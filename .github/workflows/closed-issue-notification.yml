@@ -1,0 +1,26 @@
+name: Closed Issue Notification
+on:
+  issues: 
+    types: [closed]
+    
+jobs:
+  create-issue: 
+    name: Send closed notification to slack
+    runs-on: ubuntu-latest 
+    steps: 
+    - name: Send Issue
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        custom_payload: |
+          {
+            attachments: [{
+              color: '#7539DE',
+              text: `
+                      *이슈가 닫혔습니다!*\n*ID*\n${{ github.event.issue.number }}\n*Title*\n${{ github.event.issue.title }}\n*URL*\n${{ github.event.issue.html_url }}
+                    `
+            }]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_ISSUE_WEBHOOK_URL }}
+      if: always()
