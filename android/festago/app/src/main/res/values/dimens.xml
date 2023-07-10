@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="headline_large">32sp</dimen>
+    <dimen name="headline_medium">28sp</dimen>
+    <dimen name="headline_small">24sp</dimen>
+
+    <dimen name="title_large">22sp</dimen>
+    <dimen name="title_medium">16sp</dimen>
+    <dimen name="title_small">14sp</dimen>
+
+    <dimen name="label_large">14sp</dimen>
+    <dimen name="label_medium">12sp</dimen>
+    <dimen name="label_small">11sp</dimen>
+
+    <dimen name="body_large">16sp</dimen>
+    <dimen name="body_medium">14sp</dimen>
+    <dimen name="body_small">12sp</dimen>
+
+    <dimen name="space_xxsm">2dp</dimen>
+    <dimen name="space_xsm">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen>
+    <dimen name="space_lsm">12dp</dimen>
+    <dimen name="space">16dp</dimen>
+    <dimen name="space_md">20dp</dimen>
+    <dimen name="space_llg">24dp</dimen>
+    <dimen name="space_lg">32dp</dimen>
+    <dimen name="space_xlg">64dp</dimen>
+    <dimen name="space_xxlg">128dp</dimen>
+</resources>
