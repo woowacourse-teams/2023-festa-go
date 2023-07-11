@@ -1,8 +1,8 @@
 <!--
 PR 이름 컨벤션
-[BE] FEAT: ~~(#issueNum)
-[AN/STAFF] FEAT: ~~(#issueNum)
-[AN/USER] FIX: ~~(#issueNum)
+[BE] feat: ~~(#issueNum)
+[AN/STAFF] feat: ~~(#issueNum)
+[AN/USER] fix: ~~(#issueNum)
 -->
 
 ## 📌 관련 이슈
