@@ -71,9 +71,21 @@ dependencies {
     testImplementation("org.assertj", "assertj-core", "3.22.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
 
+    // android-test
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
     // mock
     testImplementation("io.mockk:mockk-android:1.13.5")
 
     // espresso
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // coroutine
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.1")
+
+    // viewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.0")
 }
