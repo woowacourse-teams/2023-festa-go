@@ -40,6 +40,9 @@ android {
     dataBinding {
         enable = true
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -66,10 +69,15 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
     // junit5
-    testImplementation("junit:junit:5.9.3")
-    testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.2")
-    testImplementation("org.assertj", "assertj-core", "3.22.0")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+//    testImplementation("junit:junit:5.8.2")
+//    testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.2")
+//    testImplementation("org.assertj", "assertj-core", "3.22.0")
+//    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+
+    // junit4
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("androidx.test:runner:1.5.2")
 
     // android-test
     testImplementation("androidx.arch.core:core-testing:2.2.0")
@@ -82,7 +90,8 @@ dependencies {
 
     // coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
 
     // viewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
