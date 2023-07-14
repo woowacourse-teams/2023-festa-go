@@ -20,3 +20,6 @@ logging:
         orm:
           jdbc:
             bind: trace
+
+festago:
+  qr-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
