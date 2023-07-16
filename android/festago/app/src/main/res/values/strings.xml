@@ -1,4 +1,5 @@
 <resources>
+    <!-- Strings related to app -->
     <string name="app_name">festago</string>
 
     <!--date format-->
@@ -8,4 +9,12 @@
     <string name="all_ticket_state_before_entry">입장전</string>
     <string name="all_ticket_state_after_entry">입장완료</string>
     <string name="all_ticket_state_away">외출중</string>
+
+    <!-- Strings related to main -->
+    <string name="main_btn_enter_ticket">티켓 제시</string>
+
+    <!-- Strings related to ticket entry-->
+    <string name="ticket_entry_tv_before_entry">입장 전</string>
+    <string name="ticket_entry_tv_after_entry">입장 완료</string>
+    <string name="ticket_entry_tv_away">외출중</string>
 </resources>
