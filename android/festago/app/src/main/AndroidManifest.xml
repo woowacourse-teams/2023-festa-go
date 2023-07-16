@@ -24,8 +24,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:name=".presentation.ui.MainActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
