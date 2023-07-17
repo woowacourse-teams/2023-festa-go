@@ -4,4 +4,5 @@ import com.festago.festago.presentation.model.TicketUiModel
 
 sealed class MainEvent {
     class OpenTicketEntry(val ticketUiModel: TicketUiModel) : MainEvent()
+    object FailToOpenTicketEntry : MainEvent()
 }

@@ -1,6 +1,7 @@
 package com.festago.festago.presentation.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.festago.festago.data.RetrofitClient
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleEvent(event: MainEvent) = when (event) {
         is MainEvent.OpenTicketEntry -> navigateToTicketEntryActivity(event.ticketUiModel)
+        is MainEvent.FailToOpenTicketEntry -> Toast.makeText(this, "Fail to open ticket entry", Toast.LENGTH_SHORT).show()
     }
 
     private fun navigateToTicketEntryActivity(ticketUiModel: TicketUiModel) {

@@ -22,7 +22,7 @@ class MainViewModel(
 
     fun openTicketEntry() {
         when (val currentTicket = ticket.getValue()) {
-            null -> null
+            null -> _event.postValue(MainEvent.FailToOpenTicketEntry)
             else -> _event.postValue(MainEvent.OpenTicketEntry(currentTicket))
         }
     }
