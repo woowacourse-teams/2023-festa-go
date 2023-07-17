@@ -9,8 +9,8 @@
     <item android:id="@android:id/progress">
         <scale android:scaleWidth="100%">
             <shape android:shape="rectangle">
-                <corners android:radius="6dp"/>
-                <solid android:color="@color/md_theme_light_primary"/>
+                <corners android:radius="6dp" />
+                <solid android:color="@color/md_theme_light_primary" />
             </shape>
         </scale>
     </item>
