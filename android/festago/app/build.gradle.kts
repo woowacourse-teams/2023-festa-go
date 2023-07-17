@@ -76,6 +76,9 @@ dependencies {
     testImplementation("androidx.test.ext:junit:1.1.5")
     testImplementation("androidx.test:runner:1.5.2")
 
+    // assertJ
+    testImplementation("org.assertj:assertj-core:3.22.0")
+
     // android-test
     testImplementation("androidx.arch.core:core-testing:2.2.0")
 
