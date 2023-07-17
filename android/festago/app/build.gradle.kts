@@ -61,6 +61,9 @@ dependencies {
     // glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
 
+    // okhttp3
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+
     // retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
@@ -78,6 +81,9 @@ dependencies {
 
     // mock
     testImplementation("io.mockk:mockk-android:1.13.5")
+
+    // okhttp3-mockwebserver
+    implementation("com.squareup.okhttp3:mockwebserver:4.11.0")
 
     // espresso
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
