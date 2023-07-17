@@ -3,6 +3,8 @@ package com.festago.application;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.dto.MemberTicketResponse;
+import com.festago.dto.MemberTicketsResponse;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,5 +27,11 @@ public class MemberTicketService {
             throw new IllegalArgumentException(); // TODO
         }
         return MemberTicketResponse.from(memberTicket);
+    }
+
+    @Transactional(readOnly = true)
+    public MemberTicketsResponse findAll(Long memberId) {
+        List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
+        return MemberTicketsResponse.from(memberTickets);
     }
 }

@@ -4,6 +4,7 @@ import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketResponse;
+import com.festago.dto.MemberTicketsResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,13 @@ public class TicketController {
     @GetMapping("/{memberTicketId}")
     public ResponseEntity<MemberTicketResponse> findById(@PathVariable Long memberTicketId) {
         MemberTicketResponse response = memberTicketService.findById(1L, memberTicketId);// TODO
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<MemberTicketsResponse> findAll() {
+        MemberTicketsResponse response = memberTicketService.findAll(1L);// TODO
         return ResponseEntity.ok()
                 .body(response);
     }

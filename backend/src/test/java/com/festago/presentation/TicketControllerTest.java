@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.festago.application.EntryService;
+import com.festago.application.MemberTicketService;
 import com.festago.dto.EntryCodeResponse;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -29,12 +30,15 @@ class TicketControllerTest {
     @MockBean
     EntryService entryService;
 
+    @MockBean
+    MemberTicketService memberTicketService;
+
     @Test
     void QR을_생성한다() throws Exception {
         // given
         Long memberTicketId = 1L;
         String code = "2312313213";
-        int period = 30;
+        long period = 30;
         given(entryService.createEntryCode(anyLong(), anyLong()))
             .willReturn(new EntryCodeResponse(code, period));
 
