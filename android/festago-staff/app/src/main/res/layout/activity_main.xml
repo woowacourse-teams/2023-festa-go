@@ -24,14 +24,14 @@
         android:layout_height="0dp"
         android:importantForAccessibility="no"
         android:src="@drawable/img_festago_staff_logo"
-        app:layout_constraintBottom_toTopOf="@id/buttonCheckTicket"
+        app:layout_constraintBottom_toTopOf="@id/btnCheckTicket"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonCheckTicket"
+        android:id="@+id/btnCheckTicket"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/space"
