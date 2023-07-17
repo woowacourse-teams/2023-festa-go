@@ -8,6 +8,7 @@ import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.model.TicketUiModel
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -28,9 +29,13 @@ class MainViewModel(
     }
 
     fun loadTicket() {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             _ticket.postValue(ticketRepository.loadTicket(0L).toPresentation())
         }
+    }
+
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
+        _event.postValue(MainEvent.FailToLoadTicket)
     }
 
     class MainViewModelFactory(

@@ -16,6 +16,7 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.lang.Exception
 import java.time.LocalDateTime
 
 class MainViewModelTest {
@@ -48,6 +49,18 @@ class MainViewModelTest {
 
         // then
         assertThat(vm.ticket.getValue()).isEqualTo(fakeTicket.toPresentation())
+    }
+
+    @Test
+    fun `티켓 정보를 불러오는 것을 실패하면 에러 이벤트가 발생한다`() {
+        // given
+        coEvery { ticketRepository.loadTicket(any()) } throws Exception()
+
+        // when
+        vm.loadTicket()
+
+        // then
+        assertThat(vm.event.getValue()).isInstanceOf(MainEvent.FailToLoadTicket::class.java)
     }
 
     @Test
