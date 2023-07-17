@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">festago</string>
+
+    <!--date format-->
+    <string name="ticket_entry_date_time_dot_format">yyyy.MM.dd</string>
+
+    <!--ticket state-->
+    <string name="all_ticket_state_before_entry">입장전</string>
+    <string name="all_ticket_state_after_entry">입장완료</string>
+    <string name="all_ticket_state_away">외출중</string>
 </resources>
