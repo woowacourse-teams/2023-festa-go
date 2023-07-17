@@ -19,14 +19,14 @@ class TicketEntryViewModel(
     val ticketRemainTime: LiveData<Int> = _ticketRemainTime
 
     private val _ticketCode: MutableLiveData<TicketCodeUiModel> = MutableLiveData(
-        TicketCodeUiModel("", 0),
+        TicketCodeUiModel("festago.com", 0),
     )
     val ticketCode: LiveData<TicketCodeUiModel> = _ticketCode
 
     private val timer: Timer = Timer()
 
     fun loadTicketCode(ticketId: Long) {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             val ticketCode = ticketRepository.loadTicketCode(ticketId)
             _ticketCode.value = ticketCode.toPresentation()
 
