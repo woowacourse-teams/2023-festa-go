@@ -1,5 +1,7 @@
 package com.festago.festago.presentation.ui
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -18,15 +20,15 @@ class MainViewModel(
     private val _event = MutableSingleLiveData<MainEvent>()
     val event: SingleLiveData<MainEvent> get() = _event
 
-    private val _ticket = MutableSingleLiveData<TicketUiModel>()
-    val ticket: SingleLiveData<TicketUiModel> get() = _ticket
+    private val _ticket = MutableLiveData<TicketUiModel>()
+    val ticket: LiveData<TicketUiModel> get() = _ticket
 
     private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
         _event.postValue(MainEvent.FailToLoadTicket)
     }
 
     fun openTicketEntry() {
-        when (val currentTicket = ticket.getValue()) {
+        when (val currentTicket = ticket.value) {
             null -> _event.postValue(MainEvent.FailToOpenTicketEntry)
             else -> _event.postValue(MainEvent.OpenTicketEntry(currentTicket))
         }
