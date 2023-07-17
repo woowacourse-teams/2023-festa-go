@@ -72,9 +72,6 @@ dependencies {
     // mock
     testImplementation("io.mockk:mockk-android:1.13.5")
 
-    // espresso
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
     // coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
