@@ -21,6 +21,10 @@ class MainViewModel(
     private val _ticket = MutableSingleLiveData<TicketUiModel>()
     val ticket: SingleLiveData<TicketUiModel> get() = _ticket
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
+        _event.postValue(MainEvent.FailToLoadTicket)
+    }
+
     fun openTicketEntry() {
         when (val currentTicket = ticket.getValue()) {
             null -> _event.postValue(MainEvent.FailToOpenTicketEntry)
@@ -32,10 +36,6 @@ class MainViewModel(
         viewModelScope.launch(exceptionHandler) {
             _ticket.postValue(ticketRepository.loadTicket(0L).toPresentation())
         }
-    }
-
-    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
-        _event.postValue(MainEvent.FailToLoadTicket)
     }
 
     class MainViewModelFactory(
