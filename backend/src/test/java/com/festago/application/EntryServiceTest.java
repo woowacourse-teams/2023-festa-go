@@ -3,6 +3,7 @@ package com.festago.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
@@ -105,7 +106,7 @@ class EntryServiceTest {
             String code = "3112321312123";
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
-            given(entryCodeProvider.provide(eq(memberTicket), anyLong()))
+            given(entryCodeProvider.provide(eq(memberTicket), any()))
                 .willReturn(code);
 
             // when

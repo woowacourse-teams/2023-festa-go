@@ -12,9 +12,7 @@ import javax.crypto.SecretKey;
 
 public class JwtEntryCodeProvider implements EntryCodeProvider {
 
-    private static final int MILLISECOND_FACTOR = 1000;
-    private static final String MEMBER_TICKET_ID_KEY = "memberTicketId";
-    private static final int MINIMUM_PERIOD = 0;
+    private static final String MEMBER_TICKET_ID_KEY = "ticketId";
 
     private final SecretKey key;
 
@@ -22,28 +20,24 @@ public class JwtEntryCodeProvider implements EntryCodeProvider {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    @Override
-    public String provide(MemberTicket memberTicket, long period) {
-        Long memberTicketId = memberTicket.getId();
-        validate(memberTicketId, period);
-
-        Date now = new Date();
-        Date expirationTime = new Date(now.getTime() + period * MILLISECOND_FACTOR);
-
-        return Jwts.builder()
-            .claim(MEMBER_TICKET_ID_KEY, memberTicketId)
-            .setIssuedAt(now)
-            .setExpiration(expirationTime)
-            .signWith(key, SignatureAlgorithm.HS256)
-            .compact();
-    }
-
-    private static void validate(Long memberTicketId, long period) {
+    private static void validate(Long memberTicketId, Date expiredAt) {
         if (Objects.isNull(memberTicketId)) {
             throw new IllegalArgumentException(); // TODO
         }
-        if (period <= MINIMUM_PERIOD) {
+        if (expiredAt.before(new Date())) {
             throw new IllegalArgumentException(); // TODO
         }
+    }
+
+    @Override
+    public String provide(MemberTicket memberTicket, Date expiredAt) {
+        validate(memberTicket.getId(), expiredAt);
+        Long memberTicketId = memberTicket.getId();
+
+        return Jwts.builder()
+                .claim(MEMBER_TICKET_ID_KEY, memberTicketId)
+                .setExpiration(expiredAt)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
     }
 }
