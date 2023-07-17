@@ -79,7 +79,6 @@ class MainViewModelTest {
     @Test
     fun `티켓 정보를 불러오지 않고 티켓을 제시를 시도하면 에러 이벤트가 발생한다`() {
         // given
-        coEvery { ticketRepository.loadTicket(any()) } returns fakeTicket
 
         // when
         vm.openTicketEntry()
