@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">festago-staff</string>
+    <string name="main_btn_check_ticket">티켓 검사</string>
+    <string name="main_label_staff">STAFF</string>
+</resources>
