@@ -21,9 +21,9 @@ class Timer {
         job = CoroutineScope(coroutineContext).launch {
             val startTime = System.currentTimeMillis()
             repeat(period) { usedTime ->
+                timerListener.onTick(period - usedTime)
                 val adjustment = System.currentTimeMillis() - startTime - INTERVAL * usedTime
                 delay(INTERVAL - adjustment)
-                timerListener.onTick(period - usedTime)
             }
             timerListener.onFinish()
         }
