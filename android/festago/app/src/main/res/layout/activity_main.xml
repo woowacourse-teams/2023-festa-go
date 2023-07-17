@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.festago.festago.presentation.ui.MainViewModel" />
@@ -31,9 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/space"
             android:layout_marginTop="@dimen/space_lg"
+            android:onClick="@{() -> vm.openTicketEntry()}"
             android:paddingVertical="@dimen/space"
             android:text="@string/main_btn_enter_ticket"
-            android:onClick="@{() -> vm.openTicketEntry()}"
             android:textSize="@dimen/title_medium"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,9 +43,9 @@
 
         <TextView
             android:id="@+id/tvTicketState"
+            ticketState="@{vm.ticket.state}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            ticketState="@{vm.ticket.state}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnEnterTicket"
