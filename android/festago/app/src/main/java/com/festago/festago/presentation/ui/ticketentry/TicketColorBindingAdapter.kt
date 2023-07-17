@@ -10,6 +10,7 @@ fun setTicketBackgroundByState(viewGroup: ViewGroup, state: TicketStateUiModel) 
     val background = when (state) {
         TicketStateUiModel.BEFORE_ENTRY -> R.drawable.bg_ticket_gradient_primary
         TicketStateUiModel.AFTER_ENTRY -> R.drawable.bg_ticket_gradient_secondary
+        TicketStateUiModel.AWAY -> R.drawable.bg_ticket_gradient_primary
     }
     viewGroup.setBackgroundResource(background)
 }
