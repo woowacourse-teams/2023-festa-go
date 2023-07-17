@@ -7,6 +7,8 @@
 
         <import type="com.festago.festago.presentation.model.TicketStateUiModel" />
 
+        <import type="java.time.format.DateTimeFormatter" />
+
         <variable
             name="vm"
             type="com.festago.festago.presentation.ui.ticketentry.TicketEntryViewModel" />
@@ -18,7 +20,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        ticketBackground="@{TicketStateUiModel.BEFORE_ENTRY}"
+        ticketBackground="@{vm.ticket.ticketState}"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -40,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_llg"
-                android:text="테코대학교 무슨축제"
+                android:text="@{vm.ticket.stage.name}"
                 android:textColor="@color/md_theme_light_onSurface"
                 android:textSize="@dimen/title_medium"
                 android:textStyle="bold"
@@ -54,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="123"
+                android:text="@{Integer.toString(vm.ticket.number)}"
                 android:textColor="@color/md_theme_light_onSurface"
                 android:textSize="90sp"
                 android:textStyle="bold"
@@ -70,7 +72,7 @@
                 android:layout_marginTop="@dimen/space_lsm"
                 android:clickable="false"
                 android:minHeight="0dp"
-                android:text="입장전"
+                android:text="@{vm.ticket.ticketState.stateName}"
                 android:textColor="@color/md_theme_light_onPrimary"
                 android:textSize="@dimen/label_large"
                 android:textStyle="bold"
@@ -143,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_lsm"
-            android:text="2023.7.5"
+            android:text="@{vm.ticket.entryTime.format(DateTimeFormatter.ofPattern(@string/ticket_entry_date_time_dot_format))}"
             android:textColor="@color/md_theme_light_onPrimary"
             android:textSize="@dimen/title_medium"
             android:textStyle="bold"
