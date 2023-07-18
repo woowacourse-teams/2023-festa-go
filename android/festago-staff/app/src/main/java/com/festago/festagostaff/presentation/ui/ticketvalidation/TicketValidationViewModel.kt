@@ -17,7 +17,7 @@ class TicketValidationViewModel(
 
     fun validateTicketCode(code: String) {
         viewModelScope.launch {
-            _ticketState.value = ticketRepository.validateTicket(code).state
+            _ticketState.value = ticketRepository.validateTicket(code).toString()
         }
     }
 

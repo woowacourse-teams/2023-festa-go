@@ -7,5 +7,10 @@ import kotlinx.serialization.Serializable
 data class TicketValidationDto(
     val updatedState: String,
 ) {
-    fun toTicketState(): TicketState = TicketState.of(updatedState)
+    fun toTicketState(): TicketState = when (updatedState) {
+        "BEFORE_ENTRY" -> TicketState.BEFORE_ENTRY
+        "AFTER_ENTRY" -> TicketState.AFTER_ENTRY
+        "AWAY" -> TicketState.AWAY
+        else -> throw IllegalArgumentException("Unknown ticket state: $updatedState")
+    }
 }
