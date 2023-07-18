@@ -27,6 +27,8 @@ public class MemberTicket {
     @ManyToOne(fetch = FetchType.LAZY)
     private Ticket ticket;
 
+    private int number;
+
     protected MemberTicket() {
     }
 
@@ -39,6 +41,12 @@ public class MemberTicket {
     public MemberTicket(Member owner, Ticket ticket) {
         this.owner = owner;
         this.ticket = ticket;
+    }
+
+    public MemberTicket(Member owner, Ticket ticket, int number) {
+        this.owner = owner;
+        this.ticket = ticket;
+        this.number = number;
     }
 
     public boolean isOwner(Long memberId) {
@@ -63,5 +71,9 @@ public class MemberTicket {
 
     public Ticket getTicket() {
         return ticket;
+    }
+
+    public int getNumber() {
+        return number;
     }
 }

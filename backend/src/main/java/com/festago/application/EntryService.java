@@ -8,8 +8,10 @@ import com.festago.dto.EntryCodeResponse;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class EntryService {
 
     private final EntryCodeProvider entryCodeProvider;
@@ -22,7 +24,7 @@ public class EntryService {
 
     public EntryCodeResponse createEntryCode(Long memberId, Long memberTicketId) {
         MemberTicket memberTicket = memberTicketRepository.findById(memberTicketId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         if (!memberTicket.isOwner(memberId)) {
             throw new IllegalArgumentException(); // TODO
         }
