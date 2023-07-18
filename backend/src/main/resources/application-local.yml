@@ -11,7 +11,6 @@ spring:
     hibernate:
       ddl-auto: create
     open-in-view: false
-    database-platform: org.hibernate.dialect.MySQL57Dialect
 
 logging:
   level:
