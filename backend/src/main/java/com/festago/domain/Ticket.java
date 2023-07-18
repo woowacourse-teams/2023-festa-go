@@ -29,8 +29,9 @@ public class Ticket {
         this.entryTime = entryTime;
     }
 
-    public Ticket(Long id, LocalDateTime entryTime) {
+    public Ticket(Long id, Stage stage, LocalDateTime entryTime) {
         this.id = id;
+        this.stage = stage;
         this.entryTime = entryTime;
     }
 
