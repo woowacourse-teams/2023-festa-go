@@ -5,6 +5,10 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.festago.festago.R
 import com.festago.festago.presentation.model.TicketStateUiModel
+import com.festago.festago.presentation.model.TicketStateUiModel.AFTER_ENTRY
+import com.festago.festago.presentation.model.TicketStateUiModel.AWAY
+import com.festago.festago.presentation.model.TicketStateUiModel.BEFORE_ENTRY
+import com.festago.festago.presentation.model.TicketStateUiModel.EMPTY
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
@@ -23,10 +27,8 @@ fun setQrCodeImage(imageView: ImageView, content: String) {
 @BindingAdapter("ticketBackground")
 fun setTicketBackgroundByState(viewGroup: ViewGroup, state: TicketStateUiModel) {
     val background = when (state) {
-        TicketStateUiModel.BEFORE_ENTRY -> R.drawable.bg_ticket_gradient_primary
-        TicketStateUiModel.AFTER_ENTRY -> R.drawable.bg_ticket_gradient_secondary
-        TicketStateUiModel.AWAY -> R.drawable.bg_ticket_gradient_primary
-        TicketStateUiModel.EMPTY -> R.drawable.bg_ticket_gradient_primary
+        BEFORE_ENTRY, AWAY, EMPTY -> R.drawable.bg_ticket_gradient_primary
+        AFTER_ENTRY -> R.drawable.bg_ticket_gradient_secondary
     }
     viewGroup.setBackgroundResource(background)
 }
@@ -34,10 +36,8 @@ fun setTicketBackgroundByState(viewGroup: ViewGroup, state: TicketStateUiModel) 
 @BindingAdapter("renewBackground")
 fun setRenewBackgroundByState(imageView: ImageView, state: TicketStateUiModel) {
     val background = when (state) {
-        TicketStateUiModel.BEFORE_ENTRY -> R.drawable.btn_circle_primary
-        TicketStateUiModel.AFTER_ENTRY -> R.drawable.btn_circle_secondary
-        TicketStateUiModel.AWAY -> R.drawable.btn_circle_primary
-        TicketStateUiModel.EMPTY -> R.drawable.btn_circle_primary
+        BEFORE_ENTRY, AWAY, EMPTY -> R.drawable.btn_circle_primary
+        AFTER_ENTRY -> R.drawable.btn_circle_secondary
     }
     imageView.setBackgroundResource(background)
 }
