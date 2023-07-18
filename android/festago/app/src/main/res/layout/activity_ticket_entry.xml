@@ -125,10 +125,10 @@
 
             <ImageView
                 android:id="@+id/btnReNew"
+                renewBackground="@{vm.ticket.ticketState}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_lsm"
-                android:background="@drawable/btn_circle_primary"
                 android:importantForAccessibility="no"
                 android:onClick="@{() -> vm.loadTicketCode(ticketId)}"
                 android:padding="@dimen/space_sm"
