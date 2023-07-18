@@ -49,6 +49,20 @@ public class MemberTicket {
         this.number = number;
     }
 
+    public void changeState(EntryState originState) {
+        if (originState != this.entryState) {
+            throw new IllegalArgumentException(); // TODO : "이미 처리된 요청입니다."
+        }
+        this.entryState = findNextState(originState);
+    }
+
+    private EntryState findNextState(EntryState entryState) {
+        if (entryState == EntryState.AFTER_ENTRY) {
+            return EntryState.AWAY;
+        }
+        return EntryState.AFTER_ENTRY;
+    }
+
     public boolean isOwner(Long memberId) {
         return Objects.equals(owner.getId(), memberId);
     }
