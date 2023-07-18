@@ -1,6 +1,7 @@
 package com.festago.festago.presentation.ui.ticketentry
 
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.core.content.res.ResourcesCompat
@@ -58,4 +59,13 @@ fun ProgressBar.setRemainTimeProgressDrawableByState(state: TicketStateUiModel) 
             null,
         )
     }
+}
+
+@BindingAdapter("ticketStateBackground")
+fun Button.setTicketStateBackgroundByState(state: TicketStateUiModel) {
+    val colorRes = when (state) {
+        BEFORE_ENTRY, AWAY, EMPTY -> R.color.md_theme_light_primary
+        AFTER_ENTRY -> R.color.md_theme_light_secondary
+    }
+    backgroundTintList = ResourcesCompat.getColorStateList(resources, colorRes, null)
 }
