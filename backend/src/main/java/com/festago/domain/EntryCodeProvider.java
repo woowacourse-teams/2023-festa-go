@@ -4,5 +4,5 @@ import java.util.Date;
 
 public interface EntryCodeProvider {
 
-    String provide(MemberTicket memberTicket, Date expiredAt);
+    String provide(EntryCodePayload entryCodePayload, Date expiredAt);
 }
