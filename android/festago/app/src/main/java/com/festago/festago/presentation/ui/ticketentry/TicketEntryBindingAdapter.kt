@@ -2,6 +2,8 @@ package com.festago.festago.presentation.ui.ticketentry
 
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.festago.festago.R
 import com.festago.festago.presentation.model.TicketStateUiModel
@@ -40,4 +42,21 @@ fun setRenewBackgroundByState(imageView: ImageView, state: TicketStateUiModel) {
         AFTER_ENTRY -> R.drawable.btn_circle_secondary
     }
     imageView.setBackgroundResource(background)
+}
+
+@BindingAdapter("remainTimeProgressDrawable")
+fun ProgressBar.setRemainTimeProgressDrawableByState(state: TicketStateUiModel) {
+    progressDrawable = when (state) {
+        BEFORE_ENTRY, AWAY, EMPTY -> ResourcesCompat.getDrawable(
+            resources,
+            R.drawable.pb_ticket_remain_time_primary,
+            null,
+        )
+
+        AFTER_ENTRY -> ResourcesCompat.getDrawable(
+            resources,
+            R.drawable.pb_ticket_remain_time_secondary,
+            null,
+        )
+    }
 }
