@@ -16,8 +16,8 @@ class TicketValidationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTicketValidationBinding
 
-    private val vm: TicketScanViewModel by viewModels {
-        TicketScanViewModel.TicketScanViewModelFactory(
+    private val vm: TicketValidationViewModel by viewModels {
+        TicketValidationViewModel.TicketScanViewModelFactory(
             TicketDefaultRepository(
                 RetrofitClient.getInstance().ticketRetrofitService,
             ),

@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festagostaff.domain.repository.TicketRepository
 import kotlinx.coroutines.launch
 
-class TicketScanViewModel(
+class TicketValidationViewModel(
     private val ticketRepository: TicketRepository,
 ) : ViewModel() {
 
@@ -26,8 +26,8 @@ class TicketScanViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(TicketScanViewModel::class.java)) {
-                return TicketScanViewModel(ticketRepository) as T
+            if (modelClass.isAssignableFrom(TicketValidationViewModel::class.java)) {
+                return TicketValidationViewModel(ticketRepository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel Class")
         }

@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.festago.festagostaff.presentation.ui.ticketvalidation.TicketScanViewModel" />
+            type="com.festago.festagostaff.presentation.ui.ticketvalidation.TicketValidationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
