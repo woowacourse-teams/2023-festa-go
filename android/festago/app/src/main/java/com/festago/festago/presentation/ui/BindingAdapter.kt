@@ -12,14 +12,19 @@ fun setTicketState(textView: TextView, ticketStateUiModel: TicketStateUiModel?) 
             textView.setText(R.string.ticket_entry_tv_before_entry)
             textView.isEnabled = true
         }
+
         TicketStateUiModel.AFTER_ENTRY -> {
             textView.setText(R.string.ticket_entry_tv_after_entry)
             textView.isEnabled = false
         }
+
         TicketStateUiModel.AWAY -> {
             textView.setText(R.string.ticket_entry_tv_away)
             textView.isEnabled = true
         }
-        null -> ""
+
+        TicketStateUiModel.EMPTY,
+        null,
+        -> null
     }
 }
