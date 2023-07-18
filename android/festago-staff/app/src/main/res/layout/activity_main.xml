@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+
+        <variable
+            name="vm"
+            type="com.festago.festagostaff.presentation.ui.main.MainViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -38,6 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/space"
             android:backgroundTint="@color/white"
+            android:onClick="@{() -> vm.openTicketValidation()}"
             android:paddingVertical="@dimen/space"
             android:text="@string/main_btn_check_ticket"
             android:textColor="@color/md_theme_light_primary"
