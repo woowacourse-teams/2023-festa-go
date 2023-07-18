@@ -1,15 +1,15 @@
 package com.festago.festagostaff.presentation.ui.main
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.festago.festagostaff.databinding.ActivityMainBinding
 import com.festago.festagostaff.presentation.ui.ticketvalidation.TicketValidationActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val vm: MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
+    private val vm: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
