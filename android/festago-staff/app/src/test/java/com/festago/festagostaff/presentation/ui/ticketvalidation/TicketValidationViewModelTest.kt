@@ -33,12 +33,12 @@ class TicketValidationViewModelTest {
     fun `티켓 코드 검증을 하면 새로운 티켓 상태를 불러올 수 있다`() {
         // given
         coEvery { ticketRepository.validateTicket(any()) } returns fakeTicketState
+        val fakeCode = "xxx"
 
         // when
-        val code = "xxx"
-        vm.validateTicketCode(code)
+        vm.validateTicketCode(fakeCode)
 
         // then
-        assertThat(vm.ticketState.value).isEqualTo(fakeTicketState.state)
+        assertThat(vm.ticketState.value).isEqualTo(fakeTicketState.toString())
     }
 }
