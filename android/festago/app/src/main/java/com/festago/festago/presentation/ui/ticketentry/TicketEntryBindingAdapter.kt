@@ -15,33 +15,32 @@ import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
 @BindingAdapter("qrContent")
-fun setQrCodeImage(imageView: ImageView, content: String) {
-    val barcodeEncoder = BarcodeEncoder()
-    val bitmap = barcodeEncoder.encodeBitmap(
+fun ImageView.setQrCodeImage(content: String) {
+    val bitmap = BarcodeEncoder().encodeBitmap(
         content,
         BarcodeFormat.QR_CODE,
         200,
         200,
     )
-    imageView.setImageBitmap(bitmap)
+    setImageBitmap(bitmap)
 }
 
 @BindingAdapter("ticketBackground")
-fun setTicketBackgroundByState(viewGroup: ViewGroup, state: TicketStateUiModel) {
+fun ViewGroup.setTicketBackgroundByState(state: TicketStateUiModel) {
     val background = when (state) {
         BEFORE_ENTRY, AWAY, EMPTY -> R.drawable.bg_ticket_gradient_primary
         AFTER_ENTRY -> R.drawable.bg_ticket_gradient_secondary
     }
-    viewGroup.setBackgroundResource(background)
+    setBackgroundResource(background)
 }
 
 @BindingAdapter("renewBackground")
-fun setRenewBackgroundByState(imageView: ImageView, state: TicketStateUiModel) {
+fun ImageView.setRenewBackgroundByState(state: TicketStateUiModel) {
     val background = when (state) {
         BEFORE_ENTRY, AWAY, EMPTY -> R.drawable.btn_circle_primary
         AFTER_ENTRY -> R.drawable.btn_circle_secondary
     }
-    imageView.setBackgroundResource(background)
+    setBackgroundResource(background)
 }
 
 @BindingAdapter("remainTimeProgressDrawable")
