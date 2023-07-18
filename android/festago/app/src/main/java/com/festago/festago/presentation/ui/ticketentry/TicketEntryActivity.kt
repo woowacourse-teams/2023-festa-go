@@ -1,5 +1,7 @@
 package com.festago.festago.presentation.ui.ticketentry
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +25,7 @@ class TicketEntryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val currentTicketId = 0L
+        val currentTicketId = intent.getLongExtra(KEY_TICKET_ID, 0L)
 
         initBinding(currentTicketId)
         initView(currentTicketId)
@@ -41,5 +43,15 @@ class TicketEntryActivity : AppCompatActivity() {
     private fun initView(currentTicketId: Long) {
         vm.loadTicketCode(currentTicketId)
         vm.loadTicket(currentTicketId)
+    }
+
+    companion object {
+        private const val KEY_TICKET_ID = "KEY_TICKET_ID"
+
+        fun getIntent(context: Context, ticketId: Long): Intent {
+            return Intent(context, TicketEntryActivity::class.java).apply {
+                putExtra(KEY_TICKET_ID, ticketId)
+            }
+        }
     }
 }
