@@ -12,12 +12,12 @@ class TicketValidationViewModel(
     private val ticketRepository: TicketRepository,
 ) : ViewModel() {
 
-    private val _ticketCode: MutableLiveData<String> = MutableLiveData("")
-    val ticketCode: LiveData<String> = _ticketCode
+    private val _ticketState: MutableLiveData<String> = MutableLiveData("")
+    val ticketState: LiveData<String> = _ticketState
 
     fun validateTicketCode(code: String) {
         viewModelScope.launch {
-            _ticketCode.value = ticketRepository.validateTicket(code).state
+            _ticketState.value = ticketRepository.validateTicket(code).state
         }
     }
 
