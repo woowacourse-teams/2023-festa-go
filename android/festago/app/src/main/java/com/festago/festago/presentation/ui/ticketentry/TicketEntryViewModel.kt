@@ -9,25 +9,22 @@ import com.festago.festago.domain.model.timer.Timer
 import com.festago.festago.domain.model.timer.TimerListener
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.model.StageUiModel
 import com.festago.festago.presentation.model.TicketCodeUiModel
-import com.festago.festago.presentation.model.TicketStateUiModel
 import com.festago.festago.presentation.model.TicketUiModel
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class TicketEntryViewModel(
     private val ticketRepository: TicketRepository,
 ) : ViewModel() {
-    private val _ticketRemainTime: MutableLiveData<Int> = MutableLiveData(DEFAULT_REMAIN_TIME)
+
+    private val _ticketRemainTime: MutableLiveData<Int> = MutableLiveData(0)
     val ticketRemainTime: LiveData<Int> = _ticketRemainTime
 
-    private val _ticketCode: MutableLiveData<TicketCodeUiModel> = MutableLiveData(
-        DEFAULT_TICKET_CODE,
-    )
+    private val _ticketCode: MutableLiveData<TicketCodeUiModel> =
+        MutableLiveData(TicketCodeUiModel.EMPTY)
     val ticketCode: LiveData<TicketCodeUiModel> = _ticketCode
 
-    private val _ticket: MutableLiveData<TicketUiModel> = MutableLiveData(DEFAULT_TICKET)
+    private val _ticket: MutableLiveData<TicketUiModel> = MutableLiveData(TicketUiModel.EMPTY)
     val ticket: LiveData<TicketUiModel> = _ticket
 
     private val timer: Timer = Timer()
@@ -77,19 +74,5 @@ class TicketEntryViewModel(
             }
             throw IllegalArgumentException("Unknown ViewModel Class")
         }
-    }
-
-    companion object {
-        private const val DEFAULT_REMAIN_TIME = 0
-
-        private val DEFAULT_TICKET_CODE = TicketCodeUiModel("festago.com", 0)
-
-        private val DEFAULT_TICKET = TicketUiModel(
-            id = 1,
-            number = 123,
-            entryTime = LocalDateTime.of(2023, 7, 17, 16, 0),
-            ticketState = TicketStateUiModel.BEFORE_ENTRY,
-            stage = StageUiModel(1, "페스타고", LocalDateTime.of(2023, 7, 17, 18, 0)),
-        )
     }
 }

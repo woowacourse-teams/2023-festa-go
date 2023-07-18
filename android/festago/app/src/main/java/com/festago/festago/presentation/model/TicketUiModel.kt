@@ -8,4 +8,14 @@ data class TicketUiModel(
     val entryTime: LocalDateTime,
     val ticketState: TicketStateUiModel,
     val stage: StageUiModel,
-)
+) {
+    companion object {
+        val EMPTY = TicketUiModel(
+            id = 0,
+            number = 0,
+            entryTime = LocalDateTime.MAX,
+            ticketState = TicketStateUiModel.EMPTY,
+            stage = StageUiModel.EMPTY,
+        )
+    }
+}

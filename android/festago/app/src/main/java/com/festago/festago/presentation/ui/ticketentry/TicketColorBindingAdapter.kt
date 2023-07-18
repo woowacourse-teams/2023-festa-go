@@ -11,6 +11,7 @@ fun setTicketBackgroundByState(viewGroup: ViewGroup, state: TicketStateUiModel) 
         TicketStateUiModel.BEFORE_ENTRY -> R.drawable.bg_ticket_gradient_primary
         TicketStateUiModel.AFTER_ENTRY -> R.drawable.bg_ticket_gradient_secondary
         TicketStateUiModel.AWAY -> R.drawable.bg_ticket_gradient_primary
+        TicketStateUiModel.EMPTY -> R.drawable.bg_ticket_gradient_primary
     }
     viewGroup.setBackgroundResource(background)
 }
