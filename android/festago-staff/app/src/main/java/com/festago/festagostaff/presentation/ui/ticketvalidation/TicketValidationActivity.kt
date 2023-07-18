@@ -1,21 +1,27 @@
-package com.festago.festagostaff.presentation.ui.ticketscan
+package com.festago.festagostaff.presentation.ui.ticketvalidation
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.festago.festagostaff.databinding.ActivityTicketScanBinding
+import com.festago.festagostaff.data.RetrofitClient
+import com.festago.festagostaff.data.repository.TicketDefaultRepository
+import com.festago.festagostaff.databinding.ActivityTicketValidationBinding
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
-class TicketScanActivity : AppCompatActivity() {
+class TicketValidationActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityTicketScanBinding
+    private lateinit var binding: ActivityTicketValidationBinding
 
-    private val vm: TicketScanViewModel by lazy {
-        ViewModelProvider(this)[TicketScanViewModel::class.java]
+    private val vm: TicketScanViewModel by viewModels {
+        TicketScanViewModel.TicketScanViewModelFactory(
+            TicketDefaultRepository(
+                RetrofitClient.getInstance().ticketRetrofitService,
+            ),
+        )
     }
 
     private val barcodeLauncher = registerForActivityResult(ScanContract()) { result ->
@@ -34,7 +40,7 @@ class TicketScanActivity : AppCompatActivity() {
     }
 
     private fun initBinding() {
-        binding = ActivityTicketScanBinding.inflate(layoutInflater)
+        binding = ActivityTicketValidationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.lifecycleOwner = this
@@ -50,7 +56,7 @@ class TicketScanActivity : AppCompatActivity() {
 
     companion object {
         fun getIntent(context: Context): Intent {
-            return Intent(context, TicketScanActivity::class.java)
+            return Intent(context, TicketValidationActivity::class.java)
         }
     }
 }

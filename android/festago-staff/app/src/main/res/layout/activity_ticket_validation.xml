@@ -7,13 +7,13 @@
 
         <variable
             name="vm"
-            type="com.festago.festagostaff.presentation.ui.ticketscan.TicketScanViewModel" />
+            type="com.festago.festagostaff.presentation.ui.ticketvalidation.TicketScanViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.ticketscan.TicketScanActivity">
+        tools:context=".presentation.ui.ticketvalidation.TicketValidationActivity">
 
         <TextView
             android:id="@+id/textView"
