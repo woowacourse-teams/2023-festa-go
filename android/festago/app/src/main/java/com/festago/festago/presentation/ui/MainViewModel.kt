@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.model.TicketUiModel
+import com.festago.festago.presentation.ui.MainEvent.FailToLoadTicket
+import com.festago.festago.presentation.ui.MainEvent.FailToOpenTicketEntry
+import com.festago.festago.presentation.ui.MainEvent.OpenTicketEntry
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -24,12 +27,12 @@ class MainViewModel(
     val ticket: LiveData<TicketUiModel> get() = _ticket
 
     private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
-        _event.postValue(MainEvent.FailToLoadTicket)
+        _event.postValue(FailToLoadTicket)
     }
 
     fun openTicketEntry() {
-        ticket.value?.let { _event.postValue(MainEvent.OpenTicketEntry(it)) }
-            ?: _event.postValue(MainEvent.FailToOpenTicketEntry)
+        ticket.value?.let { _event.postValue(OpenTicketEntry(it)) }
+            ?: _event.postValue(FailToOpenTicketEntry)
     }
 
     fun loadTicket() {
