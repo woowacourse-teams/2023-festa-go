@@ -28,10 +28,8 @@ class MainViewModel(
     }
 
     fun openTicketEntry() {
-        when (val currentTicket = ticket.value) {
-            null -> _event.postValue(MainEvent.FailToOpenTicketEntry)
-            else -> _event.postValue(MainEvent.OpenTicketEntry(currentTicket))
-        }
+        ticket.value?.let { _event.postValue(MainEvent.OpenTicketEntry(it)) }
+            ?: _event.postValue(MainEvent.FailToOpenTicketEntry)
     }
 
     fun loadTicket() {
