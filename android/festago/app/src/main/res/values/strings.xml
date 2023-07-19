@@ -11,7 +11,11 @@
     <string name="all_ticket_state_away">외출중</string>
 
     <!-- Strings related to main -->
-    <string name="main_btn_enter_ticket">티켓 제시</string>
+    <string name="main_btn_ticket_disable_time">HH:mm 티켓 활성화</string>
+    <string name="main_btn_ticket_enable_time">티켓 제시</string>
+    <string name="main_tv_ticket_before_entry">입장 전</string>
+    <string name="main_tv_ticket_after_entry">입장 완료</string>
+    <string name="main_tv_ticket_away">외출중</string>
 
     <!-- Strings related to ticket entry-->
     <string name="ticket_entry_tv_before_entry">입장 전</string>

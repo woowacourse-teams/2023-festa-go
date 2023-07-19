@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="btnFesta">
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:textColor">@color/md_theme_light_onPrimary</item>
+        <item name="android:background">@drawable/btn_festa</item>
+        <item name="android:paddingVertical">@dimen/space</item>
+    </style>
+</resources>

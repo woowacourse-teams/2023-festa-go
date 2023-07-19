@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity() {
         vm.event.observe(this) {
             handleEvent(it)
         }
+        vm.ticket.observe(this) {
+            MainBinding.setBtnEnterTicket(binding, it)
+            MainBinding.setTvTicketState(binding, it)
+        }
     }
 
     private fun initView() {

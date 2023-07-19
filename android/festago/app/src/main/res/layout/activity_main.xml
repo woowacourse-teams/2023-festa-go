@@ -25,24 +25,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnEnterTicket"
+            style="@style/btnFesta"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/space"
             android:layout_marginTop="@dimen/space_lg"
             android:onClick="@{() -> vm.openTicketEntry()}"
-            android:paddingVertical="@dimen/space"
-            android:text="@string/main_btn_enter_ticket"
-            android:textSize="@dimen/title_medium"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgFestagoLogo" />
+            app:layout_constraintTop_toBottomOf="@id/imgFestagoLogo"
+            tools:text="티켓 제시"/>
 
         <TextView
             android:id="@+id/tvTicketState"
-            ticketState="@{vm.ticket.ticketState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
