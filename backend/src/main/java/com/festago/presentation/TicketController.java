@@ -28,20 +28,20 @@ public class TicketController {
     public ResponseEntity<EntryCodeResponse> createQR(@PathVariable Long memberTicketId) {
         EntryCodeResponse response = entryService.createEntryCode(1L, memberTicketId); // TODO
         return ResponseEntity.ok()
-                .body(response);
+            .body(response);
     }
 
     @GetMapping("/{memberTicketId}")
     public ResponseEntity<MemberTicketResponse> findById(@PathVariable Long memberTicketId) {
         MemberTicketResponse response = memberTicketService.findById(1L, memberTicketId);// TODO
         return ResponseEntity.ok()
-                .body(response);
+            .body(response);
     }
 
     @GetMapping
     public ResponseEntity<MemberTicketsResponse> findAll() {
         MemberTicketsResponse response = memberTicketService.findAll(1L);// TODO
         return ResponseEntity.ok()
-                .body(response);
+            .body(response);
     }
 }
