@@ -29,8 +29,9 @@ fun ImageView.setQrCodeImage(content: String) {
 @BindingAdapter("ticketBackground")
 fun ViewGroup.setTicketBackgroundByState(state: TicketStateUiModel) {
     val background = when (state) {
-        BEFORE_ENTRY, AWAY, EMPTY -> R.drawable.bg_ticket_gradient_primary
+        BEFORE_ENTRY, EMPTY -> R.drawable.bg_ticket_gradient_primary
         AFTER_ENTRY -> R.drawable.bg_ticket_gradient_secondary
+        AWAY -> R.drawable.bg_ticket_gradient_tertiary
     }
     setBackgroundResource(background)
 }
@@ -38,8 +39,9 @@ fun ViewGroup.setTicketBackgroundByState(state: TicketStateUiModel) {
 @BindingAdapter("renewBackground")
 fun ImageView.setRenewBackgroundByState(state: TicketStateUiModel) {
     val background = when (state) {
-        BEFORE_ENTRY, AWAY, EMPTY -> R.drawable.btn_circle_primary
+        BEFORE_ENTRY, EMPTY -> R.drawable.btn_circle_primary
         AFTER_ENTRY -> R.drawable.btn_circle_secondary
+        AWAY -> R.drawable.btn_circle_tertiary
     }
     setBackgroundResource(background)
 }
@@ -47,7 +49,7 @@ fun ImageView.setRenewBackgroundByState(state: TicketStateUiModel) {
 @BindingAdapter("remainTimeProgressDrawable")
 fun ProgressBar.setRemainTimeProgressDrawableByState(state: TicketStateUiModel) {
     progressDrawable = when (state) {
-        BEFORE_ENTRY, AWAY, EMPTY -> ResourcesCompat.getDrawable(
+        BEFORE_ENTRY, EMPTY -> ResourcesCompat.getDrawable(
             resources,
             R.drawable.pb_ticket_remain_time_primary,
             null,
@@ -58,14 +60,21 @@ fun ProgressBar.setRemainTimeProgressDrawableByState(state: TicketStateUiModel) 
             R.drawable.pb_ticket_remain_time_secondary,
             null,
         )
+
+        AWAY -> ResourcesCompat.getDrawable(
+            resources,
+            R.drawable.pb_ticket_remain_time_tertiary,
+            null,
+        )
     }
 }
 
 @BindingAdapter("ticketStateBackground")
 fun Button.setTicketStateBackgroundByState(state: TicketStateUiModel) {
     val colorRes = when (state) {
-        BEFORE_ENTRY, AWAY, EMPTY -> R.color.md_theme_light_primary
+        BEFORE_ENTRY, EMPTY -> R.color.md_theme_light_primary
         AFTER_ENTRY -> R.color.md_theme_light_secondary
+        AWAY -> R.color.md_theme_light_tertiary
     }
     backgroundTintList = ResourcesCompat.getColorStateList(resources, colorRes, null)
 }
