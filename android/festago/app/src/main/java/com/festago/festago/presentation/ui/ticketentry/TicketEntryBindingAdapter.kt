@@ -72,8 +72,9 @@ fun ProgressBar.setRemainTimeProgressDrawableByState(state: TicketStateUiModel) 
 @BindingAdapter("ticketStateBackground")
 fun Button.setTicketStateBackgroundByState(state: TicketStateUiModel) {
     val colorRes = when (state) {
-        BEFORE_ENTRY, AWAY, EMPTY -> R.color.md_theme_light_primary
+        BEFORE_ENTRY, EMPTY -> R.color.md_theme_light_primary
         AFTER_ENTRY -> R.color.md_theme_light_secondary
+        AWAY -> R.color.md_theme_light_tertiary
     }
     backgroundTintList = ResourcesCompat.getColorStateList(resources, colorRes, null)
 }
