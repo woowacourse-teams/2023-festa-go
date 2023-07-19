@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity() {
         vm.event.observe(this) {
             handleEvent(it)
         }
+        vm.ticket.observe(this) {
+            MainBinding.setBtnEnterTicket(binding, it)
+            MainBinding.setTvTicketState(binding, it)
+        }
     }
 
     private fun initView() {
@@ -50,8 +54,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleEvent(event: MainEvent) = when (event) {
         is MainEvent.OpenTicketEntry -> navigateToTicketEntryActivity(event.ticketUiModel)
-        is MainEvent.FailToOpenTicketEntry -> Toast.makeText(this, "Fail to open ticket entry", Toast.LENGTH_SHORT).show()
-        is MainEvent.FailToLoadTicket -> Toast.makeText(this, "Fail to load ticket", Toast.LENGTH_SHORT).show()
+        is MainEvent.FailToOpenTicketEntry -> Toast.makeText(
+            this,
+            "Fail to open ticket entry",
+            Toast.LENGTH_SHORT,
+        ).show()
+
+        is MainEvent.FailToLoadTicket -> Toast.makeText(
+            this,
+            "Fail to load ticket",
+            Toast.LENGTH_SHORT,
+        ).show()
     }
 
     private fun navigateToTicketEntryActivity(ticketUiModel: TicketUiModel) {
