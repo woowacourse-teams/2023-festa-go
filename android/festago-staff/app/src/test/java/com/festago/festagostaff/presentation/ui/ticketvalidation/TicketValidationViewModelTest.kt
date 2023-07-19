@@ -52,7 +52,7 @@ class TicketValidationViewModelTest {
         vm.validateTicketCode(fakeCode)
 
         // then
-        assertThat(vm.isLatestCode(fakeCode)).isEqualTo(true)
+        assertThat(vm.isLatestCode(fakeCode)).isTrue
     }
 
     @Test
@@ -65,6 +65,6 @@ class TicketValidationViewModelTest {
         vm.clearLatestCode()
 
         // then
-        assertThat(vm.isLatestCode(fakeCode)).isEqualTo(false)
+        assertThat(vm.isLatestCode(fakeCode)).isFalse
     }
 }
