@@ -29,8 +29,9 @@ fun ImageView.setQrCodeImage(content: String) {
 @BindingAdapter("ticketBackground")
 fun ViewGroup.setTicketBackgroundByState(state: TicketStateUiModel) {
     val background = when (state) {
-        BEFORE_ENTRY, AWAY, EMPTY -> R.drawable.bg_ticket_gradient_primary
+        BEFORE_ENTRY, EMPTY -> R.drawable.bg_ticket_gradient_primary
         AFTER_ENTRY -> R.drawable.bg_ticket_gradient_secondary
+        AWAY -> R.drawable.bg_ticket_gradient_tertiary
     }
     setBackgroundResource(background)
 }
