@@ -11,7 +11,7 @@ object MainBinding {
     fun setBtnEnterTicket(binding: ActivityMainBinding, ticket: TicketUiModel) {
         val context = binding.root.context
         when (LocalDateTime.now().isAfter(ticket.entryTime)) {
-            true -> {
+            false -> {
                 binding.btnEnterTicket.text =
                     DateTimeFormatter.ofPattern(context.getString(R.string.main_ticket_disable_time))
                         .format(ticket.entryTime)
