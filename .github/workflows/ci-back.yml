@@ -12,7 +12,7 @@ on:
 
 defaults:
   run:
-    working-directory: backend
+    working-directory: ./backend
 
 jobs:
   build:
@@ -23,6 +23,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'zulu'
+
       - name: gradlew 권한 부여
         run: chmod +x gradlew
 
