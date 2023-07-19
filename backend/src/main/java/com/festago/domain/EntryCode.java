@@ -20,16 +20,16 @@ public class EntryCode {
         this.offset = offset;
     }
 
+    public static EntryCode create(EntryCodeProvider entryCodeProvider, MemberTicket memberTicket) {
+        Date expiredAt = new Date(new Date().getTime() + (DEFAULT_PERIOD + DEFAULT_OFFSET) * MILLISECOND_FACTOR);
+        String code = entryCodeProvider.provide(EntryCodePayload.from(memberTicket), expiredAt);
+        return new EntryCode(code, DEFAULT_PERIOD, DEFAULT_OFFSET);
+    }
+
     public void validate(long period) {
         if (period <= MINIMUM_PERIOD) {
             throw new IllegalArgumentException(); // TODO
         }
-    }
-
-    public static EntryCode create(EntryCodeProvider entryCodeProvider, MemberTicket memberTicket) {
-        Date expiredAt = new Date(new Date().getTime() + (DEFAULT_PERIOD + DEFAULT_OFFSET) * MILLISECOND_FACTOR);
-        String code = entryCodeProvider.provide(memberTicket, expiredAt);
-        return new EntryCode(code, DEFAULT_PERIOD, DEFAULT_OFFSET);
     }
 
     public String getCode() {

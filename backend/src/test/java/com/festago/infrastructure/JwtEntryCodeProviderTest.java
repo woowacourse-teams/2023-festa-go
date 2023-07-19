@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.festago.domain.EntryCodePayload;
 import com.festago.domain.EntryCodeProvider;
 import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
@@ -33,8 +34,8 @@ class JwtEntryCodeProviderTest {
         MemberTicket memberTicket = new MemberTicket(memberTicketId, new Member(1L), new Ticket(LocalDateTime.now()));
 
         // when & then
-        assertThatThrownBy(() -> entryCodeProvider.provide(memberTicket, expiredAt))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> entryCodeProvider.provide(EntryCodePayload.from(memberTicket), expiredAt))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -44,8 +45,8 @@ class JwtEntryCodeProviderTest {
         MemberTicket memberTicket = new MemberTicket(memberTicketId, new Member(1L), new Ticket(LocalDateTime.now()));
 
         // when & then
-        assertThatThrownBy(() -> entryCodeProvider.provide(memberTicket, new Date()))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> entryCodeProvider.provide(EntryCodePayload.from(memberTicket), new Date()))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -58,21 +59,21 @@ class JwtEntryCodeProviderTest {
         Date expiredAt = new Date(now.getTime() + period);
 
         // when
-        String code = entryCodeProvider.provide(memberTicket, expiredAt);
+        String code = entryCodeProvider.provide(EntryCodePayload.from(memberTicket), expiredAt);
 
         // then
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY.getBytes())
-                .build()
-                .parseClaimsJws(code)
-                .getBody();
+            .setSigningKey(SECRET_KEY.getBytes())
+            .build()
+            .parseClaimsJws(code)
+            .getBody();
 
         Long actualMemberTicketId = (long) ((int) claims.get("ticketId"));
         Date actualExpiredAt = claims.getExpiration();
 
         assertSoftly(softAssertions -> {
             assertThat(actualExpiredAt.getTime() - now.getTime() / 1000 * 1000)
-                    .isEqualTo(period);
+                .isEqualTo(period);
             assertThat(actualMemberTicketId).isEqualTo(memberTicketId);
         });
     }
