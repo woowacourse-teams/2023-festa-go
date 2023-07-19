@@ -39,8 +39,9 @@ fun ViewGroup.setTicketBackgroundByState(state: TicketStateUiModel) {
 @BindingAdapter("renewBackground")
 fun ImageView.setRenewBackgroundByState(state: TicketStateUiModel) {
     val background = when (state) {
-        BEFORE_ENTRY, AWAY, EMPTY -> R.drawable.btn_circle_primary
+        BEFORE_ENTRY, EMPTY -> R.drawable.btn_circle_primary
         AFTER_ENTRY -> R.drawable.btn_circle_secondary
+        AWAY -> R.drawable.btn_circle_tertiary
     }
     setBackgroundResource(background)
 }
