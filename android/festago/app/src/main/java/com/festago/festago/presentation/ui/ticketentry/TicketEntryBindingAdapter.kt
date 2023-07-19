@@ -49,7 +49,7 @@ fun ImageView.setRenewBackgroundByState(state: TicketStateUiModel) {
 @BindingAdapter("remainTimeProgressDrawable")
 fun ProgressBar.setRemainTimeProgressDrawableByState(state: TicketStateUiModel) {
     progressDrawable = when (state) {
-        BEFORE_ENTRY, AWAY, EMPTY -> ResourcesCompat.getDrawable(
+        BEFORE_ENTRY, EMPTY -> ResourcesCompat.getDrawable(
             resources,
             R.drawable.pb_ticket_remain_time_primary,
             null,
@@ -58,6 +58,12 @@ fun ProgressBar.setRemainTimeProgressDrawableByState(state: TicketStateUiModel) 
         AFTER_ENTRY -> ResourcesCompat.getDrawable(
             resources,
             R.drawable.pb_ticket_remain_time_secondary,
+            null,
+        )
+
+        AWAY -> ResourcesCompat.getDrawable(
+            resources,
+            R.drawable.pb_ticket_remain_time_tertiary,
             null,
         )
     }
