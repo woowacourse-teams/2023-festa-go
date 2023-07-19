@@ -11,6 +11,9 @@ spring:
     hibernate:
       ddl-auto: create
     open-in-view: false
+  h2:
+    console:
+      enabled: true
 
 logging:
   level:
