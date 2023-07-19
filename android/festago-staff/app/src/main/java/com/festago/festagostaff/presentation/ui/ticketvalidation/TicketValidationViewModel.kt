@@ -15,11 +15,21 @@ class TicketValidationViewModel(
     private val _ticketState: MutableLiveData<String> = MutableLiveData("")
     val ticketState: LiveData<String> = _ticketState
 
+    private var latestCode = ""
+
     fun validateTicketCode(code: String) {
         viewModelScope.launch {
             _ticketState.value = ticketRepository.validateTicket(code).toString()
         }
+        latestCode = code
     }
+
+    fun clearLatestCode() {
+        _ticketState.value = ""
+        latestCode = ""
+    }
+
+    fun isLatestCode(code: String): Boolean = latestCode == code
 
     class TicketScanViewModelFactory(
         private val ticketRepository: TicketRepository,
