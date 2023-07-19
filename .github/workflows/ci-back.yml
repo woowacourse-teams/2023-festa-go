@@ -18,11 +18,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 현재 디렉토리의 파일 목록
-        run: ls -alR ..
-
-      - name: 현재 디렉토리
-        run: pwd
+      - name: 리포지토리 체크아웃
+        uses: actions/checkout@v3
 
       - name: 자바 설치
         uses: actions/setup-java@v3
