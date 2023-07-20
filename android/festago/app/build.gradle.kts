@@ -6,6 +6,7 @@ plugins {
     id("kotlin-parcelize")
     id("kotlin-kapt")
     kotlin("plugin.serialization") version "1.8.22"
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -111,6 +112,10 @@ dependencies {
 
     // zxing
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    // firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }
 
 fun getSecretKey(propertyKey: String): String {
