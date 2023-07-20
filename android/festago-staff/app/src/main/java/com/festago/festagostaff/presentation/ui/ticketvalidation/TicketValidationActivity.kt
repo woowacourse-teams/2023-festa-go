@@ -34,7 +34,7 @@ class TicketValidationActivity : AppCompatActivity() {
 
     private val barcodeCallback = BarcodeCallback { result ->
         if (result.text == null) {
-            showToast(getString(R.string.ticket_validation_no_content))
+            showToast(getString(R.string.ticket_validation_toast_no_content))
             return@BarcodeCallback
         }
         if (!vm.isLatestCode(result.text)) {
@@ -90,9 +90,9 @@ class TicketValidationActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
-                showToast(getString(R.string.ticket_validation_camera_permission_granted))
+                showToast(getString(R.string.ticket_validation_toast_camera_permission_granted))
             } else {
-                showToast(getString(R.string.ticket_validation_camera_permission_denied))
+                showToast(getString(R.string.ticket_validation_toast_camera_permission_denied))
             }
         }
     }
