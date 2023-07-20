@@ -89,7 +89,7 @@ class TicketValidationActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
+            if (grantResults.getOrNull(0) == PERMISSION_GRANTED) {
                 showToast(getString(R.string.ticket_validation_toast_camera_permission_granted))
             } else {
                 showToast(getString(R.string.ticket_validation_toast_camera_permission_denied))
