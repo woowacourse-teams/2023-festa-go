@@ -13,7 +13,7 @@ jobs:
         id: all-label
         uses: buildsville/assign-reviewer-by-label@v1
         with:
-          token: "${{ secrets.PR_LABEL_TOKEN }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
           labels: '[ "ALL" ]'
           reviewers: '["BGuga", "seokjin8678", "xxeol2", "carsago", "SeongHoonC", "EmilyCh0", "re4rk"]'
           remove-when-no-label: "true"
@@ -21,7 +21,7 @@ jobs:
         id: an-label
         uses: buildsville/assign-reviewer-by-label@v1
         with:
-          token: "${{ secrets.PR_LABEL_TOKEN }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
           labels: '[ "AN" ]'
           reviewers: '["SeongHoonC", "EmilyCh0", "re4rk"]'
           remove-when-no-label: "true"
@@ -29,7 +29,7 @@ jobs:
         id: be-label
         uses: buildsville/assign-reviewer-by-label@v1
         with:
-          token: "${{ secrets.PR_LABEL_TOKEN }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
           labels: '[ "BE" ]'
           reviewers: '["BGuga", "seokjin8678", "xxeol2", "carsago"]'
           remove-when-no-label: "true"
