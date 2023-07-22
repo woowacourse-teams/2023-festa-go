@@ -6,6 +6,7 @@ import com.festago.domain.EntryState;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -17,10 +18,13 @@ public class JwtEntryCodeExtractor implements EntryCodeExtractor {
     private static final String MEMBER_TICKET_ID_KEY = "ticketId";
     private static final String ENTRY_STATE_KEY = "state";
 
-    private final SecretKey key;
+    private final JwtParser jwtParser;
 
     public JwtEntryCodeExtractor(String secretKey) {
-        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        this.jwtParser = Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build();
     }
 
     @Override
@@ -34,10 +38,7 @@ public class JwtEntryCodeExtractor implements EntryCodeExtractor {
 
     private Claims getClaims(String code) {
         try {
-            return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(code)
+            return jwtParser.parseClaimsJws(code)
                 .getBody();
         } catch (ExpiredJwtException e) {
             throw new IllegalArgumentException(); // TODO
