@@ -25,6 +25,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".presentation.ui.ticketreservation.TicketReservationActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.ticketentry.TicketEntryActivity"
             android:exported="false" />
         <activity
