@@ -37,7 +37,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private inline fun <reified T : Fragment> AppCompatActivity.changeFragment() {
+    private inline fun <reified T : Fragment> changeFragment() {
         val tag = T::class.java.name
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 
