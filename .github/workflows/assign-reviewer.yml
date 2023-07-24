@@ -14,6 +14,7 @@ jobs:
           reviewers: BGuga, seokjin8678, xxeol2, carsago, SeongHoonC, EmilyCh0, re4rk
           assignees: ${{ github.event.pull_request.user.login }}
           includeLabels: ALL
+          excludeLabels: WIP
 
       - name: Android Label
         uses: wow-actions/auto-assign@v3
@@ -22,6 +23,7 @@ jobs:
           reviewers: SeongHoonC, EmilyCh0, re4rk
           assignees: ${{ github.event.pull_request.user.login }}
           includeLabels: AN
+          excludeLabels: WIP
 
       - name: Backend Label
         uses: wow-actions/auto-assign@v3
@@ -30,3 +32,4 @@ jobs:
           reviewers: BGuga, seokjin8678, xxeol2, carsago
           assignees: ${{ github.event.pull_request.user.login }}
           includeLabels: BE
+          excludeLabels: WIP
