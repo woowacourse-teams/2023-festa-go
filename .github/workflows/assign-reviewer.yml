@@ -12,7 +12,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           reviewers: BGuga, seokjin8678, xxeol2, carsago, SeongHoonC, EmilyCh0, re4rk
-          assignees: ''
+          assignees: ${{ github.event.pull_request.user.login }}
           includeLabels: ALL
 
       - name: Android Label
@@ -20,7 +20,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           reviewers: SeongHoonC, EmilyCh0, re4rk
-          assignees: ''
+          assignees: ${{ github.event.pull_request.user.login }}
           includeLabels: AN
 
       - name: Backend Label
@@ -28,5 +28,5 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           reviewers: BGuga, seokjin8678, xxeol2, carsago
-          assignees: ''
+          assignees: ${{ github.event.pull_request.user.login }}
           includeLabels: BE
