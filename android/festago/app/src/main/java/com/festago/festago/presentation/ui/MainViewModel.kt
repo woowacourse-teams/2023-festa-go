@@ -37,7 +37,7 @@ class MainViewModel(
 
     fun loadTicket() {
         viewModelScope.launch(exceptionHandler) {
-            _ticket.postValue(ticketRepository.loadTicket(0L).toPresentation())
+            _ticket.postValue(ticketRepository.loadTicket(9L).toPresentation())
         }
     }
 
