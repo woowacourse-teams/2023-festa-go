@@ -28,7 +28,6 @@
     <string name="home_bottom_navigation_user">마이페이지</string>
 
     <!-- Strings related to ticket reserve-->
-    <string name="ticket_reserve_tv_date">07.03 (목) 17:00</string>
     <string name="ticket_reserve_tv_open_time_title">[예매 오픈 시간]</string>
     <string name="ticket_reserve_tv_line_up_title">[라인업]</string>
     <string name="ticket_reserve_tv_ticket_count_title">[예매 가능 티켓]</string>
