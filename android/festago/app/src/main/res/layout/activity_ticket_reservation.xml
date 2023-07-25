@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.ticketreservation.TicketReservationActivity">
+        tools:context=".presentation.ui.ticketreserve.TicketReserveActivity">
 
         <ProgressBar
             android:id="@+id/pbLoading"

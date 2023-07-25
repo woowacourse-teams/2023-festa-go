@@ -1,17 +1,17 @@
-package com.festago.festago.presentation.ui.ticketreservation
+package com.festago.festago.presentation.ui.ticketreserve
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.festago.festago.data.repository.ReservationDefaultRepository
 import com.festago.festago.databinding.ActivityTicketReservationBinding
-import com.festago.festago.presentation.ui.ticketreservation.TicketReservationViewModel.Companion.TicketReservationViewModelFactory
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 
-class TicketReservationActivity : AppCompatActivity() {
+class TicketReserveActivity : AppCompatActivity() {
 
-    private lateinit var viewBinder: TicketReservationViewBinder
+    private lateinit var viewBinder: TicketReserveViewBinder
 
-    private val viewModel: TicketReservationViewModel by viewModels {
+    private val viewModel: TicketReserveViewModel by viewModels {
         TicketReservationViewModelFactory(
             ReservationDefaultRepository(),
         )
@@ -30,7 +30,7 @@ class TicketReservationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.lifecycleOwner = this
-        viewBinder = TicketReservationViewBinder(binding)
+        viewBinder = TicketReserveViewBinder(binding)
     }
 
     private fun initObserve() {

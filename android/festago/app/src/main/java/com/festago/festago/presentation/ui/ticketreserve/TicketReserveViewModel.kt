@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.ticketreservation
+package com.festago.festago.presentation.ui.ticketreserve
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,20 +9,20 @@ import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
 
-class TicketReservationViewModel(
+class TicketReserveViewModel(
     private val reservationRepository: ReservationRepository,
 ) : ViewModel() {
-    private val _uiState = MutableSingleLiveData<TicketReservationUiState>()
-    val uiState: SingleLiveData<TicketReservationUiState> = _uiState
+    private val _uiState = MutableSingleLiveData<TicketReserveUiState>()
+    val uiState: SingleLiveData<TicketReserveUiState> = _uiState
 
     fun loadReservation() {
         viewModelScope.launch {
-            _uiState.setValue(TicketReservationUiState.Loading)
+            _uiState.setValue(TicketReserveUiState.Loading)
             reservationRepository.loadReservation()
                 .onSuccess {
-                    _uiState.setValue(TicketReservationUiState.Success(it.toPresentation()))
+                    _uiState.setValue(TicketReserveUiState.Success(it.toPresentation()))
                 }.onFailure {
-                    _uiState.setValue(TicketReservationUiState.Error)
+                    _uiState.setValue(TicketReserveUiState.Error)
                 }
         }
     }
@@ -34,8 +34,8 @@ class TicketReservationViewModel(
 
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(TicketReservationViewModel::class.java)) {
-                    return TicketReservationViewModel(reservationRepository) as T
+                if (modelClass.isAssignableFrom(TicketReserveViewModel::class.java)) {
+                    return TicketReserveViewModel(reservationRepository) as T
                 }
                 throw IllegalArgumentException("Unknown ViewModel Class")
             }

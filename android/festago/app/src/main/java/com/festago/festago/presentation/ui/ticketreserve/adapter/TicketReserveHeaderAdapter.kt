@@ -1,18 +1,22 @@
-package com.festago.festago.presentation.ui.ticketreservation.adapter
+package com.festago.festago.presentation.ui.ticketreserve.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.model.ReservationUiModel
-import com.festago.festago.presentation.ui.ticketreservation.viewHolder.ReservationViewHolder
+import com.festago.festago.presentation.ui.ticketreserve.viewHolder.TicketReserveHeaderViewHolder
 
-class ReservationAdapter : ListAdapter<ReservationUiModel, ReservationViewHolder>(diffUtil) {
+class TicketReserveHeaderAdapter :
+    ListAdapter<ReservationUiModel, TicketReserveHeaderViewHolder>(diffUtil) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReservationViewHolder {
-        return ReservationViewHolder.from(parent)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): TicketReserveHeaderViewHolder {
+        return TicketReserveHeaderViewHolder.from(parent)
     }
 
-    override fun onBindViewHolder(holder: ReservationViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TicketReserveHeaderViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

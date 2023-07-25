@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.ticketreservation
+package com.festago.festago.presentation.ui.ticketreserve
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.domain.model.Reservation
@@ -16,8 +16,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class TicketReservationViewModelTest {
-    private lateinit var vm: TicketReservationViewModel
+class TicketReserveViewModelTest {
+    private lateinit var vm: TicketReserveViewModel
     private lateinit var reservationRepository: ReservationRepository
 
     private val fakeReservation = Reservation(0)
@@ -30,7 +30,7 @@ class TicketReservationViewModelTest {
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         reservationRepository = mockk()
-        vm = TicketReservationViewModel(reservationRepository)
+        vm = TicketReserveViewModel(reservationRepository)
     }
 
     @Test
@@ -46,10 +46,10 @@ class TicketReservationViewModelTest {
         vm.loadReservation()
 
         // then
-        assertThat(vm.uiState.getValue()).isInstanceOf(TicketReservationUiState.Success::class.java)
+        assertThat(vm.uiState.getValue()).isInstanceOf(TicketReserveUiState.Success::class.java)
 
         // and
-        val uiModel = vm.uiState.getValue() as TicketReservationUiState.Success
+        val uiModel = vm.uiState.getValue() as TicketReserveUiState.Success
         assertThat(uiModel.reservations).isEqualTo(List(10) { ReservationUiModel(0) })
     }
 
@@ -62,7 +62,7 @@ class TicketReservationViewModelTest {
         vm.loadReservation()
 
         // then
-        assertThat(vm.uiState.getValue()).isEqualTo(TicketReservationUiState.Error)
+        assertThat(vm.uiState.getValue()).isEqualTo(TicketReserveUiState.Error)
     }
 
     @Test
@@ -79,6 +79,6 @@ class TicketReservationViewModelTest {
         vm.loadReservation()
 
         // then
-        assertThat(vm.uiState.getValue()).isEqualTo(TicketReservationUiState.Loading)
+        assertThat(vm.uiState.getValue()).isEqualTo(TicketReserveUiState.Loading)
     }
 }
