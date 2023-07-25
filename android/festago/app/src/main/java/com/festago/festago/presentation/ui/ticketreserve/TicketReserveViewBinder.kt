@@ -17,7 +17,7 @@ class TicketReserveViewBinder(
 
     fun updateUi(uiState: TicketReserveUiState) = when (uiState) {
         is TicketReserveUiState.Loading -> updateLoading()
-        is TicketReserveUiState.Success -> updateSuccess(uiState.reservations)
+        is TicketReserveUiState.Success -> updateSuccess(uiState.reservation)
         is TicketReserveUiState.Error -> updateError()
     }
 
@@ -27,13 +27,14 @@ class TicketReserveViewBinder(
         binding.tvEmpty.visibility = INVISIBLE
     }
 
-    private fun updateSuccess(reservations: List<ReservationUiModel>) {
+    private fun updateSuccess(reservations: ReservationUiModel) {
         binding.pbLoading.visibility = INVISIBLE
         binding.rvTicketReserve.visibility = VISIBLE
         binding.tvEmpty.visibility = INVISIBLE
 
         binding.rvTicketReserve.adapter = concatAdapter
-        contentsAdapter.submitList(reservations)
+        headerAdapter.submitList(listOf(reservations))
+        contentsAdapter.submitList(reservations.reservationStages)
     }
 
     private fun updateError() {

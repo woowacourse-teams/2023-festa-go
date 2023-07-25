@@ -4,6 +4,6 @@ import com.festago.festago.presentation.model.ReservationUiModel
 
 sealed class TicketReserveUiState {
     object Loading : TicketReserveUiState()
-    class Success(val reservations: List<ReservationUiModel>) : TicketReserveUiState()
+    class Success(val reservation: ReservationUiModel) : TicketReserveUiState()
     object Error : TicketReserveUiState()
 }
