@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="19dp" />
+            app:layout_constraintGuide_begin="20dp" />
 
         <TextView
             android:id="@+id/tvDate"
