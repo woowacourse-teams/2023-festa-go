@@ -72,7 +72,7 @@ class TicketReserveViewModelTest {
             reservationRepository.loadReservation()
         } coAnswers {
             delay(1000)
-            Result.success(List(10) { fakeReservation })
+            Result.success(emptyList())
         }
 
         // when
