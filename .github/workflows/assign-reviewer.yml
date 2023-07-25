@@ -1,35 +1,35 @@
 name: Assign Reviewer By Label
 on:
   pull_request:
-    types:
-      - unlabeled
-      - labeled
+    types: [ opened, edited, labeled, unlabeled ]
 
 jobs:
   assign-reviewer:
     runs-on: ubuntu-latest
     steps:
-      - name: all-label
-        id: all-label
-        uses: buildsville/assign-reviewer-by-label@v1
+      - name: All Label
+        uses: wow-actions/auto-assign@v3
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          labels: '[ "ALL" ]'
-          reviewers: '["BGuga", "seokjin8678", "xxeol2", "carsago", "SeongHoonC", "EmilyCh0", "re4rk"]'
-          remove-when-no-label: "true"
-      - name: an-label
-        id: an-label
-        uses: buildsville/assign-reviewer-by-label@v1
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: BGuga, seokjin8678, xxeol2, carsago, SeongHoonC, EmilyCh0, re4rk
+          assignees: ${{ github.event.pull_request.user.login }}
+          includeLabels: ALL
+          excludeLabels: WIP
+
+      - name: Android Label
+        uses: wow-actions/auto-assign@v3
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          labels: '[ "AN" ]'
-          reviewers: '["SeongHoonC", "EmilyCh0", "re4rk"]'
-          remove-when-no-label: "true"
-      - name: be-label
-        id: be-label
-        uses: buildsville/assign-reviewer-by-label@v1
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: SeongHoonC, EmilyCh0, re4rk
+          assignees: ${{ github.event.pull_request.user.login }}
+          includeLabels: AN
+          excludeLabels: WIP
+
+      - name: Backend Label
+        uses: wow-actions/auto-assign@v3
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          labels: '[ "BE" ]'
-          reviewers: '["BGuga", "seokjin8678", "xxeol2", "carsago"]'
-          remove-when-no-label: "true"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: BGuga, seokjin8678, xxeol2, carsago
+          assignees: ${{ github.event.pull_request.user.login }}
+          includeLabels: BE
+          excludeLabels: WIP
