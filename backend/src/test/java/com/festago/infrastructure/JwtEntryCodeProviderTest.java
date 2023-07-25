@@ -37,19 +37,6 @@ class JwtEntryCodeProviderTest {
     }
 
     @Test
-    void memberTicketId가_null이면_예외() {
-        // given
-        MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-            .id(null)
-            .build();
-        EntryCodePayload payload = EntryCodePayload.from(memberTicket);
-
-        // when & then
-        assertThatThrownBy(() -> entryCodeProvider.provide(payload, new Date()))
-            .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
     void JWT_토큰을_생성() {
         // given
         long period = 30000;

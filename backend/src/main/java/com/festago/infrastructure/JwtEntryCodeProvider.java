@@ -22,7 +22,7 @@ public class JwtEntryCodeProvider implements EntryCodeProvider {
 
     @Override
     public String provide(EntryCodePayload entryCodePayload, Date expiredAt) {
-        validate(entryCodePayload.getMemberTicketId(), expiredAt);
+        validate(expiredAt);
 
         return Jwts.builder()
             .claim(MEMBER_TICKET_ID_KEY, entryCodePayload.getMemberTicketId())
@@ -32,10 +32,7 @@ public class JwtEntryCodeProvider implements EntryCodeProvider {
             .compact();
     }
 
-    private void validate(Long memberTicketId, Date expiredAt) {
-        if (memberTicketId == null) {
-            throw new IllegalArgumentException(); // TODO
-        }
+    private void validate(Date expiredAt) {
         if (expiredAt.before(new Date())) {
             throw new IllegalArgumentException(); // TODO
         }
