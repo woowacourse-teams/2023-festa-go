@@ -17,6 +17,9 @@
         tools:targetApi="31">
         <activity
             android:name=".presentation.ui.home.HomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".presentation.ui.ticketreserve.TicketReserveActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,9 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".presentation.ui.ticketreserve.TicketReserveActivity"
-            android:exported="true" />
         <activity
             android:name=".presentation.ui.ticketentry.TicketEntryActivity"
             android:exported="false" />

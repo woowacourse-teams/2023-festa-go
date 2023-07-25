@@ -11,7 +11,7 @@ class TicketReserveActivity : AppCompatActivity() {
 
     private lateinit var viewBinder: TicketReserveViewBinder
 
-    private val viewModel: TicketReserveViewModel by viewModels {
+    private val vm: TicketReserveViewModel by viewModels {
         TicketReservationViewModelFactory(
             ReservationDefaultRepository(),
         )
@@ -34,12 +34,12 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
-        viewModel.uiState.observe(this) { uiState ->
+        vm.uiState.observe(this) { uiState ->
             viewBinder.updateUi(uiState)
         }
     }
 
     private fun initView() {
-        viewModel.loadReservation()
+        vm.loadReservation()
     }
 }
