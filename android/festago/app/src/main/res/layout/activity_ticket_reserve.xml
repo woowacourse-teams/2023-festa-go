@@ -26,7 +26,7 @@
 
         <TextView
             android:id="@+id/tvEmpty"
-            android:text="예매 가능한 티켓이 없습니다."
+            android:text="@string/ticket_reserve_tv_error_page"
             android:textSize="20sp"
             android:gravity="center"
             android:layout_width="match_parent"

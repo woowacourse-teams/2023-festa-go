@@ -33,5 +33,6 @@
     <string name="ticket_reserve_tv_line_up_title">[라인업]</string>
     <string name="ticket_reserve_tv_ticket_count_title">[예매 가능 티켓]</string>
     <string name="ticket_reserve_tv_auth_guide_student">⚠️ 재학생용 티켓예매를 위해 사전에 학교 인증이 필요합니다.</string>
+    <string name="ticket_reserve_tv_error_page">예매 가능한 티켓이 없습니다.</string>
     <string name="ticket_reserve_btn_reserve_ticket">티켓 예매</string>
 </resources>
