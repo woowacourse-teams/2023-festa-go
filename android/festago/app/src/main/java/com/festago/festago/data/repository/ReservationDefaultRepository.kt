@@ -7,6 +7,7 @@ import kotlinx.coroutines.delay
 class ReservationDefaultRepository : ReservationRepository {
     override suspend fun loadReservation(): Result<List<Reservation>> {
         delay(2000)
-        return Result.success(List(5) { Reservation(1) })
+        return Result.failure(Exception())
+        // return Result.success(List(5) { Reservation(1) })
     }
 }

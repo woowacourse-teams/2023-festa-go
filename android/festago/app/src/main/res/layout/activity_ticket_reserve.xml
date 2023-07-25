@@ -18,11 +18,11 @@
             android:layout_height="match_parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTicketReservation"
+            android:id="@+id/rvTicketReserve"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_ticket_reservation" />
+            tools:listitem="@layout/item_ticket_reserve" />
 
         <TextView
             android:id="@+id/tvEmpty"

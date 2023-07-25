@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.festago.festago.data.repository.ReservationDefaultRepository
-import com.festago.festago.databinding.ActivityTicketReservationBinding
+import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 
 class TicketReserveActivity : AppCompatActivity() {
@@ -26,7 +26,7 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun initBinding() {
-        val binding = ActivityTicketReservationBinding.inflate(layoutInflater)
+        val binding = ActivityTicketReserveBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.lifecycleOwner = this
