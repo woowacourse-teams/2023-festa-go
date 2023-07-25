@@ -32,18 +32,14 @@ public class MemberTicket {
     protected MemberTicket() {
     }
 
-    public MemberTicket(Long id, Member owner, Ticket ticket) {
-        this.id = id;
-        this.owner = owner;
-        this.ticket = ticket;
-    }
-
-    public MemberTicket(Member owner, Ticket ticket) {
-        this.owner = owner;
-        this.ticket = ticket;
-    }
-
     public MemberTicket(Member owner, Ticket ticket, int number) {
+        this.owner = owner;
+        this.ticket = ticket;
+        this.number = number;
+    }
+
+    public MemberTicket(Long id, Member owner, Ticket ticket, int number) {
+        this.id = id;
         this.owner = owner;
         this.ticket = ticket;
         this.number = number;

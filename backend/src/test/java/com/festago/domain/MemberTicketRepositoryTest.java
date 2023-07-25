@@ -36,12 +36,12 @@ class MemberTicketRepositoryTest {
         Stage stage1 = stageRepository.save(new Stage("테코대학교 축제", LocalDateTime.now()));
         Stage stage2 = stageRepository.save(new Stage("우테대학교 축제", LocalDateTime.now()));
 
-        Ticket ticket1 = ticketRepository.save(new Ticket(null, stage1, LocalDateTime.now()));
-        Ticket ticket2 = ticketRepository.save(new Ticket(null, stage2, LocalDateTime.now()));
+        Ticket ticket1 = ticketRepository.save(new Ticket(stage1, LocalDateTime.now()));
+        Ticket ticket2 = ticketRepository.save(new Ticket(stage2, LocalDateTime.now()));
 
-        memberTicketRepository.save(new MemberTicket(member1, ticket1));
-        memberTicketRepository.save(new MemberTicket(member1, ticket2));
-        memberTicketRepository.save(new MemberTicket(member2, ticket1));
+        memberTicketRepository.save(new MemberTicket(member1, ticket1, 1));
+        memberTicketRepository.save(new MemberTicket(member1, ticket2, 1));
+        memberTicketRepository.save(new MemberTicket(member2, ticket1, 2));
 
         // when
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(member1.getId());

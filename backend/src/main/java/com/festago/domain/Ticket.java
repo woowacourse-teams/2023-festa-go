@@ -25,10 +25,6 @@ public class Ticket {
     protected Ticket() {
     }
 
-    public Ticket(LocalDateTime entryTime) {
-        this.entryTime = entryTime;
-    }
-
     public Ticket(Stage stage, LocalDateTime entryTime) {
         this.stage = stage;
         this.entryTime = entryTime;
