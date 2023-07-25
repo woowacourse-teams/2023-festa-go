@@ -2,6 +2,7 @@ package com.festago.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.festago.support.TicketFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -16,7 +17,10 @@ class TicketTest {
         // given
         LocalDateTime entryTime = LocalDateTime.now();
         LocalDateTime time = entryTime.minusMinutes(10);
-        Ticket ticket = new Ticket(entryTime);
+
+        Ticket ticket = TicketFixture.ticket()
+            .entryTime(entryTime)
+            .build();
 
         // when && then
         assertThat(ticket.canEntry(time)).isFalse();
@@ -27,7 +31,10 @@ class TicketTest {
         // given
         LocalDateTime entryTime = LocalDateTime.now();
         LocalDateTime time = entryTime.plusDays(1);
-        Ticket ticket = new Ticket(entryTime);
+
+        Ticket ticket = TicketFixture.ticket()
+            .entryTime(entryTime)
+            .build();
 
         // when && then
         assertThat(ticket.canEntry(time)).isFalse();
@@ -38,7 +45,10 @@ class TicketTest {
         // given
         LocalDateTime entryTime = LocalDateTime.now();
         LocalDateTime time = entryTime.plusMinutes(10);
-        Ticket ticket = new Ticket(entryTime);
+
+        Ticket ticket = TicketFixture.ticket()
+            .entryTime(entryTime)
+            .build();
 
         // when && then
         assertThat(ticket.canEntry(time)).isTrue();

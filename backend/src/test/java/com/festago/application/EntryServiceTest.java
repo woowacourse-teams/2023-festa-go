@@ -13,6 +13,9 @@ import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Ticket;
 import com.festago.dto.EntryCodeResponse;
+import com.festago.support.MemberFixture;
+import com.festago.support.MemberTicketFixture;
+import com.festago.support.TicketFixture;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -46,13 +49,20 @@ class EntryServiceTest {
         void 입장_시간_전_요청하면_예외() {
             // given
             LocalDateTime entryTime = LocalDateTime.now().plusMinutes(30);
-            MemberTicket memberTicket = new MemberTicket(1L, new Member(1L), new Ticket(entryTime));
+            Ticket ticket = TicketFixture.ticket()
+                .entryTime(entryTime)
+                .build();
+            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .ticket(ticket)
+                .build();
+            Long memberId = memberTicket.getOwner().getId();
+            Long memberTicketId = memberTicket.getId();
 
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
 
             // when & then
-            assertThatThrownBy(() -> entryService.createEntryCode(1L, 1L))
+            assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(IllegalArgumentException.class);
         }
 
@@ -60,22 +70,31 @@ class EntryServiceTest {
         void 자신의_티켓이_아니면_예외() {
             // given
             LocalDateTime entryTime = LocalDateTime.now().minusMinutes(30);
-            long ownerId = 1L;
-            long memberId = 2L;
-            MemberTicket memberTicket = new MemberTicket(1L, new Member(ownerId), new Ticket(entryTime));
+            Long memberId = 1L;
+            Member other = MemberFixture.member()
+                .id(2L)
+                .build();
+            Ticket ticket = TicketFixture.ticket()
+                .entryTime(entryTime)
+                .build();
+            MemberTicket otherTicket = MemberTicketFixture.memberTicket()
+                .owner(other)
+                .ticket(ticket)
+                .build();
+            Long memberTicketId = otherTicket.getId();
 
             given(memberTicketRepository.findById(anyLong()))
-                .willReturn(Optional.of(memberTicket));
+                .willReturn(Optional.of(otherTicket));
 
             // when & then
-            assertThatThrownBy(() -> entryService.createEntryCode(memberId, 1L))
+            assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
         void 존재하지_않은_티켓이면_예외() {
             // given
-            long memberTicketId = 1L;
+            Long memberTicketId = 1L;
             given(memberTicketRepository.findById(memberTicketId))
                 .willReturn(Optional.empty());
 
@@ -88,28 +107,39 @@ class EntryServiceTest {
         void 입장_시간이_24시간이_넘은_경우_예외() {
             // given
             LocalDateTime entryTime = LocalDateTime.now().minusDays(1).minusSeconds(10);
-            MemberTicket memberTicket = new MemberTicket(1L, new Member(1L), new Ticket(entryTime));
+            Ticket ticket = TicketFixture.ticket()
+                .entryTime(entryTime)
+                .build();
+            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .ticket(ticket)
+                .build();
+            Long memberId = memberTicket.getOwner().getId();
+            Long memberTicketId = memberTicket.getId();
 
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
 
             // when & then
-            assertThatThrownBy(() -> entryService.createEntryCode(1L, 1L))
+            assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
         void 성공() {
             // given
-            MemberTicket memberTicket = new MemberTicket(1L, new Member(1L), new Ticket(LocalDateTime.now()));
+            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .build();
             String code = "3112321312123";
+            Long memberId = memberTicket.getOwner().getId();
+            Long memberTicketId = memberTicket.getId();
+
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
             given(entryCodeProvider.provide(any(), any()))
                 .willReturn(code);
 
             // when
-            EntryCodeResponse entryCode = entryService.createEntryCode(1L, 1L);
+            EntryCodeResponse entryCode = entryService.createEntryCode(memberId, memberTicketId);
 
             // then
             assertSoftly(softAssertions -> {

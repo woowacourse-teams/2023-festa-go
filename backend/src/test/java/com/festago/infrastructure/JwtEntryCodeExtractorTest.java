@@ -90,7 +90,7 @@ class JwtEntryCodeExtractorTest {
     void 토큰_추출_성공() {
         // given
         Long memberTicketId = 1L;
-        int entryStateIndex = 1;
+        Integer entryStateIndex = 1;
         String code = Jwts.builder()
             .claim(MEMBER_TICKET_ID_KEY, memberTicketId)
             .claim(ENTRY_STATE_KEY, entryStateIndex)

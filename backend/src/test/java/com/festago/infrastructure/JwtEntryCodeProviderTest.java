@@ -6,12 +6,10 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.domain.EntryCodePayload;
 import com.festago.domain.EntryCodeProvider;
-import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
-import com.festago.domain.Ticket;
+import com.festago.support.MemberTicketFixture;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import java.time.LocalDateTime;
 import java.util.Date;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -30,22 +28,24 @@ class JwtEntryCodeProviderTest {
         // given
         Date now = new Date();
         Date expiredAt = new Date(now.getTime() - 1000L);
-        Long memberTicketId = 1L;
-        MemberTicket memberTicket = new MemberTicket(memberTicketId, new Member(1L), new Ticket(LocalDateTime.now()));
+        MemberTicket memberTicket = MemberTicketFixture.memberTicket().build();
+        EntryCodePayload payload = EntryCodePayload.from(memberTicket);
 
         // when & then
-        assertThatThrownBy(() -> entryCodeProvider.provide(EntryCodePayload.from(memberTicket), expiredAt))
+        assertThatThrownBy(() -> entryCodeProvider.provide(payload, expiredAt))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void memberTicketId가_null이면_예외() {
         // given
-        Long memberTicketId = null;
-        MemberTicket memberTicket = new MemberTicket(memberTicketId, new Member(1L), new Ticket(LocalDateTime.now()));
+        MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            .id(null)
+            .build();
+        EntryCodePayload payload = EntryCodePayload.from(memberTicket);
 
         // when & then
-        assertThatThrownBy(() -> entryCodeProvider.provide(EntryCodePayload.from(memberTicket), new Date()))
+        assertThatThrownBy(() -> entryCodeProvider.provide(payload, new Date()))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -53,8 +53,7 @@ class JwtEntryCodeProviderTest {
     void JWT_토큰을_생성() {
         // given
         long period = 30000;
-        Long memberTicketId = 1L;
-        MemberTicket memberTicket = new MemberTicket(memberTicketId, new Member(1L), new Ticket(LocalDateTime.now()));
+        MemberTicket memberTicket = MemberTicketFixture.memberTicket().build();
         Date now = new Date();
         Date expiredAt = new Date(now.getTime() + period);
 
@@ -74,7 +73,7 @@ class JwtEntryCodeProviderTest {
         assertSoftly(softAssertions -> {
             assertThat(actualExpiredAt.getTime() - now.getTime() / 1000 * 1000)
                 .isEqualTo(period);
-            assertThat(actualMemberTicketId).isEqualTo(memberTicketId);
+            assertThat(actualMemberTicketId).isEqualTo(memberTicket.getId());
         });
     }
 }

@@ -10,7 +10,10 @@ import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
 import com.festago.domain.Ticket;
 import com.festago.dto.MemberTicketResponse;
-import java.time.LocalDateTime;
+import com.festago.support.MemberFixture;
+import com.festago.support.MemberTicketFixture;
+import com.festago.support.StageFixture;
+import com.festago.support.TicketFixture;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -49,27 +52,43 @@ class MemberTicketServiceTest {
     void 사용자가_티켓의_주인이_아니면_예외() {
         // given
         Long memberId = 1L;
-        Long memberTicketId = 1L;
-        Member other = new Member(2L);
-        Stage stage = new Stage(null, "테코대학교 축제", LocalDateTime.now());
-        Ticket ticket = new Ticket(null, stage, LocalDateTime.now());
-        MemberTicket memberTicket = new MemberTicket(memberTicketId, other, ticket);
-        given(memberTicketRepository.findById(memberTicketId))
-            .willReturn(Optional.of(memberTicket));
+        Member other = MemberFixture.member()
+            .id(2L)
+            .build();
+
+        MemberTicket otherMemberTicket = MemberTicketFixture.memberTicket()
+            .owner(other)
+            .build();
+
+        Long otherTicketId = otherMemberTicket.getId();
+
+        given(memberTicketRepository.findById(otherTicketId))
+            .willReturn(Optional.of(otherMemberTicket));
 
         // when & then
-        assertThatThrownBy(() -> memberTicketService.findById(memberId, memberTicketId))
+
+        assertThatThrownBy(() -> memberTicketService.findById(memberId, otherTicketId))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 사용자의_티켓_단건_조회() {
         // given
+        Member member = MemberFixture.member()
+            .id(2L)
+            .build();
+        Stage stage = StageFixture.stage()
+            .build();
+        Ticket ticket = TicketFixture.ticket()
+            .stage(stage)
+            .build();
         Long memberTicketId = 1L;
-        Member member = new Member(2L);
-        Stage stage = new Stage(null, "테코대학교 축제", LocalDateTime.now());
-        Ticket ticket = new Ticket(null, stage, LocalDateTime.now());
-        MemberTicket memberTicket = new MemberTicket(memberTicketId, member, ticket);
+        MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            .id(1L)
+            .owner(member)
+            .ticket(ticket)
+            .build();
+
         given(memberTicketRepository.findById(memberTicketId))
             .willReturn(Optional.of(memberTicket));
 
