@@ -14,90 +14,108 @@
         android:paddingBottom="28dp">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
+            android:id="@+id/startGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_begin="20dp" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/endGuideLine"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp" />
+
         <TextView
             android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="07.03 (목) 17:00"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="07.03 (목) 17:00" />
 
         <TextView
             android:id="@+id/tvOpenTimeTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/ticket_reserve_tv_open_time_title"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+
             app:layout_constraintTop_toBottomOf="@id/tvDate" />
 
         <TextView
             android:id="@+id/tvOpenTime"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@id/tvOpenTimeTitle"
             tools:text="2023.07.04 14:00" />
 
         <TextView
             android:id="@+id/tvLineUpTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/ticket_reserve_tv_line_up_title"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+
             app:layout_constraintTop_toBottomOf="@id/tvOpenTime" />
 
         <TextView
             android:id="@+id/tvLineUp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+
             app:layout_constraintTop_toBottomOf="@id/tvLineUpTitle"
-            tools:text="BTS, 르세라핌, 뉴진스, 아이브, 아이들" />
+            tools:text="BTS, 르세라핌, 뉴진스, 아이브, 아이들BTS, 르세라핌, 뉴진스, 아이브, 아이들BTS, 르세라핌, 뉴진스, 아이브, 아이들" />
 
         <TextView
             android:id="@+id/tvTicketCountTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/ticket_reserve_tv_ticket_count_title"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@id/tvLineUp" />
 
         <TextView
             android:id="@+id/tvTicketCount"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@id/tvTicketCountTitle"
             tools:text="재학생용(219/500), 외부인용(212/300)" />
 
         <TextView
             android:id="@+id/tvAuthGuideStudent"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/ticket_reserve_tv_auth_guide_student"
             android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@id/tvTicketCount" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -108,7 +126,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="28dp"
             android:text="@string/ticket_reserve_btn_reserve_ticket"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvAuthGuideStudent" />
 
