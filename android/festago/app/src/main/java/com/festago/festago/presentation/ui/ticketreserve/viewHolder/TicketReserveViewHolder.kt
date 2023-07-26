@@ -6,12 +6,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveBinding
 import com.festago.festago.presentation.model.ReservationStageUiModel
+import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveCallback
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class TicketReserveViewHolder(
     private val binding: ItemTicketReserveBinding,
+    private val ticketReserveCallback: TicketReserveCallback,
 ) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(item: ReservationStageUiModel) {
         val openTimeFormatter =
             DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.ticket_reserve_tv_open_time))
@@ -34,16 +37,23 @@ class TicketReserveViewHolder(
                     it.totalAmount.toString(),
                 )
             }
+
+        binding.btnReserveTicket.setOnClickListener {
+            ticketReserveCallback.onTicketReserveClicked(item)
+        }
     }
 
     companion object {
-        fun from(parent: ViewGroup): TicketReserveViewHolder {
+        fun from(
+            parent: ViewGroup,
+            ticketReserveCallback: TicketReserveCallback,
+        ): TicketReserveViewHolder {
             val binding = ItemTicketReserveBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return TicketReserveViewHolder(binding)
+            return TicketReserveViewHolder(binding, ticketReserveCallback)
         }
     }
 }

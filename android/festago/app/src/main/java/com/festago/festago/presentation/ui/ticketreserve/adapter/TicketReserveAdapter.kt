@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.ui.ticketreserve.viewHolder.TicketReserveViewHolder
 
-class TicketReserveAdapter :
+class TicketReserveAdapter(
+    private val ticketReserveCallback: TicketReserveCallback,
+) :
     ListAdapter<ReservationStageUiModel, TicketReserveViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketReserveViewHolder {
-        return TicketReserveViewHolder.from(parent)
+        return TicketReserveViewHolder.from(parent, ticketReserveCallback)
     }
 
     override fun onBindViewHolder(holder: TicketReserveViewHolder, position: Int) {
