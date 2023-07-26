@@ -47,6 +47,7 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        binding.rvTicketReserve.adapter = concatAdapter
         vm.loadReservation()
     }
 
@@ -59,7 +60,6 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun updateSuccess(reservations: ReservationUiModel) {
-        binding.rvTicketReserve.adapter = concatAdapter
         headerAdapter.submitList(listOf(reservations))
         contentsAdapter.submitList(reservations.reservationStages)
     }
