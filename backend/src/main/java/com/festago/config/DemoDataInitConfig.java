@@ -10,6 +10,7 @@ import com.festago.domain.Stage;
 import com.festago.domain.StageRepository;
 import com.festago.domain.Ticket;
 import com.festago.domain.TicketRepository;
+import com.festago.domain.TicketType;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -48,7 +49,7 @@ public class DemoDataInitConfig {
         stageRepository.save(new Stage(now.plusYears(1), festival));
         Stage pastStage = stageRepository.save(new Stage(now.minusWeeks(1), festival));
 
-        Ticket ticket = ticketRepository.save(new Ticket(pastStage, now));
+        Ticket ticket = ticketRepository.save(new Ticket(pastStage, TicketType.VISITOR, now));
         memberTicketRepository.save(new MemberTicket(member, ticket, 1));
     }
 }

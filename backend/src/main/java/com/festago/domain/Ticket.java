@@ -1,6 +1,8 @@
 package com.festago.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,19 +22,24 @@ public class Ticket {
     @ManyToOne(fetch = FetchType.LAZY)
     private Stage stage;
 
+    @Enumerated(EnumType.STRING)
+    private TicketType ticketType;
+
     private LocalDateTime entryTime;
 
     protected Ticket() {
     }
 
-    public Ticket(Stage stage, LocalDateTime entryTime) {
+    public Ticket(Stage stage, TicketType ticketType, LocalDateTime entryTime) {
         this.stage = stage;
+        this.ticketType = ticketType;
         this.entryTime = entryTime;
     }
 
-    public Ticket(Long id, Stage stage, LocalDateTime entryTime) {
+    public Ticket(Long id, Stage stage, TicketType ticketType, LocalDateTime entryTime) {
         this.id = id;
         this.stage = stage;
+        this.ticketType = ticketType;
         this.entryTime = entryTime;
     }
 
@@ -46,6 +53,10 @@ public class Ticket {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public TicketType getTicketType() {
+        return ticketType;
     }
 
     public LocalDateTime getEntryTime() {
