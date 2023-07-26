@@ -14,10 +14,12 @@ class TicketReserveHeaderViewHolder(
     private val binding: ItemTicketReserveHeaderBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ReservationUiModel) {
-        val formatter = DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.ticket_reserve_tv_date_range))
+        val formatter =
+            DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.ticket_reserve_tv_date_range_format))
 
         binding.tvDateRange.text =
-            item.startDate.format(formatter) + " ~ " + item.endDate.format(formatter)
+            binding.root.context.getString(R.string.ticket_reserve_tv_date_range)
+                .format(item.startDate.format(formatter), item.endDate.format(formatter))
         binding.tvUniversityName.text = item.name
 
         Glide.with(binding.root)

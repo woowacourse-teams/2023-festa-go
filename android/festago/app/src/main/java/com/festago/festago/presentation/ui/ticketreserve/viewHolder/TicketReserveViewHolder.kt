@@ -13,16 +13,27 @@ class TicketReserveViewHolder(
     private val binding: ItemTicketReserveBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ReservationStageUiModel) {
-        val openTimeFormatter = DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.ticket_reserve_tv_open_time))
+        val openTimeFormatter =
+            DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.ticket_reserve_tv_open_time))
         binding.tvOpenTime.text = item.ticketOpenTime.format(openTimeFormatter)
 
-        val dateFormatter = DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.ticket_reserve_tv_start_time), Locale.KOREA)
+        val dateFormatter = DateTimeFormatter.ofPattern(
+            binding.root.context.getString(R.string.ticket_reserve_tv_start_time),
+            Locale.KOREA,
+        )
         binding.tvDate.text = item.startTime.format(dateFormatter)
 
         binding.tvLineUp.text = item.lineUp
 
         binding.tvTicketCount.text = item.reservationTickets
-            .joinToString(", ") { "${it.ticketType}(${it.remainAmount}/${it.totalAmount})" }
+            .joinToString(binding.root.context.getString(R.string.ticket_reserve_tv_ticket_count_separator)) {
+                binding.root.context.getString(
+                    R.string.ticket_reserve_tv_ticket_count,
+                    it.ticketType,
+                    it.remainAmount.toString(),
+                    it.totalAmount.toString(),
+                )
+            }
     }
 
     companion object {

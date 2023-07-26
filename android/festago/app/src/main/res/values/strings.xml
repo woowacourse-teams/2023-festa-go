@@ -28,12 +28,15 @@
     <string name="home_bottom_navigation_user">마이페이지</string>
 
     <!-- Strings related to ticket reserve-->
-    <string name="ticket_reserve_tv_date_range">yyyy.MM.dd</string>
+    <string name="ticket_reserve_tv_date_range">%1s ~ %1s</string>
+    <string name="ticket_reserve_tv_date_range_format">yyyy.MM.dd</string>
     <string name="ticket_reserve_tv_start_time">MM.dd (E) HH:mm</string>
     <string name="ticket_reserve_tv_open_time_title">[예매 오픈 시간]</string>
     <string name="ticket_reserve_tv_open_time">yyyy.MM.dd HH:mm</string>
     <string name="ticket_reserve_tv_line_up_title">[라인업]</string>
     <string name="ticket_reserve_tv_ticket_count_title">[예매 가능 티켓]</string>
+    <string name="ticket_reserve_tv_ticket_count">%1$s(%2$s/%3$s)</string>
+    <string name="ticket_reserve_tv_ticket_count_separator">", "</string>
     <string name="ticket_reserve_tv_auth_guide_student">⚠️ 재학생용 티켓예매를 위해 사전에 학교 인증이 필요합니다.</string>
     <string name="ticket_reserve_tv_error_page">예매 가능한 티켓이 없습니다.</string>
     <string name="ticket_reserve_btn_reserve_ticket">티켓 예매</string>
