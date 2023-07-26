@@ -40,6 +40,8 @@
     <string name="ticket_reserve_tv_auth_guide_student">⚠️ 재학생용 티켓예매를 위해 사전에 학교 인증이 필요합니다.</string>
     <string name="ticket_reserve_tv_error_page">예매 가능한 티켓이 없습니다.</string>
     <string name="ticket_reserve_btn_reserve_ticket">티켓 예매</string>
+    <string name="ticket_reserve_tv_ticket_count_format">(%1$s/%2$s)</string>
+    <string name="ticket_reserve_tv_btn_reserve_ticket">예매 하기</string>
 
     <!-- Strings related to festival list -->
     <string name="festival_list_tv_date_format">yyyy.MM.dd</string>
