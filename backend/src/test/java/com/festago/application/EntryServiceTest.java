@@ -111,7 +111,8 @@ class EntryServiceTest {
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
-                .isInstanceOf(BadRequestException.class);
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("해당 예매 티켓의 주인이 아닙니다.");
         }
 
         @Test
@@ -123,7 +124,8 @@ class EntryServiceTest {
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(1L, memberTicketId))
-                .isInstanceOf(NotFoundException.class);
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("존재하지 않은 멤버 티켓입니다.");
         }
 
         @Test
