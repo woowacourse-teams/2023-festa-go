@@ -3,6 +3,7 @@ package com.festago.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.support.FestivalFixture;
+import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
@@ -36,8 +37,8 @@ class MemberTicketRepositoryTest {
     @Test
     void 회원의_ID로_에매한_티켓을_모두_조회() {
         // given
-        Member member1 = memberRepository.save(new Member());
-        Member member2 = memberRepository.save(new Member());
+        Member member1 = memberRepository.save(MemberFixture.member().build());
+        Member member2 = memberRepository.save(MemberFixture.member().build());
 
         Festival festival = festivalRepository.save(FestivalFixture.festival().build());
         Stage stage1 = stageRepository.save(StageFixture.stage().festival(festival).build());
