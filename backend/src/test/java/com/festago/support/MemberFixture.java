@@ -4,7 +4,7 @@ import com.festago.domain.Member;
 
 public class MemberFixture {
 
-    private Long id = 1L;
+    private Long id;
 
     public static MemberFixture member() {
         return new MemberFixture();

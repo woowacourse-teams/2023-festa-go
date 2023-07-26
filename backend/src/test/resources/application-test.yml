@@ -1,0 +1,20 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    open-in-view: false
+
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: trace
+
+festago:
+  qr-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago

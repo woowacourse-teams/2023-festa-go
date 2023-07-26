@@ -6,7 +6,7 @@ import com.festago.domain.Ticket;
 
 public class MemberTicketFixture {
 
-    private Long id = 1L;
+    private Long id;
     private Member owner = MemberFixture.member().build();
     private Ticket ticket = TicketFixture.ticket().build();
     private int number = 1;

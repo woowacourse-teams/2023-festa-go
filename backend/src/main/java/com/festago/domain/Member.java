@@ -12,7 +12,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    protected Member() {
+    public Member() {
     }
 
     public Member(Long id) {

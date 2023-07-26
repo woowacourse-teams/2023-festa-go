@@ -6,6 +6,8 @@ public enum ErrorCode {
     NOT_ENTRY_TIME("입장 가능한 시간이 아닙니다."),
     EXPIRED_ENTRY_CODE("만료된 입장 코드입니다."),
     INVALID_ENTRY_CODE("올바르지 않은 입장코드입니다."),
+    INVALID_TICKET_OPEN_TIME("티켓은 공연 시작 전에 오픈되어야 합니다."),
+    INVALID_STAGE_START_TIME("공연은 축제 기간 중에만 진행될 수 있습니다."),
 
     // 404
     MEMBER_TICKET_NOT_FOUND("존재하지 않은 멤버 티켓입니다."),

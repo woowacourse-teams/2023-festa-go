@@ -28,7 +28,9 @@ class JwtEntryCodeProviderTest {
         // given
         Date now = new Date();
         Date expiredAt = new Date(now.getTime() - 1000L);
-        MemberTicket memberTicket = MemberTicketFixture.memberTicket().build();
+        MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            .id(1L)
+            .build();
         EntryCodePayload payload = EntryCodePayload.from(memberTicket);
 
         // when & then
@@ -41,7 +43,7 @@ class JwtEntryCodeProviderTest {
     void JWT_토큰을_생성() {
         // given
         long period = 30000;
-        MemberTicket memberTicket = MemberTicketFixture.memberTicket().build();
+        MemberTicket memberTicket = MemberTicketFixture.memberTicket().id(1L).build();
         Date now = new Date();
         Date expiredAt = new Date(now.getTime() + period);
 

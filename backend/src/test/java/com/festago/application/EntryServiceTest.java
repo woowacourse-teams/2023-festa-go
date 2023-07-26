@@ -53,6 +53,7 @@ class EntryServiceTest {
                 .entryTime(entryTime)
                 .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .id(1L)
                 .ticket(ticket)
                 .build();
             Long memberId = memberTicket.getOwner().getId();
@@ -75,6 +76,7 @@ class EntryServiceTest {
                 .entryTime(entryTime)
                 .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .id(1L)
                 .ticket(ticket)
                 .build();
             Long memberId = memberTicket.getOwner().getId();
@@ -101,6 +103,7 @@ class EntryServiceTest {
                 .entryTime(entryTime)
                 .build();
             MemberTicket otherTicket = MemberTicketFixture.memberTicket()
+                .id(1L)
                 .owner(other)
                 .ticket(ticket)
                 .build();
@@ -132,6 +135,7 @@ class EntryServiceTest {
         void 성공() {
             // given
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .id(1L)
                 .build();
             String code = "3112321312123";
             Long memberId = memberTicket.getOwner().getId();
