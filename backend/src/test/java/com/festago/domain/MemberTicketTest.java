@@ -4,7 +4,6 @@ import static com.festago.domain.EntryState.AFTER_ENTRY;
 import static com.festago.domain.EntryState.AWAY;
 import static com.festago.domain.EntryState.BEFORE_ENTRY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.support.MemberTicketFixture;
 import org.junit.jupiter.api.DisplayNameGeneration;

@@ -9,10 +9,10 @@ public record MemberTicketResponse(Long id, Integer number, LocalDateTime entryT
 
     public static MemberTicketResponse from(MemberTicket memberTicket) {
         return new MemberTicketResponse(
-                memberTicket.getId(),
-                memberTicket.getNumber(),
-                memberTicket.getTicket().getEntryTime(),
-                memberTicket.getEntryState(),
-                StageResponse.from(memberTicket.getTicket().getStage()));
+            memberTicket.getId(),
+            memberTicket.getNumber(),
+            memberTicket.getTicket().getEntryTime(),
+            memberTicket.getEntryState(),
+            StageResponse.from(memberTicket.getTicket().getStage()));
     }
 }
