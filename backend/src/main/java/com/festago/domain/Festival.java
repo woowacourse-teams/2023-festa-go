@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Festival {
@@ -36,6 +37,11 @@ public class Festival {
         this.startDate = startDate;
         this.endDate = endDate;
         this.thumbnail = thumbnail;
+    }
+
+    public boolean isNotInDuration(LocalDateTime time) {
+        LocalDate date = time.toLocalDate();
+        return date.isBefore(startDate) || date.isAfter(endDate);
     }
 
     public Long getId() {

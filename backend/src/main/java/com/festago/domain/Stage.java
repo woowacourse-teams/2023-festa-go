@@ -1,5 +1,7 @@
 package com.festago.domain;
 
+import com.festago.exception.BadRequestException;
+import com.festago.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,20 +21,37 @@ public class Stage {
     @Column(nullable = false)
     private LocalDateTime startTime;
 
+    private String lineUp;
+
+    private LocalDateTime ticketOpenTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Festival festival;
 
     protected Stage() {
     }
 
-    public Stage(LocalDateTime startTime, Festival festival) {
-        this(null, startTime, festival);
+    public Stage(LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime, Festival festival) {
+        this(null, startTime, lineUp, ticketOpenTime, festival);
     }
 
-    public Stage(Long id, LocalDateTime startTime, Festival festival) {
+    public Stage(Long id, LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime,
+                 Festival festival) {
+        validate(startTime, ticketOpenTime, festival);
         this.id = id;
         this.startTime = startTime;
+        this.lineUp = lineUp;
+        this.ticketOpenTime = ticketOpenTime;
         this.festival = festival;
+    }
+
+    private void validate(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
+        if (festival.isNotInDuration(startTime)) {
+            throw new BadRequestException(ErrorCode.INVALID_STAGE_START_TIME);
+        }
+        if (ticketOpenTime.isAfter(startTime) || ticketOpenTime.isEqual(startTime)) {
+            throw new BadRequestException(ErrorCode.INVALID_TICKET_OPEN_TIME);
+        }
     }
 
     public Long getId() {
@@ -41,6 +60,14 @@ public class Stage {
 
     public LocalDateTime getStartTime() {
         return startTime;
+    }
+
+    public String getLineUp() {
+        return lineUp;
+    }
+
+    public LocalDateTime getTicketOpenTime() {
+        return ticketOpenTime;
     }
 
     public Festival getFestival() {

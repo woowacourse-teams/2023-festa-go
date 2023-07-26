@@ -46,8 +46,10 @@ public class DemoDataInitConfig {
         Festival festival = festivalRepository.save(
             new Festival("테코 대학교 축제", now.toLocalDate(), now.plusDays(3L).toLocalDate()));
 
-        stageRepository.save(new Stage(now.plusYears(1), festival));
-        Stage pastStage = stageRepository.save(new Stage(now.minusWeeks(1), festival));
+        String lineUp = "오리, 푸우, 글렌, 애쉬";
+        LocalDateTime ticketOpenTime = now.minusWeeks(2);
+        stageRepository.save(new Stage(now.plusYears(1), lineUp, ticketOpenTime, festival));
+        Stage pastStage = stageRepository.save(new Stage(now.minusWeeks(1), lineUp, ticketOpenTime, festival));
 
         Ticket ticket = ticketRepository.save(new Ticket(pastStage, TicketType.VISITOR, 100, now));
         memberTicketRepository.save(new MemberTicket(member, ticket, 1));
