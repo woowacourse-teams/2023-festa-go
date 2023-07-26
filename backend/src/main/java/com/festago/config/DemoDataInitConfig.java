@@ -1,5 +1,7 @@
 package com.festago.config;
 
+import com.festago.domain.Festival;
+import com.festago.domain.FestivalRepository;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicket;
@@ -31,16 +33,22 @@ public class DemoDataInitConfig {
     @Autowired
     MemberTicketRepository memberTicketRepository;
 
+    @Autowired
+    FestivalRepository festivalRepository;
+
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
-        Member member = memberRepository.save(new Member(null));
+        Member member = memberRepository.save(new Member());
 
         LocalDateTime now = LocalDateTime.now();
 
-        Stage futureStage = stageRepository.save(new Stage(null, "테코대학교 축제", now.plusYears(1)));
-        Stage pastStage = stageRepository.save(new Stage(null, "우테대학교 축제", now.minusWeeks(1)));
+        Festival festival = festivalRepository.save(
+            new Festival("테코 대학교 축제", now.toLocalDate(), now.plusDays(3L).toLocalDate()));
 
-        Ticket ticket = ticketRepository.save(new Ticket(null, pastStage, now));
+        stageRepository.save(new Stage(now.plusYears(1), festival));
+        Stage pastStage = stageRepository.save(new Stage(now.minusWeeks(1), festival));
+
+        Ticket ticket = ticketRepository.save(new Ticket(pastStage, now));
         memberTicketRepository.save(new MemberTicket(member, ticket, 1));
     }
 }

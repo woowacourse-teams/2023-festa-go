@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class TicketFixture {
 
-    private Long id = 1L;
+    private Long id;
     private Stage stage = StageFixture.stage().build();
     private LocalDateTime entryTime = LocalDateTime.now();
 

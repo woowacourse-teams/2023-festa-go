@@ -71,7 +71,7 @@ class TicketControllerTest {
         // given
         Long memberTicketId = 1L;
         Long memberId = 1L;
-        StageResponse stageResponse = new StageResponse(1L, "테코대학교 축제", LocalDateTime.now());
+        StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
         MemberTicketResponse expected = new MemberTicketResponse(memberTicketId, 1, LocalDateTime.now(),
             EntryState.BEFORE_ENTRY, stageResponse);
         given(memberTicketService.findById(memberId, memberTicketId))
@@ -93,7 +93,7 @@ class TicketControllerTest {
     void 회원의_모든_티켓을_조회한다() throws Exception {
         // given
         Long memberId = 1L;
-        StageResponse stageResponse = new StageResponse(1L, "테코대학교 축제", LocalDateTime.now());
+        StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
         MemberTicketsResponse expected = LongStream.range(0, 10L)
             .mapToObj(it -> new MemberTicketResponse(it, 1, LocalDateTime.now(),
                 EntryState.BEFORE_ENTRY, stageResponse))
