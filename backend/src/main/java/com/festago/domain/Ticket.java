@@ -31,9 +31,7 @@ public class Ticket {
     }
 
     public Ticket(Stage stage, TicketType ticketType, LocalDateTime entryTime) {
-        this.stage = stage;
-        this.ticketType = ticketType;
-        this.entryTime = entryTime;
+        this(null, stage, ticketType, entryTime);
     }
 
     public Ticket(Long id, Stage stage, TicketType ticketType, LocalDateTime entryTime) {

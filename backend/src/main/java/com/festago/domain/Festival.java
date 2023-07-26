@@ -9,6 +9,8 @@ import java.time.LocalDate;
 @Entity
 public class Festival {
 
+    private static final String DEFAULT_THUMBNAIL = "https://picsum.photos/536/354";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,15 +21,13 @@ public class Festival {
 
     private LocalDate endDate;
 
-    private String thumbnail = "https://picsum.photos/536/354";
+    private String thumbnail;
 
     protected Festival() {
     }
 
     public Festival(String name, LocalDate startDate, LocalDate endDate) {
-        this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this(null, name, startDate, endDate, DEFAULT_THUMBNAIL);
     }
 
     public Festival(Long id, String name, LocalDate startDate, LocalDate endDate, String thumbnail) {

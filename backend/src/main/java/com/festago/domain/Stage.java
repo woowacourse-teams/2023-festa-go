@@ -26,8 +26,7 @@ public class Stage {
     }
 
     public Stage(LocalDateTime startTime, Festival festival) {
-        this.startTime = startTime;
-        this.festival = festival;
+        this(null, startTime, festival);
     }
 
     public Stage(Long id, LocalDateTime startTime, Festival festival) {

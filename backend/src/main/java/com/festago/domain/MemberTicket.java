@@ -33,9 +33,7 @@ public class MemberTicket {
     }
 
     public MemberTicket(Member owner, Ticket ticket, int number) {
-        this.owner = owner;
-        this.ticket = ticket;
-        this.number = number;
+        this(null, owner, ticket, number);
     }
 
     public MemberTicket(Long id, Member owner, Ticket ticket, int number) {
