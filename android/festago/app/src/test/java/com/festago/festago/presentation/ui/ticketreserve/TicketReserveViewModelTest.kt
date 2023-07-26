@@ -2,8 +2,10 @@ package com.festago.festago.presentation.ui.ticketreserve
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.domain.model.Reservation
+import com.festago.festago.domain.model.ReservationStage
+import com.festago.festago.domain.model.ReservationTicket
 import com.festago.festago.domain.repository.ReservationRepository
-import com.festago.festago.presentation.model.ReservationUiModel
+import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -15,12 +17,32 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.LocalDateTime
 
 class TicketReserveViewModelTest {
     private lateinit var vm: TicketReserveViewModel
     private lateinit var reservationRepository: ReservationRepository
 
-    private val fakeReservation = Reservation(0)
+    private val fakeReservationTickets = listOf(
+        ReservationTicket("재학생용", 219, 500),
+        ReservationTicket("외부인용", 212, 300),
+    )
+    private val fakeReservationStage = ReservationStage(
+        id = 1,
+        lineUp = "르세라핌, 아이브, 뉴진스",
+        reservationTickets = fakeReservationTickets,
+        startTime = LocalDateTime.now(),
+        ticketOpenTime = LocalDateTime.now(),
+    )
+    private val fakeReservationStages = List(5) { fakeReservationStage }
+    private val fakeReservation = Reservation(
+        id = 1,
+        name = "테코대학교",
+        reservationStages = fakeReservationStages,
+        startDate = LocalDateTime.now(),
+        endDate = LocalDateTime.now(),
+        thumbnail = "https://search2.kakaocdn.net/argon/656x0_80_wr/8vLywd3V06c",
+    )
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -39,7 +61,7 @@ class TicketReserveViewModelTest {
         coEvery {
             reservationRepository.loadReservation()
         } answers {
-            Result.success(List(10) { fakeReservation })
+            Result.success(fakeReservation)
         }
 
         // when
@@ -50,7 +72,7 @@ class TicketReserveViewModelTest {
 
         // and
         val uiModel = vm.uiState.getValue() as TicketReserveUiState.Success
-        assertThat(uiModel.reservations).isEqualTo(List(10) { ReservationUiModel(0) })
+        assertThat(uiModel.reservation).isEqualTo(fakeReservation.toPresentation())
     }
 
     @Test
@@ -72,7 +94,7 @@ class TicketReserveViewModelTest {
             reservationRepository.loadReservation()
         } coAnswers {
             delay(1000)
-            Result.success(emptyList())
+            Result.success(fakeReservation)
         }
 
         // when
