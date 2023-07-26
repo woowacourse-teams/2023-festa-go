@@ -51,9 +51,11 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun updateUi(uiState: TicketReserveUiState) = when (uiState) {
-        is TicketReserveUiState.Loading -> Unit
+        is TicketReserveUiState.Loading,
+        is TicketReserveUiState.Error,
+        -> Unit
+
         is TicketReserveUiState.Success -> updateSuccess(uiState.reservation)
-        is TicketReserveUiState.Error -> Unit
     }
 
     private fun updateSuccess(reservations: ReservationUiModel) {
