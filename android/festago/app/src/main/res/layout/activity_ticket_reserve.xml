@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.ticketreserve.TicketReserveUiState" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,11 +18,13 @@
 
         <ProgressBar
             android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTicketReserve"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -26,10 +32,11 @@
 
         <TextView
             android:id="@+id/tvEmpty"
-            android:text="@string/ticket_reserve_tv_error_page"
-            android:textSize="20sp"
-            android:gravity="center"
+            visibility="@{uiState.shouldShowError}"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/ticket_reserve_tv_error_page"
+            android:textSize="20sp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

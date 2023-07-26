@@ -1,7 +1,5 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.presentation.model.ReservationUiModel
@@ -21,25 +19,13 @@ class TicketReserveViewBinder(
         is TicketReserveUiState.Error -> updateError()
     }
 
-    private fun updateLoading() {
-        binding.pbLoading.visibility = VISIBLE
-        binding.rvTicketReserve.visibility = INVISIBLE
-        binding.tvEmpty.visibility = INVISIBLE
-    }
+    private fun updateLoading() = Unit
 
     private fun updateSuccess(reservations: ReservationUiModel) {
-        binding.pbLoading.visibility = INVISIBLE
-        binding.rvTicketReserve.visibility = VISIBLE
-        binding.tvEmpty.visibility = INVISIBLE
-
         binding.rvTicketReserve.adapter = concatAdapter
         headerAdapter.submitList(listOf(reservations))
         contentsAdapter.submitList(reservations.reservationStages)
     }
 
-    private fun updateError() {
-        binding.pbLoading.visibility = INVISIBLE
-        binding.rvTicketReserve.visibility = INVISIBLE
-        binding.tvEmpty.visibility = VISIBLE
-    }
+    private fun updateError() = Unit
 }

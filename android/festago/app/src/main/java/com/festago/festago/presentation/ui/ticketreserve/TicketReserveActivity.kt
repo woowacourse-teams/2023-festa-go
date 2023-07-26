@@ -8,6 +8,7 @@ import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 
 class TicketReserveActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityTicketReserveBinding
 
     private lateinit var viewBinder: TicketReserveViewBinder
 
@@ -26,7 +27,7 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun initBinding() {
-        val binding = ActivityTicketReserveBinding.inflate(layoutInflater)
+        binding = ActivityTicketReserveBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.lifecycleOwner = this
@@ -36,6 +37,7 @@ class TicketReserveActivity : AppCompatActivity() {
     private fun initObserve() {
         vm.uiState.observe(this) { uiState ->
             viewBinder.updateUi(uiState)
+            binding.uiState = uiState
         }
     }
 
