@@ -1,6 +1,5 @@
 package com.festago.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
@@ -13,11 +12,12 @@ import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Ticket;
 import com.festago.dto.EntryCodeResponse;
+import com.festago.exception.BadRequestException;
+import com.festago.exception.NotFoundException;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.TicketFixture;
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -63,7 +63,30 @@ class EntryServiceTest {
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("입장 가능한 시간이 아닙니다.");
+        }
+
+        @Test
+        void 입장_시간이_24시간이_넘은_경우_예외() {
+            // given
+            LocalDateTime entryTime = LocalDateTime.now().minusDays(1).minusSeconds(10);
+            Ticket ticket = TicketFixture.ticket()
+                .entryTime(entryTime)
+                .build();
+            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .ticket(ticket)
+                .build();
+            Long memberId = memberTicket.getOwner().getId();
+            Long memberTicketId = memberTicket.getId();
+
+            given(memberTicketRepository.findById(anyLong()))
+                .willReturn(Optional.of(memberTicket));
+
+            // when & then
+            assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("입장 가능한 시간이 아닙니다.");
         }
 
         @Test
@@ -88,7 +111,8 @@ class EntryServiceTest {
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("해당 예매 티켓의 주인이 아닙니다.");
         }
 
         @Test
@@ -100,28 +124,8 @@ class EntryServiceTest {
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(1L, memberTicketId))
-                .isInstanceOf(NoSuchElementException.class);
-        }
-
-        @Test
-        void 입장_시간이_24시간이_넘은_경우_예외() {
-            // given
-            LocalDateTime entryTime = LocalDateTime.now().minusDays(1).minusSeconds(10);
-            Ticket ticket = TicketFixture.ticket()
-                .entryTime(entryTime)
-                .build();
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-                .ticket(ticket)
-                .build();
-            Long memberId = memberTicket.getOwner().getId();
-            Long memberTicketId = memberTicket.getId();
-
-            given(memberTicketRepository.findById(anyLong()))
-                .willReturn(Optional.of(memberTicket));
-
-            // when & then
-            assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("존재하지 않은 멤버 티켓입니다.");
         }
 
         @Test
@@ -142,9 +146,9 @@ class EntryServiceTest {
             EntryCodeResponse entryCode = entryService.createEntryCode(memberId, memberTicketId);
 
             // then
-            assertSoftly(softAssertions -> {
-                assertThat(entryCode.code()).isEqualTo(code);
-                assertThat(entryCode.period()).isEqualTo(30);
+            assertSoftly(softly -> {
+                softly.assertThat(entryCode.code()).isEqualTo(code);
+                softly.assertThat(entryCode.period()).isEqualTo(30);
             });
         }
     }

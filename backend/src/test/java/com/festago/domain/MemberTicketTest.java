@@ -4,7 +4,6 @@ import static com.festago.domain.EntryState.AFTER_ENTRY;
 import static com.festago.domain.EntryState.AWAY;
 import static com.festago.domain.EntryState.BEFORE_ENTRY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.support.MemberTicketFixture;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -20,13 +19,15 @@ class MemberTicketTest {
     class 출입_상태_변경 {
 
         @Test
-        void 상태_변경시_기존의_상태와_다르면_예외() {
+        void 상태_변경시_기존의_상태와_다르면_기존_상태가_유지된다() {
             // given
             MemberTicket memberTicket = MemberTicketFixture.memberTicket().build();
 
-            // when & then
-            assertThatThrownBy(() -> memberTicket.changeState(AFTER_ENTRY))
-                .isInstanceOf(IllegalArgumentException.class);
+            // when
+            memberTicket.changeState(AFTER_ENTRY);
+
+            // then
+            assertThat(memberTicket.getEntryState()).isEqualTo(BEFORE_ENTRY);
         }
 
         @Test

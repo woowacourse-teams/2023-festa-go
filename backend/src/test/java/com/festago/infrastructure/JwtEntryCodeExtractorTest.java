@@ -1,10 +1,11 @@
 package com.festago.infrastructure;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.domain.EntryCodePayload;
+import com.festago.exception.BadRequestException;
+import com.festago.exception.InternalServerException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -27,6 +28,17 @@ class JwtEntryCodeExtractorTest {
     JwtEntryCodeExtractor jwtEntryCodeExtractor = new JwtEntryCodeExtractor(SECRET_KEY);
 
     @Test
+    void JWT_토큰의_형식이_아니면_예외() {
+        // given
+        String code = "Hello World";
+
+        // when & then
+        assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("올바르지 않은 입장코드입니다.");
+    }
+
+    @Test
     void 기간이_만료된_토큰이면_예외() {
         //given
         String code = Jwts.builder()
@@ -38,7 +50,8 @@ class JwtEntryCodeExtractorTest {
 
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("만료된 입장 코드입니다.");
     }
 
     @Test
@@ -55,7 +68,8 @@ class JwtEntryCodeExtractorTest {
 
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("올바르지 않은 입장코드입니다.");
     }
 
     @Test
@@ -69,7 +83,8 @@ class JwtEntryCodeExtractorTest {
 
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(InternalServerException.class)
+            .hasMessage("유효하지 않은 payload 입니다.");
     }
 
     @Test
@@ -83,7 +98,8 @@ class JwtEntryCodeExtractorTest {
 
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(InternalServerException.class)
+            .hasMessage("올바르지 않은 입장상태 인덱스입니다.");
     }
 
     @Test
@@ -102,9 +118,9 @@ class JwtEntryCodeExtractorTest {
         EntryCodePayload payload = jwtEntryCodeExtractor.extract(code);
 
         // then
-        assertSoftly(softAssertions -> {
-            assertThat(payload.getMemberTicketId()).isEqualTo(memberTicketId);
-            assertThat(payload.getEntryState().getIndex()).isEqualTo(entryStateIndex);
+        assertSoftly(softly -> {
+            softly.assertThat(payload.getMemberTicketId()).isEqualTo(memberTicketId);
+            softly.assertThat(payload.getEntryState().getIndex()).isEqualTo(entryStateIndex);
         });
     }
 }

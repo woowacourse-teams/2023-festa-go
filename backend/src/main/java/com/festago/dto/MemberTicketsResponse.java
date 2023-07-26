@@ -10,7 +10,7 @@ public record MemberTicketsResponse(List<MemberTicketResponse> tickets) {
 
     public static MemberTicketsResponse from(List<MemberTicket> memberTickets) {
         return memberTickets.stream()
-                .map(MemberTicketResponse::from)
-                .collect(collectingAndThen(toList(), MemberTicketsResponse::new));
+            .map(MemberTicketResponse::from)
+            .collect(collectingAndThen(toList(), MemberTicketsResponse::new));
     }
 }

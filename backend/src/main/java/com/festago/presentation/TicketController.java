@@ -33,7 +33,7 @@ public class TicketController {
 
     @GetMapping("/{memberTicketId}")
     public ResponseEntity<MemberTicketResponse> findById(@PathVariable Long memberTicketId) {
-        MemberTicketResponse response = memberTicketService.findById(1L, memberTicketId);// TODO
+        MemberTicketResponse response = memberTicketService.findById(1L, memberTicketId); // TODO
         return ResponseEntity.ok()
             .body(response);
     }

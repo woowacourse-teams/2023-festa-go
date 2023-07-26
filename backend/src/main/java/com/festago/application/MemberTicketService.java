@@ -4,8 +4,10 @@ import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
+import com.festago.exception.BadRequestException;
+import com.festago.exception.ErrorCode;
+import com.festago.exception.NotFoundException;
 import java.util.List;
-import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +24,9 @@ public class MemberTicketService {
     @Transactional(readOnly = true)
     public MemberTicketResponse findById(Long memberId, Long memberTicketId) {
         MemberTicket memberTicket = memberTicketRepository.findById(memberTicketId)
-                .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_TICKET_NOT_FOUND));
         if (!memberTicket.isOwner(memberId)) {
-            throw new IllegalArgumentException(); // TODO
+            throw new BadRequestException(ErrorCode.NOT_MEMBER_TICKET_OWNER);
         }
         return MemberTicketResponse.from(memberTicket);
     }
