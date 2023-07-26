@@ -10,6 +10,7 @@ public class TicketFixture {
     private Long id;
     private Stage stage = StageFixture.stage().build();
     private TicketType ticketType = TicketType.VISITOR;
+    private Integer totalAmount = 100;
     private LocalDateTime entryTime = LocalDateTime.now();
 
     private TicketFixture() {
@@ -34,12 +35,17 @@ public class TicketFixture {
         return this;
     }
 
+    public TicketFixture totalAmount(Integer totalAmount) {
+        this.totalAmount = totalAmount;
+        return this;
+    }
+    
     public TicketFixture entryTime(LocalDateTime entryTime) {
         this.entryTime = entryTime;
         return this;
     }
 
     public Ticket build() {
-        return new Ticket(id, stage, ticketType, entryTime);
+        return new Ticket(id, stage, ticketType, totalAmount, entryTime);
     }
 }

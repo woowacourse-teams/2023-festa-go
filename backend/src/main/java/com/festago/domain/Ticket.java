@@ -25,19 +25,22 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketType ticketType;
 
+    private Integer totalAmount;
+
     private LocalDateTime entryTime;
 
     protected Ticket() {
     }
 
-    public Ticket(Stage stage, TicketType ticketType, LocalDateTime entryTime) {
-        this(null, stage, ticketType, entryTime);
+    public Ticket(Stage stage, TicketType ticketType, Integer totalAmount, LocalDateTime entryTime) {
+        this(null, stage, ticketType, totalAmount, entryTime);
     }
 
-    public Ticket(Long id, Stage stage, TicketType ticketType, LocalDateTime entryTime) {
+    public Ticket(Long id, Stage stage, TicketType ticketType, Integer totalAmount, LocalDateTime entryTime) {
         this.id = id;
         this.stage = stage;
         this.ticketType = ticketType;
+        this.totalAmount = totalAmount;
         this.entryTime = entryTime;
     }
 
@@ -55,6 +58,10 @@ public class Ticket {
 
     public TicketType getTicketType() {
         return ticketType;
+    }
+
+    public Integer getTotalAmount() {
+        return totalAmount;
     }
 
     public LocalDateTime getEntryTime() {

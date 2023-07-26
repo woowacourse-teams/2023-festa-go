@@ -49,7 +49,7 @@ public class DemoDataInitConfig {
         stageRepository.save(new Stage(now.plusYears(1), festival));
         Stage pastStage = stageRepository.save(new Stage(now.minusWeeks(1), festival));
 
-        Ticket ticket = ticketRepository.save(new Ticket(pastStage, TicketType.VISITOR, now));
+        Ticket ticket = ticketRepository.save(new Ticket(pastStage, TicketType.VISITOR, 100, now));
         memberTicketRepository.save(new MemberTicket(member, ticket, 1));
     }
 }

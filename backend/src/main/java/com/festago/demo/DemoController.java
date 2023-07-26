@@ -36,7 +36,7 @@ public class DemoController {
     @PostMapping("/tickets")
     public ResponseEntity<CreateTicketResponse> createTicket(@RequestBody CreateTicketRequest request) {
         Stage stage = stageRepository.findById(1L).get();
-        Ticket ticket = ticketRepository.save(new Ticket(stage, TicketType.VISITOR, request.entryTime));
+        Ticket ticket = ticketRepository.save(new Ticket(stage, TicketType.VISITOR, 100, request.entryTime));
         Member member = memberRepository.findById(1L).get();
         MemberTicket memberTicket = memberTicketRepository.save(new MemberTicket(member, ticket, 123));
         CreateTicketResponse response = new CreateTicketResponse(ticket.getId(), memberTicket.getId());
