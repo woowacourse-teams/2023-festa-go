@@ -1,5 +1,8 @@
 package com.festago.domain;
 
+import com.festago.exception.ErrorCode;
+import com.festago.exception.InternalServerException;
+
 public enum EntryState {
     BEFORE_ENTRY(0),
     AFTER_ENTRY(1),
@@ -18,13 +21,13 @@ public enum EntryState {
             case 0 -> BEFORE_ENTRY;
             case 1 -> AFTER_ENTRY;
             case 2 -> AWAY;
-            default -> throw new IllegalArgumentException();
+            default -> throw new InternalServerException(ErrorCode.INVALID_ENTRY_STATE_INDEX);
         };
     }
 
     private static void validate(Integer index) {
         if (index == null) {
-            throw new IllegalArgumentException();
+            throw new InternalServerException(ErrorCode.INVALID_ENTRY_STATE_INDEX);
         }
     }
 

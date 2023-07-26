@@ -1,5 +1,7 @@
 package com.festago.domain;
 
+import com.festago.exception.ErrorCode;
+import com.festago.exception.InternalServerException;
 import java.util.Date;
 
 public class EntryCode {
@@ -28,7 +30,7 @@ public class EntryCode {
 
     public void validate(long period) {
         if (period <= MINIMUM_PERIOD) {
-            throw new IllegalArgumentException(); // TODO
+            throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_PERIOD);
         }
     }
 

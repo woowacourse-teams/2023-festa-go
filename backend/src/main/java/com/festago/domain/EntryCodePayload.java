@@ -1,5 +1,8 @@
 package com.festago.domain;
 
+import com.festago.exception.ErrorCode;
+import com.festago.exception.InternalServerException;
+
 public class EntryCodePayload {
 
     private final Long memberTicketId;
@@ -16,11 +19,8 @@ public class EntryCodePayload {
     }
 
     private void validate(Long memberTicketId, EntryState entryState) {
-        if (memberTicketId == null) {
-            throw new IllegalArgumentException(); // TODO
-        }
-        if (entryState == null) {
-            throw new IllegalArgumentException(); // TODO
+        if (memberTicketId == null || entryState == null) {
+            throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_PAYLOAD);
         }
     }
 

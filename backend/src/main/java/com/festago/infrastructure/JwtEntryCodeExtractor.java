@@ -3,13 +3,14 @@ package com.festago.infrastructure;
 import com.festago.domain.EntryCodeExtractor;
 import com.festago.domain.EntryCodePayload;
 import com.festago.domain.EntryState;
+import com.festago.exception.BadRequestException;
+import com.festago.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;
 import javax.crypto.SecretKey;
 
@@ -41,11 +42,9 @@ public class JwtEntryCodeExtractor implements EntryCodeExtractor {
             return jwtParser.parseClaimsJws(code)
                 .getBody();
         } catch (ExpiredJwtException e) {
-            throw new IllegalArgumentException(); // TODO
-        } catch (SignatureException e) {
-            throw new IllegalArgumentException(); // TODO
+            throw new BadRequestException(ErrorCode.EXPIRED_ENTRY_CODE);
         } catch (JwtException e) {
-            throw new IllegalArgumentException(); // TODO
+            throw new BadRequestException(ErrorCode.INVALID_ENTRY_CODE);
         }
     }
 }

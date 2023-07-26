@@ -10,11 +10,12 @@ import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
 import com.festago.domain.Ticket;
 import com.festago.dto.MemberTicketResponse;
+import com.festago.exception.BadRequestException;
+import com.festago.exception.NotFoundException;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -45,7 +46,8 @@ class MemberTicketServiceTest {
 
         // when & then
         assertThatThrownBy(() -> memberTicketService.findById(memberId, memberTicketId))
-            .isInstanceOf(NoSuchElementException.class);
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage("존재하지 않은 멤버 티켓입니다.");
     }
 
     @Test
@@ -66,9 +68,9 @@ class MemberTicketServiceTest {
             .willReturn(Optional.of(otherMemberTicket));
 
         // when & then
-
         assertThatThrownBy(() -> memberTicketService.findById(memberId, otherTicketId))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("해당 예매 티켓의 주인이 아닙니다.");
     }
 
     @Test

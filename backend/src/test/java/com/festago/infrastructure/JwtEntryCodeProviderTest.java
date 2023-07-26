@@ -1,12 +1,12 @@
 package com.festago.infrastructure;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.domain.EntryCodePayload;
 import com.festago.domain.EntryCodeProvider;
 import com.festago.domain.MemberTicket;
+import com.festago.exception.InternalServerException;
 import com.festago.support.MemberTicketFixture;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -33,7 +33,8 @@ class JwtEntryCodeProviderTest {
 
         // when & then
         assertThatThrownBy(() -> entryCodeProvider.provide(payload, expiredAt))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(InternalServerException.class)
+            .hasMessage("올바르지 않은 입장코드 만료 일자입니다.");
     }
 
     @Test
@@ -57,10 +58,10 @@ class JwtEntryCodeProviderTest {
         Long actualMemberTicketId = (long) ((int) claims.get("ticketId"));
         Date actualExpiredAt = claims.getExpiration();
 
-        assertSoftly(softAssertions -> {
-            assertThat(actualExpiredAt.getTime() - now.getTime() / 1000 * 1000)
+        assertSoftly(softly -> {
+            softly.assertThat(actualExpiredAt.getTime() - now.getTime() / 1000 * 1000)
                 .isEqualTo(period);
-            assertThat(actualMemberTicketId).isEqualTo(memberTicket.getId());
+            softly.assertThat(actualMemberTicketId).isEqualTo(memberTicket.getId());
         });
     }
 }

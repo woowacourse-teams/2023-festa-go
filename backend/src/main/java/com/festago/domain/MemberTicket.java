@@ -47,7 +47,7 @@ public class MemberTicket {
 
     public void changeState(EntryState originState) {
         if (originState != this.entryState) {
-            throw new IllegalArgumentException(); // TODO : "이미 처리된 요청입니다."
+            return;
         }
         this.entryState = findNextState(originState);
     }
