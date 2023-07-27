@@ -27,10 +27,10 @@ class TicketTest {
     }
 
     @Test
-    void 입장시간_하루_지나면_입장_불가() {
+    void 입장시간_24시간이_지나면_입장_불가() {
         // given
         LocalDateTime entryTime = LocalDateTime.now();
-        LocalDateTime time = entryTime.plusDays(1);
+        LocalDateTime time = entryTime.plusHours(24);
 
         Ticket ticket = TicketFixture.ticket()
             .entryTime(entryTime)

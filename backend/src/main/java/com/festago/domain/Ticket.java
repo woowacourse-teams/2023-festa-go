@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Ticket {
 
-    private static final int ENTRY_LIMIT_DAY = 1;
+    private static final int ENTRY_LIMIT_HOUR = 24;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +45,7 @@ public class Ticket {
     }
 
     public boolean canEntry(LocalDateTime time) {
-        return time.isAfter(entryTime) && time.isBefore(entryTime.plusDays(ENTRY_LIMIT_DAY));
+        return time.isAfter(entryTime) && time.isBefore(entryTime.plusDays(ENTRY_LIMIT_HOUR));
     }
 
     public Long getId() {
