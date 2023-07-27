@@ -45,7 +45,8 @@ public class Ticket {
     }
 
     public boolean canEntry(LocalDateTime time) {
-        return time.isAfter(entryTime) && time.isBefore(entryTime.plusDays(ENTRY_LIMIT_HOUR));
+        return (time.isEqual(entryTime) || time.isAfter(entryTime))
+            && time.isBefore(entryTime.plusHours(ENTRY_LIMIT_HOUR));
     }
 
     public Long getId() {

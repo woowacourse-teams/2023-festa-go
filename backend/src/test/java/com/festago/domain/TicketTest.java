@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -40,11 +42,11 @@ class TicketTest {
         assertThat(ticket.canEntry(time)).isFalse();
     }
 
-    @Test
-    void 입장_가능() {
+    @ParameterizedTest
+    @ValueSource(strings = {"2023-07-28T17:59:59", "2023-07-27T18:00:00"})
+    void 입장_가능(LocalDateTime time) {
         // given
-        LocalDateTime entryTime = LocalDateTime.now();
-        LocalDateTime time = entryTime.plusMinutes(10);
+        LocalDateTime entryTime = LocalDateTime.parse("2023-07-27T18:00:00");
 
         Ticket ticket = TicketFixture.ticket()
             .entryTime(entryTime)
