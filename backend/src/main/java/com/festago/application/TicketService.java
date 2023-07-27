@@ -28,6 +28,7 @@ public class TicketService {
         this.memberTicketRepository = memberTicketRepository;
     }
 
+    @Transactional(readOnly = true)
     public StageTicketsResponse findStageTickets(Long stageId) {
         Map<TicketType, Integer> ticketTypeToTotalAmount = getTicketTypeToTotalAmount(stageId);
         return getStageTicketsResponse(ticketTypeToTotalAmount, stageId);
