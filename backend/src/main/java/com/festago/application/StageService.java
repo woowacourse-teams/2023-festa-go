@@ -24,7 +24,7 @@ public class StageService {
     }
 
     public StageResponse create(StageCreateRequest request) {
-        Festival festival = findFestivalBy(request.festivalId());
+        Festival festival = findFestivalById(request.festivalId());
         Stage newStage = stageRepository.save(new Stage(
             request.startTime(),
             request.lineUp(),
@@ -34,7 +34,7 @@ public class StageService {
         return StageResponse.from(newStage);
     }
 
-    private Festival findFestivalBy(Long festivalId) {
+    private Festival findFestivalById(Long festivalId) {
         return festivalRepository.findById(festivalId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
     }

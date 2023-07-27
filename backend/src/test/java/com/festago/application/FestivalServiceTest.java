@@ -29,5 +29,4 @@ class FestivalServiceTest extends ApplicationTest {
         // then
         assertThat(festivalResponse).isNotNull();
     }
-
 }
