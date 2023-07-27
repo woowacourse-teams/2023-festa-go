@@ -20,11 +20,7 @@ class FestivalListViewModel(
             _uiState.value = FestivalListUiState.Loading
             festivalRepository.loadFestivals()
                 .onSuccess {
-                    _uiState.value = FestivalListUiState.Success(
-                        it.map { festival ->
-                            festival.toPresentation()
-                        },
-                    )
+                    _uiState.value = FestivalListUiState.Success(it.toPresentation())
                 }.onFailure {
                     _uiState.value = FestivalListUiState.Error
                 }
