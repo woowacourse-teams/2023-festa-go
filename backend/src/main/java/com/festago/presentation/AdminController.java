@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
 
@@ -19,7 +21,8 @@ public class AdminController {
 
     @PostMapping("/festivals")
     public ResponseEntity<FestivalResponse> createFestival(@RequestBody FestivalCreateRequest request) {
+        FestivalResponse response = festivalService.create(request);
         return ResponseEntity.ok()
-            .body(festivalService.create(request));
+            .body(response);
     }
 }
