@@ -9,9 +9,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.FestivalService;
+import com.festago.application.StageService;
 import com.festago.dto.FestivalCreateRequest;
 import com.festago.dto.FestivalResponse;
+import com.festago.dto.StageCreateRequest;
+import com.festago.dto.StageResponse;
+import com.festago.exception.ErrorCode;
+import com.festago.exception.NotFoundException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -31,6 +37,9 @@ class AdminControllerTest {
 
     @MockBean
     FestivalService festivalService;
+
+    @MockBean
+    StageService stageService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -67,5 +76,59 @@ class AdminControllerTest {
             .andExpect(jsonPath("$.startDate").value(startDate))
             .andExpect(jsonPath("$.endDate").value(endDate))
             .andExpect(jsonPath("$.thumbnail").value(thumbnail));
+    }
+
+    @Test
+    void 존재_하지_않는_축제_무대_생성_예외() throws Exception {
+        // given
+        String startTime = "2023-07-27T18:00:00";
+        String lineUp = "글렌, 애쉬, 오리, 푸우";
+        String ticketOpenTime = "2023-07-26T18:00:00";
+        long festivalId = 1L;
+
+        given(stageService.create(any()))
+            .willThrow(new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
+
+        StageCreateRequest request = new StageCreateRequest(
+            LocalDateTime.parse(startTime),
+            lineUp,
+            LocalDateTime.parse(ticketOpenTime),
+            festivalId);
+
+        // when && then
+        mockMvc.perform(post("/admin/stages")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.errorCode").value("FESTIVAL_NOT_FOUND"))
+            .andExpect(jsonPath("$.message").value("존재하지 않는 축제입니다."));
+    }
+
+    @Test
+    void 무대_생성() throws Exception {
+        // given
+        String startTime = "2023-07-27T18:00:00";
+        String lineUp = "글렌, 애쉬, 오리, 푸우";
+        String ticketOpenTime = "2023-07-26T18:00:00";
+        long festivalId = 1L;
+
+        StageCreateRequest request = new StageCreateRequest(
+            LocalDateTime.parse(startTime),
+            lineUp,
+            LocalDateTime.parse(ticketOpenTime),
+            festivalId);
+
+        given(stageService.create(any()))
+            .willReturn(new StageResponse(festivalId, LocalDateTime.parse(startTime)));
+
+        // when && then
+        mockMvc.perform(post("/admin/stages")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(festivalId))
+            .andExpect(jsonPath("$.startTime").value(startTime));
     }
 }
