@@ -6,11 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.data.repository.ReservationDefaultRepository
 import com.festago.festago.databinding.ActivityTicketReserveBinding
-import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.model.ReservationUiModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
-import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveCallback
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
 import com.festago.festago.presentation.ui.ticketreserve.bottomSheet.TicketReserveBottomSheetFragment
 
@@ -23,14 +21,10 @@ class TicketReserveActivity : AppCompatActivity() {
         )
     }
 
-    private val contentsAdapter = TicketReserveAdapter(
-        object : TicketReserveCallback {
-            override fun onTicketReserveClicked(reservationStageUiModel: ReservationStageUiModel) {
-                val fragment = TicketReserveBottomSheetFragment.newInstance(reservationStageUiModel)
-                fragment.show(supportFragmentManager, "bottomSheet")
-            }
-        },
-    )
+    private val contentsAdapter = TicketReserveAdapter {
+        TicketReserveBottomSheetFragment.newInstance(it)
+            .show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
+    }
     private val headerAdapter = TicketReserveHeaderAdapter()
     private val concatAdapter = ConcatAdapter(headerAdapter, contentsAdapter)
 

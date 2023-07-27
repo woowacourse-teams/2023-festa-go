@@ -39,7 +39,7 @@ class TicketReserveViewHolder(
             }
 
         binding.btnReserveTicket.setOnClickListener {
-            ticketReserveCallback.onTicketReserveClicked(item)
+            ticketReserveCallback.onTicketReserveClick(item)
         }
     }
 
