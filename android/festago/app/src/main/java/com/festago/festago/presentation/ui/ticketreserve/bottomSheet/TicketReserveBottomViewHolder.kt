@@ -7,22 +7,29 @@ import com.festago.festago.databinding.ItemTicketReserveBottomSheetBinding
 
 class TicketReserveBottomViewHolder(
     private val binding: ItemTicketReserveBottomSheetBinding,
+    private val callback: TicketReserveBottomSheetCallback,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: TicketReserveBottomItem, callback: TicketReserveBottomSheetCallback) {
-        binding.reservationTicket = item.ticket
-        binding.clLayout.isSelected = item.isSelected
+    init {
         binding.clLayout.setOnClickListener { callback.invoke(bindingAdapterPosition) }
     }
 
+    fun bind(item: TicketReserveBottomItem) {
+        binding.reservationTicket = item.ticket
+        binding.clLayout.isSelected = item.isSelected
+    }
+
     companion object {
-        fun from(parent: ViewGroup): TicketReserveBottomViewHolder {
+        fun from(
+            parent: ViewGroup,
+            callback: TicketReserveBottomSheetCallback,
+        ): TicketReserveBottomViewHolder {
             val binding = ItemTicketReserveBottomSheetBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return TicketReserveBottomViewHolder(binding)
+            return TicketReserveBottomViewHolder(binding, callback)
         }
     }
 }

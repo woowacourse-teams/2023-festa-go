@@ -11,17 +11,15 @@ class TicketReserveBottomSheetAdapter :
         parent: ViewGroup,
         viewType: Int,
     ): TicketReserveBottomViewHolder {
-        return TicketReserveBottomViewHolder.from(parent)
-    }
-
-    override fun onBindViewHolder(holder: TicketReserveBottomViewHolder, position: Int) {
-        val callback = TicketReserveBottomSheetCallback {
+        return TicketReserveBottomViewHolder.from(parent) { position ->
             currentList.forEach { it.isSelected = false }
             getItem(position).isSelected = true
             notifyDataSetChanged()
         }
+    }
 
-        holder.bind(getItem(position), callback)
+    override fun onBindViewHolder(holder: TicketReserveBottomViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 
     companion object {
