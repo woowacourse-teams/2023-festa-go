@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.model.FestivalUiModel
 
-class FestivalListAdapter : ListAdapter<FestivalUiModel, FestivalItemViewHolder>(diffUtil) {
+class FestivalListAdapter(
+    private val onFestivalClick: (festivalId: Long) -> Unit,
+) : ListAdapter<FestivalUiModel, FestivalItemViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FestivalItemViewHolder {
-        return FestivalItemViewHolder.from(parent)
+        return FestivalItemViewHolder.from(parent, onFestivalClick)
     }
 
     override fun onBindViewHolder(holder: FestivalItemViewHolder, position: Int) {

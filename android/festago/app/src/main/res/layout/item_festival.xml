@@ -6,6 +6,10 @@
         <variable
             name="festival"
             type="com.festago.festago.presentation.model.FestivalUiModel" />
+
+        <variable
+            name="onFestivalClick"
+            type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,6 +17,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> onFestivalClick.invoke(festival.id)}"
         android:padding="8dp">
 
         <androidx.cardview.widget.CardView
