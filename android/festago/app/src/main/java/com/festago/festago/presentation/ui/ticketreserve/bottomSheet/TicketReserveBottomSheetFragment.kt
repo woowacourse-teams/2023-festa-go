@@ -35,7 +35,10 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
         arguments?.getParcelableCompat<ReservationStageUiModel>(KET_ITEM)?.let {
             binding.reservationStage = it
             binding.tvDate.text = it.startTime.format(dateFormatter)
-            ticketTypeAdapter.submitList(it.reservationTickets)
+            ticketTypeAdapter.submitList(
+                it.reservationTickets
+                    .map { ticket -> TicketReserveBottomItem(ticket) },
+            )
         }
 
         binding.rvTicketTypes.adapter = ticketTypeAdapter

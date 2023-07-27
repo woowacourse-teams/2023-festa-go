@@ -4,13 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.databinding.ItemTicketReserveBottomSheetBinding
-import com.festago.festago.presentation.model.ReservationTicketUiModel
 
 class TicketReserveBottomViewHolder(
     private val binding: ItemTicketReserveBottomSheetBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ReservationTicketUiModel) {
-        binding.reservationTicket = item
+
+    fun bind(item: TicketReserveBottomItem, callback: TicketReserveBottomSheetCallback) {
+        binding.reservationTicket = item.ticket
+        binding.clLayout.isSelected = item.isSelected
+        binding.clLayout.setOnClickListener { callback.invoke(bindingAdapterPosition) }
     }
 
     companion object {

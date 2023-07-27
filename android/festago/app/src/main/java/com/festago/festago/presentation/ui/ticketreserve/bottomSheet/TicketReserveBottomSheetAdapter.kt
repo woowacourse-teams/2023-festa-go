@@ -3,10 +3,9 @@ package com.festago.festago.presentation.ui.ticketreserve.bottomSheet
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.festago.festago.presentation.model.ReservationTicketUiModel
 
 class TicketReserveBottomSheetAdapter :
-    ListAdapter<ReservationTicketUiModel, TicketReserveBottomViewHolder>(diffUtil) {
+    ListAdapter<TicketReserveBottomItem, TicketReserveBottomViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -16,20 +15,26 @@ class TicketReserveBottomSheetAdapter :
     }
 
     override fun onBindViewHolder(holder: TicketReserveBottomViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val callback = TicketReserveBottomSheetCallback {
+            currentList.forEach { it.isSelected = false }
+            getItem(position).isSelected = true
+            notifyDataSetChanged()
+        }
+
+        holder.bind(getItem(position), callback)
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<ReservationTicketUiModel>() {
+        val diffUtil = object : DiffUtil.ItemCallback<TicketReserveBottomItem>() {
             override fun areContentsTheSame(
-                oldItem: ReservationTicketUiModel,
-                newItem: ReservationTicketUiModel,
-            ) = oldItem == newItem
+                oldItem: TicketReserveBottomItem,
+                newItem: TicketReserveBottomItem,
+            ) = oldItem.ticket == newItem.ticket
 
             override fun areItemsTheSame(
-                oldItem: ReservationTicketUiModel,
-                newItem: ReservationTicketUiModel,
-            ) = oldItem.ticketType == newItem.ticketType
+                oldItem: TicketReserveBottomItem,
+                newItem: TicketReserveBottomItem,
+            ) = oldItem.ticket.ticketType == newItem.ticket.ticketType
         }
     }
 }
