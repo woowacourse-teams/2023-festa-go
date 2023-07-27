@@ -22,14 +22,14 @@ class FestivalServiceTest {
 
     @Test
     void 축제를_생성한다() {
-        //given
+        // given
         FestivalCreateRequest request = new FestivalCreateRequest("테코 대학교 축제", LocalDate.parse("2023-07-26"),
             LocalDate.parse("2023-07-28"), "thumbnail.png");
 
-        //when
+        // when
         FestivalResponse festivalResponse = festivalService.create(request);
 
-        //then
+        // then
         assertThat(festivalResponse).isNotNull();
     }
 
