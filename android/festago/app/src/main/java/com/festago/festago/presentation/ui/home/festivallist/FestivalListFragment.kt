@@ -54,11 +54,11 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
     private fun updateUi(uiState: FestivalListUiState) {
         when (uiState) {
+            is FestivalListUiState.Loading, is FestivalListUiState.Error -> Unit
+
             is FestivalListUiState.Success -> {
                 adapter.submitList(uiState.festivals)
             }
-
-            is FestivalListUiState.Loading, is FestivalListUiState.Error -> Unit
         }
     }
 
