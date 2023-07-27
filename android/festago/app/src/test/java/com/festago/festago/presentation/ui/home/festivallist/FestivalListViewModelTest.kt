@@ -12,7 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -64,14 +64,20 @@ class FestivalListViewModelTest {
         vm.loadFestivals()
 
         // then
-        assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Success::class.java)
-        assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(true)
-        assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-        assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
+        val softly = SoftAssertions().apply {
+            assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Success::class.java)
 
-        val actual = (vm.uiState.value as FestivalListUiState.Success).festivals
-        val expected = fakeFestivals.map { it.toPresentation() }
-        assertThat(actual).isEqualTo(expected)
+            // and
+            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(true)
+            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
+
+            // and
+            val actual = (vm.uiState.value as FestivalListUiState.Success).festivals
+            val expected = fakeFestivals.map { it.toPresentation() }
+            assertThat(actual).isEqualTo(expected)
+        }
+        softly.assertAll()
     }
 
     @Test
@@ -87,10 +93,15 @@ class FestivalListViewModelTest {
         vm.loadFestivals()
 
         // then
-        assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Error::class.java)
-        assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-        assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-        assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+        val softly = SoftAssertions().apply {
+            assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Error::class.java)
+
+            // and
+            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+        }
+        softly.assertAll()
     }
 
     @Test
@@ -107,9 +118,14 @@ class FestivalListViewModelTest {
         vm.loadFestivals()
 
         // then
-        assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Loading::class.java)
-        assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-        assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(true)
-        assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
+        val softly = SoftAssertions().apply {
+            assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Loading::class.java)
+
+            // and
+            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(true)
+            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
+        }
+        softly.assertAll()
     }
 }
