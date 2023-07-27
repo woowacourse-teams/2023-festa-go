@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(StaffTicketController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class StaffTicketControllerTest {
+class StaffMemberTicketControllerTest {
 
     @Autowired
     MockMvc mockMvc;
