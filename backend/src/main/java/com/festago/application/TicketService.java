@@ -29,12 +29,20 @@ public class TicketService {
     }
 
     public StageTicketsResponse findStageTickets(Long stageId) {
-        List<Ticket> tickets = ticketRepository.findAllByStageId(stageId);
-        Map<TicketType, Integer> collect = tickets.stream()
-            .collect(groupingBy(Ticket::getTicketType, summingInt(Ticket::getTotalAmount)));
+        Map<TicketType, Integer> ticketTypeToTotalAmount = getTicketTypeToTotalAmount(stageId);
+        return getStageTicketsResponse(ticketTypeToTotalAmount, stageId);
+    }
 
+    private Map<TicketType, Integer> getTicketTypeToTotalAmount(Long stageId) {
+        List<Ticket> tickets = ticketRepository.findAllByStageId(stageId);
+        return tickets.stream()
+            .collect(groupingBy(Ticket::getTicketType, summingInt(Ticket::getTotalAmount)));
+    }
+
+    private StageTicketsResponse getStageTicketsResponse(Map<TicketType, Integer> ticketTypeToTotalAmount,
+                                                         Long stageId) {
         List<StageTicketResponse> stageTicketResponses = new ArrayList<>();
-        for (Entry<TicketType, Integer> entry : collect.entrySet()) {
+        for (Entry<TicketType, Integer> entry : ticketTypeToTotalAmount.entrySet()) {
             Integer reserveCount = memberTicketRepository.countByTicketTypeAndStageId(entry.getKey(), stageId);
             stageTicketResponses.add(
                 new StageTicketResponse(entry.getKey(), entry.getValue(), entry.getValue() - reserveCount));
