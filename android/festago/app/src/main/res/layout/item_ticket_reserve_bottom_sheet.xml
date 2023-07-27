@@ -15,7 +15,7 @@
         android:id="@+id/clLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_ticket_reserve_bottom_sheet"
+        android:background="@drawable/bg_ticket_reserve_bottom_sheet_item"
         android:paddingVertical="24dp">
 
         <androidx.constraintlayout.widget.Guideline
@@ -37,6 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{reservationTicket.ticketType}"
+            android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -48,6 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{@string/ticket_reserve_tv_ticket_count_format(reservationTicket.remainAmount, reservationTicket.totalAmount)}"
+            android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/endGuideLine"
