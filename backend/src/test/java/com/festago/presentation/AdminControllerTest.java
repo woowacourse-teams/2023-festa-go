@@ -10,10 +10,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
+import com.festago.application.TicketService;
+import com.festago.domain.TicketType;
 import com.festago.dto.FestivalCreateRequest;
 import com.festago.dto.FestivalResponse;
 import com.festago.dto.StageCreateRequest;
 import com.festago.dto.StageResponse;
+import com.festago.dto.TicketCreateRequest;
+import com.festago.dto.TicketResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
 import java.time.LocalDate;
@@ -40,6 +44,9 @@ class AdminControllerTest {
 
     @MockBean
     StageService stageService;
+
+    @MockBean
+    TicketService ticketService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -130,5 +137,64 @@ class AdminControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").value(festivalId))
             .andExpect(jsonPath("$.startTime").value(startTime));
+    }
+
+    @Test
+    void 존재_하지_않는_무대_티켓_예외() throws Exception {
+        // given
+        String entryTime = "2023-07-27T18:00:00";
+
+        TicketCreateRequest request = new TicketCreateRequest(1L,
+            TicketType.VISITOR,
+            100,
+            LocalDateTime.parse(entryTime)
+        );
+
+        given(ticketService.create(any()))
+            .willThrow(new NotFoundException(ErrorCode.STAGE_NOT_FOUND));
+
+        // when && then
+        mockMvc.perform(post("/admin/tickets")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.errorCode").value("STAGE_NOT_FOUND"))
+            .andExpect(jsonPath("$.message").value("존재하지 않은 공연입니다."));
+    }
+
+    @Test
+    void 티켓_생성() throws Exception {
+        // given
+        String entryTime = "2023-07-27T18:00:00";
+        int totalAmount = 100;
+        long stageId = 1L;
+        TicketType ticketType = TicketType.VISITOR;
+
+        TicketCreateRequest request = new TicketCreateRequest(stageId,
+            ticketType,
+            totalAmount,
+            LocalDateTime.parse(entryTime)
+        );
+
+        long ticketId = 1L;
+
+        given(ticketService.create(any()))
+            .willReturn(new TicketResponse(ticketId,
+                stageId,
+                ticketType,
+                totalAmount,
+                LocalDateTime.parse(entryTime)));
+
+        // when && then
+        mockMvc.perform(post("/admin/tickets")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(ticketId))
+            .andExpect(jsonPath("$.stageId").value(stageId))
+            .andExpect(jsonPath("$.ticketType").value(ticketType.name()))
+            .andExpect(jsonPath("$.totalAmount").value(totalAmount));
     }
 }
