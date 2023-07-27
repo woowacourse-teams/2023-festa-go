@@ -77,7 +77,7 @@ class MemberTicketControllerTest {
         FestivalResponse festivalResponse = new FestivalResponse(1L, "테코대학교", LocalDate.now(), LocalDate.now(),
             "https://image.png");
         MemberTicketResponse expected = new MemberTicketResponse(memberTicketId, 1, LocalDateTime.now(),
-            EntryState.BEFORE_ENTRY, stageResponse, festivalResponse);
+            EntryState.BEFORE_ENTRY, LocalDateTime.now(), stageResponse, festivalResponse);
         given(memberTicketService.findById(memberId, memberTicketId))
             .willReturn(expected);
 
@@ -101,8 +101,9 @@ class MemberTicketControllerTest {
         FestivalResponse festivalResponse = new FestivalResponse(1L, "테코대학교", LocalDate.now(), LocalDate.now(),
             "https://image.png");
         MemberTicketsResponse expected = LongStream.range(0, 10L)
-            .mapToObj(it -> new MemberTicketResponse(it, 1, LocalDateTime.now(),
-                EntryState.BEFORE_ENTRY, stageResponse, festivalResponse))
+            .mapToObj(
+                it -> new MemberTicketResponse(it, 1, LocalDateTime.now(), EntryState.BEFORE_ENTRY, LocalDateTime.now(),
+                    stageResponse, festivalResponse))
             .collect(collectingAndThen(toList(), MemberTicketsResponse::new));
         given(memberTicketService.findAll(memberId))
             .willReturn(expected);

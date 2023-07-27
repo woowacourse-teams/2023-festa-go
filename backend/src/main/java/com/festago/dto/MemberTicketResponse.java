@@ -8,7 +8,7 @@ import com.festago.domain.Ticket;
 import java.time.LocalDateTime;
 
 public record MemberTicketResponse(Long id, Integer number, LocalDateTime entryTime, EntryState state,
-                                   StageResponse stage, FestivalResponse festival) {
+                                   LocalDateTime reservedAt, StageResponse stage, FestivalResponse festival) {
 
     // TODO: FestivalResponse
     // 다른 API의 FestivalResponse와 해당 API의 FestivalResponse 응답값 구성이 다릅니다. (얘가 원래는 좀 더 심플함)
@@ -24,6 +24,7 @@ public record MemberTicketResponse(Long id, Integer number, LocalDateTime entryT
             memberTicket.getNumber(),
             ticket.getEntryTime(),
             memberTicket.getEntryState(),
+            memberTicket.getReservedAt(),
             StageResponse.from(stage),
             FestivalResponse.from(festival));
     }
