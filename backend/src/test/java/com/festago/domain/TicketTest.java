@@ -124,4 +124,21 @@ class TicketTest {
             .isInstanceOf(BadRequestException.class)
             .hasMessage("입장 시간은 공연 시작 12시간 이내여야 합니다.");
     }
+
+    @Test
+    void 티켓의_최대_수량과_현재_예매한_수량과_같으면_매진() {
+        // given
+        Ticket ticket = TicketFixture.ticket()
+            .totalAmount(2)
+            .build();
+
+        // when
+        ticket.increaseReservedAmount();
+        ticket.increaseReservedAmount();
+
+        // then
+        assertThatThrownBy(ticket::increaseReservedAmount)
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("매진된 티켓입니다.");
+    }
 }

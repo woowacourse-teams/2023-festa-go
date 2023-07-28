@@ -31,6 +31,8 @@ public class Ticket {
 
     private Integer totalAmount;
 
+    private int reservedAmount = 0;
+
     private LocalDateTime entryTime;
 
     protected Ticket() {
@@ -71,6 +73,13 @@ public class Ticket {
             && time.isBefore(entryTime.plusHours(ENTRY_LIMIT_HOUR));
     }
 
+    public void increaseReservedAmount() {
+        if (reservedAmount >= totalAmount) {
+            throw new BadRequestException(ErrorCode.TICKET_SOLD_OUT);
+        }
+        reservedAmount++;
+    }
+
     public Long getId() {
         return id;
     }
@@ -85,6 +94,10 @@ public class Ticket {
 
     public Integer getTotalAmount() {
         return totalAmount;
+    }
+
+    public int getReservedAmount() {
+        return reservedAmount;
     }
 
     public LocalDateTime getEntryTime() {
