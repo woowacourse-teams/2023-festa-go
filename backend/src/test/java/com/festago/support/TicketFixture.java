@@ -3,15 +3,12 @@ package com.festago.support;
 import com.festago.domain.Stage;
 import com.festago.domain.Ticket;
 import com.festago.domain.TicketType;
-import java.time.LocalDateTime;
 
 public class TicketFixture {
 
     private Long id;
     private Stage stage = StageFixture.stage().build();
     private TicketType ticketType = TicketType.VISITOR;
-    private Integer totalAmount = 100;
-    private LocalDateTime entryTime = LocalDateTime.now().minusMinutes(30);
 
     private TicketFixture() {
     }
@@ -35,17 +32,7 @@ public class TicketFixture {
         return this;
     }
 
-    public TicketFixture totalAmount(Integer totalAmount) {
-        this.totalAmount = totalAmount;
-        return this;
-    }
-
-    public TicketFixture entryTime(LocalDateTime entryTime) {
-        this.entryTime = entryTime;
-        return this;
-    }
-
     public Ticket build() {
-        return new Ticket(id, stage, ticketType, totalAmount, entryTime);
+        return new Ticket(id, stage, ticketType);
     }
 }
