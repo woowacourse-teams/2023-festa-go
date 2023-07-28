@@ -34,7 +34,7 @@ class FestivalListViewModel(
     }
 
     fun openTicketReserve(festivalId: Long) {
-        _event.postValue(OpenTicketReserve(festivalId))
+        _event.setValue(OpenTicketReserve(festivalId))
     }
 
     class FestivalListViewModelFactory(
