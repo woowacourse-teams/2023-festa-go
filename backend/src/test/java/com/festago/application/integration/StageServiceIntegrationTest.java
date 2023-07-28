@@ -1,7 +1,8 @@
-package com.festago.application;
+package com.festago.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.festago.application.StageService;
 import com.festago.domain.FestivalRepository;
 import com.festago.dto.StageCreateRequest;
 import com.festago.exception.NotFoundException;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class StageServiceTest extends ApplicationTest {
+class StageServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     StageService stageService;
