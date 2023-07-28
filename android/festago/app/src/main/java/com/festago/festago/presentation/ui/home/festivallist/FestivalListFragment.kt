@@ -52,7 +52,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
     }
 
     private fun initView() {
-        adapter = FestivalListAdapter(vm::openTicketReserve)
+        adapter = FestivalListAdapter(vm)
         binding.rvFestivalList.adapter = adapter
         vm.loadFestivals()
     }

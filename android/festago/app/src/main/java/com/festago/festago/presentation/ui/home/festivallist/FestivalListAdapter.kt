@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.model.FestivalUiModel
 
 class FestivalListAdapter(
-    private val onFestivalClick: (festivalId: Long) -> Unit,
+    private val vm: FestivalListViewModel,
 ) : ListAdapter<FestivalUiModel, FestivalItemViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FestivalItemViewHolder {
-        return FestivalItemViewHolder.from(parent, onFestivalClick)
+        return FestivalItemViewHolder.of(parent, vm)
     }
 
     override fun onBindViewHolder(holder: FestivalItemViewHolder, position: Int) {
