@@ -16,12 +16,11 @@ import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
 import com.festago.domain.EntryState;
 import com.festago.dto.EntryCodeResponse;
-import com.festago.dto.FestivalResponse;
+import com.festago.dto.MemberTicketFestivalResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.dto.StageResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.stream.LongStream;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -74,7 +73,7 @@ class MemberTicketControllerTest {
         Long memberTicketId = 1L;
         Long memberId = 1L;
         StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
-        FestivalResponse festivalResponse = new FestivalResponse(1L, "테코대학교", LocalDate.now(), LocalDate.now(),
+        MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
             "https://image.png");
         MemberTicketResponse expected = new MemberTicketResponse(memberTicketId, 1, LocalDateTime.now(),
             EntryState.BEFORE_ENTRY, LocalDateTime.now(), stageResponse, festivalResponse);
@@ -98,7 +97,7 @@ class MemberTicketControllerTest {
         // given
         Long memberId = 1L;
         StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
-        FestivalResponse festivalResponse = new FestivalResponse(1L, "테코대학교", LocalDate.now(), LocalDate.now(),
+        MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
             "https://image.png");
         MemberTicketsResponse expected = LongStream.range(0, 10L)
             .mapToObj(
