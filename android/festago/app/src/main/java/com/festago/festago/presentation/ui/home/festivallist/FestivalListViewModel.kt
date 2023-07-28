@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.OpenTicketReserve
+import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.ShowTicketReserve
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
@@ -34,7 +34,7 @@ class FestivalListViewModel(
     }
 
     fun showTicketReserve(festivalId: Long) {
-        _event.setValue(OpenTicketReserve(festivalId))
+        _event.setValue(ShowTicketReserve(festivalId))
     }
 
     class FestivalListViewModelFactory(

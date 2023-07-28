@@ -69,7 +69,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
     private fun handleEvent(event: FestivalListEvent) {
         when (event) {
-            is FestivalListEvent.OpenTicketReserve -> {
+            is FestivalListEvent.ShowTicketReserve -> {
                 startActivity(TicketReserveActivity.getIntent(requireContext(), event.festivalId))
             }
         }

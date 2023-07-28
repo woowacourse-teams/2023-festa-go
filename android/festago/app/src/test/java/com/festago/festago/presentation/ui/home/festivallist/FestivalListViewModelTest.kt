@@ -137,6 +137,6 @@ class FestivalListViewModelTest {
         vm.showTicketReserve(fakeFestivalId)
 
         // then
-        assertThat(vm.event.getValue()).isInstanceOf(FestivalListEvent.OpenTicketReserve::class.java)
+        assertThat(vm.event.getValue()).isInstanceOf(FestivalListEvent.ShowTicketReserve::class.java)
     }
 }
