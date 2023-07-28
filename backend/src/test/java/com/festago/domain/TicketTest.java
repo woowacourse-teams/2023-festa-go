@@ -114,6 +114,6 @@ class TicketTest {
         // when & then
         assertThatThrownBy(() -> new Ticket(stage, TicketType.VISITOR, 100, entryTime))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("입장 시간은 공연 시간보다 빨라야합니다.");
+            .hasMessage("입장 시간은 공연 시작 12시간 이내여야 합니다.");
     }
 }

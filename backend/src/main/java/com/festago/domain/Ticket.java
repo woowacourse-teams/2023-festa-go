@@ -54,14 +54,16 @@ public class Ticket {
             throw new BadRequestException(ErrorCode.INVALID_MIN_TICKET_AMOUNT);
         }
         LocalDateTime stageStartTime = stage.getStartTime();
-        if (validateEntryTime(entryTime, stageStartTime)) {
-            throw new BadRequestException(ErrorCode.INVALID_TICKET_ENTRY_TIME);
-        }
+        validateEntryTime(entryTime, stageStartTime);
     }
 
-    private boolean validateEntryTime(LocalDateTime entryTime, LocalDateTime stageStartTime) {
-        return (entryTime.isAfter(stageStartTime) || entryTime.isEqual(stageStartTime))
-            || entryTime.isBefore(stageStartTime.minusHours(EARLY_ENTRY_LIMIT));
+    private void validateEntryTime(LocalDateTime entryTime, LocalDateTime stageStartTime) {
+        if (entryTime.isAfter(stageStartTime) || entryTime.isEqual(stageStartTime)) {
+            throw new BadRequestException(ErrorCode.LATE_TICKET_ENTRY_TIME);
+        }
+        if (entryTime.isBefore(stageStartTime.minusHours(EARLY_ENTRY_LIMIT))) {
+            throw new BadRequestException(ErrorCode.EARLY_TICKET_ENTRY_TIME);
+        }
     }
 
     public boolean canEntry(LocalDateTime time) {
