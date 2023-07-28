@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Ticket {
 
-    private static final int ENTRY_LIMIT_HOUR = 24;
+    private static final long ENTRY_LIMIT_HOUR = 24;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
