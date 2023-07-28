@@ -163,4 +163,15 @@ class EntryServiceTest {
             });
         }
     }
+
+    //TODO
+    @Test
+    void QR_검증() {
+        // given
+
+        // when
+
+        // then
+
+    }
 }

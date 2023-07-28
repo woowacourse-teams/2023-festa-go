@@ -45,28 +45,9 @@ public class TicketService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.STAGE_NOT_FOUND));
     }
 
+    //TODO
     @Transactional(readOnly = true)
     public StageTicketsResponse findStageTickets(Long stageId) {
-//        Map<TicketType, Integer> ticketTypeToTotalAmount = getTicketTypeToTotalAmount(stageId);
-//        return getStageTicketsResponse(ticketTypeToTotalAmount, stageId);
         return null;
     }
-
-//    private Map<TicketType, Integer> getTicketTypeToTotalAmount(Long stageId) {
-//        List<Ticket> tickets = ticketRepository.findAllByStageId(stageId);
-//        return tickets.stream()
-//            .collect(groupingBy(Ticket::getTicketType, summingInt(Ticket::getTotalAmount)));
-//    }
-
-//    private StageTicketsResponse getStageTicketsResponse(Map<TicketType, Integer> ticketTypeToTotalAmount,
-//                                                         Long stageId) {
-//        List<StageTicketResponse> stageTicketResponses = new ArrayList<>();
-//        for (Entry<TicketType, Integer> entry : ticketTypeToTotalAmount.entrySet()) {
-//            Integer reserveCount = memberTicketRepository.countByTicketTypeAndStageId(entry.getKey(), stageId);
-//            stageTicketResponses.add(
-//                new StageTicketResponse(entry.getKey(), entry.getValue(), entry.getValue() - reserveCount));
-//        }
-//
-//        return new StageTicketsResponse(stageTicketResponses);
-//    }
 }
