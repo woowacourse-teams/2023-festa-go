@@ -51,9 +51,17 @@ class TicketTest {
     void 입장_가능(LocalDateTime time) {
         // given
         LocalDateTime entryTime = LocalDateTime.parse("2023-07-27T18:00:00");
-
+        Festival festival = FestivalFixture.festival()
+            .startDate(entryTime.toLocalDate())
+            .endDate(entryTime.plusDays(4).toLocalDate())
+            .build();
+        Stage stage = StageFixture.stage()
+            .startTime(entryTime.plusHours(4))
+            .festival(festival)
+            .build();
         Ticket ticket = TicketFixture.ticket()
             .entryTime(entryTime)
+            .stage(stage)
             .build();
 
         // when && then
