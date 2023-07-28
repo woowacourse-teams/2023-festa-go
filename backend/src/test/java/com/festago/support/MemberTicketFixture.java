@@ -3,6 +3,7 @@ package com.festago.support;
 import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.Ticket;
+import java.time.LocalDateTime;
 
 public class MemberTicketFixture {
 
@@ -10,6 +11,7 @@ public class MemberTicketFixture {
     private Member owner = MemberFixture.member().build();
     private Ticket ticket = TicketFixture.ticket().build();
     private int number = 1;
+    private LocalDateTime reservedAt = LocalDateTime.now();
 
     private MemberTicketFixture() {
     }
@@ -38,7 +40,12 @@ public class MemberTicketFixture {
         return this;
     }
 
+    public MemberTicketFixture reservedAt(LocalDateTime reservedAt) {
+        this.reservedAt = reservedAt;
+        return this;
+    }
+
     public MemberTicket build() {
-        return new MemberTicket(id, owner, ticket, number);
+        return new MemberTicket(id, owner, ticket, number, reservedAt);
     }
 }

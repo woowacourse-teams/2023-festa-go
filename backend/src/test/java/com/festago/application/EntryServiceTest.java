@@ -7,15 +7,19 @@ import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.domain.EntryCodeProvider;
+import com.festago.domain.Festival;
 import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
+import com.festago.domain.Stage;
 import com.festago.domain.Ticket;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
+import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
+import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -49,7 +53,11 @@ class EntryServiceTest {
         void 입장_시간_전_요청하면_예외() {
             // given
             LocalDateTime entryTime = LocalDateTime.now().plusMinutes(30);
+            Stage stage = StageFixture.stage()
+                .startTime(LocalDateTime.now().plusHours(1))
+                .build();
             Ticket ticket = TicketFixture.ticket()
+                .stage(stage)
                 .entryTime(entryTime)
                 .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
@@ -71,8 +79,18 @@ class EntryServiceTest {
         @Test
         void 입장_시간이_24시간이_넘은_경우_예외() {
             // given
-            LocalDateTime entryTime = LocalDateTime.now().minusDays(1).minusSeconds(10);
+            LocalDateTime stageStartTime = LocalDateTime.now().minusHours(24);
+            LocalDateTime entryTime = stageStartTime.minusSeconds(10);
+            Festival festival = FestivalFixture.festival()
+                .startDate(stageStartTime.toLocalDate())
+                .endDate(stageStartTime.toLocalDate())
+                .build();
+            Stage stage = StageFixture.stage()
+                .festival(festival)
+                .startTime(stageStartTime)
+                .build();
             Ticket ticket = TicketFixture.ticket()
+                .stage(stage)
                 .entryTime(entryTime)
                 .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
