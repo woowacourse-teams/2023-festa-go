@@ -33,10 +33,10 @@ class TicketTest {
     }
 
     @Test
-    void 입장시간_하루_지나면_입장_불가() {
+    void 입장시간_24시간이_지나면_입장_불가() {
         // given
         LocalDateTime entryTime = LocalDateTime.now();
-        LocalDateTime time = entryTime.plusDays(1);
+        LocalDateTime time = entryTime.plusHours(24);
 
         Ticket ticket = TicketFixture.ticket()
             .entryTime(entryTime)
@@ -46,11 +46,11 @@ class TicketTest {
         assertThat(ticket.canEntry(time)).isFalse();
     }
 
-    @Test
-    void 입장_가능() {
+    @ParameterizedTest
+    @ValueSource(strings = {"2023-07-28T17:59:59", "2023-07-27T18:00:00"})
+    void 입장_가능(LocalDateTime time) {
         // given
-        LocalDateTime entryTime = LocalDateTime.now();
-        LocalDateTime time = entryTime.plusMinutes(10);
+        LocalDateTime entryTime = LocalDateTime.parse("2023-07-27T18:00:00");
 
         Ticket ticket = TicketFixture.ticket()
             .entryTime(entryTime)

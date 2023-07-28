@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Ticket {
 
-    private static final int ENTRY_LIMIT_DAY = 1;
+    private static final long ENTRY_LIMIT_HOUR = 24;
     private static final int MIN_TOTAL_AMOUNT = 1;
     private static final long EARLY_ENTRY_LIMIT = 12;
 
@@ -67,7 +67,8 @@ public class Ticket {
     }
 
     public boolean canEntry(LocalDateTime time) {
-        return time.isAfter(entryTime) && time.isBefore(entryTime.plusDays(ENTRY_LIMIT_DAY));
+        return (time.isEqual(entryTime) || time.isAfter(entryTime))
+            && time.isBefore(entryTime.plusHours(ENTRY_LIMIT_HOUR));
     }
 
     public Long getId() {
