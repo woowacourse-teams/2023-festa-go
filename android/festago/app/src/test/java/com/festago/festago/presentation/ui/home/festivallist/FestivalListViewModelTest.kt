@@ -134,7 +134,7 @@ class FestivalListViewModelTest {
     fun `티켓 예매를 열면 티켓 예매 열기 이벤트가 발생한다`() {
         // when
         val fakeFestivalId = 1L
-        vm.openTicketReserve(fakeFestivalId)
+        vm.showTicketReserve(fakeFestivalId)
 
         // then
         assertThat(vm.event.getValue()).isInstanceOf(FestivalListEvent.OpenTicketReserve::class.java)

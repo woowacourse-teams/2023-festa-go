@@ -33,7 +33,7 @@ class FestivalListViewModel(
         }
     }
 
-    fun openTicketReserve(festivalId: Long) {
+    fun showTicketReserve(festivalId: Long) {
         _event.setValue(OpenTicketReserve(festivalId))
     }
 
