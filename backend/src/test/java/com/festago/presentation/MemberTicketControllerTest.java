@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,7 @@ import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
 import com.festago.domain.EntryState;
 import com.festago.dto.EntryCodeResponse;
+import com.festago.dto.MemberTicketFestivalResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.dto.StageResponse;
@@ -30,10 +32,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(TicketController.class)
+@WebMvcTest(MemberTicketController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class TicketControllerTest {
+class MemberTicketControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -60,7 +62,7 @@ class TicketControllerTest {
             .willReturn(expected);
 
         // when & then
-        String content = mockMvc.perform(post("/tickets/{memberTicketId}/qr", memberTicketId)
+        String content = mockMvc.perform(post("/member-tickets/{memberTicketId}/qr", memberTicketId)
                 .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn()
@@ -76,13 +78,15 @@ class TicketControllerTest {
         Long memberTicketId = 1L;
         Long memberId = 1L;
         StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
+        MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
+            "https://image.png");
         MemberTicketResponse expected = new MemberTicketResponse(memberTicketId, 1, LocalDateTime.now(),
-            EntryState.BEFORE_ENTRY, stageResponse);
+            EntryState.BEFORE_ENTRY, LocalDateTime.now(), stageResponse, festivalResponse);
         given(memberTicketService.findById(memberId, memberTicketId))
             .willReturn(expected);
 
         // when & then
-        String content = mockMvc.perform(get("/tickets/{memberTicketId}", memberTicketId)
+        String content = mockMvc.perform(get("/member-tickets/{memberTicketId}", memberTicketId)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print())
@@ -98,15 +102,18 @@ class TicketControllerTest {
         // given
         Long memberId = 1L;
         StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
+        MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
+            "https://image.png");
         MemberTicketsResponse expected = LongStream.range(0, 10L)
-            .mapToObj(it -> new MemberTicketResponse(it, 1, LocalDateTime.now(),
-                EntryState.BEFORE_ENTRY, stageResponse))
+            .mapToObj(
+                it -> new MemberTicketResponse(it, 1, LocalDateTime.now(), EntryState.BEFORE_ENTRY, LocalDateTime.now(),
+                    stageResponse, festivalResponse))
             .collect(collectingAndThen(toList(), MemberTicketsResponse::new));
         given(memberTicketService.findAll(memberId))
             .willReturn(expected);
 
         // when & then
-        String content = mockMvc.perform(get("/tickets")
+        String content = mockMvc.perform(get("/member-tickets")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print())

@@ -29,18 +29,21 @@ public class MemberTicket {
 
     private int number;
 
+    private LocalDateTime reservedAt;
+
     protected MemberTicket() {
     }
 
-    public MemberTicket(Member owner, Ticket ticket, int number) {
-        this(null, owner, ticket, number);
+    public MemberTicket(Member owner, Ticket ticket, int number, LocalDateTime reservedAt) {
+        this(null, owner, ticket, number, reservedAt);
     }
 
-    public MemberTicket(Long id, Member owner, Ticket ticket, int number) {
+    public MemberTicket(Long id, Member owner, Ticket ticket, int number, LocalDateTime reservedAt) {
         this.id = id;
         this.owner = owner;
         this.ticket = ticket;
         this.number = number;
+        this.reservedAt = reservedAt;
     }
 
     public void changeState(EntryState originState) {
@@ -83,5 +86,9 @@ public class MemberTicket {
 
     public int getNumber() {
         return number;
+    }
+
+    public LocalDateTime getReservedAt() {
+        return reservedAt;
     }
 }
