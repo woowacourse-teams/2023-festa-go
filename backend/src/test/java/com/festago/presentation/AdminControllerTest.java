@@ -120,8 +120,7 @@ class AdminControllerTest {
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);
         ErrorResponse actual = objectMapper.readValue(content, ErrorResponse.class);
-        assertThat(actual).usingRecursiveComparison()
-            .isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -184,8 +183,7 @@ class AdminControllerTest {
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);
         ErrorResponse actual = objectMapper.readValue(content, ErrorResponse.class);
-        assertThat(actual).usingRecursiveComparison()
-            .isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
