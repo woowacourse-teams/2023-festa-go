@@ -8,7 +8,7 @@ import com.festago.dto.FestivalResponse;
 import com.festago.dto.StageCreateRequest;
 import com.festago.dto.StageResponse;
 import com.festago.dto.TicketCreateRequest;
-import com.festago.dto.TicketResponse;
+import com.festago.dto.TicketCreateResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,8 +44,8 @@ public class AdminController {
     }
 
     @PostMapping("/tickets")
-    public ResponseEntity<TicketResponse> createTicket(@RequestBody TicketCreateRequest request) {
-        TicketResponse response = ticketService.create(request);
+    public ResponseEntity<TicketCreateResponse> createTicket(@RequestBody TicketCreateRequest request) {
+        TicketCreateResponse response = ticketService.create(request);
         return ResponseEntity.ok()
             .body(response);
     }

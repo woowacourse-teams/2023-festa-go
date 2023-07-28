@@ -1,18 +1,9 @@
 package com.festago.demo;
 
-import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
-import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
-import com.festago.domain.Stage;
 import com.festago.domain.StageRepository;
-import com.festago.domain.Ticket;
 import com.festago.domain.TicketRepository;
-import com.festago.domain.TicketType;
-import java.time.LocalDateTime;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,23 +24,23 @@ public class DemoController {
         this.memberTicketRepository = memberTicketRepository;
     }
 
-    @PostMapping("/tickets")
-    public ResponseEntity<CreateTicketResponse> createTicket(@RequestBody CreateTicketRequest request) {
-        Stage stage = stageRepository.findById(1L).get();
-        Ticket ticket = ticketRepository.save(new Ticket(stage, TicketType.VISITOR, 100, request.entryTime));
-        Member member = memberRepository.findById(1L).get();
-        MemberTicket memberTicket = memberTicketRepository.save(
-            new MemberTicket(member, ticket, 123, LocalDateTime.now()));
-        CreateTicketResponse response = new CreateTicketResponse(ticket.getId(), memberTicket.getId());
-        return ResponseEntity.ok().body(response);
-    }
-
-    record CreateTicketRequest(LocalDateTime entryTime) {
-
-    }
-
-    record CreateTicketResponse(Long ticketId, Long memberTicketId) {
-
-    }
+//    @PostMapping("/tickets")
+//    public ResponseEntity<CreateTicketResponse> createTicket(@RequestBody CreateTicketRequest request) {
+//        Stage stage = stageRepository.findById(1L).get();
+//        Ticket ticket = ticketRepository.save(new Ticket(stage, TicketType.VISITOR, 100, request.entryTime));
+//        Member member = memberRepository.findById(1L).get();
+//        MemberTicket memberTicket = memberTicketRepository.save(
+//            new MemberTicket(member, ticket, 123, LocalDateTime.now()));
+//        CreateTicketResponse response = new CreateTicketResponse(ticket.getId(), memberTicket.getId());
+//        return ResponseEntity.ok().body(response);
+//    }
+//
+//    record CreateTicketRequest(LocalDateTime entryTime) {
+//
+//    }
+//
+//    record CreateTicketResponse(Long ticketId, Long memberTicketId) {
+//
+//    }
 }
 

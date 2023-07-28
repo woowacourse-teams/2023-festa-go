@@ -12,7 +12,6 @@ import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
-import com.festago.domain.Ticket;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
@@ -20,7 +19,6 @@ import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
-import com.festago.support.TicketFixture;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -56,13 +54,10 @@ class EntryServiceTest {
             Stage stage = StageFixture.stage()
                 .startTime(LocalDateTime.now().plusHours(1))
                 .build();
-            Ticket ticket = TicketFixture.ticket()
-                .stage(stage)
-                .entryTime(entryTime)
-                .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
-                .ticket(ticket)
+                .stage(stage)
+                .entryTime(entryTime)
                 .build();
             Long memberId = memberTicket.getOwner().getId();
             Long memberTicketId = memberTicket.getId();
@@ -89,13 +84,10 @@ class EntryServiceTest {
                 .festival(festival)
                 .startTime(stageStartTime)
                 .build();
-            Ticket ticket = TicketFixture.ticket()
-                .stage(stage)
-                .entryTime(entryTime)
-                .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
-                .ticket(ticket)
+                .stage(stage)
+                .entryTime(entryTime)
                 .build();
             Long memberId = memberTicket.getOwner().getId();
             Long memberTicketId = memberTicket.getId();
@@ -117,13 +109,10 @@ class EntryServiceTest {
             Member other = MemberFixture.member()
                 .id(2L)
                 .build();
-            Ticket ticket = TicketFixture.ticket()
-                .entryTime(entryTime)
-                .build();
             MemberTicket otherTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
+                .entryTime(entryTime)
                 .owner(other)
-                .ticket(ticket)
                 .build();
             Long memberTicketId = otherTicket.getId();
 
@@ -173,5 +162,16 @@ class EntryServiceTest {
                 softly.assertThat(entryCode.period()).isEqualTo(30);
             });
         }
+    }
+
+    //TODO
+    @Test
+    void QR_검증() {
+        // given
+
+        // when
+
+        // then
+
     }
 }

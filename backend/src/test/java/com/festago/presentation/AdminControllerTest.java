@@ -18,7 +18,7 @@ import com.festago.dto.FestivalResponse;
 import com.festago.dto.StageCreateRequest;
 import com.festago.dto.StageResponse;
 import com.festago.dto.TicketCreateRequest;
-import com.festago.dto.TicketResponse;
+import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
 import java.nio.charset.StandardCharsets;
@@ -201,11 +201,7 @@ class AdminControllerTest {
             LocalDateTime.parse(entryTime)
         );
 
-        TicketResponse expected = new TicketResponse(ticketId,
-            stageId,
-            ticketType,
-            totalAmount,
-            LocalDateTime.parse(entryTime));
+        TicketCreateResponse expected = new TicketCreateResponse(ticketId);
 
         given(ticketService.create(any()))
             .willReturn(expected);
@@ -219,7 +215,7 @@ class AdminControllerTest {
             .andReturn()
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);
-        TicketResponse actual = objectMapper.readValue(content, TicketResponse.class);
+        TicketCreateResponse actual = objectMapper.readValue(content, TicketCreateResponse.class);
         assertThat(actual).isEqualTo(expected);
     }
 }

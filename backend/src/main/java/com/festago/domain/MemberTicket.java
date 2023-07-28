@@ -14,6 +14,8 @@ import java.util.Objects;
 @Entity
 public class MemberTicket {
 
+    private static final long ENTRY_LIMIT_HOUR = 24;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,25 +27,29 @@ public class MemberTicket {
     private Member owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Ticket ticket;
+    private Stage stage;
 
     private int number;
 
-    private LocalDateTime reservedAt;
+    private LocalDateTime entryTime;
+
+    private TicketType ticketType;
 
     protected MemberTicket() {
     }
 
-    public MemberTicket(Member owner, Ticket ticket, int number, LocalDateTime reservedAt) {
-        this(null, owner, ticket, number, reservedAt);
+    public MemberTicket(Member owner, Stage stage, int number, LocalDateTime entryTime, TicketType ticketType) {
+        this(null, owner, stage, number, entryTime, ticketType);
     }
 
-    public MemberTicket(Long id, Member owner, Ticket ticket, int number, LocalDateTime reservedAt) {
+    public MemberTicket(Long id, Member owner, Stage stage, int number, LocalDateTime entryTime,
+                        TicketType ticketType) {
         this.id = id;
         this.owner = owner;
-        this.ticket = ticket;
+        this.stage = stage;
         this.number = number;
-        this.reservedAt = reservedAt;
+        this.entryTime = entryTime;
+        this.ticketType = ticketType;
     }
 
     public void changeState(EntryState originState) {
@@ -65,7 +71,8 @@ public class MemberTicket {
     }
 
     public boolean canEntry(LocalDateTime time) {
-        return ticket.canEntry(time);
+        return (time.isEqual(entryTime) || time.isAfter(entryTime))
+            && time.isBefore(entryTime.plusHours(ENTRY_LIMIT_HOUR));
     }
 
     public Long getId() {
@@ -80,15 +87,19 @@ public class MemberTicket {
         return owner;
     }
 
-    public Ticket getTicket() {
-        return ticket;
+    public Stage getStage() {
+        return stage;
     }
 
     public int getNumber() {
         return number;
     }
 
-    public LocalDateTime getReservedAt() {
-        return reservedAt;
+    public LocalDateTime getEntryTime() {
+        return entryTime;
+    }
+
+    public TicketType getTicketType() {
+        return ticketType;
     }
 }

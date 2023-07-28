@@ -2,16 +2,18 @@ package com.festago.support;
 
 import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
-import com.festago.domain.Ticket;
+import com.festago.domain.Stage;
+import com.festago.domain.TicketType;
 import java.time.LocalDateTime;
 
 public class MemberTicketFixture {
 
     private Long id;
     private Member owner = MemberFixture.member().build();
-    private Ticket ticket = TicketFixture.ticket().build();
+    private Stage stage = StageFixture.stage().build();
+    private TicketType ticketType = TicketType.VISITOR;
+    private LocalDateTime entryTime = LocalDateTime.now();
     private int number = 1;
-    private LocalDateTime reservedAt = LocalDateTime.now();
 
     private MemberTicketFixture() {
     }
@@ -30,8 +32,8 @@ public class MemberTicketFixture {
         return this;
     }
 
-    public MemberTicketFixture ticket(Ticket ticket) {
-        this.ticket = ticket;
+    public MemberTicketFixture stage(Stage stage) {
+        this.stage = stage;
         return this;
     }
 
@@ -40,12 +42,17 @@ public class MemberTicketFixture {
         return this;
     }
 
-    public MemberTicketFixture reservedAt(LocalDateTime reservedAt) {
-        this.reservedAt = reservedAt;
+    public MemberTicketFixture entryTime(LocalDateTime entryTime) {
+        this.entryTime = entryTime;
+        return this;
+    }
+
+    public MemberTicketFixture ticketType(TicketType ticketType) {
+        this.ticketType = ticketType;
         return this;
     }
 
     public MemberTicket build() {
-        return new MemberTicket(id, owner, ticket, number, reservedAt);
+        return new MemberTicket(id, owner, stage, number, entryTime, ticketType);
     }
 }

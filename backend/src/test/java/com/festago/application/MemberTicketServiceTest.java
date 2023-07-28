@@ -8,14 +8,12 @@ import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
-import com.festago.domain.Ticket;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
-import com.festago.support.TicketFixture;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -81,14 +79,11 @@ class MemberTicketServiceTest {
             .build();
         Stage stage = StageFixture.stage()
             .build();
-        Ticket ticket = TicketFixture.ticket()
-            .stage(stage)
-            .build();
         Long memberTicketId = 1L;
         MemberTicket memberTicket = MemberTicketFixture.memberTicket()
             .id(1L)
             .owner(member)
-            .ticket(ticket)
+            .stage(stage)
             .build();
 
         given(memberTicketRepository.findById(memberTicketId))
