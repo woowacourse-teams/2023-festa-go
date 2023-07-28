@@ -1,7 +1,8 @@
-package com.festago.application;
+package com.festago.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.festago.application.FestivalService;
 import com.festago.dto.FestivalCreateRequest;
 import com.festago.dto.FestivalResponse;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class FestivalServiceTest extends ApplicationTest {
+class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     FestivalService festivalService;

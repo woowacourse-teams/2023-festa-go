@@ -2,7 +2,6 @@ package com.festago.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.application.ApplicationTest;
 import com.festago.application.TicketService;
 import com.festago.domain.TicketType;
 import com.festago.dto.TicketCreateRequest;
@@ -16,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class TicketServiceIntegrationTest extends ApplicationTest {
+class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     TicketService ticketService;
