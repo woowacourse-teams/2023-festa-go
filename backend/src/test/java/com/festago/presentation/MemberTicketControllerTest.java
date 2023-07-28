@@ -55,16 +55,21 @@ class MemberTicketControllerTest {
         Long memberTicketId = 1L;
         String code = "2312313213";
         long period = 30;
+
+        EntryCodeResponse expected = new EntryCodeResponse(code, period);
+
         given(entryService.createEntryCode(anyLong(), anyLong()))
-            .willReturn(new EntryCodeResponse(code, period));
+            .willReturn(expected);
 
         // when & then
-        mockMvc.perform(post("/member-tickets/{memberTicketId}/qr", memberTicketId)
+        String content = mockMvc.perform(post("/member-tickets/{memberTicketId}/qr", memberTicketId)
                 .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code").value(code))
-            .andExpect(jsonPath("$.period").value(period))
-            .andDo(print());
+            .andDo(print())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+        EntryCodeResponse actual = objectMapper.readValue(content, EntryCodeResponse.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
