@@ -31,6 +31,13 @@ public class Festival {
         this(null, name, startDate, endDate, DEFAULT_THUMBNAIL);
     }
 
+    public Festival(String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.thumbnail = thumbnail;
+    }
+
     public Festival(Long id, String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
         this.id = id;
         this.name = name;
