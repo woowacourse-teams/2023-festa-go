@@ -34,7 +34,7 @@ public class TicketService {
         TicketType ticketType = request.ticketType();
 
         Ticket ticket = ticketRepository.findByTicketTypeAndStage(ticketType, stage)
-            .orElse(ticketRepository.save(new Ticket(stage, ticketType)));
+            .orElseGet(() -> ticketRepository.save(new Ticket(stage, ticketType)));
 
         ticket.addTicketEntryTime(request.entryTime(), request.amount());
 
