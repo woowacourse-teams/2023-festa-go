@@ -1,5 +1,7 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -62,5 +64,15 @@ class TicketReserveActivity : AppCompatActivity() {
     private fun updateSuccess(reservations: ReservationUiModel) {
         headerAdapter.submitList(listOf(reservations))
         contentsAdapter.submitList(reservations.reservationStages)
+    }
+
+    companion object {
+        private const val KEY_FESTIVAL_ID = "KEY_FESTIVAL_ID"
+
+        fun getIntent(context: Context, festivalId: Long): Intent {
+            return Intent(context, TicketReserveActivity::class.java).apply {
+                putExtra(KEY_FESTIVAL_ID, festivalId)
+            }
+        }
     }
 }

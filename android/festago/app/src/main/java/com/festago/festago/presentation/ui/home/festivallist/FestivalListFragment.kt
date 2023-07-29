@@ -10,6 +10,7 @@ import com.festago.festago.R
 import com.festago.festago.data.repository.FestivalDefaultRepository
 import com.festago.festago.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListViewModel.FestivalListViewModelFactory
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveActivity
 
 class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
@@ -22,7 +23,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
         )
     }
 
-    private val adapter: FestivalListAdapter = FestivalListAdapter()
+    private lateinit var adapter: FestivalListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,9 +46,13 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
             binding.uiState = it
             updateUi(it)
         }
+        vm.event.observe(viewLifecycleOwner) {
+            handleEvent(it)
+        }
     }
 
     private fun initView() {
+        adapter = FestivalListAdapter(vm)
         binding.rvFestivalList.adapter = adapter
         vm.loadFestivals()
     }
@@ -58,6 +63,14 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
             is FestivalListUiState.Success -> {
                 adapter.submitList(uiState.festivals)
+            }
+        }
+    }
+
+    private fun handleEvent(event: FestivalListEvent) {
+        when (event) {
+            is FestivalListEvent.ShowTicketReserve -> {
+                startActivity(TicketReserveActivity.getIntent(requireContext(), event.festivalId))
             }
         }
     }
