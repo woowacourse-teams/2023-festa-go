@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <data>
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.home.ticketlist.TicketListUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.home.ticketlist.TicketListFragment">
+        tools:context=".presentation.ui.ticketlist.TicketListFragment">
 
-        <TextView
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Ticket List Fragment" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
 
-    </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTicketList"
+            visibility="@{uiState.shouldShowSuccess}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_ticket" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
