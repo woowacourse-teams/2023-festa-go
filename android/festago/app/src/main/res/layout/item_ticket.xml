@@ -5,7 +5,8 @@
 
     <data>
 
-        <import type="java.time.format.DateTimeFormatter"/>
+        <import type="java.time.format.DateTimeFormatter" />
+
         <variable
             name="vm"
             type="com.festago.festago.presentation.ui.home.ticketlist.TicketListViewModel" />
@@ -38,12 +39,12 @@
                     imageUrl="@{ticket.imageUrl}"
                     android:layout_width="120dp"
                     android:layout_height="0dp"
+                    android:importantForAccessibility="no"
                     android:scaleType="centerCrop"
                     app:layout_constraintDimensionRatio="3:4"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@mipmap/ic_festago_logo"
-                    android:importantForAccessibility="no" />
+                    tools:src="@mipmap/ic_festago_logo" />
 
                 <TextView
                     android:id="@+id/tvTicketStageName"
@@ -107,10 +108,11 @@
 
                 <Button
                     android:id="@+id/btnTicketEntry"
+                    btnTicketEntry="@{ticket}"
                     android:layout_width="match_parent"
-                    android:onClick="@{() -> vm.showTicketEntry(ticket.id)}"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:onClick="@{() -> vm.showTicketEntry(ticket.id)}"
                     android:text="@string/ticket_list_btn_ticket_entry"
                     android:textSize="20sp"
                     android:textStyle="bold"

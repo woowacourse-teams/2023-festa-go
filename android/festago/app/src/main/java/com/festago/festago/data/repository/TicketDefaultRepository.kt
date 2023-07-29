@@ -15,10 +15,10 @@ class TicketDefaultRepository(
     private val fakeTicket = List(10) {
         Ticket(
             id = it + 1L,
-            number = 100,
-            LocalDateTime.MAX,
+            number = it + 100,
+            LocalDateTime.of(2023, 7, 30, 15, 0),
             TicketState.BEFORE_ENTRY,
-            Stage(1, "테코대학교 축제 DAY1", LocalDateTime.MAX),
+            Stage(1, "테코대학교 축제 DAY1", LocalDateTime.of(2023, 7, 30, 18, 0)),
             "",
         )
     }
