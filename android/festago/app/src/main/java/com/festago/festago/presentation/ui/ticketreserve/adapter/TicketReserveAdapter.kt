@@ -8,8 +8,7 @@ import com.festago.festago.presentation.ui.ticketreserve.viewHolder.TicketReserv
 
 class TicketReserveAdapter(
     private val ticketReserveCallback: TicketReserveCallback,
-) :
-    ListAdapter<ReservationStageUiModel, TicketReserveViewHolder>(diffUtil) {
+) : ListAdapter<ReservationStageUiModel, TicketReserveViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketReserveViewHolder {
         return TicketReserveViewHolder.from(parent, ticketReserveCallback)
@@ -29,8 +28,7 @@ class TicketReserveAdapter(
             override fun areItemsTheSame(
                 oldItem: ReservationStageUiModel,
                 newItem: ReservationStageUiModel,
-            ) =
-                oldItem.id == newItem.id
+            ) = oldItem.id == newItem.id
         }
     }
 }
