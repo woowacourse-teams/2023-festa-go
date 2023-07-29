@@ -18,7 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:padding="16dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvTicket"
@@ -52,9 +52,9 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
                     android:text="@{ticket.stage.name}"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@+id/ivStageThumbnail"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ivStageThumbnail"
                     tools:text="테코데학교 무슨축제 DAY1" />
 
                 <TextView
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@{@string/ticket_list_tv_ticket_stage_start_time(ticket.stage.startTime.format(DateTimeFormatter.ofPattern(@string/ticket_list_tv_date_time_format)))}"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/tvTicketStageName"
                     app:layout_constraintTop_toBottomOf="@id/tvTicketStageName"
                     tools:text="무대 시작 시간 2023.07.03 18:00" />
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="@{@string/ticket_list_tv_ticket_entry_time(ticket.entryTime.format(DateTimeFormatter.ofPattern(@string/ticket_list_tv_date_time_format)))}"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/tvTicketStageName"
                     app:layout_constraintTop_toBottomOf="@id/tvStageStartTime"
                     tools:text="입장 시작 시간 2023.07.03 15:00" />
@@ -86,6 +86,7 @@
                     android:layout_marginTop="12dp"
                     android:text="@{@string/ticket_list_tv_ticket_number(ticket.number)}"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivStageThumbnail"
                     app:layout_constraintStart_toStartOf="@+id/tvTicketStageName"
                     app:layout_constraintTop_toBottomOf="@id/tvTicketEntryTime"
                     tools:text="100번" />
@@ -97,7 +98,7 @@
                     android:layout_marginEnd="16dp"
                     android:text="@{ticket.ticketState.stateName}"
                     android:textColor="@color/md_theme_light_primary"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/tvTicketNumber"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -111,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@string/ticket_list_btn_ticket_entry"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toBottomOf="@+id/ivStageThumbnail" />
 
