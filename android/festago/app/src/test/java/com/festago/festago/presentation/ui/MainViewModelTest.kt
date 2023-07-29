@@ -16,7 +16,6 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.Exception
 import java.time.LocalDateTime
 
 class MainViewModelTest {
@@ -26,7 +25,7 @@ class MainViewModelTest {
     private val fakeStage = Stage(0L, "fakeStage", LocalDateTime.MIN)
 
     private val fakeTicket =
-        Ticket(0L, 0, LocalDateTime.MIN, TicketState.AWAY, fakeStage)
+        Ticket(0L, 0, LocalDateTime.MIN, TicketState.AWAY, fakeStage, "")
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()

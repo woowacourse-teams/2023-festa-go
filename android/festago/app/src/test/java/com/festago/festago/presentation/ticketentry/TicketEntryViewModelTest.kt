@@ -62,7 +62,7 @@ class TicketEntryViewModelTest {
         val ticketId = 0L
         val fakeStage = Stage(ticketId, "fakeStage", LocalDateTime.MIN)
         val fakeTicket =
-            Ticket(ticketId, 0, LocalDateTime.MIN, TicketState.AWAY, fakeStage)
+            Ticket(ticketId, 0, LocalDateTime.MIN, TicketState.AWAY, fakeStage, "")
 
         coEvery { ticketRepository.loadTicket(any()) } returns fakeTicket
 
