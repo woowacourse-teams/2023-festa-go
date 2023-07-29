@@ -8,20 +8,25 @@ import com.festago.festago.presentation.model.FestivalUiModel
 
 class FestivalItemViewHolder(
     private val binding: ItemFestivalBinding,
+    vm: FestivalListViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        binding.vm = vm
+    }
 
     fun bind(item: FestivalUiModel) {
         binding.festival = item
     }
 
     companion object {
-        fun from(parent: ViewGroup): FestivalItemViewHolder {
+        fun of(parent: ViewGroup, vm: FestivalListViewModel): FestivalItemViewHolder {
             val binding = ItemFestivalBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return FestivalItemViewHolder(binding)
+            return FestivalItemViewHolder(binding, vm)
         }
     }
 }

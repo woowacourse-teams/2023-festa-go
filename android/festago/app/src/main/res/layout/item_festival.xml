@@ -3,9 +3,16 @@
 
     <data>
 
+        <import type="java.time.format.DateTimeFormatter" />
+
         <variable
             name="festival"
             type="com.festago.festago.presentation.model.FestivalUiModel" />
+
+        <variable
+            name="vm"
+            type="com.festago.festago.presentation.ui.home.festivallist.FestivalListViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,10 +20,11 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> vm.showTicketReserve(festival.id)}"
         android:padding="8dp">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv_festival_thumbnail"
+            android:id="@+id/cvFestivalThumbnail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:cardCornerRadius="8dp"
@@ -25,7 +33,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/iv_festival_thumbnail"
+                android:id="@+id/ivFestivalThumbnail"
                 imageUrl="@{festival.thumbnail}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -36,7 +44,7 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/tv_festival_title"
+            android:id="@+id/tvFestivalTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -45,21 +53,21 @@
             android:text="@{festival.name}"
             android:textColor="@color/md_theme_light_onBackground"
             android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/cv_festival_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/cvFestivalThumbnail"
             tools:text="테코대학교" />
 
         <TextView
-            android:id="@+id/tv_festival_schedule"
-            dateRange="@{festival}"
+            android:id="@+id/tvFestivalSchedule"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{@string/festival_list_tv_date_range_format(festival.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),festival.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
             android:textColor="@color/md_theme_light_onBackground"
             android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@id/tv_festival_title"
+            app:layout_constraintTop_toBottomOf="@id/tvFestivalTitle"
             tools:text="2023.07.03 - 2023.07.09" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

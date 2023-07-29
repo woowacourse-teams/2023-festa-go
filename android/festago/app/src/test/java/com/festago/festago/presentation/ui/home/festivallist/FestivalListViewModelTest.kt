@@ -12,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
@@ -127,5 +128,15 @@ class FestivalListViewModelTest {
             assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
         }
         softly.assertAll()
+    }
+
+    @Test
+    fun `티켓 예매를 열면 티켓 예매 열기 이벤트가 발생한다`() {
+        // when
+        val fakeFestivalId = 1L
+        vm.showTicketReserve(fakeFestivalId)
+
+        // then
+        assertThat(vm.event.getValue()).isInstanceOf(FestivalListEvent.ShowTicketReserve::class.java)
     }
 }
