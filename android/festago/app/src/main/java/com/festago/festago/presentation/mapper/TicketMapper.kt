@@ -9,7 +9,10 @@ fun Ticket.toPresentation() = TicketUiModel(
     entryTime = entryTime,
     ticketState = state.toPresentation(),
     stage = stage.toPresentation(),
+    imageUrl = imageUrl,
 )
+
+fun List<Ticket>.toPresentation() = this.map { ticket -> ticket.toPresentation() }
 
 fun TicketUiModel.toDomain() = Ticket(
     id = id,
@@ -17,4 +20,5 @@ fun TicketUiModel.toDomain() = Ticket(
     entryTime = entryTime,
     state = ticketState.toDomain(),
     stage = stage.toDomain(),
+    imageUrl = imageUrl,
 )
