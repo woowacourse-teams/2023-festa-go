@@ -42,6 +42,7 @@ class TicketListViewModelTest {
             "test.com",
         )
     }
+    private val fakeEmptyTickets = emptyList<Ticket>()
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -61,7 +62,7 @@ class TicketListViewModelTest {
     }
 
     @Test
-    fun `티켓 목록을 받아오면 성공 상태이다`() {
+    fun `티켓을 받아왔을 때 티켓이 있으면 성공이고 티켓도 존재하는 상태이다`() {
         // given
         coEvery { ticketRepository.loadTickets() } returns Result.success(fakeTickets)
 
@@ -73,13 +74,40 @@ class TicketListViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(TicketListUiState.Success::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(true)
+            assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isEqualTo(true)
+            assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isEqualTo(false)
             assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
             assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
 
             // and
             val actual = (vm.uiState.value as TicketListUiState.Success).tickets
             val expected = fakeTickets.toPresentation()
+            assertThat(actual).isEqualTo(expected)
+        }
+        softly.assertAll()
+    }
+
+    @Test
+    fun `티켓을 받아왔을 때 티켓이 없으면 성공이지만 티켓은 없는 상태이다`() {
+        // given
+        coEvery { ticketRepository.loadTickets() } returns Result.success(fakeEmptyTickets)
+
+        // when
+        vm.loadTickets()
+
+        // then
+        val softly = SoftAssertions().apply {
+            assertThat(vm.uiState.value).isInstanceOf(TicketListUiState.Success::class.java)
+
+            // and
+            assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isEqualTo(true)
+            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
+
+            // and
+            val actual = (vm.uiState.value as TicketListUiState.Success).tickets
+            val expected = fakeEmptyTickets.toPresentation()
             assertThat(actual).isEqualTo(expected)
         }
         softly.assertAll()
@@ -100,7 +128,8 @@ class TicketListViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(TicketListUiState.Error::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isEqualTo(false)
             assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
             assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
         }
@@ -123,7 +152,8 @@ class TicketListViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(TicketListUiState.Loading::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isEqualTo(false)
             assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(true)
             assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
         }
