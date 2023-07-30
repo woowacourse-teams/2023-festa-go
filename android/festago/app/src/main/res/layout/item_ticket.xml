@@ -108,12 +108,10 @@
 
                 <Button
                     android:id="@+id/btnTicketEntry"
-                    btnTicketEntry="@{ticket}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:onClick="@{() -> vm.showTicketEntry(ticket.id)}"
-                    android:text="@string/ticket_list_btn_ticket_entry"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toBottomOf="@id/ivStageThumbnail" />
