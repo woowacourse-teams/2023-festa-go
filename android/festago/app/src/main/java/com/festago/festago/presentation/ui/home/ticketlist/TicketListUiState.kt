@@ -5,12 +5,15 @@ import com.festago.festago.presentation.model.TicketUiModel
 sealed interface TicketListUiState {
     object Loading : TicketListUiState
 
-    data class Success(val tickets: List<TicketUiModel>) : TicketListUiState
+    data class Success(val tickets: List<TicketUiModel>) : TicketListUiState {
+        val hasTicket get() = tickets.isNotEmpty()
+        val hasNotTicket get() = tickets.isEmpty()
+    }
 
     object Error : TicketListUiState
 
-    val shouldShowSuccessWithTickets get() = this is Success && tickets.isNotEmpty()
-    val shouldShowSuccessAndEmpty get() = this is Success && tickets.isEmpty()
+    val shouldShowSuccessWithTickets get() = this is Success && hasTicket
+    val shouldShowSuccessAndEmpty get() = this is Success && hasNotTicket
     val shouldShowLoading get() = this is Loading
     val shouldShowError get() = this is Error
 }
