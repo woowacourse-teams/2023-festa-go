@@ -15,7 +15,7 @@ class TicketReserveBottomViewHolder(
     }
 
     fun bind(item: TicketReserveBottomItem) {
-        binding.reservationTicket = item.ticket
+        binding.item = item
         binding.clLayout.isSelected = item.isSelected
     }
 
