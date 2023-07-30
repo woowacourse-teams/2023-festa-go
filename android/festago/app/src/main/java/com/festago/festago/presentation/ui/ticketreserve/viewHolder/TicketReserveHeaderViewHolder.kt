@@ -31,7 +31,7 @@ class TicketReserveHeaderViewHolder(
     }
 
     companion object {
-        fun of(parent: ViewGroup): TicketReserveHeaderViewHolder {
+        fun from(parent: ViewGroup): TicketReserveHeaderViewHolder {
             val binding = ItemTicketReserveHeaderBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
