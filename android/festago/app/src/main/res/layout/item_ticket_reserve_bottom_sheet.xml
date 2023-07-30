@@ -39,8 +39,9 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            tools:ignore="MissingConstraints"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="재학생" />
 
         <TextView
@@ -51,8 +52,9 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/endGuideLine"
-            tools:ignore="MissingConstraints"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="(219/300)" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
