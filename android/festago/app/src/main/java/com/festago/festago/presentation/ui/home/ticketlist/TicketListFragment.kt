@@ -55,7 +55,9 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
 
     private fun updateUi(uiState: TicketListUiState) {
         when (uiState) {
-            is TicketListUiState.Loading, is TicketListUiState.Error -> Unit
+            is TicketListUiState.Loading,
+            is TicketListUiState.Error,
+            -> Unit
 
             is TicketListUiState.Success -> {
                 adapter.submitList(uiState.tickets)
