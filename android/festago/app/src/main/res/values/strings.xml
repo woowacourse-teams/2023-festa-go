@@ -47,4 +47,14 @@
     <string name="festival_list_chip_past">지난축제</string>
     <string name="festival_list_tv_error">조회된 축제가 없습니다.</string>
     <string name="festival_list_tv_date_range_format">%s - %s</string>
+
+    <!-- Strings related to ticket list -->
+    <string name="ticket_list_tv_ticket_list">티켓 목록</string>
+    <string name="ticket_list_tv_date_time_format">yyyy.MM.dd HH:mm</string>
+    <string name="ticket_list_btn_ticket_disable_time">HH:mm 티켓 활성화</string>
+    <string name="ticket_list_btn_ticket_entry">입장하기</string>
+    <string name="ticket_list_tv_ticket_number">%d번</string>
+    <string name="ticket_list_tv_ticket_stage_start_time">무대 시작 시간 %s</string>
+    <string name="ticket_list_tv_ticket_entry_time">입장 시작 시간 %s</string>
+    <string name="ticket_list_tv_no_ticket">사용할 수 있는 티켓이 없습니다</string>
 </resources>

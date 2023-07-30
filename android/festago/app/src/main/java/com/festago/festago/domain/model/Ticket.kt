@@ -8,4 +8,5 @@ data class Ticket(
     val entryTime: LocalDateTime,
     val state: TicketState,
     val stage: Stage,
+    val imageUrl: String,
 )

@@ -8,6 +8,7 @@ data class TicketUiModel(
     val entryTime: LocalDateTime,
     val ticketState: TicketStateUiModel,
     val stage: StageUiModel,
+    val imageUrl: String,
 ) {
     companion object {
         val EMPTY = TicketUiModel(
@@ -16,6 +17,7 @@ data class TicketUiModel(
             entryTime = LocalDateTime.MAX,
             ticketState = TicketStateUiModel.EMPTY,
             stage = StageUiModel.EMPTY,
+            imageUrl = "",
         )
     }
 }
