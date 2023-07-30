@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.data.repository.ReservationDefaultRepository
 import com.festago.festago.databinding.ActivityTicketReserveBinding
+import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.model.ReservationUiModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
@@ -21,12 +22,9 @@ class TicketReserveActivity : AppCompatActivity() {
         )
     }
 
-    private val contentsAdapter = TicketReserveAdapter {
-        TicketReserveBottomSheetFragment.newInstance(it)
-            .show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
-    }
-    private val headerAdapter = TicketReserveHeaderAdapter()
-    private val concatAdapter = ConcatAdapter(headerAdapter, contentsAdapter)
+    private val contentsAdapter by lazy { TicketReserveAdapter(vm) }
+    private val headerAdapter by lazy { TicketReserveHeaderAdapter() }
+    private val concatAdapter by lazy { ConcatAdapter(headerAdapter, contentsAdapter) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +46,18 @@ class TicketReserveActivity : AppCompatActivity() {
             updateUi(uiState)
             binding.uiState = uiState
         }
+        vm.event.observe(this) { event ->
+            handleEvent(event)
+        }
+    }
+
+    private fun handleEvent(event: TicketReserveEvent) = when (event) {
+        is TicketReserveEvent.ShowTicketTypes -> handleShowTicketTypes(event.reservationStage)
+    }
+
+    private fun handleShowTicketTypes(reservationStage: ReservationStageUiModel) {
+        TicketReserveBottomSheetFragment.newInstance(reservationStage)
+            .show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
     }
 
     private fun initView() {

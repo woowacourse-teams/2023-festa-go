@@ -4,14 +4,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.model.ReservationStageUiModel
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 import com.festago.festago.presentation.ui.ticketreserve.viewHolder.TicketReserveViewHolder
 
 class TicketReserveAdapter(
-    private val ticketReserveCallback: TicketReserveCallback,
+    private val vm: TicketReserveViewModel,
 ) : ListAdapter<ReservationStageUiModel, TicketReserveViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketReserveViewHolder {
-        return TicketReserveViewHolder.from(parent, ticketReserveCallback)
+        return TicketReserveViewHolder.from(parent, vm)
     }
 
     override fun onBindViewHolder(holder: TicketReserveViewHolder, position: Int) {
