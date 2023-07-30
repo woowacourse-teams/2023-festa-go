@@ -6,9 +6,8 @@
     <data>
 
         <variable
-            name="reservationTicket"
-            type="com.festago.festago.presentation.model.ReservationTicketUiModel" />
-
+            name="item"
+            type="com.festago.festago.presentation.ui.ticketreserve.bottomSheet.TicketReserveBottomItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +35,7 @@
             android:id="@+id/tvTicketType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{reservationTicket.ticketType}"
+            android:text="@{item.ticket.ticketType}"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -48,7 +47,7 @@
             android:id="@+id/tvTicketCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{@string/ticket_reserve_tv_ticket_count_format(reservationTicket.remainAmount, reservationTicket.totalAmount)}"
+            android:text="@{@string/ticket_reserve_tv_ticket_count_format(item.ticket.remainAmount, item.ticket.totalAmount)}"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
