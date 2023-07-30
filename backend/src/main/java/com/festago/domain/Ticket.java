@@ -1,5 +1,7 @@
 package com.festago.domain;
 
+import com.festago.exception.BadRequestException;
+import com.festago.exception.ErrorCode;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,8 +15,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import org.hibernate.annotations.SortNatural;
 
 @Entity
 public class Ticket {
@@ -34,7 +38,8 @@ public class Ticket {
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ticket_id")
-    private List<TicketEntryTime> ticketEntryTimes = new ArrayList<>();
+    @SortNatural
+    private SortedSet<TicketEntryTime> ticketEntryTimes = new TreeSet<>();
 
     protected Ticket() {
     }
@@ -55,6 +60,27 @@ public class Ticket {
         ticketEntryTimes.add(ticketEntryTime);
     }
 
+    public MemberTicket createMemberTicket(Member member) {
+        LocalDateTime entryTime = calculateEntryTime();
+        return new MemberTicket(member, stage, 1, entryTime, ticketType);
+    }
+
+    private LocalDateTime calculateEntryTime() {
+        int reservedAmount = ticketAmount.getReservedAmount();
+        int tempAmount = 0;
+        for (TicketEntryTime ticketEntryTime : ticketEntryTimes) {
+            tempAmount += ticketEntryTime.getAmount();
+            if (reservedAmount < tempAmount) {
+                return ticketEntryTime.getEntryTime();
+            }
+        }
+        throw new BadRequestException(ErrorCode.TICKET_SOLD_OUT);
+    }
+
+    public void increaseReservedAmount() {
+        ticketAmount.increaseReservedAmount();
+    }
+
     public Long getId() {
         return id;
     }
@@ -71,7 +97,7 @@ public class Ticket {
         return ticketAmount;
     }
 
-    public List<TicketEntryTime> getTicketEntryTimes() {
+    public Collection<TicketEntryTime> getTicketEntryTimes() {
         return ticketEntryTimes;
     }
 }

@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
-public class TicketEntryTime {
+public class TicketEntryTime implements Comparable<TicketEntryTime> {
 
     private static final long EARLY_ENTRY_LIMIT = 12;
     private static final int MIN_TOTAL_AMOUNT = 1;
@@ -67,5 +67,27 @@ public class TicketEntryTime {
 
     public Integer getAmount() {
         return amount;
+    }
+
+    @Override
+    public int compareTo(TicketEntryTime o) {
+        return entryTime.compareTo(o.getEntryTime());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof TicketEntryTime that)) {
+            return false;
+        }
+
+        return getId() != null ? getId().equals(that.getId()) : that.getId() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return getId() != null ? getId().hashCode() : 0;
     }
 }
