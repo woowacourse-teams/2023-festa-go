@@ -5,8 +5,12 @@
 
     <data>
 
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <import type="java.util.Locale" />
+
         <variable
-            name="reservationStage"
+            name="stage"
             type="com.festago.festago.presentation.model.ReservationStageUiModel" />
     </data>
 
@@ -35,6 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
+            android:text="@{stage.startTime.format(DateTimeFormatter.ofPattern(@string/ticket_reserve_tv_start_time, Locale.KOREA))}"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"

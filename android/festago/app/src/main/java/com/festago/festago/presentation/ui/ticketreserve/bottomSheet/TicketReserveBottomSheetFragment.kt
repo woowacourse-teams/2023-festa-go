@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.festago.festago.R
 import com.festago.festago.databinding.FragmentTicketReserveBottomSheetBinding
 import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.util.getParcelableCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
-    private lateinit var binding: FragmentTicketReserveBottomSheetBinding
+
+    private var _binding: FragmentTicketReserveBottomSheetBinding? = null
+    private val binding: FragmentTicketReserveBottomSheetBinding get() = _binding!!
 
     private val ticketTypeAdapter = TicketReserveBottomSheetAdapter()
 
@@ -22,28 +21,27 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentTicketReserveBottomSheetBinding
-            .inflate(inflater, container, false).apply {
-                lifecycleOwner = viewLifecycleOwner
-            }
+        _binding = FragmentTicketReserveBottomSheetBinding.inflate(inflater)
+        binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
+    }
 
-        val dateFormatter = DateTimeFormatter.ofPattern(
-            binding.root.context.getString(R.string.ticket_reserve_tv_start_time),
-            Locale.KOREA,
-        )
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         arguments?.getParcelableCompat<ReservationStageUiModel>(KET_ITEM)?.let {
-            binding.reservationStage = it
-            binding.tvDate.text = it.startTime.format(dateFormatter)
-            ticketTypeAdapter.submitList(
-                it.reservationTickets
-                    .map { ticket -> TicketReserveBottomItem(ticket) },
-            )
+            binding.stage = it
+            ticketTypeAdapter.submitList(it.reservationTickets.map(::TicketReserveBottomItem))
         }
 
-        binding.rvTicketTypes.adapter = ticketTypeAdapter
+        initView()
+    }
 
-        return binding.root
+    private fun initView() {
+        binding.rvTicketTypes.adapter = ticketTypeAdapter
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
