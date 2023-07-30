@@ -70,7 +70,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTicketList"
-            tools:listitem="@layout/item_ticket" />
+            tools:listitem="@layout/item_ticket_list" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,13 +7,13 @@ import com.festago.festago.presentation.model.TicketUiModel
 
 class TicketListAdapter(
     private val vm: TicketListViewModel,
-) : ListAdapter<TicketUiModel, TicketItemViewHolder>(ticketDiffUtil) {
+) : ListAdapter<TicketUiModel, TicketListItemViewHolder>(ticketDiffUtil) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketItemViewHolder {
-        return TicketItemViewHolder.of(parent, vm)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketListItemViewHolder {
+        return TicketListItemViewHolder.of(parent, vm)
     }
 
-    override fun onBindViewHolder(holder: TicketItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TicketListItemViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

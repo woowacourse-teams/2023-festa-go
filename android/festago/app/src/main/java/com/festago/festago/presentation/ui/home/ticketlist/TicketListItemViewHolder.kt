@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.R
-import com.festago.festago.databinding.ItemTicketBinding
+import com.festago.festago.databinding.ItemTicketListBinding
 import com.festago.festago.presentation.model.TicketUiModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class TicketItemViewHolder(
-    val binding: ItemTicketBinding,
+class TicketListItemViewHolder(
+    val binding: ItemTicketListBinding,
     vm: TicketListViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -49,13 +49,13 @@ class TicketItemViewHolder(
     }
 
     companion object {
-        fun of(parent: ViewGroup, vm: TicketListViewModel): TicketItemViewHolder {
-            val binding = ItemTicketBinding.inflate(
+        fun of(parent: ViewGroup, vm: TicketListViewModel): TicketListItemViewHolder {
+            val binding = ItemTicketListBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return TicketItemViewHolder(binding, vm)
+            return TicketListItemViewHolder(binding, vm)
         }
     }
 }
