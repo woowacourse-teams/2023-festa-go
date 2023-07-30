@@ -15,6 +15,9 @@ class TicketReserveViewModel(
     private val _uiState = MutableLiveData<TicketReserveUiState>()
     val uiState: LiveData<TicketReserveUiState> = _uiState
 
+    private val _event = MutableLiveData<TicketReserveEvent>()
+    val event: LiveData<TicketReserveEvent> = _event
+
     fun loadReservation(refresh: Boolean = false) {
         if (!refresh && uiState.value is TicketReserveUiState.Success) return
         viewModelScope.launch {
@@ -22,6 +25,21 @@ class TicketReserveViewModel(
             reservationRepository.loadReservation()
                 .onSuccess {
                     _uiState.setValue(TicketReserveUiState.Success(it.toPresentation()))
+                }.onFailure {
+                    _uiState.setValue(TicketReserveUiState.Error)
+                }
+        }
+    }
+
+    fun showTicketTypes(stageId: Int) {
+        viewModelScope.launch {
+            reservationRepository.loadReservation()
+                .onSuccess {
+                    it.reservationStages
+                        .find { stage -> stage.id == stageId }
+                        ?.let { stage ->
+                            _event.setValue(TicketReserveEvent.ShowTicketTypes(stage.toPresentation()))
+                        }
                 }.onFailure {
                     _uiState.setValue(TicketReserveUiState.Error)
                 }
