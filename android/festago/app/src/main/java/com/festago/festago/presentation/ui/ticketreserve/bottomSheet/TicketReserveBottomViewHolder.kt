@@ -20,7 +20,7 @@ class TicketReserveBottomViewHolder(
     }
 
     companion object {
-        fun from(
+        fun of(
             parent: ViewGroup,
             callback: TicketReserveBottomSheetCallback,
         ): TicketReserveBottomViewHolder {

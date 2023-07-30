@@ -13,7 +13,7 @@ class TicketReserveHeaderAdapter :
         parent: ViewGroup,
         viewType: Int,
     ): TicketReserveHeaderViewHolder {
-        return TicketReserveHeaderViewHolder.from(parent)
+        return TicketReserveHeaderViewHolder.of(parent)
     }
 
     override fun onBindViewHolder(holder: TicketReserveHeaderViewHolder, position: Int) {

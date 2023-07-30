@@ -12,7 +12,7 @@ class TicketReserveAdapter(
 ) : ListAdapter<ReservationStageUiModel, TicketReserveViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketReserveViewHolder {
-        return TicketReserveViewHolder.from(parent, vm)
+        return TicketReserveViewHolder.of(parent, vm)
     }
 
     override fun onBindViewHolder(holder: TicketReserveViewHolder, position: Int) {

@@ -30,7 +30,7 @@ class TicketReserveViewHolder(
     }
 
     companion object {
-        fun from(
+        fun of(
             parent: ViewGroup,
             vm: TicketReserveViewModel,
         ): TicketReserveViewHolder {

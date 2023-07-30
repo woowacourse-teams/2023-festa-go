@@ -11,7 +11,7 @@ class TicketReserveBottomSheetAdapter :
         parent: ViewGroup,
         viewType: Int,
     ): TicketReserveBottomViewHolder {
-        return TicketReserveBottomViewHolder.from(parent) { position ->
+        return TicketReserveBottomViewHolder.of(parent) { position ->
             currentList.forEach { it.isSelected = false }
             getItem(position).isSelected = true
             notifyDataSetChanged()
