@@ -20,10 +20,9 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.jdbc.Sql;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@SpringBootTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class TicketServiceIntegrationTest {
@@ -41,7 +40,7 @@ class TicketServiceIntegrationTest {
     void 공연이_없으면_예외() {
         // given
         String entryTime = "2023-07-26T18:00:00";
-        long invliadStageId = 1L;
+        long invliadStageId = 0L;
         int totalAmount = 100;
 
         TicketCreateRequest request = new TicketCreateRequest(invliadStageId, TicketType.VISITOR,

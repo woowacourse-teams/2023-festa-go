@@ -60,17 +60,28 @@ public class TicketService {
     }
 
     public TicketingResponse ticketing(Long memberId, TicketingRequest request) {
-        TicketAmount ticketAmount = ticketAmountRepository.findByTicketIdForUpdate(request.ticketId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
+        TicketAmount ticketAmount = findTicketAmountById(request.ticketId());
         ticketAmount.increaseReservedAmount();
         int reservedAmount = ticketAmount.getReservedAmount();
-        System.out.println("reservedAmount = " + reservedAmount);
-        Ticket ticket = ticketRepository.findById(request.ticketId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+        Ticket ticket = findTicketById(request.ticketId());
+        Member member = findMemberById(memberId);
         MemberTicket memberTicket = memberTicketRepository.save(ticket.createMemberTicket(member, reservedAmount));
         return TicketingResponse.from(memberTicket);
+    }
+
+    private TicketAmount findTicketAmountById(Long ticketAmountId) {
+        return ticketAmountRepository.findByTicketIdForUpdate(ticketAmountId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
+    }
+
+    private Ticket findTicketById(Long ticketId) {
+        return ticketRepository.findById(ticketId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
+    }
+
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     //TODO
