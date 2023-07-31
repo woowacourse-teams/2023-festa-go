@@ -15,8 +15,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import org.hibernate.annotations.SortNatural;
 
 @Entity
 public class Ticket {
@@ -33,12 +35,13 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketType ticketType;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private TicketAmount ticketAmount = new TicketAmount();
+    @OneToOne(mappedBy = "ticket", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private TicketAmount ticketAmount;
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ticket_id")
-    private List<TicketEntryTime> ticketEntryTimes = new ArrayList<>();
+    @SortNatural
+    private SortedSet<TicketEntryTime> ticketEntryTimes = new TreeSet<>();
 
     protected Ticket() {
     }
@@ -51,6 +54,7 @@ public class Ticket {
         this.id = id;
         this.stage = stage;
         this.ticketType = ticketType;
+        this.ticketAmount = new TicketAmount(this);
     }
 
     public void addTicketEntryTime(LocalDateTime entryTime, int amount) {
@@ -70,6 +74,22 @@ public class Ticket {
         }
     }
 
+    public MemberTicket createMemberTicket(Member member, int reservedAmount) {
+        LocalDateTime entryTime = calculateEntryTime(reservedAmount);
+        return new MemberTicket(member, stage, reservedAmount, entryTime, ticketType);
+    }
+
+    private LocalDateTime calculateEntryTime(int reservedAmount) {
+        int tempAmount = 0;
+        for (TicketEntryTime ticketEntryTime : ticketEntryTimes) {
+            tempAmount += ticketEntryTime.getAmount();
+            if (reservedAmount <= tempAmount) {
+                return ticketEntryTime.getEntryTime();
+            }
+        }
+        throw new BadRequestException(ErrorCode.TICKET_SOLD_OUT);
+    }
+
     public Long getId() {
         return id;
     }
@@ -86,7 +106,7 @@ public class Ticket {
         return ticketAmount;
     }
 
-    public List<TicketEntryTime> getTicketEntryTimes() {
+    public Set<TicketEntryTime> getTicketEntryTimes() {
         return ticketEntryTimes;
     }
 }
