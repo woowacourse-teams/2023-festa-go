@@ -34,4 +34,9 @@ class ReservationDefaultRepository : ReservationRepository {
 //        return Result.failure(Exception())
         return Result.success(fakeReservation)
     }
+
+    override suspend fun reserveTicket(stageId: Int, ticketId: Int): Result<Int> {
+        delay(500)
+        return Result.success(1)
+    }
 }
