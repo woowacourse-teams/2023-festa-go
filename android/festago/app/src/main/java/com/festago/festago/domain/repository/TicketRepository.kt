@@ -5,5 +5,6 @@ import com.festago.festago.domain.model.TicketCode
 
 interface TicketRepository {
     suspend fun loadTicket(ticketId: Long): Ticket
+    suspend fun loadTickets(): Result<List<Ticket>>
     suspend fun loadTicketCode(ticketId: Long): TicketCode
 }

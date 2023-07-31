@@ -6,44 +6,40 @@ import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveBinding
 import com.festago.festago.presentation.model.ReservationStageUiModel
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 
 class TicketReserveViewHolder(
     private val binding: ItemTicketReserveBinding,
+    vm: TicketReserveViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
+    init {
+        binding.vm = vm
+    }
+
     fun bind(item: ReservationStageUiModel) {
-        val openTimeFormatter =
-            DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.ticket_reserve_tv_open_time))
-        binding.tvOpenTime.text = item.ticketOpenTime.format(openTimeFormatter)
+        binding.stage = item
 
-        val dateFormatter = DateTimeFormatter.ofPattern(
-            binding.root.context.getString(R.string.ticket_reserve_tv_start_time),
-            Locale.KOREA,
-        )
-        binding.tvDate.text = item.startTime.format(dateFormatter)
-
-        binding.tvLineUp.text = item.lineUp
-
-        binding.tvTicketCount.text = item.reservationTickets
-            .joinToString(binding.root.context.getString(R.string.ticket_reserve_tv_ticket_count_separator)) {
-                binding.root.context.getString(
-                    R.string.ticket_reserve_tv_ticket_count,
-                    it.ticketType,
-                    it.remainAmount.toString(),
-                    it.totalAmount.toString(),
-                )
-            }
+        binding.tvTicketCount.text = item.reservationTickets.joinToString(binding.root.context.getString(R.string.ticket_reserve_tv_ticket_count_separator)) {
+            binding.root.context.getString(
+                R.string.ticket_reserve_tv_ticket_count,
+                it.ticketType,
+                it.remainAmount.toString(),
+                it.totalAmount.toString(),
+            )
+        }
     }
 
     companion object {
-        fun from(parent: ViewGroup): TicketReserveViewHolder {
+        fun of(
+            parent: ViewGroup,
+            vm: TicketReserveViewModel,
+        ): TicketReserveViewHolder {
             val binding = ItemTicketReserveBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return TicketReserveViewHolder(binding)
+            return TicketReserveViewHolder(binding, vm)
         }
     }
 }
