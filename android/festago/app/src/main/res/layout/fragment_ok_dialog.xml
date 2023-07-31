@@ -23,7 +23,7 @@
             android:layout_height="16dp" />
 
         <TextView
-            android:id="@+id/tv_message"
+            android:id="@+id/tvMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="22sp"
