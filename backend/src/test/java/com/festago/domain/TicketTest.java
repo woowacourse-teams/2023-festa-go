@@ -27,7 +27,7 @@ class TicketTest {
 
         // then
         assertSoftly(softly -> {
-            softly.assertThat(ticket.getTicketAmount().getTotalAmount()).isEqualTo(300);
+            softly.assertThat(ticket.getTicketAmount().get().getTotalAmount()).isEqualTo(300);
             softly.assertThat(ticket.getTicketEntryTimes()).hasSize(2);
         });
     }

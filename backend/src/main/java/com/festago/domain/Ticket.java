@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.hibernate.annotations.SortNatural;
@@ -33,8 +34,8 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketType ticketType;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private TicketAmount ticketAmount = new TicketAmount();
+    @OneToOne(mappedBy = "ticket", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private TicketAmount ticketAmount;
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ticket_id")
@@ -52,6 +53,7 @@ public class Ticket {
         this.id = id;
         this.stage = stage;
         this.ticketType = ticketType;
+        this.ticketAmount = new TicketAmount(this);
     }
 
     public void addTicketEntryTime(LocalDateTime entryTime, int amount) {
@@ -60,25 +62,20 @@ public class Ticket {
         ticketEntryTimes.add(ticketEntryTime);
     }
 
-    public MemberTicket createMemberTicket(Member member) {
-        LocalDateTime entryTime = calculateEntryTime();
+    public MemberTicket createMemberTicket(Member member, int reservedAmount) {
+        LocalDateTime entryTime = calculateEntryTime(reservedAmount);
         return new MemberTicket(member, stage, 1, entryTime, ticketType);
     }
 
-    private LocalDateTime calculateEntryTime() {
-        int reservedAmount = ticketAmount.getReservedAmount();
+    private LocalDateTime calculateEntryTime(int reservedAmount) {
         int tempAmount = 0;
         for (TicketEntryTime ticketEntryTime : ticketEntryTimes) {
             tempAmount += ticketEntryTime.getAmount();
-            if (reservedAmount < tempAmount) {
+            if (reservedAmount <= tempAmount) {
                 return ticketEntryTime.getEntryTime();
             }
         }
         throw new BadRequestException(ErrorCode.TICKET_SOLD_OUT);
-    }
-
-    public void increaseReservedAmount() {
-        ticketAmount.increaseReservedAmount();
     }
 
     public Long getId() {
@@ -93,8 +90,8 @@ public class Ticket {
         return ticketType;
     }
 
-    public TicketAmount getTicketAmount() {
-        return ticketAmount;
+    public Optional<TicketAmount> getTicketAmount() {
+        return Optional.ofNullable(ticketAmount);
     }
 
     public Collection<TicketEntryTime> getTicketEntryTimes() {

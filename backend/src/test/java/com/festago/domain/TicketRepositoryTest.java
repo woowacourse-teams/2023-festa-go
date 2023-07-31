@@ -26,6 +26,9 @@ class TicketRepositoryTest {
     @Autowired
     StageRepository stageRepository;
 
+    @Autowired
+    TicketAmountRepository ticketAmountRepository;
+
     @Test
     void 공연의_ID로_티켓을_모두_조회() {
         // given
@@ -42,5 +45,15 @@ class TicketRepositoryTest {
 
         // then
         assertThat(actual).hasSize(2);
+    }
+
+    @Test
+    void name() {
+        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+        Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
+        Ticket ticket = ticketRepository.save(new Ticket(stage, TicketType.VISITOR));
+        TicketAmount ticketAmount = ticket.getTicketAmount()
+            .orElseThrow(IllegalArgumentException::new);
+        System.out.println(ticketAmount.getId());
     }
 }

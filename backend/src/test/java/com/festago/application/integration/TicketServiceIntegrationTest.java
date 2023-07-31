@@ -8,12 +8,11 @@ import com.festago.domain.FestivalRepository;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicketRepository;
-import com.festago.domain.Stage;
 import com.festago.domain.StageRepository;
 import com.festago.domain.TicketRepository;
 import com.festago.domain.TicketType;
+import com.festago.dto.PoohDto;
 import com.festago.dto.TicketCreateRequest;
-import com.festago.dto.TicketingRequest;
 import com.festago.exception.NotFoundException;
 import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
@@ -69,10 +68,9 @@ class TicketServiceIntegrationTest {
     @Sql("/ticketing-test-data.sql")
     void 예약() throws InterruptedException {
         Member member = memberRepository.findById(1L).get();
-        Stage stage = stageRepository.findById(1L).get();
-        TicketingRequest request = new TicketingRequest(stage.getId(), TicketType.VISITOR);
+        var request = new PoohDto(1L);
 
-        int threadCount = 200;
+        int threadCount = 1000;
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch latch = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {

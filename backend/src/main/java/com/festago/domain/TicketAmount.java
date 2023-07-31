@@ -3,22 +3,32 @@ package com.festago.domain;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class TicketAmount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private int reservedAmount = 0;
 
     private int totalAmount = 0;
 
-    public TicketAmount() {
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "ticket_id")
+    private Ticket ticket;
+
+    protected TicketAmount() {
+    }
+
+    public TicketAmount(Ticket ticket) {
+        this.ticket = ticket;
     }
 
     public void increaseReservedAmount() {
@@ -42,5 +52,9 @@ public class TicketAmount {
 
     public Integer getTotalAmount() {
         return totalAmount;
+    }
+
+    private Ticket getTicket() {
+        return ticket;
     }
 }
