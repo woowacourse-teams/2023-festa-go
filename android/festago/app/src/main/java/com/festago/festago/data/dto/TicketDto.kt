@@ -20,6 +20,7 @@ data class TicketDto(
             number = number,
             stage = stage.toDomain(),
             state = TicketState.valueOf(state),
+            imageUrl = "",
         )
     }
 }

@@ -22,7 +22,8 @@ public class TicketService {
     private final StageRepository stageRepository;
     private final MemberTicketRepository memberTicketRepository;
 
-    public TicketService(TicketRepository ticketRepository, StageRepository stageRepository, MemberTicketRepository memberTicketRepository) {
+    public TicketService(TicketRepository ticketRepository, StageRepository stageRepository,
+                         MemberTicketRepository memberTicketRepository) {
         this.ticketRepository = ticketRepository;
         this.stageRepository = stageRepository;
         this.memberTicketRepository = memberTicketRepository;
@@ -33,7 +34,7 @@ public class TicketService {
         TicketType ticketType = request.ticketType();
 
         Ticket ticket = ticketRepository.findByTicketTypeAndStage(ticketType, stage)
-            .orElse(new Ticket(stage, ticketType));
+            .orElseGet(() -> ticketRepository.save(new Ticket(stage, ticketType)));
 
         ticket.addTicketEntryTime(request.entryTime(), request.amount());
 

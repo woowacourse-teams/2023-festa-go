@@ -5,6 +5,17 @@
 
     <data>
 
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <import type="java.util.Locale" />
+
+        <variable
+            name="vm"
+            type="com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel" />
+
+        <variable
+            name="stage"
+            type="com.festago.festago.presentation.model.ReservationStageUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,10 +42,12 @@
             android:id="@+id/tvDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{stage.startTime.format(DateTimeFormatter.ofPattern(@string/ticket_reserve_tv_start_time, Locale.KOREA))}"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/endGuideLine"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
+
             app:layout_constraintTop_toTopOf="parent"
             tools:text="07.03 (목) 17:00" />
 
@@ -55,6 +68,7 @@
             android:id="@+id/tvOpenTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{stage.ticketOpenTime.format(DateTimeFormatter.ofPattern(@string/ticket_reserve_tv_open_time))}"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@id/tvOpenTimeTitle"
@@ -78,10 +92,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:text="@{stage.lineUp}"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@id/endGuideLine"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-
             app:layout_constraintTop_toBottomOf="@id/tvLineUpTitle"
             tools:text="BTS, 르세라핌, 뉴진스, 아이브, 아이들BTS, 르세라핌, 뉴진스, 아이브, 아이들BTS, 르세라핌, 뉴진스, 아이브, 아이들" />
 
@@ -125,6 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="28dp"
+            android:onClick="@{() -> vm.showTicketTypes(stage.id)}"
             android:text="@string/ticket_reserve_btn_reserve_ticket"
             app:layout_constraintEnd_toEndOf="@id/endGuideLine"
             app:layout_constraintStart_toStartOf="parent"

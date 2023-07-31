@@ -4,13 +4,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.model.ReservationStageUiModel
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 import com.festago.festago.presentation.ui.ticketreserve.viewHolder.TicketReserveViewHolder
 
-class TicketReserveAdapter :
-    ListAdapter<ReservationStageUiModel, TicketReserveViewHolder>(diffUtil) {
+class TicketReserveAdapter(
+    private val vm: TicketReserveViewModel,
+) : ListAdapter<ReservationStageUiModel, TicketReserveViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketReserveViewHolder {
-        return TicketReserveViewHolder.from(parent)
+        return TicketReserveViewHolder.of(parent, vm)
     }
 
     override fun onBindViewHolder(holder: TicketReserveViewHolder, position: Int) {
@@ -27,8 +29,7 @@ class TicketReserveAdapter :
             override fun areItemsTheSame(
                 oldItem: ReservationStageUiModel,
                 newItem: ReservationStageUiModel,
-            ) =
-                oldItem.id == newItem.id
+            ) = oldItem.id == newItem.id
         }
     }
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <import type="java.util.Locale" />
+
+        <variable
+            name="stage"
+            type="com.festago.festago.presentation.model.ReservationStageUiModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_ticket_reserve_bottom_sheet"
+        tools:context=".presentation.ui.ticketreserve.bottomSheet.TicketReserveBottomSheetFragment">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/endGuideLine"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="@{stage.startTime.format(DateTimeFormatter.ofPattern(@string/ticket_reserve_tv_start_time, Locale.KOREA))}"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="07.03 (목) 17:00" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTicketTypes"
+            android:layout_width="match_parent"
+            android:layout_height="256dp"
+            android:layout_marginTop="32dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/btnReserveTicket"
+            app:layout_constraintTop_toBottomOf="@id/tvDate"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_ticket_reserve_bottom_sheet" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnReserveTicket"
+            style="@style/btnFesta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="28dp"
+            android:text="@string/ticket_reserve_tv_btn_reserve_ticket"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

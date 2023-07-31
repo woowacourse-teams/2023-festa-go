@@ -36,7 +36,7 @@ public class Ticket {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private TicketAmount ticketAmount = new TicketAmount();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ticket_id")
     private List<TicketEntryTime> ticketEntryTimes = new ArrayList<>();
 
