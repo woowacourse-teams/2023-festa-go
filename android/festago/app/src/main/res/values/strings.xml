@@ -47,4 +47,8 @@
     <string name="festival_list_chip_past">지난축제</string>
     <string name="festival_list_tv_error">조회된 축제가 없습니다.</string>
     <string name="festival_list_tv_date_range_format">%s - %s</string>
+
+    <!-- Strings related to mypage -->
+    <string name="mypage_btn_kakao">카카오로 로그인</string>
+    <string name="mypage_tv_login_description">페스타고로\n대학교 축제를 즐겨보세요.</string>
 </resources>
