@@ -46,6 +46,17 @@ class TicketReserveViewModel(
         }
     }
 
+    fun reserveTicket() {
+        viewModelScope.launch {
+            reservationRepository.reserveTicket(0, 0)
+                .onSuccess {
+                    _event.value = TicketReserveEvent.ReserveTicketSuccess
+                }.onFailure {
+                    _event.value = TicketReserveEvent.ReserveTicketFailed
+                }
+        }
+    }
+
     companion object {
         class TicketReservationViewModelFactory(
             private val reservationRepository: ReservationRepository,
