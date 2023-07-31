@@ -14,7 +14,7 @@ import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
-import com.festago.festago.presentation.ui.ticketreserve.bottomSheet.TicketReserveBottomSheetFragment
+import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
 
 class TicketReserveActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTicketReserveBinding

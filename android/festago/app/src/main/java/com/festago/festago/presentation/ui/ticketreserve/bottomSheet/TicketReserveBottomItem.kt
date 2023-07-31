@@ -1,7 +1,8 @@
-package com.festago.festago.presentation.ui.ticketreserve.bottomSheet
+package com.festago.festago.presentation.ui.ticketreserve.bottomsheet
 
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 
-class TicketReserveBottomItem(val ticket: ReservationTicketUiModel) {
-    var isSelected: Boolean = false
-}
+data class TicketReserveBottomItem(
+    val ticket: ReservationTicketUiModel,
+    val isSelected: Boolean = false,
+)

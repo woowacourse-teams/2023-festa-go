@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.festago.festago.presentation.ui.ticketreserve.bottomSheet.TicketReserveBottomItem" />
+            type="com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

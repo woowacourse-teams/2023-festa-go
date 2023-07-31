@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.ticketreserve.bottomSheet
+package com.festago.festago.presentation.ui.ticketreserve.bottomsheet
 
 import android.os.Bundle
 import android.view.LayoutInflater
