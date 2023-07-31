@@ -1,5 +1,7 @@
 package com.festago.domain;
 
+import com.festago.exception.BadRequestException;
+import com.festago.exception.ErrorCode;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,6 +20,8 @@ import java.util.List;
 
 @Entity
 public class Ticket {
+
+    private static final int EARLY_ENTRY_LIMIT = 12;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,9 +54,20 @@ public class Ticket {
     }
 
     public void addTicketEntryTime(LocalDateTime entryTime, int amount) {
-        TicketEntryTime ticketEntryTime = TicketEntryTime.of(entryTime, amount, stage);
+        validateEntryTime(entryTime);
+        TicketEntryTime ticketEntryTime = new TicketEntryTime(entryTime, amount);
         ticketAmount.addTotalAmount(amount);
         ticketEntryTimes.add(ticketEntryTime);
+    }
+
+    private void validateEntryTime(LocalDateTime entryTime) {
+        LocalDateTime stageStartTime = stage.getStartTime();
+        if (entryTime.isAfter(stageStartTime) || entryTime.isEqual(stageStartTime)) {
+            throw new BadRequestException(ErrorCode.LATE_TICKET_ENTRY_TIME);
+        }
+        if (entryTime.isBefore(stageStartTime.minusHours(EARLY_ENTRY_LIMIT))) {
+            throw new BadRequestException(ErrorCode.EARLY_TICKET_ENTRY_TIME);
+        }
     }
 
     public Long getId() {

@@ -3,12 +3,9 @@ package com.festago.domain;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.exception.BadRequestException;
-import com.festago.support.FestivalFixture;
-import com.festago.support.StageFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -21,55 +18,10 @@ class TicketEntryTimeTest {
     void 총_수량이_1_미만이면_예외(int totalAmount) {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Stage stage = StageFixture.stage()
-            .startTime(now.plusHours(2))
-            .build();
 
         // when & then
-        assertThatThrownBy(() -> TicketEntryTime.of(now, totalAmount, stage))
+        assertThatThrownBy(() -> new TicketEntryTime(now, totalAmount))
             .isInstanceOf(BadRequestException.class)
             .hasMessage("티켓은 적어도 한장 이상 발급해야합니다.");
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"2023-07-26T18:00:00", "2023-07-26T18:00:01"})
-    void 입장_시간이_축제_이후면_예외(LocalDateTime entryTime) {
-        // given
-        LocalDateTime stageStartTime = LocalDateTime.parse("2023-07-26T18:00:00");
-        Festival festival = FestivalFixture.festival()
-            .startDate(stageStartTime.toLocalDate())
-            .endDate(stageStartTime.plusDays(4).toLocalDate())
-            .build();
-
-        Stage stage = StageFixture.stage()
-            .festival(festival)
-            .startTime(stageStartTime)
-            .build();
-
-        // when & then
-        assertThatThrownBy(() -> TicketEntryTime.of(entryTime, 100, stage))
-            .isInstanceOf(BadRequestException.class)
-            .hasMessage("입장 시간은 공연 시간보다 빨라야합니다.");
-    }
-
-    @Test
-    void 입장_시간이_공연_시작_12시간_이전이면_예외() {
-        // given
-        LocalDateTime entryTime = LocalDateTime.parse("2023-07-26T05:59:59");
-        LocalDateTime stageStartTime = LocalDateTime.parse("2023-07-26T18:00:00");
-        Festival festival = FestivalFixture.festival()
-            .startDate(stageStartTime.toLocalDate())
-            .endDate(stageStartTime.plusDays(4).toLocalDate())
-            .build();
-
-        Stage stage = StageFixture.stage()
-            .festival(festival)
-            .startTime(stageStartTime)
-            .build();
-
-        // when & then
-        assertThatThrownBy(() -> TicketEntryTime.of(entryTime, 100, stage))
-            .isInstanceOf(BadRequestException.class)
-            .hasMessage("입장 시간은 공연 시작 12시간 이내여야 합니다.");
     }
 }
