@@ -79,7 +79,7 @@ class FestivalServiceTest {
         @Test
         void 무대_시작시간순으로_정렬() {
             // given
-            long festivalId = 1L;
+            Long festivalId = 1L;
             Festival festival = FestivalFixture.festival().id(festivalId).build();
             LocalDateTime now = LocalDateTime.now();
             Stage stage1 = StageFixture.stage().id(1L).startTime(now).festival(festival).build();
