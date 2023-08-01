@@ -3,11 +3,11 @@ package com.festago.festago.presentation.ui.home.festivallist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.festago.festago.databinding.ItemFestivalBinding
+import com.festago.festago.databinding.ItemFestivalListBinding
 import com.festago.festago.presentation.model.FestivalUiModel
 
 class FestivalItemViewHolder(
-    private val binding: ItemFestivalBinding,
+    private val binding: ItemFestivalListBinding,
     vm: FestivalListViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -21,7 +21,7 @@ class FestivalItemViewHolder(
 
     companion object {
         fun of(parent: ViewGroup, vm: FestivalListViewModel): FestivalItemViewHolder {
-            val binding = ItemFestivalBinding.inflate(
+            val binding = ItemFestivalListBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,

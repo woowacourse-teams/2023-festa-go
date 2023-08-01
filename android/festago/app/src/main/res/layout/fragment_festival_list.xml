@@ -62,7 +62,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cgFilterOption"
             app:spanCount="2"
-            tools:listitem="@layout/item_festival" />
+            tools:listitem="@layout/item_festival_list" />
 
         <TextView
             android:id="@+id/tvErrorOrEmpty"
