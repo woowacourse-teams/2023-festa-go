@@ -7,6 +7,7 @@ data class Ticket(
     val number: Int,
     val entryTime: LocalDateTime,
     val state: TicketState,
+    val reserveAt: LocalDateTime,
     val stage: Stage,
-    val imageUrl: String,
+    val festivalTicket: MemberTicketFestival,
 )
