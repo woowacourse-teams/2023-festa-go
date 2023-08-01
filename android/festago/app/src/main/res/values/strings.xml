@@ -62,4 +62,8 @@
 
     <!-- Strings related to ok dialog -->
     <string name="ok_dialog_btn_ok">확인</string>
+
+    <!-- Strings related to mypage -->
+    <string name="mypage_btn_kakao">카카오로 로그인</string>
+    <string name="mypage_tv_login_description">페스타고로\n대학교 축제를 즐겨보세요.</string>
 </resources>
