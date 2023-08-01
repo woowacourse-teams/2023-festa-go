@@ -9,7 +9,7 @@ data class MemberTicketFestivalResponse(
     val name: String,
     val thumbnail: String,
 ) {
-    fun toDomain() = MemberTicketFestival(
+    fun toDomain(): MemberTicketFestival = MemberTicketFestival(
         id = id,
         name = name,
         thumbnail = thumbnail,

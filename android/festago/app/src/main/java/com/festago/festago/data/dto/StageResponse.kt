@@ -9,7 +9,7 @@ data class StageResponse(
     val id: Int,
     val startTime: String,
 ) {
-    fun toDomain() = Stage(
+    fun toDomain(): Stage = Stage(
         id = id,
         startTime = LocalDateTime.parse(startTime),
     )

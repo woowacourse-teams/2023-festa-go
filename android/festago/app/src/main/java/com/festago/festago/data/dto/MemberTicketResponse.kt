@@ -15,7 +15,7 @@ data class MemberTicketResponse(
     val stage: StageResponse,
     val festival: MemberTicketFestivalResponse,
 ) {
-    fun toDomain() = Ticket(
+    fun toDomain(): Ticket = Ticket(
         id = id,
         number = number,
         entryTime = LocalDateTime.parse(entryTime),

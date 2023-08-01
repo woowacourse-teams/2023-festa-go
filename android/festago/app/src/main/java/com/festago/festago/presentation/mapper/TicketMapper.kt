@@ -3,7 +3,7 @@ package com.festago.festago.presentation.mapper
 import com.festago.festago.domain.model.Ticket
 import com.festago.festago.presentation.model.TicketUiModel
 
-fun Ticket.toPresentation() = TicketUiModel(
+fun Ticket.toPresentation(): TicketUiModel = TicketUiModel(
     id = id,
     number = number,
     entryTime = entryTime,
@@ -15,4 +15,4 @@ fun Ticket.toPresentation() = TicketUiModel(
     festivalThumbnail = festivalTicket.thumbnail,
 )
 
-fun List<Ticket>.toPresentation() = this.map { ticket -> ticket.toPresentation() }
+fun List<Ticket>.toPresentation(): List<TicketUiModel> = this.map { ticket -> ticket.toPresentation() }

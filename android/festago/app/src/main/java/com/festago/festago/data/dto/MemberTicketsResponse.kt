@@ -1,5 +1,6 @@
 package com.festago.festago.data.dto
 
+import com.festago.festago.domain.model.Ticket
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -7,5 +8,5 @@ import kotlinx.serialization.Serializable
 data class MemberTicketsResponse(
     @SerialName("tickets") val memberTickets: List<MemberTicketResponse>,
 ) {
-    fun toDomain() = memberTickets.map { it.toDomain() }
+    fun toDomain(): List<Ticket> = memberTickets.map { it.toDomain() }
 }
