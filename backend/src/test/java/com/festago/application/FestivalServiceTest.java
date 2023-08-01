@@ -46,16 +46,13 @@ class FestivalServiceTest {
         // given
         Festival festival1 = FestivalFixture.festival().id(1L).build();
         Festival festival2 = FestivalFixture.festival().id(2L).build();
-        given(festivalRepository.findAll())
-            .willReturn(List.of(festival1, festival2));
+        given(festivalRepository.findAll()).willReturn(List.of(festival1, festival2));
 
         // when
         FestivalsResponse response = festivalService.findAll();
 
         // then
-        List<Long> festivalIds = response.festivals().stream()
-            .map(FestivalResponse::id)
-            .toList();
+        List<Long> festivalIds = response.festivals().stream().map(FestivalResponse::id).toList();
 
         assertThat(festivalIds).containsExactly(1L, 2L);
     }
@@ -67,12 +64,10 @@ class FestivalServiceTest {
         void 축제가_없다면_예외() {
             // given
             Long festivalId = 1L;
-            given(festivalRepository.findById(festivalId))
-                .willReturn(Optional.empty());
+            given(festivalRepository.findById(festivalId)).willReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> festivalService.findDetail(festivalId))
-                .isInstanceOf(NotFoundException.class)
+            assertThatThrownBy(() -> festivalService.findDetail(festivalId)).isInstanceOf(NotFoundException.class)
                 .hasMessage("존재하지 않는 축제입니다.");
         }
 
@@ -85,18 +80,14 @@ class FestivalServiceTest {
             Stage stage1 = StageFixture.stage().id(1L).startTime(now).festival(festival).build();
             Stage stage2 = StageFixture.stage().id(2L).startTime(now.plusDays(1)).festival(festival).build();
 
-            given(festivalRepository.findById(festivalId))
-                .willReturn(Optional.of(festival));
-            given(stageRepository.findAllByFestival(festival))
-                .willReturn(List.of(stage2, stage1));
+            given(festivalRepository.findById(festivalId)).willReturn(Optional.of(festival));
+            given(stageRepository.findAllDetailByFestivalId(festival.getId())).willReturn(List.of(stage2, stage1));
 
             // when
             FestivalDetailResponse response = festivalService.findDetail(festivalId);
 
             // then
-            List<Long> stageIds = response.stages().stream()
-                .map(FestivalDetailStageResponse::id)
-                .toList();
+            List<Long> stageIds = response.stages().stream().map(FestivalDetailStageResponse::id).toList();
             assertThat(stageIds).containsExactly(1L, 2L);
         }
     }
