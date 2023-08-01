@@ -58,7 +58,7 @@ class KakaoOAuth2ClientTest {
             // when & then
             assertThatThrownBy(() -> kakaoOAuth2Client.getAccessToken("code"))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("잘못된 인증 코드 입니다.");
+                .hasMessage("잘못된 인가 코드 입니다.");
         }
 
         @Test
