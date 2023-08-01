@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_llg"
-                android:text="@{vm.ticket.stage.name}"
+                android:text="@{vm.ticket.festivalName}"
                 android:textColor="@color/md_theme_light_onSurface"
                 android:textSize="@dimen/title_medium"
                 android:textStyle="bold"

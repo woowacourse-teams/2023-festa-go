@@ -9,16 +9,10 @@ fun Ticket.toPresentation() = TicketUiModel(
     entryTime = entryTime,
     ticketState = state.toPresentation(),
     stage = stage.toPresentation(),
-    imageUrl = imageUrl,
+    reserveAt = reserveAt,
+    festivalId = festivalTicket.id,
+    festivalName = festivalTicket.name,
+    festivalThumbnail = festivalTicket.thumbnail,
 )
 
 fun List<Ticket>.toPresentation() = this.map { ticket -> ticket.toPresentation() }
-
-fun TicketUiModel.toDomain() = Ticket(
-    id = id,
-    number = number,
-    entryTime = entryTime,
-    state = ticketState.toDomain(),
-    stage = stage.toDomain(),
-    imageUrl = imageUrl,
-)

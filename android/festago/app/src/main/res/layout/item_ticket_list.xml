@@ -36,7 +36,7 @@
 
                 <ImageView
                     android:id="@+id/ivStageThumbnail"
-                    imageUrl="@{ticket.imageUrl}"
+                    imageUrl="@{ticket.festivalThumbnail}"
                     android:layout_width="120dp"
                     android:layout_height="0dp"
                     android:importantForAccessibility="no"
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
-                    android:text="@{ticket.stage.name}"
+                    android:text="@{ticket.festivalName}"
                     android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@id/ivStageThumbnail"
                     app:layout_constraintTop_toTopOf="@id/ivStageThumbnail"
