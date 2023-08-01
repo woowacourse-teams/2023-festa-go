@@ -2,7 +2,7 @@ package com.festago.festago.presentation.ui
 
 import com.festago.festago.R
 import com.festago.festago.databinding.ActivityMainBinding
-import com.festago.festago.presentation.model.TicketStateUiModel
+import com.festago.festago.presentation.model.TicketConditionUiModel
 import com.festago.festago.presentation.model.TicketUiModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -27,10 +27,10 @@ object MainBinding {
 
     fun setTvTicketState(binding: ActivityMainBinding, ticket: TicketUiModel) {
         val context = binding.root.context
-        binding.tvTicketState.text = when (ticket.ticketState) {
-            TicketStateUiModel.BEFORE_ENTRY -> context.getString(R.string.main_tv_ticket_before_entry)
-            TicketStateUiModel.AFTER_ENTRY -> context.getString(R.string.main_tv_ticket_after_entry)
-            TicketStateUiModel.AWAY -> context.getString(R.string.main_tv_ticket_away)
+        binding.tvTicketState.text = when (ticket.condition) {
+            TicketConditionUiModel.BEFORE_ENTRY -> context.getString(R.string.main_tv_ticket_before_entry)
+            TicketConditionUiModel.AFTER_ENTRY -> context.getString(R.string.main_tv_ticket_after_entry)
+            TicketConditionUiModel.AWAY -> context.getString(R.string.main_tv_ticket_away)
             else -> ""
         }
     }

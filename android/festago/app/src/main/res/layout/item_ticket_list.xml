@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <variable
+            name="vm"
+            type="com.festago.festago.presentation.ui.home.ticketlist.TicketListViewModel" />
+
+        <variable
+            name="ticket"
+            type="com.festago.festago.presentation.model.TicketUiModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvTicket"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ivStageThumbnail"
+                    imageUrl="@{ticket.festivalThumbnail}"
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:importantForAccessibility="no"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintDimensionRatio="3:4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@mipmap/ic_festago_logo" />
+
+                <TextView
+                    android:id="@+id/tvTicketStageName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@{ticket.festivalName}"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@id/ivStageThumbnail"
+                    app:layout_constraintTop_toTopOf="@id/ivStageThumbnail"
+                    tools:text="테코데학교 무슨축제 DAY1" />
+
+                <TextView
+                    android:id="@+id/tvStageStartTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@{@string/ticket_list_tv_ticket_stage_start_time(ticket.stage.startTime.format(DateTimeFormatter.ofPattern(@string/ticket_list_tv_date_time_format)))}"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@id/tvTicketStageName"
+                    app:layout_constraintTop_toBottomOf="@id/tvTicketStageName"
+                    tools:text="무대 시작 시간 2023.07.03 18:00" />
+
+                <TextView
+                    android:id="@+id/tvTicketEntryTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@{@string/ticket_list_tv_ticket_entry_time(ticket.entryTime.format(DateTimeFormatter.ofPattern(@string/ticket_list_tv_date_time_format)))}"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@id/tvTicketStageName"
+                    app:layout_constraintTop_toBottomOf="@id/tvStageStartTime"
+                    tools:text="입장 시작 시간 2023.07.03 15:00" />
+
+                <TextView
+                    android:id="@+id/tvTicketNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@{@string/ticket_list_tv_ticket_number(ticket.number)}"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/ivStageThumbnail"
+                    app:layout_constraintStart_toStartOf="@id/tvTicketStageName"
+                    app:layout_constraintTop_toBottomOf="@id/tvTicketEntryTime"
+                    tools:text="100번" />
+
+                <TextView
+                    android:id="@+id/tvTicketState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{ticket.condition.stateName}"
+                    android:textColor="@color/md_theme_light_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tvTicketNumber"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvTicketNumber"
+                    tools:text="입장전" />
+
+                <Button
+                    android:id="@+id/btnTicketEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{() -> vm.showTicketEntry(ticket.id)}"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/ivStageThumbnail" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Entity
 public class TicketEntryTime {
 
-    private static final long EARLY_ENTRY_LIMIT = 12;
     private static final int MIN_TOTAL_AMOUNT = 1;
 
     @Id
@@ -25,7 +24,7 @@ public class TicketEntryTime {
     protected TicketEntryTime() {
     }
 
-    private TicketEntryTime(LocalDateTime entryTime, Integer amount) {
+    public TicketEntryTime(LocalDateTime entryTime, Integer amount) {
         this(null, entryTime, amount);
     }
 
@@ -39,21 +38,6 @@ public class TicketEntryTime {
     private void validate(Integer amount) {
         if (amount < MIN_TOTAL_AMOUNT) {
             throw new BadRequestException(ErrorCode.INVALID_MIN_TICKET_AMOUNT);
-        }
-    }
-
-    public static TicketEntryTime of(LocalDateTime entryTime, Integer amount, Stage stage) {
-        validateEntryTime(entryTime, stage);
-        return new TicketEntryTime(entryTime, amount);
-    }
-
-    private static void validateEntryTime(LocalDateTime entryTime, Stage stage) {
-        LocalDateTime stageStartTime = stage.getStartTime();
-        if (entryTime.isAfter(stageStartTime) || entryTime.isEqual(stageStartTime)) {
-            throw new BadRequestException(ErrorCode.LATE_TICKET_ENTRY_TIME);
-        }
-        if (entryTime.isBefore(stageStartTime.minusHours(EARLY_ENTRY_LIMIT))) {
-            throw new BadRequestException(ErrorCode.EARLY_TICKET_ENTRY_TIME);
         }
     }
 

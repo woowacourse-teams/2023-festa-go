@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/llContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_custom_dialog"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/ivIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_error" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="16dp" />
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            tools:text="매진된 티켓입니다." />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="40dp" />
+
+        <Button
+            android:id="@+id/btnOk"
+            style="@style/btnFesta"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:maxLines="1"
+            android:padding="0dp"
+            android:text="@string/ok_dialog_btn_ok" />
+
+    </LinearLayout>
+</layout>

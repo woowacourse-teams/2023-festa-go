@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_ticket_reserve_bottom_sheet_item"
+        android:paddingVertical="24dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/endGuideLine"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp" />
+
+        <TextView
+            android:id="@+id/tvTicketType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{item.ticket.ticketType}"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="재학생" />
+
+        <TextView
+            android:id="@+id/tvTicketCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{@string/ticket_reserve_tv_ticket_count_format(item.ticket.remainAmount, item.ticket.totalAmount)}"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="(219/300)" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

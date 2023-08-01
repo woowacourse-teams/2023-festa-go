@@ -78,5 +78,8 @@
     <color name="md_theme_dark_onSurface">#C7C6CA</color>
     <color name="md_theme_dark_surfaceVariant">#44474F</color>
     <color name="md_theme_dark_onSurfaceVariant">#C4C6D0</color>
-</resources>
 
+    <color name="kakao_symbol">#000000</color>
+    <color name="kakao_label">#D9000000</color>
+    <color name="kakao_containter">#FEE500</color>
+</resources>

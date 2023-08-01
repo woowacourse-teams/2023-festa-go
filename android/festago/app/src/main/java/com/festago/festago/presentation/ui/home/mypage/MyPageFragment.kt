@@ -1,6 +1,9 @@
 package com.festago.festago.presentation.ui.home.mypage
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +25,32 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
+    private fun initView() {
+        val spannableStringBuilder = SpannableStringBuilder(
+            getString(R.string.mypage_tv_login_description),
+        ).apply {
+            setSpan(
+                ForegroundColorSpan(requireContext().getColor(R.color.seed)),
+                COLOR_SPAN_START_INDEX,
+                COLOR_SPAN_END_INDEX,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+        }
+        binding.tvLoginDescription.text = spannableStringBuilder
+    }
+
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val COLOR_SPAN_START_INDEX = 0
+        private const val COLOR_SPAN_END_INDEX = 4
     }
 }

@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.domain.repository.ReservationRepository
 import com.festago.festago.presentation.mapper.toPresentation
+import com.festago.festago.presentation.util.MutableSingleLiveData
+import com.festago.festago.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
 
 class TicketReserveViewModel(
@@ -14,6 +16,9 @@ class TicketReserveViewModel(
 ) : ViewModel() {
     private val _uiState = MutableLiveData<TicketReserveUiState>()
     val uiState: LiveData<TicketReserveUiState> = _uiState
+
+    private val _event = MutableSingleLiveData<TicketReserveEvent>()
+    val event: SingleLiveData<TicketReserveEvent> = _event
 
     fun loadReservation(refresh: Boolean = false) {
         if (!refresh && uiState.value is TicketReserveUiState.Success) return
@@ -24,6 +29,32 @@ class TicketReserveViewModel(
                     _uiState.setValue(TicketReserveUiState.Success(it.toPresentation()))
                 }.onFailure {
                     _uiState.setValue(TicketReserveUiState.Error)
+                }
+        }
+    }
+
+    fun showTicketTypes(stageId: Int) {
+        viewModelScope.launch {
+            reservationRepository.loadReservation()
+                .onSuccess {
+                    it.reservationStages
+                        .find { stage -> stage.id == stageId }
+                        ?.let { stage ->
+                            _event.setValue(TicketReserveEvent.ShowTicketTypes(stage.toPresentation()))
+                        }
+                }.onFailure {
+                    _uiState.setValue(TicketReserveUiState.Error)
+                }
+        }
+    }
+
+    fun reserveTicket() {
+        viewModelScope.launch {
+            reservationRepository.reserveTicket(0, 0)
+                .onSuccess {
+                    _event.setValue(TicketReserveEvent.ReserveTicketSuccess)
+                }.onFailure {
+                    _event.setValue(TicketReserveEvent.ReserveTicketFailed)
                 }
         }
     }
