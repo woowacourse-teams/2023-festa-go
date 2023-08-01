@@ -6,10 +6,16 @@ import static org.mockito.BDDMockito.given;
 
 import com.festago.domain.Festival;
 import com.festago.domain.FestivalRepository;
+import com.festago.domain.Stage;
+import com.festago.domain.StageRepository;
+import com.festago.dto.FestivalDetailResponse;
+import com.festago.dto.FestivalDetailStageResponse;
 import com.festago.dto.FestivalResponse;
 import com.festago.dto.FestivalsResponse;
 import com.festago.exception.NotFoundException;
 import com.festago.support.FestivalFixture;
+import com.festago.support.StageFixture;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -28,6 +34,9 @@ class FestivalServiceTest {
 
     @Mock
     FestivalRepository festivalRepository;
+
+    @Mock
+    StageRepository stageRepository;
 
     @InjectMocks
     FestivalService festivalService;
@@ -65,6 +74,30 @@ class FestivalServiceTest {
             assertThatThrownBy(() -> festivalService.findDetail(festivalId))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("존재하지 않는 축제입니다.");
+        }
+
+        @Test
+        void 무대_시작시간순으로_정렬() {
+            // given
+            long festivalId = 1L;
+            Festival festival = FestivalFixture.festival().id(festivalId).build();
+            LocalDateTime now = LocalDateTime.now();
+            Stage stage1 = StageFixture.stage().id(1L).startTime(now).festival(festival).build();
+            Stage stage2 = StageFixture.stage().id(2L).startTime(now.plusDays(1)).festival(festival).build();
+
+            given(festivalRepository.findById(festivalId))
+                .willReturn(Optional.of(festival));
+            given(stageRepository.findAllByFestival(festival))
+                .willReturn(List.of(stage2, stage1));
+
+            // when
+            FestivalDetailResponse response = festivalService.findDetail(festivalId);
+
+            // then
+            List<Long> stageIds = response.stages().stream()
+                .map(FestivalDetailStageResponse::id)
+                .toList();
+            assertThat(stageIds).containsExactly(1L, 2L);
         }
     }
 }

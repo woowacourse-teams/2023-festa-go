@@ -1,6 +1,7 @@
 package com.festago.dto;
 
 import com.festago.domain.Festival;
+import com.festago.domain.Stage;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,8 +12,8 @@ public record FestivalDetailResponse(Long id,
                                      String thumbnail,
                                      List<FestivalDetailStageResponse> stages) {
 
-    public static FestivalDetailResponse from(Festival festival) {
-        List<FestivalDetailStageResponse> stages = festival.getStages().stream()
+    public static FestivalDetailResponse of(Festival festival, List<Stage> stages) {
+        List<FestivalDetailStageResponse> stageResponses = stages.stream()
             .map(FestivalDetailStageResponse::from)
             .toList();
         return new FestivalDetailResponse(
@@ -21,7 +22,7 @@ public record FestivalDetailResponse(Long id,
             festival.getStartDate(),
             festival.getEndDate(),
             festival.getThumbnail(),
-            stages
+            stageResponses
         );
     }
 }
