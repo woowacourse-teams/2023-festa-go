@@ -12,13 +12,14 @@ import androidx.fragment.app.DialogFragment
 import com.festago.festago.databinding.FragmentOkDialogBinding
 
 class OkDialogFragment(
-    private val context: Context,
     private val message: String,
     private val listener: OnClickListener,
 ) : DialogFragment() {
 
     private var _binding: FragmentOkDialogBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var context: Context
 
     private val window
         get() = dialog?.window ?: throw IllegalStateException()
@@ -40,6 +41,8 @@ class OkDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        context = requireContext()
+
         binding.tvMessage.text = message
 
         binding.btnOk.setOnClickListener {
