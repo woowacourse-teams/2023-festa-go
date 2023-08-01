@@ -12,6 +12,7 @@ public enum ErrorCode {
     LATE_TICKET_ENTRY_TIME("입장 시간은 공연 시간보다 빨라야합니다."),
     EARLY_TICKET_ENTRY_TIME("입장 시간은 공연 시작 12시간 이내여야 합니다."),
     TICKET_SOLD_OUT("매진된 티켓입니다."),
+    OAUTH2_INVALID_CODE("잘못된 인증 코드 입니다."),
 
     // 404
     MEMBER_TICKET_NOT_FOUND("존재하지 않은 멤버 티켓입니다."),
