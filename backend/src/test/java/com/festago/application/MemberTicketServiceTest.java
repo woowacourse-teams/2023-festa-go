@@ -8,12 +8,16 @@ import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
+import com.festago.dto.CurrentMemberTicketResponse;
+import com.festago.dto.CurrentMemberTicketsResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -94,5 +98,41 @@ class MemberTicketServiceTest {
 
         // then
         assertThat(response.id()).isEqualTo(memberTicketId);
+    }
+
+    @Test
+    void 현재_활성화된_티켓리스트_조회시_입장시간이_빠른순으로_정렬된다() {
+        // given
+        long memberId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        MemberTicket beforePendingMemberTicket = MemberTicketFixture.memberTicket()
+            .id(1L)
+            .entryTime(now.plusHours(13))
+            .build();
+        MemberTicket pendingMemberTicket = MemberTicketFixture.memberTicket()
+            .id(2L)
+            .entryTime(now.plusHours(1))
+            .build();
+        MemberTicket oldMemberTicket = MemberTicketFixture.memberTicket()
+            .id(3L)
+            .entryTime(now.minusHours(25))
+            .build();
+        MemberTicket canEntryMemberTicket = MemberTicketFixture.memberTicket()
+            .id(4L)
+            .entryTime(now.minusHours(1))
+            .build();
+
+        given(memberTicketRepository.findAllByOwnerId(memberId))
+            .willReturn(List.of(beforePendingMemberTicket, pendingMemberTicket, oldMemberTicket, canEntryMemberTicket));
+
+        // when
+        CurrentMemberTicketsResponse response = memberTicketService.findCurrentMemberTickets(memberId);
+
+        // then
+        List<Long> memberTicketIds = response.memberTickets().stream()
+            .map(CurrentMemberTicketResponse::id)
+            .toList();
+        assertThat(memberTicketIds)
+            .containsExactly(4L, 2L);
     }
 }

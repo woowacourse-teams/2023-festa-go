@@ -1,12 +1,18 @@
 package com.festago.application;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
+import com.festago.dto.CurrentMemberTicketsResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,5 +41,14 @@ public class MemberTicketService {
     public MemberTicketsResponse findAll(Long memberId) {
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
         return MemberTicketsResponse.from(memberTickets);
+    }
+
+    @Transactional(readOnly = true)
+    public CurrentMemberTicketsResponse findCurrentMemberTickets(Long memberId) {
+        List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
+        return memberTickets.stream()
+            .filter(memberTicket -> memberTicket.isCurrent(LocalDateTime.now()))
+            .sorted(Comparator.comparing(MemberTicket::getEntryTime))
+            .collect(collectingAndThen(toList(), CurrentMemberTicketsResponse::from));
     }
 }
