@@ -11,6 +11,7 @@ import com.festago.domain.Stage;
 import com.festago.dto.CurrentMemberTicketResponse;
 import com.festago.dto.CurrentMemberTicketsResponse;
 import com.festago.dto.MemberTicketResponse;
+import com.festago.dto.MemberTicketsResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
 import com.festago.support.MemberFixture;
@@ -38,6 +39,40 @@ class MemberTicketServiceTest {
 
     @InjectMocks
     MemberTicketService memberTicketService;
+
+    @Test
+    void 사용자의_멤버티켓_전체_조회시_공연시작시간이_빠른순으로_정렬된다() {
+        // given
+        long memberId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        Stage stage1 = StageFixture.stage().build();
+        Stage stage2 = StageFixture.stage().startTime(now.plusDays(1)).build();
+        Stage stage3 = StageFixture.stage().startTime(now.plusDays(2)).build();
+        MemberTicket memberTicket1 = MemberTicketFixture.memberTicket()
+            .id(1L)
+            .entryTime(stage1.getStartTime().minusHours(1))
+            .build();
+        MemberTicket memberTicket2 = MemberTicketFixture.memberTicket()
+            .id(2L)
+            .entryTime(stage2.getStartTime().minusHours(1))
+            .build();
+        MemberTicket memberTicket3 = MemberTicketFixture.memberTicket()
+            .id(3L)
+            .entryTime(stage3.getStartTime().minusHours(1))
+            .build();
+
+        given(memberTicketRepository.findAllByOwnerId(memberId))
+            .willReturn(List.of(memberTicket2, memberTicket1, memberTicket3));
+
+        // when
+        MemberTicketsResponse response = memberTicketService.findAll(memberId);
+
+        // then
+        List<Long> memberTicketIds = response.memberTickets().stream()
+            .map(MemberTicketResponse::id)
+            .toList();
+        assertThat(memberTicketIds).containsExactly(1L, 2L, 3L);
+    }
 
     @Test
     void 현재_활성화된_티켓리스트_조회시_입장시간이_빠른순으로_정렬된다() {

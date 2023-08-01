@@ -40,7 +40,9 @@ public class MemberTicketService {
     @Transactional(readOnly = true)
     public MemberTicketsResponse findAll(Long memberId) {
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
-        return MemberTicketsResponse.from(memberTickets);
+        return memberTickets.stream()
+            .sorted(Comparator.comparing(memberTicket -> memberTicket.getStage().getStartTime()))
+            .collect(collectingAndThen(toList(), MemberTicketsResponse::from));
     }
 
     @Transactional(readOnly = true)
