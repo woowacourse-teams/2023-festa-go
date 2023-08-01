@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,68 +38,6 @@ class MemberTicketServiceTest {
 
     @InjectMocks
     MemberTicketService memberTicketService;
-
-    @Test
-    void 사용자의_티켓이_없으면_예외() {
-        // given
-        Long memberId = 1L;
-        Long memberTicketId = 1L;
-        given(memberTicketRepository.findById(memberTicketId))
-            .willReturn(Optional.empty());
-
-        // when & then
-        assertThatThrownBy(() -> memberTicketService.findById(memberId, memberTicketId))
-            .isInstanceOf(NotFoundException.class)
-            .hasMessage("존재하지 않은 멤버 티켓입니다.");
-    }
-
-    @Test
-    void 사용자가_티켓의_주인이_아니면_예외() {
-        // given
-        Long memberId = 1L;
-        Member other = MemberFixture.member()
-            .id(2L)
-            .build();
-
-        MemberTicket otherMemberTicket = MemberTicketFixture.memberTicket()
-            .owner(other)
-            .build();
-
-        Long otherTicketId = otherMemberTicket.getId();
-
-        given(memberTicketRepository.findById(otherTicketId))
-            .willReturn(Optional.of(otherMemberTicket));
-
-        // when & then
-        assertThatThrownBy(() -> memberTicketService.findById(memberId, otherTicketId))
-            .isInstanceOf(BadRequestException.class)
-            .hasMessage("해당 예매 티켓의 주인이 아닙니다.");
-    }
-
-    @Test
-    void 사용자의_티켓_단건_조회() {
-        // given
-        Member member = MemberFixture.member()
-            .id(2L)
-            .build();
-        Stage stage = StageFixture.stage()
-            .build();
-        Long memberTicketId = 1L;
-        MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-            .id(1L)
-            .owner(member)
-            .stage(stage)
-            .build();
-
-        given(memberTicketRepository.findById(memberTicketId))
-            .willReturn(Optional.of(memberTicket));
-
-        // when
-        MemberTicketResponse response = memberTicketService.findById(member.getId(), memberTicketId);
-
-        // then
-        assertThat(response.id()).isEqualTo(memberTicketId);
-    }
 
     @Test
     void 현재_활성화된_티켓리스트_조회시_입장시간이_빠른순으로_정렬된다() {
@@ -134,5 +73,71 @@ class MemberTicketServiceTest {
             .toList();
         assertThat(memberTicketIds)
             .containsExactly(4L, 2L);
+    }
+
+    @Nested
+    class 멤버_티켓_아이디로_단건_조회 {
+
+        @Test
+        void 사용자의_티켓이_없으면_예외() {
+            // given
+            Long memberId = 1L;
+            Long memberTicketId = 1L;
+            given(memberTicketRepository.findById(memberTicketId))
+                .willReturn(Optional.empty());
+
+            // when & then
+            assertThatThrownBy(() -> memberTicketService.findById(memberId, memberTicketId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("존재하지 않은 멤버 티켓입니다.");
+        }
+
+        @Test
+        void 사용자가_티켓의_주인이_아니면_예외() {
+            // given
+            Long memberId = 1L;
+            Member other = MemberFixture.member()
+                .id(2L)
+                .build();
+
+            MemberTicket otherMemberTicket = MemberTicketFixture.memberTicket()
+                .owner(other)
+                .build();
+
+            Long otherTicketId = otherMemberTicket.getId();
+
+            given(memberTicketRepository.findById(otherTicketId))
+                .willReturn(Optional.of(otherMemberTicket));
+
+            // when & then
+            assertThatThrownBy(() -> memberTicketService.findById(memberId, otherTicketId))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("해당 예매 티켓의 주인이 아닙니다.");
+        }
+
+        @Test
+        void 성공() {
+            // given
+            Member member = MemberFixture.member()
+                .id(2L)
+                .build();
+            Stage stage = StageFixture.stage()
+                .build();
+            Long memberTicketId = 1L;
+            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .id(1L)
+                .owner(member)
+                .stage(stage)
+                .build();
+
+            given(memberTicketRepository.findById(memberTicketId))
+                .willReturn(Optional.of(memberTicket));
+
+            // when
+            MemberTicketResponse response = memberTicketService.findById(member.getId(), memberTicketId);
+
+            // then
+            assertThat(response.id()).isEqualTo(memberTicketId);
+        }
     }
 }
