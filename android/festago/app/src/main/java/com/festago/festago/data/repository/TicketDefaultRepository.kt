@@ -14,7 +14,13 @@ class TicketDefaultRepository(
     }
 
     override suspend fun loadTickets(): Result<List<Ticket>> {
-        return Result.success(ticketRetrofitService.getTickets().body()!!.toDomain())
+        val response = ticketRetrofitService.getTickets()
+        if (response.isSuccessful && response.body() != null) {
+            return Result.success(response.body()!!.toDomain())
+        }
+        return Result.failure(
+            Throwable("code: ${response.code()}, body: ${response.errorBody()?.toString()}}"),
+        )
     }
 
     override suspend fun loadTicketCode(ticketId: Long): TicketCode {
