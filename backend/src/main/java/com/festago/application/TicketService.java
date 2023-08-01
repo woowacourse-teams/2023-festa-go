@@ -1,6 +1,5 @@
 package com.festago.application;
 
-import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
 import com.festago.domain.StageRepository;
 import com.festago.domain.Ticket;
@@ -20,13 +19,10 @@ public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final StageRepository stageRepository;
-    private final MemberTicketRepository memberTicketRepository;
 
-    public TicketService(TicketRepository ticketRepository, StageRepository stageRepository,
-                         MemberTicketRepository memberTicketRepository) {
+    public TicketService(TicketRepository ticketRepository, StageRepository stageRepository) {
         this.ticketRepository = ticketRepository;
         this.stageRepository = stageRepository;
-        this.memberTicketRepository = memberTicketRepository;
     }
 
     public TicketCreateResponse create(TicketCreateRequest request) {
@@ -46,9 +42,8 @@ public class TicketService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.STAGE_NOT_FOUND));
     }
 
-    //TODO
     @Transactional(readOnly = true)
     public StageTicketsResponse findStageTickets(Long stageId) {
-        return null;
+        return StageTicketsResponse.from(ticketRepository.findAllByStageId(stageId));
     }
 }

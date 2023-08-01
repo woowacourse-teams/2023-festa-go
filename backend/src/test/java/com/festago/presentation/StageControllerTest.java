@@ -42,8 +42,8 @@ class StageControllerTest {
         // given
         StageTicketsResponse expected = new StageTicketsResponse(
             List.of(
-                new StageTicketResponse(TicketType.STUDENT, 100, 60),
-                new StageTicketResponse(TicketType.VISITOR, 50, 30)
+                new StageTicketResponse(1L, TicketType.STUDENT, 100, 60),
+                new StageTicketResponse(2L, TicketType.VISITOR, 50, 30)
             ));
 
         given(ticketService.findStageTickets(anyLong()))
