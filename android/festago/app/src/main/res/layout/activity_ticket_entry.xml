@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.festago.festago.presentation.model.TicketStateUiModel" />
+        <import type="com.festago.festago.presentation.model.TicketConditionUiModel" />
 
         <import type="java.time.format.DateTimeFormatter" />
 
@@ -20,7 +20,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        ticketBackground="@{vm.ticket.ticketState}"
+        ticketBackground="@{vm.ticket.condition}"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -67,13 +67,13 @@
 
             <Button
                 android:id="@+id/btnTicketState"
-                ticketStateBackground="@{vm.ticket.ticketState}"
+                ticketStateBackground="@{vm.ticket.condition}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_lsm"
                 android:clickable="false"
                 android:minHeight="0dp"
-                android:text="@{vm.ticket.ticketState.stateName}"
+                android:text="@{vm.ticket.condition.stateName}"
                 android:textColor="@color/md_theme_light_onPrimary"
                 android:textSize="@dimen/label_large"
                 android:textStyle="bold"
@@ -85,7 +85,7 @@
             <ProgressBar
                 android:id="@+id/pbRemainTime"
                 style="@android:style/Widget.ProgressBar.Horizontal"
-                remainTimeProgressDrawable="@{vm.ticket.ticketState}"
+                remainTimeProgressDrawable="@{vm.ticket.condition}"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="@dimen/space_md"
@@ -126,7 +126,7 @@
 
             <ImageView
                 android:id="@+id/btnReNew"
-                renewBackground="@{vm.ticket.ticketState}"
+                renewBackground="@{vm.ticket.condition}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_lsm"

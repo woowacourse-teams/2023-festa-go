@@ -3,7 +3,7 @@ package com.festago.festago.presentation.fixture
 import com.festago.festago.domain.model.MemberTicketFestival
 import com.festago.festago.domain.model.Stage
 import com.festago.festago.domain.model.Ticket
-import com.festago.festago.domain.model.TicketState
+import com.festago.festago.domain.model.TicketCondition
 import java.time.LocalDateTime
 
 object TicketFixture {
@@ -12,7 +12,7 @@ object TicketFixture {
             id = ticketId,
             number = 0,
             entryTime = LocalDateTime.MIN,
-            state = TicketState.AWAY,
+            condition = TicketCondition.AWAY,
             reserveAt = LocalDateTime.MAX,
             stage = getStage(),
             festivalTicket = getMemberTicketFestival(),
