@@ -60,13 +60,17 @@ public class TicketService {
     }
 
     public TicketingResponse ticketing(Long memberId, TicketingRequest request) {
-        TicketAmount ticketAmount = findTicketAmountById(request.ticketId());
-        ticketAmount.increaseReservedAmount();
-        int reservedAmount = ticketAmount.getReservedAmount();
+        int reservedAmount = reserveTicket(request);
         Ticket ticket = findTicketById(request.ticketId());
         Member member = findMemberById(memberId);
         MemberTicket memberTicket = memberTicketRepository.save(ticket.createMemberTicket(member, reservedAmount));
         return TicketingResponse.from(memberTicket);
+    }
+
+    private int reserveTicket(TicketingRequest request) {
+        TicketAmount ticketAmount = findTicketAmountById(request.ticketId());
+        ticketAmount.increaseReservedAmount();
+        return ticketAmount.getReservedAmount();
     }
 
     private TicketAmount findTicketAmountById(Long ticketAmountId) {

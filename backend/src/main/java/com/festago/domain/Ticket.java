@@ -74,16 +74,16 @@ public class Ticket {
         }
     }
 
-    public MemberTicket createMemberTicket(Member member, int reservedAmount) {
-        LocalDateTime entryTime = calculateEntryTime(reservedAmount);
-        return new MemberTicket(member, stage, reservedAmount, entryTime, ticketType);
+    public MemberTicket createMemberTicket(Member member, int reservationSequence) {
+        LocalDateTime entryTime = calculateEntryTime(reservationSequence);
+        return new MemberTicket(member, stage, reservationSequence, entryTime, ticketType);
     }
 
-    private LocalDateTime calculateEntryTime(int reservedAmount) {
-        int tempAmount = 0;
+    private LocalDateTime calculateEntryTime(int reservationSequence) {
+        int lastSequence = 0;
         for (TicketEntryTime ticketEntryTime : ticketEntryTimes) {
-            tempAmount += ticketEntryTime.getAmount();
-            if (reservedAmount <= tempAmount) {
+            lastSequence += ticketEntryTime.getAmount();
+            if (reservationSequence <= lastSequence) {
                 return ticketEntryTime.getEntryTime();
             }
         }
