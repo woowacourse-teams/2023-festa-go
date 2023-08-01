@@ -40,6 +40,7 @@ public class KakaoOAuth2Client implements OAuth2Client {
         this.restTemplate = restTemplateBuilder.build();
     }
 
+    @Override
     public String getAccessToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -62,6 +63,7 @@ public class KakaoOAuth2Client implements OAuth2Client {
         }
     }
 
+    @Override
     public UserInfo getUserInfo(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
