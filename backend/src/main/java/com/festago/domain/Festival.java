@@ -1,11 +1,14 @@
 package com.festago.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Festival {
@@ -23,6 +26,9 @@ public class Festival {
     private LocalDate endDate;
 
     private String thumbnail;
+
+    @OneToMany(mappedBy = "festival", fetch = FetchType.LAZY)
+    private List<Stage> stages;
 
     protected Festival() {
     }
@@ -69,5 +75,9 @@ public class Festival {
 
     public String getThumbnail() {
         return thumbnail;
+    }
+
+    public List<Stage> getStages() {
+        return stages;
     }
 }

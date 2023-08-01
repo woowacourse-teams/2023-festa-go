@@ -9,7 +9,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Stage {
@@ -27,6 +29,9 @@ public class Stage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Festival festival;
+
+    @OneToMany(mappedBy = "stage", fetch = FetchType.LAZY)
+    private List<Ticket> tickets;
 
     protected Stage() {
     }
@@ -72,5 +77,9 @@ public class Stage {
 
     public Festival getFestival() {
         return festival;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
     }
 }
