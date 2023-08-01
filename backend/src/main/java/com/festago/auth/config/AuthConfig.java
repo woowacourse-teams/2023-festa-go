@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AuthConfig {
 
-    private final static long EXPIRATION_MINUTES = 360;
+    private static final long EXPIRATION_MINUTES = 360;
 
     private final String secretKey;
 
