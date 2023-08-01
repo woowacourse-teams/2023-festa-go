@@ -3,6 +3,7 @@ package com.festago.application;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
@@ -14,7 +15,6 @@ import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,9 +85,7 @@ public class MemberTicketService {
 
     private List<MemberTicket> mergeMemberTickets(List<MemberTicket> memberTickets1,
                                                   List<MemberTicket> memberTickets2) {
-        List<MemberTicket> mergedMemberTickets = new ArrayList<>(memberTickets1.size() + memberTickets2.size());
-        mergedMemberTickets.addAll(memberTickets1);
-        mergedMemberTickets.addAll(memberTickets2);
-        return mergedMemberTickets;
+        return concat(memberTickets1.stream(), memberTickets2.stream())
+            .toList();
     }
 }
