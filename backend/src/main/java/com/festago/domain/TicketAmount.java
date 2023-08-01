@@ -32,6 +32,10 @@ public class TicketAmount {
         totalAmount += amount;
     }
 
+    public int calculateRemainAmount() {
+        return totalAmount - reservedAmount;
+    }
+
     public Long getId() {
         return id;
     }
