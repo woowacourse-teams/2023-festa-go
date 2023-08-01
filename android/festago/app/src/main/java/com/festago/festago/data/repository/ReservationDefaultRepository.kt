@@ -11,6 +11,7 @@ class ReservationDefaultRepository : ReservationRepository {
     private val fakeReservationTickets = listOf(
         ReservationTicket("재학생용", 219, 500),
         ReservationTicket("외부인용", 212, 300),
+        ReservationTicket("외부인용", 212, 300),
     )
     private val fakeReservationStage = ReservationStage(
         id = 1,
@@ -33,5 +34,10 @@ class ReservationDefaultRepository : ReservationRepository {
         delay(500)
 //        return Result.failure(Exception())
         return Result.success(fakeReservation)
+    }
+
+    override suspend fun reserveTicket(stageId: Int, ticketId: Int): Result<Int> {
+        delay(500)
+        return Result.success(1)
     }
 }
