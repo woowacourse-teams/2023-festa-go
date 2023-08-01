@@ -71,11 +71,7 @@ public class MemberTicket {
         return Objects.equals(owner.getId(), memberId);
     }
 
-    public boolean isCurrent(LocalDateTime time) {
-        return isPending(time) || canEntry(time);
-    }
-
-    private boolean isPending(LocalDateTime time) {
+    public boolean isPending(LocalDateTime time) {
         return time.isAfter(entryTime.minusHours(PENDING_LIMIT_HOUR))
             && time.isBefore(entryTime);
     }

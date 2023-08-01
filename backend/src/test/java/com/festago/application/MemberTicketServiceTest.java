@@ -74,40 +74,105 @@ class MemberTicketServiceTest {
         assertThat(memberTicketIds).containsExactly(1L, 2L, 3L);
     }
 
-    @Test
-    void 현재_활성화된_티켓리스트_조회시_입장시간이_빠른순으로_정렬된다() {
-        // given
-        long memberId = 1L;
-        LocalDateTime now = LocalDateTime.now();
-        MemberTicket beforePendingMemberTicket = MemberTicketFixture.memberTicket()
-            .id(1L)
-            .entryTime(now.plusHours(13))
-            .build();
-        MemberTicket pendingMemberTicket = MemberTicketFixture.memberTicket()
-            .id(2L)
-            .entryTime(now.plusHours(1))
-            .build();
-        MemberTicket oldMemberTicket = MemberTicketFixture.memberTicket()
-            .id(3L)
-            .entryTime(now.minusHours(25))
-            .build();
-        MemberTicket canEntryMemberTicket = MemberTicketFixture.memberTicket()
-            .id(4L)
-            .entryTime(now.minusHours(1))
-            .build();
+    @Nested
+    class 현재_멤버티켓_조회 {
 
-        given(memberTicketRepository.findAllByOwnerId(memberId))
-            .willReturn(List.of(beforePendingMemberTicket, pendingMemberTicket, oldMemberTicket, canEntryMemberTicket));
+        @Test
+        void 입장시간이_12시간이상_남은_티켓은_조회되지_않는다() {
+            // given
+            long memberId = 1L;
+            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .entryTime(LocalDateTime.now().plusHours(13))
+                .build();
 
-        // when
-        CurrentMemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+            given(memberTicketRepository.findAllByOwnerId(memberId))
+                .willReturn(List.of(memberTicket));
 
-        // then
-        List<Long> memberTicketIds = response.memberTickets().stream()
-            .map(CurrentMemberTicketResponse::id)
-            .toList();
-        assertThat(memberTicketIds)
-            .containsExactly(4L, 2L);
+            // when
+            CurrentMemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+
+            // then
+            assertThat(response.memberTickets()).isEmpty();
+        }
+
+        @Test
+        void 입장시간이_24시간_지난_티켓은_조회되지_않는다() {
+            // given
+            long memberId = 1L;
+            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .entryTime(LocalDateTime.now().minusHours(25))
+                .build();
+
+            given(memberTicketRepository.findAllByOwnerId(memberId))
+                .willReturn(List.of(memberTicket));
+
+            // when
+            CurrentMemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+
+            // then
+            assertThat(response.memberTickets()).isEmpty();
+        }
+
+        @Test
+        void 활성화된_티켓이_먼저_조회된다() {
+            // given
+            long memberId = 1L;
+            MemberTicket pendingMemberTicket = MemberTicketFixture.memberTicket()
+                .id(1L)
+                .entryTime(LocalDateTime.now().plusHours(1))
+                .build();
+            MemberTicket activateMemberTicket = MemberTicketFixture.memberTicket()
+                .id(2L)
+                .entryTime(LocalDateTime.now().minusHours(1))
+                .build();
+
+            given(memberTicketRepository.findAllByOwnerId(memberId))
+                .willReturn(List.of(pendingMemberTicket, activateMemberTicket));
+
+            // when
+            CurrentMemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+
+            // then
+            List<Long> memberTicketIds = response.memberTickets().stream()
+                .map(CurrentMemberTicketResponse::id)
+                .toList();
+            assertThat(memberTicketIds).containsExactly(2L, 1L);
+        }
+
+        @Test
+        void 활성화_및_비활성화_내에서는_현재시간과_가까운순으로_정렬되어_조회된다() {
+            // given
+            long memberId = 1L;
+            MemberTicket pendingMemberTicket1 = MemberTicketFixture.memberTicket()
+                .id(1L)
+                .entryTime(LocalDateTime.now().plusHours(1))
+                .build();
+            MemberTicket pendingMemberTicket2 = MemberTicketFixture.memberTicket()
+                .id(2L)
+                .entryTime(LocalDateTime.now().plusHours(2))
+                .build();
+            MemberTicket activateMemberTicket1 = MemberTicketFixture.memberTicket()
+                .id(3L)
+                .entryTime(LocalDateTime.now().minusHours(2))
+                .build();
+            MemberTicket activateMemberTicket2 = MemberTicketFixture.memberTicket()
+                .id(4L)
+                .entryTime(LocalDateTime.now().minusHours(1))
+                .build();
+
+            given(memberTicketRepository.findAllByOwnerId(memberId))
+                .willReturn(
+                    List.of(pendingMemberTicket1, pendingMemberTicket2, activateMemberTicket1, activateMemberTicket2));
+
+            // when
+            CurrentMemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+
+            // then
+            List<Long> memberTicketIds = response.memberTickets().stream()
+                .map(CurrentMemberTicketResponse::id)
+                .toList();
+            assertThat(memberTicketIds).containsExactly(4L, 3L, 1L, 2L);
+        }
     }
 
     @Nested
