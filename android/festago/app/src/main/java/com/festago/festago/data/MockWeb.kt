@@ -47,6 +47,13 @@ class MockWeb {
                                     .setBody(getTicket(ticketId))
                             }
 
+                            path.startsWith("/festivals") -> {
+                                MockResponse()
+                                    .setHeader("Content-Type", "application/json")
+                                    .setResponseCode(200)
+                                    .setBody(getFestivals())
+                            }
+
                             else -> MockResponse().setResponseCode(404)
                         }
                     }
@@ -77,6 +84,36 @@ class MockWeb {
                             "name": "테코대학교 무슨 축제",
                             "startTime": "2023-07-09T18:00:00"
                       }
+                }
+            """.trimIndent()
+        }
+
+        private fun getFestivals(): String {
+            return """
+                {
+                	"festivals": [
+                		{
+                			"id": 1,
+                			"name": "테코대학교1",
+                			"startDate": "2023-06-26",
+                			"endDate": "2023-06-30",
+                			"thumbnail": "https://images.unsplash.com/photo-1506157786151-b8491531f063?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                		},
+                        {       
+                			"id": 2,
+                			"name": "테코대학교2",
+                			"startDate": "2023-06-26",
+                			"endDate": "2023-06-30",
+                			"thumbnail": "https://images.unsplash.com/photo-1506157786151-b8491531f063?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                		},
+                        {
+                			"id": 1,
+                			"name": "테코대학교3",
+                			"startDate": "2023-06-26",
+                			"endDate": "2023-06-30",
+                			"thumbnail": "https://images.unsplash.com/photo-1506157786151-b8491531f063?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                		}
+                	]
                 }
             """.trimIndent()
         }
