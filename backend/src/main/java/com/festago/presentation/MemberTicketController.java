@@ -2,6 +2,7 @@ package com.festago.presentation;
 
 import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
+import com.festago.dto.CurrentMemberTicketsResponse;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
@@ -41,6 +42,13 @@ public class MemberTicketController {
     @GetMapping
     public ResponseEntity<MemberTicketsResponse> findAll() {
         MemberTicketsResponse response = memberTicketService.findAll(1L);// TODO
+        return ResponseEntity.ok()
+            .body(response);
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<CurrentMemberTicketsResponse> findCurrent() {
+        CurrentMemberTicketsResponse response = memberTicketService.findCurrent(1L);// TODO
         return ResponseEntity.ok()
             .body(response);
     }
