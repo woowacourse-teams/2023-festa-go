@@ -14,6 +14,7 @@ import java.util.Objects;
 @Entity
 public class MemberTicket {
 
+    private static final long PENDING_LIMIT_HOUR = 12;
     private static final long ENTRY_LIMIT_HOUR = 24;
 
     @Id
@@ -68,6 +69,15 @@ public class MemberTicket {
 
     public boolean isOwner(Long memberId) {
         return Objects.equals(owner.getId(), memberId);
+    }
+
+    public boolean isCurrent(LocalDateTime time) {
+        return isPending(time) || canEntry(time);
+    }
+
+    private boolean isPending(LocalDateTime time) {
+        return time.isAfter(entryTime.minusHours(PENDING_LIMIT_HOUR))
+            && time.isBefore(entryTime);
     }
 
     public boolean canEntry(LocalDateTime time) {
