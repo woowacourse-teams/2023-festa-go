@@ -10,6 +10,7 @@ import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.ShowTicketReserve
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class FestivalListViewModel(
@@ -21,14 +22,18 @@ class FestivalListViewModel(
     private val _event = MutableSingleLiveData<FestivalListEvent>()
     val event: SingleLiveData<FestivalListEvent> = _event
 
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+    }
+
     fun loadFestivals() {
-        viewModelScope.launch {
+        viewModelScope.launch(coroutineExceptionHandler) {
             _uiState.value = FestivalListUiState.Loading
             festivalRepository.loadFestivals()
                 .onSuccess {
                     _uiState.value = FestivalListUiState.Success(it.toPresentation())
                 }.onFailure {
                     _uiState.value = FestivalListUiState.Error
+                    throw it
                 }
         }
     }
