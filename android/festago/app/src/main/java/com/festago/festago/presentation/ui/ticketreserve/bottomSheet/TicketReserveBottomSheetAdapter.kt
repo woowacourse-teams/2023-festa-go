@@ -34,14 +34,6 @@ class TicketReserveBottomSheetAdapter :
                 oldItem: TicketReserveBottomItem,
                 newItem: TicketReserveBottomItem,
             ) = oldItem.ticket.ticketType == newItem.ticket.ticketType
-
-            override fun getChangePayload(
-                oldItem: TicketReserveBottomItem,
-                newItem: TicketReserveBottomItem,
-            ): Any? {
-                println("oldItem: $oldItem, newItem: $newItem")
-                return super.getChangePayload(oldItem, newItem)
-            }
         }
     }
 }
