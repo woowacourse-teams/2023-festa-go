@@ -1,10 +1,8 @@
 package com.festago.festago.presentation.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.festago.festago.domain.model.Stage
-import com.festago.festago.domain.model.Ticket
-import com.festago.festago.domain.model.TicketState
 import com.festago.festago.domain.repository.TicketRepository
+import com.festago.festago.presentation.fixture.TicketFixture
 import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -16,16 +14,10 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalDateTime
 
 class MainViewModelTest {
     private lateinit var vm: MainViewModel
     private lateinit var ticketRepository: TicketRepository
-
-    private val fakeStage = Stage(0L, "fakeStage", LocalDateTime.MIN)
-
-    private val fakeTicket =
-        Ticket(0L, 0, LocalDateTime.MIN, TicketState.AWAY, fakeStage, "")
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -41,6 +33,7 @@ class MainViewModelTest {
     @Test
     fun `티켓 id를 전달하면 티켓의 정보를 불러올 수 있다`() {
         // given
+        val fakeTicket = TicketFixture.getMemberTicket(0)
         coEvery { ticketRepository.loadTicket(any()) } returns fakeTicket
 
         // when
@@ -65,6 +58,7 @@ class MainViewModelTest {
     @Test
     fun `티켓을 제시하면 티켓 확인 이벤트가 발생한다`() {
         // given
+        val fakeTicket = TicketFixture.getMemberTicket(0)
         coEvery { ticketRepository.loadTicket(any()) } returns fakeTicket
         vm.loadTicket()
 

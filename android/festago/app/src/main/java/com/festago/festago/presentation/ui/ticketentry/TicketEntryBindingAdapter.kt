@@ -7,11 +7,11 @@ import android.widget.ProgressBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.festago.festago.R
-import com.festago.festago.presentation.model.TicketStateUiModel
-import com.festago.festago.presentation.model.TicketStateUiModel.AFTER_ENTRY
-import com.festago.festago.presentation.model.TicketStateUiModel.AWAY
-import com.festago.festago.presentation.model.TicketStateUiModel.BEFORE_ENTRY
-import com.festago.festago.presentation.model.TicketStateUiModel.EMPTY
+import com.festago.festago.presentation.model.TicketConditionUiModel
+import com.festago.festago.presentation.model.TicketConditionUiModel.AFTER_ENTRY
+import com.festago.festago.presentation.model.TicketConditionUiModel.AWAY
+import com.festago.festago.presentation.model.TicketConditionUiModel.BEFORE_ENTRY
+import com.festago.festago.presentation.model.TicketConditionUiModel.EMPTY
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
@@ -27,7 +27,7 @@ fun ImageView.setQrCodeImage(content: String) {
 }
 
 @BindingAdapter("ticketBackground")
-fun ViewGroup.setTicketBackgroundByState(state: TicketStateUiModel) {
+fun ViewGroup.setTicketBackgroundByState(state: TicketConditionUiModel) {
     val background = when (state) {
         BEFORE_ENTRY, EMPTY -> R.drawable.bg_ticket_gradient_primary
         AFTER_ENTRY -> R.drawable.bg_ticket_gradient_secondary
@@ -37,7 +37,7 @@ fun ViewGroup.setTicketBackgroundByState(state: TicketStateUiModel) {
 }
 
 @BindingAdapter("renewBackground")
-fun ImageView.setRenewBackgroundByState(state: TicketStateUiModel) {
+fun ImageView.setRenewBackgroundByState(state: TicketConditionUiModel) {
     val background = when (state) {
         BEFORE_ENTRY, EMPTY -> R.drawable.btn_circle_primary
         AFTER_ENTRY -> R.drawable.btn_circle_secondary
@@ -47,7 +47,7 @@ fun ImageView.setRenewBackgroundByState(state: TicketStateUiModel) {
 }
 
 @BindingAdapter("remainTimeProgressDrawable")
-fun ProgressBar.setRemainTimeProgressDrawableByState(state: TicketStateUiModel) {
+fun ProgressBar.setRemainTimeProgressDrawableByState(state: TicketConditionUiModel) {
     progressDrawable = when (state) {
         BEFORE_ENTRY, EMPTY -> ResourcesCompat.getDrawable(
             resources,
@@ -70,7 +70,7 @@ fun ProgressBar.setRemainTimeProgressDrawableByState(state: TicketStateUiModel) 
 }
 
 @BindingAdapter("ticketStateBackground")
-fun Button.setTicketStateBackgroundByState(state: TicketStateUiModel) {
+fun Button.setTicketStateBackgroundByState(state: TicketConditionUiModel) {
     val colorRes = when (state) {
         BEFORE_ENTRY, EMPTY -> R.color.md_theme_light_primary
         AFTER_ENTRY -> R.color.md_theme_light_secondary

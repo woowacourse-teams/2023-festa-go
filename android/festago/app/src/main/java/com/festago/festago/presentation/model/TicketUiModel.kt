@@ -6,18 +6,24 @@ data class TicketUiModel(
     val id: Long,
     val number: Int,
     val entryTime: LocalDateTime,
-    val ticketState: TicketStateUiModel,
+    val reserveAt: LocalDateTime,
+    val condition: TicketConditionUiModel,
     val stage: StageUiModel,
-    val imageUrl: String,
+    val festivalId: Int,
+    val festivalName: String,
+    val festivalThumbnail: String,
 ) {
     companion object {
         val EMPTY = TicketUiModel(
-            id = 0,
+            id = 0L,
             number = 0,
             entryTime = LocalDateTime.MAX,
-            ticketState = TicketStateUiModel.EMPTY,
+            condition = TicketConditionUiModel.EMPTY,
             stage = StageUiModel.EMPTY,
-            imageUrl = "",
+            reserveAt = LocalDateTime.MAX,
+            festivalId = 0,
+            festivalName = "",
+            festivalThumbnail = "",
         )
     }
 }
