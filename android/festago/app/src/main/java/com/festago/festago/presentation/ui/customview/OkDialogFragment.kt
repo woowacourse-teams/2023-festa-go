@@ -40,7 +40,7 @@ class OkDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getString("message")?.let { message ->
+        arguments?.getString(KEY_MESSAGE)?.let { message ->
             binding.tvMessage.text = message
         }
 
@@ -77,10 +77,12 @@ class OkDialogFragment : DialogFragment() {
     }
 
     companion object {
+        private const val KEY_MESSAGE = "KEY_MESSAGE"
+
         fun newInstance(message: String): OkDialogFragment {
             return OkDialogFragment().apply {
                 arguments = Bundle().apply {
-                    putString("message", message)
+                    putString(KEY_MESSAGE, message)
                 }
             }
         }
