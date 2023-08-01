@@ -15,10 +15,7 @@ import com.festago.exception.NotFoundException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,18 +50,32 @@ public class MemberTicketService {
     @Transactional(readOnly = true)
     public CurrentMemberTicketsResponse findCurrent(Long memberId) {
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
-        Map<Boolean, List<MemberTicket>> currentMemberTickets = getCurrentMemberTickets(memberTickets);
-        List<MemberTicket> activateMemberTickets = currentMemberTickets.getOrDefault(true, Collections.emptyList());
-        List<MemberTicket> pendingMemberTickets = currentMemberTickets.getOrDefault(false, Collections.emptyList());
+        LocalDateTime currentTime = LocalDateTime.now();
+        List<MemberTicket> currentMemberTickets = filterCurrentMemberTickets(memberTickets, currentTime);
+        List<MemberTicket> activateMemberTickets = filterActivateMemberTickets(currentMemberTickets, currentTime);
+        List<MemberTicket> pendingMemberTickets = filterPendingMemberTickets(currentMemberTickets, currentTime);
         return CurrentMemberTicketsResponse.from(mergeMemberTickets(activateMemberTickets, pendingMemberTickets));
     }
 
-    private Map<Boolean, List<MemberTicket>> getCurrentMemberTickets(List<MemberTicket> memberTickets) {
-        LocalDateTime now = LocalDateTime.now();
+    private List<MemberTicket> filterCurrentMemberTickets(List<MemberTicket> memberTickets,
+                                                          LocalDateTime currentTime) {
         return memberTickets.stream()
-            .filter(memberTicket -> memberTicket.isPending(now) || memberTicket.canEntry(now))
+            .filter(memberTicket -> memberTicket.isPending(currentTime) || memberTicket.canEntry(currentTime))
             .sorted(comparing(this::getTimeGapFromNow))
-            .collect(Collectors.groupingBy(memberTicket -> memberTicket.canEntry(now)));
+            .toList();
+    }
+
+    private List<MemberTicket> filterActivateMemberTickets(List<MemberTicket> memberTickets,
+                                                           LocalDateTime currentTime) {
+        return memberTickets.stream()
+            .filter(memberTicket -> memberTicket.canEntry(currentTime))
+            .toList();
+    }
+
+    private List<MemberTicket> filterPendingMemberTickets(List<MemberTicket> memberTickets, LocalDateTime currentTime) {
+        return memberTickets.stream()
+            .filter(memberTicket -> memberTicket.isPending(currentTime))
+            .toList();
     }
 
     private long getTimeGapFromNow(MemberTicket memberTicket) {
