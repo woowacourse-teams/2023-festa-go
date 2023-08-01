@@ -7,6 +7,7 @@ import com.festago.auth.dto.LoginResponse;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
