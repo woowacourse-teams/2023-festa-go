@@ -1,11 +1,22 @@
 package com.festago.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.festago.auth.domain.SocialType;
+import com.festago.auth.domain.UserInfo;
 
 public record KakaoUserInfo(
     String id,
     @JsonProperty(value = "kakao_account") KakaoAccount kakaoAccount
 ) {
+
+    public UserInfo toUserInfo() {
+        return new UserInfo(
+            id,
+            SocialType.KAKAO,
+            kakaoAccount.profile.nickname,
+            kakaoAccount.profile.thumbnailImageUrl
+        );
+    }
 
     public record KakaoAccount(
         Profile profile

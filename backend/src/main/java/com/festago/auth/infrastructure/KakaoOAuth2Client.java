@@ -73,7 +73,7 @@ public class KakaoOAuth2Client implements OAuth2Client {
             KakaoUserInfo kakaoUserInfo = restTemplate.postForEntity(USER_INFO_URL, new HttpEntity<>(headers),
                     KakaoUserInfo.class)
                 .getBody();
-            return UserInfo.ofKakao(kakaoUserInfo);
+            return kakaoUserInfo.toUserInfo();
         } catch (HttpClientErrorException e) {
             throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR, e);
         }
