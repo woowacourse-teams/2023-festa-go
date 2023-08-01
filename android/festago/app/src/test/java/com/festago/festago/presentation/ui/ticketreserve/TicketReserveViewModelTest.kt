@@ -117,10 +117,10 @@ class TicketReserveViewModelTest {
         vm.showTicketTypes(1)
 
         // then
-        assertThat(vm.event.value).isInstanceOf(TicketReserveEvent.ShowTicketTypes::class.java)
+        assertThat(vm.event.getValue()).isInstanceOf(TicketReserveEvent.ShowTicketTypes::class.java)
 
         // and
-        val event = vm.event.value as TicketReserveEvent.ShowTicketTypes
+        val event = vm.event.getValue() as TicketReserveEvent.ShowTicketTypes
         assertThat(event.reservationStage).isEqualTo(fakeReservationStage.toPresentation())
     }
 
@@ -149,7 +149,7 @@ class TicketReserveViewModelTest {
         vm.reserveTicket()
 
         // then
-        assertThat(vm.event.value).isEqualTo(TicketReserveEvent.ReserveTicketSuccess)
+        assertThat(vm.event.getValue()).isEqualTo(TicketReserveEvent.ReserveTicketSuccess)
     }
 
     @Test
@@ -165,6 +165,6 @@ class TicketReserveViewModelTest {
         vm.reserveTicket()
 
         // then
-        assertThat(vm.event.value).isEqualTo(TicketReserveEvent.ReserveTicketFailed)
+        assertThat(vm.event.getValue()).isEqualTo(TicketReserveEvent.ReserveTicketFailed)
     }
 }
