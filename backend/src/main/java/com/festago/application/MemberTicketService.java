@@ -46,7 +46,7 @@ public class MemberTicketService {
     }
 
     @Transactional(readOnly = true)
-    public CurrentMemberTicketsResponse findCurrentMemberTickets(Long memberId) {
+    public CurrentMemberTicketsResponse findCurrent(Long memberId) {
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
         return memberTickets.stream()
             .filter(memberTicket -> memberTicket.isCurrent(LocalDateTime.now()))

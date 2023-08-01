@@ -100,7 +100,7 @@ class MemberTicketServiceTest {
             .willReturn(List.of(beforePendingMemberTicket, pendingMemberTicket, oldMemberTicket, canEntryMemberTicket));
 
         // when
-        CurrentMemberTicketsResponse response = memberTicketService.findCurrentMemberTickets(memberId);
+        CurrentMemberTicketsResponse response = memberTicketService.findCurrent(memberId);
 
         // then
         List<Long> memberTicketIds = response.memberTickets().stream()
