@@ -9,6 +9,7 @@ import com.festago.domain.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class AuthService {
 
     private final MemberRepository memberRepository;
