@@ -68,10 +68,10 @@ class TicketReserveViewModelTest {
         vm.loadReservation()
 
         // then
-        assertThat(vm.uiState.getValue()).isInstanceOf(TicketReserveUiState.Success::class.java)
+        assertThat(vm.uiState.value).isInstanceOf(TicketReserveUiState.Success::class.java)
 
         // and
-        val uiModel = vm.uiState.getValue() as TicketReserveUiState.Success
+        val uiModel = vm.uiState.value as TicketReserveUiState.Success
         assertThat(uiModel.reservation).isEqualTo(fakeReservation.toPresentation())
     }
 
@@ -84,7 +84,7 @@ class TicketReserveViewModelTest {
         vm.loadReservation()
 
         // then
-        assertThat(vm.uiState.getValue()).isEqualTo(TicketReserveUiState.Error)
+        assertThat(vm.uiState.value).isEqualTo(TicketReserveUiState.Error)
     }
 
     @Test
@@ -101,6 +101,70 @@ class TicketReserveViewModelTest {
         vm.loadReservation()
 
         // then
-        assertThat(vm.uiState.getValue()).isEqualTo(TicketReserveUiState.Loading)
+        assertThat(vm.uiState.value).isEqualTo(TicketReserveUiState.Loading)
+    }
+
+    @Test
+    fun `특정 공연의 티켓 타입을 보여주는 이벤트가 발생하면 해당 공연의 티켓 타입을 보여준다`() {
+        // given
+        coEvery {
+            reservationRepository.loadReservation()
+        } answers {
+            Result.success(fakeReservation)
+        }
+
+        // when
+        vm.showTicketTypes(1)
+
+        // then
+        assertThat(vm.event.getValue()).isInstanceOf(TicketReserveEvent.ShowTicketTypes::class.java)
+
+        // and
+        val event = vm.event.getValue() as TicketReserveEvent.ShowTicketTypes
+        assertThat(event.reservationStage).isEqualTo(fakeReservationStage.toPresentation())
+    }
+
+    @Test
+    fun `특정 공연의 티켓 타입을 보여주는 것을 실패하면 에러 이벤트가 발생한다`() {
+        // given
+        coEvery { reservationRepository.loadReservation() } returns Result.failure(Exception())
+
+        // when
+        vm.showTicketTypes(1)
+
+        // then
+        assertThat(vm.uiState.value).isEqualTo(TicketReserveUiState.Error)
+    }
+
+    @Test
+    fun `티켓 유형을 선택하고 예약하면 예약 성공 이벤트가 발생한다`() {
+        // given
+        coEvery {
+            reservationRepository.reserveTicket(0, 0)
+        } answers {
+            Result.success(1)
+        }
+
+        // when
+        vm.reserveTicket()
+
+        // then
+        assertThat(vm.event.getValue()).isEqualTo(TicketReserveEvent.ReserveTicketSuccess)
+    }
+
+    @Test
+    fun `티켓 유형을 선택하고 예약하는 것을 실패하면 예약 실패 이벤트가 발생한다`() {
+        // given
+        coEvery {
+            reservationRepository.reserveTicket(0, 0)
+        } answers {
+            Result.failure(Exception())
+        }
+
+        // when
+        vm.reserveTicket()
+
+        // then
+        assertThat(vm.event.getValue()).isEqualTo(TicketReserveEvent.ReserveTicketFailed)
     }
 }

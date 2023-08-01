@@ -1,11 +1,13 @@
-package com.festago.festago.presentation.ui.ticketreserve.bottomSheet
+package com.festago.festago.presentation.ui.ticketreserve.bottomsheet
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.festago.festago.databinding.FragmentTicketReserveBottomSheetBinding
 import com.festago.festago.presentation.model.ReservationStageUiModel
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 import com.festago.festago.presentation.util.getParcelableCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -14,7 +16,16 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentTicketReserveBottomSheetBinding? = null
     private val binding: FragmentTicketReserveBottomSheetBinding get() = _binding!!
 
+    private lateinit var vm: TicketReserveViewModel
+
     private val ticketTypeAdapter = TicketReserveBottomSheetAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val viewModelProvider = ViewModelProvider(requireActivity())
+        vm = viewModelProvider[TicketReserveViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,6 +34,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
     ): View {
         _binding = FragmentTicketReserveBottomSheetBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = vm
         return binding.root
     }
 

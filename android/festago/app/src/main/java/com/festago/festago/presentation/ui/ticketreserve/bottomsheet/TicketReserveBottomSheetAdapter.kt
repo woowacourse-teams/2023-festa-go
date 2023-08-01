@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.ticketreserve.bottomSheet
+package com.festago.festago.presentation.ui.ticketreserve.bottomsheet
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,9 +12,10 @@ class TicketReserveBottomSheetAdapter :
         viewType: Int,
     ): TicketReserveBottomViewHolder {
         return TicketReserveBottomViewHolder.of(parent) { position ->
-            currentList.forEach { it.isSelected = false }
-            getItem(position).isSelected = true
-            notifyDataSetChanged()
+            val newList = currentList.mapIndexed { index, item ->
+                item.copy(isSelected = (index == position))
+            }
+            submitList(newList)
         }
     }
 
@@ -27,7 +28,7 @@ class TicketReserveBottomSheetAdapter :
             override fun areContentsTheSame(
                 oldItem: TicketReserveBottomItem,
                 newItem: TicketReserveBottomItem,
-            ) = oldItem.ticket == newItem.ticket
+            ) = oldItem == newItem
 
             override fun areItemsTheSame(
                 oldItem: TicketReserveBottomItem,
