@@ -66,12 +66,12 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun handleReserveTicketSuccess() {
-        OkDialogFragment("예약이 완료되었습니다.") {}
+        OkDialogFragment.newInstance("예약이 완료되었습니다.")
             .show(supportFragmentManager, OkDialogFragment::class.java.name)
     }
 
     private fun handleReserveTicketFailed() {
-        OkDialogFragment("예약에 실패하였습니다.") {}
+        OkDialogFragment.newInstance("예약에 실패하였습니다.")
             .show(supportFragmentManager, OkDialogFragment::class.java.name)
     }
 

@@ -11,10 +11,7 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.festago.festago.databinding.FragmentOkDialogBinding
 
-class OkDialogFragment(
-    private val message: String,
-    private val listener: OnClickListener,
-) : DialogFragment() {
+class OkDialogFragment : DialogFragment() {
 
     private var _binding: FragmentOkDialogBinding? = null
     private val binding get() = _binding!!
@@ -30,6 +27,8 @@ class OkDialogFragment(
     private val Int.dpToPx: Int
         get() = (this * context.resources.displayMetrics.density).toInt()
 
+    lateinit var listener: OnClickListener
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,9 +40,11 @@ class OkDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        context = requireContext()
+        arguments?.getString("message")?.let { message ->
+            binding.tvMessage.text = message
+        }
 
-        binding.tvMessage.text = message
+        context = requireContext()
 
         binding.btnOk.setOnClickListener {
             listener.invoke()
@@ -73,5 +74,15 @@ class OkDialogFragment(
 
     fun interface OnClickListener {
         fun invoke()
+    }
+
+    companion object {
+        fun newInstance(message: String): OkDialogFragment {
+            return OkDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putString("message", message)
+                }
+            }
+        }
     }
 }
