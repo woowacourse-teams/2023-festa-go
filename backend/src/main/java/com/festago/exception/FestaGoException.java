@@ -1,6 +1,8 @@
 package com.festago.exception;
 
-public abstract class FestaGoException extends RuntimeException {
+import org.springframework.core.NestedRuntimeException;
+
+public abstract class FestaGoException extends NestedRuntimeException {
 
     private final ErrorCode errorCode;
 
