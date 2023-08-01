@@ -19,14 +19,15 @@ class TicketReserveViewHolder(
     fun bind(item: ReservationStageUiModel) {
         binding.stage = item
 
-        binding.tvTicketCount.text = item.reservationTickets.joinToString(binding.root.context.getString(R.string.ticket_reserve_tv_ticket_count_separator)) {
-            binding.root.context.getString(
-                R.string.ticket_reserve_tv_ticket_count,
-                it.ticketType,
-                it.remainAmount.toString(),
-                it.totalAmount.toString(),
-            )
-        }
+        binding.tvTicketCount.text =
+            item.reservationTickets.joinToString(binding.root.context.getString(R.string.ticket_reserve_tv_ticket_count_separator)) {
+                binding.root.context.getString(
+                    R.string.ticket_reserve_tv_ticket_count,
+                    it.ticketType,
+                    it.remainAmount.toString(),
+                    it.totalAmount.toString(),
+                )
+            }
     }
 
     companion object {

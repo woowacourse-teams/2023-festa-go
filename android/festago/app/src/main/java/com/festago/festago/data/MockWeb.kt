@@ -37,7 +37,6 @@ class MockWeb {
                     }
 
                     "GET" -> {
-                        val path = request.path ?: return MockResponse().setResponseCode(404)
                         when {
                             path.startsWith("/tickets/") -> {
                                 val ticketId = path.substringAfterLast("/").toLong()
@@ -45,6 +44,13 @@ class MockWeb {
                                     .setHeader("Content-Type", "application/json")
                                     .setResponseCode(200)
                                     .setBody(getTicket(ticketId))
+                            }
+
+                            path.startsWith("/member-tickets") -> {
+                                MockResponse()
+                                    .setHeader("Content-Type", "application/json")
+                                    .setResponseCode(200)
+                                    .setBody(getTickets())
                             }
 
                             else -> MockResponse().setResponseCode(404)
@@ -78,6 +84,31 @@ class MockWeb {
                             "startTime": "2023-07-09T18:00:00"
                       }
                 }
+            """.trimIndent()
+        }
+
+        private fun getTickets(): String {
+            return """
+                {
+	                "tickets": [
+		            {
+			            "id": 1,
+			            "number": 103,
+			            "entryTime": "2023-07-09T16:00:00",
+			            "state": "BEFORE_ENTRY",
+			            "reservedAt": "2023-07-09T08:00:00",
+			            "stage": {
+				        "id": 1,
+				        "startTime": "2023-07-09T18:00:00"
+			        },
+			            "festival": {
+				            "id": 1,
+				            "name": "테코대학교",
+				            "thumbnail": "https://image.png"
+			            }
+		            }
+	            ]
+            }
             """.trimIndent()
         }
     }
