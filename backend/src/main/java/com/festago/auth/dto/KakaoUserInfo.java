@@ -6,7 +6,7 @@ import com.festago.auth.domain.UserInfo;
 
 public record KakaoUserInfo(
     String id,
-    @JsonProperty(value = "kakao_account") KakaoAccount kakaoAccount
+    @JsonProperty("kakao_account") KakaoAccount kakaoAccount
 ) {
 
     public UserInfo toUserInfo() {
@@ -24,7 +24,7 @@ public record KakaoUserInfo(
 
         public record Profile(
             String nickname,
-            @JsonProperty(value = "thumbnail_image_url") String thumbnailImageUrl
+            @JsonProperty("thumbnail_image_url") String thumbnailImageUrl
         ) {
 
         }
