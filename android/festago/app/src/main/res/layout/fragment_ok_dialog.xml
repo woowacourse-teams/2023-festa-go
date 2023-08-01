@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_error" />
 
-        <View
+        <Space
             android:layout_width="0dp"
             android:layout_height="16dp" />
 
@@ -30,7 +30,7 @@
             android:textStyle="bold"
             tools:text="매진된 티켓입니다." />
 
-        <View
+        <Space
             android:layout_width="0dp"
             android:layout_height="40dp" />
 
