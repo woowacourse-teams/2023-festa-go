@@ -1,8 +1,10 @@
 package com.festago.festago.data.dto
 
 import com.festago.festago.domain.model.Reservation
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
+@Serializable
 data class ReservationFestivalResponse(
     val id: Int,
     val name: String,

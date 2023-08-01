@@ -1,7 +1,9 @@
 package com.festago.festago.data.dto
 
 import com.festago.festago.domain.model.ReservationTicket
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ReservationTicketResponse(
     val id: Int,
     val ticketType: String,
