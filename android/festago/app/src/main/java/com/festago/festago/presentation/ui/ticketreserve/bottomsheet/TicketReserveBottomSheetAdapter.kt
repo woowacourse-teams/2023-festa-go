@@ -4,7 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
-class TicketReserveBottomSheetAdapter :
+class TicketReserveBottomSheetAdapter(
+    private val callback: TicketReserveBottomSheetCallback,
+) :
     ListAdapter<TicketReserveBottomItem, TicketReserveBottomViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(
@@ -12,6 +14,7 @@ class TicketReserveBottomSheetAdapter :
         viewType: Int,
     ): TicketReserveBottomViewHolder {
         return TicketReserveBottomViewHolder.of(parent) { position ->
+            callback(currentList[position].ticket.id)
             val newList = currentList.mapIndexed { index, item ->
                 item.copy(isSelected = (index == position))
             }
