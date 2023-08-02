@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record FestivalDetailStageResponse(Long id,
-                                          LocalDateTime startDate,
+                                          LocalDateTime startTime,
                                           LocalDateTime ticketOpenTime,
                                           String lineUp,
                                           List<FestivalDetailTicketResponse> tickets) {
