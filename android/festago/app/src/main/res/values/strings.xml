@@ -47,7 +47,8 @@
     <string name="festival_list_tv_date_format">yyyy.MM.dd</string>
     <string name="festival_list_chip_ongoing">진행중</string>
     <string name="festival_list_chip_past">지난축제</string>
-    <string name="festival_list_tv_error">조회된 축제가 없습니다.</string>
+    <string name="festival_list_tv_error">축제 조회에 실패했습니다.</string>
+    <string name="festival_list_tv_empty">조회된 축제가 없습니다.</string>
     <string name="festival_list_tv_date_range_format">%s - %s</string>
 
     <!-- Strings related to ticket list -->

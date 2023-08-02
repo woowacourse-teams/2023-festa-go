@@ -10,10 +10,12 @@ import com.festago.dto.StageResponse;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/admin")
@@ -48,5 +50,10 @@ public class AdminController {
         TicketCreateResponse response = ticketService.create(request);
         return ResponseEntity.ok()
             .body(response);
+    }
+
+    @GetMapping
+    public ModelAndView adminPage() {
+        return new ModelAndView("admin");
     }
 }
