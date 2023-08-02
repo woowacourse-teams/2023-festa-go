@@ -19,30 +19,34 @@ public class KakaoOAuth2AccessTokenErrorHandler extends DefaultResponseErrorHand
             super.handleError(response);
         } catch (HttpStatusCodeException e) {
             HttpStatusCode statusCode = response.getStatusCode();
-            is4xxError(statusCode, e);
-            is5xxError(statusCode);
+            handle4xxError(statusCode, e);
+            handle5xxError(statusCode);
         }
         throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
     }
 
-    private void is4xxError(HttpStatusCode statusCode, HttpStatusCodeException e) {
+    private void handle4xxError(HttpStatusCode statusCode, HttpStatusCodeException e) {
         if (statusCode.is4xxClientError()) {
             KakaoOAuth2ErrorResponse errorResponse = e.getResponseBodyAs(KakaoOAuth2ErrorResponse.class);
-            isKOE320ErrorCode(errorResponse);
+            handleErrorCode(errorResponse);
         }
     }
 
-    private void is5xxError(HttpStatusCode statusCode) {
-        if (statusCode.is5xxServerError()) {
-            throw new InternalServerException(ErrorCode.OAUTH2_PROVIDER_NOT_RESPONSE);
-        }
+    private void handleErrorCode(KakaoOAuth2ErrorResponse errorResponse) {
+        handleKOE320Error(errorResponse);
+        throw new InternalServerException(ErrorCode.OAUTH2_INVALID_REQUEST);
     }
 
-    private void isKOE320ErrorCode(KakaoOAuth2ErrorResponse errorResponse) {
+    private void handleKOE320Error(KakaoOAuth2ErrorResponse errorResponse) {
         if (errorResponse != null && errorResponse.isErrorCodeKOE320()) {
             throw new BadRequestException(ErrorCode.OAUTH2_INVALID_CODE);
         }
-        throw new InternalServerException(ErrorCode.OAUTH2_INVALID_REQUEST);
+    }
+
+    private void handle5xxError(HttpStatusCode statusCode) {
+        if (statusCode.is5xxServerError()) {
+            throw new InternalServerException(ErrorCode.OAUTH2_PROVIDER_NOT_RESPONSE);
+        }
     }
 
     public record KakaoOAuth2ErrorResponse(

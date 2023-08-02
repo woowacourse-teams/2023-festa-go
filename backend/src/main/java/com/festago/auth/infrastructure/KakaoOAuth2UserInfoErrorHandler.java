@@ -12,17 +12,18 @@ public class KakaoOAuth2UserInfoErrorHandler extends DefaultResponseErrorHandler
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
         HttpStatusCode statusCode = response.getStatusCode();
-        is4xxError(statusCode);
-        is5xxError(statusCode);
+        handle4xxError(statusCode);
+        handle5xxError(statusCode);
+        throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
     }
 
-    private void is4xxError(HttpStatusCode statusCode) {
+    private void handle4xxError(HttpStatusCode statusCode) {
         if (statusCode.is4xxClientError()) {
             throw new InternalServerException(ErrorCode.OAUTH2_INVALID_REQUEST);
         }
     }
 
-    private void is5xxError(HttpStatusCode statusCode) {
+    private void handle5xxError(HttpStatusCode statusCode) {
         if (statusCode.is5xxServerError()) {
             throw new InternalServerException(ErrorCode.OAUTH2_PROVIDER_NOT_RESPONSE);
         }
