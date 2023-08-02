@@ -6,9 +6,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
+import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.ReservationDefaultRepository
 import com.festago.festago.databinding.ActivityTicketReserveBinding
-import com.festago.festago.presentation.model.ReservationStageUiModel
+import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.model.ReservationUiModel
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
@@ -21,7 +22,9 @@ class TicketReserveActivity : AppCompatActivity() {
 
     private val vm: TicketReserveViewModel by viewModels {
         TicketReservationViewModelFactory(
-            ReservationDefaultRepository(),
+            ReservationDefaultRepository(
+                reservationRetrofitService = RetrofitClient.getInstance().reservationRetrofitService,
+            ),
         )
     }
 
@@ -55,13 +58,13 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun handleEvent(event: TicketReserveEvent) = when (event) {
-        is TicketReserveEvent.ShowTicketTypes -> handleShowTicketTypes(event.reservationStage)
+        is TicketReserveEvent.ShowTicketTypes -> handleShowTicketTypes(event.tickets)
         is TicketReserveEvent.ReserveTicketSuccess -> handleReserveTicketSuccess()
         is TicketReserveEvent.ReserveTicketFailed -> handleReserveTicketFailed()
     }
 
-    private fun handleShowTicketTypes(reservationStage: ReservationStageUiModel) {
-        TicketReserveBottomSheetFragment.newInstance(reservationStage)
+    private fun handleShowTicketTypes(tickets: List<ReservationTicketUiModel>) {
+        TicketReserveBottomSheetFragment.newInstance(tickets)
             .show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
     }
 

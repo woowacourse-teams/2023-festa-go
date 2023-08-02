@@ -20,11 +20,11 @@ class TicketReserveViewModel(
     private val _event = MutableSingleLiveData<TicketReserveEvent>()
     val event: SingleLiveData<TicketReserveEvent> = _event
 
-    fun loadReservation(refresh: Boolean = false) {
+    fun loadReservation(festivalId: Long = 0, refresh: Boolean = false) {
         if (!refresh && uiState.value is TicketReserveUiState.Success) return
         viewModelScope.launch {
             _uiState.value = TicketReserveUiState.Loading
-            reservationRepository.loadReservation()
+            reservationRepository.loadReservation(festivalId)
                 .onSuccess {
                     _uiState.setValue(TicketReserveUiState.Success(it.toPresentation()))
                 }.onFailure {
@@ -35,13 +35,9 @@ class TicketReserveViewModel(
 
     fun showTicketTypes(stageId: Int) {
         viewModelScope.launch {
-            reservationRepository.loadReservation()
-                .onSuccess {
-                    it.reservationStages
-                        .find { stage -> stage.id == stageId }
-                        ?.let { stage ->
-                            _event.setValue(TicketReserveEvent.ShowTicketTypes(stage.toPresentation()))
-                        }
+            reservationRepository.reserveTicket(stageId)
+                .onSuccess { tickets ->
+                    _event.setValue(TicketReserveEvent.ShowTicketTypes(tickets.map { it.toPresentation() }))
                 }.onFailure {
                     _uiState.setValue(TicketReserveUiState.Error)
                 }
@@ -50,7 +46,7 @@ class TicketReserveViewModel(
 
     fun reserveTicket() {
         viewModelScope.launch {
-            reservationRepository.reserveTicket(0, 0)
+            reservationRepository.reserveTicket(0)
                 .onSuccess {
                     _event.setValue(TicketReserveEvent.ReserveTicketSuccess)
                 }.onFailure {

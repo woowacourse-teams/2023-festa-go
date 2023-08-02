@@ -2,7 +2,7 @@ package com.festago.festago.data.dto
 
 import com.festago.festago.domain.model.Reservation
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 @Serializable
 data class ReservationFestivalResponse(
@@ -17,8 +17,8 @@ data class ReservationFestivalResponse(
         id = id,
         name = name,
         reservationStages = stages.map { it.toDomain() },
-        startDate = LocalDateTime.parse(startDate),
-        endDate = LocalDateTime.parse(endDate),
+        startDate = LocalDate.parse(startDate),
+        endDate = LocalDate.parse(endDate),
         thumbnail = thumbnail,
     )
 }
