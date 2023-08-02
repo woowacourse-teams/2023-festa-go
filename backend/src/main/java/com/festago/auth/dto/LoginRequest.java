@@ -1,5 +1,7 @@
 package com.festago.auth.dto;
 
-public record LoginRequest(String code) {
+import com.festago.auth.domain.SocialType;
+
+public record LoginRequest(SocialType socialType, String code) {
 
 }

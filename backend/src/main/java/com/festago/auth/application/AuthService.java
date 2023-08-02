@@ -2,7 +2,9 @@ package com.festago.auth.application;
 
 import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.OAuth2Client;
+import com.festago.auth.domain.OAuth2Clients;
 import com.festago.auth.domain.UserInfo;
+import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
@@ -14,20 +16,29 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final OAuth2Client oAuth2Client;
+    private final OAuth2Clients oAuth2Clients;
     private final AuthProvider authProvider;
 
-    public AuthService(MemberRepository memberRepository, OAuth2Client oAuth2Client, AuthProvider authProvider) {
+    public AuthService(MemberRepository memberRepository, OAuth2Clients oAuth2Clients, AuthProvider authProvider) {
         this.memberRepository = memberRepository;
-        this.oAuth2Client = oAuth2Client;
+        this.oAuth2Clients = oAuth2Clients;
         this.authProvider = authProvider;
     }
 
-    public LoginResponse login(String code) {
-        String accessToken = oAuth2Client.getAccessToken(code);
-        UserInfo userInfo = oAuth2Client.getUserInfo(accessToken);
+    public LoginResponse login(LoginRequest request) {
+        UserInfo userInfo = getUserInfo(request);
         Member member = memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
-            .orElseGet(() -> memberRepository.save(userInfo.toMember()));
-        return new LoginResponse(authProvider.provide(member), userInfo.nickname());
+            .orElseGet(() -> signUp(userInfo));
+        return new LoginResponse(authProvider.provide(member), member.getNickname());
+    }
+
+    private UserInfo getUserInfo(LoginRequest request) {
+        OAuth2Client oAuth2Client = oAuth2Clients.getClient(request.socialType());
+        String accessToken = oAuth2Client.getAccessToken(request.code());
+        return oAuth2Client.getUserInfo(accessToken);
+    }
+
+    private Member signUp(UserInfo userInfo) {
+        return memberRepository.save(userInfo.toMember());
     }
 }
