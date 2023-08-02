@@ -57,7 +57,6 @@ class TicketEntryActivity : AppCompatActivity() {
     }
 
     private fun initView(currentTicketId: Long) {
-        vm.loadTicketCode(currentTicketId)
         vm.loadTicket(currentTicketId)
     }
 
