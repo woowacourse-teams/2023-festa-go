@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
 @Parcelize
-data class ReservationCompleteUiModel(
+data class ReservedTicketUiModel(
     val ticketId: Long,
     val number: Int,
     val entryTime: LocalDateTime,

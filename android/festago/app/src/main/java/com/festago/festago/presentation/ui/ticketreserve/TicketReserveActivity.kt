@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.ReservationDefaultRepository
 import com.festago.festago.databinding.ActivityTicketReserveBinding
-import com.festago.festago.presentation.model.ReservationCompleteUiModel
+import com.festago.festago.domain.model.ReservedTicket
+import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.model.ReservationUiModel
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
@@ -21,7 +22,6 @@ import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
-import java.time.LocalDateTime
 
 class TicketReserveActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTicketReserveBinding
@@ -65,7 +65,7 @@ class TicketReserveActivity : AppCompatActivity() {
 
     private fun handleEvent(event: TicketReserveEvent) = when (event) {
         is ShowTicketTypes -> handleShowTicketTypes(event.stageId, event.tickets)
-        is ReserveTicketSuccess -> handleReserveTicketSuccess()
+        is ReserveTicketSuccess -> handleReserveTicketSuccess(event.reservedTicket)
         is ReserveTicketFailed -> handleReserveTicketFailed()
     }
 
@@ -76,12 +76,12 @@ class TicketReserveActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleReserveTicketSuccess() {
+    private fun handleReserveTicketSuccess(reservedTicket: ReservedTicket) {
         // todo: API Response 연결하기
         startActivity(
             ReservationCompleteActivity.getIntent(
                 this,
-                ReservationCompleteUiModel(1L, 123, LocalDateTime.now()),
+                reservedTicket.toPresentation(),
             ),
         )
     }

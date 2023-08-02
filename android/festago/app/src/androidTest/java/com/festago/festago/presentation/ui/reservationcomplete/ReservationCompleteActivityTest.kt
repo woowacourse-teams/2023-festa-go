@@ -7,14 +7,14 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.festago.festago.R
-import com.festago.festago.presentation.model.ReservationCompleteUiModel
+import com.festago.festago.presentation.model.ReservedTicketUiModel
 import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class ReservationCompleteActivityTest {
-    private val reservationComplete = ReservationCompleteUiModel(1L, 123, LocalDateTime.now())
+    private val reservationComplete = ReservedTicketUiModel(1L, 123, LocalDateTime.now())
 
     private val intent =
         ReservationCompleteActivity.getIntent(

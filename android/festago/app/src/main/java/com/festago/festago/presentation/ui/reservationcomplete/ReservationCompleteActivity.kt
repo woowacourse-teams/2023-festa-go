@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.festago.festago.databinding.ActivityReservationCompleteBinding
-import com.festago.festago.presentation.model.ReservationCompleteUiModel
+import com.festago.festago.presentation.model.ReservedTicketUiModel
 import com.festago.festago.presentation.util.getParcelableExtraCompat
 
 class ReservationCompleteActivity : AppCompatActivity() {
@@ -25,7 +25,7 @@ class ReservationCompleteActivity : AppCompatActivity() {
 
     private fun initView() {
         val reservationComplete =
-            intent.getParcelableExtraCompat<ReservationCompleteUiModel>(
+            intent.getParcelableExtraCompat<ReservedTicketUiModel>(
                 KEY_RESERVATION_COMPLETE,
             )
         binding.reservationComplete = reservationComplete
@@ -34,7 +34,7 @@ class ReservationCompleteActivity : AppCompatActivity() {
     companion object {
         private const val KEY_RESERVATION_COMPLETE = "KEY_RESERVATION_COMPLETE"
 
-        fun getIntent(context: Context, reservationComplete: ReservationCompleteUiModel): Intent {
+        fun getIntent(context: Context, reservationComplete: ReservedTicketUiModel): Intent {
             return Intent(context, ReservationCompleteActivity::class.java).apply {
                 putExtra(KEY_RESERVATION_COMPLETE, reservationComplete)
             }

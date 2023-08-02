@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Serializable
 data class ReservedTicketResponse(
     val entryTime: String,
-    val id: Int,
+    val id: Long,
     val number: Int,
 ) {
     fun toDomain(): ReservedTicket = ReservedTicket(
