@@ -5,54 +5,74 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.festago.festago.domain.model.TicketCode
 import com.festago.festago.domain.model.timer.Timer
 import com.festago.festago.domain.model.timer.TimerListener
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.model.TicketCodeUiModel
-import com.festago.festago.presentation.model.TicketUiModel
 import kotlinx.coroutines.launch
 
 class TicketEntryViewModel(
     private val ticketRepository: TicketRepository,
 ) : ViewModel() {
 
-    private val _ticketRemainTime: MutableLiveData<Int> = MutableLiveData(0)
-    val ticketRemainTime: LiveData<Int> = _ticketRemainTime
-
-    private val _ticketCode: MutableLiveData<TicketCodeUiModel> =
-        MutableLiveData(TicketCodeUiModel.EMPTY)
-    val ticketCode: LiveData<TicketCodeUiModel> = _ticketCode
-
-    private val _ticket: MutableLiveData<TicketUiModel> = MutableLiveData(TicketUiModel.EMPTY)
-    val ticket: LiveData<TicketUiModel> = _ticket
+    private val _uiState = MutableLiveData<TicketEntryUiState>()
+    val uiState: LiveData<TicketEntryUiState> = _uiState
 
     private val timer: Timer = Timer()
 
     fun loadTicketCode(ticketId: Long) {
         viewModelScope.launch {
-            val ticketCode = ticketRepository.loadTicketCode(ticketId)
-            _ticketCode.value = ticketCode.toPresentation()
-
-            timer.timerListener = createTimerListener(
-                ticketId = ticketId,
-                period = ticketCode.period,
-            )
-            timer.start(ticketCode.period)
+            ticketRepository.loadTicketCode(ticketId)
+                .onSuccess {
+                    val state = uiState.value
+                    if (state is TicketEntryUiState.Success) {
+                        _uiState.value = state.copy(ticketCode = it, remainTime = it.period)
+                        setTimer(ticketId, it)
+                    }
+                }.onFailure {
+                    _uiState.value = TicketEntryUiState.Error
+                }
         }
     }
 
     fun loadTicket(ticketId: Long) {
         viewModelScope.launch {
-            val ticket = ticketRepository.loadTicket(ticketId)
-            _ticket.value = ticket.toPresentation()
+            _uiState.value = TicketEntryUiState.Loading
+            ticketRepository.loadTicket(ticketId)
+                .onSuccess { ticket ->
+                    ticketRepository.loadTicketCode(ticketId)
+                        .onSuccess { ticketCode ->
+                            _uiState.value = TicketEntryUiState.Success(
+                                ticket = ticket.toPresentation(),
+                                ticketCode = ticketCode,
+                                remainTime = ticketCode.period,
+                            )
+                            setTimer(ticketId, ticketCode)
+                        }.onFailure {
+                            _uiState.value = TicketEntryUiState.Error
+                        }
+                }.onFailure {
+                    _uiState.value = TicketEntryUiState.Error
+                }
         }
+    }
+
+    private suspend fun setTimer(ticketId: Long, ticketCode: TicketCode) {
+        timer.timerListener = createTimerListener(
+            ticketId = ticketId,
+            period = ticketCode.period,
+        )
+        timer.start(ticketCode.period)
     }
 
     private fun createTimerListener(ticketId: Long, period: Int): TimerListener =
         object : TimerListener {
             override fun onTick(current: Int) {
-                _ticketRemainTime.value = current
+                val state = uiState.value
+                if (state is TicketEntryUiState.Success) {
+                    _uiState.value = state.copy(remainTime = current)
+                }
             }
 
             override fun onFinish() {

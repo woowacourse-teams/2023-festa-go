@@ -66,4 +66,5 @@
     <!-- Strings related to mypage -->
     <string name="mypage_btn_kakao">카카오로 로그인</string>
     <string name="mypage_tv_login_description">페스타고로\n대학교 축제를 즐겨보세요.</string>
+    <string name="ticket_entry_tv_error">티켓 조회 과정에 문제가 발생했습니다.</string>
 </resources>
