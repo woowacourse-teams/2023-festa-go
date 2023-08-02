@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.application.AdminService;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
@@ -49,6 +50,9 @@ class AdminControllerTest {
 
     @MockBean
     TicketService ticketService;
+
+    @MockBean
+    AdminService adminService;
 
     @Autowired
     ObjectMapper objectMapper;
