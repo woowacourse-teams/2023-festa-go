@@ -37,6 +37,7 @@ class MockWeb {
                     }
 
                     "GET" -> {
+                        val path = request.path ?: return MockResponse().setResponseCode(404)
                         when {
                             path.startsWith("/tickets/") -> {
                                 val ticketId = path.substringAfterLast("/").toLong()
@@ -51,6 +52,13 @@ class MockWeb {
                                     .setHeader("Content-Type", "application/json")
                                     .setResponseCode(200)
                                     .setBody(getTickets())
+                            }
+
+                            path.startsWith("/festivals") -> {
+                                MockResponse()
+                                    .setHeader("Content-Type", "application/json")
+                                    .setResponseCode(200)
+                                    .setBody(getFestivals())
                             }
 
                             else -> MockResponse().setResponseCode(404)
@@ -88,7 +96,7 @@ class MockWeb {
         }
 
         private fun getTickets(): String {
-            return """
+            return """ 
                 {
 	                "tickets": [
 		            {
@@ -109,6 +117,36 @@ class MockWeb {
 		            }
 	            ]
             }
+            """.trimIndent()
+        }
+
+        private fun getFestivals(): String {
+            return """
+                {
+                	"festivals": [
+                		{
+                			"id": 1,
+                			"name": "테코대학교1",
+                			"startDate": "2023-06-26",
+                			"endDate": "2023-06-30",
+                			"thumbnail": "https://images.unsplash.com/photo-1506157786151-b8491531f063"
+                		},
+                        {       
+                			"id": 2,
+                			"name": "테코대학교2",
+                			"startDate": "2023-06-26",
+                			"endDate": "2023-06-30",
+                			"thumbnail": "https://images.unsplash.com/photo-1506157786151-b8491531f063"
+                		},
+                        {
+                			"id": 1,
+                			"name": "테코대학교3",
+                			"startDate": "2023-06-26",
+                			"endDate": "2023-06-30",
+                			"thumbnail": "https://images.unsplash.com/photo-1506157786151-b8491531f063"
+                		}
+                	]
+                }
             """.trimIndent()
         }
     }
