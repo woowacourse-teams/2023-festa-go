@@ -84,7 +84,7 @@ document.getElementById("createTicketForm").addEventListener("submit",
       const ticketData = {
         stageId: formData.get("stageId"),
         ticketType: formData.get("ticketType"),
-        totalAmount: formData.get("totalAmount"),
+        amount: formData.get("amount"),
         entryTime: formData.get("entryTime")
       };
 
