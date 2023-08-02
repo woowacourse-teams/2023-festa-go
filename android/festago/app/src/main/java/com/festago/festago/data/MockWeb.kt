@@ -28,7 +28,7 @@ class MockWeb {
                 return when (request.method) {
                     "POST" -> {
                         when {
-                            path.startsWith("/tickets") -> MockResponse()
+                            path.startsWith("/member-tickets") -> MockResponse()
                                 .setResponseCode(201)
                                 .setBody(getQrCode())
 
@@ -38,7 +38,7 @@ class MockWeb {
 
                     "GET" -> {
                         when {
-                            path.startsWith("/tickets/") -> {
+                            path.startsWith("/member-tickets/") -> {
                                 val ticketId = path.substringAfterLast("/").toLong()
                                 MockResponse()
                                     .setHeader("Content-Type", "application/json")
@@ -74,15 +74,20 @@ class MockWeb {
         private fun getTicket(id: Long): String {
             return """
                 {
-                      "id": $id,
-                      "number": 103,
-                      "entryTime": "2023-07-09T16:00:00",
-                      "state": "BEFORE_ENTRY",
-                      "stage": {
-                            "id": 1,
-                            "name": "테코대학교 무슨 축제",
-                            "startTime": "2023-07-09T18:00:00"
-                      }
+                    "id": $id,
+                    "number": 103,
+                    "entryTime": "2023-07-09T16:00:00",
+                    "state": "BEFORE_ENTRY",
+                    "reservedAt": "2023-07-09T08:00:00",
+                    "stage": {
+                        "id": 1,
+                        "startTime": "2023-07-09T18:00:00"
+                    },
+                    "festival": {
+                        "id": 1,
+                        "name": "테코대학교",
+                        "thumbnail": "https://image.png"
+                    }
                 }
             """.trimIndent()
         }

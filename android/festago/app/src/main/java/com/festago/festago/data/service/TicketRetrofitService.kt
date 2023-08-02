@@ -9,16 +9,16 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface TicketRetrofitService {
-    @GET("/tickets/{id}")
+    @GET("/member-tickets/{memberTicketId}")
     suspend fun getTicket(
-        @Path("id") ticketId: Long,
+        @Path("memberTicketId") ticketId: Long,
     ): Response<MemberTicketResponse>
 
     @GET("/member-tickets")
     suspend fun getTickets(): Response<MemberTicketsResponse>
 
-    @POST("/tickets/{id}/qr")
+    @POST("/member-tickets/{memberTicketId}/qr")
     suspend fun getTicketCode(
-        @Path("id") ticketId: Long,
+        @Path("memberTicketId") ticketId: Long,
     ): Response<TicketCodeDto>
 }
