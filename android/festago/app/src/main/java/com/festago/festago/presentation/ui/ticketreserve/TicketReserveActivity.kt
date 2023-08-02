@@ -8,13 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.data.repository.ReservationDefaultRepository
 import com.festago.festago.databinding.ActivityTicketReserveBinding
+import com.festago.festago.presentation.model.ReservationCompleteUiModel
 import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.model.ReservationUiModel
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
+import com.festago.festago.presentation.ui.reservationcomplete.ReservationCompleteActivity
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
+import java.time.LocalDateTime
 
 class TicketReserveActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTicketReserveBinding
@@ -66,8 +69,13 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun handleReserveTicketSuccess() {
-        OkDialogFragment.newInstance("예약이 완료되었습니다.")
-            .show(supportFragmentManager, OkDialogFragment::class.java.name)
+        // todo: API Response 연결하기
+        startActivity(
+            ReservationCompleteActivity.getIntent(
+                this,
+                ReservationCompleteUiModel(1L, 123, LocalDateTime.now()),
+            ),
+        )
     }
 
     private fun handleReserveTicketFailed() {
