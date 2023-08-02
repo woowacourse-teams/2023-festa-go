@@ -4,7 +4,6 @@ import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
-import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
 import com.festago.domain.StageRepository;
 import com.festago.domain.Ticket;
