@@ -7,6 +7,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface TicketRetrofitService {
-    @POST("/staff/tickets/validation")
+    @POST("/staff/member-tickets/validation")
     suspend fun validateTicket(@Body code: TicketValidationRequestDto): Response<TicketValidationDto>
 }
