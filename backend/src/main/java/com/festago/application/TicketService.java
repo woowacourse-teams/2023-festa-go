@@ -88,9 +88,8 @@ public class TicketService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    //TODO
     @Transactional(readOnly = true)
     public StageTicketsResponse findStageTickets(Long stageId) {
-        return null;
+        return StageTicketsResponse.from(ticketRepository.findAllByStageId(stageId));
     }
 }
