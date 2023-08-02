@@ -47,7 +47,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
             getParcelableCompat<ReservationStageUiModel>(KEY_STAGE)?.let { stage ->
                 binding.stage = stage
             }
-            getParcelableArrayCompat<ReservationTicketUiModel>(KET_ITEM)?.let {
+            getParcelableArrayCompat<ReservationTicketUiModel>(KEY_ITEM)?.let {
                 ticketTypeAdapter.submitList(it.map(::TicketReserveBottomItem))
             }
         }
@@ -66,7 +66,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
 
     companion object {
         private const val KEY_STAGE = "KEY_STAGE"
-        private const val KET_ITEM = "KET_ITEM"
+        private const val KEY_ITEM = "KEY_ITEM"
 
         fun newInstance(
             stage: ReservationStageUiModel,
@@ -74,7 +74,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
         ) = TicketReserveBottomSheetFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(KEY_STAGE, stage)
-                putParcelableArray(KET_ITEM, items.toTypedArray())
+                putParcelableArray(KEY_ITEM, items.toTypedArray())
             }
         }
     }
