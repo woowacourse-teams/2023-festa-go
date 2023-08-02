@@ -16,7 +16,6 @@ interface ReservationRetrofitService {
         @Path("festivalId") festivalId: Long,
     ): Response<ReservationFestivalResponse>
 
-    //  GET /stages/:stageId/tickets
     @GET("/stages/{stageId}/tickets")
     suspend fun getTickets(
         @Path("stageId") stageId: Int,
