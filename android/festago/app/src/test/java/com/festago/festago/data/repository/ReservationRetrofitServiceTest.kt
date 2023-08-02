@@ -4,6 +4,8 @@ import com.festago.festago.data.dto.ReservationFestivalResponse
 import com.festago.festago.data.dto.ReservationStageResponse
 import com.festago.festago.data.dto.ReservationTicketResponse
 import com.festago.festago.data.dto.ReservationTicketsResponse
+import com.festago.festago.data.dto.ReservedTicketRequest
+import com.festago.festago.data.dto.ReservedTicketResponse
 import com.festago.festago.data.service.ReservationRetrofitService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -145,6 +147,24 @@ class ReservationRetrofitServiceTest {
         // then
         assertThat(response.isSuccessful).isFalse
         assertThat(response.body()).isNull()
+    }
+
+    @Test
+    fun `티켓 번호를 넣으면 예약된 티켓을 받아온다`() = runTest {
+        // given
+        val fakeResponse = MockResponse()
+            .setHeader("Content-Type", "application/json")
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(getReservedTicket())
+
+        fakeServer.enqueue(fakeResponse)
+
+        // when
+        val response = reservationRetrofitService.postReserveTicket(ReservedTicketRequest(1))
+
+        // then
+        assertThat(response.isSuccessful).isTrue
+        assertThat(response.body()).isEqualTo(getFakeReservedTicket())
     }
 
     companion object {
@@ -292,6 +312,24 @@ class ReservationRetrofitServiceTest {
 			]
 }
 """.trimIndent()
+        }
+
+        fun getFakeReservedTicket(): ReservedTicketResponse {
+            return ReservedTicketResponse(
+                id = 1,
+                number = 103,
+                entryTime = "2023-07-09T16:00:00",
+            )
+        }
+
+        fun getReservedTicket(): String {
+            return """
+                {
+                  "id": 1,
+                  "number": 103,
+                  "entryTime": "2023-07-09T16:00:00"
+                }
+            """.trimIndent()
         }
     }
 }

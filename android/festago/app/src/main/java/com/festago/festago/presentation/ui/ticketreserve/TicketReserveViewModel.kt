@@ -35,7 +35,7 @@ class TicketReserveViewModel(
 
     fun showTicketTypes(stageId: Int) {
         viewModelScope.launch {
-            reservationRepository.reserveTicket(stageId)
+            reservationRepository.loadTicketTypes(stageId)
                 .onSuccess { tickets ->
                     _event.setValue(TicketReserveEvent.ShowTicketTypes(tickets.map { it.toPresentation() }))
                 }.onFailure {
@@ -44,11 +44,11 @@ class TicketReserveViewModel(
         }
     }
 
-    fun reserveTicket() {
+    fun reserveTicket(ticketId: Int) {
         viewModelScope.launch {
-            reservationRepository.reserveTicket(0)
+            reservationRepository.reserveTicket(ticketId)
                 .onSuccess {
-                    _event.setValue(TicketReserveEvent.ReserveTicketSuccess)
+                    _event.setValue(TicketReserveEvent.ReserveTicketSuccess(it))
                 }.onFailure {
                     _event.setValue(TicketReserveEvent.ReserveTicketFailed)
                 }

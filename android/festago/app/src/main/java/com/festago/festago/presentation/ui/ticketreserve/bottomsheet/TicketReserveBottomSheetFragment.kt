@@ -18,7 +18,9 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var vm: TicketReserveViewModel
 
-    private val ticketTypeAdapter = TicketReserveBottomSheetAdapter()
+    private val ticketTypeAdapter = TicketReserveBottomSheetAdapter { ticketId ->
+        binding.selectedTicketTypeId = ticketId
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.ReservationDefaultRepository
 import com.festago.festago.databinding.ActivityTicketReserveBinding
+import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.model.ReservationUiModel
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
@@ -59,7 +60,7 @@ class TicketReserveActivity : AppCompatActivity() {
 
     private fun handleEvent(event: TicketReserveEvent) = when (event) {
         is TicketReserveEvent.ShowTicketTypes -> handleShowTicketTypes(event.tickets)
-        is TicketReserveEvent.ReserveTicketSuccess -> handleReserveTicketSuccess()
+        is TicketReserveEvent.ReserveTicketSuccess -> handleReserveTicketSuccess(event.reservedTicket)
         is TicketReserveEvent.ReserveTicketFailed -> handleReserveTicketFailed()
     }
 
@@ -68,8 +69,8 @@ class TicketReserveActivity : AppCompatActivity() {
             .show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
     }
 
-    private fun handleReserveTicketSuccess() {
-        OkDialogFragment.newInstance("예약이 완료되었습니다.")
+    private fun handleReserveTicketSuccess(reservedTicket: ReservedTicket) {
+        OkDialogFragment.newInstance("예약이 완료되었습니다. $reservedTicket")
             .show(supportFragmentManager, OkDialogFragment::class.java.name)
     }
 
