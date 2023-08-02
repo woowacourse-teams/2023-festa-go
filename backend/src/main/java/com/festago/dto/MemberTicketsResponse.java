@@ -6,7 +6,7 @@ import static java.util.stream.Collectors.toList;
 import com.festago.domain.MemberTicket;
 import java.util.List;
 
-public record MemberTicketsResponse(List<MemberTicketResponse> tickets) {
+public record MemberTicketsResponse(List<MemberTicketResponse> memberTickets) {
 
     public static MemberTicketsResponse from(List<MemberTicket> memberTickets) {
         return memberTickets.stream()

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
+import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.FestivalDefaultRepository
 import com.festago.festago.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListViewModel.FestivalListViewModelFactory
@@ -19,7 +20,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
     private val vm: FestivalListViewModel by viewModels {
         FestivalListViewModelFactory(
-            FestivalDefaultRepository(),
+            FestivalDefaultRepository(RetrofitClient.getInstance().festivalRetrofitService),
         )
     }
 

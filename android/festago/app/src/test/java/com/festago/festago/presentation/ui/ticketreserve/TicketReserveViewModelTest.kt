@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.domain.model.Reservation
 import com.festago.festago.domain.model.ReservationStage
 import com.festago.festago.domain.model.ReservationTicket
+import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.domain.repository.ReservationRepository
 import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
@@ -17,6 +18,7 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 class TicketReserveViewModelTest {
@@ -24,8 +26,8 @@ class TicketReserveViewModelTest {
     private lateinit var reservationRepository: ReservationRepository
 
     private val fakeReservationTickets = listOf(
-        ReservationTicket("재학생용", 219, 500),
-        ReservationTicket("외부인용", 212, 300),
+        ReservationTicket(1, "재학생용", 219, 500),
+        ReservationTicket(1, "외부인용", 212, 300),
     )
     private val fakeReservationStage = ReservationStage(
         id = 1,
@@ -39,9 +41,15 @@ class TicketReserveViewModelTest {
         id = 1,
         name = "테코대학교",
         reservationStages = fakeReservationStages,
-        startDate = LocalDateTime.now(),
-        endDate = LocalDateTime.now(),
+        startDate = LocalDate.now(),
+        endDate = LocalDate.now(),
         thumbnail = "https://search2.kakaocdn.net/argon/656x0_80_wr/8vLywd3V06c",
+    )
+
+    private val fakeReservedTicket = ReservedTicket(
+        id = 1,
+        entryTime = LocalDateTime.now(),
+        number = 1,
     )
 
     @get:Rule
@@ -59,7 +67,7 @@ class TicketReserveViewModelTest {
     fun `예약 정보를 불러오면 성공 이벤트가 발생하고 리스트를 반환한다`() {
         // given
         coEvery {
-            reservationRepository.loadReservation()
+            reservationRepository.loadReservation(0)
         } answers {
             Result.success(fakeReservation)
         }
@@ -78,10 +86,10 @@ class TicketReserveViewModelTest {
     @Test
     fun `예약 정보를 불러오는 것을 실패하면 에러 이벤트가 발생한다`() {
         // given
-        coEvery { reservationRepository.loadReservation() } returns Result.failure(Exception())
+        coEvery { reservationRepository.loadReservation(0) } returns Result.failure(Exception())
 
         // when
-        vm.loadReservation()
+        vm.loadReservation(0)
 
         // then
         assertThat(vm.uiState.value).isEqualTo(TicketReserveUiState.Error)
@@ -91,7 +99,7 @@ class TicketReserveViewModelTest {
     fun `예약 정보를 불러오는 중이면 로딩 이벤트가 발생한다`() {
         // given
         coEvery {
-            reservationRepository.loadReservation()
+            reservationRepository.loadReservation(0)
         } coAnswers {
             delay(1000)
             Result.success(fakeReservation)
@@ -108,9 +116,9 @@ class TicketReserveViewModelTest {
     fun `특정 공연의 티켓 타입을 보여주는 이벤트가 발생하면 해당 공연의 티켓 타입을 보여준다`() {
         // given
         coEvery {
-            reservationRepository.loadReservation()
+            reservationRepository.loadTicketTypes(1)
         } answers {
-            Result.success(fakeReservation)
+            Result.success(fakeReservationTickets)
         }
 
         // when
@@ -121,13 +129,13 @@ class TicketReserveViewModelTest {
 
         // and
         val event = vm.event.getValue() as TicketReserveEvent.ShowTicketTypes
-        assertThat(event.reservationStage).isEqualTo(fakeReservationStage.toPresentation())
+        assertThat(event.tickets).isEqualTo(fakeReservationTickets.map { it.toPresentation() })
     }
 
     @Test
     fun `특정 공연의 티켓 타입을 보여주는 것을 실패하면 에러 이벤트가 발생한다`() {
         // given
-        coEvery { reservationRepository.loadReservation() } returns Result.failure(Exception())
+        coEvery { reservationRepository.loadTicketTypes(1) } returns Result.failure(Exception())
 
         // when
         vm.showTicketTypes(1)
@@ -140,29 +148,29 @@ class TicketReserveViewModelTest {
     fun `티켓 유형을 선택하고 예약하면 예약 성공 이벤트가 발생한다`() {
         // given
         coEvery {
-            reservationRepository.reserveTicket(0, 0)
+            reservationRepository.reserveTicket(any())
         } answers {
-            Result.success(1)
+            Result.success(fakeReservedTicket)
         }
 
         // when
-        vm.reserveTicket()
+        vm.reserveTicket(0)
 
         // then
-        assertThat(vm.event.getValue()).isEqualTo(TicketReserveEvent.ReserveTicketSuccess)
+        assertThat(vm.event.getValue()).isInstanceOf(TicketReserveEvent.ReserveTicketSuccess::class.java)
     }
 
     @Test
     fun `티켓 유형을 선택하고 예약하는 것을 실패하면 예약 실패 이벤트가 발생한다`() {
         // given
         coEvery {
-            reservationRepository.reserveTicket(0, 0)
+            reservationRepository.reserveTicket(0)
         } answers {
             Result.failure(Exception())
         }
 
         // when
-        vm.reserveTicket()
+        vm.reserveTicket(0)
 
         // then
         assertThat(vm.event.getValue()).isEqualTo(TicketReserveEvent.ReserveTicketFailed)

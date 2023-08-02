@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.festago.festago.databinding.FragmentOkDialogBinding
+import com.festago.festago.presentation.ui.customview.OkDialogFragment.OnClickListener
 
 class OkDialogFragment : DialogFragment() {
 
@@ -27,7 +28,9 @@ class OkDialogFragment : DialogFragment() {
     private val Int.dpToPx: Int
         get() = (this * context.resources.displayMetrics.density).toInt()
 
-    lateinit var listener: OnClickListener
+    var listener: OnClickListener = OnClickListener {
+        dismiss()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -1,12 +1,19 @@
 package com.festago.application;
 
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
+import com.festago.dto.CurrentMemberTicketsResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +41,27 @@ public class MemberTicketService {
     @Transactional(readOnly = true)
     public MemberTicketsResponse findAll(Long memberId) {
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
-        return MemberTicketsResponse.from(memberTickets);
+        return memberTickets.stream()
+            .sorted(comparing(memberTicket -> memberTicket.getStage().getStartTime()))
+            .collect(collectingAndThen(toList(), MemberTicketsResponse::from));
+    }
+
+    @Transactional(readOnly = true)
+    public CurrentMemberTicketsResponse findCurrent(Long memberId) {
+        List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
+        return CurrentMemberTicketsResponse.from(filterCurrentMemberTickets(memberTickets));
+    }
+
+    private List<MemberTicket> filterCurrentMemberTickets(List<MemberTicket> memberTickets) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return memberTickets.stream()
+            .filter(memberTicket -> memberTicket.isPending(currentTime) || memberTicket.canEntry(currentTime))
+            .sorted(comparing((MemberTicket memberTicket) -> memberTicket.isPending(currentTime))
+                .thenComparing(memberTicket -> calculateTimeGap(memberTicket, currentTime)))
+            .toList();
+    }
+
+    private Duration calculateTimeGap(MemberTicket memberTicket, LocalDateTime time) {
+        return Duration.between(memberTicket.getEntryTime(), time).abs();
     }
 }
