@@ -8,13 +8,16 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
 import com.festago.domain.EntryState;
+import com.festago.dto.CurrentFestivalResponse;
+import com.festago.dto.CurrentMemberTicketResponse;
+import com.festago.dto.CurrentMemberTicketsResponse;
+import com.festago.dto.CurrentStageResponse;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketFestivalResponse;
 import com.festago.dto.MemberTicketResponse;
@@ -81,7 +84,7 @@ class MemberTicketControllerTest {
         MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
             "https://image.png");
         MemberTicketResponse expected = new MemberTicketResponse(memberTicketId, 1, LocalDateTime.now(),
-            EntryState.BEFORE_ENTRY, LocalDateTime.now(), stageResponse, festivalResponse);
+            LocalDateTime.now(), stageResponse, festivalResponse);
         given(memberTicketService.findById(memberId, memberTicketId))
             .willReturn(expected);
 
@@ -106,8 +109,8 @@ class MemberTicketControllerTest {
             "https://image.png");
         MemberTicketsResponse expected = LongStream.range(0, 10L)
             .mapToObj(
-                it -> new MemberTicketResponse(it, 1, LocalDateTime.now(), EntryState.BEFORE_ENTRY, LocalDateTime.now(),
-                    stageResponse, festivalResponse))
+                it -> new MemberTicketResponse(it, 1, LocalDateTime.now(), LocalDateTime.now(), stageResponse,
+                    festivalResponse))
             .collect(collectingAndThen(toList(), MemberTicketsResponse::new));
         given(memberTicketService.findAll(memberId))
             .willReturn(expected);
@@ -121,6 +124,34 @@ class MemberTicketControllerTest {
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);
         MemberTicketsResponse actual = objectMapper.readValue(content, MemberTicketsResponse.class);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void 현재_티켓_리스트를_조회한다() throws Exception {
+        // given
+        Long memberId = 1L;
+        CurrentStageResponse stageResponse = new CurrentStageResponse(1L, LocalDateTime.now());
+        CurrentFestivalResponse festivalResponse = new CurrentFestivalResponse(1L, "테코대학교",
+            "https://image.png");
+        CurrentMemberTicketsResponse expected = LongStream.range(0, 10L)
+            .mapToObj(
+                it -> new CurrentMemberTicketResponse(it, 1, LocalDateTime.now(), EntryState.BEFORE_ENTRY,
+                    stageResponse,
+                    festivalResponse))
+            .collect(collectingAndThen(toList(), CurrentMemberTicketsResponse::new));
+        given(memberTicketService.findCurrent(memberId))
+            .willReturn(expected);
+
+        // when & then
+        String content = mockMvc.perform(get("/member-tickets/current")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+        CurrentMemberTicketsResponse actual = objectMapper.readValue(content, CurrentMemberTicketsResponse.class);
         assertThat(actual).isEqualTo(expected);
     }
 }
