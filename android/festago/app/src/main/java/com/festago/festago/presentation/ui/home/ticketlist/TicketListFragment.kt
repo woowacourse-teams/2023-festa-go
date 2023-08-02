@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
+import com.festago.festago.analytics.FirebaseAnalyticsHelper
 import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.TicketDefaultRepository
 import com.festago.festago.databinding.FragmentTicketListBinding
@@ -24,6 +25,7 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
             TicketDefaultRepository(
                 ticketRetrofitService = RetrofitClient.getInstance().ticketRetrofitService,
             ),
+            analyticsHelper = FirebaseAnalyticsHelper.getInstance(),
         )
     }
 

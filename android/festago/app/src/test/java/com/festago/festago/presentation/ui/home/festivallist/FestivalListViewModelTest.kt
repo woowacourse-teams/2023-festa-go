@@ -1,6 +1,7 @@
 package com.festago.festago.presentation.ui.home.festivallist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.domain.model.Festival
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.presentation.mapper.toPresentation
@@ -24,6 +25,7 @@ import java.time.LocalDate
 class FestivalListViewModelTest {
     private lateinit var vm: FestivalListViewModel
     private lateinit var festivalRepository: FestivalRepository
+    private lateinit var analyticsHelper: AnalyticsHelper
 
     private val fakeFestivals = List(5) {
         Festival(
@@ -43,7 +45,8 @@ class FestivalListViewModelTest {
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         festivalRepository = mockk()
-        vm = FestivalListViewModel(festivalRepository)
+        analyticsHelper = mockk(relaxed = true)
+        vm = FestivalListViewModel(festivalRepository, analyticsHelper)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

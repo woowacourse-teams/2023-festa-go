@@ -1,6 +1,7 @@
 package com.festago.festago.presentation.ui.ticketentry
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.domain.model.TicketCode
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.fixture.TicketFixture
@@ -22,6 +23,7 @@ import org.junit.Test
 class TicketEntryViewModelTest {
     private lateinit var vm: TicketEntryViewModel
     private lateinit var ticketRepository: TicketRepository
+    private lateinit var analyticsHelper: AnalyticsHelper
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -31,7 +33,8 @@ class TicketEntryViewModelTest {
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         ticketRepository = mockk()
-        vm = TicketEntryViewModel(ticketRepository)
+        analyticsHelper = mockk(relaxed = true)
+        vm = TicketEntryViewModel(ticketRepository, analyticsHelper)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

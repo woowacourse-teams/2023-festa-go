@@ -1,6 +1,7 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.domain.model.Reservation
 import com.festago.festago.domain.model.ReservationStage
 import com.festago.festago.domain.model.ReservationTicket
@@ -24,6 +25,7 @@ import java.time.LocalDateTime
 class TicketReserveViewModelTest {
     private lateinit var vm: TicketReserveViewModel
     private lateinit var reservationRepository: ReservationRepository
+    private lateinit var analyticsHelper: AnalyticsHelper
 
     private val fakeReservationTickets = listOf(
         ReservationTicket(1, "재학생용", 219, 500),
@@ -60,7 +62,8 @@ class TicketReserveViewModelTest {
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         reservationRepository = mockk()
-        vm = TicketReserveViewModel(reservationRepository)
+        analyticsHelper = mockk(relaxed = true)
+        vm = TicketReserveViewModel(reservationRepository, analyticsHelper)
     }
 
     @Test
