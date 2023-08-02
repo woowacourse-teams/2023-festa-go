@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.festago.festago.databinding.FragmentTicketReserveBottomSheetBinding
+import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 import com.festago.festago.presentation.util.getParcelableArrayCompat
+import com.festago.festago.presentation.util.getParcelableCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
@@ -41,8 +43,13 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        arguments?.getParcelableArrayCompat<ReservationTicketUiModel>(KET_ITEM)?.let {
-            ticketTypeAdapter.submitList(it.map(::TicketReserveBottomItem))
+        arguments?.apply {
+            getParcelableCompat<ReservationStageUiModel>(KEY_STAGE)?.let { stage ->
+                binding.stage = stage
+            }
+            getParcelableArrayCompat<ReservationTicketUiModel>(KET_ITEM)?.let {
+                ticketTypeAdapter.submitList(it.map(::TicketReserveBottomItem))
+            }
         }
 
         initView()
@@ -58,13 +65,17 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
+        private const val KEY_STAGE = "KEY_STAGE"
         private const val KET_ITEM = "KET_ITEM"
 
-        fun newInstance(items: List<ReservationTicketUiModel>) =
-            TicketReserveBottomSheetFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelableArray(KET_ITEM, items.toTypedArray())
-                }
+        fun newInstance(
+            stage: ReservationStageUiModel,
+            items: List<ReservationTicketUiModel>,
+        ) = TicketReserveBottomSheetFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(KEY_STAGE, stage)
+                putParcelableArray(KET_ITEM, items.toTypedArray())
             }
+        }
     }
 }

@@ -13,6 +13,9 @@ import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.model.ReservationUiModel
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketFailed
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketSuccess
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowTicketTypes
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
@@ -59,14 +62,16 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun handleEvent(event: TicketReserveEvent) = when (event) {
-        is TicketReserveEvent.ShowTicketTypes -> handleShowTicketTypes(event.tickets)
-        is TicketReserveEvent.ReserveTicketSuccess -> handleReserveTicketSuccess(event.reservedTicket)
-        is TicketReserveEvent.ReserveTicketFailed -> handleReserveTicketFailed()
+        is ShowTicketTypes -> handleShowTicketTypes(event.stageId, event.tickets)
+        is ReserveTicketSuccess -> handleReserveTicketSuccess(event.reservedTicket)
+        is ReserveTicketFailed -> handleReserveTicketFailed()
     }
 
-    private fun handleShowTicketTypes(tickets: List<ReservationTicketUiModel>) {
-        TicketReserveBottomSheetFragment.newInstance(tickets)
-            .show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
+    private fun handleShowTicketTypes(stageId: Int, tickets: List<ReservationTicketUiModel>) {
+        contentsAdapter.currentList.find { it.id == stageId }?.let { stage ->
+            TicketReserveBottomSheetFragment.newInstance(stage, tickets)
+                .show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
+        }
     }
 
     private fun handleReserveTicketSuccess(reservedTicket: ReservedTicket) {

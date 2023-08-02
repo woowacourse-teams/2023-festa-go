@@ -37,7 +37,12 @@ class TicketReserveViewModel(
         viewModelScope.launch {
             reservationRepository.loadTicketTypes(stageId)
                 .onSuccess { tickets ->
-                    _event.setValue(TicketReserveEvent.ShowTicketTypes(tickets.map { it.toPresentation() }))
+                    _event.setValue(
+                        TicketReserveEvent.ShowTicketTypes(
+                            stageId,
+                            tickets.map { it.toPresentation() },
+                        ),
+                    )
                 }.onFailure {
                     _uiState.setValue(TicketReserveUiState.Error)
                 }
