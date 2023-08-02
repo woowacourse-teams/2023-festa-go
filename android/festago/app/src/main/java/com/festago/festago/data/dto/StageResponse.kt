@@ -5,16 +5,12 @@ import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
 @Serializable
-data class StageDto(
+data class StageResponse(
     val id: Int,
-    val name: String,
     val startTime: String,
 ) {
-    fun toDomain(): Stage {
-        return Stage(
-            id = id.toLong(),
-            name = name,
-            startTime = LocalDateTime.parse(startTime),
-        )
-    }
+    fun toDomain(): Stage = Stage(
+        id = id,
+        startTime = LocalDateTime.parse(startTime),
+    )
 }
