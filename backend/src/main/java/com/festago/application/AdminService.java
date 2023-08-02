@@ -37,7 +37,63 @@ public class AdminService {
         List<Ticket> allTicket = ticketRepository.findAll();
         List<Stage> allStage = stageRepository.findAll();
         List<Festival> allFestival = festivalRepository.findAll();
-        return AdminResponse.of(allTicket, allStage, allFestival);
+        return new AdminResponse(
+            ticketResponses(allTicket),
+            stageResponses(allStage),
+            festivalResponses(allFestival));
+    }
+
+    private List<AdminTicketResponse> ticketResponses(List<Ticket> tickets) {
+        return tickets.stream()
+            .map(this::ticketResponse)
+            .toList();
+    }
+
+    private AdminTicketResponse ticketResponse(Ticket ticket) {
+        TicketAmount ticketAmount = ticket.getTicketAmount();
+        Map<LocalDateTime, Integer> amountByEntryTime = ticket.getTicketEntryTimes().stream()
+            .collect(Collectors.toMap(
+                TicketEntryTime::getEntryTime,
+                TicketEntryTime::getAmount
+            ));
+        return new AdminTicketResponse(
+            ticket.getId(),
+            ticket.getStage().getId(),
+            ticket.getTicketType(),
+            ticketAmount.getTotalAmount(),
+            ticketAmount.getReservedAmount(),
+            amountByEntryTime
+        );
+    }
+
+    private List<AdminStageResponse> stageResponses(List<Stage> stages) {
+        return stages.stream()
+            .map(this::stageResponse)
+            .toList();
+    }
+
+    private AdminStageResponse stageResponse(Stage stage) {
+        List<Long> ticketIds = stage.getTickets().stream()
+            .map(Ticket::getId)
+            .toList();
+        return new AdminStageResponse(
+            stage.getId(),
+            stage.getFestival().getId(),
+            stage.getStartTime(),
+            stage.getLineUp(),
+            ticketIds
+        );
+    }
+
+    private List<AdminFestivalResponse> festivalResponses(List<Festival> festivals) {
+        return festivals.stream()
+            .map(festival -> new AdminFestivalResponse(
+                festival.getId(),
+                festival.getName(),
+                festival.getStartDate(),
+                festival.getEndDate(),
+                festival.getThumbnail()))
+            .toList();
     }
 
     public record AdminResponse(
@@ -45,91 +101,33 @@ public class AdminService {
         List<AdminStageResponse> adminStageResponse,
         List<AdminFestivalResponse> adminFestivalResponse) {
 
-        public static AdminResponse of(List<Ticket> allTicket, List<Stage> allStage, List<Festival> allFestival) {
-            List<AdminTicketResponse> allTicketResponse = allTicket.stream()
-                .map(AdminTicketResponse::from)
-                .toList();
+    }
 
-            List<AdminStageResponse> allStageResponse = allStage.stream()
-                .map(AdminStageResponse::from)
-                .toList();
+    public record AdminFestivalResponse(
+        Long id,
+        String name,
+        LocalDate startDate,
+        LocalDate endDate,
+        String thumbnail) {
 
-            List<AdminFestivalResponse> allFestivalResponse = allFestival.stream()
-                .map(AdminFestivalResponse::from)
-                .toList();
+    }
 
-            return new AdminResponse(
-                allTicketResponse,
-                allStageResponse,
-                allFestivalResponse
-            );
-        }
+    public record AdminStageResponse(
+        Long id,
+        Long festivalId,
+        LocalDateTime startTime,
+        String lineUp,
+        List<Long> ticketId) {
 
+    }
 
-        public record AdminTicketResponse(
-            Long id,
-            Long stageId,
-            TicketType ticketType,
-            Integer totalAmount,
-            Integer reservedAmount,
-            Map<LocalDateTime, Integer> entryTimeAmount) {
+    public record AdminTicketResponse(
+        Long id,
+        Long stageId,
+        TicketType ticketType,
+        Integer totalAmount,
+        Integer reservedAmount,
+        Map<LocalDateTime, Integer> entryTimeAmount) {
 
-            public static AdminTicketResponse from(Ticket ticket) {
-                TicketAmount ticketAmount = ticket.getTicketAmount();
-                Map<LocalDateTime, Integer> amountByEntryTime = ticket.getTicketEntryTimes().stream()
-                    .collect(Collectors.toMap(
-                        TicketEntryTime::getEntryTime,
-                        TicketEntryTime::getAmount
-                    ));
-                return new AdminTicketResponse(
-                    ticket.getId(),
-                    ticket.getStage().getId(),
-                    ticket.getTicketType(),
-                    ticketAmount.getTotalAmount(),
-                    ticketAmount.getReservedAmount(),
-                    amountByEntryTime
-                );
-            }
-        }
-
-        public record AdminStageResponse(
-            Long id,
-            Long festivalId,
-            LocalDateTime startTime,
-            String lineUp,
-            List<Long> ticketId
-        ) {
-
-            public static AdminStageResponse from(Stage stage) {
-                List<Long> ticketIds = stage.getTickets().stream()
-                    .map(Ticket::getId)
-                    .toList();
-                return new AdminStageResponse(
-                    stage.getId(),
-                    stage.getFestival().getId(),
-                    stage.getStartTime(),
-                    stage.getLineUp(),
-                    ticketIds
-                );
-            }
-        }
-
-        public record AdminFestivalResponse(
-            Long id,
-            String name,
-            LocalDate startDate,
-            LocalDate endDate,
-            String thumbnail) {
-
-            public static AdminFestivalResponse from(Festival festival) {
-                return new AdminFestivalResponse(
-                    festival.getId(),
-                    festival.getName(),
-                    festival.getStartDate(),
-                    festival.getEndDate(),
-                    festival.getThumbnail()
-                );
-            }
-        }
     }
 }
