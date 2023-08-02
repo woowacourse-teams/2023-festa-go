@@ -43,7 +43,6 @@ public class Member {
         this.profileImage = profileImage;
     }
 
-
     public Long getId() {
         return id;
     }
