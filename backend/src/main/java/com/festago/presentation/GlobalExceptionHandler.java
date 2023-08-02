@@ -7,9 +7,10 @@ import com.festago.exception.FestaGoException;
 import com.festago.exception.InternalServerException;
 import com.festago.exception.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.stream.Collectors;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,15 +29,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handle(BadRequestException e, HttpServletRequest request) throws IOException {
         log(errorLogger::info, e, request);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(ErrorResponse.from(e));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.from(e));
     }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handle(NotFoundException e, HttpServletRequest request) throws IOException {
         log(errorLogger::info, e, request);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(ErrorResponse.from(e));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.from(e));
     }
 
     @ExceptionHandler(InternalServerException.class)
@@ -55,33 +54,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private void log(LogFunction logFunction, FestaGoException e, HttpServletRequest request) throws IOException {
-        logFunction.log(
-            LOG_FORMAT,
-            e.getErrorCode(),
-            e.getMessage(),
-            request.getMethod(),
-            request.getRequestURI(),
-            e.getStackTrace()[0],
-            getRequestPayload(request),
-            e
-        );
+        logFunction.log(LOG_FORMAT, e.getErrorCode(), e.getMessage(), request.getMethod(), request.getRequestURI(),
+            e.getStackTrace()[0], getRequestPayload(request), e);
     }
 
     private void log(LogFunction logFunction, Exception e, HttpServletRequest request) throws IOException {
-        logFunction.log(
-            ERROR_LOG_FORMAT,
-            e.getClass().getSimpleName(),
-            request.getMethod(),
-            request.getRequestURI(),
-            e.getStackTrace()[0],
-            getRequestPayload(request),
-            e
-        );
+        logFunction.log(ERROR_LOG_FORMAT, e.getClass().getSimpleName(), request.getMethod(), request.getRequestURI(),
+            e.getStackTrace()[0], getRequestPayload(request), e);
     }
 
     private String getRequestPayload(HttpServletRequest request) throws IOException {
-        BufferedReader reader = request.getReader();
-        return reader.lines().collect(Collectors.joining(System.lineSeparator()));
+        try (InputStream inputStream = request.getInputStream(); Scanner scanner = new Scanner(inputStream,
+            StandardCharsets.UTF_8)) {
+            if (scanner.useDelimiter("\\A").hasNext()) {
+                return scanner.next();
+            } else {
+                return "";
+            }
+        }
     }
 
     @FunctionalInterface
