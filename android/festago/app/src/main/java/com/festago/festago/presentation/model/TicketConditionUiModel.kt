@@ -8,5 +8,4 @@ enum class TicketConditionUiModel(@StringRes val stateName: Int) {
     BEFORE_ENTRY(R.string.all_ticket_state_before_entry),
     AFTER_ENTRY(R.string.all_ticket_state_after_entry),
     AWAY(R.string.all_ticket_state_away),
-    EMPTY(R.string.all_ticket_state_before_entry),
 }

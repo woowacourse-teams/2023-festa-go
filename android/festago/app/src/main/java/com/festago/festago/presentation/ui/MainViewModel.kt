@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.domain.repository.TicketRepository
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.model.TicketUiModel
 import com.festago.festago.presentation.ui.MainEvent.FailToLoadTicket
 import com.festago.festago.presentation.ui.MainEvent.FailToOpenTicketEntry
@@ -37,7 +36,7 @@ class MainViewModel(
 
     fun loadTicket() {
         viewModelScope.launch(exceptionHandler) {
-            _ticket.postValue(ticketRepository.loadTicket(9L).toPresentation())
+//            _ticket.postValue(ticketRepository.loadTicket(9L).toPresentation())
         }
     }
 
