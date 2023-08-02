@@ -12,7 +12,7 @@ data class FestivalResponse(
     val endDate: String,
     val thumbnail: String,
 ) {
-    fun toDomain() = Festival(
+    fun toDomain(): Festival = Festival(
         id = id.toLong(),
         name = name,
         startDate = LocalDate.parse(startDate),
