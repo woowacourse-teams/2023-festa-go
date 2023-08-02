@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class KakaoOAuth2UserInfoClient {
 
-    private static final String USER_INFO_URL = "https://kapi.kakao.com/v2/user/me";
+    private static final String URL = "https://kapi.kakao.com/v2/user/me";
 
     private final RestTemplate restTemplate;
 
@@ -35,7 +35,7 @@ public class KakaoOAuth2UserInfoClient {
     }
 
     private UserInfo requestUserInfo(HttpHeaders headers) {
-        KakaoUserInfo kakaoUserInfo = restTemplate.postForEntity(USER_INFO_URL, new HttpEntity<>(headers),
+        KakaoUserInfo kakaoUserInfo = restTemplate.postForEntity(URL, new HttpEntity<>(headers),
                 KakaoUserInfo.class)
             .getBody();
         return kakaoUserInfo.toUserInfo();

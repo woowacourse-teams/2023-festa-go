@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class KakaoOAuth2AccessTokenClient {
 
-    private static final String ACCESS_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
+    private static final String URL = "https://kauth.kakao.com/oauth/token";
 
     private final RestTemplate restTemplate;
     private final String grantType;
@@ -48,7 +48,7 @@ public class KakaoOAuth2AccessTokenClient {
     }
 
     private String requestAccessToken(HttpHeaders headers) {
-        KakaoAccessTokenResponse response = restTemplate.postForEntity(ACCESS_TOKEN_URL, headers,
+        KakaoAccessTokenResponse response = restTemplate.postForEntity(URL, headers,
             KakaoAccessTokenResponse.class).getBody();
         return response.accessToken();
     }
