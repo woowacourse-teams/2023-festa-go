@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.reservationcomplete.ReservationCompleteActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.home.HomeActivity"
             android:exported="true">
             <intent-filter>
