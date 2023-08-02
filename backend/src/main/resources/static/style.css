@@ -5,26 +5,34 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  flex-direction: column; /* Center align content vertically */
+  background-color: #f2f2f2;
 }
 
 .container {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap; /* Wrap the form sections when they reach the container width */
+  justify-content: flex-start; /* Align items to the left */
   width: 80%;
   margin-top: 50px;
+  padding-top: 20px; /* Add some top padding to the container */
+  min-height: 500px; /* Set a minimum height for the container to accommodate the data */
 }
 
 .form-section {
-  width: 30%;
+  flex: 1; /* Make all three request sections have the same width */
   border: 1px solid #ddd;
   padding: 20px;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin: 10px; /* Add some margin around each form section */
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 300px; /* Set a minimum width for each form section to prevent them from becoming too narrow */
 }
 
 h2 {
   margin-top: 0;
+  color: #444;
 }
 
 form {
@@ -34,13 +42,16 @@ form {
 label {
   display: block;
   margin-bottom: 5px;
+  color: #444;
 }
 
 input,
 select {
   width: 100%;
-  padding: 5px;
+  padding: 8px;
   margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 button {
@@ -50,9 +61,44 @@ button {
   border: none;
   cursor: pointer;
   width: 100%;
+  border-radius: 4px;
 }
 
 button:hover {
   background-color: #45a049;
 }
 
+/* Add some spacing to the data display area */
+#dataSection {
+  margin-top: 50px;
+  width: 100%; /* Make sure the data section spans the full width */
+  display: flex;
+  flex-direction: column; /* Display the data divs vertically */
+  align-items: flex-start; /* Left-align the data divs horizontally */
+}
+
+/* Style for the data divs */
+.dataDiv {
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Make sure the data div spans the full width */
+}
+
+/* Style for the data table */
+table {
+  border-collapse: collapse;
+  width: 100%; /* Make the table span the full width */
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}

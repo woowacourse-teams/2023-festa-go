@@ -1,3 +1,118 @@
+// Function to fetch data and update dataSection
+function fetchDataAndUpdateDataSection() {
+  fetch("/admin/data")
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("응답을 가져올 수 없습니다.");
+    }
+    return response.json();
+  })
+  .then(data => {
+    const dataSection = document.getElementById("dataSection");
+
+    // Clear existing data before appending new data
+    dataSection.innerHTML = "";
+
+    // 1. 축제 생성 요청 데이터 섹션
+    const festivalDataDiv = createDataSection(
+        "축제 목록",
+        data.adminFestivalResponse
+    );
+    dataSection.appendChild(festivalDataDiv);
+
+    // 2. 공연 생성 요청 데이터 섹션
+    const stageDataDiv = createDataSection(
+        "공연 목록",
+        data.adminStageResponse
+    );
+    dataSection.appendChild(stageDataDiv);
+
+    // 3. 티켓 생성 요청 데이터 섹션
+    const ticketDataDiv = createDataSection(
+        "티켓 목록",
+        data.adminTickets
+    );
+    dataSection.appendChild(ticketDataDiv);
+  })
+  .catch(error => {
+    alert(error.message);
+  });
+}
+
+// Call the fetchDataAndUpdateDataSection function on page load
+fetchDataAndUpdateDataSection();
+
+function createDataSection(sectionTitle, data) {
+  const dataDiv = document.createElement("div");
+  dataDiv.classList.add("dataDiv"); // Add the "dataDiv" class to the data div
+
+  const title = document.createElement("h3");
+  title.textContent = sectionTitle;
+  dataDiv.appendChild(title);
+
+  const table = createTable(data);
+  dataDiv.appendChild(table);
+
+  return dataDiv;
+}
+
+function createTable(data) {
+  const table = document.createElement("table");
+  const tableHead = document.createElement("thead");
+  const tableBody = document.createElement("tbody");
+
+  // 테이블 헤더 생성
+  const headerRow = document.createElement("tr");
+  for (const key in data[0]) {
+    const th = document.createElement("th");
+    th.textContent = key;
+    headerRow.appendChild(th);
+  }
+  tableHead.appendChild(headerRow);
+
+  // 테이블 데이터 생성
+  data.forEach(item => {
+    const row = document.createElement("tr");
+    for (const key in item) {
+      const cell = document.createElement("td");
+
+      if (typeof item[key] === "object") {
+        // If the value is an object (entryTimeAmount), format it with new lines
+        const formattedEntryTimeAmount = formatEntryTimeAmount(item[key]);
+        cell.textContent = formattedEntryTimeAmount;
+        cell.style.whiteSpace = "pre-line"; // Apply white-space: pre-line; style to allow line breaks
+      } else {
+        // If the value is not an object, display it normally
+        cell.textContent = item[key];
+      }
+
+      row.appendChild(cell);
+    }
+    tableBody.appendChild(row);
+  });
+
+  table.appendChild(tableHead);
+  table.appendChild(tableBody);
+  return table;
+}
+
+// Helper function to format entryTimeAmount object and sort by time
+function formatEntryTimeAmount(entryTimeAmount) {
+  // Convert the object to an array of [time, amount] pairs
+  const entryTimeAmountArray = Object.entries(entryTimeAmount);
+
+  // Sort the array based on time
+  entryTimeAmountArray.sort((a, b) => a[0].localeCompare(b[0]));
+
+  // Format the sorted array as a string with line breaks
+  let formattedString = "";
+  entryTimeAmountArray.forEach(([time, amount]) => {
+    formattedString += `${time}: ${amount}\n`;
+  });
+
+  return formattedString;
+}
+
 // 축제 생성 버튼 클릭 시 요청 보내기
 document.getElementById("createFestivalForm").addEventListener("submit",
     function (event) {
@@ -29,7 +144,8 @@ document.getElementById("createFestivalForm").addEventListener("submit",
       .then(data => {
         // 성공: 알림창 표시하고 폼 필드 초기화
         alert("축제가 성공적으로 생성되었습니다!");
-        document.getElementById("createFestivalForm").reset();
+        // Fetch data again and update dataSection
+        fetchDataAndUpdateDataSection();
       })
       .catch(error => {
         // 오류: 알림창 표시
@@ -68,7 +184,8 @@ document.getElementById("createPerformanceForm").addEventListener("submit",
       .then(data => {
         // 성공: 알림창 표시하고 폼 필드 초기화
         alert("공연이 성공적으로 생성되었습니다!");
-        document.getElementById("createPerformanceForm").reset();
+        // Fetch data again and update dataSection
+        fetchDataAndUpdateDataSection();
       })
       .catch(error => {
         // 오류: 알림창 표시
@@ -107,7 +224,8 @@ document.getElementById("createTicketForm").addEventListener("submit",
       .then(data => {
         // 성공: 알림창 표시하고 폼 필드 초기화
         alert("티켓이 성공적으로 생성되었습니다!");
-        document.getElementById("createTicketForm").reset();
+        // Fetch data again and update dataSection
+        fetchDataAndUpdateDataSection();
       })
       .catch(error => {
         // 오류: 알림창 표시

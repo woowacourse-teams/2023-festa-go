@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>어드민 페이지</title>
@@ -9,7 +9,7 @@
 <div class="container">
   <div class="form-section">
     <h2>축제 생성 요청</h2>
-    <form id="createFestivalForm" method="post">
+    <form id="createFestivalForm" method="post" th:action="@{/admin/festivals}">
       <label for="name">이름:</label>
       <input id="name" name="name" required type="text"><br>
 
@@ -28,7 +28,7 @@
 
   <div class="form-section">
     <h2>공연 생성 요청</h2>
-    <form id="createPerformanceForm" method="post">
+    <form id="createPerformanceForm" method="post" th:action="@{/admin/stages}">
       <label for="startTime">시작 시간:</label>
       <input id="startTime" name="startTime" required type="datetime-local"><br>
 
@@ -47,7 +47,7 @@
 
   <div class="form-section">
     <h2>티켓 생성 요청</h2>
-    <form id="createTicketForm" method="post">
+    <form id="createTicketForm" method="post" th:action="@{/admin/tickets}">
       <label for="stageId">공연장 ID:</label>
       <input id="stageId" name="stageId" required type="text"><br>
 
@@ -67,8 +67,8 @@
     </form>
   </div>
 </div>
+<div id="dataSection"></div>
 
-<script src="admin.js"></script>
+<script th:src="@{/admin.js}" type="text/javascript"></script>
 </body>
 </html>
-
