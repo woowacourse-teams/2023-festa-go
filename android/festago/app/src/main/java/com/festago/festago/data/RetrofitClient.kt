@@ -1,6 +1,7 @@
 package com.festago.festago.data
 
 import com.festago.festago.BuildConfig
+import com.festago.festago.data.service.ReservationRetrofitService
 import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.service.TicketRetrofitService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -13,6 +14,10 @@ class RetrofitClient private constructor(
 ) {
     val ticketRetrofitService: TicketRetrofitService by lazy {
         normalRetrofit.create(TicketRetrofitService::class.java)
+    }
+
+    val reservationRetrofitService: ReservationRetrofitService by lazy {
+        normalRetrofit.create(ReservationRetrofitService::class.java)
     }
 
     val festivalRetrofitService: FestivalRetrofitService by lazy {

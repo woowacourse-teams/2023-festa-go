@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.festago.festago.databinding.FragmentTicketReserveBottomSheetBinding
 import com.festago.festago.presentation.model.ReservationStageUiModel
+import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
+import com.festago.festago.presentation.util.getParcelableArrayCompat
 import com.festago.festago.presentation.util.getParcelableCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -18,7 +20,9 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var vm: TicketReserveViewModel
 
-    private val ticketTypeAdapter = TicketReserveBottomSheetAdapter()
+    private val ticketTypeAdapter = TicketReserveBottomSheetAdapter { ticketId ->
+        binding.selectedTicketTypeId = ticketId
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +43,13 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        arguments?.getParcelableCompat<ReservationStageUiModel>(KET_ITEM)?.let {
-            binding.stage = it
-            ticketTypeAdapter.submitList(it.reservationTickets.map(::TicketReserveBottomItem))
+        arguments?.apply {
+            getParcelableCompat<ReservationStageUiModel>(KEY_STAGE)?.let { stage ->
+                binding.stage = stage
+            }
+            getParcelableArrayCompat<ReservationTicketUiModel>(KEY_ITEM)?.let {
+                ticketTypeAdapter.submitList(it.map(::TicketReserveBottomItem))
+            }
         }
 
         initView()
@@ -57,11 +65,16 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        private const val KET_ITEM = "KET_ITEM"
+        private const val KEY_STAGE = "KEY_STAGE"
+        private const val KEY_ITEM = "KEY_ITEM"
 
-        fun newInstance(item: ReservationStageUiModel) = TicketReserveBottomSheetFragment().apply {
+        fun newInstance(
+            stage: ReservationStageUiModel,
+            items: List<ReservationTicketUiModel>,
+        ) = TicketReserveBottomSheetFragment().apply {
             arguments = Bundle().apply {
-                putParcelable(KET_ITEM, item)
+                putParcelable(KEY_STAGE, stage)
+                putParcelableArray(KEY_ITEM, items.toTypedArray())
             }
         }
     }

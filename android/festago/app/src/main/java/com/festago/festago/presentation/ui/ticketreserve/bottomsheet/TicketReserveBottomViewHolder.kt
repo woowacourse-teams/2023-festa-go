@@ -11,7 +11,7 @@ class TicketReserveBottomViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.clLayout.setOnClickListener { callback.invoke(bindingAdapterPosition) }
+        binding.clLayout.setOnClickListener { callback(bindingAdapterPosition) }
     }
 
     fun bind(item: TicketReserveBottomItem) {
