@@ -19,3 +19,8 @@ fun ImageView.setImage(imageUrl: String) {
         .fallback(R.drawable.ic_image_placeholder)
         .into(this)
 }
+
+@BindingAdapter("background")
+fun View.setBackground(resourceId: Int) {
+    setBackgroundResource(resourceId)
+}

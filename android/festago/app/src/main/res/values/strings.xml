@@ -21,6 +21,7 @@
     <string name="ticket_entry_tv_before_entry">입장 전</string>
     <string name="ticket_entry_tv_after_entry">입장 완료</string>
     <string name="ticket_entry_tv_away">외출중</string>
+    <string name="ticket_entry_tv_error">티켓 조회 과정에 문제가 발생했습니다.</string>
 
     <!-- Strings related to home -->
     <string name="home_bottom_navigation_festival">축제 목록</string>

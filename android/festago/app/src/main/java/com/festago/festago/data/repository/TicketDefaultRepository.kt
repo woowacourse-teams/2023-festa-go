@@ -9,8 +9,14 @@ class TicketDefaultRepository(
     private val ticketRetrofitService: TicketRetrofitService,
 ) : TicketRepository {
 
-    override suspend fun loadTicket(ticketId: Long): Ticket {
-        return ticketRetrofitService.getTicket(ticketId).body()!!.toDomain()
+    override suspend fun loadTicket(ticketId: Long): Result<Ticket> {
+        val response = ticketRetrofitService.getTicket(ticketId)
+        if (response.isSuccessful && response.body() != null) {
+            return Result.success(response.body()!!.toDomain())
+        }
+        return Result.failure(
+            Throwable("code: ${response.code()}, body: ${response.errorBody()?.toString()}}"),
+        )
     }
 
     override suspend fun loadTickets(): Result<List<Ticket>> {
@@ -23,7 +29,13 @@ class TicketDefaultRepository(
         )
     }
 
-    override suspend fun loadTicketCode(ticketId: Long): TicketCode {
-        return ticketRetrofitService.getTicketCode(ticketId).body()!!.toDomain()
+    override suspend fun loadTicketCode(ticketId: Long): Result<TicketCode> {
+        val response = ticketRetrofitService.getTicketCode(ticketId)
+        if (response.isSuccessful && response.body() != null) {
+            return Result.success(response.body()!!.toDomain())
+        }
+        return Result.failure(
+            Throwable("code: ${response.code()}, body: ${response.errorBody()?.toString()}}"),
+        )
     }
 }
