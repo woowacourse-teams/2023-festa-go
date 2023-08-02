@@ -32,7 +32,7 @@ class TicketListViewModel(
                     _uiState.value = TicketListUiState.Success(tickets.toPresentation())
                 }.onFailure {
                     _uiState.value = TicketListUiState.Error
-                    analyticsHelper.logNetworkFailure("FAILURE_LOAD_TICKETS", it.message.toString())
+                    analyticsHelper.logNetworkFailure(KEY_LOAD_TICKETS_LOG, it.message.toString())
                 }
         }
     }
@@ -53,5 +53,9 @@ class TicketListViewModel(
             }
             throw IllegalArgumentException("Unknown ViewModel Class")
         }
+    }
+
+    companion object {
+        private const val KEY_LOAD_TICKETS_LOG = "load_tickets"
     }
 }
