@@ -8,8 +8,10 @@ import com.festago.domain.Ticket;
 import com.festago.domain.TicketAmount;
 import com.festago.domain.TicketEntryTime;
 import com.festago.domain.TicketRepository;
-import com.festago.domain.TicketType;
-import java.time.LocalDate;
+import com.festago.dto.AdminFestivalResponse;
+import com.festago.dto.AdminResponse;
+import com.festago.dto.AdminStageResponse;
+import com.festago.dto.AdminTicketResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -94,40 +96,5 @@ public class AdminService {
                 festival.getEndDate(),
                 festival.getThumbnail()))
             .toList();
-    }
-
-    public record AdminResponse(
-        List<AdminTicketResponse> adminTickets,
-        List<AdminStageResponse> adminStageResponse,
-        List<AdminFestivalResponse> adminFestivalResponse) {
-
-    }
-
-    public record AdminFestivalResponse(
-        Long id,
-        String name,
-        LocalDate startDate,
-        LocalDate endDate,
-        String thumbnail) {
-
-    }
-
-    public record AdminStageResponse(
-        Long id,
-        Long festivalId,
-        LocalDateTime startTime,
-        String lineUp,
-        List<Long> ticketId) {
-
-    }
-
-    public record AdminTicketResponse(
-        Long id,
-        Long stageId,
-        TicketType ticketType,
-        Integer totalAmount,
-        Integer reservedAmount,
-        Map<LocalDateTime, Integer> entryTimeAmount) {
-
     }
 }

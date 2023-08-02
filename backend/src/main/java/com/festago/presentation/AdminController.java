@@ -1,10 +1,10 @@
 package com.festago.presentation;
 
 import com.festago.application.AdminService;
-import com.festago.application.AdminService.AdminResponse;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
+import com.festago.dto.AdminResponse;
 import com.festago.dto.FestivalCreateRequest;
 import com.festago.dto.FestivalResponse;
 import com.festago.dto.StageCreateRequest;
