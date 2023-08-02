@@ -1,16 +1,16 @@
 <included>
-  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE-INFO">
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE-ERROR">
     <encoder>
       <pattern>${LOG_PATTERN}</pattern>
     </encoder>
-    <file>./log/info/info-${BY_DATE}.log</file>
+    <file>./log/common/error/error-${BY_DATE}.log</file>
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
-      <level>INFO</level>
+      <level>ERROR</level>
       <onMatch>ACCEPT</onMatch>
       <onMismatch>DENY</onMismatch>
     </filter>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>./backup/info/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>./backup/common/error/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <maxFileSize>100MB</maxFileSize>
       <maxHistory>30</maxHistory>
       <totalSizeCap>3GB</totalSizeCap>

@@ -22,7 +22,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String LOG_FORMAT = "\n[🚨ERROR]\n{}: {} ({} {})\n[CALLED BY] {} \n[REQUEST BODY] \n{}";
     private static final String ERROR_LOG_FORMAT = "\n[🚨ERROR]\n{} ({} {})\n[CALLED BY] {} \n[REQUEST BODY] \n{}";
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger errorLogger = LoggerFactory.getLogger("ErrorLogger");
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handle(BadRequestException e) {
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handle(NotFoundException e, HttpServletRequest request) throws IOException {
-        logger.info(LOG_FORMAT,
+        errorLogger.info(LOG_FORMAT,
             e.getErrorCode(),
             e.getMessage(),
             request.getMethod(),
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InternalServerException.class)
     public ResponseEntity<ErrorResponse> handle(InternalServerException e, HttpServletRequest request)
         throws IOException {
-        logger.warn(LOG_FORMAT,
+        errorLogger.warn(LOG_FORMAT,
             e.getErrorCode(),
             e.getMessage(),
             request.getMethod(),
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handle(Exception e, HttpServletRequest request) throws IOException {
-        logger.error(ERROR_LOG_FORMAT,
+        errorLogger.error(ERROR_LOG_FORMAT,
             e.getClass().getSimpleName(),
             request.getMethod(),
             request.getRequestURI(),
