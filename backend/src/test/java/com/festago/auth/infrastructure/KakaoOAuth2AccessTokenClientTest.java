@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
@@ -24,7 +25,7 @@ import org.springframework.test.web.client.response.MockRestResponseCreators;
 @RestClientTest(KakaoOAuth2AccessTokenClient.class)
 class KakaoOAuth2AccessTokenClientTest {
 
-    private static final String ACCESS_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
+    private static final String URL = "https://kauth.kakao.com/oauth/token";
 
     @Autowired
     KakaoOAuth2AccessTokenClient kakaoOAuth2AccessTokenClient;
@@ -36,10 +37,10 @@ class KakaoOAuth2AccessTokenClientTest {
     ObjectMapper objectMapper;
 
     @Test
-    void 전송한_코드가_잘못됐다면_예외() throws JsonProcessingException {
+    void 상태코드_400에서_KOE320_에러코드_이면_BadRequest_예외() throws JsonProcessingException {
         // given
         KakaoOAuth2ErrorResponse expected = new KakaoOAuth2ErrorResponse("error", "description", "KOE320");
-        mockServer.expect(requestTo(ACCESS_TOKEN_URL))
+        mockServer.expect(requestTo(URL))
             .andRespond(MockRestResponseCreators.withBadRequest()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(objectMapper.writeValueAsString(expected)));
@@ -51,10 +52,10 @@ class KakaoOAuth2AccessTokenClientTest {
     }
 
     @Test
-    void 예상치못한_에러인_경우_서버_예외() throws JsonProcessingException {
+    void 상태코드_400에서_KOE320_에러코드가_아니면_InternalServer_예외() throws JsonProcessingException {
         // given
         KakaoOAuth2ErrorResponse expected = new KakaoOAuth2ErrorResponse("error", "description", "any");
-        mockServer.expect(requestTo(ACCESS_TOKEN_URL))
+        mockServer.expect(requestTo(URL))
             .andRespond(MockRestResponseCreators.withBadRequest()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(objectMapper.writeValueAsString(expected)));
@@ -62,7 +63,33 @@ class KakaoOAuth2AccessTokenClientTest {
         // when & then
         assertThatThrownBy(() -> kakaoOAuth2AccessTokenClient.getAccessToken("code"))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("서버 내부에 문제가 발생했습니다.");
+            .hasMessage("OAuth2 제공자 서버에 잘못된 요청이 발생했습니다.");
+    }
+
+    @Test
+    void 상태코드가_401이면_InternalServer_예외() {
+        // given
+        mockServer.expect(requestTo(URL))
+            .andRespond(MockRestResponseCreators.withUnauthorizedRequest()
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // when & then
+        assertThatThrownBy(() -> kakaoOAuth2AccessTokenClient.getAccessToken("code"))
+            .isInstanceOf(InternalServerException.class)
+            .hasMessage("OAuth2 제공자 서버에 잘못된 요청이 발생했습니다.");
+    }
+
+    @Test
+    void 상태코드가_500이면_InternalServer_예외() {
+        // given
+        mockServer.expect(requestTo(URL))
+            .andRespond(MockRestResponseCreators.withStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // when & then
+        assertThatThrownBy(() -> kakaoOAuth2AccessTokenClient.getAccessToken("code"))
+            .isInstanceOf(InternalServerException.class)
+            .hasMessage("OAuth2 제공자 서버에 문제가 발생했습니다.");
     }
 
     @Test
@@ -70,7 +97,7 @@ class KakaoOAuth2AccessTokenClientTest {
         // given
         KakaoAccessTokenResponse expected = new KakaoAccessTokenResponse("tokenType", "accessToken",
             100, "refreshToken", 50);
-        mockServer.expect(requestTo(ACCESS_TOKEN_URL))
+        mockServer.expect(requestTo(URL))
             .andRespond(MockRestResponseCreators.withSuccess()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(objectMapper.writeValueAsString(expected)));
