@@ -86,7 +86,8 @@ class TicketReserveActivity : AppCompatActivity() {
 
     private fun initView() {
         binding.rvTicketReserve.adapter = concatAdapter
-        vm.loadReservation()
+
+        vm.loadReservation(intent.getLongExtra(KEY_FESTIVAL_ID, -1))
     }
 
     private fun updateUi(uiState: TicketReserveUiState) = when (uiState) {
