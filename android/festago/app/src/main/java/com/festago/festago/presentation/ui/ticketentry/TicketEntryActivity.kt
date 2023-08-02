@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import com.festago.festago.analytics.FirebaseAnalyticsHelper
 import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.TicketDefaultRepository
 import com.festago.festago.databinding.ActivityTicketEntryBinding
@@ -23,6 +24,7 @@ class TicketEntryActivity : AppCompatActivity() {
             TicketDefaultRepository(
                 ticketRetrofitService = RetrofitClient.getInstance().ticketRetrofitService,
             ),
+            FirebaseAnalyticsHelper.getInstance(),
         )
     }
 
