@@ -14,9 +14,13 @@ class ReservationCompleteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initBinding()
+        initView()
+    }
+
+    private fun initBinding() {
         binding = ActivityReservationCompleteBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initView()
     }
 
     private fun initView() {
