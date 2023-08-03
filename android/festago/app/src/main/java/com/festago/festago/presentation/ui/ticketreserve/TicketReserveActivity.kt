@@ -96,12 +96,19 @@ class TicketReserveActivity : AppCompatActivity() {
         binding.rvTicketReserve.adapter = concatAdapter
 
         vm.loadReservation(intent.getLongExtra(KEY_FESTIVAL_ID, -1))
+
+        binding.srlTicketReserve.setOnRefreshListener {
+            vm.loadReservation(
+                festivalId = intent.getLongExtra(KEY_FESTIVAL_ID, -1),
+                refresh = true,
+            )
+        }
     }
 
     private fun updateUi(uiState: TicketReserveUiState) = when (uiState) {
         is TicketReserveUiState.Loading,
         is TicketReserveUiState.Error,
-        -> Unit
+        -> binding.srlTicketReserve.isRefreshing = false
 
         is TicketReserveUiState.Success -> updateSuccess(uiState.reservation)
     }
@@ -109,6 +116,7 @@ class TicketReserveActivity : AppCompatActivity() {
     private fun updateSuccess(reservations: ReservationUiModel) {
         headerAdapter.submitList(listOf(reservations))
         contentsAdapter.submitList(reservations.reservationStages)
+        binding.srlTicketReserve.isRefreshing = false
     }
 
     companion object {

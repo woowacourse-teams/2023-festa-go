@@ -17,7 +17,7 @@ class TicketReserveViewModel(
     private val reservationRepository: ReservationRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
-    private val _uiState = MutableLiveData<TicketReserveUiState>()
+    private val _uiState = MutableLiveData<TicketReserveUiState>(TicketReserveUiState.Loading)
     val uiState: LiveData<TicketReserveUiState> = _uiState
 
     private val _event = MutableSingleLiveData<TicketReserveEvent>()
@@ -26,7 +26,6 @@ class TicketReserveViewModel(
     fun loadReservation(festivalId: Long = 0, refresh: Boolean = false) {
         if (!refresh && uiState.value is TicketReserveUiState.Success) return
         viewModelScope.launch {
-            _uiState.value = TicketReserveUiState.Loading
             reservationRepository.loadReservation(festivalId)
                 .onSuccess {
                     _uiState.setValue(TicketReserveUiState.Success(it.toPresentation()))
