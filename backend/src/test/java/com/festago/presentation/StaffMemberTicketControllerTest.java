@@ -23,10 +23,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-@WebMvcTest(StaffTicketController.class)
+@WebMvcTest(StaffMemberTicketController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class StaffTicketControllerTest {
+class StaffMemberTicketControllerTest {
 
     @Autowired
     MockMvc mockMvc;
