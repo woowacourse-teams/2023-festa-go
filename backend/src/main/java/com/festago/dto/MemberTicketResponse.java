@@ -1,5 +1,6 @@
 package com.festago.dto;
 
+import com.festago.domain.EntryState;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.Stage;
 import java.time.LocalDateTime;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 public record MemberTicketResponse(Long id,
                                    Integer number,
                                    LocalDateTime entryTime,
+                                   EntryState entryState,
                                    LocalDateTime reservedAt,
                                    StageResponse stage,
                                    MemberTicketFestivalResponse festival) {
@@ -18,6 +20,7 @@ public record MemberTicketResponse(Long id,
             memberTicket.getId(),
             memberTicket.getNumber(),
             memberTicket.getEntryTime(),
+            memberTicket.getEntryState(),
             LocalDateTime.now(), // TODO
             StageResponse.from(stage),
             MemberTicketFestivalResponse.from(stage.getFestival()));

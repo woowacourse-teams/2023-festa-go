@@ -8,8 +8,6 @@ import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
-import com.festago.dto.CurrentMemberTicketResponse;
-import com.festago.dto.CurrentMemberTicketsResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.exception.BadRequestException;
@@ -89,7 +87,7 @@ class MemberTicketServiceTest {
                 .willReturn(List.of(memberTicket));
 
             // when
-            CurrentMemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+            MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
 
             // then
             assertThat(response.memberTickets()).isEmpty();
@@ -107,7 +105,7 @@ class MemberTicketServiceTest {
                 .willReturn(List.of(memberTicket));
 
             // when
-            CurrentMemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+            MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
 
             // then
             assertThat(response.memberTickets()).isEmpty();
@@ -130,11 +128,11 @@ class MemberTicketServiceTest {
                 .willReturn(List.of(pendingMemberTicket, activateMemberTicket));
 
             // when
-            CurrentMemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+            MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
 
             // then
             List<Long> memberTicketIds = response.memberTickets().stream()
-                .map(CurrentMemberTicketResponse::id)
+                .map(MemberTicketResponse::id)
                 .toList();
             assertThat(memberTicketIds).containsExactly(2L, 1L);
         }
@@ -165,11 +163,11 @@ class MemberTicketServiceTest {
                     List.of(pendingMemberTicket1, pendingMemberTicket2, activateMemberTicket1, activateMemberTicket2));
 
             // when
-            CurrentMemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+            MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
 
             // then
             List<Long> memberTicketIds = response.memberTickets().stream()
-                .map(CurrentMemberTicketResponse::id)
+                .map(MemberTicketResponse::id)
                 .toList();
             assertThat(memberTicketIds).containsExactly(4L, 3L, 1L, 2L);
         }
