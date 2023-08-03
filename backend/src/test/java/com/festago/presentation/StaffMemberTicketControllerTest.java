@@ -23,10 +23,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-@WebMvcTest(StaffTicketController.class)
+@WebMvcTest(StaffMemberTicketController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class StaffTicketControllerTest {
+class StaffMemberTicketControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -46,7 +46,7 @@ class StaffTicketControllerTest {
             .willReturn(expected);
 
         // when & then
-        String content = mockMvc.perform(post("/staff/tickets/validation")
+        String content = mockMvc.perform(post("/staff/member-tickets/validation")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())

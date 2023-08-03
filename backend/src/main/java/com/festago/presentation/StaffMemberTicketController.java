@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/staff/tickets")
-public class StaffTicketController {
+@RequestMapping("/staff/member-tickets")
+public class StaffMemberTicketController {
 
     private final EntryService entryService;
 
-    public StaffTicketController(EntryService entryService) {
+    public StaffMemberTicketController(EntryService entryService) {
         this.entryService = entryService;
     }
 
