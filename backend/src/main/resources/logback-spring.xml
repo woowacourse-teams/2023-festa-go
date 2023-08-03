@@ -3,7 +3,7 @@
 <configuration>
   <property name="LOG_PATTERN"
     value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
-  <springProfile name="!prod">//TODO : 로컬 환경 console log 적용하기
+  <springProfile name="!prod"> <!-- TODO : 로컬 환경 console log 적용하기 -->
     <include resource="./logs/common/file-info-appender.xml"/>
     <include resource="./logs/common/file-warn-appender.xml"/>
     <include resource="./logs/common/file-error-appender.xml"/>
