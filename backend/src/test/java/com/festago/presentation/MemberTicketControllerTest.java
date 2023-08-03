@@ -3,6 +3,7 @@ package com.festago.presentation;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -13,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
+import com.festago.application.TicketService;
 import com.festago.domain.EntryState;
 import com.festago.dto.CurrentFestivalResponse;
 import com.festago.dto.CurrentMemberTicketResponse;
@@ -23,6 +25,8 @@ import com.festago.dto.MemberTicketFestivalResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.dto.StageResponse;
+import com.festago.dto.TicketingRequest;
+import com.festago.dto.TicketingResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.stream.LongStream;
@@ -48,6 +52,9 @@ class MemberTicketControllerTest {
 
     @MockBean
     MemberTicketService memberTicketService;
+
+    @MockBean
+    TicketService ticketService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -152,6 +159,33 @@ class MemberTicketControllerTest {
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);
         CurrentMemberTicketsResponse actual = objectMapper.readValue(content, CurrentMemberTicketsResponse.class);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void 티켓팅을_통해_멤버의_티켓을_생성한다() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long memberTicketId = 1L;
+        Integer ticketNumber = 125;
+        Long ticketId = 1L;
+        LocalDateTime ticketEntryTime = LocalDateTime.now();
+        TicketingResponse expected = new TicketingResponse(memberTicketId, ticketNumber, ticketEntryTime);
+        TicketingRequest request = new TicketingRequest(ticketId);
+
+        given(ticketService.ticketing(anyLong(), any()))
+            .willReturn(expected);
+
+        // when & then
+        String content = mockMvc.perform(post("/member-tickets")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+        TicketingResponse actual = objectMapper.readValue(content, TicketingResponse.class);
         assertThat(actual).isEqualTo(expected);
     }
 }
