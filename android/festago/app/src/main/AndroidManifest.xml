@@ -34,8 +34,5 @@
         <activity
             android:name=".presentation.ui.ticketentry.TicketEntryActivity"
             android:exported="false" />
-        <activity
-            android:name=".presentation.ui.MainActivity"
-            android:exported="false" />
     </application>
 </manifest>
