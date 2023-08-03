@@ -49,20 +49,26 @@
             app:layout_constraintTop_toBottomOf="@id/cgFilterOption"
             tools:visibility="gone" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvFestivalList"
-            visibility="@{uiState.shouldShowSuccess}"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clipToPadding="false"
-            android:padding="8dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srlFestivalList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cgFilterOption"
-            app:spanCount="2"
-            tools:listitem="@layout/item_festival_list" />
+            app:layout_constraintTop_toBottomOf="@id/cgFilterOption">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFestivalList"
+                visibility="@{uiState.shouldShowSuccess}"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:clipToPadding="false"
+                android:padding="8dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/item_festival_list" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
             android:id="@+id/tvErrorOrEmpty"

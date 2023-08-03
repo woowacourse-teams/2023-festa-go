@@ -18,7 +18,7 @@ class FestivalListViewModel(
     private val festivalRepository: FestivalRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
-    private val _uiState = MutableLiveData<FestivalListUiState>()
+    private val _uiState = MutableLiveData<FestivalListUiState>(FestivalListUiState.Loading)
     val uiState: LiveData<FestivalListUiState> = _uiState
 
     private val _event = MutableSingleLiveData<FestivalListEvent>()
@@ -26,7 +26,6 @@ class FestivalListViewModel(
 
     fun loadFestivals() {
         viewModelScope.launch {
-            _uiState.value = FestivalListUiState.Loading
             festivalRepository.loadFestivals()
                 .onSuccess {
                     _uiState.value = FestivalListUiState.Success(it.toPresentation())
