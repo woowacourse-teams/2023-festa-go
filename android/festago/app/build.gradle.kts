@@ -119,6 +119,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
+
+    // swiperefreshlayout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }
 
 fun getSecretKey(propertyKey: String): String {
