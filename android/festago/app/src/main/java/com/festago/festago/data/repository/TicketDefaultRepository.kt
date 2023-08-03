@@ -10,32 +10,38 @@ class TicketDefaultRepository(
 ) : TicketRepository {
 
     override suspend fun loadTicket(ticketId: Long): Result<Ticket> {
-        val response = ticketRetrofitService.getTicket(ticketId)
-        if (response.isSuccessful && response.body() != null) {
-            return Result.success(response.body()!!.toDomain())
+        try {
+            val response = ticketRetrofitService.getTicket(ticketId)
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
+            }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
-        return Result.failure(
-            Throwable("code: ${response.code()}, body: ${response.errorBody()?.toString()}}"),
-        )
     }
 
     override suspend fun loadTickets(): Result<List<Ticket>> {
-        val response = ticketRetrofitService.getTickets()
-        if (response.isSuccessful && response.body() != null) {
-            return Result.success(response.body()!!.toDomain())
+        try {
+            val response = ticketRetrofitService.getTickets()
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
+            }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
-        return Result.failure(
-            Throwable("code: ${response.code()}, body: ${response.errorBody()?.toString()}}"),
-        )
     }
 
     override suspend fun loadTicketCode(ticketId: Long): Result<TicketCode> {
-        val response = ticketRetrofitService.getTicketCode(ticketId)
-        if (response.isSuccessful && response.body() != null) {
-            return Result.success(response.body()!!.toDomain())
+        try {
+            val response = ticketRetrofitService.getTicketCode(ticketId)
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
+            }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
-        return Result.failure(
-            Throwable("code: ${response.code()}, body: ${response.errorBody()?.toString()}}"),
-        )
     }
 }
