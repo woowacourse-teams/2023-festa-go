@@ -1,10 +1,12 @@
 package com.festago.festago.presentation.ui.ticketreserve.bottomsheet
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import com.festago.festago.R
 import com.festago.festago.databinding.FragmentTicketReserveBottomSheetBinding
 import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.model.ReservationTicketUiModel
@@ -53,6 +55,11 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         initView()
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        setStyle(STYLE_NO_TITLE, R.style.AppBottomSheetDialogTheme)
+        return super.onCreateDialog(savedInstanceState)
     }
 
     private fun initView() {

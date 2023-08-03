@@ -141,7 +141,7 @@
             android:layout_marginTop="28dp"
             android:onClick="@{() -> vm.showTicketTypes(stage.id)}"
             android:text="@string/ticket_reserve_btn_reserve_ticket"
-            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvAuthGuideStudent" />
 

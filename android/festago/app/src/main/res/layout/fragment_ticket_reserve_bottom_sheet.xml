@@ -25,7 +25,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_ticket_reserve_bottom_sheet"
+        tools:background="@drawable/bg_ticket_reserve_bottom_sheet"
         tools:context=".presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment">
 
         <androidx.constraintlayout.widget.Guideline
