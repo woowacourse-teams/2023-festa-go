@@ -6,7 +6,6 @@ import static java.util.stream.Collectors.toList;
 
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
-import com.festago.dto.CurrentMemberTicketsResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.exception.BadRequestException;
@@ -47,9 +46,9 @@ public class MemberTicketService {
     }
 
     @Transactional(readOnly = true)
-    public CurrentMemberTicketsResponse findCurrent(Long memberId) {
+    public MemberTicketsResponse findCurrent(Long memberId) {
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
-        return CurrentMemberTicketsResponse.from(filterCurrentMemberTickets(memberTickets));
+        return MemberTicketsResponse.from(filterCurrentMemberTickets(memberTickets));
     }
 
     private List<MemberTicket> filterCurrentMemberTickets(List<MemberTicket> memberTickets) {
