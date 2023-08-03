@@ -48,5 +48,4 @@
     </root>
   </springProfile>
 
-  <timestamp datePattern="yyyy-MM-dd" key="BY_DATE"/>
 </configuration>

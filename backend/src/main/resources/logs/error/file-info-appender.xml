@@ -3,17 +3,16 @@
     <encoder>
       <pattern>${LOG_PATTERN}</pattern>
     </encoder>
-    <file>./log/error/info/info-${BY_DATE}.log</file>
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
       <level>INFO</level>
       <onMatch>ACCEPT</onMatch>
       <onMismatch>DENY</onMismatch>
     </filter>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>./backup/error/info/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>./log/error/info/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <maxFileSize>100MB</maxFileSize>
-      <maxHistory>30</maxHistory>
-      <totalSizeCap>3GB</totalSizeCap>
+      <maxHistory>100</maxHistory>
+      <totalSizeCap>4GB</totalSizeCap>
     </rollingPolicy>
   </appender>
 </included>
