@@ -12,6 +12,7 @@ import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.FestivalDefaultRepository
 import com.festago.festago.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListViewModel.FestivalListViewModelFactory
+import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveActivity
 
 class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
@@ -72,8 +73,15 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
     private fun handleEvent(event: FestivalListEvent) {
         when (event) {
             is FestivalListEvent.ShowTicketReserve -> {
+                removeTicketListFragment()
                 startActivity(TicketReserveActivity.getIntent(requireContext(), event.festivalId))
             }
+        }
+    }
+
+    private fun removeTicketListFragment() {
+        parentFragmentManager.findFragmentByTag(TicketListFragment::class.java.name)?.let {
+            parentFragmentManager.beginTransaction().remove(it).commit()
         }
     }
 
