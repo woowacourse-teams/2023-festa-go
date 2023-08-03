@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/staff/tickets")
+@RequestMapping("/staff/member-tickets")
 public class StaffTicketController {
 
     private final EntryService entryService;

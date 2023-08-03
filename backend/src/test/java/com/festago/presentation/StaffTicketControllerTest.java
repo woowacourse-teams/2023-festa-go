@@ -46,7 +46,7 @@ class StaffTicketControllerTest {
             .willReturn(expected);
 
         // when & then
-        String content = mockMvc.perform(post("/staff/tickets/validation")
+        String content = mockMvc.perform(post("/staff/member-tickets/validation")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
