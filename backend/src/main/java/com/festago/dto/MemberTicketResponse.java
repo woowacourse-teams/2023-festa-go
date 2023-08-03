@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public record MemberTicketResponse(Long id,
                                    Integer number,
                                    LocalDateTime entryTime,
-                                   EntryState entryState,
+                                   EntryState state,
                                    LocalDateTime reservedAt,
                                    StageResponse stage,
                                    MemberTicketFestivalResponse festival) {
