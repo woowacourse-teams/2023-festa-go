@@ -7,6 +7,8 @@ import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveBinding
 import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class TicketReserveViewHolder(
     private val binding: ItemTicketReserveBinding,
@@ -18,6 +20,18 @@ class TicketReserveViewHolder(
 
     fun bind(item: ReservationStageUiModel) {
         binding.stage = item
+
+        if (LocalDateTime.now().isAfter(item.ticketOpenTime)) {
+            binding.btnReserveTicket.isEnabled = true
+            binding.btnReserveTicket.text =
+                binding.root.context.getString(R.string.ticket_reserve_tv_btn_reserve_ticket)
+        } else {
+            binding.btnReserveTicket.isEnabled = false
+            val pattern = DateTimeFormatter.ofPattern(
+                binding.root.context.getString(R.string.ticket_reserve_tv_btn_reserve_ticket_not_open),
+            )
+            binding.btnReserveTicket.text = item.ticketOpenTime.format(pattern)
+        }
 
         binding.tvTicketCount.text =
             item.reservationTickets.joinToString(binding.root.context.getString(R.string.ticket_reserve_tv_ticket_count_separator)) {
