@@ -6,9 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface StageRepository extends JpaRepository<Stage, Long> {
-
-    List<Stage> findAllByFestival(Festival festival);
-
+    
     @Query("""
         SELECT s FROM Stage s
         JOIN FETCH s.tickets t
