@@ -1,8 +1,10 @@
 package com.festago.presentation;
 
+import com.festago.application.AdminService;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
+import com.festago.dto.AdminResponse;
 import com.festago.dto.FestivalCreateRequest;
 import com.festago.dto.FestivalResponse;
 import com.festago.dto.StageCreateRequest;
@@ -24,11 +26,14 @@ public class AdminController {
     private final FestivalService festivalService;
     private final StageService stageService;
     private final TicketService ticketService;
+    private final AdminService adminService;
 
-    public AdminController(FestivalService festivalService, StageService stageService, TicketService ticketService) {
+    public AdminController(FestivalService festivalService, StageService stageService, TicketService ticketService,
+                           AdminService adminService) {
         this.festivalService = festivalService;
         this.stageService = stageService;
         this.ticketService = ticketService;
+        this.adminService = adminService;
     }
 
     @PostMapping("/festivals")
@@ -55,5 +60,12 @@ public class AdminController {
     @GetMapping
     public ModelAndView adminPage() {
         return new ModelAndView("admin");
+    }
+
+    @GetMapping("/data")
+    public ResponseEntity<AdminResponse> adminData() {
+        AdminResponse response = adminService.getAdminResponse();
+        return ResponseEntity.ok()
+            .body(response);
     }
 }
