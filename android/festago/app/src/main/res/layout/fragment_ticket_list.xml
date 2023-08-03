@@ -62,17 +62,24 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTicketList"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srlTicketList"
             visibility="@{uiState.shouldShowSuccessWithTickets}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTicketList"
-            tools:listitem="@layout/item_ticket_list" />
+            app:layout_constraintTop_toBottomOf="@id/tvTicketList">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTicketList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_ticket_list" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

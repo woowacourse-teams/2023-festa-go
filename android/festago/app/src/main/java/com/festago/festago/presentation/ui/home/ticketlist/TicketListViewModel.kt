@@ -18,7 +18,7 @@ class TicketListViewModel(
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData<TicketListUiState>()
+    private val _uiState = MutableLiveData<TicketListUiState>(TicketListUiState.Loading)
     val uiState: LiveData<TicketListUiState> = _uiState
 
     private val _event = MutableSingleLiveData<TicketListEvent>()
@@ -26,7 +26,6 @@ class TicketListViewModel(
 
     fun loadTickets() {
         viewModelScope.launch {
-            _uiState.value = TicketListUiState.Loading
             ticketRepository.loadTickets()
                 .onSuccess { tickets ->
                     _uiState.value = TicketListUiState.Success(tickets.toPresentation())
