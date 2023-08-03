@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface StageRepository extends JpaRepository<Stage, Long> {
-    
+
     @Query("""
         SELECT s FROM Stage s
-        JOIN FETCH s.tickets t
-        JOIN FETCH t.ticketAmount
+        LEFT JOIN FETCH s.tickets t
+        LEFT JOIN FETCH t.ticketAmount
         WHERE s.festival.id = :festivalId
         """)
     List<Stage> findAllDetailByFestivalId(@Param("festivalId") Long festivalId);
