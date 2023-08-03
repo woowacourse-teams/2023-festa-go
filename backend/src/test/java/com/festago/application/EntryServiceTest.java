@@ -3,16 +3,22 @@ package com.festago.application;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 
+import com.festago.domain.EntryCodeExtractor;
+import com.festago.domain.EntryCodePayload;
 import com.festago.domain.EntryCodeProvider;
+import com.festago.domain.EntryState;
 import com.festago.domain.Festival;
 import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
 import com.festago.dto.EntryCodeResponse;
+import com.festago.dto.TicketValidationRequest;
+import com.festago.dto.TicketValidationResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
 import com.festago.support.FestivalFixture;
@@ -37,6 +43,9 @@ class EntryServiceTest {
 
     @Mock
     EntryCodeProvider entryCodeProvider;
+
+    @Mock
+    EntryCodeExtractor entryCodeExtractor;
 
     @Mock
     MemberTicketRepository memberTicketRepository;
@@ -164,14 +173,51 @@ class EntryServiceTest {
         }
     }
 
-    //TODO
-    @Test
-    void QR_검증() {
-        // given
+    @Nested
+    class 티켓_검사 {
 
-        // when
+        @Test
+        void 예매한_티켓의_입장_상태와_요청의_입장_상태가_같으면_에매한_티켓의_입장_상태를_변경한다() {
+            // given
+            TicketValidationRequest request = new TicketValidationRequest("code");
+            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .id(1L)
+                .build();
+            given(entryCodeExtractor.extract(anyString()))
+                .willReturn(new EntryCodePayload(1L, EntryState.BEFORE_ENTRY));
+            given(memberTicketRepository.findById(anyLong()))
+                .willReturn(Optional.of(memberTicket));
 
-        // then
+            // when
+            TicketValidationResponse expect = entryService.validate(request);
 
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(memberTicket.getEntryState()).isEqualTo(EntryState.AFTER_ENTRY);
+                softly.assertThat(expect.updatedState()).isEqualTo(EntryState.AFTER_ENTRY);
+            });
+        }
+
+        @Test
+        void 예매한_티켓의_입장_상태와_요청의_입장_상태가_다르면_에매한_티켓의_입장_상태를_변경하지_않는다() {
+            // given
+            TicketValidationRequest request = new TicketValidationRequest("code");
+            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+                .id(1L)
+                .build();
+            given(entryCodeExtractor.extract(anyString()))
+                .willReturn(new EntryCodePayload(1L, EntryState.AFTER_ENTRY));
+            given(memberTicketRepository.findById(anyLong()))
+                .willReturn(Optional.of(memberTicket));
+
+            // when
+            TicketValidationResponse expect = entryService.validate(request);
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(memberTicket.getEntryState()).isEqualTo(EntryState.BEFORE_ENTRY);
+                softly.assertThat(expect.updatedState()).isEqualTo(EntryState.BEFORE_ENTRY);
+            });
+        }
     }
 }
