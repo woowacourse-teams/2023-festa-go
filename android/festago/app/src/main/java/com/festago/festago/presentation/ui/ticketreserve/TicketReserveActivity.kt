@@ -79,12 +79,10 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun handleReserveTicketSuccess(reservedTicket: ReservedTicket) {
-        startActivity(
-            ReservationCompleteActivity.getIntent(
-                this,
-                reservedTicket.toPresentation(),
-            ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP),
-        )
+        val intent = ReservationCompleteActivity.getIntent(this, reservedTicket.toPresentation())
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun handleReserveTicketFailed() {
