@@ -25,7 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String LOG_FORMAT = "\n[🚨ERROR]\n{}: {} ({} {})\n[CALLED BY] {} \n[REQUEST BODY] \n{}";
-    private static final String ERROR_LOG_FORMAT = "\n[🚨ERROR]\n{} ({} {})\n[CALLED BY] {} \n[REQUEST BODY] \n{}";
+    private static final String LOG_FORMAT_WITH_TRACE = "\n[🚨ERROR]\n{} ({} {})\n[CALLED BY] {} \n[REQUEST BODY] \n{}";
     private static final Logger errorLogger = LoggerFactory.getLogger("ErrorLogger");
 
     private static final Map<Level, LogFunction> logFunctions = Map.of(
@@ -49,14 +49,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InternalServerException.class)
     public ResponseEntity<ErrorResponse> handle(InternalServerException e, HttpServletRequest request)
         throws IOException {
-        log(Level.WARN, e, request);
+        logWithTrace(Level.WARN, e, request);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ErrorResponse.from(ErrorCode.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handle(Exception e, HttpServletRequest request) throws IOException {
-        log(Level.ERROR, e, request);
+        logWithTrace(Level.ERROR, e, request);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ErrorResponse.from(ErrorCode.INTERNAL_SERVER_ERROR));
     }
@@ -67,15 +67,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
         logFunctions.get(logLevel)
             .log(LOG_FORMAT, e.getErrorCode(), e.getMessage(), request.getMethod(), request.getRequestURI(),
-                e.getStackTrace()[0], getRequestPayload(request), e);
+                e.getStackTrace()[0], getRequestPayload(request));
     }
 
-    private void log(Level logLevel, Exception e, HttpServletRequest request) throws IOException {
+    private void logWithTrace(Level logLevel, FestaGoException e, HttpServletRequest request) throws IOException {
         if (!errorLogger.isEnabledForLevel(logLevel)) {
             return;
         }
         logFunctions.get(logLevel)
-            .log(ERROR_LOG_FORMAT, e.getClass().getSimpleName(), request.getMethod(), request.getRequestURI(),
+            .log(LOG_FORMAT, e.getErrorCode(), e.getMessage(), request.getMethod(), request.getRequestURI(),
+                e.getStackTrace()[0], getRequestPayload(request), e);
+    }
+
+    private void logWithTrace(Level logLevel, Exception e, HttpServletRequest request) throws IOException {
+        if (!errorLogger.isEnabledForLevel(logLevel)) {
+            return;
+        }
+        logFunctions.get(logLevel)
+            .log(LOG_FORMAT_WITH_TRACE, e.getClass().getSimpleName(), request.getMethod(), request.getRequestURI(),
                 e.getStackTrace()[0], getRequestPayload(request), e);
     }
 
