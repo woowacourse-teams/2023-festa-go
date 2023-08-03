@@ -7,7 +7,6 @@ import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveBinding
 import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class TicketReserveViewHolder(
@@ -21,7 +20,7 @@ class TicketReserveViewHolder(
     fun bind(item: ReservationStageUiModel) {
         binding.stage = item
 
-        if (LocalDateTime.now().isAfter(item.ticketOpenTime)) {
+        if (item.canReserve) {
             binding.btnReserveTicket.isEnabled = true
             binding.btnReserveTicket.text =
                 binding.root.context.getString(R.string.ticket_reserve_tv_btn_reserve_ticket)
