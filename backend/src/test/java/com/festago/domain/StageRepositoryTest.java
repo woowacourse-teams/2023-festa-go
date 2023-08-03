@@ -29,9 +29,6 @@ class StageRepositoryTest {
     TicketRepository ticketRepository;
 
     @Autowired
-    TicketAmountRepository ticketAmountRepository;
-
-    @Autowired
     EntityManager entityManager;
 
     @Test
