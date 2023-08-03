@@ -3,6 +3,7 @@ package com.festago.festago.presentation.ui.ticketentry
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -36,6 +37,17 @@ class TicketEntryActivity : AppCompatActivity() {
         initBinding()
         initObserve()
         initView(currentTicketId)
+        initBackPressed()
+    }
+
+    private fun initBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                setResult(RESULT_OK, intent)
+                finish()
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, callback)
     }
 
     private fun initBinding() {
@@ -89,6 +101,7 @@ class TicketEntryActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY_TICKET_ID = "KEY_TICKET_ID"
+        const val RESULT_OK = 1
 
         fun getIntent(context: Context, ticketId: Long): Intent {
             return Intent(context, TicketEntryActivity::class.java).apply {

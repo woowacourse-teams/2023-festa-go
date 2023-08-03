@@ -14,7 +14,7 @@ interface TicketRetrofitService {
         @Path("memberTicketId") ticketId: Long,
     ): Response<MemberTicketResponse>
 
-    @GET("/member-tickets")
+    @GET("/member-tickets/current")
     suspend fun getTickets(): Response<MemberTicketsResponse>
 
     @POST("/member-tickets/{memberTicketId}/qr")
