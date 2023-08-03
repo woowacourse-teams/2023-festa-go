@@ -32,8 +32,6 @@
     <string name="ticket_reserve_tv_date_range">%1s ~ %1s</string>
     <string name="ticket_reserve_tv_date_range_format">yyyy.MM.dd</string>
     <string name="ticket_reserve_tv_start_time">MM.dd (E) HH:mm</string>
-    <string name="ticket_reserve_tv_open_time_title">[예매 오픈 시간]</string>
-    <string name="ticket_reserve_tv_open_time">yyyy.MM.dd HH:mm</string>
     <string name="ticket_reserve_tv_line_up_title">[라인업]</string>
     <string name="ticket_reserve_tv_ticket_count_title">[예매 가능 티켓]</string>
     <string name="ticket_reserve_tv_ticket_count">%1$s(%2$s/%3$s)</string>
