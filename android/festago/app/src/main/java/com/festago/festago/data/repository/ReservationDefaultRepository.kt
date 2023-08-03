@@ -11,32 +11,39 @@ class ReservationDefaultRepository(
     private val reservationRetrofitService: ReservationRetrofitService,
 ) : ReservationRepository {
     override suspend fun loadReservation(festivalId: Long): Result<Reservation> {
-        return reservationRetrofitService.getFestival(festivalId).let {
-            if (it.isSuccessful && it.body() != null) {
-                Result.success(it.body()!!.toDomain())
-            } else {
-                Result.failure(Exception("Failed to load reservation"))
+        try {
+            val response = reservationRetrofitService.getFestival(festivalId)
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
             }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
     }
 
     override suspend fun loadTicketTypes(stageId: Int): Result<List<ReservationTicket>> {
-        return reservationRetrofitService.getTickets(stageId).let {
-            if (it.isSuccessful && it.body() != null) {
-                Result.success(it.body()!!.toDomain())
-            } else {
-                Result.failure(Exception("Failed to load ticket types"))
+        try {
+            val response = reservationRetrofitService.getTickets(stageId)
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
             }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
     }
 
     override suspend fun reserveTicket(ticketId: Int): Result<ReservedTicket> {
-        return reservationRetrofitService.postReserveTicket(ReservedTicketRequest(ticketId)).let {
-            if (it.isSuccessful && it.body() != null) {
-                Result.success(it.body()!!.toDomain())
-            } else {
-                Result.failure(Exception("Failed to reserve ticket"))
+        try {
+            val response =
+                reservationRetrofitService.postReserveTicket(ReservedTicketRequest(ticketId))
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
             }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
     }
 }
