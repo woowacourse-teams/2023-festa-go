@@ -9,7 +9,8 @@
       <onMismatch>DENY</onMismatch>
     </filter>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>./log/error/error/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>${MOVE_TO_HOME_DIRECTORY}/log/error/error/error-%d{yyyy-MM-dd}.%i.log
+      </fileNamePattern>
       <maxFileSize>100MB</maxFileSize>
       <maxHistory>100</maxHistory>
       <totalSizeCap>4GB</totalSizeCap>

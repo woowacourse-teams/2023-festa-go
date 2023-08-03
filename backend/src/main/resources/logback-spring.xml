@@ -3,20 +3,22 @@
 <configuration>
   <property name="LOG_PATTERN"
     value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
-  <springProfile name="!prod">
-    <include resource="./console-appender.xml"/>
+  <property name="MOVE_TO_HOME_DIRECTORY" value="../../../.."/>
+
+  <springProfile name="local">
+    <include resource="console-appender.xml"/>
     <root level="INFO">
       <appender-ref ref="CONSOLE"/>
     </root>
   </springProfile>
 
   <springProfile name="dev">
-    <include resource="./logs/common/file-info-appender.xml"/>
-    <include resource="./logs/common/file-warn-appender.xml"/>
-    <include resource="./logs/common/file-error-appender.xml"/>
-    <include resource="./logs/error/file-info-appender.xml"/>
-    <include resource="./logs/error/file-warn-appender.xml"/>
-    <include resource="./logs/error/file-error-appender.xml"/>
+    <include resource="logs/common/file-info-appender.xml"/>
+    <include resource="logs/common/file-warn-appender.xml"/>
+    <include resource="logs/common/file-error-appender.xml"/>
+    <include resource="logs/error/file-info-appender.xml"/>
+    <include resource="logs/error/file-warn-appender.xml"/>
+    <include resource="logs/error/file-error-appender.xml"/>
 
     <logger additivity="false" level="INFO" name="ErrorLogger">
       <appender-ref ref="ERROR_ERROR"/>
@@ -32,12 +34,12 @@
   </springProfile>
 
   <springProfile name="prod">
-    <include resource="./logs/common/file-info-appender.xml"/>
-    <include resource="./logs/common/file-warn-appender.xml"/>
-    <include resource="./logs/common/file-error-appender.xml"/>
-    <include resource="./logs/error/file-info-appender.xml"/>
-    <include resource="./logs/error/file-warn-appender.xml"/>
-    <include resource="./logs/error/file-error-appender.xml"/>
+    <include resource="logs/common/file-info-appender.xml"/>
+    <include resource="logs/common/file-warn-appender.xml"/>
+    <include resource="logs/common/file-error-appender.xml"/>
+    <include resource="logs/error/file-info-appender.xml"/>
+    <include resource="logs/error/file-warn-appender.xml"/>
+    <include resource="logs/error/file-error-appender.xml"/>
 
     <logger additivity="false" level="INFO" name="ErrorLogger">
       <appender-ref ref="ERROR_ERROR"/>
