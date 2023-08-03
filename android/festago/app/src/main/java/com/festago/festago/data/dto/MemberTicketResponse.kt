@@ -20,9 +20,9 @@ data class MemberTicketResponse(
         id = id,
         number = number,
         entryTime = LocalDateTime.parse(entryTime),
-        stage = stage.toDomain(),
-        reserveAt = LocalDateTime.parse(reservedAt),
         condition = stateToDomain(condition),
+        reserveAt = LocalDateTime.parse(reservedAt),
+        stage = stage.toDomain(),
         festivalTicket = festival.toDomain(),
     )
 
