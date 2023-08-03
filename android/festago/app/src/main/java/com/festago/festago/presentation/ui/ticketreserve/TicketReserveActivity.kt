@@ -108,7 +108,7 @@ class TicketReserveActivity : AppCompatActivity() {
     private fun updateUi(uiState: TicketReserveUiState) = when (uiState) {
         is TicketReserveUiState.Loading,
         is TicketReserveUiState.Error,
-        -> Unit
+        -> binding.srlTicketReserve.isRefreshing = false
 
         is TicketReserveUiState.Success -> updateSuccess(uiState.reservation)
     }
