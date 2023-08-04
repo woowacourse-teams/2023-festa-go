@@ -11,18 +11,44 @@ import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 
 class HomeActivity : AppCompatActivity() {
 
+    private var _binding: ActivityHomeBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityHomeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
+        initBinding()
+        initView()
+    }
+
+    private fun initBinding() {
+        _binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    private fun initView() {
         binding.bnvHome.setOnItemSelectedListener {
             when (getItemType(it.itemId)) {
-                HomeItemType.FESTIVAL_LIST -> changeFragment<FestivalListFragment>()
-                HomeItemType.TICKET_LIST -> changeFragment<TicketListFragment>()
-                HomeItemType.MY_PAGE -> changeFragment<MyPageFragment>()
+                HomeItemType.FESTIVAL_LIST -> {
+                    changeFragment<FestivalListFragment>()
+                    binding.fabTicket.isSelected = false
+                }
+
+                HomeItemType.TICKET_LIST -> {
+                    changeFragment<TicketListFragment>()
+                    binding.fabTicket.isSelected = true
+                }
+
+                HomeItemType.MY_PAGE -> {
+                    changeFragment<MyPageFragment>()
+                    binding.fabTicket.isSelected = false
+                }
             }
             true
+        }
+
+        binding.fabTicket.setOnClickListener {
+            binding.bnvHome.selectedItemId = R.id.item_ticket
         }
 
         changeFragment<FestivalListFragment>()
