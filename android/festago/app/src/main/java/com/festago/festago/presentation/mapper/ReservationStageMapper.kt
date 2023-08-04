@@ -6,16 +6,14 @@ import java.time.LocalDateTime
 
 fun List<ReservationStage>.toPresentation() = map { it.toPresentation() }
 
-fun ReservationStage.toPresentation(): ReservationStageUiModel {
-    return ReservationStageUiModel(
-        id = id,
-        lineUp = lineUp,
-        reservationTickets = reservationTickets.map { it.toPresentation() },
-        startTime = startTime,
-        ticketOpenTime = ticketOpenTime,
-        canReserve = LocalDateTime.now().isAfter(ticketOpenTime),
-    )
-}
+fun ReservationStage.toPresentation() = ReservationStageUiModel(
+    id = id,
+    lineUp = lineUp,
+    reservationTickets = reservationTickets.map { it.toPresentation() },
+    startTime = startTime,
+    ticketOpenTime = ticketOpenTime,
+    canReserve = LocalDateTime.now().isAfter(ticketOpenTime),
+)
 
 fun ReservationStageUiModel.toDomain() = ReservationStage(
     id = id,
