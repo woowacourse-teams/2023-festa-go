@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/md_theme_light_inversePrimary" android:state_selected="true"/>
-    <item android:drawable="@color/white" />
+    <item android:state_selected="true">
+        <shape>
+            <solid android:color="?android:attr/colorBackgroundFloating" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="?android:attr/colorSecondary" />
+        </shape>
+    </item>
 </selector>
