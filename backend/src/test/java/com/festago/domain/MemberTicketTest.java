@@ -62,6 +62,7 @@ class MemberTicketTest {
                 .build();
             Stage stage = StageFixture.stage()
                 .startTime(entryTime.plusHours(4))
+                .ticketOpenTime(entryTime.minusWeeks(1))
                 .festival(festival)
                 .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
