@@ -24,7 +24,7 @@ class FestivalTest {
         // when & then
         assertThatThrownBy(() -> new Festival("테코대학교", today.plusDays(1), today))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("축제 시작 일자는 축제 종료일자 이전일 수 없습니다.");
+            .hasMessage("축제 시작 일자는 종료일자 이전이어야합니다.");
     }
 
     @Nested

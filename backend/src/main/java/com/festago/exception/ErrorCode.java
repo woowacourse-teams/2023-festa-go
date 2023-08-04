@@ -14,7 +14,7 @@ public enum ErrorCode {
     EARLY_TICKET_ENTRY_THAN_OPEN("입장 시간은 티켓 오픈 시간 이후여야합니다."),
     TICKET_SOLD_OUT("매진된 티켓입니다."),
     INVALID_FESTIVAL_START_DATE("축제 시작 일자는 과거일 수 없습니다."),
-    INVALID_FESTIVAL_DURATION("축제 시작 일자는 종료일자 이전일 수 없습니다."),
+    INVALID_FESTIVAL_DURATION("축제 시작 일자는 종료일자 이전이어야합니다."),
 
     // 404
     MEMBER_TICKET_NOT_FOUND("존재하지 않은 멤버 티켓입니다."),
