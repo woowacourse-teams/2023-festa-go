@@ -50,8 +50,9 @@ class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 축제를_생성한다() {
         // given
-        FestivalCreateRequest request = new FestivalCreateRequest("테코 대학교 축제", LocalDate.parse("2023-07-26"),
-            LocalDate.parse("2023-07-28"), "thumbnail.png");
+        LocalDate today = LocalDate.now();
+        FestivalCreateRequest request = new FestivalCreateRequest("테코 대학교 축제", today, today.plusDays(1),
+            "thumbnail.png");
 
         // when
         FestivalResponse festivalResponse = festivalService.create(request);
