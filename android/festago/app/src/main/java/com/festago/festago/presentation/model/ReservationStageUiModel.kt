@@ -11,4 +11,5 @@ data class ReservationStageUiModel(
     val startTime: LocalDateTime,
     val ticketOpenTime: LocalDateTime,
     val reservationTickets: List<ReservationTicketUiModel>,
+    val canReserve: Boolean,
 ) : Parcelable
