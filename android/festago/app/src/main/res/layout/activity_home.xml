@@ -46,6 +46,7 @@
             android:backgroundTint="@drawable/menu_selector_color"
             android:src="@drawable/ic_festago_coupon"
             app:fabCustomSize="72dp"
+            app:tint="@color/white"
             app:layout_anchor="@id/baNavigation"
             app:maxImageSize="72dp" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
