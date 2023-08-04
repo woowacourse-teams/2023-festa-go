@@ -1,5 +1,7 @@
 package com.festago.domain;
 
+import com.festago.exception.BadRequestException;
+import com.festago.exception.ErrorCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,11 +38,18 @@ public class Festival {
     }
 
     public Festival(Long id, String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
+        validate(startDate, endDate);
         this.id = id;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.thumbnail = thumbnail;
+    }
+
+    public void validate(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isAfter(endDate)) {
+            throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_DURATION);
+        }
     }
 
     public boolean isNotInDuration(LocalDateTime time) {

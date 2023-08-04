@@ -6,6 +6,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.exception.BadRequestException;
 import com.festago.support.MemberFixture;
+import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -18,6 +19,25 @@ import org.junit.jupiter.params.provider.ValueSource;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class TicketTest {
+
+    @ParameterizedTest
+    @ValueSource(longs = {0, 1})
+    void 입장시간이_티켓오픈시간_이전이면_예외(long minute) {
+        // given
+        LocalDateTime ticketOpenTime = LocalDateTime.now();
+        Stage stage = StageFixture.stage()
+            .startTime(ticketOpenTime.plusDays(1))
+            .ticketOpenTime(ticketOpenTime)
+            .build();
+        Ticket ticket = TicketFixture.ticket()
+            .stage(stage)
+            .build();
+
+        // when & then
+        assertThatThrownBy(() -> ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(minute), 100))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("입장 시간은 티켓 오픈 시간 이후여야합니다.");
+    }
 
     @ParameterizedTest
     @ValueSource(longs = {0, 1})

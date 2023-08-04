@@ -66,6 +66,10 @@ public class Ticket {
 
     private void validateEntryTime(LocalDateTime entryTime) {
         LocalDateTime stageStartTime = stage.getStartTime();
+        LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
+        if (entryTime.isBefore(ticketOpenTime) || entryTime.isEqual(ticketOpenTime)) {
+            throw new BadRequestException(ErrorCode.EARLY_TICKET_ENTRY_THAN_OPEN);
+        }
         if (entryTime.isAfter(stageStartTime) || entryTime.isEqual(stageStartTime)) {
             throw new BadRequestException(ErrorCode.LATE_TICKET_ENTRY_TIME);
         }
