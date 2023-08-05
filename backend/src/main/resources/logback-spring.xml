@@ -3,7 +3,6 @@
 <configuration>
   <property name="LOG_PATTERN"
     value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
-  <property name="MOVE_TO_HOME_DIRECTORY" value="../../.."/>
 
   <springProfile name="local">
     <include resource="console-appender.xml"/>
