@@ -17,16 +17,19 @@ public class KakaoOAuth2AccessTokenClient {
     private final String grantType;
     private final String clientId;
     private final String redirectUri;
+    private final String clientSecret;
 
     public KakaoOAuth2AccessTokenClient(
         @Value("${festago.oauth2.kakao.grant-type}") String grantType,
         @Value("${festago.oauth2.kakao.client-id}") String clientId,
         @Value("${festago.oauth2.kakao.redirect-uri}") String redirectUri,
+        @Value("${festago.oauth2.kakao.client-secret}") String clientSecret,
         RestTemplateBuilder restTemplateBuilder
     ) {
         this.grantType = grantType;
         this.clientId = clientId;
         this.redirectUri = redirectUri;
+        this.clientSecret = clientSecret;
         this.restTemplate = restTemplateBuilder
             .errorHandler(new KakaoOAuth2AccessTokenErrorHandler())
             .build();
@@ -43,6 +46,7 @@ public class KakaoOAuth2AccessTokenClient {
         headers.set("grant_type", grantType);
         headers.set("client_id", clientId);
         headers.set("redirect_uri", redirectUri);
+        headers.set("client_secret", clientSecret);
         headers.set("code", code);
         return headers;
     }

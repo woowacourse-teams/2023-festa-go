@@ -31,3 +31,4 @@ festago:
       grant-type: grant-type
       client-id: client-id
       redirect-uri: redirect-uri
+      client-secret: client-secret
