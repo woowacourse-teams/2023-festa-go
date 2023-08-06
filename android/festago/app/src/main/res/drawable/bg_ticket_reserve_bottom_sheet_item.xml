@@ -2,12 +2,12 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="true">
         <shape>
-            <solid android:color="@color/md_theme_light_inversePrimary" />
+            <solid android:color="?attr/colorPrimaryInverse" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="?android:attr/colorBackgroundFloating" />
+            <solid android:color="#00000000" />
         </shape>
     </item>
 </selector>

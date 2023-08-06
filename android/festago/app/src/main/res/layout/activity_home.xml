@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:backgroundTint="@color/md_theme_light_surfaceVariant"
+            app:backgroundTint="?attr/colorSurface"
             app:contentInsetStart="0dp"
             app:fabAlignmentMode="center">
 
@@ -29,7 +29,7 @@
                 android:id="@+id/bnvHome"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                android:background="@color/zxing_transparent"
+                android:background="#00000000"
                 app:itemActiveIndicatorStyle="@color/zxing_transparent"
                 app:itemIconSize="40dp"
                 app:itemIconTint="@drawable/menu_selector_color"
