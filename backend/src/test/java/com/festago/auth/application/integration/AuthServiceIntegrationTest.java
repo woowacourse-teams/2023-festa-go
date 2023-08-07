@@ -2,6 +2,7 @@ package com.festago.auth.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.festago.application.integration.ApplicationIntegrationTest;
 import com.festago.auth.application.AuthService;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.LoginRequest;
@@ -11,14 +12,10 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AuthServiceIntegrationTest {
+class AuthServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     MemberRepository memberRepository;

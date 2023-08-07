@@ -23,14 +23,14 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
 
 @ExtendWith(DatabaseClearExtension.class)
-@SpringBootTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class TicketServiceIntegrationTest {
+class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     TicketService ticketService;
@@ -64,7 +64,8 @@ class TicketServiceIntegrationTest {
     }
 
     @Test
-    @Sql("/ticketing-test-data.sql")
+    @Sql(scripts = "/ticketing-test-data.sql",
+        config = @SqlConfig(transactionMode = TransactionMode.ISOLATED))
     void 예약() throws InterruptedException {
         // given
         Member member = memberRepository.findById(1L).get();
@@ -86,5 +87,4 @@ class TicketServiceIntegrationTest {
 
         assertThat(memberTicketRepository.count()).isEqualTo(100);
     }
-
 }
