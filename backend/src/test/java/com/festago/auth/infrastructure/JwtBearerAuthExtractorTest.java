@@ -1,0 +1,114 @@
+package com.festago.auth.infrastructure;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.festago.auth.domain.AuthPayload;
+import com.festago.exception.InternalServerException;
+import com.festago.exception.UnauthorizedException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Test;
+
+@DisplayNameGeneration(ReplaceUnderscores.class)
+@SuppressWarnings("NonAsciiCharacters")
+class JwtBearerAuthExtractorTest {
+
+    private static final String MEMBER_ID_KEY = "memberId";
+    private static final String TOKEN_PREFIX = "Bearer ";
+    private static final String SECRET_KEY = "1231231231231231223131231231231231231212312312";
+    private static final Key KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+
+    JwtBearerAuthExtractor jwtBearerAuthExtractor = new JwtBearerAuthExtractor(SECRET_KEY);
+
+    @Test
+    void Bearer_토큰의_형식이_아니면_예외() {
+        // given
+        String token = "Hello World";
+
+        // when & then
+        assertThatThrownBy(() -> jwtBearerAuthExtractor.extract(token))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessage("Bearer 타입의 토큰이 아닙니다.");
+    }
+
+    @Test
+    void JWT_토큰의_형식이_아니면_예외() {
+        // given
+        String token = "Hello World";
+
+        // when & then
+        assertThatThrownBy(() -> jwtBearerAuthExtractor.extract(TOKEN_PREFIX + token))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessage("올바르지 않은 로그인 토큰입니다.");
+    }
+
+    @Test
+    void 기간이_만료된_토큰이면_예외() {
+        //given
+        String token = Jwts.builder()
+            .claim(MEMBER_ID_KEY, 1L)
+            .setExpiration(new Date(new Date().getTime() - 1000))
+            .signWith(KEY, SignatureAlgorithm.HS256)
+            .compact();
+
+        // when & then
+        assertThatThrownBy(() -> jwtBearerAuthExtractor.extract(TOKEN_PREFIX + token))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessage("만료된 로그인 토큰입니다.");
+    }
+
+    @Test
+    void 키값이_유효하지_않으면_예외() {
+        // given
+        Key otherKey = Keys.hmacShaKeyFor(("a" + SECRET_KEY).getBytes(StandardCharsets.UTF_8));
+
+        String token = Jwts.builder()
+            .claim(MEMBER_ID_KEY, 1L)
+            .setExpiration(new Date(new Date().getTime() + 10000))
+            .signWith(otherKey, SignatureAlgorithm.HS256)
+            .compact();
+
+        // when & then
+        assertThatThrownBy(() -> jwtBearerAuthExtractor.extract(TOKEN_PREFIX + token))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessage("올바르지 않은 로그인 토큰입니다.");
+    }
+
+    @Test
+    void memberId_필드가_없으면_예외() {
+        // given
+        String token = Jwts.builder()
+            .setExpiration(new Date(new Date().getTime() + 10000))
+            .signWith(KEY, SignatureAlgorithm.HS256)
+            .compact();
+
+        // when & then
+        assertThatThrownBy(() -> jwtBearerAuthExtractor.extract(TOKEN_PREFIX + token))
+            .isInstanceOf(InternalServerException.class)
+            .hasMessage("유효하지 않은 로그인 토큰 payload 입니다.");
+    }
+
+    @Test
+    void 토큰_추출_성공() {
+        // given
+        Long memberId = 1L;
+        String token = Jwts.builder()
+            .claim(MEMBER_ID_KEY, memberId)
+            .setExpiration(new Date(new Date().getTime() + 10000))
+            .signWith(KEY, SignatureAlgorithm.HS256)
+            .compact();
+
+        // when
+        AuthPayload payload = jwtBearerAuthExtractor.extract(TOKEN_PREFIX + token);
+
+        // then
+        assertThat(payload.getMemberId()).isEqualTo(memberId);
+    }
+}
