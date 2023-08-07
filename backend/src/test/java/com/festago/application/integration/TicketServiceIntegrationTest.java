@@ -11,6 +11,7 @@ import com.festago.domain.TicketType;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketingRequest;
 import com.festago.exception.NotFoundException;
+import com.festago.support.DatabaseClearExtension;
 import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -18,10 +19,12 @@ import java.util.concurrent.Executors;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+@ExtendWith(DatabaseClearExtension.class)
 @SpringBootTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
