@@ -1,9 +1,11 @@
 package com.festago.auth.config;
 
+import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.OAuth2Client;
 import com.festago.auth.domain.OAuth2Clients;
 import com.festago.auth.infrastructure.JwtAuthProvider;
+import com.festago.auth.infrastructure.JwtBearerAuthExtractor;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -30,5 +32,10 @@ public class AuthConfig {
         return OAuth2Clients.builder()
             .addAll(oAuth2Clients)
             .build();
+    }
+
+    @Bean
+    public AuthExtractor authExtractor() {
+        return new JwtBearerAuthExtractor(secretKey);
     }
 }

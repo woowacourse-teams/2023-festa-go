@@ -15,6 +15,11 @@ public enum ErrorCode {
     OAUTH2_INVALID_CODE("잘못된 인가 코드 입니다."),
     OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE("해당 OAuth2 제공자는 지원되지 않습니다."),
 
+    // 401
+    EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
+    INVALID_AUTH_TOKEN("올바르지 않은 로그인 토큰입니다."),
+    NOT_BEARER_TOKEN_TYPE("Bearer 타입의 토큰이 아닙니다."),
+
     // 404
     MEMBER_TICKET_NOT_FOUND("존재하지 않은 멤버 티켓입니다."),
     MEMBER_NOT_FOUND("존재하지 않는 멤버입니다."),
