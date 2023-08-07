@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
             android:paddingTop="12dp"
+            android:visibility="gone"
             app:checkedChip="@+id/chipOngoing"
             app:layout_constraintTop_toTopOf="parent"
             app:singleSelection="true">
@@ -48,28 +49,34 @@
             app:layout_constraintTop_toBottomOf="@id/cgFilterOption"
             tools:visibility="gone" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvFestivalList"
-            visibility="@{uiState.shouldShowSuccess}"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clipToPadding="false"
-            android:padding="8dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srlFestivalList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cgFilterOption"
-            app:spanCount="2"
-            tools:listitem="@layout/item_festival" />
+            app:layout_constraintTop_toBottomOf="@id/cgFilterOption">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFestivalList"
+                visibility="@{uiState.shouldShowSuccess}"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:clipToPadding="false"
+                android:padding="8dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/item_festival_list" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
-            android:id="@+id/tvError"
-            visibility="@{uiState.shouldShowError}"
+            android:id="@+id/tvErrorOrEmpty"
+            visibility="@{uiState.shouldShowError || uiState.shouldShowSuccessAndEmpty}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/festival_list_tv_error"
+            android:text="@{uiState.shouldShowError ? @string/festival_list_tv_error: @string/festival_list_tv_empty}"
             tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

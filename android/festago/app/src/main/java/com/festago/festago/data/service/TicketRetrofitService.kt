@@ -1,20 +1,24 @@
 package com.festago.festago.data.service
 
+import com.festago.festago.data.dto.MemberTicketResponse
+import com.festago.festago.data.dto.MemberTicketsResponse
 import com.festago.festago.data.dto.TicketCodeDto
-import com.festago.festago.data.dto.TicketDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface TicketRetrofitService {
-    @GET("/tickets/{id}")
+    @GET("/member-tickets/{memberTicketId}")
     suspend fun getTicket(
-        @Path("id") ticketId: Long,
-    ): Response<TicketDto>
+        @Path("memberTicketId") ticketId: Long,
+    ): Response<MemberTicketResponse>
 
-    @POST("/tickets/{id}/qr")
+    @GET("/member-tickets/current")
+    suspend fun getTickets(): Response<MemberTicketsResponse>
+
+    @POST("/member-tickets/{memberTicketId}/qr")
     suspend fun getTicketCode(
-        @Path("id") ticketId: Long,
+        @Path("memberTicketId") ticketId: Long,
     ): Response<TicketCodeDto>
 }

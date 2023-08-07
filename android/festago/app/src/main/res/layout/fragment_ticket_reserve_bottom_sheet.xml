@@ -16,12 +16,16 @@
         <variable
             name="stage"
             type="com.festago.festago.presentation.model.ReservationStageUiModel" />
+
+        <variable
+            name="selectedTicketTypeId"
+            type="int" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_ticket_reserve_bottom_sheet"
+        tools:background="@drawable/bg_ticket_reserve_bottom_sheet"
         tools:context=".presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment">
 
         <androidx.constraintlayout.widget.Guideline
@@ -70,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="28dp"
-            android:onClick="@{() -> vm.reserveTicket()}"
+            android:onClick="@{() -> vm.reserveTicket(selectedTicketTypeId)}"
             android:text="@string/ticket_reserve_tv_btn_reserve_ticket"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -6,11 +6,19 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
+import com.festago.festago.analytics.FirebaseAnalyticsHelper
+import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.ReservationDefaultRepository
 import com.festago.festago.databinding.ActivityTicketReserveBinding
-import com.festago.festago.presentation.model.ReservationStageUiModel
+import com.festago.festago.domain.model.ReservedTicket
+import com.festago.festago.presentation.mapper.toPresentation
+import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.model.ReservationUiModel
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
+import com.festago.festago.presentation.ui.reservationcomplete.ReservationCompleteActivity
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketFailed
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketSuccess
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowTicketTypes
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
@@ -21,7 +29,10 @@ class TicketReserveActivity : AppCompatActivity() {
 
     private val vm: TicketReserveViewModel by viewModels {
         TicketReservationViewModelFactory(
-            ReservationDefaultRepository(),
+            ReservationDefaultRepository(
+                reservationRetrofitService = RetrofitClient.getInstance().reservationRetrofitService,
+            ),
+            FirebaseAnalyticsHelper.getInstance(),
         )
     }
 
@@ -55,19 +66,23 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun handleEvent(event: TicketReserveEvent) = when (event) {
-        is TicketReserveEvent.ShowTicketTypes -> handleShowTicketTypes(event.reservationStage)
-        is TicketReserveEvent.ReserveTicketSuccess -> handleReserveTicketSuccess()
-        is TicketReserveEvent.ReserveTicketFailed -> handleReserveTicketFailed()
+        is ShowTicketTypes -> handleShowTicketTypes(event.stageId, event.tickets)
+        is ReserveTicketSuccess -> handleReserveTicketSuccess(event.reservedTicket)
+        is ReserveTicketFailed -> handleReserveTicketFailed()
     }
 
-    private fun handleShowTicketTypes(reservationStage: ReservationStageUiModel) {
-        TicketReserveBottomSheetFragment.newInstance(reservationStage)
-            .show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
+    private fun handleShowTicketTypes(stageId: Int, tickets: List<ReservationTicketUiModel>) {
+        contentsAdapter.currentList.find { it.id == stageId }?.let { stage ->
+            TicketReserveBottomSheetFragment.newInstance(stage, tickets)
+                .show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
+        }
     }
 
-    private fun handleReserveTicketSuccess() {
-        OkDialogFragment.newInstance("예약이 완료되었습니다.")
-            .show(supportFragmentManager, OkDialogFragment::class.java.name)
+    private fun handleReserveTicketSuccess(reservedTicket: ReservedTicket) {
+        val intent = ReservationCompleteActivity.getIntent(this, reservedTicket.toPresentation())
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun handleReserveTicketFailed() {
@@ -77,13 +92,21 @@ class TicketReserveActivity : AppCompatActivity() {
 
     private fun initView() {
         binding.rvTicketReserve.adapter = concatAdapter
-        vm.loadReservation()
+
+        vm.loadReservation(intent.getLongExtra(KEY_FESTIVAL_ID, -1))
+
+        binding.srlTicketReserve.setOnRefreshListener {
+            vm.loadReservation(
+                festivalId = intent.getLongExtra(KEY_FESTIVAL_ID, -1),
+                refresh = true,
+            )
+        }
     }
 
     private fun updateUi(uiState: TicketReserveUiState) = when (uiState) {
         is TicketReserveUiState.Loading,
         is TicketReserveUiState.Error,
-        -> Unit
+        -> binding.srlTicketReserve.isRefreshing = false
 
         is TicketReserveUiState.Success -> updateSuccess(uiState.reservation)
     }
@@ -91,6 +114,7 @@ class TicketReserveActivity : AppCompatActivity() {
     private fun updateSuccess(reservations: ReservationUiModel) {
         headerAdapter.submitList(listOf(reservations))
         contentsAdapter.submitList(reservations.reservationStages)
+        binding.srlTicketReserve.isRefreshing = false
     }
 
     companion object {

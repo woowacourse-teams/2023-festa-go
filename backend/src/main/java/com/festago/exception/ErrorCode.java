@@ -17,8 +17,10 @@ public enum ErrorCode {
 
     // 404
     MEMBER_TICKET_NOT_FOUND("존재하지 않은 멤버 티켓입니다."),
+    MEMBER_NOT_FOUND("존재하지 않는 멤버입니다."),
     STAGE_NOT_FOUND("존재하지 않은 공연입니다."),
     FESTIVAL_NOT_FOUND("존재하지 않는 축제입니다."),
+    TICKET_NOT_FOUND("존재하지 않는 티켓입니다."),
 
     // 500
     INTERNAL_SERVER_ERROR("서버 내부에 문제가 발생했습니다."),

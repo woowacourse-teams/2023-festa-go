@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.util.MutableSingleLiveData
@@ -13,9 +15,10 @@ import kotlinx.coroutines.launch
 
 class TicketListViewModel(
     private val ticketRepository: TicketRepository,
+    private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData<TicketListUiState>()
+    private val _uiState = MutableLiveData<TicketListUiState>(TicketListUiState.Loading)
     val uiState: LiveData<TicketListUiState> = _uiState
 
     private val _event = MutableSingleLiveData<TicketListEvent>()
@@ -23,12 +26,12 @@ class TicketListViewModel(
 
     fun loadTickets() {
         viewModelScope.launch {
-            _uiState.value = TicketListUiState.Loading
             ticketRepository.loadTickets()
                 .onSuccess { tickets ->
                     _uiState.value = TicketListUiState.Success(tickets.toPresentation())
                 }.onFailure {
                     _uiState.value = TicketListUiState.Error
+                    analyticsHelper.logNetworkFailure(KEY_LOAD_TICKETS_LOG, it.message.toString())
                 }
         }
     }
@@ -39,14 +42,19 @@ class TicketListViewModel(
 
     class TicketListViewModelFactory(
         private val ticketRepository: TicketRepository,
+        private val analyticsHelper: AnalyticsHelper,
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(TicketListViewModel::class.java)) {
-                return TicketListViewModel(ticketRepository) as T
+                return TicketListViewModel(ticketRepository, analyticsHelper) as T
             }
             throw IllegalArgumentException("Unknown ViewModel Class")
         }
+    }
+
+    companion object {
+        private const val KEY_LOAD_TICKETS_LOG = "load_tickets"
     }
 }

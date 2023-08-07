@@ -21,6 +21,7 @@
     <string name="ticket_entry_tv_before_entry">입장 전</string>
     <string name="ticket_entry_tv_after_entry">입장 완료</string>
     <string name="ticket_entry_tv_away">외출중</string>
+    <string name="ticket_entry_tv_error">티켓 조회 과정에 문제가 발생했습니다.</string>
 
     <!-- Strings related to home -->
     <string name="home_bottom_navigation_festival">축제 목록</string>
@@ -31,8 +32,6 @@
     <string name="ticket_reserve_tv_date_range">%1s ~ %1s</string>
     <string name="ticket_reserve_tv_date_range_format">yyyy.MM.dd</string>
     <string name="ticket_reserve_tv_start_time">MM.dd (E) HH:mm</string>
-    <string name="ticket_reserve_tv_open_time_title">[예매 오픈 시간]</string>
-    <string name="ticket_reserve_tv_open_time">yyyy.MM.dd HH:mm</string>
     <string name="ticket_reserve_tv_line_up_title">[라인업]</string>
     <string name="ticket_reserve_tv_ticket_count_title">[예매 가능 티켓]</string>
     <string name="ticket_reserve_tv_ticket_count">%1$s(%2$s/%3$s)</string>
@@ -42,12 +41,15 @@
     <string name="ticket_reserve_btn_reserve_ticket">티켓 예매</string>
     <string name="ticket_reserve_tv_ticket_count_format">(%1$s/%2$s)</string>
     <string name="ticket_reserve_tv_btn_reserve_ticket">예매 하기</string>
+    <string name="ticket_reserve_tv_btn_reserve_ticket_not_open">MM월 dd일 HH:mm 오픈예정</string>
+
 
     <!-- Strings related to festival list -->
     <string name="festival_list_tv_date_format">yyyy.MM.dd</string>
     <string name="festival_list_chip_ongoing">진행중</string>
     <string name="festival_list_chip_past">지난축제</string>
-    <string name="festival_list_tv_error">조회된 축제가 없습니다.</string>
+    <string name="festival_list_tv_error">축제 조회에 실패했습니다.</string>
+    <string name="festival_list_tv_empty">조회된 축제가 없습니다.</string>
     <string name="festival_list_tv_date_range_format">%s - %s</string>
 
     <!-- Strings related to ticket list -->
@@ -66,4 +68,11 @@
     <!-- Strings related to mypage -->
     <string name="mypage_btn_kakao">카카오로 로그인</string>
     <string name="mypage_tv_login_description">페스타고로\n대학교 축제를 즐겨보세요.</string>
+
+    <!-- Strings related to reservation complete -->
+    <string name="reservation_complete_tv_reservation_complete">예매에 성공했습니다!</string>
+    <string name="reservation_complete_tv_ticket_number_prompt">나의 티켓 번호</string>
+    <string name="reservation_complete_tv_time_format">HH:mm</string>
+    <string name="reservation_complete_tv_date_format">yyyy.MM.dd</string>
+    <string name="reservation_complete_tv_entry_able_time">[입장 가능 시간] %s</string>
 </resources>

@@ -28,7 +28,7 @@ class MockWeb {
                 return when (request.method) {
                     "POST" -> {
                         when {
-                            path.startsWith("/tickets") -> MockResponse()
+                            path.startsWith("/member-tickets") -> MockResponse()
                                 .setResponseCode(201)
                                 .setBody(getQrCode())
 
@@ -39,12 +39,26 @@ class MockWeb {
                     "GET" -> {
                         val path = request.path ?: return MockResponse().setResponseCode(404)
                         when {
-                            path.startsWith("/tickets/") -> {
+                            path.startsWith("/member-tickets/") -> {
                                 val ticketId = path.substringAfterLast("/").toLong()
                                 MockResponse()
                                     .setHeader("Content-Type", "application/json")
                                     .setResponseCode(200)
                                     .setBody(getTicket(ticketId))
+                            }
+
+                            path.startsWith("/member-tickets") -> {
+                                MockResponse()
+                                    .setHeader("Content-Type", "application/json")
+                                    .setResponseCode(200)
+                                    .setBody(getTickets())
+                            }
+
+                            path.startsWith("/festivals") -> {
+                                MockResponse()
+                                    .setHeader("Content-Type", "application/json")
+                                    .setResponseCode(200)
+                                    .setBody(getFestivals())
                             }
 
                             else -> MockResponse().setResponseCode(404)
@@ -68,15 +82,75 @@ class MockWeb {
         private fun getTicket(id: Long): String {
             return """
                 {
-                      "id": $id,
-                      "number": 103,
-                      "entryTime": "2023-07-09T16:00:00",
-                      "state": "BEFORE_ENTRY",
-                      "stage": {
-                            "id": 1,
-                            "name": "테코대학교 무슨 축제",
-                            "startTime": "2023-07-09T18:00:00"
-                      }
+                    "id": $id,
+                    "number": 103,
+                    "entryTime": "2023-07-09T16:00:00",
+                    "state": "BEFORE_ENTRY",
+                    "reservedAt": "2023-07-09T08:00:00",
+                    "stage": {
+                        "id": 1,
+                        "startTime": "2023-07-09T18:00:00"
+                    },
+                    "festival": {
+                        "id": 1,
+                        "name": "테코대학교",
+                        "thumbnail": "https://image.png"
+                    }
+                }
+            """.trimIndent()
+        }
+
+        private fun getTickets(): String {
+            return """ 
+                {
+	                "memberTickets": [
+		            {
+			            "id": 1,
+			            "number": 103,
+			            "entryTime": "2023-07-09T16:00:00",
+			            "state": "BEFORE_ENTRY",
+			            "reservedAt": "2023-07-09T08:00:00",
+			            "stage": {
+				        "id": 1,
+				        "startTime": "2023-07-09T18:00:00"
+			        },
+			            "festival": {
+				            "id": 1,
+				            "name": "테코대학교",
+				            "thumbnail": "https://image.png"
+			            }
+		            }
+	            ]
+            }
+            """.trimIndent()
+        }
+
+        private fun getFestivals(): String {
+            return """
+                {
+                	"festivals": [
+                		{
+                			"id": 1,
+                			"name": "테코대학교1",
+                			"startDate": "2023-06-26",
+                			"endDate": "2023-06-30",
+                			"thumbnail": "https://images.unsplash.com/photo-1506157786151-b8491531f063"
+                		},
+                        {       
+                			"id": 2,
+                			"name": "테코대학교2",
+                			"startDate": "2023-06-26",
+                			"endDate": "2023-06-30",
+                			"thumbnail": "https://images.unsplash.com/photo-1506157786151-b8491531f063"
+                		},
+                        {
+                			"id": 1,
+                			"name": "테코대학교3",
+                			"startDate": "2023-06-26",
+                			"endDate": "2023-06-30",
+                			"thumbnail": "https://images.unsplash.com/photo-1506157786151-b8491531f063"
+                		}
+                	]
                 }
             """.trimIndent()
         }

@@ -1,12 +1,16 @@
 package com.festago.festago.presentation.ui.home.ticketlist
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
+import com.festago.festago.analytics.FirebaseAnalyticsHelper
 import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.TicketDefaultRepository
 import com.festago.festago.databinding.FragmentTicketListBinding
@@ -19,11 +23,14 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
 
     private lateinit var adapter: TicketListAdapter
 
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
     private val vm: TicketListViewModel by viewModels {
         TicketListViewModel.TicketListViewModelFactory(
             TicketDefaultRepository(
                 ticketRetrofitService = RetrofitClient.getInstance().ticketRetrofitService,
             ),
+            analyticsHelper = FirebaseAnalyticsHelper.getInstance(),
         )
     }
 
@@ -41,6 +48,14 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
         super.onViewCreated(view, savedInstanceState)
         initObserve()
         initView()
+        initActivityResult()
+        initRefresh()
+    }
+
+    private fun initRefresh() {
+        binding.srlTicketList.setOnRefreshListener {
+            vm.loadTickets()
+        }
     }
 
     private fun initObserve() {
@@ -57,10 +72,11 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
         when (uiState) {
             is TicketListUiState.Loading,
             is TicketListUiState.Error,
-            -> Unit
+            -> binding.srlTicketList.isRefreshing = false
 
             is TicketListUiState.Success -> {
                 adapter.submitList(uiState.tickets)
+                binding.srlTicketList.isRefreshing = false
             }
         }
     }
@@ -71,9 +87,24 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
         }
     }
 
-    private fun showTicketEntry(event: TicketListEvent.ShowTicketEntry) = startActivity(
-        TicketEntryActivity.getIntent(context = requireContext(), ticketId = event.ticketId),
-    )
+    private fun showTicketEntry(event: TicketListEvent.ShowTicketEntry) {
+        resultLauncher.launch(
+            TicketEntryActivity.getIntent(
+                context = requireContext(),
+                ticketId = event.ticketId,
+            ),
+        )
+    }
+
+    private fun initActivityResult() {
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == TicketEntryActivity.RESULT_OK) {
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.fcv_home_container, TicketListFragment()).commit()
+                }
+            }
+    }
 
     private fun initView() {
         adapter = TicketListAdapter(vm)

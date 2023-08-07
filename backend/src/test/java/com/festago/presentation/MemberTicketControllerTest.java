@@ -3,23 +3,26 @@ package com.festago.presentation;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
+import com.festago.application.TicketService;
 import com.festago.domain.EntryState;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketFestivalResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.dto.StageResponse;
+import com.festago.dto.TicketingRequest;
+import com.festago.dto.TicketingResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.stream.LongStream;
@@ -45,6 +48,9 @@ class MemberTicketControllerTest {
 
     @MockBean
     MemberTicketService memberTicketService;
+
+    @MockBean
+    TicketService ticketService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -121,6 +127,60 @@ class MemberTicketControllerTest {
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);
         MemberTicketsResponse actual = objectMapper.readValue(content, MemberTicketsResponse.class);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void 현재_티켓_리스트를_조회한다() throws Exception {
+        // given
+        Long memberId = 1L;
+        StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
+        MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
+            "https://image.png");
+        MemberTicketsResponse expected = LongStream.range(0, 10L)
+            .mapToObj(
+                it -> new MemberTicketResponse(it, 1, LocalDateTime.now(), EntryState.BEFORE_ENTRY, LocalDateTime.now(),
+                    stageResponse, festivalResponse))
+            .collect(collectingAndThen(toList(), MemberTicketsResponse::new));
+        given(memberTicketService.findCurrent(memberId))
+            .willReturn(expected);
+
+        // when & then
+        String content = mockMvc.perform(get("/member-tickets/current")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+        MemberTicketsResponse actual = objectMapper.readValue(content, MemberTicketsResponse.class);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void 티켓팅을_통해_멤버의_티켓을_생성한다() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long memberTicketId = 1L;
+        Integer ticketNumber = 125;
+        Long ticketId = 1L;
+        LocalDateTime ticketEntryTime = LocalDateTime.now();
+        TicketingResponse expected = new TicketingResponse(memberTicketId, ticketNumber, ticketEntryTime);
+        TicketingRequest request = new TicketingRequest(ticketId);
+
+        given(ticketService.ticketing(anyLong(), any()))
+            .willReturn(expected);
+
+        // when & then
+        String content = mockMvc.perform(post("/member-tickets")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+        TicketingResponse actual = objectMapper.readValue(content, TicketingResponse.class);
         assertThat(actual).isEqualTo(expected);
     }
 }

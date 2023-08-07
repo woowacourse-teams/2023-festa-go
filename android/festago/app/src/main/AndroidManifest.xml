@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name="com.festago.festago.FestagoApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,6 +16,9 @@
         android:theme="@style/Theme.Festago"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".presentation.ui.reservationcomplete.ReservationCompleteActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.ui.home.HomeActivity"
             android:exported="true">
@@ -30,9 +34,5 @@
         <activity
             android:name=".presentation.ui.ticketentry.TicketEntryActivity"
             android:exported="false" />
-        <activity
-            android:name=".presentation.ui.MainActivity"
-            android:exported="false" />
     </application>
-
 </manifest>

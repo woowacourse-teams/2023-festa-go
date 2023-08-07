@@ -1,10 +1,10 @@
 package com.festago.festago.presentation.ui.home.ticketlist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.festago.festago.domain.model.Stage
+import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.domain.model.Ticket
-import com.festago.festago.domain.model.TicketState
 import com.festago.festago.domain.repository.TicketRepository
+import com.festago.festago.presentation.fixture.TicketFixture
 import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -20,29 +20,11 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalDateTime
 
 class TicketListViewModelTest {
     private lateinit var vm: TicketListViewModel
     private lateinit var ticketRepository: TicketRepository
-
-    private val fakeStage = Stage(
-        1,
-        "테코대학교 DAY1",
-        LocalDateTime.of(2023, 7, 29, 18, 0),
-    )
-
-    private val fakeTickets = List(10) {
-        Ticket(
-            it.toLong(),
-            100,
-            LocalDateTime.of(2023, 7, 29, 15, 0),
-            TicketState.BEFORE_ENTRY,
-            fakeStage,
-            "test.com",
-        )
-    }
-    private val fakeEmptyTickets = emptyList<Ticket>()
+    private lateinit var analyticsHelper: AnalyticsHelper
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -52,7 +34,8 @@ class TicketListViewModelTest {
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         ticketRepository = mockk()
-        vm = TicketListViewModel(ticketRepository)
+        analyticsHelper = mockk(relaxed = true)
+        vm = TicketListViewModel(ticketRepository, analyticsHelper)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -64,7 +47,9 @@ class TicketListViewModelTest {
     @Test
     fun `티켓을 받아왔을 때 티켓이 있으면 성공이고 티켓도 존재하는 상태이다`() {
         // given
-        coEvery { ticketRepository.loadTickets() } returns Result.success(fakeTickets)
+        val tickets = TicketFixture.getMemberTickets((1L..10L).toList())
+
+        coEvery { ticketRepository.loadTickets() } returns Result.success(tickets)
 
         // when
         vm.loadTickets()
@@ -81,7 +66,7 @@ class TicketListViewModelTest {
 
             // and
             val actual = (vm.uiState.value as TicketListUiState.Success).tickets
-            val expected = fakeTickets.toPresentation()
+            val expected = tickets.toPresentation()
             assertThat(actual).isEqualTo(expected)
         }
         softly.assertAll()
@@ -90,6 +75,7 @@ class TicketListViewModelTest {
     @Test
     fun `티켓을 받아왔을 때 티켓이 없으면 성공이지만 티켓은 없는 상태이다`() {
         // given
+        val fakeEmptyTickets = emptyList<Ticket>()
         coEvery { ticketRepository.loadTickets() } returns Result.success(fakeEmptyTickets)
 
         // when
@@ -139,9 +125,11 @@ class TicketListViewModelTest {
     @Test
     fun `티켓 목록을 받아오는 중이면 로딩 상태이다`() {
         // given
+        val tickets = TicketFixture.getMemberTickets((1L..10L).toList())
+
         coEvery { ticketRepository.loadTickets() } coAnswers {
             delay(1000)
-            Result.success(fakeTickets)
+            Result.success(tickets)
         }
 
         // when

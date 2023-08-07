@@ -1,37 +1,47 @@
 package com.festago.festago.data.repository
 
 import com.festago.festago.data.service.TicketRetrofitService
-import com.festago.festago.domain.model.Stage
 import com.festago.festago.domain.model.Ticket
 import com.festago.festago.domain.model.TicketCode
-import com.festago.festago.domain.model.TicketState
 import com.festago.festago.domain.repository.TicketRepository
-import java.time.LocalDateTime
 
 class TicketDefaultRepository(
     private val ticketRetrofitService: TicketRetrofitService,
 ) : TicketRepository {
 
-    private val fakeTicket = List(10) {
-        Ticket(
-            id = it + 1L,
-            number = it + 100,
-            LocalDateTime.of(2023, 7, 30, 15, 0),
-            TicketState.BEFORE_ENTRY,
-            Stage(1, "테코대학교 축제 DAY1", LocalDateTime.of(2023, 7, 30, 18, 0)),
-            "",
-        )
-    }
-
-    override suspend fun loadTicket(ticketId: Long): Ticket {
-        return ticketRetrofitService.getTicket(ticketId).body()!!.toDomain()
+    override suspend fun loadTicket(ticketId: Long): Result<Ticket> {
+        try {
+            val response = ticketRetrofitService.getTicket(ticketId)
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
+            }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 
     override suspend fun loadTickets(): Result<List<Ticket>> {
-        return Result.success(fakeTicket)
+        try {
+            val response = ticketRetrofitService.getTickets()
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
+            }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 
-    override suspend fun loadTicketCode(ticketId: Long): TicketCode {
-        return ticketRetrofitService.getTicketCode(ticketId).body()!!.toDomain()
+    override suspend fun loadTicketCode(ticketId: Long): Result<TicketCode> {
+        try {
+            val response = ticketRetrofitService.getTicketCode(ticketId)
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
+            }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 }
