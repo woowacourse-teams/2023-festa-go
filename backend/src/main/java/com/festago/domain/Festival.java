@@ -46,7 +46,7 @@ public class Festival {
         this.thumbnail = thumbnail;
     }
 
-    public void validate(LocalDate startDate, LocalDate endDate) {
+    private void validate(LocalDate startDate, LocalDate endDate) {
         if (startDate.isAfter(endDate)) {
             throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_DURATION);
         }
