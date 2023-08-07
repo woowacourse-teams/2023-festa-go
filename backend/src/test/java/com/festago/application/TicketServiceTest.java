@@ -3,7 +3,6 @@ package com.festago.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
 import com.festago.domain.Ticket;
 import com.festago.domain.TicketRepository;
@@ -28,10 +27,7 @@ class TicketServiceTest {
 
     @Mock
     TicketRepository ticketRepository;
-
-    @Mock
-    MemberTicketRepository memberTicketRepository;
-
+    
     @InjectMocks
     TicketService ticketService;
 
