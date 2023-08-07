@@ -2,8 +2,8 @@
 name: ALL 이슈 템플릿
 about: ALL 이슈 템플릿
 title: "[ALL] "
-labels: ALL
-assignees: ''
+labels: "ALL"
+assignees: ""
 
 ---
 
