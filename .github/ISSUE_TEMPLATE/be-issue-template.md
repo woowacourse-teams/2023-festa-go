@@ -2,8 +2,9 @@
 name: BE 이슈 템플릿
 about: BE 이슈 템플릿
 title: "[BE] "
-labels: "BE"
-assignees: ""
+labels: BE
+assignees: ''
+
 ---
 
 ## ✨ 세부 내용
