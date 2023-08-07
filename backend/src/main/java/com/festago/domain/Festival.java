@@ -52,6 +52,11 @@ public class Festival {
         }
     }
 
+    public boolean canCreate() {
+        LocalDate today = LocalDate.now();
+        return startDate.isEqual(today) || startDate.isAfter(today);
+    }
+
     public boolean isNotInDuration(LocalDateTime time) {
         LocalDate date = time.toLocalDate();
         return date.isBefore(startDate) || date.isAfter(endDate);
