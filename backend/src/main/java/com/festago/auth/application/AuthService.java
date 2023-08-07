@@ -1,6 +1,7 @@
 package com.festago.auth.application;
 
 import com.festago.auth.domain.AuthExtractor;
+import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.OAuth2Client;
 import com.festago.auth.domain.OAuth2Clients;
@@ -36,7 +37,7 @@ public class AuthService {
         UserInfo userInfo = getUserInfo(request);
         Member member = memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
             .orElseGet(() -> signUp(userInfo));
-        return new LoginResponse(authProvider.provide(member), member.getNickname());
+        return new LoginResponse(authProvider.provide(new AuthPayload(member.getId())), member.getNickname());
     }
 
     private UserInfo getUserInfo(LoginRequest request) {
