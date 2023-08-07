@@ -20,74 +20,103 @@ import org.junit.jupiter.params.provider.ValueSource;
 @SuppressWarnings("NonAsciiCharacters")
 class TicketTest {
 
-    @ParameterizedTest
-    @ValueSource(longs = {0, 1})
-    void 입장시간이_티켓오픈시간_이전이면_예외(long minute) {
-        // given
-        LocalDateTime ticketOpenTime = LocalDateTime.now();
-        Stage stage = StageFixture.stage()
-            .startTime(ticketOpenTime.plusDays(1))
-            .ticketOpenTime(ticketOpenTime)
-            .build();
-        Ticket ticket = TicketFixture.ticket()
-            .stage(stage)
-            .build();
 
-        // when & then
-        assertThatThrownBy(() -> ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(minute), 100))
-            .isInstanceOf(BadRequestException.class)
-            .hasMessage("입장 시간은 티켓 오픈 시간 이후여야합니다.");
-    }
+    @Nested
+    class 입장시간_추가_검증 {
 
-    @ParameterizedTest
-    @ValueSource(longs = {0, 1})
-    void 입장_시간이_축제_시작_시간보다_같거나_이후면_예외(long minute) {
-        // given
-        Ticket ticket = TicketFixture.ticket()
-            .build();
+        @ParameterizedTest
+        @ValueSource(longs = {0, 1})
+        void 입장시간이_티켓오픈시간_이전이면_예외(long minute) {
+            // given
+            LocalDateTime now = LocalDateTime.now();
+            Stage stage = StageFixture.stage()
+                .startTime(now.plusDays(1))
+                .ticketOpenTime(now)
+                .build();
+            Ticket ticket = TicketFixture.ticket()
+                .stage(stage)
+                .build();
 
-        LocalDateTime stageStartTime = ticket.getStage().getStartTime();
-        LocalDateTime entryTime = stageStartTime.plusMinutes(minute);
+            // when & then
+            assertThatThrownBy(
+                () -> ticket.addTicketEntryTime(now.minusMinutes(10), now.minusMinutes(minute), 100))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("입장 시간은 티켓 오픈 시간 이후여야합니다.");
+        }
 
-        // when & then
-        assertThatThrownBy(() -> ticket.addTicketEntryTime(entryTime, 100))
-            .isInstanceOf(BadRequestException.class)
-            .hasMessage("입장 시간은 공연 시간보다 빨라야합니다.");
-    }
+        @ParameterizedTest
+        @ValueSource(longs = {0, 1})
+        void 입장_시간이_축제_시작_시간보다_같거나_이후면_예외(long minute) {
+            // given
+            Ticket ticket = TicketFixture.ticket()
+                .build();
 
-    @Test
-    void 입장_시간이_공연_시작_12시간_이전이면_예외() {
-        // given
-        Ticket ticket = TicketFixture.ticket()
-            .build();
+            Stage stage = ticket.getStage();
+            LocalDateTime stageStartTime = stage.getStartTime();
+            LocalDateTime entryTime = stageStartTime.plusMinutes(minute);
+            LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
 
-        LocalDateTime stageStartTime = ticket.getStage().getStartTime();
-        LocalDateTime entryTime = stageStartTime.minusHours(12).minusSeconds(1);
+            // when & then
+            assertThatThrownBy(() -> ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), entryTime, 100))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("입장 시간은 공연 시간보다 빨라야합니다.");
+        }
 
-        // when & then
-        assertThatThrownBy(() -> ticket.addTicketEntryTime(entryTime, 100))
-            .isInstanceOf(BadRequestException.class)
-            .hasMessage("입장 시간은 공연 시작 12시간 이내여야 합니다.");
-    }
+        @Test
+        void 입장_시간이_공연_시작_12시간_이전이면_예외() {
+            // given
+            Ticket ticket = TicketFixture.ticket()
+                .build();
 
-    @Test
-    void 입장시간을_추가한다() {
-        // given
-        Ticket ticket = TicketFixture
-            .ticket()
-            .build();
+            Stage stage = ticket.getStage();
+            LocalDateTime stageStartTime = stage.getStartTime();
+            LocalDateTime entryTime = stageStartTime.minusHours(12).minusSeconds(1);
+            LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
 
-        LocalDateTime startTime = ticket.getStage().getStartTime();
+            // when & then
+            assertThatThrownBy(() -> ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), entryTime, 100))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("입장 시간은 공연 시작 12시간 이내여야 합니다.");
+        }
 
-        // when
-        ticket.addTicketEntryTime(startTime.minusHours(3), 100);
-        ticket.addTicketEntryTime(startTime.minusHours(2), 200);
+        @Test
+        void 티켓_오픈_이후_티켓생성시_예외() {
+            // given
+            Stage stage = StageFixture.stage()
+                .ticketOpenTime(LocalDateTime.now().minusHours(1))
+                .build();
+            Ticket ticket = TicketFixture.ticket()
+                .build();
 
-        // then
-        assertSoftly(softly -> {
-            softly.assertThat(ticket.getTicketAmount().getTotalAmount()).isEqualTo(300);
-            softly.assertThat(ticket.getTicketEntryTimes()).hasSize(2);
-        });
+            LocalDateTime startTime = stage.getStartTime();
+
+            // when & then
+            assertThatThrownBy(() -> ticket.addTicketEntryTime(LocalDateTime.now(), startTime.minusHours(3), 100))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("티켓 예매 시작 후 새롭게 티켓을 발급할 수 없습니다.");
+        }
+
+        @Test
+        void 입장시간을_추가한다() {
+            // given
+            Ticket ticket = TicketFixture
+                .ticket()
+                .build();
+
+            Stage stage = ticket.getStage();
+            LocalDateTime startTime = stage.getStartTime();
+            LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
+
+            // when
+            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), startTime.minusHours(3), 100);
+            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), startTime.minusHours(2), 200);
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(ticket.getTicketAmount().getTotalAmount()).isEqualTo(300);
+                softly.assertThat(ticket.getTicketEntryTimes()).hasSize(2);
+            });
+        }
     }
 
     @Nested
@@ -100,9 +129,11 @@ class TicketTest {
                 .build();
             Ticket ticket = TicketFixture.ticket()
                 .build();
-            ticket.addTicketEntryTime(LocalDateTime.now().minusHours(1), 50);
-            ticket.addTicketEntryTime(LocalDateTime.now().minusHours(2), 30);
-            ticket.addTicketEntryTime(LocalDateTime.now().minusHours(3), 20);
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime ticketOpenTime = ticket.getStage().getTicketOpenTime();
+            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), now.minusHours(1), 50);
+            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), now.minusHours(2), 30);
+            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), now.minusHours(3), 20);
 
             // when & then
             assertThatThrownBy(() -> ticket.createMemberTicket(member, 101))
@@ -118,9 +149,10 @@ class TicketTest {
                 .build();
             Ticket ticket = TicketFixture.ticket()
                 .build();
-            ticket.addTicketEntryTime(LocalDateTime.now().minusHours(1), 50);
-            ticket.addTicketEntryTime(LocalDateTime.now().minusHours(2), 30);
-            ticket.addTicketEntryTime(LocalDateTime.now().minusHours(3), 20);
+            LocalDateTime ticketOpenTime = ticket.getStage().getTicketOpenTime();
+            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), LocalDateTime.now().minusHours(1), 50);
+            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), LocalDateTime.now().minusHours(2), 30);
+            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), LocalDateTime.now().minusHours(3), 20);
 
             // when
             MemberTicket memberTicket = ticket.createMemberTicket(member, reservationSequence);

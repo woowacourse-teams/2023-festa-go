@@ -98,11 +98,12 @@ class TicketServiceIntegrationTest {
     void 티켓_최초_생성시_입장시간이_유효하지_않으면_티켓도_생성되지않는다() {
         // given
         Festival festival = festivalRepository.save(FestivalFixture.festival().build());
-        Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
+        LocalDateTime now = LocalDateTime.now();
+        Stage stage = stageRepository.save(StageFixture.stage().festival(festival).startTime(now.plusHours(10))
+            .ticketOpenTime(now.plusHours(1)).build());
         LocalDateTime entryTime = stage.getStartTime().plusHours(1);
         Long stageId = stage.getId();
-        TicketCreateRequest request = new TicketCreateRequest(stageId, TicketType.STUDENT, 100,
-            entryTime);
+        TicketCreateRequest request = new TicketCreateRequest(stageId, TicketType.STUDENT, 100, entryTime);
 
         // when & then
         assertSoftly(softly -> {
