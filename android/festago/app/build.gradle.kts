@@ -24,6 +24,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "BASE_URL", getSecretKey("base_url"))
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", getSecretKey("kakao_native_app_key"))
+        buildConfigField(
+            "String",
+            "KAKAO_REDIRECTION_SCHEME",
+            getSecretKey("kakao_redirection_scheme"),
+        )
     }
 
     buildFeatures {
@@ -124,7 +130,7 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     // kakao login
-    implementation("com.kakao.sdk:v2-user:2.10.0")
+    implementation("com.kakao.sdk:v2-user:2.12.0")
 }
 
 fun getSecretKey(propertyKey: String): String {
