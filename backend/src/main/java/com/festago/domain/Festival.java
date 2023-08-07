@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-public class Festival {
+public class Festival extends BaseTimeEntity {
 
     private static final String DEFAULT_THUMBNAIL = "https://picsum.photos/536/354";
 

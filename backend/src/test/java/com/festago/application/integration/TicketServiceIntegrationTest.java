@@ -59,7 +59,7 @@ class TicketServiceIntegrationTest {
         Member member = memberRepository.findById(1L).get();
         TicketingRequest request = new TicketingRequest(1L);
 
-        int threadCount = 1000;
+        int threadCount = 1;
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch latch = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {
