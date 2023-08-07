@@ -2,6 +2,7 @@ package com.festago.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.domain.Member;
@@ -237,5 +238,35 @@ class MemberTicketServiceTest {
             // then
             assertThat(response.id()).isEqualTo(memberTicketId);
         }
+    }
+
+    @Test
+    void 가장_최근에_예매한_티켓을_반환() {
+        // given
+        MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            .id(1L)
+            .build();
+
+        given(memberTicketRepository.findRecentlyReservedTicket(anyLong()))
+            .willReturn(Optional.of(memberTicket));
+
+        // when
+        MemberTicketResponse actual = memberTicketService.findRecentlyReservedTicket(1L);
+
+        // then
+        assertThat(actual.id()).isEqualTo(memberTicket.getId());
+    }
+
+    @Test
+    void 예매한_티켓이_없다면_아이디가_마이너스_일() {
+        // given
+        given(memberTicketRepository.findRecentlyReservedTicket(anyLong()))
+            .willReturn(Optional.empty());
+
+        // when
+        MemberTicketResponse actual = memberTicketService.findRecentlyReservedTicket(1L);
+
+        // then
+        assertThat(actual.id()).isEqualTo(-1);
     }
 }

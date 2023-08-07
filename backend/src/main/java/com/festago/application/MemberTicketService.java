@@ -63,4 +63,11 @@ public class MemberTicketService {
     private Duration calculateTimeGap(MemberTicket memberTicket, LocalDateTime time) {
         return Duration.between(memberTicket.getEntryTime(), time).abs();
     }
+
+    @Transactional(readOnly = true)
+    public MemberTicketResponse findRecentlyReservedTicket(Long memberId) {
+        return memberTicketRepository.findRecentlyReservedTicket(memberId)
+            .map(MemberTicketResponse::from)
+            .orElseGet(MemberTicketResponse::empty);
+    }
 }
