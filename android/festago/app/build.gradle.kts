@@ -25,11 +25,7 @@ android {
 
         buildConfigField("String", "BASE_URL", getSecretKey("base_url"))
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", getSecretKey("kakao_native_app_key"))
-        buildConfigField(
-            "String",
-            "KAKAO_REDIRECTION_SCHEME",
-            getSecretKey("kakao_redirection_scheme"),
-        )
+        resValue("string", "kakao_redirection_scheme", getSecretKey("kakao_redirection_scheme"))
     }
 
     buildFeatures {
