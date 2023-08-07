@@ -13,6 +13,7 @@ import com.festago.dto.FestivalsResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,7 @@ public class FestivalService {
     }
 
     private void validate(Festival festival) {
-        if (!festival.canCreate()) {
+        if (!festival.canCreate(LocalDate.now())) {
             throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_START_DATE);
         }
     }
