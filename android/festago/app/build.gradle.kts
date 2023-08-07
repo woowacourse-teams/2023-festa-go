@@ -122,6 +122,9 @@ dependencies {
 
     // swiperefreshlayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // kakao login
+    implementation("com.kakao.sdk:v2-user:2.10.0")
 }
 
 fun getSecretKey(propertyKey: String): String {
