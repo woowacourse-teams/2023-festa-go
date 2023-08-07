@@ -1,6 +1,7 @@
 package com.festago.auth.presentation;
 
 import com.festago.auth.application.AuthService;
+import com.festago.auth.domain.Login;
 import com.festago.auth.dto.LoginMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +22,7 @@ public class LoginMemberResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(LoginMember.class);
+        return parameter.getParameterType().equals(LoginMember.class) && parameter.hasParameterAnnotation(Login.class);
     }
 
     @Override
