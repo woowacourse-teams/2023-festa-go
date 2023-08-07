@@ -1,7 +1,7 @@
 ---
 name: 버그 템플릿
 about: 앱 사용중 발생한 버그에 대한 템플릿
-title: "[ALL] bug:"
+title: "[BUG] "
 labels: "BUG"
 assignees: ""
 ---
