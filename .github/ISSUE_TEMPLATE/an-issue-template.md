@@ -2,9 +2,8 @@
 name: AN 이슈 템플릿
 about: AN 이슈 템플릿
 title: "[AN] "
-labels: AN
-assignees: ''
-
+labels: "AN"
+assignees: ""
 ---
 
 ## ✨ 세부 내용
