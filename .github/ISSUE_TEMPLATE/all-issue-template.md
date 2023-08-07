@@ -4,7 +4,6 @@ about: ALL 이슈 템플릿
 title: "[ALL] "
 labels: "ALL"
 assignees: ""
-
 ---
 
 ## ✨ 세부 내용
