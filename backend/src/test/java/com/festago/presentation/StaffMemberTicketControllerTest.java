@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.EntryService;
+import com.festago.auth.application.AuthService;
 import com.festago.domain.EntryState;
 import com.festago.dto.TicketValidationRequest;
 import com.festago.dto.TicketValidationResponse;
@@ -33,6 +34,9 @@ class StaffMemberTicketControllerTest {
 
     @MockBean
     EntryService entryService;
+
+    @MockBean
+    AuthService authService;
 
     @Autowired
     ObjectMapper objectMapper;

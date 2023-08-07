@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
 import com.festago.application.TicketService;
+import com.festago.auth.application.AuthService;
 import com.festago.domain.EntryState;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketFestivalResponse;
@@ -51,6 +52,9 @@ class MemberTicketControllerTest {
 
     @MockBean
     TicketService ticketService;
+
+    @MockBean
+    AuthService authService;
 
     @Autowired
     ObjectMapper objectMapper;

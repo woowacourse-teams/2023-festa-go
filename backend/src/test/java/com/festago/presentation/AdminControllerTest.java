@@ -12,6 +12,7 @@ import com.festago.application.AdminService;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
+import com.festago.auth.application.AuthService;
 import com.festago.domain.TicketType;
 import com.festago.dto.ErrorResponse;
 import com.festago.dto.FestivalCreateRequest;
@@ -53,6 +54,9 @@ class AdminControllerTest {
 
     @MockBean
     AdminService adminService;
+
+    @MockBean
+    AuthService authService;
 
     @Autowired
     ObjectMapper objectMapper;

@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.TicketService;
+import com.festago.auth.application.AuthService;
 import com.festago.domain.TicketType;
 import com.festago.dto.StageTicketResponse;
 import com.festago.dto.StageTicketsResponse;
@@ -33,6 +34,9 @@ class StageControllerTest {
 
     @MockBean
     TicketService ticketService;
+
+    @MockBean
+    AuthService authService;
 
     @Autowired
     ObjectMapper objectMapper;

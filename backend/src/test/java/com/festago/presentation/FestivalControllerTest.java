@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.FestivalService;
+import com.festago.auth.application.AuthService;
 import com.festago.dto.FestivalDetailResponse;
 import com.festago.dto.FestivalResponse;
 import com.festago.dto.FestivalsResponse;
@@ -35,6 +36,9 @@ class FestivalControllerTest {
 
     @MockBean
     FestivalService festivalService;
+
+    @MockBean
+    AuthService authService;
 
     @Autowired
     ObjectMapper objectMapper;
