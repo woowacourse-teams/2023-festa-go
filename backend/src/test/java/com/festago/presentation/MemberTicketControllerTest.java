@@ -11,11 +11,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.EntryService;
-import com.festago.application.MemberTicketService;
-import com.festago.application.TicketService;
-import com.festago.auth.application.AuthService;
 import com.festago.domain.EntryState;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketFestivalResponse;
@@ -30,34 +25,11 @@ import java.util.stream.LongStream;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(MemberTicketController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class MemberTicketControllerTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @MockBean
-    EntryService entryService;
-
-    @MockBean
-    MemberTicketService memberTicketService;
-
-    @MockBean
-    TicketService ticketService;
-
-    @MockBean
-    AuthService authService;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class MemberTicketControllerTest extends ControllerTest {
 
     @Test
     void QR을_생성한다() throws Exception {

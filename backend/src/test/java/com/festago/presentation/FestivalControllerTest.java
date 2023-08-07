@@ -7,9 +7,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.FestivalService;
-import com.festago.auth.application.AuthService;
 import com.festago.dto.FestivalDetailResponse;
 import com.festago.dto.FestivalResponse;
 import com.festago.dto.FestivalsResponse;
@@ -20,28 +17,11 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(FestivalController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class FestivalControllerTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @MockBean
-    FestivalService festivalService;
-
-    @MockBean
-    AuthService authService;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class FestivalControllerTest extends ControllerTest {
 
     @Test
     void 모든_축제를_조회한다() throws Exception {

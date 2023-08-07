@@ -7,9 +7,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.TicketService;
-import com.festago.auth.application.AuthService;
 import com.festago.domain.TicketType;
 import com.festago.dto.StageTicketResponse;
 import com.festago.dto.StageTicketsResponse;
@@ -18,28 +15,11 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(StageController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class StageControllerTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @MockBean
-    TicketService ticketService;
-
-    @MockBean
-    AuthService authService;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class StageControllerTest extends ControllerTest {
 
     @Test
     void 공연의_티켓_정보를_조회() throws Exception {
