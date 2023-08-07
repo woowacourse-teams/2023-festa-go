@@ -25,3 +25,10 @@ logging:
 
 festago:
   qr-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
+  auth-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
+  oauth2:
+    kakao:
+      grant-type: grant-type
+      client-id: client-id
+      redirect-uri: redirect-uri
+      client-secret: client-secret
