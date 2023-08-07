@@ -12,7 +12,7 @@ import com.festago.auth.dto.LoginResponse;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.exception.ErrorCode;
-import com.festago.exception.NotFoundException;
+import com.festago.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +57,6 @@ public class AuthService {
 
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+            .orElseThrow(() -> new UnauthorizedException(ErrorCode.INVALID_AUTH_TOKEN));
     }
 }

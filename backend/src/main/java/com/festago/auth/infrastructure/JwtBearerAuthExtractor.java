@@ -2,7 +2,6 @@ package com.festago.auth.infrastructure;
 
 import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
-import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
@@ -48,9 +47,9 @@ public class JwtBearerAuthExtractor implements AuthExtractor {
             return jwtParser.parseClaimsJws(code)
                 .getBody();
         } catch (ExpiredJwtException e) {
-            throw new BadRequestException(ErrorCode.EXPIRED_AUTH_TOKEN);
+            throw new UnauthorizedException(ErrorCode.EXPIRED_AUTH_TOKEN);
         } catch (JwtException e) {
-            throw new BadRequestException(ErrorCode.INVALID_AUTH_TOKEN);
+            throw new UnauthorizedException(ErrorCode.INVALID_AUTH_TOKEN);
         }
     }
 }
