@@ -84,7 +84,7 @@ class JwtEntryCodeExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("유효하지 않은 payload 입니다.");
+            .hasMessage("유효하지 않은 입장코드 payload 입니다.");
     }
 
     @Test
