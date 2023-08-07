@@ -16,6 +16,8 @@ spring:
       enabled: true
 
 logging:
+  file:
+    path: ./
   level:
     org:
       hibernate:
