@@ -52,7 +52,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{festival.name}"
-            android:textColor="@color/md_theme_light_onBackground"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/cvFestivalThumbnail"
             tools:text="테코대학교" />
@@ -66,7 +65,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{@string/festival_list_tv_date_range_format(festival.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),festival.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
-            android:textColor="@color/md_theme_light_onBackground"
             android:textSize="12sp"
             app:layout_constraintTop_toBottomOf="@id/tvFestivalTitle"
             tools:text="2023.07.03 - 2023.07.09" />

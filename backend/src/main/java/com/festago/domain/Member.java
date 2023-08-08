@@ -7,8 +7,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
+@SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image = '' WHERE id=?")
+@Where(clause = "deleted_at is null")
 public class Member {
 
     @Id
@@ -23,6 +28,8 @@ public class Member {
     private String nickname;
 
     private String profileImage;
+
+    private LocalDateTime deletedAt = null;
 
     protected Member() {
     }
@@ -61,5 +68,9 @@ public class Member {
 
     public String getProfileImage() {
         return profileImage;
+    }
+
+    public boolean isDeleted() {
+        return deletedAt != null;
     }
 }
