@@ -48,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
             android:text="@{stage.startTime.format(DateTimeFormatter.ofPattern(@string/ticket_reserve_tv_start_time, Locale.KOREA))}"
-            android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/endGuideLine"

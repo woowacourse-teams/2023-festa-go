@@ -53,29 +53,4 @@ class MemberTicketRepositoryTest {
         // then
         assertThat(memberTickets).hasSize(2);
     }
-
-    // TODO
-    @Test
-    void 티켓_타입과_공연_아이디로_해당하는_회원_티켓의_갯수_조회() {
-        // given
-//        Member member = memberRepository.save(MemberFixture.member().build());
-//        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
-//        Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
-//
-//        Ticket studentTicket = ticketRepository.save(
-//            TicketFixture.ticket().stage(stage).ticketType(TicketType.STUDENT).build());
-//        Ticket visitorTicket = ticketRepository.save(
-//            TicketFixture.ticket().stage(stage).ticketType(TicketType.VISITOR).build());
-//
-//        memberTicketRepository.save(MemberTicketFixture.memberTicket().owner(member).ticket(studentTicket).build());
-//        memberTicketRepository.save(MemberTicketFixture.memberTicket().owner(member).ticket(studentTicket).build());
-//        memberTicketRepository.save(MemberTicketFixture.memberTicket().owner(member).ticket(visitorTicket).build());
-//        memberTicketRepository.save(MemberTicketFixture.memberTicket().owner(member).ticket(visitorTicket).build());
-//
-//        // when
-//        Integer actual = memberTicketRepository.countByTicketTypeAndStageId(TicketType.STUDENT, stage.getId());
-//
-//        // then
-//        assertThat(actual).isEqualTo(2);
-    }
 }

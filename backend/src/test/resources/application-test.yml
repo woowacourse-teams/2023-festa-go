@@ -1,4 +1,6 @@
 spring:
+  datasource:
+    url: jdbc:h2:mem:test;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
   jpa:
     properties:
       hibernate:
@@ -18,3 +20,10 @@ logging:
 
 festago:
   qr-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
+  auth-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
+  oauth2:
+    kakao:
+      grant-type: grant-type
+      client-id: client-id
+      redirect-uri: redirect-uri
+      client-secret: client-secret

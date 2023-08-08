@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.festago.application.FestivalService;
+import com.festago.application.StageService;
 import com.festago.application.TicketService;
 import com.festago.domain.Festival;
 import com.festago.domain.FestivalRepository;
@@ -18,6 +20,7 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketingRequest;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
+import com.festago.support.DatabaseClearExtension;
 import com.festago.support.FestivalFixture;
 import com.festago.support.StageFixture;
 import java.time.LocalDateTime;
@@ -27,20 +30,28 @@ import java.util.concurrent.Executors;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
 
-@SpringBootTest
+@ExtendWith(DatabaseClearExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class TicketServiceIntegrationTest {
+class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     TicketService ticketService;
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    FestivalService festivalService;
+
+    @Autowired
+    StageService stageService;
 
     @Autowired
     MemberTicketRepository memberTicketRepository;
@@ -58,10 +69,10 @@ class TicketServiceIntegrationTest {
     void 공연이_없으면_예외() {
         // given
         String entryTime = "2023-07-26T18:00:00";
-        long invliadStageId = 0L;
+        long invalidStageId = 0L;
         int totalAmount = 100;
 
-        TicketCreateRequest request = new TicketCreateRequest(invliadStageId, TicketType.VISITOR,
+        TicketCreateRequest request = new TicketCreateRequest(invalidStageId, TicketType.VISITOR,
             totalAmount, LocalDateTime.parse(entryTime));
 
         // when && then
@@ -71,7 +82,8 @@ class TicketServiceIntegrationTest {
     }
 
     @Test
-    @Sql("/ticketing-test-data.sql")
+    @Sql(scripts = "/ticketing-test-data.sql",
+        config = @SqlConfig(transactionMode = TransactionMode.ISOLATED))
     void 예약() throws InterruptedException {
         // given
         Member member = memberRepository.findById(1L).get();
