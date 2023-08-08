@@ -16,22 +16,29 @@ public class EntryCode {
     private final long offset;
 
     public EntryCode(String code, long period, long offset) {
-        validate(period);
+        validate(period, offset);
         this.code = code;
         this.period = period;
         this.offset = offset;
+    }
+
+    public void validate(long period, long offset) {
+        if (period <= MINIMUM_PERIOD) {
+            throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_PERIOD);
+        }
+        if (isNegative(offset)) {
+            throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_OFFSET);
+        }
+    }
+
+    private boolean isNegative(long offset) {
+        return offset < 0;
     }
 
     public static EntryCode create(EntryCodeProvider entryCodeProvider, MemberTicket memberTicket) {
         Date expiredAt = new Date(new Date().getTime() + (DEFAULT_PERIOD + DEFAULT_OFFSET) * MILLISECOND_FACTOR);
         String code = entryCodeProvider.provide(EntryCodePayload.from(memberTicket), expiredAt);
         return new EntryCode(code, DEFAULT_PERIOD, DEFAULT_OFFSET);
-    }
-
-    public void validate(long period) {
-        if (period <= MINIMUM_PERIOD) {
-            throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_PERIOD);
-        }
     }
 
     public String getCode() {
