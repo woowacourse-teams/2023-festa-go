@@ -12,6 +12,7 @@ import com.festago.application.TicketService;
 import com.festago.domain.TicketType;
 import com.festago.dto.StageTicketResponse;
 import com.festago.dto.StageTicketsResponse;
+import com.festago.support.TestConfig;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -20,10 +21,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(StageController.class)
+@Import(TestConfig.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class StageControllerTest {
@@ -31,11 +34,11 @@ class StageControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @MockBean
-    TicketService ticketService;
-
     @Autowired
     ObjectMapper objectMapper;
+
+    @MockBean
+    TicketService ticketService;
 
     @Test
     void 공연의_티켓_정보를_조회() throws Exception {

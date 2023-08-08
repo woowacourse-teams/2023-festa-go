@@ -1,7 +1,7 @@
 package com.festago.auth.infrastructure;
 
+import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.AuthProvider;
-import com.festago.domain.Member;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -24,10 +24,10 @@ public class JwtAuthProvider implements AuthProvider {
     }
 
     @Override
-    public String provide(Member member) {
+    public String provide(AuthPayload authPayload) {
         Date now = new Date();
         return Jwts.builder()
-            .claim(MEMBER_ID_KEY, member.getId())
+            .claim(MEMBER_ID_KEY, authPayload.getMemberId())
             .setIssuedAt(now)
             .setExpiration(new Date(now.getTime() + expirationMinutes * SECOND_FACTOR * MILLISECOND_FACTOR))
             .signWith(key, SignatureAlgorithm.HS256)

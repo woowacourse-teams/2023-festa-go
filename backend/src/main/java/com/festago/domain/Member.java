@@ -7,9 +7,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
-public class Member {
+@SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image = '' WHERE id=?")
+@Where(clause = "deleted_at is null")
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +29,9 @@ public class Member {
 
     private String profileImage;
 
-    public Member() {
+    private LocalDateTime deletedAt = null;
+
+    protected Member() {
     }
 
     public Member(Long id) {
@@ -61,5 +68,9 @@ public class Member {
 
     public String getProfileImage() {
         return profileImage;
+    }
+
+    public boolean isDeleted() {
+        return deletedAt != null;
     }
 }

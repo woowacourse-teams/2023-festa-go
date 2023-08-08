@@ -3,6 +3,8 @@ package com.festago.presentation;
 import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
 import com.festago.application.TicketService;
+import com.festago.auth.domain.Login;
+import com.festago.auth.dto.LoginMember;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
@@ -36,39 +38,47 @@ public class MemberTicketController {
     }
 
     @PostMapping("/{memberTicketId}/qr")
-    public ResponseEntity<EntryCodeResponse> createQR(@PathVariable Long memberTicketId) {
-        EntryCodeResponse response = entryService.createEntryCode(1L, memberTicketId); // TODO
+    public ResponseEntity<EntryCodeResponse> createQR(
+        @Login LoginMember loginMember,
+        @PathVariable Long memberTicketId) {
+        EntryCodeResponse response = entryService.createEntryCode(loginMember.memberId(), memberTicketId);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @PostMapping
-    public ResponseEntity<TicketingResponse> ticketing(@RequestBody TicketingRequest request) {
-        TicketingResponse response = ticketService.ticketing(1L, request);
+    public ResponseEntity<TicketingResponse> ticketing(
+        @Login LoginMember loginMember,
+        @RequestBody TicketingRequest request) {
+        TicketingResponse response = ticketService.ticketing(loginMember.memberId(), request);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @GetMapping("/{memberTicketId}")
-    public ResponseEntity<MemberTicketResponse> findById(@PathVariable Long memberTicketId) {
-        MemberTicketResponse response = memberTicketService.findById(1L, memberTicketId); // TODO
+    public ResponseEntity<MemberTicketResponse> findById(
+        @Login LoginMember loginMember,
+        @PathVariable Long memberTicketId) {
+        MemberTicketResponse response = memberTicketService.findById(loginMember.memberId(), memberTicketId);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @GetMapping
-    public ResponseEntity<MemberTicketsResponse> findAll(@RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "100") int size) {
+    public ResponseEntity<MemberTicketsResponse> findAll(
+        @Login LoginMember loginMember,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "100") int size) {
         Pageable pageRequest = PageRequest.of(page, size, Sort.by("entryTime").descending());
-        MemberTicketsResponse response = memberTicketService.findAll(1L, pageRequest);
+        MemberTicketsResponse response = memberTicketService.findAll(loginMember.memberId(), pageRequest);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @GetMapping("/current")
-    public ResponseEntity<MemberTicketsResponse> findCurrent() {
+    public ResponseEntity<MemberTicketsResponse> findCurrent(@Login LoginMember loginMember) {
         Pageable pageable = PageRequest.of(0, 100);
-        MemberTicketsResponse response = memberTicketService.findCurrent(1L, pageable);// TODO
+        MemberTicketsResponse response = memberTicketService.findCurrent(loginMember.memberId(), pageable);
         return ResponseEntity.ok()
             .body(response);
     }

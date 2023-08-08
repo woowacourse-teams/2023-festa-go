@@ -12,6 +12,7 @@ import com.festago.application.FestivalService;
 import com.festago.dto.FestivalDetailResponse;
 import com.festago.dto.FestivalResponse;
 import com.festago.dto.FestivalsResponse;
+import com.festago.support.TestConfig;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -22,10 +23,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(FestivalController.class)
+@Import(TestConfig.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class FestivalControllerTest {
@@ -33,11 +36,11 @@ class FestivalControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @MockBean
-    FestivalService festivalService;
-
     @Autowired
     ObjectMapper objectMapper;
+
+    @MockBean
+    FestivalService festivalService;
 
     @Test
     void 모든_축제를_조회한다() throws Exception {

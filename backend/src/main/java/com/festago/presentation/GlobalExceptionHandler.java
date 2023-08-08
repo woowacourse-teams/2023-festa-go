@@ -6,6 +6,7 @@ import com.festago.exception.ErrorCode;
 import com.festago.exception.FestaGoException;
 import com.festago.exception.InternalServerException;
 import com.festago.exception.NotFoundException;
+import com.festago.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +39,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(BadRequestException e, HttpServletRequest request) throws IOException {
         log(Level.INFO, e, request);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.from(e));
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handle(UnauthorizedException e, HttpServletRequest request)
+        throws IOException {
+        log(Level.INFO, e, request);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.from(e));
     }
 
     @ExceptionHandler(NotFoundException.class)

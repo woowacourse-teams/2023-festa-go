@@ -22,6 +22,7 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.support.TestConfig;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,16 +32,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminController.class)
+@Import(TestConfig.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AdminControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @MockBean
     FestivalService festivalService;
@@ -53,9 +59,6 @@ class AdminControllerTest {
 
     @MockBean
     AdminService adminService;
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Test
     void 축제_생성() throws Exception {

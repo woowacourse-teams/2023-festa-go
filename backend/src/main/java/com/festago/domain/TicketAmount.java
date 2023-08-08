@@ -10,7 +10,7 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class TicketAmount {
+public class TicketAmount extends BaseTimeEntity {
 
     @Id
     private Long id;

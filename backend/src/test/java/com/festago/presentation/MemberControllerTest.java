@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.MemberService;
 import com.festago.application.MemberTicketService;
 import com.festago.dto.MemberProfileResponse;
+import com.festago.support.TestConfig;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -18,9 +19,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(MemberController.class)
+@Import(TestConfig.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class MemberControllerTest {
@@ -28,14 +31,15 @@ class MemberControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+    
     @MockBean
     MemberService memberService;
 
     @MockBean
     MemberTicketService memberTicketService;
 
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Test
     void 회원_정보_반환() throws Exception {
