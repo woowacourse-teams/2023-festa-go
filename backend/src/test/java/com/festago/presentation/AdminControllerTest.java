@@ -7,6 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.application.AdminService;
+import com.festago.application.FestivalService;
+import com.festago.application.StageService;
+import com.festago.application.TicketService;
 import com.festago.domain.TicketType;
 import com.festago.dto.ErrorResponse;
 import com.festago.dto.FestivalCreateRequest;
@@ -17,17 +22,43 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.support.TestConfig;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
+@WebMvcTest(AdminController.class)
+@Import(TestConfig.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AdminControllerTest extends ControllerTest {
+class AdminControllerTest {
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @MockBean
+    FestivalService festivalService;
+
+    @MockBean
+    StageService stageService;
+
+    @MockBean
+    TicketService ticketService;
+
+    @MockBean
+    AdminService adminService;
 
     @Test
     void 축제_생성() throws Exception {

@@ -7,19 +7,38 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.application.EntryService;
 import com.festago.domain.EntryState;
 import com.festago.dto.TicketValidationRequest;
 import com.festago.dto.TicketValidationResponse;
+import com.festago.support.TestConfig;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 
+@WebMvcTest(StaffMemberTicketController.class)
+@Import(TestConfig.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class StaffMemberTicketControllerTest extends ControllerTest {
+class StaffMemberTicketControllerTest {
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @MockBean
+    EntryService entryService;
 
     @Test
     void QR을_검사한다() throws Exception {

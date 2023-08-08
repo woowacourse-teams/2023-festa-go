@@ -11,6 +11,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.application.EntryService;
+import com.festago.application.MemberTicketService;
+import com.festago.application.TicketService;
+import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.domain.EntryState;
 import com.festago.dto.EntryCodeResponse;
@@ -20,17 +25,43 @@ import com.festago.dto.MemberTicketsResponse;
 import com.festago.dto.StageResponse;
 import com.festago.dto.TicketingRequest;
 import com.festago.dto.TicketingResponse;
+import com.festago.support.TestConfig;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.stream.LongStream;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
+@WebMvcTest(MemberTicketController.class)
+@Import(TestConfig.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class MemberTicketControllerTest extends ControllerTest {
+class MemberTicketControllerTest {
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @MockBean
+    EntryService entryService;
+
+    @MockBean
+    MemberTicketService memberTicketService;
+
+    @MockBean
+    TicketService ticketService;
+
+    @MockBean
+    AuthExtractor authExtractor;
 
     @Test
     void QR을_생성한다() throws Exception {
