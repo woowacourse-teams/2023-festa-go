@@ -28,7 +28,6 @@ public class DatabaseClearExtension implements TestInstancePreConstructCallback,
         truncate(context);
     }
 
-    @SuppressWarnings("unchecked")
     private void initialTable(ExtensionContext context) {
         if (TABLES.isEmpty()) {
             JdbcTemplate jdbcTemplate = context.getStore(CLEANER).get(JDBC_TEMPLATE, JdbcTemplate.class);
