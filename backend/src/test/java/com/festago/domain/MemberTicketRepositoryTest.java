@@ -10,9 +10,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 
 @DataJpaTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -34,25 +36,51 @@ class MemberTicketRepositoryTest {
     @Autowired
     FestivalRepository festivalRepository;
 
-    @Test
-    void 회원의_ID로_에매한_티켓을_모두_조회() {
-        // given
-        Member member1 = memberRepository.save(MemberFixture.member().build());
-        Member member2 = memberRepository.save(MemberFixture.member().build());
+    @Nested
+    class 회원의_ID로_에매한_티켓을_모두_조회 {
 
-        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
-        Stage stage1 = stageRepository.save(StageFixture.stage().festival(festival).build());
-        Stage stage2 = stageRepository.save(StageFixture.stage().festival(festival).build());
+        @Test
+        void 성공() {
+            // given
+            Member member1 = memberRepository.save(MemberFixture.member().build());
+            Member member2 = memberRepository.save(MemberFixture.member().build());
 
-        memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage1).owner(member1).build());
-        memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage2).owner(member1).build());
-        memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage1).owner(member2).build());
+            Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+            Stage stage1 = stageRepository.save(StageFixture.stage().festival(festival).build());
+            Stage stage2 = stageRepository.save(StageFixture.stage().festival(festival).build());
 
-        // when
-        List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(member1.getId());
+            memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage1).owner(member1).build());
+            memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage2).owner(member1).build());
+            memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage1).owner(member2).build());
 
-        // then
-        assertThat(memberTickets).hasSize(2);
+            // when
+            List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(member1.getId(),
+                PageRequest.of(0, 10));
+
+            // then
+            assertThat(memberTickets).hasSize(2);
+        }
+
+        @Test
+        void 지정한_갯수만큼_조회() {
+            // given
+            int expected = 10;
+            Member member = memberRepository.save(MemberFixture.member().build());
+
+            Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+            Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
+
+            for (int i = 0; i < 20; i++) {
+                memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage).owner(member).build());
+            }
+
+            // when
+            List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(member.getId(),
+                PageRequest.of(0, expected));
+
+            // then
+            assertThat(memberTickets).hasSize(expected);
+        }
     }
 
     //TODO: createAt 추가시 변경

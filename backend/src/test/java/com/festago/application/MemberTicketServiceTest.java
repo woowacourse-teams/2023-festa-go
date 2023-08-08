@@ -2,6 +2,8 @@ package com.festago.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 
@@ -27,6 +29,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -60,11 +63,11 @@ class MemberTicketServiceTest {
             .entryTime(stage3.getStartTime().minusHours(1))
             .build();
 
-        given(memberTicketRepository.findAllByOwnerId(memberId))
+        given(memberTicketRepository.findAllByOwnerId(eq(memberId), any(Pageable.class)))
             .willReturn(List.of(memberTicket2, memberTicket1, memberTicket3));
 
         // when
-        MemberTicketsResponse response = memberTicketService.findAll(memberId);
+        MemberTicketsResponse response = memberTicketService.findAll(memberId, Pageable.ofSize(1));
 
         // then
         List<Long> memberTicketIds = response.memberTickets().stream()
@@ -84,11 +87,11 @@ class MemberTicketServiceTest {
                 .entryTime(LocalDateTime.now().plusHours(13))
                 .build();
 
-            given(memberTicketRepository.findAllByOwnerId(memberId))
+            given(memberTicketRepository.findAllByOwnerId(eq(memberId), any(Pageable.class)))
                 .willReturn(List.of(memberTicket));
 
             // when
-            MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+            MemberTicketsResponse response = memberTicketService.findCurrent(memberId, Pageable.ofSize(100));
 
             // then
             assertThat(response.memberTickets()).isEmpty();
@@ -102,11 +105,11 @@ class MemberTicketServiceTest {
                 .entryTime(LocalDateTime.now().minusHours(25))
                 .build();
 
-            given(memberTicketRepository.findAllByOwnerId(memberId))
+            given(memberTicketRepository.findAllByOwnerId(anyLong(), any(Pageable.class)))
                 .willReturn(List.of(memberTicket));
 
             // when
-            MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+            MemberTicketsResponse response = memberTicketService.findCurrent(memberId, Pageable.ofSize(100));
 
             // then
             assertThat(response.memberTickets()).isEmpty();
@@ -125,11 +128,11 @@ class MemberTicketServiceTest {
                 .entryTime(LocalDateTime.now().minusHours(1))
                 .build();
 
-            given(memberTicketRepository.findAllByOwnerId(memberId))
+            given(memberTicketRepository.findAllByOwnerId(eq(memberId), any(Pageable.class)))
                 .willReturn(List.of(pendingMemberTicket, activateMemberTicket));
 
             // when
-            MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+            MemberTicketsResponse response = memberTicketService.findCurrent(memberId, Pageable.ofSize(100));
 
             // then
             List<Long> memberTicketIds = response.memberTickets().stream()
@@ -159,12 +162,12 @@ class MemberTicketServiceTest {
                 .entryTime(LocalDateTime.now().minusHours(1))
                 .build();
 
-            given(memberTicketRepository.findAllByOwnerId(memberId))
+            given(memberTicketRepository.findAllByOwnerId(eq(memberId), any(Pageable.class)))
                 .willReturn(
                     List.of(pendingMemberTicket1, pendingMemberTicket2, activateMemberTicket1, activateMemberTicket2));
 
             // when
-            MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
+            MemberTicketsResponse response = memberTicketService.findCurrent(memberId, Pageable.ofSize(100));
 
             // then
             List<Long> memberTicketIds = response.memberTickets().stream()

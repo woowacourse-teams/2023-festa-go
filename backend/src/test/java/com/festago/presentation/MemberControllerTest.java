@@ -10,13 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.MemberService;
 import com.festago.application.MemberTicketService;
-import com.festago.domain.EntryState;
 import com.festago.dto.MemberResponse;
-import com.festago.dto.MemberTicketFestivalResponse;
-import com.festago.dto.MemberTicketResponse;
-import com.festago.dto.StageResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -58,29 +53,6 @@ class MemberControllerTest {
             .getContentAsString(StandardCharsets.UTF_8);
 
         MemberResponse actual = objectMapper.readValue(content, MemberResponse.class);
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    @Test
-    void 최근_티켓_반환() throws Exception {
-        // given
-        LocalDateTime now = LocalDateTime.now();
-        MemberTicketResponse expected = new MemberTicketResponse(
-            1L, 100, now, EntryState.BEFORE_ENTRY, now,
-            new StageResponse(1L, now),
-            new MemberTicketFestivalResponse(1L, "축제", "www.naver.com"));
-        given(memberTicketService.findRecentlyReservedTicket(anyLong()))
-            .willReturn(expected);
-
-        // when & then
-        String content = mockMvc.perform(get("/members/ticket"))
-            .andExpect(status().isOk())
-            .andDo(print())
-            .andReturn()
-            .getResponse()
-            .getContentAsString(StandardCharsets.UTF_8);
-
-        MemberTicketResponse actual = objectMapper.readValue(content, MemberTicketResponse.class);
         assertThat(actual).isEqualTo(expected);
     }
 }
