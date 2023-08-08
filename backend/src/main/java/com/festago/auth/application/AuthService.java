@@ -36,8 +36,7 @@ public class AuthService {
 
     private UserInfo getUserInfo(LoginRequest request) {
         OAuth2Client oAuth2Client = oAuth2Clients.getClient(request.socialType());
-        String accessToken = oAuth2Client.getAccessToken(request.accessToken());
-        return oAuth2Client.getUserInfo(accessToken);
+        return oAuth2Client.getUserInfo(request.accessToken());
     }
 
     private Member signUp(UserInfo userInfo) {
