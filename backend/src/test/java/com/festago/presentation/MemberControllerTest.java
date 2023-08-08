@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.MemberService;
 import com.festago.application.MemberTicketService;
-import com.festago.dto.MemberResponse;
+import com.festago.dto.MemberProfileResponse;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -40,8 +40,8 @@ class MemberControllerTest {
     @Test
     void 회원_정보_반환() throws Exception {
         // given
-        MemberResponse expected = new MemberResponse("닉네임", "www.profileImageUrl.com");
-        given(memberService.findMemberInfo(anyLong()))
+        MemberProfileResponse expected = new MemberProfileResponse(1L, "닉네임", "www.profileImageUrl.com");
+        given(memberService.findMemberProfile(anyLong()))
             .willReturn(expected);
 
         // when & then
@@ -52,7 +52,7 @@ class MemberControllerTest {
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);
 
-        MemberResponse actual = objectMapper.readValue(content, MemberResponse.class);
+        MemberProfileResponse actual = objectMapper.readValue(content, MemberProfileResponse.class);
         assertThat(actual).isEqualTo(expected);
     }
 }

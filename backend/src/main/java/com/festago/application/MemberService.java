@@ -2,7 +2,7 @@ package com.festago.application;
 
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
-import com.festago.dto.MemberResponse;
+import com.festago.dto.MemberProfileResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,9 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public MemberResponse findMemberInfo(Long memberId) {
+    public MemberProfileResponse findMemberProfile(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
-        return MemberResponse.from(member);
+        return MemberProfileResponse.from(member);
     }
 }
