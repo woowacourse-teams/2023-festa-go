@@ -3,6 +3,8 @@ package com.festago.application.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.festago.application.FestivalService;
+import com.festago.application.StageService;
 import com.festago.application.TicketService;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
@@ -11,6 +13,7 @@ import com.festago.domain.TicketType;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketingRequest;
 import com.festago.exception.NotFoundException;
+import com.festago.support.DatabaseClearExtension;
 import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -18,14 +21,16 @@ import java.util.concurrent.Executors;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
 
-@SpringBootTest
+@ExtendWith(DatabaseClearExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class TicketServiceIntegrationTest {
+class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     TicketService ticketService;
@@ -34,16 +39,22 @@ class TicketServiceIntegrationTest {
     MemberRepository memberRepository;
 
     @Autowired
+    FestivalService festivalService;
+
+    @Autowired
+    StageService stageService;
+
+    @Autowired
     MemberTicketRepository memberTicketRepository;
 
     @Test
     void 공연이_없으면_예외() {
         // given
         String entryTime = "2023-07-26T18:00:00";
-        long invliadStageId = 0L;
+        long invalidStageId = 0L;
         int totalAmount = 100;
 
-        TicketCreateRequest request = new TicketCreateRequest(invliadStageId, TicketType.VISITOR,
+        TicketCreateRequest request = new TicketCreateRequest(invalidStageId, TicketType.VISITOR,
             totalAmount, LocalDateTime.parse(entryTime));
 
         // when && then
@@ -53,7 +64,8 @@ class TicketServiceIntegrationTest {
     }
 
     @Test
-    @Sql("/ticketing-test-data.sql")
+    @Sql(scripts = "/ticketing-test-data.sql",
+        config = @SqlConfig(transactionMode = TransactionMode.ISOLATED))
     void 예약() throws InterruptedException {
         // given
         Member member = memberRepository.findById(1L).get();
@@ -75,5 +87,4 @@ class TicketServiceIntegrationTest {
 
         assertThat(memberTicketRepository.count()).isEqualTo(100);
     }
-
 }
