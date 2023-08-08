@@ -25,10 +25,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(MyPageController.class)
+@WebMvcTest(MemberController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class MyPageControllerTest {
+class MemberControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -50,7 +50,7 @@ class MyPageControllerTest {
             .willReturn(expected);
 
         // when & then
-        String content = mockMvc.perform(get("/my-page/info"))
+        String content = mockMvc.perform(get("/members/profile"))
             .andExpect(status().isOk())
             .andDo(print())
             .andReturn()
@@ -73,7 +73,7 @@ class MyPageControllerTest {
             .willReturn(expected);
 
         // when & then
-        String content = mockMvc.perform(get("/my-page/ticket"))
+        String content = mockMvc.perform(get("/members/ticket"))
             .andExpect(status().isOk())
             .andDo(print())
             .andReturn()

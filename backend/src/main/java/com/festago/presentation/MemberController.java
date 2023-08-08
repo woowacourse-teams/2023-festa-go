@@ -9,20 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//TODO: API URL 논의 후 변경
 @RestController
-@RequestMapping("/my-page")
-public class MyPageController {
+@RequestMapping("/members")
+public class MemberController {
 
     private final MemberService memberService;
     private final MemberTicketService memberTicketService;
 
-    public MyPageController(MemberService memberService, MemberTicketService memberTicketService) {
+    public MemberController(MemberService memberService, MemberTicketService memberTicketService) {
         this.memberService = memberService;
         this.memberTicketService = memberTicketService;
     }
 
-    @GetMapping("/info")
+    @GetMapping("/profile")
     public ResponseEntity<MemberResponse> findMemberInfo() {
         Long memberId = 1L;
         MemberResponse response = memberService.findMemberInfo(memberId);
