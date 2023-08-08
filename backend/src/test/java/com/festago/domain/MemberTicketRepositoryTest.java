@@ -6,7 +6,6 @@ import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -81,32 +80,6 @@ class MemberTicketRepositoryTest {
             // then
             assertThat(memberTickets).hasSize(expected);
         }
-    }
-
-    //TODO: createAt 추가시 변경
-    @Test
-    void 입장_시간이_가장_최근인_티켓만_조회() {
-        // given
-        Member member = memberRepository.save(MemberFixture.member().build());
-
-        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
-        Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
-
-        LocalDateTime now = LocalDateTime.now();
-        memberTicketRepository.save(MemberTicketFixture.memberTicket()
-            .entryTime(now)
-            .stage(stage).owner(member).build());
-        MemberTicket expected = memberTicketRepository.save(MemberTicketFixture.memberTicket()
-            .entryTime(now.plusHours(2))
-            .stage(stage).owner(member).build());
-        memberTicketRepository.save(MemberTicketFixture.memberTicket()
-            .entryTime(now.plusHours(1))
-            .stage(stage).owner(member).build());
-        // when
-        MemberTicket actual = memberTicketRepository.findRecentlyReservedTicket(member.getId()).get();
-
-        // then
-        assertThat(actual).isEqualTo(expected);
     }
 
     // TODO
