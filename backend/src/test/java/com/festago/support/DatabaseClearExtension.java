@@ -4,26 +4,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
-import org.junit.jupiter.api.extension.TestInstanceFactoryContext;
-import org.junit.jupiter.api.extension.TestInstancePreConstructCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-public class DatabaseClearExtension implements TestInstancePreConstructCallback, AfterEachCallback {
+public class DatabaseClearExtension implements BeforeAllCallback, AfterEachCallback {
 
     private static final Namespace CLEANER = Namespace.create("festago.database.cleaner");
     private static final Set<String> TABLES = new HashSet<>();
     private static final String JDBC_TEMPLATE = "jdbcTemplate";
 
     @Override
-    public void preConstructTestInstance(TestInstanceFactoryContext factoryContext, ExtensionContext context)
-        throws Exception {
+    public void beforeAll(ExtensionContext context) throws Exception {
         JdbcTemplate jdbcTemplate = SpringExtension.getApplicationContext(context)
             .getBean(JdbcTemplate.class);
         context.getStore(CLEANER).put(JDBC_TEMPLATE, jdbcTemplate);
-
         initialTable(context);
         truncate(context);
     }
