@@ -31,40 +31,51 @@ class MyPageViewModel(
         // TODO: _event.setValue(MyPageEvent.ShowLogin)
 
         viewModelScope.launch {
-            userRepository.loadUserProfile()
-                .onSuccess {
-                    val currentState = uiState.value
-                    if (currentState is MyPageUiState.Success) {
-                        _uiState.value = currentState.copy(userProfile = it.toPresentation())
-                    } else {
-                        _uiState.value = MyPageUiState.Success(userProfile = it.toPresentation())
-                    }
-                }.onFailure {
-                    _uiState.value = MyPageUiState.Error
-                    analyticsHelper.logNetworkFailure(
-                        key = KEY_LOAD_USER_INFO,
-                        value = it.message.toString(),
-                    )
-                }
-            ticketRepository.loadAllTickets(size = 1)
-                .onSuccess {
-                    val currentState = uiState.value
-                    if (currentState is MyPageUiState.Success) {
-                        _uiState.value =
-                            currentState.copy(ticket = it.first().toPresentation())
-                    } else {
-                        _uiState.value = MyPageUiState.Success(
-                            ticket = it.first().toPresentation(),
-                        )
-                    }
-                }.onFailure {
-                    _uiState.value = MyPageUiState.Error
-                    analyticsHelper.logNetworkFailure(
-                        key = KEY_LOAD_USER_INFO,
-                        value = it.message.toString(),
-                    )
-                }
+            loadUserProfile()
+            loadFirstTicket()
         }
+    }
+
+    private suspend fun loadUserProfile() {
+        userRepository.loadUserProfile()
+            .onSuccess {
+                when (val current = uiState.value) {
+                    is MyPageUiState.Loading ->
+                        _uiState.value = MyPageUiState.Success(userProfile = it.toPresentation())
+
+                    is MyPageUiState.Success ->
+                        _uiState.value = current.copy(userProfile = it.toPresentation())
+
+                    else -> Unit
+                }
+            }.onFailure {
+                _uiState.value = MyPageUiState.Error
+                analyticsHelper.logNetworkFailure(
+                    key = KEY_LOAD_USER_INFO,
+                    value = it.message.toString(),
+                )
+            }
+    }
+
+    private suspend fun loadFirstTicket() {
+        ticketRepository.loadAllTickets(size = 1)
+            .onSuccess {
+                when (val current = uiState.value) {
+                    is MyPageUiState.Loading ->
+                        _uiState.value = MyPageUiState.Success(ticket = it.first().toPresentation())
+
+                    is MyPageUiState.Success ->
+                        _uiState.value = current.copy(ticket = it.first().toPresentation())
+
+                    else -> Unit
+                }
+            }.onFailure {
+                _uiState.value = MyPageUiState.Error
+                analyticsHelper.logNetworkFailure(
+                    key = KEY_LOAD_USER_INFO,
+                    value = it.message.toString(),
+                )
+            }
     }
 
     class MyPageViewModelFactory(
