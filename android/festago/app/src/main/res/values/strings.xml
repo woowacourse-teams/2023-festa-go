@@ -75,4 +75,18 @@
     <string name="reservation_complete_tv_time_format">HH:mm</string>
     <string name="reservation_complete_tv_date_format">yyyy.MM.dd</string>
     <string name="reservation_complete_tv_entry_able_time">[입장 가능 시간] %s</string>
+
+    <!-- Strings related to my page -->
+    <string name="my_page_tv_account_title">계정</string>
+    <string name="my_page_tv_school_authorization">학교 인증</string>
+    <string name="my_page_tv_logout">로그아웃</string>
+    <string name="my_page_tv_withdrawal">탈퇴하기</string>
+    <string name="my_page_tv_reserve_list_title">예매 목록</string>
+    <string name="my_page_tv_stage_start_time_title">[무대 시작 시간]</string>
+    <string name="my_page_tv_entry_start_time_title">[입장 시작 시간]</string>
+    <string name="my_page_tv_number_title">[입장 번호]</string>
+    <string name="my_page_tv_reserve_at_title">[예매 일자]</string>
+    <string name="my_page_tv_more">더보기 ></string>
+    <string name="my_page_no_ticket">예매 내역이 존재하지 않습니다.</string>
+    <string name="my_page_datatime_format">yyyy.MM.dd. HH:mm</string>
 </resources>
