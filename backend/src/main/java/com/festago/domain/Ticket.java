@@ -21,7 +21,7 @@ import java.util.TreeSet;
 import org.hibernate.annotations.SortNatural;
 
 @Entity
-public class Ticket {
+public class Ticket extends BaseTimeEntity {
 
     private static final int EARLY_ENTRY_LIMIT = 12;
 

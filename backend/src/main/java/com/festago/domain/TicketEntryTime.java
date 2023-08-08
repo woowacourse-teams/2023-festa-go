@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
-public class TicketEntryTime implements Comparable<TicketEntryTime> {
+public class TicketEntryTime extends BaseTimeEntity implements Comparable<TicketEntryTime> {
 
     private static final int MIN_TOTAL_AMOUNT = 1;
 

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class MemberTicket {
+public class MemberTicket extends BaseTimeEntity {
 
     private static final long PENDING_LIMIT_HOUR = 12;
     private static final long ENTRY_LIMIT_HOUR = 24;

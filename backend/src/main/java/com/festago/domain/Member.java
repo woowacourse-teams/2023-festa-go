@@ -14,7 +14,7 @@ import org.hibernate.annotations.Where;
 @Entity
 @SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image = '' WHERE id=?")
 @Where(clause = "deleted_at is null")
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
