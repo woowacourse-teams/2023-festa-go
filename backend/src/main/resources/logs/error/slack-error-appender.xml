@@ -1,8 +1,8 @@
 <included>
-  <springProperty name="WEBHOOK-URL" source="festago.log.slack.webhook-url"/>
+  <springProperty name="WEBHOOK_URL" source="festago.log.slack.webhook-url"/>
 
   <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
-    <webhookUri>${WEBHOOK-URL}</webhookUri>
+    <webhookUri>${WEBHOOK_URL}</webhookUri>
     <layout class="ch.qos.logback.classic.PatternLayout">
       <pattern>${FILE_LOG_PATTERN}</pattern>
     </layout>
