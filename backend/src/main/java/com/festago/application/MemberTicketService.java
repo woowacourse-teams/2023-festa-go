@@ -48,7 +48,6 @@ public class MemberTicketService {
         validateMemberId(memberId);
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId, pageable);
         return memberTickets.stream()
-            .sorted(comparing(memberTicket -> memberTicket.getStage().getStartTime()))
             .collect(collectingAndThen(toList(), MemberTicketsResponse::from));
     }
 

@@ -63,42 +63,6 @@ class MemberTicketServiceTest {
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("존재하지 않는 멤버입니다.");
         }
-
-        @Test
-        void 사용자의_멤버티켓_전체_조회시_공연시작시간이_빠른순으로_정렬된다() {
-            // given
-            Long memberId = 1L;
-            LocalDateTime now = LocalDateTime.now();
-            Stage stage1 = StageFixture.stage().build();
-            Stage stage2 = StageFixture.stage().startTime(now.plusDays(1)).build();
-            Stage stage3 = StageFixture.stage().startTime(now.plusDays(2)).build();
-            MemberTicket memberTicket1 = MemberTicketFixture.memberTicket()
-                .id(1L)
-                .entryTime(stage1.getStartTime().minusHours(1))
-                .build();
-            MemberTicket memberTicket2 = MemberTicketFixture.memberTicket()
-                .id(2L)
-                .entryTime(stage2.getStartTime().minusHours(1))
-                .build();
-            MemberTicket memberTicket3 = MemberTicketFixture.memberTicket()
-                .id(3L)
-                .entryTime(stage3.getStartTime().minusHours(1))
-                .build();
-
-            given(memberTicketRepository.findAllByOwnerId(eq(memberId), any(Pageable.class)))
-                .willReturn(List.of(memberTicket2, memberTicket1, memberTicket3));
-            given(memberRepository.findById(memberId))
-                .willReturn(Optional.of(new Member(memberId)));
-
-            // when
-            MemberTicketsResponse response = memberTicketService.findAll(memberId, Pageable.ofSize(1));
-
-            // then
-            List<Long> memberTicketIds = response.memberTickets().stream()
-                .map(MemberTicketResponse::id)
-                .toList();
-            assertThat(memberTicketIds).containsExactly(1L, 2L, 3L);
-        }
     }
 
     @Nested
