@@ -1,24 +1,26 @@
 package com.festago.support;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class DatabaseCleaner {
 
-    private final List<String> tableNames = new ArrayList<>();
+    private final Set<String> tableNames = new HashSet<>();
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @SuppressWarnings("unchecked")
-    @PostConstruct
-    private void findDatabaseTableNames() {
+    @EventListener(ApplicationReadyEvent.class)
+    public void findDatabaseTableNames() {
         List<Object[]> tableInfos = entityManager.createNativeQuery("SHOW TABLES").getResultList();
         for (Object[] tableInfo : tableInfos) {
             String tableName = (String) tableInfo[0];
