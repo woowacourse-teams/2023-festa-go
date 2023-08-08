@@ -20,11 +20,13 @@
     <include resource="logs/error/file-info-appender.xml"/>
     <include resource="logs/error/file-warn-appender.xml"/>
     <include resource="logs/error/file-error-appender.xml"/>
+    <include resource="logs/error/slack-error-appender.xml"/>
 
     <logger additivity="false" level="INFO" name="ErrorLogger">
       <appender-ref ref="ERROR_ERROR"/>
       <appender-ref ref="ERROR_WARN"/>
       <appender-ref ref="ERROR_INFO"/>
+      <appender-ref ref="ASYNC_SLACK"/>
     </logger>
 
     <root level="INFO">
@@ -41,11 +43,13 @@
     <include resource="logs/error/file-info-appender.xml"/>
     <include resource="logs/error/file-warn-appender.xml"/>
     <include resource="logs/error/file-error-appender.xml"/>
+    <include resource="logs/error/slack-error-appender.xml"/>
 
     <logger additivity="false" level="INFO" name="ErrorLogger">
       <appender-ref ref="ERROR_ERROR"/>
       <appender-ref ref="ERROR_WARN"/>
       <appender-ref ref="ERROR_INFO"/>
+      <appender-ref ref="ASYNC_SLACK"/>
     </logger>
 
     <root level="INFO">
