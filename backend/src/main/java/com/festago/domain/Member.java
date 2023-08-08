@@ -24,7 +24,7 @@ public class Member {
 
     private String profileImage;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(Long id) {
