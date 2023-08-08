@@ -89,4 +89,5 @@
     <string name="my_page_tv_more">더보기 ></string>
     <string name="my_page_no_ticket">예매 내역이 존재하지 않습니다.</string>
     <string name="my_page_datatime_format">yyyy.MM.dd. HH:mm</string>
+    <string name="my_page_tv_error">마이페이지 정보 받아오기에 실패했습니다.</string>
 </resources>
