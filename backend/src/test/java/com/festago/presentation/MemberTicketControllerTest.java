@@ -162,7 +162,6 @@ class MemberTicketControllerTest {
     @Test
     void 티켓팅을_통해_멤버의_티켓을_생성한다() throws Exception {
         // given
-        Long memberId = 1L;
         Long memberTicketId = 1L;
         Integer ticketNumber = 125;
         Long ticketId = 1L;
