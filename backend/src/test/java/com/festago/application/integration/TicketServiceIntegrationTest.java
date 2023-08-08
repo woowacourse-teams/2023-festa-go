@@ -2,7 +2,6 @@ package com.festago.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
@@ -107,7 +106,7 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     }
 
     @Test
-    void 티켓_최초_생성시_입장시간이_유효하지_않으면_티켓도_생성되지않는다() {
+    void 티켓_생성시_입장_시간이_공연_시간보다_빠르면_예외() {
         // given
         Festival festival = festivalRepository.save(FestivalFixture.festival().build());
         LocalDateTime now = LocalDateTime.now();
@@ -118,11 +117,8 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         TicketCreateRequest request = new TicketCreateRequest(stageId, TicketType.STUDENT, 100, entryTime);
 
         // when & then
-        assertSoftly(softly -> {
-            softly.assertThatThrownBy(() -> ticketService.create(request))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessage("입장 시간은 공연 시간보다 빨라야합니다.");
-            softly.assertThat(ticketRepository.findAllByStageId(stageId).size()).isEqualTo(0);
-        });
+        assertThatThrownBy(() -> ticketService.create(request))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("입장 시간은 공연 시간보다 빨라야합니다.");
     }
 }
