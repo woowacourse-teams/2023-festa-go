@@ -19,6 +19,7 @@ public enum ErrorCode {
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
     INVALID_AUTH_TOKEN("올바르지 않은 로그인 토큰입니다."),
     NOT_BEARER_TOKEN_TYPE("Bearer 타입의 토큰이 아닙니다."),
+    NEED_AUTH_TOKEN("로그인이 필요한 서비스입니다."),
 
     // 404
     MEMBER_TICKET_NOT_FOUND("존재하지 않은 멤버 티켓입니다."),

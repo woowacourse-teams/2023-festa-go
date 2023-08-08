@@ -36,10 +36,17 @@ public class JwtBearerAuthExtractor implements AuthExtractor {
     }
 
     private String extractToken(String header) {
+        validateHeader(header);
+        return header.substring(TOKEN_PREFIX.length()).trim();
+    }
+
+    private void validateHeader(String header) {
+        if (header == null) {
+            throw new UnauthorizedException(ErrorCode.NEED_AUTH_TOKEN);
+        }
         if (!header.toLowerCase().startsWith(TOKEN_PREFIX.toLowerCase())) {
             throw new UnauthorizedException(ErrorCode.NOT_BEARER_TOKEN_TYPE);
         }
-        return header.substring(TOKEN_PREFIX.length()).trim();
     }
 
     private Claims getClaims(String code) {
