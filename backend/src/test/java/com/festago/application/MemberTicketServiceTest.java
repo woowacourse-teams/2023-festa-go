@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.domain.Member;
+import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
@@ -35,56 +36,96 @@ class MemberTicketServiceTest {
     @Mock
     MemberTicketRepository memberTicketRepository;
 
+    @Mock
+    MemberRepository memberRepository;
+
     @InjectMocks
     MemberTicketService memberTicketService;
 
-    @Test
-    void 사용자의_멤버티켓_전체_조회시_공연시작시간이_빠른순으로_정렬된다() {
-        // given
-        long memberId = 1L;
-        LocalDateTime now = LocalDateTime.now();
-        Stage stage1 = StageFixture.stage().build();
-        Stage stage2 = StageFixture.stage().startTime(now.plusDays(1)).build();
-        Stage stage3 = StageFixture.stage().startTime(now.plusDays(2)).build();
-        MemberTicket memberTicket1 = MemberTicketFixture.memberTicket()
-            .id(1L)
-            .entryTime(stage1.getStartTime().minusHours(1))
-            .build();
-        MemberTicket memberTicket2 = MemberTicketFixture.memberTicket()
-            .id(2L)
-            .entryTime(stage2.getStartTime().minusHours(1))
-            .build();
-        MemberTicket memberTicket3 = MemberTicketFixture.memberTicket()
-            .id(3L)
-            .entryTime(stage3.getStartTime().minusHours(1))
-            .build();
+    @Nested
+    class 사용자의_멤버티켓_전체_조회 {
 
-        given(memberTicketRepository.findAllByOwnerId(memberId))
-            .willReturn(List.of(memberTicket2, memberTicket1, memberTicket3));
+        @Test
+        void 멤버가_없으면_예외() {
+            // given
+            Long memberId = 1L;
 
-        // when
-        MemberTicketsResponse response = memberTicketService.findAll(memberId);
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.empty());
 
-        // then
-        List<Long> memberTicketIds = response.memberTickets().stream()
-            .map(MemberTicketResponse::id)
-            .toList();
-        assertThat(memberTicketIds).containsExactly(1L, 2L, 3L);
+            // when & then
+            assertThatThrownBy(() -> memberTicketService.findAll(memberId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("존재하지 않는 멤버입니다.");
+        }
+
+        @Test
+        void 사용자의_멤버티켓_전체_조회시_공연시작시간이_빠른순으로_정렬된다() {
+            // given
+            Long memberId = 1L;
+            LocalDateTime now = LocalDateTime.now();
+            Stage stage1 = StageFixture.stage().build();
+            Stage stage2 = StageFixture.stage().startTime(now.plusDays(1)).build();
+            Stage stage3 = StageFixture.stage().startTime(now.plusDays(2)).build();
+            MemberTicket memberTicket1 = MemberTicketFixture.memberTicket()
+                .id(1L)
+                .entryTime(stage1.getStartTime().minusHours(1))
+                .build();
+            MemberTicket memberTicket2 = MemberTicketFixture.memberTicket()
+                .id(2L)
+                .entryTime(stage2.getStartTime().minusHours(1))
+                .build();
+            MemberTicket memberTicket3 = MemberTicketFixture.memberTicket()
+                .id(3L)
+                .entryTime(stage3.getStartTime().minusHours(1))
+                .build();
+
+            given(memberTicketRepository.findAllByOwnerId(memberId))
+                .willReturn(List.of(memberTicket2, memberTicket1, memberTicket3));
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.of(new Member(memberId)));
+
+            // when
+            MemberTicketsResponse response = memberTicketService.findAll(memberId);
+
+            // then
+            List<Long> memberTicketIds = response.memberTickets().stream()
+                .map(MemberTicketResponse::id)
+                .toList();
+            assertThat(memberTicketIds).containsExactly(1L, 2L, 3L);
+        }
     }
+
 
     @Nested
     class 현재_멤버티켓_조회 {
 
         @Test
+        void 멤버가_없으면_예외() {
+            // given
+            Long memberId = 1L;
+
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.empty());
+
+            // when & then
+            assertThatThrownBy(() -> memberTicketService.findCurrent(memberId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("존재하지 않는 멤버입니다.");
+        }
+
+        @Test
         void 입장시간이_12시간이상_남은_티켓은_조회되지_않는다() {
             // given
-            long memberId = 1L;
+            Long memberId = 1L;
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .entryTime(LocalDateTime.now().plusHours(13))
                 .build();
 
             given(memberTicketRepository.findAllByOwnerId(memberId))
                 .willReturn(List.of(memberTicket));
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.of(new Member(memberId)));
 
             // when
             MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
@@ -96,13 +137,15 @@ class MemberTicketServiceTest {
         @Test
         void 입장시간이_24시간_지난_티켓은_조회되지_않는다() {
             // given
-            long memberId = 1L;
+            Long memberId = 1L;
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .entryTime(LocalDateTime.now().minusHours(25))
                 .build();
 
             given(memberTicketRepository.findAllByOwnerId(memberId))
                 .willReturn(List.of(memberTicket));
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.of(new Member(memberId)));
 
             // when
             MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
@@ -114,7 +157,7 @@ class MemberTicketServiceTest {
         @Test
         void 활성화된_티켓이_먼저_조회된다() {
             // given
-            long memberId = 1L;
+            Long memberId = 1L;
             MemberTicket pendingMemberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
                 .entryTime(LocalDateTime.now().plusHours(1))
@@ -126,6 +169,8 @@ class MemberTicketServiceTest {
 
             given(memberTicketRepository.findAllByOwnerId(memberId))
                 .willReturn(List.of(pendingMemberTicket, activateMemberTicket));
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.of(new Member(memberId)));
 
             // when
             MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
@@ -140,7 +185,7 @@ class MemberTicketServiceTest {
         @Test
         void 활성화_및_비활성화_내에서는_현재시간과_가까운순으로_정렬되어_조회된다() {
             // given
-            long memberId = 1L;
+            Long memberId = 1L;
             MemberTicket pendingMemberTicket1 = MemberTicketFixture.memberTicket()
                 .id(1L)
                 .entryTime(LocalDateTime.now().plusHours(1))
@@ -161,6 +206,8 @@ class MemberTicketServiceTest {
             given(memberTicketRepository.findAllByOwnerId(memberId))
                 .willReturn(
                     List.of(pendingMemberTicket1, pendingMemberTicket2, activateMemberTicket1, activateMemberTicket2));
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.of(new Member(memberId)));
 
             // when
             MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
@@ -177,12 +224,29 @@ class MemberTicketServiceTest {
     class 멤버_티켓_아이디로_단건_조회 {
 
         @Test
+        void 멤버가_없으면_예외() {
+            // given
+            Long memberId = 1L;
+
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.empty());
+
+            // when & then
+            assertThatThrownBy(() -> memberTicketService.findById(memberId, 1L))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("존재하지 않는 멤버입니다.");
+        }
+
+        @Test
         void 사용자의_티켓이_없으면_예외() {
             // given
             Long memberId = 1L;
             Long memberTicketId = 1L;
+
             given(memberTicketRepository.findById(memberTicketId))
                 .willReturn(Optional.empty());
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.of(new Member(memberId)));
 
             // when & then
             assertThatThrownBy(() -> memberTicketService.findById(memberId, memberTicketId))
@@ -206,6 +270,8 @@ class MemberTicketServiceTest {
 
             given(memberTicketRepository.findById(otherTicketId))
                 .willReturn(Optional.of(otherMemberTicket));
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.of(new Member(memberId)));
 
             // when & then
             assertThatThrownBy(() -> memberTicketService.findById(memberId, otherTicketId))
@@ -216,8 +282,9 @@ class MemberTicketServiceTest {
         @Test
         void 성공() {
             // given
+            Long memberId = 2L;
             Member member = MemberFixture.member()
-                .id(2L)
+                .id(memberId)
                 .build();
             Stage stage = StageFixture.stage()
                 .build();
@@ -230,6 +297,8 @@ class MemberTicketServiceTest {
 
             given(memberTicketRepository.findById(memberTicketId))
                 .willReturn(Optional.of(memberTicket));
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.of(new Member(memberId)));
 
             // when
             MemberTicketResponse response = memberTicketService.findById(member.getId(), memberTicketId);

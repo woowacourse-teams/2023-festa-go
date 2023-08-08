@@ -13,18 +13,21 @@ import com.festago.auth.application.AuthService;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
+import com.festago.support.TestConfig;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+@WebMvcTest(AuthController.class)
+@Import(TestConfig.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@WebMvcTest(AuthController.class)
 class AuthControllerTest {
 
     @Autowired

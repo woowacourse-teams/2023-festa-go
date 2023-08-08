@@ -15,6 +15,12 @@ public enum ErrorCode {
     OAUTH2_INVALID_CODE("잘못된 인가 코드 입니다."),
     OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE("해당 OAuth2 제공자는 지원되지 않습니다."),
 
+    // 401
+    EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
+    INVALID_AUTH_TOKEN("올바르지 않은 로그인 토큰입니다."),
+    NOT_BEARER_TOKEN_TYPE("Bearer 타입의 토큰이 아닙니다."),
+    NEED_AUTH_TOKEN("로그인이 필요한 서비스입니다."),
+
     // 404
     MEMBER_TICKET_NOT_FOUND("존재하지 않은 멤버 티켓입니다."),
     MEMBER_NOT_FOUND("존재하지 않는 멤버입니다."),
@@ -27,7 +33,8 @@ public enum ErrorCode {
     INVALID_ENTRY_CODE_PERIOD("올바르지 않은 입장코드 유효기간입니다."),
     INVALID_ENTRY_CODE_EXPIRATION_TIME("올바르지 않은 입장코드 만료 일자입니다."),
     INVALID_ENTRY_STATE_INDEX("올바르지 않은 입장상태 인덱스입니다."),
-    INVALID_ENTRY_CODE_PAYLOAD("유효하지 않은 payload 입니다."),
+    INVALID_ENTRY_CODE_PAYLOAD("유효하지 않은 입장코드 payload 입니다."),
+    INVALID_AUTH_TOKEN_PAYLOAD("유효하지 않은 로그인 토큰 payload 입니다."),
     DUPLICATE_SOCIAL_TYPE("중복된 OAuth2 제공자 입니다."),
     OAUTH2_PROVIDER_NOT_RESPONSE("OAuth2 제공자 서버에 문제가 발생했습니다."),
     OAUTH2_INVALID_REQUEST("OAuth2 제공자 서버에 잘못된 요청이 발생했습니다."),

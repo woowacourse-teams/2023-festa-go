@@ -31,7 +31,7 @@ public class Member {
 
     private LocalDateTime deletedAt = null;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(Long id) {
