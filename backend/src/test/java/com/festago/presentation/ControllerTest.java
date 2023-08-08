@@ -8,6 +8,8 @@ import com.festago.application.MemberTicketService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
 import com.festago.auth.application.AuthService;
+import com.festago.auth.domain.AuthExtractor;
+import com.festago.auth.presentation.AuthController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,35 +21,39 @@ import org.springframework.test.web.servlet.MockMvc;
         FestivalController.class,
         MemberTicketController.class,
         StaffMemberTicketController.class,
-        StageController.class
+        StageController.class,
+        AuthController.class,
     }
 )
 public abstract class ControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    public MockMvc mockMvc;
 
     @MockBean
-    AdminService adminService;
+    public AuthExtractor authExtractor;
 
     @MockBean
-    EntryService entryService;
+    public AdminService adminService;
 
     @MockBean
-    FestivalService festivalService;
+    public EntryService entryService;
 
     @MockBean
-    MemberTicketService memberTicketService;
+    public FestivalService festivalService;
 
     @MockBean
-    StageService stageService;
+    public MemberTicketService memberTicketService;
 
     @MockBean
-    TicketService ticketService;
+    public StageService stageService;
 
     @MockBean
-    AuthService authService;
+    public TicketService ticketService;
+
+    @MockBean
+    public AuthService authService;
 
     @Autowired
-    ObjectMapper objectMapper;
+    public ObjectMapper objectMapper;
 }

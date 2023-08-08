@@ -2,5 +2,5 @@ package com.festago.auth.domain;
 
 public interface AuthExtractor {
 
-    AuthPayload extract(String header);
+    AuthPayload extract(String token);
 }

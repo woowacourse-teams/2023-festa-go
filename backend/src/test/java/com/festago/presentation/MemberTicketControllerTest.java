@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.festago.auth.dto.LoginMember;
+import com.festago.auth.domain.AuthPayload;
 import com.festago.domain.EntryState;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketFestivalResponse;
@@ -44,8 +44,8 @@ class MemberTicketControllerTest extends ControllerTest {
 
         given(entryService.createEntryCode(anyLong(), anyLong()))
             .willReturn(expected);
-        given(authService.loginMemberByHeader(any()))
-            .willReturn(new LoginMember(1L));
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L));
 
         // when & then
         String content = mockMvc.perform(post("/member-tickets/{memberTicketId}/qr", memberTicketId)
@@ -74,8 +74,8 @@ class MemberTicketControllerTest extends ControllerTest {
 
         given(memberTicketService.findById(memberId, memberTicketId))
             .willReturn(expected);
-        given(authService.loginMemberByHeader(any()))
-            .willReturn(new LoginMember(1L));
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L));
 
         // when & then
         String content = mockMvc.perform(get("/member-tickets/{memberTicketId}", memberTicketId)
@@ -107,8 +107,8 @@ class MemberTicketControllerTest extends ControllerTest {
 
         given(memberTicketService.findAll(memberId))
             .willReturn(expected);
-        given(authService.loginMemberByHeader(any()))
-            .willReturn(new LoginMember(1L));
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L));
 
         // when & then
         String content = mockMvc.perform(get("/member-tickets")
@@ -140,8 +140,8 @@ class MemberTicketControllerTest extends ControllerTest {
 
         given(memberTicketService.findCurrent(memberId))
             .willReturn(expected);
-        given(authService.loginMemberByHeader(any()))
-            .willReturn(new LoginMember(1L));
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L));
 
         // when & then
         String content = mockMvc.perform(get("/member-tickets/current")
@@ -170,8 +170,8 @@ class MemberTicketControllerTest extends ControllerTest {
 
         given(ticketService.ticketing(anyLong(), any()))
             .willReturn(expected);
-        given(authService.loginMemberByHeader(any()))
-            .willReturn(new LoginMember(1L));
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L));
 
         // when & then
         String content = mockMvc.perform(post("/member-tickets")

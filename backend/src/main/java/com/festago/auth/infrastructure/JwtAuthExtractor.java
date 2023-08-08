@@ -13,14 +13,13 @@ import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import javax.crypto.SecretKey;
 
-public class JwtBearerAuthExtractor implements AuthExtractor {
+public class JwtAuthExtractor implements AuthExtractor {
 
     private static final String MEMBER_ID_KEY = "memberId";
-    private static final String TOKEN_PREFIX = "Bearer ";
 
     private final JwtParser jwtParser;
 
-    public JwtBearerAuthExtractor(String secretKey) {
+    public JwtAuthExtractor(String secretKey) {
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         this.jwtParser = Jwts.parserBuilder()
             .setSigningKey(key)
@@ -28,25 +27,10 @@ public class JwtBearerAuthExtractor implements AuthExtractor {
     }
 
     @Override
-    public AuthPayload extract(String header) {
-        String token = extractToken(header);
+    public AuthPayload extract(String token) {
         Claims claims = getClaims(token);
         Long memberId = claims.get(MEMBER_ID_KEY, Long.class);
         return new AuthPayload(memberId);
-    }
-
-    private String extractToken(String header) {
-        validateHeader(header);
-        return header.substring(TOKEN_PREFIX.length()).trim();
-    }
-
-    private void validateHeader(String header) {
-        if (header == null) {
-            throw new UnauthorizedException(ErrorCode.NEED_AUTH_TOKEN);
-        }
-        if (!header.toLowerCase().startsWith(TOKEN_PREFIX.toLowerCase())) {
-            throw new UnauthorizedException(ErrorCode.NOT_BEARER_TOKEN_TYPE);
-        }
     }
 
     private Claims getClaims(String code) {

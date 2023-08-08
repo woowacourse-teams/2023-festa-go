@@ -18,33 +18,21 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JwtBearerAuthExtractorTest {
+class JwtAuthExtractorTest {
 
     private static final String MEMBER_ID_KEY = "memberId";
-    private static final String TOKEN_PREFIX = "Bearer ";
     private static final String SECRET_KEY = "1231231231231231223131231231231231231212312312";
     private static final Key KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
-    JwtBearerAuthExtractor jwtBearerAuthExtractor = new JwtBearerAuthExtractor(SECRET_KEY);
-
-    @Test
-    void Bearer_토큰의_형식이_아니면_예외() {
-        // given
-        String token = "Hello World";
-
-        // when & then
-        assertThatThrownBy(() -> jwtBearerAuthExtractor.extract(token))
-            .isInstanceOf(UnauthorizedException.class)
-            .hasMessage("Bearer 타입의 토큰이 아닙니다.");
-    }
-
+    JwtAuthExtractor jwtAuthExtractor = new JwtAuthExtractor(SECRET_KEY);
+    
     @Test
     void JWT_토큰의_형식이_아니면_예외() {
         // given
         String token = "Hello World";
 
         // when & then
-        assertThatThrownBy(() -> jwtBearerAuthExtractor.extract(TOKEN_PREFIX + token))
+        assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage("올바르지 않은 로그인 토큰입니다.");
     }
@@ -59,7 +47,7 @@ class JwtBearerAuthExtractorTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> jwtBearerAuthExtractor.extract(TOKEN_PREFIX + token))
+        assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage("만료된 로그인 토큰입니다.");
     }
@@ -76,7 +64,7 @@ class JwtBearerAuthExtractorTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> jwtBearerAuthExtractor.extract(TOKEN_PREFIX + token))
+        assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage("올바르지 않은 로그인 토큰입니다.");
     }
@@ -90,7 +78,7 @@ class JwtBearerAuthExtractorTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> jwtBearerAuthExtractor.extract(TOKEN_PREFIX + token))
+        assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
             .isInstanceOf(InternalServerException.class)
             .hasMessage("유효하지 않은 로그인 토큰 payload 입니다.");
     }
@@ -106,7 +94,7 @@ class JwtBearerAuthExtractorTest {
             .compact();
 
         // when
-        AuthPayload payload = jwtBearerAuthExtractor.extract(TOKEN_PREFIX + token);
+        AuthPayload payload = jwtAuthExtractor.extract(token);
 
         // then
         assertThat(payload.getMemberId()).isEqualTo(memberId);
