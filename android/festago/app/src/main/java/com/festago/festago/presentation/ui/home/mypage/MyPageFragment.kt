@@ -8,8 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentMyPageBinding
+import com.festago.festago.presentation.util.loginWithKakao
+import com.kakao.sdk.user.UserApiClient
+import kotlinx.coroutines.launch
 
 class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
@@ -28,6 +32,10 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+
+        lifecycleScope.launch {
+            UserApiClient.loginWithKakao(binding.root.context)
+        }
     }
 
     private fun initView() {
