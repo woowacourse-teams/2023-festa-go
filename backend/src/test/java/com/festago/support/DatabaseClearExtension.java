@@ -21,7 +21,6 @@ public class DatabaseClearExtension implements TestInstancePreConstructCallback,
     @Override
     public void preConstructTestInstance(TestInstanceFactoryContext factoryContext, ExtensionContext context)
         throws Exception {
-        context.getStore(CLEANER).put(TABLES, new HashSet<String>());
         EntityManagerFactory emf = SpringExtension.getApplicationContext(context)
             .getBean(EntityManagerFactory.class);
         context.getStore(CLEANER).put(ENTITY_MANAGER, emf.createEntityManager());
