@@ -7,4 +7,5 @@ interface TicketRepository {
     suspend fun loadTicket(ticketId: Long): Result<Ticket>
     suspend fun loadTickets(): Result<List<Ticket>>
     suspend fun loadTicketCode(ticketId: Long): Result<TicketCode>
+    suspend fun loadAllTickets(size: Int): Result<List<Ticket>>
 }
