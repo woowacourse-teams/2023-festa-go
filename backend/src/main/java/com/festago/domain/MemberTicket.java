@@ -72,8 +72,7 @@ public class MemberTicket extends BaseTimeEntity {
     }
 
     public boolean isPending(LocalDateTime currentTime) {
-        return currentTime.isAfter(entryTime.minusHours(PENDING_LIMIT_HOUR))
-            && currentTime.isBefore(entryTime);
+        return currentTime.isBefore(entryTime);
     }
 
     public boolean canEntry(LocalDateTime currentTime) {

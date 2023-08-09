@@ -113,27 +113,7 @@ class MemberTicketServiceTest {
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("존재하지 않는 멤버입니다.");
         }
-
-        @Test
-        void 입장시간이_12시간이상_남은_티켓은_조회되지_않는다() {
-            // given
-            Long memberId = 1L;
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-                .entryTime(LocalDateTime.now().plusHours(13))
-                .build();
-
-            given(memberTicketRepository.findAllByOwnerId(memberId))
-                .willReturn(List.of(memberTicket));
-            given(memberRepository.findById(memberId))
-                .willReturn(Optional.of(new Member(memberId)));
-
-            // when
-            MemberTicketsResponse response = memberTicketService.findCurrent(memberId);
-
-            // then
-            assertThat(response.memberTickets()).isEmpty();
-        }
-
+        
         @Test
         void 입장시간이_24시간_지난_티켓은_조회되지_않는다() {
             // given
