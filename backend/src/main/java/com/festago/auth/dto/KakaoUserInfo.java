@@ -24,7 +24,8 @@ public record KakaoUserInfo(
 
         public record Profile(
             String nickname,
-            @JsonProperty("thumbnail_image_url") String thumbnailImageUrl
+            @JsonProperty(value = "thumbnail_image_url", defaultValue = "https://placehold.co/200")
+            String thumbnailImageUrl
         ) {
 
         }
