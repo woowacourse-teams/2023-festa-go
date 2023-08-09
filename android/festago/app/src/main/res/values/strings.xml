@@ -67,7 +67,7 @@
 
     <!-- Strings related to mypage -->
     <string name="mypage_btn_kakao">카카오로 로그인</string>
-    <string name="mypage_tv_login_description">페스타고로\n대학교 축제를 즐겨보세요.</string>
+    <string name="mypage_tv_signin_description">페스타고로\n대학교 축제를 즐겨보세요.</string>
 
     <!-- Strings related to reservation complete -->
     <string name="reservation_complete_tv_reservation_complete">예매에 성공했습니다!</string>
