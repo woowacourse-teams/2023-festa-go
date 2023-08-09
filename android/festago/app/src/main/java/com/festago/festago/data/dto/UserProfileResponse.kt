@@ -7,5 +7,9 @@ data class UserProfileResponse(
     val nickname: String,
     val profileImage: String,
 ) {
-    fun toDomain(): UserProfile = UserProfile(memberId, nickname, profileImage)
+    fun toDomain(): UserProfile = UserProfile(
+        memberId = memberId,
+        nickName = nickname,
+        profileImage = profileImage,
+    )
 }
