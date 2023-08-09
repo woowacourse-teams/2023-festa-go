@@ -89,7 +89,7 @@ class MemberTicketTest {
                 .build();
 
             // when & then
-            assertThat(memberTicket.isPending(time)).isFalse();
+            assertThat(memberTicket.isBeforeEntry(time)).isFalse();
         }
 
         @Test
@@ -111,7 +111,7 @@ class MemberTicketTest {
                 .build();
 
             // when & then
-            assertThat(memberTicket.isPending(time)).isTrue();
+            assertThat(memberTicket.isBeforeEntry(time)).isTrue();
         }
     }
 

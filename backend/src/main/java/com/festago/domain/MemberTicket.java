@@ -70,7 +70,7 @@ public class MemberTicket extends BaseTimeEntity {
         return Objects.equals(owner.getId(), memberId);
     }
 
-    public boolean isPending(LocalDateTime currentTime) {
+    public boolean isBeforeEntry(LocalDateTime currentTime) {
         return currentTime.isBefore(entryTime);
     }
 

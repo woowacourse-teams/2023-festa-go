@@ -61,8 +61,8 @@ public class MemberTicketService {
     private List<MemberTicket> filterCurrentMemberTickets(List<MemberTicket> memberTickets) {
         LocalDateTime currentTime = LocalDateTime.now();
         return memberTickets.stream()
-            .filter(memberTicket -> memberTicket.isPending(currentTime) || memberTicket.canEntry(currentTime))
-            .sorted(comparing((MemberTicket memberTicket) -> memberTicket.isPending(currentTime))
+            .filter(memberTicket -> memberTicket.isBeforeEntry(currentTime) || memberTicket.canEntry(currentTime))
+            .sorted(comparing((MemberTicket memberTicket) -> memberTicket.isBeforeEntry(currentTime))
                 .thenComparing(memberTicket -> calculateTimeGap(memberTicket, currentTime)))
             .toList();
     }
