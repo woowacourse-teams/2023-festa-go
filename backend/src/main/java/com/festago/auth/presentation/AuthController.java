@@ -30,8 +30,8 @@ public class AuthController {
     }
 
     @GetMapping("/oauth2/kakao")
-    public ResponseEntity<LoginResponse> loginWithKakao(@RequestParam String code) {
-        LoginResponse response = authService.login(new LoginRequest(SocialType.KAKAO, code));
+    public ResponseEntity<LoginResponse> loginWithKakao(@RequestParam String accessToken) {
+        LoginResponse response = authService.login(new LoginRequest(SocialType.KAKAO, accessToken));
         return ResponseEntity.ok()
             .body(response);
     }

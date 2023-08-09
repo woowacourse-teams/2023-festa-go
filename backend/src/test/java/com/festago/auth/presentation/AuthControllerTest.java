@@ -70,7 +70,7 @@ class AuthControllerTest {
 
         // when & then
         String response = mockMvc.perform(get("/auth/oauth2/kakao")
-                .param("code", "code"))
+                .param("accessToken", "code"))
             .andExpect(status().isOk())
             .andDo(print())
             .andReturn()

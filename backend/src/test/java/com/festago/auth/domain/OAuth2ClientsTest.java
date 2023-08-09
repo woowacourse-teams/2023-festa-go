@@ -6,7 +6,6 @@ import static org.mockito.Mockito.mock;
 
 import com.festago.auth.domain.OAuth2Clients.OAuth2ClientsBuilder;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
-import com.festago.auth.infrastructure.KakaoOAuth2AccessTokenClient;
 import com.festago.auth.infrastructure.KakaoOAuth2Client;
 import com.festago.auth.infrastructure.KakaoOAuth2UserInfoClient;
 import com.festago.exception.BadRequestException;
@@ -51,9 +50,9 @@ class OAuth2ClientsTest {
         // given
         FestagoOAuth2Client festagoOAuth2Client = new FestagoOAuth2Client();
         KakaoOAuth2Client kakaoOAuth2Client = new KakaoOAuth2Client(
-            mock(KakaoOAuth2AccessTokenClient.class),
             mock(KakaoOAuth2UserInfoClient.class)
         );
+
         OAuth2Clients oAuth2Clients = OAuth2Clients.builder()
             .add(festagoOAuth2Client)
             .add(kakaoOAuth2Client)
