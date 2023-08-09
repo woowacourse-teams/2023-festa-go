@@ -25,7 +25,7 @@ class TicketEntryActivity : AppCompatActivity() {
             TicketDefaultRepository(
                 ticketRetrofitService = RetrofitClient.instance.ticketRetrofitService,
             ),
-            FirebaseAnalyticsHelper.getInstance(),
+            FirebaseAnalyticsHelper,
         )
     }
 

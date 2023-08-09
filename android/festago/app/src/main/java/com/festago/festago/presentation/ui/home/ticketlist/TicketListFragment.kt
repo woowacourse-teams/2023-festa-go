@@ -30,7 +30,7 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
             TicketDefaultRepository(
                 ticketRetrofitService = RetrofitClient.instance.ticketRetrofitService,
             ),
-            analyticsHelper = FirebaseAnalyticsHelper.getInstance(),
+            analyticsHelper = FirebaseAnalyticsHelper,
         )
     }
 

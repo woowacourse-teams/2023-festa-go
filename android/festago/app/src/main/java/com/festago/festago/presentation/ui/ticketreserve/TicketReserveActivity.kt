@@ -32,7 +32,7 @@ class TicketReserveActivity : AppCompatActivity() {
             ReservationDefaultRepository(
                 reservationRetrofitService = RetrofitClient.instance.reservationRetrofitService,
             ),
-            FirebaseAnalyticsHelper.getInstance(),
+            FirebaseAnalyticsHelper,
         )
     }
 

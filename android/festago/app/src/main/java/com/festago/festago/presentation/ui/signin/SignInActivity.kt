@@ -32,7 +32,7 @@ class SignInActivity : AppCompatActivity() {
                 RetrofitClient.instance.authRetrofitService,
                 SharedPrefAuthDataSource.getInstance(this),
             ),
-            FirebaseAnalyticsHelper.getInstance(),
+            FirebaseAnalyticsHelper,
         )
     }
 

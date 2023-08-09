@@ -10,7 +10,7 @@ class FestagoApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        FirebaseAnalyticsHelper.create(applicationContext)
+        FirebaseAnalyticsHelper.init(applicationContext)
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
         RetrofitClient.create(
             authDataSource = SharedPrefAuthDataSource.getInstance(applicationContext),

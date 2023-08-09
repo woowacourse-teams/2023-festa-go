@@ -27,7 +27,7 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
             ticketRepository = TicketDefaultRepository(
                 ticketRetrofitService = RetrofitClient.instance.ticketRetrofitService,
             ),
-            analyticsHelper = FirebaseAnalyticsHelper.getInstance(),
+            analyticsHelper = FirebaseAnalyticsHelper,
         )
     }
 

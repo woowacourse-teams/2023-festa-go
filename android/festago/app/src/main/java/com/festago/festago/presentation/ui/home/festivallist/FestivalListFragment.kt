@@ -23,7 +23,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
     private val vm: FestivalListViewModel by viewModels {
         FestivalListViewModelFactory(
             FestivalDefaultRepository(RetrofitClient.instance.festivalRetrofitService),
-            FirebaseAnalyticsHelper.getInstance(),
+            FirebaseAnalyticsHelper,
         )
     }
 
