@@ -10,6 +10,7 @@ public class EntryCode {
     private static final long DEFAULT_OFFSET = 10;
     private static final int MILLISECOND_FACTOR = 1000;
     private static final int MINIMUM_PERIOD = 0;
+    private static final int MINIMUM_OFFSET = 0;
 
     private final String code;
     private final long period;
@@ -32,7 +33,7 @@ public class EntryCode {
     }
 
     private boolean isNegative(long offset) {
-        return offset < 0;
+        return offset < MINIMUM_OFFSET;
     }
 
     public static EntryCode create(EntryCodeProvider entryCodeProvider, MemberTicket memberTicket) {
