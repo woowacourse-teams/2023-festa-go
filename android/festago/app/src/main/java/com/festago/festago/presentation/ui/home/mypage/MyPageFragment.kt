@@ -21,7 +21,9 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
     private val vm: MyPageViewModel by viewModels {
         MyPageViewModelFactory(
-            userRepository = UserDefaultRepository(),
+            userRepository = UserDefaultRepository(
+                userProfileService = RetrofitClient.getInstance().userRetrofitService,
+            ),
             ticketRepository = TicketDefaultRepository(
                 ticketRetrofitService = RetrofitClient.getInstance().ticketRetrofitService,
             ),

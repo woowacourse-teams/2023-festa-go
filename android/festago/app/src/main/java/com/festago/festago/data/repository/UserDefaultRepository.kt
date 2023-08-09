@@ -1,17 +1,21 @@
 package com.festago.festago.data.repository
 
+import com.festago.festago.data.service.UserRetrofitService
 import com.festago.festago.domain.model.UserProfile
 import com.festago.festago.domain.repository.UserRepository
-import kotlinx.coroutines.delay
 
-class UserDefaultRepository : UserRepository {
+class UserDefaultRepository(
+    private val userProfileService: UserRetrofitService,
+) : UserRepository {
     override suspend fun loadUserProfile(): Result<UserProfile> {
-        delay(500)
-        return Result.success(
-            UserProfile(
-                "홍길동",
-                "https://images.unsplash.com/photo-1592194996308-7b43878e84a6",
-            ),
-        )
+        try {
+            val response = userProfileService.getUserProfile()
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
+            }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 }
