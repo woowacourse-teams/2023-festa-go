@@ -8,6 +8,8 @@ plugins {
     kotlin("plugin.serialization") version "1.8.22"
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("org.jlleitschuh.gradle.ktlint")
+    id("io.gitlab.arturbosch.detekt")
 }
 
 android {
