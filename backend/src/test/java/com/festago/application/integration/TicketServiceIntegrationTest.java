@@ -99,14 +99,16 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         List<Member> members = createMember(memberCount);
         TicketingRequest request = new TicketingRequest(1L);
         ExecutorService executor = Executors.newFixedThreadPool(16);
+
+        // when
         List<CompletableFuture<Void>> futures = members.stream()
             .map(member -> CompletableFuture.runAsync(() -> {
                 ticketService.ticketing(member.getId(), request);
             }, executor).exceptionally(e -> null))
             .toList();
-
         futures.forEach(CompletableFuture::join);
 
+        // then
         assertThat(memberTicketRepository.count()).isEqualTo(50);
     }
 
