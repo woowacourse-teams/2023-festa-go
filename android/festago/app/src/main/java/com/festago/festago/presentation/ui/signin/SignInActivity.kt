@@ -87,25 +87,24 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun handleSuccessEvent() {
-        finishAffinity()
-        startMain()
+        showHomeWithFinish()
     }
 
     private fun handleFailureEvent() {
         val dialog = OkDialogFragment.newInstance(FAILURE_SIGN_IN).apply {
             listener = OkDialogFragment.OnClickListener {
-                finishAffinity()
-                startMain()
+                showHomeWithFinish()
             }
         }
         dialog.show(supportFragmentManager, OkDialogFragment::class.java.name)
     }
 
-    private fun startMain() {
+    private fun showHomeWithFinish() {
         val intent = HomeActivity.getIntent(this).apply {
-            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
         startActivity(intent)
+        finish()
     }
 
     private fun initLogout() {
