@@ -10,6 +10,7 @@ import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.domain.repository.UserRepository
 import com.festago.festago.presentation.mapper.toPresentation
+import com.festago.festago.presentation.model.TicketUiModel
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
@@ -40,13 +41,13 @@ class MyPageViewModel(
         userRepository.loadUserProfile()
             .onSuccess {
                 when (val current = uiState.value) {
+                    is MyPageUiState.Error, null -> Unit
+
                     is MyPageUiState.Loading ->
                         _uiState.value = MyPageUiState.Success(userProfile = it.toPresentation())
 
                     is MyPageUiState.Success ->
                         _uiState.value = current.copy(userProfile = it.toPresentation())
-
-                    else -> Unit
                 }
             }.onFailure {
                 _uiState.value = MyPageUiState.Error
@@ -60,14 +61,14 @@ class MyPageViewModel(
     private suspend fun loadFirstTicket() {
         ticketRepository.loadHistoryTickets(size = 1)
             .onSuccess {
+                val ticket = it.firstOrNull()?.toPresentation() ?: TicketUiModel()
                 when (val current = uiState.value) {
+                    is MyPageUiState.Error, null -> Unit
+
                     is MyPageUiState.Loading ->
-                        _uiState.value = MyPageUiState.Success(ticket = it.first().toPresentation())
+                        _uiState.value = MyPageUiState.Success(ticket = ticket)
 
-                    is MyPageUiState.Success ->
-                        _uiState.value = current.copy(ticket = it.first().toPresentation())
-
-                    else -> Unit
+                    is MyPageUiState.Success -> _uiState.value = current.copy(ticket = ticket)
                 }
             }.onFailure {
                 _uiState.value = MyPageUiState.Error
