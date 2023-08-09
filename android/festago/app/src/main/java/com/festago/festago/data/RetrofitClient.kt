@@ -61,7 +61,7 @@ class RetrofitClient private constructor(
         val instance: RetrofitClient get() = _instance!!
 
         fun create(authDataSource: AuthDataSource, baseUrl: String = "") {
-            if (_instance != null) {
+            if (_instance == null) {
                 _instance = RetrofitClient(baseUrl.removeSuffix("/"), authDataSource)
             }
         }
