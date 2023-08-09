@@ -57,15 +57,22 @@ public class Ticket extends BaseTimeEntity {
         this.ticketAmount = new TicketAmount(this);
     }
 
-    public void addTicketEntryTime(LocalDateTime entryTime, int amount) {
-        validateEntryTime(entryTime);
+    public void addTicketEntryTime(LocalDateTime currentTime, LocalDateTime entryTime, int amount) {
+        validateEntryTime(currentTime, entryTime);
         TicketEntryTime ticketEntryTime = new TicketEntryTime(entryTime, amount);
         ticketAmount.addTotalAmount(amount);
         ticketEntryTimes.add(ticketEntryTime);
     }
 
-    private void validateEntryTime(LocalDateTime entryTime) {
+    private void validateEntryTime(LocalDateTime currentTime, LocalDateTime entryTime) {
         LocalDateTime stageStartTime = stage.getStartTime();
+        LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
+        if (currentTime.isEqual(ticketOpenTime) || currentTime.isAfter(ticketOpenTime)) {
+            throw new BadRequestException(ErrorCode.INVALID_TICKET_CREATE_TIME);
+        }
+        if (entryTime.isBefore(ticketOpenTime) || entryTime.isEqual(ticketOpenTime)) {
+            throw new BadRequestException(ErrorCode.EARLY_TICKET_ENTRY_THAN_OPEN);
+        }
         if (entryTime.isAfter(stageStartTime) || entryTime.isEqual(stageStartTime)) {
             throw new BadRequestException(ErrorCode.LATE_TICKET_ENTRY_TIME);
         }

@@ -10,8 +10,10 @@ import com.festago.dto.FestivalCreateRequest;
 import com.festago.dto.FestivalDetailResponse;
 import com.festago.dto.FestivalResponse;
 import com.festago.dto.FestivalsResponse;
+import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +31,16 @@ public class FestivalService {
     }
 
     public FestivalResponse create(FestivalCreateRequest request) {
-        Festival newFestival = festivalRepository.save(request.toEntity());
+        Festival festival = request.toEntity();
+        validate(festival);
+        Festival newFestival = festivalRepository.save(festival);
         return FestivalResponse.from(newFestival);
+    }
+
+    private void validate(Festival festival) {
+        if (!festival.canCreate(LocalDate.now())) {
+            throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_START_DATE);
+        }
     }
 
     @Transactional(readOnly = true)
