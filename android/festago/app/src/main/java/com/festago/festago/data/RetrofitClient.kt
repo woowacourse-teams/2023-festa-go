@@ -43,6 +43,7 @@ object RetrofitClient {
     }
 
     private fun initNormalRetrofit(baseUrl: String) {
+        if (!::normalRetrofit.isInitialized) return
         normalRetrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
@@ -50,6 +51,7 @@ object RetrofitClient {
     }
 
     private fun initAuthRetrofit(authDataSource: AuthDataSource, baseUrl: String) {
+        if (!::authRetrofit.isInitialized) return
         val okHttpClient: OkHttpClient = OkHttpClient
             .Builder()
             .addInterceptor(AuthInterceptor(authDataSource))
