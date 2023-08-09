@@ -121,8 +121,7 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     }
 
     @Test
-    @Sql(scripts = "/ticketing-test-data.sql",
-        config = @SqlConfig(transactionMode = TransactionMode.ISOLATED))
+    @Sql("/ticketing-test-data.sql")
     void 중복으로_티켓을_예매하면_예외() {
         // given
         Member member = memberRepository.save(MemberFixture.member().build());
