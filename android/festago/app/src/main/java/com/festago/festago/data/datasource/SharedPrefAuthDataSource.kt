@@ -32,7 +32,8 @@ class SharedPrefAuthDataSource private constructor(
 
         @Synchronized
         fun getInstance(context: Context): SharedPrefAuthDataSource {
-            return INSTANCE ?: SharedPrefAuthDataSource(context).also { INSTANCE = it }
+            return INSTANCE ?: SharedPrefAuthDataSource(context.applicationContext)
+                .also { INSTANCE = it }
         }
     }
 }

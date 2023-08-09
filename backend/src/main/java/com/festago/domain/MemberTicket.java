@@ -14,7 +14,6 @@ import java.util.Objects;
 @Entity
 public class MemberTicket extends BaseTimeEntity {
 
-    private static final long PENDING_LIMIT_HOUR = 12;
     private static final long ENTRY_LIMIT_HOUR = 24;
 
     @Id
@@ -72,9 +71,8 @@ public class MemberTicket extends BaseTimeEntity {
         return Objects.equals(owner.getId(), memberId);
     }
 
-    public boolean isPending(LocalDateTime currentTime) {
-        return currentTime.isAfter(entryTime.minusHours(PENDING_LIMIT_HOUR))
-            && currentTime.isBefore(entryTime);
+    public boolean isBeforeEntry(LocalDateTime currentTime) {
+        return currentTime.isBefore(entryTime);
     }
 
     public boolean canEntry(LocalDateTime currentTime) {

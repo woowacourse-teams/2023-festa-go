@@ -44,12 +44,10 @@ class RetrofitClient private constructor(
     }
 
     private val authRetrofit: Retrofit by lazy {
-        val okHttpClient: OkHttpClient by lazy {
-            OkHttpClient
-                .Builder()
-                .addInterceptor(AuthInterceptor(authDataSource))
-                .build()
-        }
+        val okHttpClient: OkHttpClient = OkHttpClient
+            .Builder()
+            .addInterceptor(AuthInterceptor(authDataSource))
+            .build()
 
         Retrofit.Builder()
             .baseUrl(baseUrl)
@@ -63,7 +61,9 @@ class RetrofitClient private constructor(
         val instance: RetrofitClient get() = _instance!!
 
         fun create(authDataSource: AuthDataSource, baseUrl: String = "") {
-            _instance = RetrofitClient(baseUrl.removeSuffix("/"), authDataSource)
+            if (_instance != null) {
+                _instance = RetrofitClient(baseUrl.removeSuffix("/"), authDataSource)
+            }
         }
     }
 }

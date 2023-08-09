@@ -79,21 +79,21 @@ class MemberTicketTest {
     class 대기상태_티켓_검사 {
 
         @Test
-        void 입장시간_12시간전이면_거짓() {
+        void 입장시간_이후이면_거짓() {
             // given
             LocalDateTime entryTime = LocalDateTime.now();
-            LocalDateTime time = entryTime.minusHours(12);
+            LocalDateTime time = entryTime.plusHours(1);
 
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .entryTime(entryTime)
                 .build();
 
             // when & then
-            assertThat(memberTicket.isPending(time)).isFalse();
+            assertThat(memberTicket.isBeforeEntry(time)).isFalse();
         }
 
         @Test
-        void 대기_상태면_참() {
+        void 입장시간_이전이면_참() {
             // given
             LocalDateTime entryTime = LocalDateTime.now();
             LocalDateTime time = entryTime.minusHours(12).plusSeconds(1);
@@ -111,7 +111,7 @@ class MemberTicketTest {
                 .build();
 
             // when & then
-            assertThat(memberTicket.isPending(time)).isTrue();
+            assertThat(memberTicket.isBeforeEntry(time)).isTrue();
         }
     }
 
