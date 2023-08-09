@@ -32,6 +32,7 @@ class MyPageViewModelTest {
     private lateinit var analyticsHelper: AnalyticsHelper
 
     private val fakeUserProfile = UserProfile(
+        1L,
         "홍길동",
         "https://images.unsplash.com/photo-1592194996308-7b43878e84a6",
     )
@@ -81,7 +82,7 @@ class MyPageViewModelTest {
         }
 
         coEvery {
-            ticketRepository.loadAllTickets(1)
+            ticketRepository.loadHistoryTickets(1)
         } answers {
             Result.success(fakeTickets)
         }
@@ -119,7 +120,7 @@ class MyPageViewModelTest {
         }
 
         coEvery {
-            ticketRepository.loadAllTickets(1)
+            ticketRepository.loadHistoryTickets(1)
         } coAnswers {
             delay(1000)
             Result.success(fakeTickets)
@@ -157,7 +158,7 @@ class MyPageViewModelTest {
         }
 
         coEvery {
-            ticketRepository.loadAllTickets(1)
+            ticketRepository.loadHistoryTickets(1)
         } answers {
             Result.success(fakeTickets)
         }
@@ -187,7 +188,7 @@ class MyPageViewModelTest {
         }
 
         coEvery {
-            ticketRepository.loadAllTickets(1)
+            ticketRepository.loadHistoryTickets(1)
         } answers {
             Result.failure(Exception())
         }

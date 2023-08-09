@@ -49,10 +49,10 @@ class TicketListViewModelTest {
         // given
         val tickets = TicketFixture.getMemberTickets((1L..10L).toList())
 
-        coEvery { ticketRepository.loadTickets() } returns Result.success(tickets)
+        coEvery { ticketRepository.loadCurrentTickets() } returns Result.success(tickets)
 
         // when
-        vm.loadTickets()
+        vm.loadCurrentTickets()
 
         // then
         val softly = SoftAssertions().apply {
@@ -76,10 +76,10 @@ class TicketListViewModelTest {
     fun `티켓을 받아왔을 때 티켓이 없으면 성공이지만 티켓은 없는 상태이다`() {
         // given
         val fakeEmptyTickets = emptyList<Ticket>()
-        coEvery { ticketRepository.loadTickets() } returns Result.success(fakeEmptyTickets)
+        coEvery { ticketRepository.loadCurrentTickets() } returns Result.success(fakeEmptyTickets)
 
         // when
-        vm.loadTickets()
+        vm.loadCurrentTickets()
 
         // then
         val softly = SoftAssertions().apply {
@@ -102,12 +102,12 @@ class TicketListViewModelTest {
     @Test
     fun `티켓 목록 받아오기를 실패하면 에러 상태이다`() {
         // given
-        coEvery { ticketRepository.loadTickets() } answers {
+        coEvery { ticketRepository.loadCurrentTickets() } answers {
             Result.failure(Exception())
         }
 
         // when
-        vm.loadTickets()
+        vm.loadCurrentTickets()
 
         // then
         val softly = SoftAssertions().apply {
@@ -127,13 +127,13 @@ class TicketListViewModelTest {
         // given
         val tickets = TicketFixture.getMemberTickets((1L..10L).toList())
 
-        coEvery { ticketRepository.loadTickets() } coAnswers {
+        coEvery { ticketRepository.loadCurrentTickets() } coAnswers {
             delay(1000)
             Result.success(tickets)
         }
 
         // when
-        vm.loadTickets()
+        vm.loadCurrentTickets()
 
         // then
         val softly = SoftAssertions().apply {

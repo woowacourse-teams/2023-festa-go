@@ -58,7 +58,7 @@ class MyPageViewModel(
     }
 
     private suspend fun loadFirstTicket() {
-        ticketRepository.loadAllTickets(size = 1)
+        ticketRepository.loadHistoryTickets(size = 1)
             .onSuccess {
                 when (val current = uiState.value) {
                     is MyPageUiState.Loading ->

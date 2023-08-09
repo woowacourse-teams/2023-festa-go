@@ -21,9 +21,9 @@ class TicketDefaultRepository(
         }
     }
 
-    override suspend fun loadTickets(): Result<List<Ticket>> {
+    override suspend fun loadCurrentTickets(): Result<List<Ticket>> {
         try {
-            val response = ticketRetrofitService.getTickets()
+            val response = ticketRetrofitService.getCurrentTickets()
             if (response.isSuccessful && response.body() != null) {
                 return Result.success(response.body()!!.toDomain())
             }
@@ -45,7 +45,7 @@ class TicketDefaultRepository(
         }
     }
 
-    override suspend fun loadAllTickets(size: Int): Result<List<Ticket>> {
+    override suspend fun loadHistoryTickets(size: Int): Result<List<Ticket>> {
         try {
             val response = ticketRetrofitService.getHistoryTickets(size)
             if (response.isSuccessful && response.body() != null) {

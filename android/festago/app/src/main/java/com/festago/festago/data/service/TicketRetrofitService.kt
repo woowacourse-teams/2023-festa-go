@@ -16,7 +16,7 @@ interface TicketRetrofitService {
     ): Response<MemberTicketResponse>
 
     @GET("/member-tickets/current")
-    suspend fun getTickets(): Response<MemberTicketsResponse>
+    suspend fun getCurrentTickets(): Response<MemberTicketsResponse>
 
     @POST("/member-tickets/{memberTicketId}/qr")
     suspend fun getTicketCode(

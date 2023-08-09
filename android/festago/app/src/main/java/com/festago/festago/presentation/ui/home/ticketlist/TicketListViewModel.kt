@@ -24,9 +24,9 @@ class TicketListViewModel(
     private val _event = MutableSingleLiveData<TicketListEvent>()
     val event: SingleLiveData<TicketListEvent> = _event
 
-    fun loadTickets() {
+    fun loadCurrentTickets() {
         viewModelScope.launch {
-            ticketRepository.loadTickets()
+            ticketRepository.loadCurrentTickets()
                 .onSuccess { tickets ->
                     _uiState.value = TicketListUiState.Success(tickets.toPresentation())
                 }.onFailure {
