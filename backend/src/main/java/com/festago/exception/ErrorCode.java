@@ -16,7 +16,6 @@ public enum ErrorCode {
     INVALID_FESTIVAL_START_DATE("축제 시작 일자는 과거일 수 없습니다."),
     INVALID_FESTIVAL_DURATION("축제 시작 일자는 종료일자 이전이어야합니다."),
     INVALID_TICKET_CREATE_TIME("티켓 예매 시작 후 새롭게 티켓을 발급할 수 없습니다."),
-    OAUTH2_INVALID_CODE("잘못된 인가 코드 입니다."),
     OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE("해당 OAuth2 제공자는 지원되지 않습니다."),
     OAUTH2_INVALID_TOKEN("잘못된 Oauth2 토큰입니다."),
 
