@@ -51,7 +51,10 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
         vm.uiState.observe(viewLifecycleOwner) { uiState ->
             binding.uiState = uiState
             when (uiState) {
-                is MyPageUiState.Loading, is MyPageUiState.Error -> Unit
+                is MyPageUiState.Loading, is MyPageUiState.Error -> {
+                    binding.srlMyPage.isRefreshing = false
+                }
+
                 is MyPageUiState.Success -> handleSuccess(uiState)
             }
         }
@@ -59,10 +62,15 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
     private fun initView() {
         vm.loadUserInfo()
+
+        binding.srlMyPage.setOnRefreshListener {
+            vm.loadUserInfo()
+        }
     }
 
     private fun handleSuccess(uiState: MyPageUiState.Success) {
         binding.successState = uiState
+        binding.srlMyPage.isRefreshing = false
     }
 
     override fun onDestroyView() {
