@@ -54,7 +54,7 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
 
     private fun initRefresh() {
         binding.srlTicketList.setOnRefreshListener {
-            vm.loadTickets()
+            vm.loadCurrentTickets()
         }
     }
 
@@ -109,7 +109,7 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
     private fun initView() {
         adapter = TicketListAdapter(vm)
         binding.rvTicketList.adapter = adapter
-        vm.loadTickets()
+        vm.loadCurrentTickets()
     }
 
     override fun onDestroyView() {
