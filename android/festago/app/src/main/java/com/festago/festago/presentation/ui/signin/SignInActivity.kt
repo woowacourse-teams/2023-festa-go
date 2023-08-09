@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.festago.festago.R
+import com.festago.festago.analytics.FirebaseAnalyticsHelper
 import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.datasource.SharedPrefAuthDataSource
 import com.festago.festago.data.repository.AuthDefaultRepository
@@ -31,6 +32,7 @@ class SignInActivity : AppCompatActivity() {
                 RetrofitClient.instance.authRetrofitService,
                 SharedPrefAuthDataSource.getInstance(this),
             ),
+            FirebaseAnalyticsHelper.getInstance(),
         )
     }
 
