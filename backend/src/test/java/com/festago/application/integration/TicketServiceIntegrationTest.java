@@ -21,11 +21,14 @@ import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
 import com.festago.support.DatabaseClearExtension;
 import com.festago.support.FestivalFixture;
+import com.festago.support.MemberFixture;
 import com.festago.support.StageFixture;
 import java.time.LocalDateTime;
-import java.util.concurrent.CountDownLatch;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -34,6 +37,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @ExtendWith(DatabaseClearExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -64,6 +71,9 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     @Autowired
     FestivalRepository festivalRepository;
 
+    @Autowired
+    PlatformTransactionManager tm;
+
     @Test
     void 공연이_없으면_예외() {
         // given
@@ -83,26 +93,47 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     @Sql(scripts = "/ticketing-test-data.sql",
         config = @SqlConfig(transactionMode = TransactionMode.ISOLATED))
-    void 예약() throws InterruptedException {
+    void 동시에_100명이_예약() {
         // given
-        Member member = memberRepository.findById(1L).get();
+        int memberCount = 100;
+        List<Member> members = createMember(memberCount);
         TicketingRequest request = new TicketingRequest(1L);
+        ExecutorService executor = Executors.newFixedThreadPool(16);
+        List<CompletableFuture<Void>> futures = members.stream()
+            .map(member -> CompletableFuture.runAsync(() -> {
+                ticketService.ticketing(member.getId(), request);
+            }, executor).exceptionally(e -> null))
+            .toList();
 
-        int threadCount = 1000;
-        ExecutorService executorService = Executors.newFixedThreadPool(32);
-        CountDownLatch latch = new CountDownLatch(threadCount);
-        for (int i = 0; i < threadCount; i++) {
-            executorService.submit(() -> {
-                try {
-                    ticketService.ticketing(member.getId(), request);
-                } finally {
-                    latch.countDown();
-                }
-            });
-        }
-        latch.await();
+        futures.forEach(CompletableFuture::join);
 
-        assertThat(memberTicketRepository.count()).isEqualTo(100);
+        assertThat(memberTicketRepository.count()).isEqualTo(50);
+    }
+
+    List<Member> createMember(int count) {
+        TransactionStatus transaction = tm.getTransaction(
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
+        List<Member> member = IntStream.rangeClosed(1, count)
+            .mapToObj(i -> memberRepository.save(MemberFixture.member().build()))
+            .toList();
+        tm.commit(transaction);
+        return member;
+    }
+
+    @Test
+    @Sql(scripts = "/ticketing-test-data.sql",
+        config = @SqlConfig(transactionMode = TransactionMode.ISOLATED))
+    void 중복으로_티켓을_예매하면_예외() {
+        // given
+        Member member = memberRepository.save(MemberFixture.member().build());
+        TicketingRequest request = new TicketingRequest(1L);
+        Long memberId = member.getId();
+        ticketService.ticketing(memberId, request);
+
+        // when & then
+        assertThatThrownBy(() -> ticketService.ticketing(memberId, request))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("예매 가능한 수량을 초과했습니다.");
     }
 
     @Test

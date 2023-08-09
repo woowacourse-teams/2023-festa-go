@@ -16,6 +16,7 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.dto.TicketingRequest;
 import com.festago.dto.TicketingResponse;
+import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
 import java.time.LocalDateTime;
@@ -64,6 +65,7 @@ public class TicketService {
         int reservedAmount = reserveTicket(request);
         Ticket ticket = findTicketById(request.ticketId());
         Member member = findMemberById(memberId);
+        validateAlreadyReserved(member, ticket);
         MemberTicket memberTicket = memberTicketRepository.save(ticket.createMemberTicket(member, reservedAmount));
         return TicketingResponse.from(memberTicket);
     }
@@ -87,6 +89,12 @@ public class TicketService {
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    private void validateAlreadyReserved(Member member, Ticket ticket) {
+        if (memberTicketRepository.existsByOwnerAndStage(member, ticket.getStage())) {
+            throw new BadRequestException(ErrorCode.RESERVE_TICKET_OVER_AMOUNT);
+        }
     }
 
     @Transactional(readOnly = true)
