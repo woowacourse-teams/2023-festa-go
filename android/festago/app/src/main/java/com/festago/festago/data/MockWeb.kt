@@ -101,26 +101,26 @@ class MockWeb {
         }
 
         private fun getTickets(): String {
-            return """ 
-                {
-	                "memberTickets": [
-		            {
-			            "id": 1,
-			            "number": 103,
-			            "entryTime": "2023-07-09T16:00:00",
-			            "state": "BEFORE_ENTRY",
-			            "reservedAt": "2023-07-09T08:00:00",
-			            "stage": {
-				        "id": 1,
-				        "startTime": "2023-07-09T18:00:00"
-			        },
-			            "festival": {
-				            "id": 1,
-				            "name": "테코대학교",
-				            "thumbnail": "https://image.png"
-			            }
-		            }
-	            ]
+            return """
+            {
+                "memberTickets": [
+                    {
+                        "id": 1,
+                        "number": 103,
+                        "entryTime": "2023-07-09T16:00:00",
+                        "state": "BEFORE_ENTRY",
+                        "reservedAt": "2023-07-09T08:00:00",
+                        "stage": {
+                            "id": 1,
+                            "startTime": "2023-07-09T18:00:00"
+                        },
+                        "festival": {
+                            "id": 1,
+                            "name": "테코대학교",
+                            "thumbnail": "https://image.png"
+                        }
+                    }
+                ]
             }
             """.trimIndent()
         }
