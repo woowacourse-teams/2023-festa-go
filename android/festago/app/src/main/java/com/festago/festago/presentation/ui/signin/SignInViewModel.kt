@@ -6,9 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festago.domain.repository.AuthRepository
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SignInViewModel(
     private val authRepository: AuthRepository,
@@ -23,15 +21,12 @@ class SignInViewModel(
 
     fun signIn(token: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                authRepository.signIn("KAKAO", token)
-                    .onSuccess { token ->
-                        authRepository.storeToken(token.accessToken)
-                        _event.setValue(SignInEvent.SignInSuccess)
-                    }.onFailure {
-                        _event.setValue(SignInEvent.SignInFailure)
-                    }
-            }
+            authRepository.signIn(SOCIAL_TYPE_KAKAO, token)
+                .onSuccess {
+                    _event.setValue(SignInEvent.SignInSuccess)
+                }.onFailure {
+                    _event.setValue(SignInEvent.SignInFailure)
+                }
         }
     }
 
@@ -46,5 +41,9 @@ class SignInViewModel(
             }
             throw IllegalArgumentException("Unknown ViewModel Class")
         }
+    }
+
+    companion object {
+        private const val SOCIAL_TYPE_KAKAO = "KAKAO"
     }
 }
