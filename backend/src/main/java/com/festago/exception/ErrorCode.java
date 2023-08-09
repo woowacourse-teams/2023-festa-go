@@ -18,6 +18,7 @@ public enum ErrorCode {
     INVALID_TICKET_CREATE_TIME("티켓 예매 시작 후 새롭게 티켓을 발급할 수 없습니다."),
     OAUTH2_INVALID_CODE("잘못된 인가 코드 입니다."),
     OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE("해당 OAuth2 제공자는 지원되지 않습니다."),
+    OAUTH2_INVALID_TOKEN("잘못된 Oauth2 토큰입니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
@@ -41,7 +42,6 @@ public enum ErrorCode {
     INVALID_AUTH_TOKEN_PAYLOAD("유효하지 않은 로그인 토큰 payload 입니다."),
     DUPLICATE_SOCIAL_TYPE("중복된 OAuth2 제공자 입니다."),
     OAUTH2_PROVIDER_NOT_RESPONSE("OAuth2 제공자 서버에 문제가 발생했습니다."),
-    OAUTH2_INVALID_REQUEST("OAuth2 제공자 서버에 잘못된 요청이 발생했습니다."),
     INVALID_ENTRY_CODE_OFFSET("올바르지 않은 입장코드 오프셋입니다.");
 
     private final String message;

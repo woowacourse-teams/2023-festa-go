@@ -20,7 +20,7 @@ public class KakaoOAuth2UserInfoErrorHandler extends DefaultResponseErrorHandler
 
     private void handle4xxError(HttpStatusCode statusCode) {
         if (statusCode.is4xxClientError()) {
-            throw new BadRequestException(ErrorCode.OAUTH2_INVALID_REQUEST);
+            throw new BadRequestException(ErrorCode.OAUTH2_INVALID_TOKEN);
         }
     }
 

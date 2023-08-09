@@ -49,7 +49,7 @@ class KakaoOAuth2UserInfoClientTest {
         // when & then
         assertThatThrownBy(() -> kakaoOAuth2UserInfoClient.getUserInfo("accessToken"))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("OAuth2 제공자 서버에 잘못된 요청이 발생했습니다.");
+            .hasMessage("잘못된 Oauth2 토큰입니다.");
     }
 
     @Test
@@ -62,7 +62,7 @@ class KakaoOAuth2UserInfoClientTest {
         // when & then
         assertThatThrownBy(() -> kakaoOAuth2UserInfoClient.getUserInfo("accessToken"))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("OAuth2 제공자 서버에 잘못된 요청이 발생했습니다.");
+            .hasMessage("잘못된 Oauth2 토큰입니다.");
     }
 
     @Test
