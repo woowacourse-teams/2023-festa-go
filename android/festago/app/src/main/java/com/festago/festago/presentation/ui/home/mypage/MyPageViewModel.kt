@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
+import com.festago.festago.domain.repository.AuthRepository
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.domain.repository.UserRepository
 import com.festago.festago.presentation.mapper.toPresentation
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 class MyPageViewModel(
     private val userRepository: UserRepository,
     private val ticketRepository: TicketRepository,
+    private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
@@ -28,9 +30,11 @@ class MyPageViewModel(
     val event: SingleLiveData<MyPageEvent> = _event
 
     fun loadUserInfo() {
-        // TODO: 로그인 확인
-        // TODO: _event.setValue(MyPageEvent.ShowLogin)
-
+        if (!authRepository.isSigned) {
+            _event.setValue(MyPageEvent.ShowSignIn)
+            _uiState.value = MyPageUiState.Error
+            return
+        }
         viewModelScope.launch {
             loadUserProfile()
             loadFirstTicket()
@@ -82,13 +86,19 @@ class MyPageViewModel(
     class MyPageViewModelFactory(
         private val userRepository: UserRepository,
         private val ticketRepository: TicketRepository,
+        private val authRepository: AuthRepository,
         private val analyticsHelper: AnalyticsHelper,
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MyPageViewModel::class.java)) {
-                return MyPageViewModel(userRepository, ticketRepository, analyticsHelper) as T
+                return MyPageViewModel(
+                    userRepository = userRepository,
+                    ticketRepository = ticketRepository,
+                    authRepository = authRepository,
+                    analyticsHelper = analyticsHelper,
+                ) as T
             }
             throw IllegalArgumentException("Unknown ViewModel Class")
         }
