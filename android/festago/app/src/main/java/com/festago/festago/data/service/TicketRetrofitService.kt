@@ -7,6 +7,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface TicketRetrofitService {
     @GET("/member-tickets/{memberTicketId}")
@@ -15,10 +16,15 @@ interface TicketRetrofitService {
     ): Response<MemberTicketResponse>
 
     @GET("/member-tickets/current")
-    suspend fun getTickets(): Response<MemberTicketsResponse>
+    suspend fun getCurrentTickets(): Response<MemberTicketsResponse>
 
     @POST("/member-tickets/{memberTicketId}/qr")
     suspend fun getTicketCode(
         @Path("memberTicketId") ticketId: Long,
     ): Response<TicketCodeDto>
+
+    @GET("/member-tickets")
+    suspend fun getHistoryTickets(
+        @Query("size") size: Int,
+    ): Response<MemberTicketsResponse>
 }

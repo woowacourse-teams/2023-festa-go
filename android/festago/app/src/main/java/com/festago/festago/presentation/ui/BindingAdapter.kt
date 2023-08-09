@@ -12,7 +12,7 @@ fun View.setVisibility(isVisible: Boolean) {
 }
 
 @BindingAdapter("imageUrl")
-fun ImageView.setImage(imageUrl: String) {
+fun ImageView.setImage(imageUrl: String?) {
     Glide.with(context)
         .load(imageUrl)
         .error(R.drawable.ic_image_placeholder)

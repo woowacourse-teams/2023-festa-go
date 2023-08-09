@@ -29,14 +29,21 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
         UserInfo userInfo = getUserInfo(request);
-        Member member = memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
-            .orElseGet(() -> signUp(userInfo));
-        return new LoginResponse(authProvider.provide(new AuthPayload(member.getId())), member.getNickname());
+        return memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
+            .map(member -> LoginResponse.isExists(getAccessToken(member), member.getNickname()))
+            .orElseGet(() -> {
+                Member member = signUp(userInfo);
+                return LoginResponse.isNew(getAccessToken(member), member.getNickname());
+            });
     }
 
     private UserInfo getUserInfo(LoginRequest request) {
         OAuth2Client oAuth2Client = oAuth2Clients.getClient(request.socialType());
         return oAuth2Client.getUserInfo(request.accessToken());
+    }
+
+    private String getAccessToken(Member member) {
+        return authProvider.provide(new AuthPayload(member.getId()));
     }
 
     private Member signUp(UserInfo userInfo) {

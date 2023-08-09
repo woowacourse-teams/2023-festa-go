@@ -10,12 +10,16 @@ import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.dto.TicketingRequest;
 import com.festago.dto.TicketingResponse;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -61,15 +65,20 @@ public class MemberTicketController {
     }
 
     @GetMapping
-    public ResponseEntity<MemberTicketsResponse> findAll(@Login LoginMember loginMember) {
-        MemberTicketsResponse response = memberTicketService.findAll(loginMember.memberId());
+    public ResponseEntity<MemberTicketsResponse> findAll(
+        @Login LoginMember loginMember,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "100") int size) {
+        Pageable pageRequest = PageRequest.of(page, size, Sort.by("entryTime").descending());
+        MemberTicketsResponse response = memberTicketService.findAll(loginMember.memberId(), pageRequest);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @GetMapping("/current")
     public ResponseEntity<MemberTicketsResponse> findCurrent(@Login LoginMember loginMember) {
-        MemberTicketsResponse response = memberTicketService.findCurrent(loginMember.memberId());
+        Pageable pageable = PageRequest.of(0, 100);
+        MemberTicketsResponse response = memberTicketService.findCurrent(loginMember.memberId(), pageable);
         return ResponseEntity.ok()
             .body(response);
     }

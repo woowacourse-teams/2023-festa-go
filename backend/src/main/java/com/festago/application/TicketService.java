@@ -18,6 +18,7 @@ import com.festago.dto.TicketingRequest;
 import com.festago.dto.TicketingResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +50,7 @@ public class TicketService {
         Ticket ticket = ticketRepository.findByTicketTypeAndStage(ticketType, stage)
             .orElseGet(() -> ticketRepository.save(new Ticket(stage, ticketType)));
 
-        ticket.addTicketEntryTime(request.entryTime(), request.amount());
+        ticket.addTicketEntryTime(LocalDateTime.now(), request.entryTime(), request.amount());
 
         return TicketCreateResponse.from(ticket);
     }

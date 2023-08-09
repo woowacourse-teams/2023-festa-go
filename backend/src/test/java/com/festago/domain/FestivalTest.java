@@ -1,8 +1,11 @@
 package com.festago.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.festago.exception.BadRequestException;
 import com.festago.support.FestivalFixture;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -12,6 +15,17 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class FestivalTest {
+
+    @Test
+    void 시작일자가_종료일자_이전이면_예외() {
+        // given
+        LocalDate today = LocalDate.now();
+
+        // when & then
+        assertThatThrownBy(() -> new Festival("테코대학교", today.plusDays(1), today))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("축제 시작 일자는 종료일자 이전이어야합니다.");
+    }
 
     @Nested
     class 축제_기간_중이_아닌지_검사 {

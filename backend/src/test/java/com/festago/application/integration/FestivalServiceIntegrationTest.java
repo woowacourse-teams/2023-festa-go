@@ -50,8 +50,9 @@ class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 축제를_생성한다() {
         // given
-        FestivalCreateRequest request = new FestivalCreateRequest("테코 대학교 축제", LocalDate.parse("2023-07-26"),
-            LocalDate.parse("2023-07-28"), "thumbnail.png");
+        LocalDate today = LocalDate.now();
+        FestivalCreateRequest request = new FestivalCreateRequest("테코 대학교 축제", today, today.plusDays(1),
+            "thumbnail.png");
 
         // when
         FestivalResponse festivalResponse = festivalService.create(request);
@@ -67,10 +68,11 @@ class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
         Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
         Ticket ticket1 = ticketRepository.save(
             TicketFixture.ticket().stage(stage).ticketType(TicketType.VISITOR).build());
-        ticket1.addTicketEntryTime(LocalDateTime.now().minusMinutes(10), 100);
+        LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
+        ticket1.addTicketEntryTime(ticketOpenTime.minusHours(1), LocalDateTime.now().minusMinutes(10), 100);
         Ticket ticket2 = ticketRepository.save(
             TicketFixture.ticket().stage(stage).ticketType(TicketType.STUDENT).build());
-        ticket2.addTicketEntryTime(LocalDateTime.now().minusMinutes(10), 200);
+        ticket2.addTicketEntryTime(ticketOpenTime.minusHours(1), LocalDateTime.now().minusMinutes(10), 200);
 
         entityManager.flush();
         entityManager.clear();

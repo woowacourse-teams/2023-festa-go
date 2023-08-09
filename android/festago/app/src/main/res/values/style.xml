@@ -17,4 +17,9 @@
         <item name="android:background">@drawable/bg_ticket_reserve_bottom_sheet</item>
     </style>
 
+    <style name="roundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

@@ -42,7 +42,7 @@ class AuthControllerTest {
     @Test
     void OAuth2_로그인을_한다() throws Exception {
         // given
-        LoginResponse expected = new LoginResponse("accesstoken", "nickname");
+        LoginResponse expected = new LoginResponse("accesstoken", "nickname", true);
         given(authService.login(any(LoginRequest.class)))
             .willReturn(expected);
         LoginRequest request = new LoginRequest(SocialType.FESTAGO, "code");
@@ -64,7 +64,7 @@ class AuthControllerTest {
     @Test
     void 카카오_OAuth2_로그인을_한다() throws Exception {
         // given
-        LoginResponse expected = new LoginResponse("accesstoken", "nickname");
+        LoginResponse expected = new LoginResponse("accesstoken", "nickname", true);
         given(authService.login(any(LoginRequest.class)))
             .willReturn(expected);
 

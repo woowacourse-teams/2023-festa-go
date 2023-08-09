@@ -4,6 +4,7 @@ import com.festago.festago.BuildConfig
 import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.service.ReservationRetrofitService
 import com.festago.festago.data.service.TicketRetrofitService
+import com.festago.festago.data.service.UserRetrofitService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -22,6 +23,10 @@ class RetrofitClient private constructor(
 
     val festivalRetrofitService: FestivalRetrofitService by lazy {
         normalRetrofit.create(FestivalRetrofitService::class.java)
+    }
+
+    val userRetrofitService: UserRetrofitService by lazy {
+        normalRetrofit.create(UserRetrofitService::class.java)
     }
 
     private val normalRetrofit: Retrofit by lazy {

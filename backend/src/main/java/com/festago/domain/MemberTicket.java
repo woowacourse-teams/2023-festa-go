@@ -33,6 +33,7 @@ public class MemberTicket extends BaseTimeEntity {
 
     private LocalDateTime entryTime;
 
+    @Enumerated(EnumType.STRING)
     private TicketType ticketType;
 
     protected MemberTicket() {

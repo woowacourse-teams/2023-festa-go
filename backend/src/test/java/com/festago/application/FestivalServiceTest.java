@@ -2,19 +2,23 @@ package com.festago.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.domain.Festival;
 import com.festago.domain.FestivalRepository;
 import com.festago.domain.Stage;
 import com.festago.domain.StageRepository;
+import com.festago.dto.FestivalCreateRequest;
 import com.festago.dto.FestivalDetailResponse;
 import com.festago.dto.FestivalDetailStageResponse;
 import com.festago.dto.FestivalResponse;
 import com.festago.dto.FestivalsResponse;
+import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
 import com.festago.support.FestivalFixture;
 import com.festago.support.StageFixture;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -55,6 +59,43 @@ class FestivalServiceTest {
         List<Long> festivalIds = response.festivals().stream().map(FestivalResponse::id).toList();
 
         assertThat(festivalIds).containsExactly(1L, 2L);
+    }
+
+    @Nested
+    class 축제_생성 {
+
+        @Test
+        void 축제_생성시_시작일자가_과거이면_예외() {
+            // given
+            LocalDate today = LocalDate.now();
+            FestivalCreateRequest request = new FestivalCreateRequest("테코대학교", today.minusDays(1), today,
+                "http://image.png");
+
+            // when & then
+            assertThatThrownBy(() -> festivalService.create(request))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("축제 시작 일자는 과거일 수 없습니다.");
+        }
+
+        @Test
+        void 성공() {
+            // given
+            LocalDate today = LocalDate.now();
+            String name = "테코대학교";
+            String thumbnail = "http://image.png";
+            FestivalCreateRequest request = new FestivalCreateRequest(name, today, today, thumbnail);
+            Festival festival = new Festival(1L, name, today, today, thumbnail);
+            FestivalResponse expected = new FestivalResponse(1L, name, today, today, thumbnail);
+            given(festivalRepository.save(any()))
+                .willReturn(festival);
+
+            // when
+            FestivalResponse actual = festivalService.create(request);
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
+        }
     }
 
     @Nested

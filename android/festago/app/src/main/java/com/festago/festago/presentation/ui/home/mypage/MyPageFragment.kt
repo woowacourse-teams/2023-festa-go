@@ -1,24 +1,35 @@
 package com.festago.festago.presentation.ui.home.mypage
 
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
 import com.festago.festago.R
+import com.festago.festago.analytics.FirebaseAnalyticsHelper
+import com.festago.festago.data.RetrofitClient
+import com.festago.festago.data.repository.TicketDefaultRepository
+import com.festago.festago.data.repository.UserDefaultRepository
 import com.festago.festago.databinding.FragmentMyPageBinding
-import com.festago.festago.presentation.util.loginWithKakao
-import com.kakao.sdk.user.UserApiClient
-import kotlinx.coroutines.launch
+import com.festago.festago.presentation.ui.home.mypage.MyPageViewModel.MyPageViewModelFactory
 
 class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
+
+    private val vm: MyPageViewModel by viewModels {
+        MyPageViewModelFactory(
+            userRepository = UserDefaultRepository(
+                userProfileService = RetrofitClient.getInstance().userRetrofitService,
+            ),
+            ticketRepository = TicketDefaultRepository(
+                ticketRetrofitService = RetrofitClient.getInstance().ticketRetrofitService,
+            ),
+            analyticsHelper = FirebaseAnalyticsHelper.getInstance(),
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,34 +42,39 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
 
-        lifecycleScope.launch {
-            UserApiClient.loginWithKakao(binding.root.context)
+        initObserve()
+        initView()
+    }
+
+    private fun initObserve() {
+        vm.uiState.observe(viewLifecycleOwner) { uiState ->
+            binding.uiState = uiState
+            when (uiState) {
+                is MyPageUiState.Loading, is MyPageUiState.Error -> {
+                    binding.srlMyPage.isRefreshing = false
+                }
+
+                is MyPageUiState.Success -> handleSuccess(uiState)
+            }
         }
     }
 
     private fun initView() {
-        val spannableStringBuilder = SpannableStringBuilder(
-            getString(R.string.mypage_tv_login_description),
-        ).apply {
-            setSpan(
-                ForegroundColorSpan(requireContext().getColor(R.color.seed)),
-                COLOR_SPAN_START_INDEX,
-                COLOR_SPAN_END_INDEX,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-            )
+        vm.loadUserInfo()
+
+        binding.srlMyPage.setOnRefreshListener {
+            vm.loadUserInfo()
         }
-        binding.tvLoginDescription.text = spannableStringBuilder
+    }
+
+    private fun handleSuccess(uiState: MyPageUiState.Success) {
+        binding.successState = uiState
+        binding.srlMyPage.isRefreshing = false
     }
 
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    companion object {
-        private const val COLOR_SPAN_START_INDEX = 0
-        private const val COLOR_SPAN_END_INDEX = 4
     }
 }

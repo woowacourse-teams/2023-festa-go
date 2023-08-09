@@ -6,14 +6,22 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
+import com.festago.domain.Festival;
+import com.festago.domain.FestivalRepository;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicketRepository;
+import com.festago.domain.Stage;
+import com.festago.domain.StageRepository;
+import com.festago.domain.TicketRepository;
 import com.festago.domain.TicketType;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketingRequest;
+import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
 import com.festago.support.DatabaseClearExtension;
+import com.festago.support.FestivalFixture;
+import com.festago.support.StageFixture;
 import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -46,6 +54,15 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     MemberTicketRepository memberTicketRepository;
+
+    @Autowired
+    TicketRepository ticketRepository;
+
+    @Autowired
+    StageRepository stageRepository;
+
+    @Autowired
+    FestivalRepository festivalRepository;
 
     @Test
     void 공연이_없으면_예외() {
@@ -86,5 +103,22 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         latch.await();
 
         assertThat(memberTicketRepository.count()).isEqualTo(100);
+    }
+
+    @Test
+    void 티켓_생성시_입장_시간이_공연_시간보다_빠르면_예외() {
+        // given
+        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+        LocalDateTime now = LocalDateTime.now();
+        Stage stage = stageRepository.save(StageFixture.stage().festival(festival).startTime(now.plusHours(10))
+            .ticketOpenTime(now.plusHours(1)).build());
+        LocalDateTime entryTime = stage.getStartTime().plusHours(1);
+        Long stageId = stage.getId();
+        TicketCreateRequest request = new TicketCreateRequest(stageId, TicketType.STUDENT, 100, entryTime);
+
+        // when & then
+        assertThatThrownBy(() -> ticketService.create(request))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("입장 시간은 공연 시간보다 빨라야합니다.");
     }
 }
