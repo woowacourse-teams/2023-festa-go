@@ -34,8 +34,6 @@ public class AuthServiceIntegrationTest extends ApplicationIntegrationTest {
 
         // when
         authService.deleteMember(member.getId());
-        entityManager.flush();
-        entityManager.clear();
 
         // then
         String sql = "SELECT * FROM member WHERE id = :memberId AND deleted_at IS NOT NULL";
@@ -60,8 +58,6 @@ public class AuthServiceIntegrationTest extends ApplicationIntegrationTest {
 
         // when
         authService.deleteMember(member.getId());
-        entityManager.flush();
-        entityManager.clear();
 
         // then
         assertThat(memberRepository.findById(member.getId())).isEmpty();
