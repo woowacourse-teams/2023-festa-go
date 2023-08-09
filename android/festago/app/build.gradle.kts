@@ -127,6 +127,9 @@ dependencies {
 
     // kakao login
     implementation("com.kakao.sdk:v2-user:2.12.0")
+
+    // Encrypted SharedPreference
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
 }
 
 fun getSecretKey(propertyKey: String): String {

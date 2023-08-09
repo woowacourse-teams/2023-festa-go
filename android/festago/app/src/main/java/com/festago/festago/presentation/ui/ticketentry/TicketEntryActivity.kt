@@ -23,7 +23,7 @@ class TicketEntryActivity : AppCompatActivity() {
     private val vm: TicketEntryViewModel by viewModels {
         TicketEntryViewModelFactory(
             TicketDefaultRepository(
-                ticketRetrofitService = RetrofitClient.getInstance().ticketRetrofitService,
+                ticketRetrofitService = RetrofitClient.instance.ticketRetrofitService,
             ),
             FirebaseAnalyticsHelper.getInstance(),
         )

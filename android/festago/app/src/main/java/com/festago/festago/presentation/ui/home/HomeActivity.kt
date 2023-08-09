@@ -1,5 +1,7 @@
 package com.festago.festago.presentation.ui.home
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -8,6 +10,7 @@ import com.festago.festago.databinding.ActivityHomeBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
+import com.festago.festago.presentation.ui.signin.SignInActivity
 
 class HomeActivity : AppCompatActivity() {
 
@@ -16,7 +19,6 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initBinding()
         initView()
     }
@@ -42,6 +44,7 @@ class HomeActivity : AppCompatActivity() {
                 HomeItemType.MY_PAGE -> {
                     changeFragment<MyPageFragment>()
                     binding.fabTicket.isSelected = false
+                    startActivity(SignInActivity.getIntent(this))
                 }
             }
             true
@@ -81,5 +84,11 @@ class HomeActivity : AppCompatActivity() {
         }
 
         fragmentTransaction.commit()
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, HomeActivity::class.java)
+        }
     }
 }

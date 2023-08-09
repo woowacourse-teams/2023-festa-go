@@ -30,7 +30,7 @@ class TicketReserveActivity : AppCompatActivity() {
     private val vm: TicketReserveViewModel by viewModels {
         TicketReservationViewModelFactory(
             ReservationDefaultRepository(
-                reservationRetrofitService = RetrofitClient.getInstance().reservationRetrofitService,
+                reservationRetrofitService = RetrofitClient.instance.reservationRetrofitService,
             ),
             FirebaseAnalyticsHelper.getInstance(),
         )
