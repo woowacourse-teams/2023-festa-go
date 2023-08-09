@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -136,7 +138,7 @@ class MemberTicketControllerTest {
                     stageResponse, festivalResponse))
             .collect(collectingAndThen(toList(), MemberTicketsResponse::new));
 
-        given(memberTicketService.findAll(memberId))
+        given(memberTicketService.findAll(eq(memberId), any(Pageable.class)))
             .willReturn(expected);
         given(authExtractor.extract(any()))
             .willReturn(new AuthPayload(1L));
@@ -169,7 +171,7 @@ class MemberTicketControllerTest {
                     stageResponse, festivalResponse))
             .collect(collectingAndThen(toList(), MemberTicketsResponse::new));
 
-        given(memberTicketService.findCurrent(memberId))
+        given(memberTicketService.findCurrent(eq(memberId), any(Pageable.class)))
             .willReturn(expected);
         given(authExtractor.extract(any()))
             .willReturn(new AuthPayload(1L));

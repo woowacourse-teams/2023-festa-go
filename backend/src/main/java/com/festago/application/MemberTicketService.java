@@ -15,6 +15,7 @@ import com.festago.exception.NotFoundException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,18 +44,17 @@ public class MemberTicketService {
     }
 
     @Transactional(readOnly = true)
-    public MemberTicketsResponse findAll(Long memberId) {
+    public MemberTicketsResponse findAll(Long memberId, Pageable pageable) {
         validateMemberId(memberId);
-        List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
+        List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId, pageable);
         return memberTickets.stream()
-            .sorted(comparing(memberTicket -> memberTicket.getStage().getStartTime()))
             .collect(collectingAndThen(toList(), MemberTicketsResponse::from));
     }
 
     @Transactional(readOnly = true)
-    public MemberTicketsResponse findCurrent(Long memberId) {
+    public MemberTicketsResponse findCurrent(Long memberId, Pageable pageable) {
         validateMemberId(memberId);
-        List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId);
+        List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId, pageable);
         return MemberTicketsResponse.from(filterCurrentMemberTickets(memberTickets));
     }
 
