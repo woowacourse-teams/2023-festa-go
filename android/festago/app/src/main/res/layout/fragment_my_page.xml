@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="vm"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageViewModel" />
+
+        <variable
             name="uiState"
             type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState" />
 
@@ -109,6 +113,7 @@
                 android:id="@+id/tvLogout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.signOut()}"
                 android:paddingVertical="8dp"
                 android:text="@string/my_page_tv_logout"
                 app:layout_constraintEnd_toStartOf="@id/guidelineEnd"

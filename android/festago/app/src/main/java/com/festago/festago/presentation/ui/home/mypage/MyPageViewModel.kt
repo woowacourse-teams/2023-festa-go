@@ -83,6 +83,38 @@ class MyPageViewModel(
             }
     }
 
+    fun signOut() {
+        viewModelScope.launch {
+            authRepository.signOut()
+                .onSuccess {
+                    _event.setValue(MyPageEvent.SignOutSuccess)
+                    _uiState.value = MyPageUiState.Error
+                }.onFailure {
+                    _uiState.value = MyPageUiState.Error
+                    analyticsHelper.logNetworkFailure(
+                        key = KEY_SIGN_OUT,
+                        value = it.message.toString(),
+                    )
+                }
+        }
+    }
+
+    fun deleteAccount() {
+        viewModelScope.launch {
+            authRepository.deleteAccount()
+                .onSuccess {
+                    _event.setValue(MyPageEvent.DeleteAccountSuccess)
+                    _uiState.value = MyPageUiState.Error
+                }.onFailure {
+                    _uiState.value = MyPageUiState.Error
+                    analyticsHelper.logNetworkFailure(
+                        key = KEY_DELETE_ACCOUNT,
+                        value = it.message.toString(),
+                    )
+                }
+        }
+    }
+
     class MyPageViewModelFactory(
         private val userRepository: UserRepository,
         private val ticketRepository: TicketRepository,
@@ -106,5 +138,7 @@ class MyPageViewModel(
 
     companion object {
         private const val KEY_LOAD_USER_INFO = "loadUserInfo"
+        private const val KEY_SIGN_OUT = "KEY_SIGN_OUT"
+        private const val KEY_DELETE_ACCOUNT = "KEY_DELETE_ACCOUNT"
     }
 }

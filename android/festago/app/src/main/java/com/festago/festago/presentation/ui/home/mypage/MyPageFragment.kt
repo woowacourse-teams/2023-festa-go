@@ -33,6 +33,7 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
             authRepository = AuthDefaultRepository(
                 authRetrofitService = RetrofitClient.instance.authRetrofitService,
                 authDataSource = SharedPrefAuthDataSource.getInstance(requireContext()),
+                userRetrofitService = RetrofitClient.instance.userRetrofitService,
             ),
             analyticsHelper = FirebaseAnalyticsHelper.getInstance(),
         )
@@ -67,6 +68,8 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
         vm.event.observe(viewLifecycleOwner) { event ->
             when (event) {
                 is MyPageEvent.ShowSignIn -> handleShowSignInEvent()
+                is MyPageEvent.SignOutSuccess -> handleSignOutSuccessEvent()
+                is MyPageEvent.DeleteAccountSuccess -> handleDeleteAccountSuccess()
             }
         }
     }
@@ -75,7 +78,15 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
         startActivity(SignInActivity.getIntent(requireContext()))
     }
 
+    private fun handleSignOutSuccessEvent() {
+    }
+
+    private fun handleDeleteAccountSuccess() {
+    }
+
     private fun initView() {
+        binding.vm = vm
+
         vm.loadUserInfo()
 
         binding.srlMyPage.setOnRefreshListener {
