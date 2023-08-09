@@ -1,5 +1,6 @@
 package com.festago.application.integration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.auth.application.AuthService;
@@ -49,6 +50,20 @@ public class AuthServiceIntegrationTest extends ApplicationIntegrationTest {
             softly.assertThat(actual.getNickname()).isEqualTo("탈퇴한 회원");
             softly.assertThat(actual.getProfileImage()).isBlank();
         });
+    }
 
+
+    @Test
+    void 탈퇴한_회원은_조회되지않는다() {
+        // given
+        Member member = memberRepository.save(MemberFixture.member().build());
+
+        // when
+        authService.deleteMember(member.getId());
+        entityManager.flush();
+        entityManager.clear();
+
+        // then
+        assertThat(memberRepository.findById(member.getId())).isEmpty();
     }
 }
