@@ -44,7 +44,7 @@ private suspend fun UserApiClient.Companion.loginWithKakaoTalk(context: Context)
             } else if (token != null) {
                 continuation.resume(token)
             } else {
-                continuation.resumeWithException(RuntimeException("kakao access token을 받아오는데 실패함, 이유는 명확하지 않음."))
+                continuation.resumeWithException(RuntimeException("Failure get kakao access token"))
             }
         }
     }
@@ -61,7 +61,7 @@ private suspend fun UserApiClient.Companion.loginWithKakaoAccount(context: Conte
             } else if (token != null) {
                 continuation.resume(token)
             } else {
-                continuation.resumeWithException(RuntimeException("kakao access token을 받아오는데 실패함, 이유는 명확하지 않음."))
+                continuation.resumeWithException(RuntimeException("Failure get kakao access token"))
             }
         }
     }
