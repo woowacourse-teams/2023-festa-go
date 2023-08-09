@@ -69,23 +69,17 @@ class MemberTicketServiceTest {
     class 현재_멤버티켓_조회 {
 
         @Test
-        void 입장시간이_12시간이상_남은_티켓은_조회되지_않는다() {
+        void 멤버가_없으면_예외() {
             // given
             Long memberId = 1L;
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-                .entryTime(LocalDateTime.now().plusHours(13))
-                .build();
 
-            given(memberTicketRepository.findAllByOwnerId(eq(memberId), any(Pageable.class)))
-                .willReturn(List.of(memberTicket));
             given(memberRepository.findById(memberId))
-                .willReturn(Optional.of(new Member(memberId)));
+                .willReturn(Optional.empty());
 
-            // when
-            MemberTicketsResponse response = memberTicketService.findCurrent(memberId, Pageable.ofSize(100));
-
-            // then
-            assertThat(response.memberTickets()).isEmpty();
+            // when & then
+            assertThatThrownBy(() -> memberTicketService.findCurrent(memberId, Pageable.ofSize(10)))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("존재하지 않는 멤버입니다.");
         }
 
         @Test
