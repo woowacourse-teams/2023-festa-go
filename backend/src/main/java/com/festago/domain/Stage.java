@@ -60,6 +60,10 @@ public class Stage extends BaseTimeEntity {
         }
     }
 
+    public boolean isStart(LocalDateTime time) {
+        return startTime.isBefore(time);
+    }
+
     public Long getId() {
         return id;
     }

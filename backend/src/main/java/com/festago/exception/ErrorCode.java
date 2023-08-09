@@ -18,6 +18,7 @@ public enum ErrorCode {
     INVALID_TICKET_CREATE_TIME("티켓 예매 시작 후 새롭게 티켓을 발급할 수 없습니다."),
     OAUTH2_INVALID_CODE("잘못된 인가 코드 입니다."),
     OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE("해당 OAuth2 제공자는 지원되지 않습니다."),
+    TICKET_RESERVE_TIMEOUT("티켓의 예매 시간은 공연 시작 시간보다 빨라야 합니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
