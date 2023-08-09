@@ -12,10 +12,8 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-class RetrofitClient private constructor(
-    private val baseUrl: String,
-    authDataSource: AuthDataSource,
-) {
+object RetrofitClient {
+
     val ticketRetrofitService: TicketRetrofitService by lazy {
         authRetrofit.create(TicketRetrofitService::class.java)
     }
@@ -36,34 +34,31 @@ class RetrofitClient private constructor(
         normalRetrofit.create(AuthRetrofitService::class.java)
     }
 
-    private val normalRetrofit: Retrofit by lazy {
-        Retrofit.Builder()
+    private lateinit var normalRetrofit: Retrofit
+    private lateinit var authRetrofit: Retrofit
+
+    fun init(authDataSource: AuthDataSource, baseUrl: String = "") {
+        initNormalRetrofit(baseUrl)
+        initAuthRetrofit(authDataSource, baseUrl)
+    }
+
+    private fun initNormalRetrofit(baseUrl: String) {
+        normalRetrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
     }
 
-    private val authRetrofit: Retrofit by lazy {
+    private fun initAuthRetrofit(authDataSource: AuthDataSource, baseUrl: String) {
         val okHttpClient: OkHttpClient = OkHttpClient
             .Builder()
             .addInterceptor(AuthInterceptor(authDataSource))
             .build()
 
-        Retrofit.Builder()
+        authRetrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
-    }
-
-    companion object {
-        private var _instance: RetrofitClient? = null
-        val instance: RetrofitClient get() = _instance!!
-
-        fun create(authDataSource: AuthDataSource, baseUrl: String = "") {
-            if (_instance == null) {
-                _instance = RetrofitClient(baseUrl.removeSuffix("/"), authDataSource)
-            }
-        }
     }
 }

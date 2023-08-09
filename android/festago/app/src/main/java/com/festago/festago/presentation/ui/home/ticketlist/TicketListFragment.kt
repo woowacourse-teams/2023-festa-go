@@ -28,7 +28,7 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
     private val vm: TicketListViewModel by viewModels {
         TicketListViewModel.TicketListViewModelFactory(
             TicketDefaultRepository(
-                ticketRetrofitService = RetrofitClient.instance.ticketRetrofitService,
+                ticketRetrofitService = RetrofitClient.ticketRetrofitService,
             ),
             analyticsHelper = FirebaseAnalyticsHelper,
         )

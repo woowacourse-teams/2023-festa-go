@@ -22,10 +22,10 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     private val vm: MyPageViewModel by viewModels {
         MyPageViewModelFactory(
             userRepository = UserDefaultRepository(
-                userProfileService = RetrofitClient.instance.userRetrofitService,
+                userProfileService = RetrofitClient.userRetrofitService,
             ),
             ticketRepository = TicketDefaultRepository(
-                ticketRetrofitService = RetrofitClient.instance.ticketRetrofitService,
+                ticketRetrofitService = RetrofitClient.ticketRetrofitService,
             ),
             analyticsHelper = FirebaseAnalyticsHelper,
         )
