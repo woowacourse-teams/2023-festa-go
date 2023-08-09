@@ -4,5 +4,5 @@ import java.time.LocalDateTime
 
 data class StageUiModel(
     val id: Int = -1,
-    val startTime: LocalDateTime = LocalDateTime.now(),
+    val startTime: LocalDateTime = LocalDateTime.MIN,
 )
