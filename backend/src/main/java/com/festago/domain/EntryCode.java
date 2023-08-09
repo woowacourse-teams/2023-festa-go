@@ -23,7 +23,7 @@ public class EntryCode {
         this.offset = offset;
     }
 
-    public void validate(long period, long offset) {
+    private void validate(long period, long offset) {
         if (period <= MINIMUM_PERIOD) {
             throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_PERIOD);
         }
