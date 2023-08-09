@@ -7,6 +7,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface TicketRetrofitService {
     @GET("/member-tickets/{memberTicketId}")
@@ -21,4 +22,9 @@ interface TicketRetrofitService {
     suspend fun getTicketCode(
         @Path("memberTicketId") ticketId: Long,
     ): Response<TicketCodeDto>
+
+    @GET("/member-tickets")
+    suspend fun getHistoryTickets(
+        @Query("size") size: Int,
+    ): Response<MemberTicketsResponse>
 }
