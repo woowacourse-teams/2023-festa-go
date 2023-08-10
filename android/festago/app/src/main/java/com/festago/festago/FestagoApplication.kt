@@ -2,9 +2,9 @@ package com.festago.festago
 
 import android.app.Application
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.AuthRetrofitClient
-import com.festago.festago.data.NormalRetrofitClient
 import com.festago.festago.data.datasource.AuthLocalDataSource
+import com.festago.festago.data.retrofit.AuthRetrofitClient
+import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.kakao.sdk.common.KakaoSdk
 
 class FestagoApplication : Application() {

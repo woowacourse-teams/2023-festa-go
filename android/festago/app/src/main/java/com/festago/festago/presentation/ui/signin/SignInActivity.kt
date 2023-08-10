@@ -11,10 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.festago.festago.R
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.AuthRetrofitClient
-import com.festago.festago.data.NormalRetrofitClient
 import com.festago.festago.data.datasource.AuthLocalDataSource
 import com.festago.festago.data.repository.AuthDefaultRepository
+import com.festago.festago.data.retrofit.AuthRetrofitClient
+import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.ActivitySignInBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.home.HomeActivity

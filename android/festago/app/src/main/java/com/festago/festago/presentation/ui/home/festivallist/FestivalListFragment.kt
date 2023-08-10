@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.NormalRetrofitClient
 import com.festago.festago.data.repository.FestivalDefaultRepository
+import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListViewModel.FestivalListViewModelFactory
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment

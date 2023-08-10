@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.AuthRetrofitClient
 import com.festago.festago.data.repository.TicketDefaultRepository
+import com.festago.festago.data.retrofit.AuthRetrofitClient
 import com.festago.festago.databinding.FragmentTicketListBinding
 import com.festago.festago.presentation.ui.ticketentry.TicketEntryActivity
 

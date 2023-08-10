@@ -7,8 +7,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.AuthRetrofitClient
 import com.festago.festago.data.repository.ReservationDefaultRepository
+import com.festago.festago.data.retrofit.AuthRetrofitClient
 import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.presentation.mapper.toPresentation

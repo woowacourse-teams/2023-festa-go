@@ -1,4 +1,4 @@
-package com.festago.festago.data
+package com.festago.festago.data.retrofit
 
 import okhttp3.Interceptor
 import okhttp3.Response

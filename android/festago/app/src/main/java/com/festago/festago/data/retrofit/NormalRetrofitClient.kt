@@ -1,4 +1,4 @@
-package com.festago.festago.data
+package com.festago.festago.data.retrofit
 
 import com.festago.festago.data.service.AuthRetrofitService
 import com.festago.festago.data.service.FestivalRetrofitService
