@@ -1,6 +1,8 @@
 package com.festago.festago.data.repository
 
+import com.festago.festago.data.dto.ReservedTicketRequest
 import com.festago.festago.data.service.TicketRetrofitService
+import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.domain.model.Ticket
 import com.festago.festago.domain.model.TicketCode
 import com.festago.festago.domain.repository.TicketRepository
@@ -48,6 +50,19 @@ class TicketDefaultRepository(
     override suspend fun loadHistoryTickets(size: Int): Result<List<Ticket>> {
         try {
             val response = ticketRetrofitService.getHistoryTickets(size)
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!.toDomain())
+            }
+            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    override suspend fun reserveTicket(ticketId: Int): Result<ReservedTicket> {
+        try {
+            val response =
+                ticketRetrofitService.postReserveTicket(ReservedTicketRequest(ticketId))
             if (response.isSuccessful && response.body() != null) {
                 return Result.success(response.body()!!.toDomain())
             }

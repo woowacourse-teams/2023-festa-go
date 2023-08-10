@@ -7,8 +7,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.repository.ReservationDefaultRepository
+import com.festago.festago.data.repository.FestivalDefaultRepository
+import com.festago.festago.data.repository.ReservationTicketDefaultRepository
+import com.festago.festago.data.repository.TicketDefaultRepository
 import com.festago.festago.data.retrofit.AuthRetrofitClient
+import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.presentation.mapper.toPresentation
@@ -29,8 +32,14 @@ class TicketReserveActivity : AppCompatActivity() {
 
     private val vm: TicketReserveViewModel by viewModels {
         TicketReservationViewModelFactory(
-            ReservationDefaultRepository(
-                reservationRetrofitService = AuthRetrofitClient.instance.reservationRetrofitService,
+            ReservationTicketDefaultRepository(
+                reservationTicketRetrofitService = NormalRetrofitClient.reservationTicketRetrofitService,
+            ),
+            FestivalDefaultRepository(
+                festivalRetrofitService = NormalRetrofitClient.festivalRetrofitService,
+            ),
+            TicketDefaultRepository(
+                ticketRetrofitService = AuthRetrofitClient.instance.ticketRetrofitService,
             ),
             FirebaseAnalyticsHelper,
         )

@@ -6,7 +6,9 @@ import com.festago.festago.domain.model.Reservation
 import com.festago.festago.domain.model.ReservationStage
 import com.festago.festago.domain.model.ReservationTicket
 import com.festago.festago.domain.model.ReservedTicket
-import com.festago.festago.domain.repository.ReservationRepository
+import com.festago.festago.domain.repository.FestivalRepository
+import com.festago.festago.domain.repository.ReservationTicketRepository
+import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -24,7 +26,9 @@ import java.time.LocalDateTime
 
 class TicketReserveViewModelTest {
     private lateinit var vm: TicketReserveViewModel
-    private lateinit var reservationRepository: ReservationRepository
+    private lateinit var reservationTicketRepository: ReservationTicketRepository
+    private lateinit var festivalRepository: FestivalRepository
+    private lateinit var ticketRepository: TicketRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
     private val fakeReservationTickets = listOf(
@@ -61,16 +65,23 @@ class TicketReserveViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        reservationRepository = mockk()
+        reservationTicketRepository = mockk()
+        festivalRepository = mockk()
+        ticketRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
-        vm = TicketReserveViewModel(reservationRepository, analyticsHelper)
+        vm = TicketReserveViewModel(
+            reservationTicketRepository,
+            festivalRepository,
+            ticketRepository,
+            analyticsHelper,
+        )
     }
 
     @Test
     fun `예약 정보를 불러오면 성공 이벤트가 발생하고 리스트를 반환한다`() {
         // given
         coEvery {
-            reservationRepository.loadReservation(0)
+            festivalRepository.loadFestivalDetail(0)
         } answers {
             Result.success(fakeReservation)
         }
@@ -89,7 +100,7 @@ class TicketReserveViewModelTest {
     @Test
     fun `예약 정보를 불러오는 것을 실패하면 에러 이벤트가 발생한다`() {
         // given
-        coEvery { reservationRepository.loadReservation(0) } returns Result.failure(Exception())
+        coEvery { festivalRepository.loadFestivalDetail(0) } returns Result.failure(Exception())
 
         // when
         vm.loadReservation(0)
@@ -102,7 +113,7 @@ class TicketReserveViewModelTest {
     fun `예약 정보를 불러오는 중이면 로딩 이벤트가 발생한다`() {
         // given
         coEvery {
-            reservationRepository.loadReservation(0)
+            festivalRepository.loadFestivalDetail(0)
         } coAnswers {
             delay(1000)
             Result.success(fakeReservation)
@@ -119,7 +130,7 @@ class TicketReserveViewModelTest {
     fun `특정 공연의 티켓 타입을 보여주는 이벤트가 발생하면 해당 공연의 티켓 타입을 보여준다`() {
         // given
         coEvery {
-            reservationRepository.loadTicketTypes(1)
+            reservationTicketRepository.loadTicketTypes(1)
         } answers {
             Result.success(fakeReservationTickets)
         }
@@ -138,7 +149,7 @@ class TicketReserveViewModelTest {
     @Test
     fun `특정 공연의 티켓 타입을 보여주는 것을 실패하면 에러 이벤트가 발생한다`() {
         // given
-        coEvery { reservationRepository.loadTicketTypes(1) } returns Result.failure(Exception())
+        coEvery { reservationTicketRepository.loadTicketTypes(1) } returns Result.failure(Exception())
 
         // when
         vm.showTicketTypes(1)
@@ -151,7 +162,7 @@ class TicketReserveViewModelTest {
     fun `티켓 유형을 선택하고 예약하면 예약 성공 이벤트가 발생한다`() {
         // given
         coEvery {
-            reservationRepository.reserveTicket(any())
+            ticketRepository.reserveTicket(any())
         } answers {
             Result.success(fakeReservedTicket)
         }
@@ -167,7 +178,7 @@ class TicketReserveViewModelTest {
     fun `티켓 유형을 선택하고 예약하는 것을 실패하면 예약 실패 이벤트가 발생한다`() {
         // given
         coEvery {
-            reservationRepository.reserveTicket(0)
+            ticketRepository.reserveTicket(0)
         } answers {
             Result.failure(Exception())
         }
