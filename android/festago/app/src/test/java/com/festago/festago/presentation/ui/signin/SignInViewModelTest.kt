@@ -28,7 +28,7 @@ class SignInViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        authRepository = mockk()
+        authRepository = mockk(relaxed = true)
         analyticsHelper = mockk(relaxed = true)
         vm = SignInViewModel(authRepository, analyticsHelper)
     }
