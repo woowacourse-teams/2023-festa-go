@@ -61,6 +61,7 @@
     <string name="ticket_list_tv_ticket_stage_start_time">무대 시작 시간 %s</string>
     <string name="ticket_list_tv_ticket_entry_time">입장 시작 시간 %s</string>
     <string name="ticket_list_tv_no_ticket">사용할 수 있는 티켓이 없습니다</string>
+    <string name="ticket_list_tv_error">티켓 목록 조회에 실패했습니다.</string>
 
     <!-- Strings related to ok dialog -->
     <string name="ok_dialog_btn_ok">확인</string>

@@ -49,13 +49,6 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
         initObserve()
         initView()
         initActivityResult()
-        initRefresh()
-    }
-
-    private fun initRefresh() {
-        binding.srlTicketList.setOnRefreshListener {
-            vm.loadCurrentTickets()
-        }
     }
 
     private fun initObserve() {
@@ -110,6 +103,13 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
         adapter = TicketListAdapter(vm)
         binding.rvTicketList.adapter = adapter
         vm.loadCurrentTickets()
+        initRefresh()
+    }
+
+    private fun initRefresh() {
+        binding.srlTicketList.setOnRefreshListener {
+            vm.loadCurrentTickets()
+        }
     }
 
     override fun onDestroyView() {
