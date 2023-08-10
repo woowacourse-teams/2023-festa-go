@@ -15,11 +15,11 @@ inline fun <reified T : Parcelable> Bundle.getParcelableCompat(key: String): T? 
 }
 
 @Suppress("DEPRECATION")
-inline fun <reified T : Parcelable> Bundle.getParcelableArrayCompat(key: String): Array<T>? {
+inline fun <reified T : Parcelable> Bundle.getParcelableArrayListCompat(key: String): ArrayList<T>? {
     return if (Build.VERSION.SDK_INT >= 33) {
-        getParcelableArray(key, T::class.java)
+        getParcelableArrayList(key, T::class.java)
     } else {
-        getParcelableArray(key) as? Array<T>
+        getParcelableArrayList(key)
     }
 }
 
