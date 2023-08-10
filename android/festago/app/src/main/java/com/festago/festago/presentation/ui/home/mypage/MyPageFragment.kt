@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.RetrofitClient
-import com.festago.festago.data.datasource.SharedPrefAuthDataSource
+import com.festago.festago.data.AuthRetrofitClient
+import com.festago.festago.data.NormalRetrofitClient
+import com.festago.festago.data.datasource.AuthLocalDataSource
 import com.festago.festago.data.repository.AuthDefaultRepository
 import com.festago.festago.data.repository.TicketDefaultRepository
 import com.festago.festago.data.repository.UserDefaultRepository
@@ -25,17 +26,17 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     private val vm: MyPageViewModel by viewModels {
         MyPageViewModelFactory(
             userRepository = UserDefaultRepository(
-                userProfileService = RetrofitClient.instance.userRetrofitService,
+                userProfileService = AuthRetrofitClient.instance.userRetrofitService,
             ),
             ticketRepository = TicketDefaultRepository(
-                ticketRetrofitService = RetrofitClient.instance.ticketRetrofitService,
+                ticketRetrofitService = AuthRetrofitClient.instance.ticketRetrofitService,
             ),
             authRepository = AuthDefaultRepository(
-                authRetrofitService = RetrofitClient.instance.authRetrofitService,
-                authDataSource = SharedPrefAuthDataSource.getInstance(requireContext()),
-                userRetrofitService = RetrofitClient.instance.userRetrofitService,
+                authRetrofitService = NormalRetrofitClient.authRetrofitService,
+                authDataSource = AuthLocalDataSource.getInstance(requireContext()),
+                userRetrofitService = AuthRetrofitClient.instance.userRetrofitService,
             ),
-            analyticsHelper = FirebaseAnalyticsHelper.getInstance(),
+            analyticsHelper = FirebaseAnalyticsHelper,
         )
     }
 
