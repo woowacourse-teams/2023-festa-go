@@ -46,9 +46,9 @@ jobs:
     - name: Run ktlint
       run: ./gradlew ktlintCheck
 
-    - name: Run detekt
-      run: ./gradlew detekt
-      
+    - name: Run unit tests
+      run: ./gradlew testDebugUnitTest
+        
     - name: Build assemble release apk
       run: ./gradlew assembleRelease      
 
