@@ -105,8 +105,8 @@ class SignInActivity : AppCompatActivity() {
         val intent = HomeActivity.getIntent(this).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
+        finishAffinity()
         startActivity(intent)
-        finish()
     }
 
     private fun initLogout() {
