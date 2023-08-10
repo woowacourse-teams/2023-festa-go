@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.FestivalDefaultRepository
+import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListViewModel.FestivalListViewModelFactory
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
@@ -22,8 +22,8 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
     private val vm: FestivalListViewModel by viewModels {
         FestivalListViewModelFactory(
-            FestivalDefaultRepository(RetrofitClient.instance.festivalRetrofitService),
-            FirebaseAnalyticsHelper.getInstance(),
+            FestivalDefaultRepository(NormalRetrofitClient.festivalRetrofitService),
+            FirebaseAnalyticsHelper,
         )
     }
 

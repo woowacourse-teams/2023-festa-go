@@ -4,9 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 
-class FirebaseAnalyticsHelper private constructor(context: Context) : AnalyticsHelper {
+object FirebaseAnalyticsHelper : AnalyticsHelper {
 
-    private val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
+    private const val LOG_NAME = "festago_log"
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    fun init(context: Context) {
+        if (::firebaseAnalytics.isInitialized) return
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context.applicationContext)
+    }
 
     override fun logEvent(event: AnalyticsEvent) {
         val params = Bundle().apply {
@@ -15,21 +21,5 @@ class FirebaseAnalyticsHelper private constructor(context: Context) : AnalyticsH
             }
         }
         firebaseAnalytics.logEvent(LOG_NAME, params)
-    }
-
-    companion object {
-        private const val LOG_NAME = "festago_log"
-
-        private var instance: FirebaseAnalyticsHelper? = null
-
-        fun create(context: Context) {
-            if (instance == null) {
-                instance = FirebaseAnalyticsHelper(context)
-            }
-        }
-
-        fun getInstance(): FirebaseAnalyticsHelper {
-            return instance ?: throw NullPointerException()
-        }
     }
 }
