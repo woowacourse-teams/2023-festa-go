@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
+import com.festago.festago.domain.repository.AuthRepository
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.domain.repository.ReservationTicketRepository
 import com.festago.festago.domain.repository.TicketRepository
@@ -19,6 +20,7 @@ class TicketReserveViewModel(
     private val reservationTicketRepository: ReservationTicketRepository,
     private val festivalRepository: FestivalRepository,
     private val ticketRepository: TicketRepository,
+    private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _uiState = MutableLiveData<TicketReserveUiState>(TicketReserveUiState.Loading)
@@ -32,7 +34,9 @@ class TicketReserveViewModel(
         viewModelScope.launch {
             festivalRepository.loadFestivalDetail(festivalId)
                 .onSuccess {
-                    _uiState.setValue(TicketReserveUiState.Success(it.toPresentation()))
+                    _uiState.setValue(
+                        TicketReserveUiState.Success(it.toPresentation(), authRepository.isSigned),
+                    )
                 }.onFailure {
                     _uiState.value = TicketReserveUiState.Error
                     analyticsHelper.logNetworkFailure(
@@ -45,17 +49,19 @@ class TicketReserveViewModel(
 
     fun showTicketTypes(stageId: Int) {
         viewModelScope.launch {
-            reservationTicketRepository.loadTicketTypes(stageId)
-                .onSuccess { tickets ->
-                    _event.setValue(
-                        TicketReserveEvent.ShowTicketTypes(
-                            stageId,
-                            tickets.map { it.toPresentation() },
-                        ),
-                    )
-                }.onFailure {
-                    _uiState.setValue(TicketReserveUiState.Error)
-                }
+            if (authRepository.isSigned) {
+                reservationTicketRepository.loadTicketTypes(stageId)
+                    .onSuccess { tickets ->
+                        _event.setValue(
+                            TicketReserveEvent.ShowTicketTypes(
+                                stageId,
+                                tickets.map { it.toPresentation() },
+                            ),
+                        )
+                    }.onFailure {
+                        _uiState.setValue(TicketReserveUiState.Error)
+                    }
+            }
         }
     }
 
@@ -78,6 +84,7 @@ class TicketReserveViewModel(
             private val reservationTicketRepository: ReservationTicketRepository,
             private val festivalRepository: FestivalRepository,
             private val ticketRepository: TicketRepository,
+            private val authRepository: AuthRepository,
             private val analyticsHelper: AnalyticsHelper,
         ) : ViewModelProvider.Factory {
 
@@ -88,6 +95,7 @@ class TicketReserveViewModel(
                         reservationTicketRepository = reservationTicketRepository,
                         festivalRepository = festivalRepository,
                         ticketRepository = ticketRepository,
+                        authRepository = authRepository,
                         analyticsHelper = analyticsHelper,
                     ) as T
                 }

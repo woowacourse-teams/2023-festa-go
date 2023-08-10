@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveBinding
-import com.festago.festago.presentation.model.ReservationStageUiModel
+import com.festago.festago.presentation.model.TicketReserveItemUiModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 import java.time.format.DateTimeFormatter
 
@@ -17,10 +17,14 @@ class TicketReserveViewHolder(
         binding.vm = vm
     }
 
-    fun bind(item: ReservationStageUiModel) {
+    fun bind(item: TicketReserveItemUiModel) {
         binding.stage = item
 
-        if (item.canReserve) {
+        if (!item.isSigned) {
+            binding.btnReserveTicket.isEnabled = true
+            binding.btnReserveTicket.text =
+                binding.root.context.getString(R.string.ticket_reserve_tv_signin)
+        } else if (item.canReserve) {
             binding.btnReserveTicket.isEnabled = true
             binding.btnReserveTicket.text =
                 binding.root.context.getString(R.string.ticket_reserve_tv_btn_reserve_ticket)
