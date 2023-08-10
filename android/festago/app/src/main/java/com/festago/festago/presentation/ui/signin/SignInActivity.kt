@@ -112,7 +112,7 @@ class SignInActivity : AppCompatActivity() {
     private fun initLogout() {
         // todo:logout 처리 필요
         binding.ivFestagoLogo.setOnClickListener {
-            UserApiClient.instance.unlink { error -> }
+            UserApiClient.instance.unlink {}
         }
     }
 

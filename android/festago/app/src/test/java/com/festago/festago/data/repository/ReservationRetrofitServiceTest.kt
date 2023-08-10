@@ -311,7 +311,7 @@ class ReservationRetrofitServiceTest {
 				}
 			]
 }
-""".trimIndent()
+            """.trimIndent()
         }
 
         fun getFakeReservedTicket(): ReservedTicketResponse {
