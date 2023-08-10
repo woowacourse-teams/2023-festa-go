@@ -10,7 +10,6 @@ import com.festago.festago.databinding.ActivityHomeBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
-import com.festago.festago.presentation.ui.signin.SignInActivity
 
 class HomeActivity : AppCompatActivity() {
 
@@ -44,7 +43,6 @@ class HomeActivity : AppCompatActivity() {
                 HomeItemType.MY_PAGE -> {
                     changeFragment<MyPageFragment>()
                     binding.fabTicket.isSelected = false
-                    startActivity(SignInActivity.getIntent(this))
                 }
             }
             true

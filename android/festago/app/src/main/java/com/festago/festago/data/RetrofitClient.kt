@@ -29,7 +29,7 @@ class RetrofitClient private constructor(
     }
 
     val userRetrofitService: UserRetrofitService by lazy {
-        normalRetrofit.create(UserRetrofitService::class.java)
+        authRetrofit.create(UserRetrofitService::class.java)
     }
 
     val authRetrofitService: AuthRetrofitService by lazy {

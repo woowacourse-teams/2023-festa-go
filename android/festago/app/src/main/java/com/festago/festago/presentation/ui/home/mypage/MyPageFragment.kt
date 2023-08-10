@@ -9,10 +9,13 @@ import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
 import com.festago.festago.data.RetrofitClient
+import com.festago.festago.data.datasource.SharedPrefAuthDataSource
+import com.festago.festago.data.repository.AuthDefaultRepository
 import com.festago.festago.data.repository.TicketDefaultRepository
 import com.festago.festago.data.repository.UserDefaultRepository
 import com.festago.festago.databinding.FragmentMyPageBinding
 import com.festago.festago.presentation.ui.home.mypage.MyPageViewModel.MyPageViewModelFactory
+import com.festago.festago.presentation.ui.signin.SignInActivity
 
 class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
@@ -26,6 +29,11 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
             ),
             ticketRepository = TicketDefaultRepository(
                 ticketRetrofitService = RetrofitClient.instance.ticketRetrofitService,
+            ),
+            authRepository = AuthDefaultRepository(
+                authRetrofitService = RetrofitClient.instance.authRetrofitService,
+                authDataSource = SharedPrefAuthDataSource.getInstance(requireContext()),
+                userRetrofitService = RetrofitClient.instance.userRetrofitService,
             ),
             analyticsHelper = FirebaseAnalyticsHelper.getInstance(),
         )
@@ -51,16 +59,34 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
         vm.uiState.observe(viewLifecycleOwner) { uiState ->
             binding.uiState = uiState
             when (uiState) {
-                is MyPageUiState.Loading, is MyPageUiState.Error -> {
-                    binding.srlMyPage.isRefreshing = false
-                }
+                is MyPageUiState.Loading, is MyPageUiState.Error -> Unit
 
                 is MyPageUiState.Success -> handleSuccess(uiState)
+            }
+            binding.srlMyPage.isRefreshing = false
+        }
+        vm.event.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                is MyPageEvent.ShowSignIn -> handleShowSignInEvent()
+                is MyPageEvent.SignOutSuccess -> handleSignOutSuccessEvent()
+                is MyPageEvent.DeleteAccountSuccess -> handleDeleteAccountSuccess()
             }
         }
     }
 
+    private fun handleShowSignInEvent() {
+        startActivity(SignInActivity.getIntent(requireContext()))
+    }
+
+    private fun handleSignOutSuccessEvent() {
+    }
+
+    private fun handleDeleteAccountSuccess() {
+    }
+
     private fun initView() {
+        binding.vm = vm
+
         vm.loadUserInfo()
 
         binding.srlMyPage.setOnRefreshListener {
@@ -70,7 +96,6 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
     private fun handleSuccess(uiState: MyPageUiState.Success) {
         binding.successState = uiState
-        binding.srlMyPage.isRefreshing = false
     }
 
     override fun onDestroyView() {
