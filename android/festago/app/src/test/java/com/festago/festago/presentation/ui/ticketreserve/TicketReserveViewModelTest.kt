@@ -6,6 +6,7 @@ import com.festago.festago.domain.model.Reservation
 import com.festago.festago.domain.model.ReservationStage
 import com.festago.festago.domain.model.ReservationTicket
 import com.festago.festago.domain.model.ReservedTicket
+import com.festago.festago.domain.repository.AuthRepository
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.domain.repository.ReservationTicketRepository
 import com.festago.festago.domain.repository.TicketRepository
@@ -29,6 +30,7 @@ class TicketReserveViewModelTest {
     private lateinit var reservationTicketRepository: ReservationTicketRepository
     private lateinit var festivalRepository: FestivalRepository
     private lateinit var ticketRepository: TicketRepository
+    private lateinit var authRepository: AuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
     private val fakeReservationTickets = listOf(
@@ -68,11 +70,13 @@ class TicketReserveViewModelTest {
         reservationTicketRepository = mockk()
         festivalRepository = mockk()
         ticketRepository = mockk()
+        authRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
         vm = TicketReserveViewModel(
             reservationTicketRepository,
             festivalRepository,
             ticketRepository,
+            authRepository,
             analyticsHelper,
         )
     }
@@ -84,6 +88,12 @@ class TicketReserveViewModelTest {
             festivalRepository.loadFestivalDetail(0)
         } answers {
             Result.success(fakeReservation)
+        }
+
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
         }
 
         // when
@@ -135,6 +145,12 @@ class TicketReserveViewModelTest {
             Result.success(fakeReservationTickets)
         }
 
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
+        }
+
         // when
         vm.showTicketTypes(1)
 
@@ -151,6 +167,12 @@ class TicketReserveViewModelTest {
         // given
         coEvery { reservationTicketRepository.loadTicketTypes(1) } returns Result.failure(Exception())
 
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
+        }
+
         // when
         vm.showTicketTypes(1)
 
@@ -166,7 +188,6 @@ class TicketReserveViewModelTest {
         } answers {
             Result.success(fakeReservedTicket)
         }
-
         // when
         vm.reserveTicket(0)
 
