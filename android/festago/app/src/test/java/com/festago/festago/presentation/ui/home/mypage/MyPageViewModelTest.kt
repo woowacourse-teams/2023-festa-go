@@ -19,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
@@ -76,6 +77,22 @@ class MyPageViewModelTest {
     }
 
     @Test
+    fun `로그인 되지 않았다면 로그인 이벤트가 발생한다`() {
+        // given
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            false
+        }
+
+        // when
+        vm.loadUserInfo()
+
+        // then
+        assertThat(vm.event.getValue() is MyPageEvent.ShowSignIn).isTrue
+    }
+
+    @Test
     fun `유저 프로필, 첫번째 티켓 받아오기에 성공하면 성공 상태다`() {
         // given
         coEvery {
@@ -88,6 +105,12 @@ class MyPageViewModelTest {
             ticketRepository.loadHistoryTickets(1)
         } answers {
             Result.success(fakeTickets)
+        }
+
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
         }
 
         // when
@@ -129,6 +152,12 @@ class MyPageViewModelTest {
             Result.success(fakeTickets)
         }
 
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
+        }
+
         // when
         vm.loadUserInfo()
 
@@ -166,6 +195,12 @@ class MyPageViewModelTest {
             Result.success(fakeTickets)
         }
 
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
+        }
+
         // when
         vm.loadUserInfo()
 
@@ -194,6 +229,12 @@ class MyPageViewModelTest {
             ticketRepository.loadHistoryTickets(1)
         } answers {
             Result.failure(Exception())
+        }
+
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
         }
 
         // when
