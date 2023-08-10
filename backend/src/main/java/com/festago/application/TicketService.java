@@ -62,7 +62,7 @@ public class TicketService {
     }
 
     public TicketingResponse ticketing(Long memberId, TicketingRequest request) {
-        int reservedAmount = reserveTicket(request);
+        int reservedAmount = reserveTicket(request.ticketId());
         Ticket ticket = findTicketById(request.ticketId());
         Member member = findMemberById(memberId);
         validateAlreadyReserved(member, ticket);
@@ -70,14 +70,14 @@ public class TicketService {
         return TicketingResponse.from(memberTicket);
     }
 
-    private int reserveTicket(TicketingRequest request) {
-        TicketAmount ticketAmount = findTicketAmountById(request.ticketId());
+    private int reserveTicket(Long ticketId) {
+        TicketAmount ticketAmount = findTicketAmountById(ticketId);
         ticketAmount.increaseReservedAmount();
         return ticketAmount.getReservedAmount();
     }
 
-    private TicketAmount findTicketAmountById(Long ticketAmountId) {
-        return ticketAmountRepository.findByTicketIdForUpdate(ticketAmountId)
+    private TicketAmount findTicketAmountById(Long ticketId) {
+        return ticketAmountRepository.findByTicketIdForUpdate(ticketId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
     }
 
