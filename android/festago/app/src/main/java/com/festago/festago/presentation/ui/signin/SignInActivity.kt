@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.festago.festago.R
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
 import com.festago.festago.data.RetrofitClient
-import com.festago.festago.data.datasource.SharedPrefAuthDataSource
+import com.festago.festago.data.datasource.AuthLocalDataSource
 import com.festago.festago.data.repository.AuthDefaultRepository
 import com.festago.festago.databinding.ActivitySignInBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
@@ -30,7 +30,7 @@ class SignInActivity : AppCompatActivity() {
         SignInViewModelFactory(
             AuthDefaultRepository(
                 RetrofitClient.authRetrofitService,
-                SharedPrefAuthDataSource.getInstance(this),
+                AuthLocalDataSource.getInstance(this),
             ),
             FirebaseAnalyticsHelper,
         )
