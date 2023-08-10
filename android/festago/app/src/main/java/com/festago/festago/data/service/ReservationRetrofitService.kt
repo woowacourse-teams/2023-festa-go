@@ -1,6 +1,5 @@
 package com.festago.festago.data.service
 
-import com.festago.festago.data.dto.ReservationFestivalResponse
 import com.festago.festago.data.dto.ReservationTicketsResponse
 import com.festago.festago.data.dto.ReservedTicketRequest
 import com.festago.festago.data.dto.ReservedTicketResponse
@@ -11,11 +10,6 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ReservationRetrofitService {
-    @GET("/festivals/{festivalId}")
-    suspend fun getFestival(
-        @Path("festivalId") festivalId: Long,
-    ): Response<ReservationFestivalResponse>
-
     @GET("/stages/{stageId}/tickets")
     suspend fun getTickets(
         @Path("stageId") stageId: Int,
