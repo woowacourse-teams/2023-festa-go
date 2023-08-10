@@ -97,8 +97,8 @@ public class Ticket extends BaseTimeEntity {
         throw new BadRequestException(ErrorCode.TICKET_SOLD_OUT);
     }
 
-    public boolean canReserve(LocalDateTime time) {
-        return !stage.isStart(time);
+    public boolean canReserve(LocalDateTime currentTime) {
+        return !stage.isStart(currentTime);
     }
 
     public Long getId() {
