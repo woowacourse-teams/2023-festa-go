@@ -24,8 +24,8 @@ import com.festago.festago.presentation.ui.reservationcomplete.ReservationComple
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketFailed
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketSuccess
-import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowTicketTypes
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowSignIn
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowTicketTypes
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
