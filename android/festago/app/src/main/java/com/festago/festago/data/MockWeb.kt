@@ -37,7 +37,6 @@ class MockWeb {
                     }
 
                     "GET" -> {
-                        val path = request.path ?: return MockResponse().setResponseCode(404)
                         when {
                             path.startsWith("/member-tickets/") -> {
                                 val ticketId = path.substringAfterLast("/").toLong()
