@@ -10,6 +10,7 @@ import com.festago.festago.analytics.FirebaseAnalyticsHelper
 import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.FestivalDefaultRepository
 import com.festago.festago.data.repository.ReservationDefaultRepository
+import com.festago.festago.data.repository.TicketDefaultRepository
 import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.presentation.mapper.toPresentation
@@ -35,6 +36,9 @@ class TicketReserveActivity : AppCompatActivity() {
             ),
             FestivalDefaultRepository(
                 festivalRetrofitService = RetrofitClient.instance.festivalRetrofitService,
+            ),
+            TicketDefaultRepository(
+                ticketRetrofitService = RetrofitClient.instance.ticketRetrofitService,
             ),
             FirebaseAnalyticsHelper.getInstance(),
         )

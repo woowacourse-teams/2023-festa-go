@@ -9,6 +9,7 @@ import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.domain.repository.ReservationRepository
+import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 class TicketReserveViewModel(
     private val reservationRepository: ReservationRepository,
     private val festivalRepository: FestivalRepository,
+    private val ticketRepository: TicketRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _uiState = MutableLiveData<TicketReserveUiState>(TicketReserveUiState.Loading)
@@ -59,7 +61,7 @@ class TicketReserveViewModel(
 
     fun reserveTicket(ticketId: Int) {
         viewModelScope.launch {
-            reservationRepository.reserveTicket(ticketId)
+            ticketRepository.reserveTicket(ticketId)
                 .onSuccess {
                     _event.setValue(TicketReserveEvent.ReserveTicketSuccess(it))
                 }.onFailure {
@@ -75,6 +77,7 @@ class TicketReserveViewModel(
         class TicketReservationViewModelFactory(
             private val reservationRepository: ReservationRepository,
             private val festivalRepository: FestivalRepository,
+            private val ticketRepository: TicketRepository,
             private val analyticsHelper: AnalyticsHelper,
         ) : ViewModelProvider.Factory {
 
@@ -82,9 +85,10 @@ class TicketReserveViewModel(
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(TicketReserveViewModel::class.java)) {
                     return TicketReserveViewModel(
-                        reservationRepository,
-                        festivalRepository,
-                        analyticsHelper,
+                        reservationRepository = reservationRepository,
+                        festivalRepository = festivalRepository,
+                        ticketRepository = ticketRepository,
+                        analyticsHelper = analyticsHelper,
                     ) as T
                 }
                 throw IllegalArgumentException("Unknown ViewModel Class")
