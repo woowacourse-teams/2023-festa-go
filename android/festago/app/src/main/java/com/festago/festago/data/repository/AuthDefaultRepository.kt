@@ -33,13 +33,10 @@ class AuthDefaultRepository(
     }
 
     override suspend fun signOut(): Result<Unit> {
-        return try {
+        UserApiClient.instance.logout {
             authDataSource.token = null
-            UserApiClient.instance.logout {}
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
         }
+        return Result.success(Unit)
     }
 
     override suspend fun deleteAccount(): Result<Unit> {
@@ -47,8 +44,11 @@ class AuthDefaultRepository(
             val response = userRetrofitService.deleteUserAccount()
 
             if (response.isSuccessful) {
-                authDataSource.token = null
-                UserApiClient.instance.unlink {}
+                UserApiClient.instance.unlink { error ->
+                    if (error == null) {
+                        authDataSource.token = null
+                    }
+                }
                 return Result.success(Unit)
             }
             return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
