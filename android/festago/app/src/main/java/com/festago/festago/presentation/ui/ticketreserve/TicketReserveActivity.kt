@@ -21,9 +21,11 @@ import com.festago.festago.presentation.mapper.toTicketReserveItem
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.reservationcomplete.ReservationCompleteActivity
+import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketFailed
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketSuccess
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowTicketTypes
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowSignIn
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
@@ -85,6 +87,7 @@ class TicketReserveActivity : AppCompatActivity() {
         is ShowTicketTypes -> handleShowTicketTypes(event.stageId, event.tickets)
         is ReserveTicketSuccess -> handleReserveTicketSuccess(event.reservedTicket)
         is ReserveTicketFailed -> handleReserveTicketFailed()
+        is ShowSignIn -> handleShowSignIn()
     }
 
     private fun handleShowTicketTypes(stageId: Int, tickets: List<ReservationTicketUiModel>) {
@@ -104,6 +107,10 @@ class TicketReserveActivity : AppCompatActivity() {
     private fun handleReserveTicketFailed() {
         OkDialogFragment.newInstance("예약에 실패하였습니다.")
             .show(supportFragmentManager, OkDialogFragment::class.java.name)
+    }
+
+    private fun handleShowSignIn() {
+        startActivity(SignInActivity.getIntent(this))
     }
 
     private fun initView() {

@@ -61,6 +61,8 @@ class TicketReserveViewModel(
                     }.onFailure {
                         _uiState.setValue(TicketReserveUiState.Error)
                     }
+            } else {
+                _event.setValue(TicketReserveEvent.ShowSignIn)
             }
         }
     }
