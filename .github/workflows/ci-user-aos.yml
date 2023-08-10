@@ -32,13 +32,13 @@ jobs:
       run: chmod +x gradlew
 
     - name: add google-services.json
-      run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
+      run: echo '${{ secrets.ANDROID_USER_GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
       
     - name: add local.properties
       run: |
-        echo kakao_native_app_key=\"${{ secrets.KAKAO_NATIVE_APP_KEY }}\" >> ./local.properties
-        echo kakao_redirection_scheme=\"${{ secrets.KAKAO_REDIRECTION_SCHEME }}\" >> ./local.properties
-        echo base_url=\"$${{ secrets.BASE_URL }}\" >> ./local.properties
+        echo kakao_native_app_key=\"${{ secrets.ANDROID_USER_KAKAO_NATIVE_APP_KEY }}\" >> ./local.properties
+        echo kakao_redirection_scheme=\"${{ secrets.ANDROID_USER_KAKAO_REDIRECTION_SCHEME }}\" >> ./local.properties
+        echo base_url=\"$${{ secrets.ANDROID_USER_BASE_URL }}\" >> ./local.properties
       
     - name: Build with Gradle
       run: ./gradlew build
