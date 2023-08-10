@@ -2,6 +2,7 @@ package com.festago.festago.data.retrofit
 
 import com.festago.festago.data.service.AuthRetrofitService
 import com.festago.festago.data.service.FestivalRetrofitService
+import com.festago.festago.data.service.ReservationTicketRetrofitService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -17,6 +18,10 @@ object NormalRetrofitClient {
 
     val authRetrofitService: AuthRetrofitService by lazy {
         normalRetrofit.create(AuthRetrofitService::class.java)
+    }
+
+    val reservationTicketRetrofitService: ReservationTicketRetrofitService by lazy {
+        normalRetrofit.create(ReservationTicketRetrofitService::class.java)
     }
 
     fun init(baseUrl: String = "") {
