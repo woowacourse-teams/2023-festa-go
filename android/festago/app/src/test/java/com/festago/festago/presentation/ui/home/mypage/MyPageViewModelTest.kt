@@ -7,6 +7,7 @@ import com.festago.festago.domain.model.Stage
 import com.festago.festago.domain.model.Ticket
 import com.festago.festago.domain.model.TicketCondition
 import com.festago.festago.domain.model.UserProfile
+import com.festago.festago.domain.repository.AuthRepository
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.domain.repository.UserRepository
 import com.festago.festago.presentation.mapper.toPresentation
@@ -29,6 +30,7 @@ class MyPageViewModelTest {
     private lateinit var vm: MyPageViewModel
     private lateinit var userRepository: UserRepository
     private lateinit var ticketRepository: TicketRepository
+    private lateinit var authRepository: AuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
     private val fakeUserProfile = UserProfile(
@@ -62,8 +64,9 @@ class MyPageViewModelTest {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         userRepository = mockk(relaxed = true)
         ticketRepository = mockk()
+        authRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
-        vm = MyPageViewModel(userRepository, ticketRepository, analyticsHelper)
+        vm = MyPageViewModel(userRepository, ticketRepository, authRepository, analyticsHelper)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
