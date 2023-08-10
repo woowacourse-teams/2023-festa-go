@@ -144,6 +144,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMemberTicket"
+                android:onClick="@{() -> vm.showTicketHistory()}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
