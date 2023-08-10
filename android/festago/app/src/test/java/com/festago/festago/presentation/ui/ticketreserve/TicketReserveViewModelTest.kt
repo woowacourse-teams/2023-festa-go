@@ -7,7 +7,7 @@ import com.festago.festago.domain.model.ReservationStage
 import com.festago.festago.domain.model.ReservationTicket
 import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.domain.repository.FestivalRepository
-import com.festago.festago.domain.repository.ReservationRepository
+import com.festago.festago.domain.repository.ReservationTicketRepository
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
@@ -26,7 +26,7 @@ import java.time.LocalDateTime
 
 class TicketReserveViewModelTest {
     private lateinit var vm: TicketReserveViewModel
-    private lateinit var reservationRepository: ReservationRepository
+    private lateinit var reservationTicketRepository: ReservationTicketRepository
     private lateinit var festivalRepository: FestivalRepository
     private lateinit var ticketRepository: TicketRepository
     private lateinit var analyticsHelper: AnalyticsHelper
@@ -65,12 +65,12 @@ class TicketReserveViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        reservationRepository = mockk()
+        reservationTicketRepository = mockk()
         festivalRepository = mockk()
         ticketRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
         vm = TicketReserveViewModel(
-            reservationRepository,
+            reservationTicketRepository,
             festivalRepository,
             ticketRepository,
             analyticsHelper,
@@ -130,7 +130,7 @@ class TicketReserveViewModelTest {
     fun `특정 공연의 티켓 타입을 보여주는 이벤트가 발생하면 해당 공연의 티켓 타입을 보여준다`() {
         // given
         coEvery {
-            reservationRepository.loadTicketTypes(1)
+            reservationTicketRepository.loadTicketTypes(1)
         } answers {
             Result.success(fakeReservationTickets)
         }
@@ -149,7 +149,7 @@ class TicketReserveViewModelTest {
     @Test
     fun `특정 공연의 티켓 타입을 보여주는 것을 실패하면 에러 이벤트가 발생한다`() {
         // given
-        coEvery { reservationRepository.loadTicketTypes(1) } returns Result.failure(Exception())
+        coEvery { reservationTicketRepository.loadTicketTypes(1) } returns Result.failure(Exception())
 
         // when
         vm.showTicketTypes(1)

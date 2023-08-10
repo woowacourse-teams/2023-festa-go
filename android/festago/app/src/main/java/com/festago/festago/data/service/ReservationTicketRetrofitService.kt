@@ -5,9 +5,9 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface ReservationRetrofitService {
+interface ReservationTicketRetrofitService {
     @GET("/stages/{stageId}/tickets")
-    suspend fun getTickets(
+    suspend fun getReservationTickets(
         @Path("stageId") stageId: Int,
     ): Response<ReservationTicketsResponse>
 }

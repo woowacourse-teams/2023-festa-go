@@ -1,16 +1,16 @@
 package com.festago.festago.data.repository
 
-import com.festago.festago.data.service.ReservationRetrofitService
+import com.festago.festago.data.service.ReservationTicketRetrofitService
 import com.festago.festago.domain.model.ReservationTicket
-import com.festago.festago.domain.repository.ReservationRepository
+import com.festago.festago.domain.repository.ReservationTicketRepository
 
-class ReservationDefaultRepository(
-    private val reservationRetrofitService: ReservationRetrofitService,
-) : ReservationRepository {
+class ReservationTicketDefaultRepository(
+    private val reservationTicketRetrofitService: ReservationTicketRetrofitService,
+) : ReservationTicketRepository {
 
     override suspend fun loadTicketTypes(stageId: Int): Result<List<ReservationTicket>> {
         try {
-            val response = reservationRetrofitService.getTickets(stageId)
+            val response = reservationTicketRetrofitService.getReservationTickets(stageId)
             if (response.isSuccessful && response.body() != null) {
                 return Result.success(response.body()!!.toDomain())
             }

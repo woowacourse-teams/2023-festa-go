@@ -7,7 +7,7 @@ import com.festago.festago.data.dto.ReservationTicketsResponse
 import com.festago.festago.data.dto.ReservedTicketRequest
 import com.festago.festago.data.dto.ReservedTicketResponse
 import com.festago.festago.data.service.FestivalRetrofitService
-import com.festago.festago.data.service.ReservationRetrofitService
+import com.festago.festago.data.service.ReservationTicketRetrofitService
 import com.festago.festago.data.service.TicketRetrofitService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,9 +23,9 @@ import retrofit2.Retrofit
 import java.net.HttpURLConnection
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ReservationRetrofitServiceTest {
+class ReservationTicketRetrofitServiceTest {
     private lateinit var fakeServer: MockWebServer
-    private lateinit var reservationRetrofitService: ReservationRetrofitService
+    private lateinit var reservationTicketRetrofitService: ReservationTicketRetrofitService
     private lateinit var festivalRetrofitService: FestivalRetrofitService
     private lateinit var ticketRetrofitService: TicketRetrofitService
 
@@ -34,11 +34,11 @@ class ReservationRetrofitServiceTest {
         fakeServer = MockWebServer()
         fakeServer.start()
 
-        reservationRetrofitService = Retrofit.Builder()
+        reservationTicketRetrofitService = Retrofit.Builder()
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(fakeServer.url("/"))
             .build()
-            .create(ReservationRetrofitService::class.java)
+            .create(ReservationTicketRetrofitService::class.java)
 
         festivalRetrofitService = Retrofit.Builder()
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
@@ -120,7 +120,7 @@ class ReservationRetrofitServiceTest {
         fakeServer.enqueue(fakeResponse)
 
         // when
-        val response = reservationRetrofitService.getTickets(1)
+        val response = reservationTicketRetrofitService.getReservationTickets(1)
 
         // then
         assertThat(response.isSuccessful).isTrue
@@ -138,7 +138,7 @@ class ReservationRetrofitServiceTest {
         fakeServer.enqueue(fakeResponse)
 
         // when
-        val result = runCatching { reservationRetrofitService.getTickets(1) }
+        val result = runCatching { reservationTicketRetrofitService.getReservationTickets(1) }
 
         // then
         result.onSuccess { assertThat(false).isTrue }
@@ -158,7 +158,7 @@ class ReservationRetrofitServiceTest {
         fakeServer.enqueue(fakeResponse)
 
         // when
-        val response = reservationRetrofitService.getTickets(1)
+        val response = reservationTicketRetrofitService.getReservationTickets(1)
 
         // then
         assertThat(response.isSuccessful).isFalse
