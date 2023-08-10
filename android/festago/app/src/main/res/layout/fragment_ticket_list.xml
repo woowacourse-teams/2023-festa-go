@@ -64,7 +64,6 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srlTicketList"
-            visibility="@{uiState.shouldShowSuccessWithTickets}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,6 +72,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvTicketList"
+                visibility="@{uiState.shouldShowSuccessWithTickets}"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
