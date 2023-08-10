@@ -8,7 +8,7 @@ insert into ticket (stage_id, ticket_type)
 values (1, 'VISITOR');
 
 insert into ticket_amount (ticket_id, reserved_amount, total_amount)
-values (1, 0, 100);
+values (1, 0, 50);
 
 insert into ticket_entry_time (amount, entry_time, ticket_id)
 values (10, '2023-07-30T00:21:31.964676', 1);
