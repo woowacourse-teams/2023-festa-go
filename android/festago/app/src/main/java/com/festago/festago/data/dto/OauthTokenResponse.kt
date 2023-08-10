@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 data class OauthTokenResponse(
     val accessToken: String,
     val nickname: String,
+    val isNew: Boolean,
 )

@@ -29,10 +29,11 @@ class SignInActivity : AppCompatActivity() {
     private val vm: SignInViewModel by viewModels {
         SignInViewModelFactory(
             AuthDefaultRepository(
-                RetrofitClient.authRetrofitService,
-                AuthLocalDataSource.getInstance(this),
+                authRetrofitService = RetrofitClient.instance.authRetrofitService,
+                authDataSource = SharedPrefAuthDataSource.getInstance(this),
+                userRetrofitService = RetrofitClient.instance.userRetrofitService,
             ),
-            FirebaseAnalyticsHelper,
+            FirebaseAnalyticsHelper.getInstance(),
         )
     }
 
