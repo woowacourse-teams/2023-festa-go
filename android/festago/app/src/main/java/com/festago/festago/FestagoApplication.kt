@@ -17,9 +17,11 @@ class FestagoApplication : Application() {
     }
 
     private fun initRetrofit() {
-        val token = AuthLocalDataSource.getInstance(applicationContext).token ?: NULL_TOKEN
+        val authLocalDataSource = AuthLocalDataSource.getInstance(applicationContext)
         NormalRetrofitClient.init(BuildConfig.BASE_URL)
-        AuthRetrofitClient.create(baseUrl = BuildConfig.BASE_URL, token = token)
+        AuthRetrofitClient.create(BuildConfig.BASE_URL) {
+            authLocalDataSource.token ?: NULL_TOKEN
+        }
     }
 
     companion object {

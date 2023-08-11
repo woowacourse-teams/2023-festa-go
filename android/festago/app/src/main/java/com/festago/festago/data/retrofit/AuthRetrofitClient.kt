@@ -33,13 +33,13 @@ class AuthRetrofitClient private constructor(
         private var _instance: AuthRetrofitClient? = null
         val instance get() = _instance!!
 
-        fun create(baseUrl: String = "", token: String = "") {
-            _instance = AuthRetrofitClient(baseUrl, getOkHttpClient(token))
+        fun create(baseUrl: String = "", tokenProvider: () -> String) {
+            _instance = AuthRetrofitClient(baseUrl, getOkHttpClient(tokenProvider))
         }
 
-        private fun getOkHttpClient(token: String): OkHttpClient = OkHttpClient
+        private fun getOkHttpClient(block: () -> String): OkHttpClient = OkHttpClient
             .Builder()
-            .addInterceptor(AuthInterceptor(token))
+            .addInterceptor(AuthInterceptor(block))
             .build()
     }
 }
