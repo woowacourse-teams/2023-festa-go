@@ -3,10 +3,8 @@ package com.festago.festago.presentation.ui.signin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.festago.festago.BuildConfig
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.data.retrofit.AuthRetrofitClient
 import com.festago.festago.domain.repository.AuthRepository
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
@@ -28,10 +26,6 @@ class SignInViewModel(
         viewModelScope.launch {
             authRepository.signIn(SOCIAL_TYPE_KAKAO, token)
                 .onSuccess {
-                    AuthRetrofitClient.create(
-                        baseUrl = BuildConfig.BASE_URL,
-                        token = authRepository.token ?: token,
-                    )
                     _event.setValue(SignInEvent.SignInSuccess)
                 }.onFailure {
                     _event.setValue(SignInEvent.SignInFailure)

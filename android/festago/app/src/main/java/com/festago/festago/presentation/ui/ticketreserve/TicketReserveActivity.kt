@@ -43,12 +43,12 @@ class TicketReserveActivity : AppCompatActivity() {
                 festivalRetrofitService = NormalRetrofitClient.festivalRetrofitService,
             ),
             TicketDefaultRepository(
-                ticketRetrofitService = AuthRetrofitClient.instance.ticketRetrofitService,
+                ticketRetrofitService = AuthRetrofitClient.ticketRetrofitService,
             ),
             AuthDefaultRepository(
                 authRetrofitService = NormalRetrofitClient.authRetrofitService,
                 authDataSource = AuthLocalDataSource.getInstance(this),
-                userRetrofitService = AuthRetrofitClient.instance.userRetrofitService,
+                userRetrofitService = AuthRetrofitClient.userRetrofitService,
             ),
             FirebaseAnalyticsHelper,
         )
