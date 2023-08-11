@@ -5,8 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.model.TicketUiModel
 
-class TicketHistoryAdapter :
-    ListAdapter<TicketUiModel, TicketHistoryViewHolder>(ticketDiffUtil) {
+class TicketHistoryAdapter : ListAdapter<TicketUiModel, TicketHistoryViewHolder>(ticketDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketHistoryViewHolder {
         return TicketHistoryViewHolder.from(parent)
