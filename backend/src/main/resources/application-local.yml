@@ -12,9 +12,6 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
-  h2:
-    console:
-      enabled: true
   flyway:
     enabled: true
     baseline-on-migrate: true
