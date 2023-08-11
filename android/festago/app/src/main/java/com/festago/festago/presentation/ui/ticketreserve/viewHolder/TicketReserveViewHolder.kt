@@ -20,20 +20,26 @@ class TicketReserveViewHolder(
     fun bind(item: TicketReserveItemUiModel) {
         binding.stage = item
 
-        if (!item.isSigned) {
-            binding.btnReserveTicket.isEnabled = true
-            binding.btnReserveTicket.text =
-                binding.root.context.getString(R.string.ticket_reserve_tv_signin)
-        } else if (item.canReserve) {
-            binding.btnReserveTicket.isEnabled = true
-            binding.btnReserveTicket.text =
-                binding.root.context.getString(R.string.ticket_reserve_tv_btn_reserve_ticket)
-        } else {
-            binding.btnReserveTicket.isEnabled = false
-            val pattern = DateTimeFormatter.ofPattern(
-                binding.root.context.getString(R.string.ticket_reserve_tv_btn_reserve_ticket_not_open),
-            )
-            binding.btnReserveTicket.text = item.ticketOpenTime.format(pattern)
+        when {
+            !item.isSigned -> {
+                binding.btnReserveTicket.isEnabled = true
+                binding.btnReserveTicket.text =
+                    binding.root.context.getString(R.string.ticket_reserve_tv_signin)
+            }
+
+            item.canReserve -> {
+                binding.btnReserveTicket.isEnabled = true
+                binding.btnReserveTicket.text =
+                    binding.root.context.getString(R.string.ticket_reserve_tv_btn_reserve_ticket)
+            }
+
+            else -> {
+                binding.btnReserveTicket.isEnabled = false
+                val pattern = DateTimeFormatter.ofPattern(
+                    binding.root.context.getString(R.string.ticket_reserve_tv_btn_reserve_ticket_not_open),
+                )
+                binding.btnReserveTicket.text = item.ticketOpenTime.format(pattern)
+            }
         }
 
         binding.tvTicketCount.text =
