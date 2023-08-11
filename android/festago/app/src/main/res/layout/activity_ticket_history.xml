@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.tickethistory.TicketHistoryUiState" />
+    </data>
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/activity_ticket_history_scene"
+        tools:context=".presentation.ui.tickethistory.TicketHistoryActivity">
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibilityOnMotionLayout="@{uiState.shouldShowLoading}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            visibilityOnMotionLayout="@{uiState.shouldShowSuccessWithTickets}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:paddingTop="20dp"
+            android:text="@string/ticket_history_tv_title"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTicketHistory"
+            visibilityOnMotionLayout="@{uiState.shouldShowSuccessWithTickets}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:listitem="@layout/item_ticket_history" />
+
+        <TextView
+            android:id="@+id/tvErrorOrEmpty"
+            visibilityOnMotionLayout="@{uiState.shouldShowError || uiState.shouldShowSuccessAndEmpty}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@{uiState.shouldShowError ? @string/ticket_history_tv_error: @string/ticket_history_tv_empty}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+</layout>

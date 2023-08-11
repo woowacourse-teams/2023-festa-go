@@ -18,6 +18,7 @@ import com.festago.festago.databinding.FragmentMyPageBinding
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.ui.home.mypage.MyPageViewModel.MyPageViewModelFactory
 import com.festago.festago.presentation.ui.signin.SignInActivity
+import com.festago.festago.presentation.ui.tickethistory.TicketHistoryActivity
 
 class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
@@ -72,6 +73,7 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
                 is MyPageEvent.ShowSignIn -> handleShowSignInEvent()
                 is MyPageEvent.SignOutSuccess -> handleSignOutSuccessEvent()
                 is MyPageEvent.DeleteAccountSuccess -> handleDeleteAccountSuccess()
+                is MyPageEvent.ShowTicketHistory -> handleShowTicketHistory()
             }
         }
     }
@@ -91,6 +93,10 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     private fun restartHome() {
         requireActivity().finishAffinity()
         startActivity(HomeActivity.getIntent(requireContext()))
+    }
+
+    private fun handleShowTicketHistory() {
+        startActivity(TicketHistoryActivity.getIntent(requireContext()))
     }
 
     private fun initView() {

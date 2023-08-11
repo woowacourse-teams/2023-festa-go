@@ -115,6 +115,10 @@ class MyPageViewModel(
         }
     }
 
+    fun showTicketHistory() {
+        _event.setValue(MyPageEvent.ShowTicketHistory)
+    }
+
     class MyPageViewModelFactory(
         private val userRepository: UserRepository,
         private val ticketRepository: TicketRepository,
