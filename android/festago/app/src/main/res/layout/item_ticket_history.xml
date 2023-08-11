@@ -18,8 +18,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="12dp">
+        android:layout_height="wrap_content">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvTicket"
@@ -33,7 +32,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/colorSurface"
+                android:background="@color/white"
                 android:padding="16dp">
 
                 <ImageView
@@ -47,6 +46,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@mipmap/ic_festago_logo" />
+
+                <View
+                    android:id="@+id/viewLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/md_theme_light_outline"
+                    app:layout_constraintTop_toBottomOf="@id/ivStageThumbnail"
+                    tools:layout_editor_absoluteX="16dp" />
 
                 <TextView
                     android:id="@+id/tvStageTitle"
@@ -133,10 +142,10 @@
                     android:layout_height="wrap_content"
                     android:text="@string/ticket_history_tv_ticket_ticketing_time_prefix"
                     android:textSize="14sp"
-                    android:layout_marginTop="8dp"
                     android:textStyle="bold"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintStart_toStartOf="@+id/ivStageThumbnail"
-                    app:layout_constraintTop_toBottomOf="@+id/ivStageThumbnail" />
+                    app:layout_constraintTop_toBottomOf="@+id/viewLine" />
 
                 <TextView
                     android:id="@+id/tvTicketingTime"
