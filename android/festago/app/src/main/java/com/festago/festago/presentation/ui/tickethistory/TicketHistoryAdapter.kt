@@ -16,7 +16,7 @@ class TicketHistoryAdapter : ListAdapter<TicketUiModel, TicketHistoryViewHolder>
     }
 
     companion object {
-        val ticketDiffUtil = object : DiffUtil.ItemCallback<TicketUiModel>() {
+        private val ticketDiffUtil = object : DiffUtil.ItemCallback<TicketUiModel>() {
             override fun areItemsTheSame(oldItem: TicketUiModel, newItem: TicketUiModel) =
                 oldItem.id == newItem.id
 
