@@ -2,11 +2,8 @@ package com.festago.festago.presentation.ui.tickethistory
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.analytics.AnalyticsHelper
-import com.festago.festago.domain.model.MemberTicketFestival
-import com.festago.festago.domain.model.Stage
-import com.festago.festago.domain.model.Ticket
-import com.festago.festago.domain.model.TicketCondition
 import com.festago.festago.domain.repository.TicketRepository
+import com.festago.festago.presentation.fixture.TicketFixture
 import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -21,29 +18,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalDateTime
 
 class TicketHistoryViewModelTest {
     private lateinit var vm: TicketHistoryViewModel
 
     private lateinit var ticketRepository: TicketRepository
     private lateinit var analyticsHelper: AnalyticsHelper
-
-    private val fakeTickets = listOf(
-        Ticket(
-            id = 1,
-            number = 8934,
-            entryTime = LocalDateTime.now(),
-            condition = TicketCondition.BEFORE_ENTRY,
-            reserveAt = LocalDateTime.now(),
-            stage = Stage(id = 1, startTime = LocalDateTime.now()),
-            festivalTicket = MemberTicketFestival(
-                id = 4663,
-                name = "테코대학교 무슨 축제 DAY1",
-                thumbnail = "https://images.unsplash.com/photo-1592194996308-7b43878e84a6",
-            ),
-        ),
-    )
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -70,10 +50,12 @@ class TicketHistoryViewModelTest {
     @Test
     fun `빈 리스트가 아닌 티켓들을 가져오면 성공 상태이다`() {
         // given
+        val ids = listOf(1L, 2L, 3L, 4L, 5L)
+
         coEvery {
             ticketRepository.loadHistoryTickets(any())
         } answers {
-            Result.success(fakeTickets)
+            Result.success(TicketFixture.getMemberTickets(ids))
         }
 
         // when
@@ -85,7 +67,9 @@ class TicketHistoryViewModelTest {
 
             // and
             val successUiState = vm.uiState.value as TicketHistoryUiState.Success
-            assertThat(successUiState.tickets).isEqualTo(fakeTickets.toPresentation())
+            assertThat(successUiState.tickets).isEqualTo(
+                TicketFixture.getMemberTickets(ids).toPresentation(),
+            )
 
             // and
             assertThat(successUiState.shouldShowSuccessWithTickets).isTrue
