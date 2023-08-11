@@ -69,7 +69,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ivStageThumbnail"
+                    app:layout_constraintStart_toEndOf="@id/ivStageThumbnail"
                     app:layout_constraintTop_toTopOf="@id/ivStageThumbnail"
                     tools:text="테코 대학교 무슨 축제 Day 1" />
 
@@ -81,8 +81,8 @@
                     android:textSize="14sp"
                     android:layout_marginTop="8dp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/tvTicketingTimePrefix"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTicketingTimePrefix" />
+                    app:layout_constraintStart_toStartOf="@id/tvTicketingTimePrefix"
+                    app:layout_constraintTop_toBottomOf="@id/tvTicketingTimePrefix" />
 
                 <TextView
                     android:id="@+id/tvStartTime"
@@ -91,7 +91,7 @@
                     android:text="@{ticket.stage.startTime.format(DateTimeFormatter.ofPattern(`yyyy.MM.dd HH:mm`))}"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tvStartTimePrefix"
+                    app:layout_constraintTop_toTopOf="@id/tvStartTimePrefix"
                     tools:text="2023.07.03 18:00" />
 
                 <TextView
@@ -102,7 +102,7 @@
                     android:textSize="14sp"
                     android:layout_marginTop="8dp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/tvStartTimePrefix"
+                    app:layout_constraintStart_toStartOf="@id/tvStartTimePrefix"
                     app:layout_constraintTop_toBottomOf="@id/tvStartTime" />
 
                 <TextView
@@ -122,8 +122,8 @@
                     android:layout_marginTop="16dp"
                     android:text="@string/ticket_history_tv_ticket_number_prefix"
                     android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tvStageTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/tvStageTitle" />
+                    app:layout_constraintEnd_toEndOf="@id/tvStageTitle"
+                    app:layout_constraintTop_toBottomOf="@id/tvStageTitle" />
 
                 <TextView
                     android:id="@+id/tvTicketNumber"
@@ -132,8 +132,8 @@
                     android:layout_marginTop="16dp"
                     android:text="@{@string/ticket_history_tv_ticket_number_format(ticket.number)}"
                     android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tvTicketNumberPrefix"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTicketNumberPrefix"
+                    app:layout_constraintEnd_toEndOf="@id/tvTicketNumberPrefix"
+                    app:layout_constraintTop_toBottomOf="@id/tvTicketNumberPrefix"
                     tools:text="103번" />
 
                 <TextView
@@ -144,8 +144,8 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:layout_marginTop="12dp"
-                    app:layout_constraintStart_toStartOf="@+id/ivStageThumbnail"
-                    app:layout_constraintTop_toBottomOf="@+id/viewLine" />
+                    app:layout_constraintStart_toStartOf="@id/ivStageThumbnail"
+                    app:layout_constraintTop_toBottomOf="@id/viewLine" />
 
                 <TextView
                     android:id="@+id/tvTicketingTime"
