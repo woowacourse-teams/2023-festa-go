@@ -6,8 +6,8 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.exception.BadRequestException;
 import com.festago.support.MemberFixture;
-import com.festago.support.StageFixture;
-import com.festago.support.TicketFixture;
+import com.festago.support.TotalityFixture;
+import com.festago.support.TotalityFixture.픽스쳐를;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -20,7 +20,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 @SuppressWarnings("NonAsciiCharacters")
 class TicketTest {
 
-
     @Nested
     class 입장시간_추가_검증 {
 
@@ -28,36 +27,39 @@ class TicketTest {
         @ValueSource(longs = {0, 1})
         void 입장시간이_티켓오픈시간_이전이면_예외(long minute) {
             // given
-            LocalDateTime now = LocalDateTime.now();
-            Stage stage = StageFixture.stage()
-                .startTime(now.plusDays(1))
-                .ticketOpenTime(now)
-                .build();
-            Ticket ticket = TicketFixture.ticket()
-                .stage(stage)
-                .build();
+            LocalDateTime stageStartTime = LocalDateTime.parse("2023-08-12T18:00:00");
+            LocalDateTime now = stageStartTime.minusWeeks(1);
+            TotalityFixture fixture = 픽스쳐를.생성한다()
+                .공연의().시작시간은(stageStartTime).예매오픈시간은(stageStartTime.minusHours(6))
+                .이다();
+
+            Ticket ticket = fixture.ticket();
+            Stage stage = fixture.stage();
+            LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
 
             // when & then
+            LocalDateTime entryTime = ticketOpenTime.minusMinutes(minute);
             assertThatThrownBy(
-                () -> ticket.addTicketEntryTime(now.minusMinutes(10), now.minusMinutes(minute), 100))
+                () -> ticket.addTicketEntryTime(now, entryTime, 100))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("입장 시간은 티켓 오픈 시간 이후여야합니다.");
         }
 
         @ParameterizedTest
         @ValueSource(longs = {0, 1})
-        void 입장_시간이_축제_시작_시간보다_같거나_이후면_예외(long minute) {
+        void 입장_시간이_공연_시작_시간보다_같거나_이후면_예외(long minute) {
             // given
-            Ticket ticket = TicketFixture.ticket()
-                .build();
+            LocalDateTime stageStartTime = LocalDateTime.parse("2023-08-12T18:00:00");
+            LocalDateTime now = stageStartTime.minusWeeks(1);
+            TotalityFixture fixture = 픽스쳐를.생성한다()
+                .공연의().시작시간은(stageStartTime).예매오픈시간은(stageStartTime.minusHours(6))
+                .이다();
 
-            Stage stage = ticket.getStage();
-            LocalDateTime stageStartTime = stage.getStartTime();
-            LocalDateTime entryTime = stageStartTime.plusMinutes(minute);
-            LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
+            Ticket ticket = fixture.ticket();
 
             // when & then
-            assertThatThrownBy(() -> ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), entryTime, 100))
+            LocalDateTime entryTime = stageStartTime.plusMinutes(minute);
+            assertThatThrownBy(() -> ticket.addTicketEntryTime(now, entryTime, 100))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("입장 시간은 공연 시간보다 빨라야합니다.");
         }
@@ -65,16 +67,17 @@ class TicketTest {
         @Test
         void 입장_시간이_공연_시작_12시간_이전이면_예외() {
             // given
-            Ticket ticket = TicketFixture.ticket()
-                .build();
+            LocalDateTime stageStartTime = LocalDateTime.parse("2023-08-12T18:00:00");
+            LocalDateTime now = stageStartTime.minusWeeks(1);
+            TotalityFixture fixture = 픽스쳐를.생성한다()
+                .공연의().시작시간은(stageStartTime).예매오픈시간은(stageStartTime.minusHours(13))
+                .이다();
 
-            Stage stage = ticket.getStage();
-            LocalDateTime stageStartTime = stage.getStartTime();
-            LocalDateTime entryTime = stageStartTime.minusHours(12).minusSeconds(1);
-            LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
+            Ticket ticket = fixture.ticket();
 
             // when & then
-            assertThatThrownBy(() -> ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), entryTime, 100))
+            LocalDateTime entryTime = stageStartTime.minusHours(12).minusSeconds(1);
+            assertThatThrownBy(() -> ticket.addTicketEntryTime(now, entryTime, 100))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("입장 시간은 공연 시작 12시간 이내여야 합니다.");
         }
@@ -82,16 +85,16 @@ class TicketTest {
         @Test
         void 티켓_오픈_이후_티켓생성시_예외() {
             // given
-            Stage stage = StageFixture.stage()
-                .ticketOpenTime(LocalDateTime.now().minusHours(1))
-                .build();
-            Ticket ticket = TicketFixture.ticket()
-                .build();
-
-            LocalDateTime startTime = stage.getStartTime();
+            LocalDateTime ticketOpenTime = LocalDateTime.parse("2023-08-12T12:00:00");
+            TotalityFixture fixture = 픽스쳐를.생성한다()
+                .공연의().시작시간은(ticketOpenTime.plusHours(6)).예매오픈시간은(ticketOpenTime)
+                .이다();
+            Ticket ticket = fixture.ticket();
 
             // when & then
-            assertThatThrownBy(() -> ticket.addTicketEntryTime(LocalDateTime.now(), startTime.minusHours(3), 100))
+            LocalDateTime now = ticketOpenTime.plusSeconds(1);
+            assertThatThrownBy(
+                () -> ticket.addTicketEntryTime(now, ticketOpenTime.plusHours(1), 100))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("티켓 예매 시작 후 새롭게 티켓을 발급할 수 없습니다.");
         }
@@ -99,17 +102,17 @@ class TicketTest {
         @Test
         void 입장시간을_추가한다() {
             // given
-            Ticket ticket = TicketFixture
-                .ticket()
-                .build();
+            LocalDateTime stageStartTime = LocalDateTime.parse("2023-08-12T18:00:00");
+            LocalDateTime now = stageStartTime.minusWeeks(1);
+            TotalityFixture fixture = 픽스쳐를.생성한다()
+                .공연의().시작시간은(stageStartTime).예매오픈시간은(stageStartTime.minusHours(6))
+                .이다();
 
-            Stage stage = ticket.getStage();
-            LocalDateTime startTime = stage.getStartTime();
-            LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
+            Ticket ticket = fixture.ticket();
 
             // when
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), startTime.minusHours(3), 100);
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), startTime.minusHours(2), 200);
+            ticket.addTicketEntryTime(now, stageStartTime.minusHours(3), 100);
+            ticket.addTicketEntryTime(now, stageStartTime.minusHours(2), 200);
 
             // then
             assertSoftly(softly -> {
@@ -127,13 +130,16 @@ class TicketTest {
             // given
             Member member = MemberFixture.member()
                 .build();
-            Ticket ticket = TicketFixture.ticket()
-                .build();
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime ticketOpenTime = ticket.getStage().getTicketOpenTime();
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), now.minusHours(1), 50);
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), now.minusHours(2), 30);
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), now.minusHours(3), 20);
+            LocalDateTime stageStartTime = LocalDateTime.parse("2023-08-12T18:00:00");
+            LocalDateTime now = stageStartTime.minusWeeks(1);
+            TotalityFixture fixture = 픽스쳐를.생성한다()
+                .공연의().시작시간은(stageStartTime).예매오픈시간은(stageStartTime.minusHours(6))
+                .이다();
+            Ticket ticket = fixture.ticket();
+
+            ticket.addTicketEntryTime(now, stageStartTime.minusHours(1), 50);
+            ticket.addTicketEntryTime(now, stageStartTime.minusHours(2), 30);
+            ticket.addTicketEntryTime(now, stageStartTime.minusHours(3), 20);
 
             // when & then
             assertThatThrownBy(() -> ticket.createMemberTicket(member, 101))
@@ -147,12 +153,16 @@ class TicketTest {
             // given
             Member member = MemberFixture.member()
                 .build();
-            Ticket ticket = TicketFixture.ticket()
-                .build();
-            LocalDateTime ticketOpenTime = ticket.getStage().getTicketOpenTime();
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), LocalDateTime.now().minusHours(1), 50);
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), LocalDateTime.now().minusHours(2), 30);
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), LocalDateTime.now().minusHours(3), 20);
+            LocalDateTime stageStartTime = LocalDateTime.parse("2023-08-12T18:00:00");
+            LocalDateTime now = stageStartTime.minusWeeks(1);
+            TotalityFixture fixture = 픽스쳐를.생성한다()
+                .공연의().시작시간은(stageStartTime).예매오픈시간은(stageStartTime.minusHours(6))
+                .이다();
+            Ticket ticket = fixture.ticket();
+
+            ticket.addTicketEntryTime(now, stageStartTime.minusHours(1), 50);
+            ticket.addTicketEntryTime(now, stageStartTime.minusHours(2), 30);
+            ticket.addTicketEntryTime(now, stageStartTime.minusHours(3), 20);
 
             // when
             MemberTicket memberTicket = ticket.createMemberTicket(member, reservationSequence);
