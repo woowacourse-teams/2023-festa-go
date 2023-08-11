@@ -4,7 +4,11 @@ import com.festago.festago.presentation.model.ReservationUiModel
 
 sealed interface TicketReserveUiState {
     object Loading : TicketReserveUiState
-    class Success(val reservation: ReservationUiModel) : TicketReserveUiState
+    class Success(
+        val reservation: ReservationUiModel,
+        val isSigned: Boolean,
+    ) : TicketReserveUiState
+
     object Error : TicketReserveUiState
 
     val shouldShowLoading: Boolean

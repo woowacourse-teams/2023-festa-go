@@ -42,6 +42,7 @@
     <string name="ticket_reserve_tv_ticket_count_format">(%1$s/%2$s)</string>
     <string name="ticket_reserve_tv_btn_reserve_ticket">예매 하기</string>
     <string name="ticket_reserve_tv_btn_reserve_ticket_not_open">MM월 dd일 HH:mm 오픈예정</string>
+    <string name="ticket_reserve_tv_signin">로그인 후 예매</string>
 
 
     <!-- Strings related to festival list -->
