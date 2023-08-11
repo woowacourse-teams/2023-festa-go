@@ -77,9 +77,9 @@
                     android:id="@+id/tvStartTimePrefix"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="@string/ticket_history_tv_ticket_start_time_prefix"
                     android:textSize="14sp"
-                    android:layout_marginTop="8dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/tvTicketingTimePrefix"
                     app:layout_constraintTop_toBottomOf="@id/tvTicketingTimePrefix" />
@@ -98,9 +98,9 @@
                     android:id="@+id/tvEntryTimePrefix"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="@string/ticket_history_tv_ticket_entry_time_prefix"
                     android:textSize="14sp"
-                    android:layout_marginTop="8dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/tvStartTimePrefix"
                     app:layout_constraintTop_toBottomOf="@id/tvStartTime" />
@@ -140,10 +140,10 @@
                     android:id="@+id/tvTicketingTimePrefix"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:text="@string/ticket_history_tv_ticket_ticketing_time_prefix"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="12dp"
                     app:layout_constraintStart_toStartOf="@id/ivStageThumbnail"
                     app:layout_constraintTop_toBottomOf="@id/viewLine" />
 
