@@ -34,6 +34,10 @@ dependencies {
 
     // Logback Slack Alarm
     implementation "com.github.maricn:logback-slack-appender:1.4.0"
+
+    // Flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
 }
 
 tasks.named('test') {
