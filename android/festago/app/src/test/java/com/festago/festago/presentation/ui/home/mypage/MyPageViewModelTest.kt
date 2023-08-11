@@ -253,7 +253,7 @@ class MyPageViewModelTest {
     }
 
     @Test
-    fun `로그아웃에 성공하면 SingOutSuccess 이벤트가 발생하고 에러 상태이다`() {
+    fun `로그아웃에 성공하면 SignOutSuccess 이벤트가 발생하고 에러 상태이다`() {
         // given
         coEvery {
             authRepository.signOut()
