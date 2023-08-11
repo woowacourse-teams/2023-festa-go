@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.exception.BadRequestException;
 import com.festago.support.FestivalFixture;
-import com.festago.support.StageFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -26,14 +25,8 @@ class StageTest {
             .startDate(startTime.plusDays(1).toLocalDate())
             .endDate(startTime.plusDays(1).toLocalDate())
             .build();
-
         // when & then
-        assertThatThrownBy(() -> StageFixture.stage()
-            .startTime(startTime)
-            .ticketOpenTime(ticketOpenTime)
-            .festival(festival)
-            .build()
-        )
+        assertThatThrownBy(() -> new Stage(startTime, "lineup", ticketOpenTime, festival))
             .isInstanceOf(BadRequestException.class)
             .hasMessage("공연은 축제 기간 중에만 진행될 수 있습니다.");
     }
@@ -49,12 +42,7 @@ class StageTest {
             .build();
 
         // when & then
-        assertThatThrownBy(() -> StageFixture.stage()
-            .startTime(startTime)
-            .ticketOpenTime(ticketOpenTime)
-            .festival(festival)
-            .build()
-        )
+        assertThatThrownBy(() -> new Stage(startTime, "lineup", ticketOpenTime, festival))
             .isInstanceOf(BadRequestException.class)
             .hasMessage("공연은 축제 기간 중에만 진행될 수 있습니다.");
     }
@@ -70,12 +58,7 @@ class StageTest {
             .build();
 
         // when & then
-        assertThatThrownBy(() -> StageFixture.stage()
-            .startTime(startTime)
-            .ticketOpenTime(ticketOpenTime)
-            .festival(festival)
-            .build()
-        )
+        assertThatThrownBy(() -> new Stage(startTime, "lineup", ticketOpenTime, festival))
             .isInstanceOf(BadRequestException.class)
             .hasMessage("티켓은 공연 시작 전에 오픈되어야 합니다.");
     }
@@ -91,11 +74,6 @@ class StageTest {
             .build();
 
         // when & then
-        assertThatNoException().isThrownBy(() -> StageFixture.stage()
-            .startTime(startTime)
-            .ticketOpenTime(ticketOpenTime)
-            .festival(festival)
-            .build());
+        assertThatNoException().isThrownBy(() -> new Stage(startTime, "lineup", ticketOpenTime, festival));
     }
-
 }
