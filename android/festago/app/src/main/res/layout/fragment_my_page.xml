@@ -124,6 +124,7 @@
                 android:id="@+id/tvWithdrawal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.showConfirmDelete()}"
                 android:paddingVertical="8dp"
                 android:text="@string/my_page_tv_withdrawal"
                 app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
@@ -144,11 +145,11 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMemberTicket"
-                android:onClick="@{() -> vm.showTicketHistory()}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:minHeight="120dp"
+                android:onClick="@{() -> vm.showTicketHistory()}"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
                 app:layout_constraintStart_toEndOf="@id/guidelineStart"

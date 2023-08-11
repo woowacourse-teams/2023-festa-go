@@ -99,6 +99,10 @@ class MyPageViewModel(
         }
     }
 
+    fun showConfirmDelete() {
+        _event.setValue(MyPageEvent.ShowConfirmDelete)
+    }
+
     fun deleteAccount() {
         viewModelScope.launch {
             authRepository.deleteAccount()
