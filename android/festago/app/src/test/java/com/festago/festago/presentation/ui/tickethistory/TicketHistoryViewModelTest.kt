@@ -16,7 +16,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
@@ -81,14 +80,14 @@ class TicketHistoryViewModelTest {
         vm.loadTicketHistories()
 
         // then
-        assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Success::class.java)
-
-        // and
-        val successUiState = vm.uiState.value as TicketHistoryUiState.Success
-        assertThat(successUiState.tickets).isEqualTo(fakeTickets.toPresentation())
-
-        // and
         val softly = SoftAssertions().apply {
+            assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Success::class.java)
+
+            // and
+            val successUiState = vm.uiState.value as TicketHistoryUiState.Success
+            assertThat(successUiState.tickets).isEqualTo(fakeTickets.toPresentation())
+
+            // and
             assertThat(successUiState.shouldShowSuccessWithTickets).isTrue
             assertThat(successUiState.shouldShowSuccessAndEmpty).isFalse
             assertThat(successUiState.shouldShowLoading).isFalse
@@ -111,14 +110,14 @@ class TicketHistoryViewModelTest {
         vm.loadTicketHistories()
 
         // then
-        assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Success::class.java)
-
-        // and
-        val successUiState = vm.uiState.value as TicketHistoryUiState.Success
-        assertThat(successUiState.tickets).isEmpty()
-
-        // and
         val softly = SoftAssertions().apply {
+            assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Success::class.java)
+
+            // and
+            val successUiState = vm.uiState.value as TicketHistoryUiState.Success
+            assertThat(successUiState.tickets).isEmpty()
+
+            // and
             assertThat(successUiState.shouldShowSuccessWithTickets).isFalse
             assertThat(successUiState.shouldShowSuccessAndEmpty).isTrue
             assertThat(successUiState.shouldShowLoading).isFalse
@@ -142,10 +141,10 @@ class TicketHistoryViewModelTest {
         vm.loadTicketHistories()
 
         // then
-        assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Loading::class.java)
-
-        // and
         val softly = SoftAssertions().apply {
+            assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Loading::class.java)
+
+            // and
             assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isFalse
             assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isFalse
             assertThat(vm.uiState.value?.shouldShowLoading).isTrue
@@ -168,10 +167,10 @@ class TicketHistoryViewModelTest {
         vm.loadTicketHistories()
 
         // then
-        assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Error::class.java)
-
-        // and
         val softly = SoftAssertions().apply {
+            assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Error::class.java)
+
+            // and
             assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isFalse
             assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isFalse
             assertThat(vm.uiState.value?.shouldShowLoading).isFalse
