@@ -15,6 +15,7 @@ import com.festago.festago.data.repository.UserDefaultRepository
 import com.festago.festago.data.retrofit.AuthRetrofitClient
 import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.FragmentMyPageBinding
+import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.ui.home.mypage.MyPageViewModel.MyPageViewModelFactory
 import com.festago.festago.presentation.ui.signin.SignInActivity
 
@@ -80,9 +81,16 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     }
 
     private fun handleSignOutSuccessEvent() {
+        restartHome()
     }
 
     private fun handleDeleteAccountSuccess() {
+        restartHome()
+    }
+
+    private fun restartHome() {
+        requireActivity().finishAffinity()
+        startActivity(HomeActivity.getIntent(requireContext()))
     }
 
     private fun initView() {
