@@ -11,10 +11,10 @@ fun <T> Response<T>.runCatchingWithErrorHandler(): Result<T> {
         return Result.failure(
             Throwable(
                 "{" +
-                        "code: ${this.code()}," +
-                        "message: ${this.message()}, " +
-                        "body: ${this.errorBody()?.string()}" +
-                        "}",
+                    "code: ${this.code()}," +
+                    "message: ${this.message()}, " +
+                    "body: ${this.errorBody()?.string()}" +
+                    "}",
             ),
         )
     } catch (e: Exception) {

@@ -32,7 +32,7 @@ class SignInActivity : AppCompatActivity() {
             AuthDefaultRepository(
                 authRetrofitService = NormalRetrofitClient.authRetrofitService,
                 authDataSource = AuthLocalDataSource.getInstance(this),
-                userRetrofitService = AuthRetrofitClient.instance.userRetrofitService,
+                userRetrofitService = AuthRetrofitClient.userRetrofitService,
             ),
             FirebaseAnalyticsHelper,
         )

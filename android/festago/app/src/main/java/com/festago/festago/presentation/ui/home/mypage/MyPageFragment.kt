@@ -29,15 +29,15 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     private val vm: MyPageViewModel by viewModels {
         MyPageViewModelFactory(
             userRepository = UserDefaultRepository(
-                userProfileService = AuthRetrofitClient.instance.userRetrofitService,
+                userProfileService = AuthRetrofitClient.userRetrofitService,
             ),
             ticketRepository = TicketDefaultRepository(
-                ticketRetrofitService = AuthRetrofitClient.instance.ticketRetrofitService,
+                ticketRetrofitService = AuthRetrofitClient.ticketRetrofitService,
             ),
             authRepository = AuthDefaultRepository(
                 authRetrofitService = NormalRetrofitClient.authRetrofitService,
                 authDataSource = AuthLocalDataSource.getInstance(requireContext()),
-                userRetrofitService = AuthRetrofitClient.instance.userRetrofitService,
+                userRetrofitService = AuthRetrofitClient.userRetrofitService,
             ),
             analyticsHelper = FirebaseAnalyticsHelper,
         )

@@ -17,7 +17,7 @@ class TicketHistoryActivity : AppCompatActivity() {
     private val vm: TicketHistoryViewModel by viewModels {
         TicketHistoryViewModelFactory(
             TicketDefaultRepository(
-                ticketRetrofitService = AuthRetrofitClient.instance.ticketRetrofitService,
+                ticketRetrofitService = AuthRetrofitClient.ticketRetrofitService,
             ),
             FirebaseAnalyticsHelper,
         )
