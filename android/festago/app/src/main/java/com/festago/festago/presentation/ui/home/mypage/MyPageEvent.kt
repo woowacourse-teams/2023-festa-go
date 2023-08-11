@@ -5,4 +5,5 @@ sealed interface MyPageEvent {
     object SignOutSuccess : MyPageEvent
     object DeleteAccountSuccess : MyPageEvent
     object ShowTicketHistory : MyPageEvent
+    object ShowConfirmDelete : MyPageEvent
 }

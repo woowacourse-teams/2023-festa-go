@@ -43,7 +43,6 @@ class SignInActivity : AppCompatActivity() {
         initBinding()
         initView()
         initObserve()
-        initLogout()
     }
 
     private fun initBinding() {
@@ -107,13 +106,6 @@ class SignInActivity : AppCompatActivity() {
         }
         finishAffinity()
         startActivity(intent)
-    }
-
-    private fun initLogout() {
-        // todo:logout 처리 필요
-        binding.ivFestagoLogo.setOnClickListener {
-            UserApiClient.instance.unlink {}
-        }
     }
 
     companion object {

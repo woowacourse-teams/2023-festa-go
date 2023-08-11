@@ -124,6 +124,7 @@
                 android:id="@+id/tvWithdrawal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.showConfirmDelete()}"
                 android:paddingVertical="8dp"
                 android:text="@string/my_page_tv_withdrawal"
                 app:layout_constraintEnd_toStartOf="@id/guidelineEnd"

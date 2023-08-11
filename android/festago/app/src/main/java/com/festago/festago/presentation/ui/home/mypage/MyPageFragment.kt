@@ -1,5 +1,6 @@
 package com.festago.festago.presentation.ui.home.mypage
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -74,6 +75,7 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
                 is MyPageEvent.SignOutSuccess -> handleSignOutSuccessEvent()
                 is MyPageEvent.DeleteAccountSuccess -> handleDeleteAccountSuccess()
                 is MyPageEvent.ShowTicketHistory -> handleShowTicketHistory()
+                is MyPageEvent.ShowConfirmDelete -> handleShowConfirmDelete()
             }
         }
     }
@@ -97,6 +99,21 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
     private fun handleShowTicketHistory() {
         startActivity(TicketHistoryActivity.getIntent(requireContext()))
+    }
+
+    private fun handleShowConfirmDelete() {
+        val dialog = AlertDialog.Builder(requireContext()).apply {
+            setTitle(getString(R.string.confirm_delete_dialog_title))
+            setMessage(getString(R.string.confirm_delete_dialog_message))
+            setPositiveButton(getString(R.string.confirm_delete_dialog_yes)) { dialog, _ ->
+                vm.deleteAccount()
+                dialog.dismiss()
+            }
+            setNegativeButton(getString(R.string.confirm_delete_dialog_no)) { dialog, _ ->
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
     }
 
     private fun initView() {
