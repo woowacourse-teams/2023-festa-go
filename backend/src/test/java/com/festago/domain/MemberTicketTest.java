@@ -5,9 +5,8 @@ import static com.festago.domain.EntryState.AWAY;
 import static com.festago.domain.EntryState.BEFORE_ENTRY;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.support.FestivalFixture;
+import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
-import com.festago.support.StageFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -26,52 +25,43 @@ class MemberTicketTest {
         @Test
         void 입장시간_전_입장_불가() {
             // given
-            LocalDateTime entryTime = LocalDateTime.now();
-            LocalDateTime time = entryTime.minusMinutes(10);
+            LocalDateTime entryTime = LocalDateTime.parse("2023-08-12T18:00:00");
+            LocalDateTime currentTime = entryTime.minusMinutes(10);
 
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .entryTime(entryTime)
                 .build();
 
             // when && then
-            assertThat(memberTicket.canEntry(time)).isFalse();
+            assertThat(memberTicket.canEntry(currentTime)).isFalse();
         }
 
         @Test
         void 입장시간_24시간이_지나면_입장_불가() {
             // given
-            LocalDateTime entryTime = LocalDateTime.now();
-            LocalDateTime time = entryTime.plusHours(24);
+            LocalDateTime entryTime = LocalDateTime.parse("2023-07-28T18:00:00");
+            LocalDateTime currentTime = entryTime.plusHours(24);
 
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .entryTime(entryTime)
                 .build();
 
             // when && then
-            assertThat(memberTicket.canEntry(time)).isFalse();
+            assertThat(memberTicket.canEntry(currentTime)).isFalse();
         }
 
         @ParameterizedTest
         @ValueSource(strings = {"2023-07-28T17:59:59", "2023-07-27T18:00:00"})
-        void 입장_가능(LocalDateTime time) {
+        void 입장_가능(LocalDateTime currentTime) {
             // given
             LocalDateTime entryTime = LocalDateTime.parse("2023-07-27T18:00:00");
-            Festival festival = FestivalFixture.festival()
-                .startDate(entryTime.toLocalDate())
-                .endDate(entryTime.plusDays(4).toLocalDate())
-                .build();
-            Stage stage = StageFixture.stage()
-                .startTime(entryTime.plusHours(4))
-                .ticketOpenTime(entryTime.minusWeeks(1))
-                .festival(festival)
-                .build();
+
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-                .stage(stage)
                 .entryTime(entryTime)
                 .build();
 
             // when && then
-            assertThat(memberTicket.canEntry(time)).isTrue();
+            assertThat(memberTicket.canEntry(currentTime)).isTrue();
         }
     }
 
@@ -81,37 +71,29 @@ class MemberTicketTest {
         @Test
         void 입장시간_이후이면_거짓() {
             // given
-            LocalDateTime entryTime = LocalDateTime.now();
-            LocalDateTime time = entryTime.plusHours(1);
+            LocalDateTime entryTime = LocalDateTime.parse("2023-08-12T18:00:00");
+            LocalDateTime currentTime = entryTime.plusHours(1);
 
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .entryTime(entryTime)
                 .build();
 
             // when & then
-            assertThat(memberTicket.isBeforeEntry(time)).isFalse();
+            assertThat(memberTicket.isBeforeEntry(currentTime)).isFalse();
         }
 
         @Test
         void 입장시간_이전이면_참() {
             // given
-            LocalDateTime entryTime = LocalDateTime.now();
-            LocalDateTime time = entryTime.minusHours(12).plusSeconds(1);
-            Festival festival = FestivalFixture.festival()
-                .startDate(entryTime.toLocalDate())
-                .endDate(entryTime.plusDays(4).toLocalDate())
-                .build();
-            Stage stage = StageFixture.stage()
-                .startTime(entryTime.plusHours(4))
-                .festival(festival)
-                .build();
+            LocalDateTime entryTime = LocalDateTime.parse("2023-08-12T18:00:00");
+            LocalDateTime currentTime = entryTime.minusHours(12).plusSeconds(1);
+
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-                .stage(stage)
                 .entryTime(entryTime)
                 .build();
 
             // when & then
-            assertThat(memberTicket.isBeforeEntry(time)).isTrue();
+            assertThat(memberTicket.isBeforeEntry(currentTime)).isTrue();
         }
     }
 
@@ -177,7 +159,9 @@ class MemberTicketTest {
         void 티켓_주인이다() {
             // given
             Long memberId = 1L;
-            Member member = new Member(memberId);
+            Member member = MemberFixture.member()
+                .id(memberId)
+                .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .owner(member)
                 .build();
@@ -191,7 +175,9 @@ class MemberTicketTest {
             // given
             Long memberId = 1L;
             Long ownerId = 2L;
-            Member owner = new Member(ownerId);
+            Member owner = MemberFixture.member()
+                .id(ownerId)
+                .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .owner(owner)
                 .build();
@@ -199,6 +185,5 @@ class MemberTicketTest {
             // when && then
             assertThat(memberTicket.isOwner(memberId)).isFalse();
         }
-
     }
 }

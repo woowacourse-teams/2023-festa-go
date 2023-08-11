@@ -19,7 +19,7 @@ class FestivalTest {
     @Test
     void 시작일자가_종료일자_이전이면_예외() {
         // given
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.parse("2023-08-12");
 
         // when & then
         assertThatThrownBy(() -> new Festival("테코대학교", today.plusDays(1), today))
@@ -33,7 +33,7 @@ class FestivalTest {
         @Test
         void 축제_시작_일자_이전이면_참() {
             // given
-            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time = LocalDateTime.parse("2023-08-12T18:00:00");
             Festival festival = FestivalFixture.festival()
                 .startDate(time.plusDays(1).toLocalDate())
                 .endDate(time.plusDays(4).toLocalDate())
@@ -49,7 +49,7 @@ class FestivalTest {
         @Test
         void 축제_종료_일자_이후이면_참() {
             // given
-            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time = LocalDateTime.parse("2023-08-12T18:00:00");
             Festival festival = FestivalFixture.festival()
                 .startDate(time.minusDays(4).toLocalDate())
                 .endDate(time.minusDays(1).toLocalDate())
@@ -65,7 +65,7 @@ class FestivalTest {
         @Test
         void 축제_기간중이면_거짓() {
             // given
-            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time = LocalDateTime.parse("2023-08-12T18:00:00");
             Festival festival = FestivalFixture.festival()
                 .startDate(time.minusDays(1).toLocalDate())
                 .endDate(time.toLocalDate())
