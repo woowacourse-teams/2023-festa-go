@@ -30,7 +30,7 @@ class TicketHistoryViewModel(
                 }.onFailure {
                     _uiState.value = TicketHistoryUiState.Error
                     analyticsHelper.logNetworkFailure(
-                        key = KEY_LOAD_Ticket_LOG,
+                        key = KEY_LOAD_TICKET_HISTORIES_LOG,
                         value = it.message.toString(),
                     )
                 }
@@ -52,6 +52,6 @@ class TicketHistoryViewModel(
     }
 
     companion object {
-        private const val KEY_LOAD_Ticket_LOG = "load_ticket"
+        private const val KEY_LOAD_TICKET_HISTORIES_LOG = "ticket_histories"
     }
 }
