@@ -41,7 +41,9 @@ public enum ErrorCode {
     INVALID_AUTH_TOKEN_PAYLOAD("유효하지 않은 로그인 토큰 payload 입니다."),
     DUPLICATE_SOCIAL_TYPE("중복된 OAuth2 제공자 입니다."),
     OAUTH2_PROVIDER_NOT_RESPONSE("OAuth2 제공자 서버에 문제가 발생했습니다."),
-    INVALID_ENTRY_CODE_OFFSET("올바르지 않은 입장코드 오프셋입니다.");
+    INVALID_ENTRY_CODE_OFFSET("올바르지 않은 입장코드 오프셋입니다."),
+    FOR_TEST_ERROR("테스트용 에러입니다."),
+    ;
 
     private final String message;
 
