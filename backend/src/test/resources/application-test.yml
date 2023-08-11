@@ -9,6 +9,8 @@ spring:
     hibernate:
       ddl-auto: create
     open-in-view: false
+  flyway:
+    enabled: false
 
 logging:
   level:
