@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 data class UserProfileResponse(
     val memberId: Long,
     val nickname: String,
-    val profileImage: String,
+    val profileImage: String?,
 ) {
     fun toDomain(): UserProfile = UserProfile(
         memberId = memberId,
         nickName = nickname,
-        profileImage = profileImage,
+        profileImage = profileImage ?: "",
     )
 }
