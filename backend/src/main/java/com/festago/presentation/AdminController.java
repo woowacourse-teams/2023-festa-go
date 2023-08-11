@@ -11,6 +11,12 @@ import com.festago.dto.StageCreateRequest;
 import com.festago.dto.StageResponse;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
+import com.festago.exception.ErrorCode;
+import com.festago.exception.InternalServerException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Optional;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,13 +33,15 @@ public class AdminController {
     private final StageService stageService;
     private final TicketService ticketService;
     private final AdminService adminService;
+    private final Optional<BuildProperties> properties;
 
     public AdminController(FestivalService festivalService, StageService stageService, TicketService ticketService,
-                           AdminService adminService) {
+                           AdminService adminService, Optional<BuildProperties> buildProperties) {
         this.festivalService = festivalService;
         this.stageService = stageService;
         this.ticketService = ticketService;
         this.adminService = adminService;
+        this.properties = buildProperties;
     }
 
     @PostMapping("/festivals")
@@ -67,5 +75,22 @@ public class AdminController {
         AdminResponse response = adminService.getAdminResponse();
         return ResponseEntity.ok()
             .body(response);
+    }
+
+    @GetMapping("/version")
+    public ResponseEntity<String> getVersion() {
+        return properties.map(it -> ResponseEntity.ok(it.getTime().atZone(ZoneId.of("Asia/Seoul")).toString()))
+            .orElseGet(() -> ResponseEntity.ok()
+                .body(LocalDateTime.now().toString()));
+    }
+
+    @GetMapping("/error")
+    public ResponseEntity<Void> getError() {
+        throw new IllegalArgumentException("테스트용 에러입니다.");
+    }
+
+    @GetMapping("/warn")
+    public ResponseEntity<Void> getWarn() {
+        throw new InternalServerException(ErrorCode.FOR_TEST_ERROR);
     }
 }
