@@ -5,8 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.Mockito.doReturn;
 
-import com.festago.application.FestivalService;
-import com.festago.application.StageService;
 import com.festago.application.TicketService;
 import com.festago.domain.Festival;
 import com.festago.domain.FestivalRepository;
@@ -15,7 +13,6 @@ import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
 import com.festago.domain.StageRepository;
-import com.festago.domain.TicketRepository;
 import com.festago.domain.TicketType;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketingRequest;
@@ -38,7 +35,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
-import org.springframework.transaction.PlatformTransactionManager;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -50,26 +46,14 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     @Autowired
     MemberRepository memberRepository;
 
-    @Autowired
-    FestivalService festivalService;
-
-    @Autowired
-    StageService stageService;
-
     @SpyBean
     MemberTicketRepository memberTicketRepository;
-
-    @Autowired
-    TicketRepository ticketRepository;
 
     @Autowired
     StageRepository stageRepository;
 
     @Autowired
     FestivalRepository festivalRepository;
-
-    @Autowired
-    PlatformTransactionManager tm;
 
     @Test
     void 공연이_없으면_예외() {
