@@ -36,8 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -78,8 +76,7 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     }
 
     @Test
-    @Sql(scripts = "/ticketing-test-data.sql",
-        config = @SqlConfig(transactionMode = TransactionMode.ISOLATED))
+    @Sql("/ticketing-test-data.sql")
     void 동시에_100명이_예약() {
         // given
         int tryCount = 100;
