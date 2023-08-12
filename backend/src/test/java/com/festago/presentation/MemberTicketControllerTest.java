@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
-import com.festago.application.TicketService;
+import com.festago.application.TicketingService;
 import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.domain.EntryState;
@@ -60,7 +60,7 @@ class MemberTicketControllerTest {
     MemberTicketService memberTicketService;
 
     @MockBean
-    TicketService ticketService;
+    TicketingService ticketingService;
 
     @MockBean
     AuthExtractor authExtractor;
@@ -201,7 +201,7 @@ class MemberTicketControllerTest {
         TicketingResponse expected = new TicketingResponse(memberTicketId, ticketNumber, ticketEntryTime);
         TicketingRequest request = new TicketingRequest(ticketId);
 
-        given(ticketService.ticketing(anyLong(), any()))
+        given(ticketingService.ticketing(anyLong(), any()))
             .willReturn(expected);
         given(authExtractor.extract(any()))
             .willReturn(new AuthPayload(1L));
