@@ -12,9 +12,11 @@ import com.festago.festago.presentation.ui.ticketentry.TicketEntryViewModel
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryViewModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 
+@Suppress("UNCHECKED_CAST")
 val FestagoViewModelFactory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-    val repositoryContainer = FestagoApplication.DependencyContainer.repositoryContainer
-    val analysisContainer = FestagoApplication.DependencyContainer.analysisContainer
+    val repositoryContainer = FestagoApplication.repositoryContainer
+    val analysisContainer = FestagoApplication.analysisContainer
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(TicketHistoryViewModel::class.java) -> TicketHistoryViewModel(
@@ -29,27 +31,33 @@ val FestagoViewModelFactory: ViewModelProvider.Factory = object : ViewModelProvi
                 authRepository = repositoryContainer.authRepository,
                 analyticsHelper = analysisContainer.analyticsHelper,
             )
+
             modelClass.isAssignableFrom(TicketEntryViewModel::class.java) -> TicketEntryViewModel(
                 ticketRepository = repositoryContainer.ticketRepository,
                 analyticsHelper = analysisContainer.analyticsHelper,
             )
+
             modelClass.isAssignableFrom(SignInViewModel::class.java) -> SignInViewModel(
                 authRepository = repositoryContainer.authRepository,
                 analyticsHelper = analysisContainer.analyticsHelper,
             )
+
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(
                 authRepository = repositoryContainer.authRepository,
             )
+
             modelClass.isAssignableFrom(FestivalListViewModel::class.java) -> FestivalListViewModel(
                 festivalRepository = repositoryContainer.festivalRepository,
                 analyticsHelper = analysisContainer.analyticsHelper,
             )
+
             modelClass.isAssignableFrom(MyPageViewModel::class.java) -> MyPageViewModel(
                 userRepository = repositoryContainer.userRepository,
                 ticketRepository = repositoryContainer.ticketRepository,
                 authRepository = repositoryContainer.authRepository,
                 analyticsHelper = analysisContainer.analyticsHelper,
             )
+
             modelClass.isAssignableFrom(TicketListViewModel::class.java) -> TicketListViewModel(
                 ticketRepository = repositoryContainer.ticketRepository,
                 analyticsHelper = analysisContainer.analyticsHelper,
