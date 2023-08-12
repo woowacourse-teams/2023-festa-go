@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.Role;
 import com.festago.auth.dto.LoginMember;
 import com.festago.exception.UnauthorizedException;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -65,7 +66,7 @@ class LoginMemberResolverTest {
         given(request.getHeader(HttpHeaders.AUTHORIZATION))
             .willReturn("Bearer " + token);
         given(authExtractor.extract(token))
-            .willReturn(new AuthPayload(memberId));
+            .willReturn(new AuthPayload(memberId, Role.MEMBER));
 
         // when
         LoginMember expect = loginMemberResolver.resolveArgument(null, null, request, null);

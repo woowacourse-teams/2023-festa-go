@@ -2,6 +2,7 @@ package com.festago.auth.infrastructure;
 
 import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.Role;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
@@ -16,6 +17,7 @@ import javax.crypto.SecretKey;
 public class JwtAuthExtractor implements AuthExtractor {
 
     private static final String MEMBER_ID_KEY = "memberId";
+    private static final String ROLE_ID_KEY = "role";
 
     private final JwtParser jwtParser;
 
@@ -30,7 +32,8 @@ public class JwtAuthExtractor implements AuthExtractor {
     public AuthPayload extract(String token) {
         Claims claims = getClaims(token);
         Long memberId = claims.get(MEMBER_ID_KEY, Long.class);
-        return new AuthPayload(memberId);
+        String role = claims.get(ROLE_ID_KEY, String.class);
+        return new AuthPayload(memberId, Role.of(role));
     }
 
     private Claims getClaims(String code) {

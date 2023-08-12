@@ -13,6 +13,7 @@ import com.festago.application.MemberService;
 import com.festago.application.MemberTicketService;
 import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.Role;
 import com.festago.dto.MemberProfileResponse;
 import com.festago.support.TestConfig;
 import java.nio.charset.StandardCharsets;
@@ -54,7 +55,7 @@ class MemberControllerTest {
         given(memberService.findMemberProfile(anyLong()))
             .willReturn(expected);
         given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L));
+            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(get("/members/profile")

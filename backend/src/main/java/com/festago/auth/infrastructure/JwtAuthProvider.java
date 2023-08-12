@@ -14,6 +14,7 @@ public class JwtAuthProvider implements AuthProvider {
     private static final int SECOND_FACTOR = 60;
     private static final int MILLISECOND_FACTOR = 1000;
     private static final String MEMBER_ID_KEY = "memberId";
+    private static final String ROLE_ID_KEY = "role";
 
     private final SecretKey key;
     private final long expirationMinutes;
@@ -28,6 +29,7 @@ public class JwtAuthProvider implements AuthProvider {
         Date now = new Date();
         return Jwts.builder()
             .claim(MEMBER_ID_KEY, authPayload.getMemberId())
+            .claim(ROLE_ID_KEY, authPayload.getRole())
             .setIssuedAt(now)
             .setExpiration(new Date(now.getTime() + expirationMinutes * SECOND_FACTOR * MILLISECOND_FACTOR))
             .signWith(key, SignatureAlgorithm.HS256)

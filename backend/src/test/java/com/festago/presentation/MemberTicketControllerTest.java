@@ -18,6 +18,7 @@ import com.festago.application.MemberTicketService;
 import com.festago.application.TicketService;
 import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.Role;
 import com.festago.domain.EntryState;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketFestivalResponse;
@@ -78,7 +79,7 @@ class MemberTicketControllerTest {
         given(entryService.createEntryCode(anyLong(), anyLong()))
             .willReturn(expected);
         given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L));
+            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(post("/member-tickets/{memberTicketId}/qr", memberTicketId)
@@ -108,7 +109,7 @@ class MemberTicketControllerTest {
         given(memberTicketService.findById(memberId, memberTicketId))
             .willReturn(expected);
         given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L));
+            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(get("/member-tickets/{memberTicketId}", memberTicketId)
@@ -141,7 +142,7 @@ class MemberTicketControllerTest {
         given(memberTicketService.findAll(eq(memberId), any(Pageable.class)))
             .willReturn(expected);
         given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L));
+            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(get("/member-tickets")
@@ -174,7 +175,7 @@ class MemberTicketControllerTest {
         given(memberTicketService.findCurrent(eq(memberId), any(Pageable.class)))
             .willReturn(expected);
         given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L));
+            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(get("/member-tickets/current")
@@ -204,7 +205,7 @@ class MemberTicketControllerTest {
         given(ticketService.ticketing(anyLong(), any()))
             .willReturn(expected);
         given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L));
+            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(post("/member-tickets")
