@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
     name = "bearerAuth",
     type = SecuritySchemeType.HTTP,
     bearerFormat = "Jwt",
-    scheme = "hello "
+    scheme = "bearer"
 )
 public class SwaggerConfig {
 
