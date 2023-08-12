@@ -11,7 +11,6 @@ import com.festago.domain.TicketAmount;
 import com.festago.domain.TicketAmountRepository;
 import com.festago.domain.TicketRepository;
 import com.festago.domain.TicketType;
-import com.festago.domain.TimeProvider;
 import com.festago.dto.StageTicketsResponse;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
@@ -20,6 +19,7 @@ import com.festago.dto.TicketingResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,18 +33,18 @@ public class TicketService {
     private final MemberTicketRepository memberTicketRepository;
     private final TicketAmountRepository ticketAmountRepository;
     private final MemberRepository memberRepository;
-    private final TimeProvider timeProvider;
+    private final Clock clock;
 
     public TicketService(TicketRepository ticketRepository, StageRepository stageRepository,
                          MemberTicketRepository memberTicketRepository,
                          TicketAmountRepository ticketAmountRepository,
-                         MemberRepository memberRepository, TimeProvider timeProvider) {
+                         MemberRepository memberRepository, Clock clock) {
         this.ticketRepository = ticketRepository;
         this.stageRepository = stageRepository;
         this.memberTicketRepository = memberTicketRepository;
         this.ticketAmountRepository = ticketAmountRepository;
         this.memberRepository = memberRepository;
-        this.timeProvider = timeProvider;
+        this.clock = clock;
     }
 
     public TicketCreateResponse create(TicketCreateRequest request) {
@@ -54,7 +54,7 @@ public class TicketService {
         Ticket ticket = ticketRepository.findByTicketTypeAndStage(ticketType, stage)
             .orElseGet(() -> ticketRepository.save(new Ticket(stage, ticketType)));
 
-        ticket.addTicketEntryTime(LocalDateTime.now(), request.entryTime(), request.amount());
+        ticket.addTicketEntryTime(LocalDateTime.now(clock), request.entryTime(), request.amount());
 
         return TicketCreateResponse.from(ticket);
     }
@@ -69,22 +69,9 @@ public class TicketService {
         Member member = findMemberById(memberId);
         validateAlreadyReserved(member, ticket);
         int reserveSequence = getReserveSequence(request.ticketId());
-        if (!ticket.canReserve(timeProvider.now())) {
-            throw new BadRequestException(ErrorCode.TICKET_RESERVE_TIMEOUT);
-        }
-        MemberTicket memberTicket = memberTicketRepository.save(ticket.createMemberTicket(member, reserveSequence));
+        MemberTicket memberTicket = ticket.createMemberTicket(member, reserveSequence, LocalDateTime.now(clock));
+        memberTicketRepository.save(memberTicket);
         return TicketingResponse.from(memberTicket);
-    }
-
-    private int getReserveSequence(Long ticketId) {
-        TicketAmount ticketAmount = findTicketAmountById(ticketId);
-        ticketAmount.increaseReservedAmount();
-        return ticketAmount.getReservedAmount();
-    }
-
-    private TicketAmount findTicketAmountById(Long ticketId) {
-        return ticketAmountRepository.findByTicketIdForUpdate(ticketId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
     }
 
     private Ticket findTicketById(Long ticketId) {
@@ -101,6 +88,17 @@ public class TicketService {
         if (memberTicketRepository.existsByOwnerAndStage(member, ticket.getStage())) {
             throw new BadRequestException(ErrorCode.RESERVE_TICKET_OVER_AMOUNT);
         }
+    }
+
+    private int getReserveSequence(Long ticketId) {
+        TicketAmount ticketAmount = findTicketAmountById(ticketId);
+        ticketAmount.increaseReservedAmount();
+        return ticketAmount.getReservedAmount();
+    }
+
+    private TicketAmount findTicketAmountById(Long ticketId) {
+        return ticketAmountRepository.findByTicketIdForUpdate(ticketId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)

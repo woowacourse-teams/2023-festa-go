@@ -2,8 +2,7 @@ package com.festago.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 import com.festago.application.TicketService;
@@ -15,7 +14,6 @@ import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
 import com.festago.domain.StageRepository;
 import com.festago.domain.TicketType;
-import com.festago.domain.TimeProvider;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketingRequest;
 import com.festago.exception.BadRequestException;
@@ -23,6 +21,8 @@ import com.festago.exception.NotFoundException;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.StageFixture;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -57,7 +57,7 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     FestivalRepository festivalRepository;
 
     @MockBean
-    TimeProvider timeProvider;
+    Clock clock;
 
     @Test
     void 공연이_없으면_예외() {
@@ -86,8 +86,9 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         doReturn(false)
             .when(memberTicketRepository)
             .existsByOwnerAndStage(any(Member.class), any(Stage.class));
-        given(timeProvider.now())
-            .willReturn(LocalDateTime.MIN);
+        doReturn(Instant.parse("2023-07-24T03:21:31Z"))
+            .when(clock)
+            .instant();
 
         // when
         List<CompletableFuture<Void>> futures = IntStream.range(0, tryCount)
@@ -108,30 +109,16 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         Member member = memberRepository.save(MemberFixture.member().build());
         TicketingRequest request = new TicketingRequest(1L);
         Long memberId = member.getId();
-        given(timeProvider.now())
-            .willReturn(LocalDateTime.MIN);
+        doReturn(Instant.parse("2023-07-24T03:21:31Z"))
+            .when(clock)
+            .instant();
+
         ticketService.ticketing(memberId, request);
 
         // when & then
         assertThatThrownBy(() -> ticketService.ticketing(memberId, request))
             .isInstanceOf(BadRequestException.class)
             .hasMessage("예매 가능한 수량을 초과했습니다.");
-    }
-
-    @Test
-    @Sql("/ticketing-test-data.sql")
-    void 티켓_예매시_공연의_시간보다_빠르면_예외() {
-        // given
-        Member member = memberRepository.save(MemberFixture.member().build());
-        TicketingRequest request = new TicketingRequest(1L);
-        given(timeProvider.now())
-            .willReturn(LocalDateTime.MAX);
-        Long memberId = member.getId();
-
-        // when & then
-        assertThatThrownBy(() -> ticketService.ticketing(memberId, request))
-            .isInstanceOf(BadRequestException.class)
-            .hasMessage("티켓의 예매 시간은 공연 시작 시간보다 빨라야 합니다.");
     }
 
     @Test

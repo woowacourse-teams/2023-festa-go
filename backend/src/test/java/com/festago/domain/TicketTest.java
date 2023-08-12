@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.exception.BadRequestException;
+import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
@@ -19,7 +20,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class TicketTest {
-
 
     @Nested
     class 입장시간_추가_검증 {
@@ -125,37 +125,86 @@ class TicketTest {
         @Test
         void 최대_수량보다_많으면_예외() {
             // given
-            Member member = MemberFixture.member()
+            LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
+            LocalDateTime now = stageStartTime.minusHours(6);
+            Festival festival = FestivalFixture.festival()
+                .startDate(stageStartTime.toLocalDate())
+                .endDate(stageStartTime.toLocalDate())
+                .build();
+            Stage stage = StageFixture.stage()
+                .startTime(stageStartTime)
+                .ticketOpenTime(stageStartTime.minusDays(1))
+                .festival(festival)
                 .build();
             Ticket ticket = TicketFixture.ticket()
+                .stage(stage)
                 .build();
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime ticketOpenTime = ticket.getStage().getTicketOpenTime();
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), now.minusHours(1), 50);
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), now.minusHours(2), 30);
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), now.minusHours(3), 20);
+            Member member = MemberFixture.member()
+                .id(1L)
+                .build();
 
             // when & then
-            assertThatThrownBy(() -> ticket.createMemberTicket(member, 101))
+            assertThatThrownBy(() -> ticket.createMemberTicket(member, 101, now))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("매진된 티켓입니다.");
+        }
+
+        @Test
+        void 공연의_시간보다_빠르면_예외() {
+            LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
+            LocalDateTime now = stageStartTime.plusHours(1);
+            Festival festival = FestivalFixture.festival()
+                .startDate(stageStartTime.toLocalDate())
+                .endDate(stageStartTime.toLocalDate())
+                .build();
+            Stage stage = StageFixture.stage()
+                .startTime(stageStartTime)
+                .ticketOpenTime(stageStartTime.minusDays(1))
+                .festival(festival)
+                .build();
+            Ticket ticket = TicketFixture.ticket()
+                .stage(stage)
+                .build();
+            Member member = MemberFixture.member()
+                .id(1L)
+                .build();
+
+            ticket.addTicketEntryTime(LocalDateTime.MIN, stageStartTime.minusHours(1), 100);
+
+            // when & then
+            assertThatThrownBy(() -> ticket.createMemberTicket(member, 1, now))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("티켓의 예매 시간은 공연 시작 시간보다 빨라야 합니다.");
         }
 
         @ParameterizedTest
         @ValueSource(ints = {0, 100})
         void 성공(int reservationSequence) {
             // given
-            Member member = MemberFixture.member()
+            LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
+            LocalDateTime now = stageStartTime.minusHours(6);
+            Festival festival = FestivalFixture.festival()
+                .startDate(stageStartTime.toLocalDate())
+                .endDate(stageStartTime.toLocalDate())
+                .build();
+            Stage stage = StageFixture.stage()
+                .startTime(stageStartTime)
+                .ticketOpenTime(stageStartTime.minusDays(1))
+                .festival(festival)
                 .build();
             Ticket ticket = TicketFixture.ticket()
+                .stage(stage)
                 .build();
-            LocalDateTime ticketOpenTime = ticket.getStage().getTicketOpenTime();
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), LocalDateTime.now().minusHours(1), 50);
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), LocalDateTime.now().minusHours(2), 30);
-            ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), LocalDateTime.now().minusHours(3), 20);
+            Member member = MemberFixture.member()
+                .id(1L)
+                .build();
+
+            ticket.addTicketEntryTime(LocalDateTime.MIN, stageStartTime.minusHours(1), 50);
+            ticket.addTicketEntryTime(LocalDateTime.MIN, stageStartTime.minusHours(2), 30);
+            ticket.addTicketEntryTime(LocalDateTime.MIN, stageStartTime.minusHours(3), 20);
 
             // when
-            MemberTicket memberTicket = ticket.createMemberTicket(member, reservationSequence);
+            MemberTicket memberTicket = ticket.createMemberTicket(member, reservationSequence, now);
 
             // then
             assertThat(memberTicket.getOwner()).isEqualTo(member);

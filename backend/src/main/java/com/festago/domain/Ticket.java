@@ -81,9 +81,16 @@ public class Ticket extends BaseTimeEntity {
         }
     }
 
-    public MemberTicket createMemberTicket(Member member, int reservationSequence) {
+    public MemberTicket createMemberTicket(Member member, int reservationSequence, LocalDateTime now) {
+        if (!canReserve(now)) {
+            throw new BadRequestException(ErrorCode.TICKET_RESERVE_TIMEOUT);
+        }
         LocalDateTime entryTime = calculateEntryTime(reservationSequence);
         return new MemberTicket(member, stage, reservationSequence, entryTime, ticketType);
+    }
+
+    private boolean canReserve(LocalDateTime currentTime) {
+        return !stage.isStart(currentTime);
     }
 
     private LocalDateTime calculateEntryTime(int reservationSequence) {
@@ -95,10 +102,6 @@ public class Ticket extends BaseTimeEntity {
             }
         }
         throw new BadRequestException(ErrorCode.TICKET_SOLD_OUT);
-    }
-
-    public boolean canReserve(LocalDateTime currentTime) {
-        return !stage.isStart(currentTime);
     }
 
     public Long getId() {
