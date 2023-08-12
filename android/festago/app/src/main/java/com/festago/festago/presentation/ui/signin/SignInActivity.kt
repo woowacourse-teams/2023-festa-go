@@ -10,15 +10,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.festago.festago.R
-import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.datasource.AuthLocalDataSource
-import com.festago.festago.data.repository.AuthDefaultRepository
-import com.festago.festago.data.retrofit.AuthRetrofitClient
-import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.ActivitySignInBinding
+import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.home.HomeActivity
-import com.festago.festago.presentation.ui.signin.SignInViewModel.SignInViewModelFactory
 import com.festago.festago.presentation.util.loginWithKakao
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.launch
@@ -27,16 +22,7 @@ class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInBinding
 
-    private val vm: SignInViewModel by viewModels {
-        SignInViewModelFactory(
-            AuthDefaultRepository(
-                authRetrofitService = NormalRetrofitClient.authRetrofitService,
-                authDataSource = AuthLocalDataSource(this),
-                userRetrofitService = AuthRetrofitClient.userRetrofitService,
-            ),
-            FirebaseAnalyticsHelper,
-        )
-    }
+    private val vm: SignInViewModel by viewModels { FestagoViewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
