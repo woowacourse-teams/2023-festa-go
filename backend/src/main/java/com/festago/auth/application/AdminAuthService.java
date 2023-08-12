@@ -11,6 +11,7 @@ import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.UnauthorizedException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,24 +22,33 @@ public class AdminAuthService {
     private final AuthProvider authProvider;
     private final AdminRepository adminRepository;
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public AdminAuthService(AuthProvider authProvider, AdminRepository adminRepository,
-                            MemberRepository memberRepository) {
+                            MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
         this.authProvider = authProvider;
         this.adminRepository = adminRepository;
         this.memberRepository = memberRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
     public String login(AdminLoginRequest request) {
         Admin admin = findAdmin(request);
+        validatePassword(request.password(), admin.getPassword());
         AuthPayload authPayload = getAuthPayload(admin);
         return authProvider.provide(authPayload);
     }
 
     private Admin findAdmin(AdminLoginRequest request) {
-        return adminRepository.findByUsernameAndPassword(request.username(), request.password())
+        return adminRepository.findByUsername(request.username())
             .orElseThrow(() -> new UnauthorizedException(ErrorCode.INVALID_PASSWORD));
+    }
+
+    private void validatePassword(String password, String encodedPassword) {
+        if (!passwordEncoder.matches(password, encodedPassword)) {
+            throw new UnauthorizedException(ErrorCode.INVALID_PASSWORD);
+        }
     }
 
     private AuthPayload getAuthPayload(Admin admin) {
