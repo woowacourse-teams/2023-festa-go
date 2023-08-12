@@ -19,7 +19,7 @@ public enum ErrorCode {
     OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE("해당 OAuth2 제공자는 지원되지 않습니다."),
     RESERVE_TICKET_OVER_AMOUNT("예매 가능한 수량을 초과했습니다."),
     OAUTH2_INVALID_TOKEN("잘못된 OAuth2 토큰입니다."),
-    TICKET_RESERVE_TIMEOUT("티켓의 예매 시간은 공연 시작 시간보다 빨라야 합니다."),
+    TICKET_CANNOT_RESERVE_STAGE_START("공연의 시작 시간 이후로 예매할 수 없습니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),

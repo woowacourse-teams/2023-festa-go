@@ -150,7 +150,7 @@ class TicketTest {
         }
 
         @Test
-        void 공연의_시간보다_빠르면_예외() {
+        void 공연의_시간이_지나고_예매하면_예외() {
             LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
             LocalDateTime now = stageStartTime.plusHours(1);
             Festival festival = FestivalFixture.festival()
@@ -174,7 +174,7 @@ class TicketTest {
             // when & then
             assertThatThrownBy(() -> ticket.createMemberTicket(member, 1, now))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("티켓의 예매 시간은 공연 시작 시간보다 빨라야 합니다.");
+                .hasMessage("공연의 시작 시간 이후로 예매할 수 없습니다.");
         }
 
         @ParameterizedTest
