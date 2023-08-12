@@ -36,7 +36,7 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
             ),
             authRepository = AuthDefaultRepository(
                 authRetrofitService = NormalRetrofitClient.authRetrofitService,
-                authDataSource = AuthLocalDataSource.getInstance(requireContext()),
+                authDataSource = AuthLocalDataSource(requireContext()),
                 userRetrofitService = AuthRetrofitClient.userRetrofitService,
             ),
             analyticsHelper = FirebaseAnalyticsHelper,

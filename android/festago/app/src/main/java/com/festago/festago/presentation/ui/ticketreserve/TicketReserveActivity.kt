@@ -47,7 +47,7 @@ class TicketReserveActivity : AppCompatActivity() {
             ),
             AuthDefaultRepository(
                 authRetrofitService = NormalRetrofitClient.authRetrofitService,
-                authDataSource = AuthLocalDataSource.getInstance(this),
+                authDataSource = AuthLocalDataSource(this),
                 userRetrofitService = AuthRetrofitClient.userRetrofitService,
             ),
             FirebaseAnalyticsHelper,
