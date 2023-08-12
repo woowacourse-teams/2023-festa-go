@@ -3,6 +3,7 @@ package com.festago.festago.presentation.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.festago.festago.FestagoApplication
+import com.festago.festago.presentation.ui.ticketentry.TicketEntryViewModel
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryViewModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 
@@ -21,6 +22,10 @@ val FestagoViewModelFactory: ViewModelProvider.Factory = object : ViewModelProvi
                 festivalRepository = repositoryContainer.festivalRepository,
                 ticketRepository = repositoryContainer.ticketRepository,
                 authRepository = repositoryContainer.authRepository,
+                analyticsHelper = analysisContainer.analyticsHelper,
+            )
+            modelClass.isAssignableFrom(TicketEntryViewModel::class.java) -> TicketEntryViewModel(
+                ticketRepository = repositoryContainer.ticketRepository,
                 analyticsHelper = analysisContainer.analyticsHelper,
             )
 

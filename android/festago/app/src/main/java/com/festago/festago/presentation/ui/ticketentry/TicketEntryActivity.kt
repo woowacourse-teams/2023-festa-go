@@ -7,12 +7,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.repository.TicketDefaultRepository
-import com.festago.festago.data.retrofit.AuthRetrofitClient
 import com.festago.festago.databinding.ActivityTicketEntryBinding
 import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.ui.ticketentry.TicketEntryViewModel.TicketEntryViewModelFactory
+import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
@@ -20,14 +17,7 @@ class TicketEntryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTicketEntryBinding
 
-    private val vm: TicketEntryViewModel by viewModels {
-        TicketEntryViewModelFactory(
-            TicketDefaultRepository(
-                ticketRetrofitService = AuthRetrofitClient.ticketRetrofitService,
-            ),
-            FirebaseAnalyticsHelper,
-        )
-    }
+    private val vm: TicketEntryViewModel by viewModels { FestagoViewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
