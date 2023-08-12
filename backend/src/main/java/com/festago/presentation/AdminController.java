@@ -4,6 +4,8 @@ import com.festago.application.AdminService;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
+import com.festago.auth.application.AdminAuthService;
+import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.dto.AdminResponse;
 import com.festago.dto.FestivalCreateRequest;
 import com.festago.dto.FestivalResponse;
@@ -17,6 +19,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,14 +37,17 @@ public class AdminController {
     private final StageService stageService;
     private final TicketService ticketService;
     private final AdminService adminService;
+    private final AdminAuthService adminAuthService;
     private final Optional<BuildProperties> properties;
 
     public AdminController(FestivalService festivalService, StageService stageService, TicketService ticketService,
-                           AdminService adminService, Optional<BuildProperties> buildProperties) {
+                           AdminService adminService, AdminAuthService adminAuthService,
+                           Optional<BuildProperties> buildProperties) {
         this.festivalService = festivalService;
         this.stageService = stageService;
         this.ticketService = ticketService;
         this.adminService = adminService;
+        this.adminAuthService = adminAuthService;
         this.properties = buildProperties;
     }
 
@@ -73,6 +80,21 @@ public class AdminController {
     @GetMapping("/login")
     public ModelAndView loginPage() {
         return new ModelAndView("admin/login");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@RequestBody AdminLoginRequest request) {
+        String token = adminAuthService.login(request);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, getCookie(token))
+            .build();
+    }
+
+    private String getCookie(String token) {
+        return ResponseCookie.from("token", token)
+            .httpOnly(true)
+            .secure(true)
+            .path("/")
+            .build().toString();
     }
 
     @GetMapping("/data")

@@ -3,8 +3,10 @@ package com.festago.presentation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +14,10 @@ import com.festago.application.AdminService;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
+import com.festago.auth.application.AdminAuthService;
+import com.festago.auth.domain.AuthExtractor;
+import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.Role;
 import com.festago.domain.TicketType;
 import com.festago.dto.ErrorResponse;
 import com.festago.dto.FestivalCreateRequest;
@@ -22,7 +28,7 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
-import com.festago.support.TestConfig;
+import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,12 +38,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminController.class)
-@Import(TestConfig.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AdminControllerTest {
@@ -59,6 +63,30 @@ class AdminControllerTest {
 
     @MockBean
     AdminService adminService;
+
+    @MockBean
+    AdminAuthService adminAuthService;
+
+    @MockBean
+    AuthExtractor authExtractor;
+
+    @Test
+    void 토큰의_Role이_어드민이_아니면_로그인_페이지로_리다이렉트() throws Exception {
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L, Role.MEMBER));
+
+        mockMvc.perform(get("/admin")
+                .cookie(new Cookie("token", "token")))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/admin/login"));
+    }
+
+    @Test
+    void 쿠키에_토큰_없으면_로그인_페이지로_리다이렉트() throws Exception {
+        mockMvc.perform(get("/admin"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/admin/login"));
+    }
 
     @Test
     void 축제_생성() throws Exception {
@@ -83,11 +111,14 @@ class AdminControllerTest {
 
         given(festivalService.create(any()))
             .willReturn(expected);
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L, Role.ADMIN));
 
         // when && then
         String content = mockMvc.perform(post("/admin/festivals")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
@@ -116,11 +147,14 @@ class AdminControllerTest {
 
         given(stageService.create(any()))
             .willThrow(exception);
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L, Role.ADMIN));
 
         // when && then
         String content = mockMvc.perform(post("/admin/stages")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isNotFound())
             .andReturn()
@@ -148,11 +182,14 @@ class AdminControllerTest {
 
         given(stageService.create(any()))
             .willReturn(expected);
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L, Role.ADMIN));
 
         // when && then
         String content = mockMvc.perform(post("/admin/stages")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
@@ -179,11 +216,14 @@ class AdminControllerTest {
 
         given(ticketService.create(any()))
             .willThrow(exception);
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L, Role.ADMIN));
 
         // when && then
         String content = mockMvc.perform(post("/admin/tickets")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isNotFound())
             .andReturn()
@@ -212,11 +252,14 @@ class AdminControllerTest {
 
         given(ticketService.create(any()))
             .willReturn(expected);
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L, Role.ADMIN));
 
         // when && then
         String content = mockMvc.perform(post("/admin/tickets")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
