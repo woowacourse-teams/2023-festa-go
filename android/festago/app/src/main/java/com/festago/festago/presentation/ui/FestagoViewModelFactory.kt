@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.festago.festago.FestagoApplication
 import com.festago.festago.presentation.ui.home.HomeViewModel
+import com.festago.festago.presentation.ui.home.festivallist.FestivalListViewModel
 import com.festago.festago.presentation.ui.signin.SignInViewModel
 import com.festago.festago.presentation.ui.ticketentry.TicketEntryViewModel
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryViewModel
@@ -36,6 +37,10 @@ val FestagoViewModelFactory: ViewModelProvider.Factory = object : ViewModelProvi
             )
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(
                 authRepository = repositoryContainer.authRepository,
+            )
+            modelClass.isAssignableFrom(FestivalListViewModel::class.java) -> FestivalListViewModel(
+                festivalRepository = repositoryContainer.festivalRepository,
+                analyticsHelper = analysisContainer.analyticsHelper,
             )
 
             else -> throw IllegalArgumentException("ViewModelFactory에 정의되지않은 뷰모델을 생성하였습니다 : ${modelClass.name}")
