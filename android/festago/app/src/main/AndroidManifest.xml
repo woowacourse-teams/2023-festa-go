@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -51,6 +53,11 @@
                     android:host="oauth"
                     android:scheme="@string/kakao_redirection_scheme" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.ui.tickethistory.TicketHistoryActivity"
+            android:exported="false">
         </activity>
     </application>
 

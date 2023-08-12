@@ -11,6 +11,7 @@ import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.KakaoUserInfo;
 import com.festago.auth.dto.KakaoUserInfo.KakaoAccount;
 import com.festago.auth.dto.KakaoUserInfo.KakaoAccount.Profile;
+import com.festago.exception.BadRequestException;
 import com.festago.exception.InternalServerException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -47,8 +48,8 @@ class KakaoOAuth2UserInfoClientTest {
 
         // when & then
         assertThatThrownBy(() -> kakaoOAuth2UserInfoClient.getUserInfo("accessToken"))
-            .isInstanceOf(InternalServerException.class)
-            .hasMessage("OAuth2 제공자 서버에 잘못된 요청이 발생했습니다.");
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("잘못된 OAuth2 토큰입니다.");
     }
 
     @Test
@@ -60,8 +61,8 @@ class KakaoOAuth2UserInfoClientTest {
 
         // when & then
         assertThatThrownBy(() -> kakaoOAuth2UserInfoClient.getUserInfo("accessToken"))
-            .isInstanceOf(InternalServerException.class)
-            .hasMessage("OAuth2 제공자 서버에 잘못된 요청이 발생했습니다.");
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("잘못된 OAuth2 토큰입니다.");
     }
 
     @Test

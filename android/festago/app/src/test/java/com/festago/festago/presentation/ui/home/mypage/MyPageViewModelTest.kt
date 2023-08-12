@@ -7,6 +7,7 @@ import com.festago.festago.domain.model.Stage
 import com.festago.festago.domain.model.Ticket
 import com.festago.festago.domain.model.TicketCondition
 import com.festago.festago.domain.model.UserProfile
+import com.festago.festago.domain.repository.AuthRepository
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.domain.repository.UserRepository
 import com.festago.festago.presentation.mapper.toPresentation
@@ -18,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
@@ -29,6 +31,7 @@ class MyPageViewModelTest {
     private lateinit var vm: MyPageViewModel
     private lateinit var userRepository: UserRepository
     private lateinit var ticketRepository: TicketRepository
+    private lateinit var authRepository: AuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
     private val fakeUserProfile = UserProfile(
@@ -62,14 +65,31 @@ class MyPageViewModelTest {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         userRepository = mockk(relaxed = true)
         ticketRepository = mockk()
+        authRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
-        vm = MyPageViewModel(userRepository, ticketRepository, analyticsHelper)
+        vm = MyPageViewModel(userRepository, ticketRepository, authRepository, analyticsHelper)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun finish() {
         Dispatchers.resetMain()
+    }
+
+    @Test
+    fun `로그인 되지 않았다면 로그인 이벤트가 발생한다`() {
+        // given
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            false
+        }
+
+        // when
+        vm.loadUserInfo()
+
+        // then
+        assertThat(vm.event.getValue() is MyPageEvent.ShowSignIn).isTrue
     }
 
     @Test
@@ -85,6 +105,12 @@ class MyPageViewModelTest {
             ticketRepository.loadHistoryTickets(1)
         } answers {
             Result.success(fakeTickets)
+        }
+
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
         }
 
         // when
@@ -126,6 +152,12 @@ class MyPageViewModelTest {
             Result.success(fakeTickets)
         }
 
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
+        }
+
         // when
         vm.loadUserInfo()
 
@@ -163,6 +195,12 @@ class MyPageViewModelTest {
             Result.success(fakeTickets)
         }
 
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
+        }
+
         // when
         vm.loadUserInfo()
 
@@ -193,12 +231,77 @@ class MyPageViewModelTest {
             Result.failure(Exception())
         }
 
+        coEvery {
+            authRepository.isSigned
+        } answers {
+            true
+        }
+
         // when
         vm.loadUserInfo()
 
         // then
         val softly = SoftAssertions().apply {
             assertThat(vm.uiState.value).isInstanceOf(MyPageUiState.Error::class.java)
+
+            // and
+            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+        }
+        softly.assertAll()
+    }
+
+    @Test
+    fun `로그아웃에 성공하면 SignOutSuccess 이벤트가 발생하고 에러 상태이다`() {
+        // given
+        coEvery {
+            authRepository.signOut()
+        } answers {
+            Result.success(Unit)
+        }
+
+        // when
+        vm.signOut()
+
+        // then
+        val softly = SoftAssertions().apply {
+            assertThat(vm.event.getValue() is MyPageEvent.SignOutSuccess).isTrue
+            assertThat(vm.uiState.value is MyPageUiState.Error).isTrue
+
+            // and
+            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+        }
+        softly.assertAll()
+    }
+
+    @Test
+    fun `회원탈퇴 확인 이벤트가 발생한다`() {
+        // when
+        vm.showConfirmDelete()
+
+        // then
+        assertThat(vm.event.getValue() is MyPageEvent.ShowConfirmDelete).isTrue
+    }
+
+    @Test
+    fun `회원 탈퇴에 성공하면 DeleteAccountSuccess 이벤트가 발생하고 에러상태다`() {
+        // given
+        coEvery {
+            authRepository.deleteAccount()
+        } answers {
+            Result.success(Unit)
+        }
+
+        // when
+        vm.deleteAccount()
+
+        // then
+        val softly = SoftAssertions().apply {
+            assertThat(vm.event.getValue() is MyPageEvent.DeleteAccountSuccess).isTrue
+            assertThat(vm.uiState.value is MyPageUiState.Error).isTrue
 
             // and
             assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)

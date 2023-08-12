@@ -7,14 +7,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.domain.repository.ReservationRepository
+import com.festago.festago.domain.repository.AuthRepository
+import com.festago.festago.domain.repository.FestivalRepository
+import com.festago.festago.domain.repository.ReservationTicketRepository
+import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
 
 class TicketReserveViewModel(
-    private val reservationRepository: ReservationRepository,
+    private val reservationTicketRepository: ReservationTicketRepository,
+    private val festivalRepository: FestivalRepository,
+    private val ticketRepository: TicketRepository,
+    private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _uiState = MutableLiveData<TicketReserveUiState>(TicketReserveUiState.Loading)
@@ -26,9 +32,11 @@ class TicketReserveViewModel(
     fun loadReservation(festivalId: Long = 0, refresh: Boolean = false) {
         if (!refresh && uiState.value is TicketReserveUiState.Success) return
         viewModelScope.launch {
-            reservationRepository.loadReservation(festivalId)
+            festivalRepository.loadFestivalDetail(festivalId)
                 .onSuccess {
-                    _uiState.setValue(TicketReserveUiState.Success(it.toPresentation()))
+                    _uiState.setValue(
+                        TicketReserveUiState.Success(it.toPresentation(), authRepository.isSigned),
+                    )
                 }.onFailure {
                     _uiState.value = TicketReserveUiState.Error
                     analyticsHelper.logNetworkFailure(
@@ -41,23 +49,27 @@ class TicketReserveViewModel(
 
     fun showTicketTypes(stageId: Int) {
         viewModelScope.launch {
-            reservationRepository.loadTicketTypes(stageId)
-                .onSuccess { tickets ->
-                    _event.setValue(
-                        TicketReserveEvent.ShowTicketTypes(
-                            stageId,
-                            tickets.map { it.toPresentation() },
-                        ),
-                    )
-                }.onFailure {
-                    _uiState.setValue(TicketReserveUiState.Error)
-                }
+            if (authRepository.isSigned) {
+                reservationTicketRepository.loadTicketTypes(stageId)
+                    .onSuccess { tickets ->
+                        _event.setValue(
+                            TicketReserveEvent.ShowTicketTypes(
+                                stageId,
+                                tickets.map { it.toPresentation() },
+                            ),
+                        )
+                    }.onFailure {
+                        _uiState.setValue(TicketReserveUiState.Error)
+                    }
+            } else {
+                _event.setValue(TicketReserveEvent.ShowSignIn)
+            }
         }
     }
 
     fun reserveTicket(ticketId: Int) {
         viewModelScope.launch {
-            reservationRepository.reserveTicket(ticketId)
+            ticketRepository.reserveTicket(ticketId)
                 .onSuccess {
                     _event.setValue(TicketReserveEvent.ReserveTicketSuccess(it))
                 }.onFailure {
@@ -71,14 +83,23 @@ class TicketReserveViewModel(
         private const val KEY_LOAD_RESERVATION_LOG = "load_reservation"
 
         class TicketReservationViewModelFactory(
-            private val reservationRepository: ReservationRepository,
+            private val reservationTicketRepository: ReservationTicketRepository,
+            private val festivalRepository: FestivalRepository,
+            private val ticketRepository: TicketRepository,
+            private val authRepository: AuthRepository,
             private val analyticsHelper: AnalyticsHelper,
         ) : ViewModelProvider.Factory {
 
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(TicketReserveViewModel::class.java)) {
-                    return TicketReserveViewModel(reservationRepository, analyticsHelper) as T
+                    return TicketReserveViewModel(
+                        reservationTicketRepository = reservationTicketRepository,
+                        festivalRepository = festivalRepository,
+                        ticketRepository = ticketRepository,
+                        authRepository = authRepository,
+                        analyticsHelper = analyticsHelper,
+                    ) as T
                 }
                 throw IllegalArgumentException("Unknown ViewModel Class")
             }

@@ -65,24 +65,25 @@ public class TicketService {
     }
 
     public TicketingResponse ticketing(Long memberId, TicketingRequest request) {
-        int reserveSequence = getReserveSequence(request);
         Ticket ticket = findTicketById(request.ticketId());
         Member member = findMemberById(memberId);
+        validateAlreadyReserved(member, ticket);
+        int reservedAmount = reserveTicket(request.ticketId());
         if (!ticket.canReserve(timeProvider.now())) {
             throw new BadRequestException(ErrorCode.TICKET_RESERVE_TIMEOUT);
         }
-        MemberTicket memberTicket = memberTicketRepository.save(ticket.createMemberTicket(member, reserveSequence));
+        MemberTicket memberTicket = memberTicketRepository.save(ticket.createMemberTicket(member, reservedAmount));
         return TicketingResponse.from(memberTicket);
     }
 
-    private int getReserveSequence(TicketingRequest request) {
-        TicketAmount ticketAmount = findTicketAmountById(request.ticketId());
+    private int getReserveSequence(Long ticketId) {
+        TicketAmount ticketAmount = findTicketAmountById(ticketId);
         ticketAmount.increaseReservedAmount();
         return ticketAmount.getReservedAmount();
     }
 
-    private TicketAmount findTicketAmountById(Long ticketAmountId) {
-        return ticketAmountRepository.findByTicketIdForUpdate(ticketAmountId)
+    private TicketAmount findTicketAmountById(Long ticketId) {
+        return ticketAmountRepository.findByTicketIdForUpdate(ticketId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
     }
 
@@ -94,6 +95,18 @@ public class TicketService {
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    private void validateAlreadyReserved(Member member, Ticket ticket) {
+        if (memberTicketRepository.existsByOwnerAndStage(member, ticket.getStage())) {
+            throw new BadRequestException(ErrorCode.RESERVE_TICKET_OVER_AMOUNT);
+        }
+    }
+
+    private int reserveTicket(Long ticketId) {
+        TicketAmount ticketAmount = findTicketAmountById(ticketId);
+        ticketAmount.increaseReservedAmount();
+        return ticketAmount.getReservedAmount();
     }
 
     @Transactional(readOnly = true)

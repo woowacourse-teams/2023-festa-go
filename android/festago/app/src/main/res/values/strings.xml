@@ -42,6 +42,7 @@
     <string name="ticket_reserve_tv_ticket_count_format">(%1$s/%2$s)</string>
     <string name="ticket_reserve_tv_btn_reserve_ticket">예매 하기</string>
     <string name="ticket_reserve_tv_btn_reserve_ticket_not_open">MM월 dd일 HH:mm 오픈예정</string>
+    <string name="ticket_reserve_tv_signin">로그인 후 예매</string>
 
 
     <!-- Strings related to festival list -->
@@ -61,6 +62,7 @@
     <string name="ticket_list_tv_ticket_stage_start_time">무대 시작 시간 %s</string>
     <string name="ticket_list_tv_ticket_entry_time">입장 시작 시간 %s</string>
     <string name="ticket_list_tv_no_ticket">사용할 수 있는 티켓이 없습니다</string>
+    <string name="ticket_list_tv_error">티켓 목록 조회에 실패했습니다.</string>
 
     <!-- Strings related to ok dialog -->
     <string name="ok_dialog_btn_ok">확인</string>
@@ -90,4 +92,21 @@
     <string name="my_page_no_ticket">예매 내역이 존재하지 않습니다.</string>
     <string name="my_page_datatime_format">yyyy.MM.dd. HH:mm</string>
     <string name="my_page_tv_error">마이페이지 정보 받아오기에 실패했습니다.</string>
+
+    <!-- Strings related to ticket history -->
+    <string name="ticket_history_tv_title">예매 목록</string>
+    <string name="ticket_history_tv_ticket_start_time_prefix">[무대 시작 시간]</string>
+    <string name="ticket_history_tv_ticket_entry_time_prefix">[입장 시작 시간]</string>
+    <string name="ticket_history_tv_ticket_number_prefix">[입장 번호]</string>
+    <string name="ticket_history_tv_ticket_number_format">%d번</string>
+    <string name="ticket_history_tv_ticket_ticketing_time_prefix">[예매 일자]</string>
+    <string name="ticket_history_tv_error">티켓 조회에 실패했습니다.</string>
+    <string name="ticket_history_tv_empty">조회된 티켓이 없습니다.</string>
+
+    <!-- Strings related to confirm delete dialog -->
+    <string name="confirm_delete_dialog_title">정말 탈퇴하시겠어요?</string>
+    <string name="confirm_delete_dialog_message">탈퇴 버튼 선택 시, 계정은 삭제되며 복구되지 않습니다.</string>
+    <string name="confirm_delete_dialog_yes">탈퇴</string>
+    <string name="confirm_delete_dialog_no">취소</string>
+
 </resources>

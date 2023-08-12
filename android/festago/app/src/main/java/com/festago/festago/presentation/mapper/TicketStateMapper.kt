@@ -15,5 +15,4 @@ fun TicketConditionUiModel.toDomain(): TicketCondition =
         TicketConditionUiModel.BEFORE_ENTRY -> TicketCondition.BEFORE_ENTRY
         TicketConditionUiModel.AFTER_ENTRY -> TicketCondition.AFTER_ENTRY
         TicketConditionUiModel.AWAY -> TicketCondition.AWAY
-        else -> throw IllegalStateException()
     }

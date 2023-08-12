@@ -11,9 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.festago.festago.R
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.RetrofitClient
-import com.festago.festago.data.datasource.SharedPrefAuthDataSource
+import com.festago.festago.data.datasource.AuthLocalDataSource
 import com.festago.festago.data.repository.AuthDefaultRepository
+import com.festago.festago.data.retrofit.AuthRetrofitClient
+import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.ActivitySignInBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.home.HomeActivity
@@ -29,10 +30,11 @@ class SignInActivity : AppCompatActivity() {
     private val vm: SignInViewModel by viewModels {
         SignInViewModelFactory(
             AuthDefaultRepository(
-                RetrofitClient.instance.authRetrofitService,
-                SharedPrefAuthDataSource.getInstance(this),
+                authRetrofitService = NormalRetrofitClient.authRetrofitService,
+                authDataSource = AuthLocalDataSource.getInstance(this),
+                userRetrofitService = AuthRetrofitClient.userRetrofitService,
             ),
-            FirebaseAnalyticsHelper.getInstance(),
+            FirebaseAnalyticsHelper,
         )
     }
 
@@ -41,7 +43,6 @@ class SignInActivity : AppCompatActivity() {
         initBinding()
         initView()
         initObserve()
-        initLogout()
     }
 
     private fun initBinding() {
@@ -87,32 +88,24 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun handleSuccessEvent() {
-        finishAffinity()
-        startMain()
+        showHomeWithFinish()
     }
 
     private fun handleFailureEvent() {
         val dialog = OkDialogFragment.newInstance(FAILURE_SIGN_IN).apply {
             listener = OkDialogFragment.OnClickListener {
-                finishAffinity()
-                startMain()
+                showHomeWithFinish()
             }
         }
         dialog.show(supportFragmentManager, OkDialogFragment::class.java.name)
     }
 
-    private fun startMain() {
+    private fun showHomeWithFinish() {
         val intent = HomeActivity.getIntent(this).apply {
-            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
+        finishAffinity()
         startActivity(intent)
-    }
-
-    private fun initLogout() {
-        // todo:logout 처리 필요
-        binding.ivFestagoLogo.setOnClickListener {
-            UserApiClient.instance.unlink { error -> }
-        }
     }
 
     companion object {

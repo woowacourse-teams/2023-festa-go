@@ -2,10 +2,10 @@ package com.festago.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.application.FestivalService;
-import com.festago.application.StageService;
 import com.festago.application.TicketService;
 import com.festago.domain.Festival;
 import com.festago.domain.FestivalRepository;
@@ -14,32 +14,31 @@ import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Stage;
 import com.festago.domain.StageRepository;
-import com.festago.domain.TicketRepository;
 import com.festago.domain.TicketType;
 import com.festago.domain.TimeProvider;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketingRequest;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
-import com.festago.support.DatabaseClearExtension;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.StageFixture;
 import java.time.LocalDateTime;
-import java.util.concurrent.CountDownLatch;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
 
-@ExtendWith(DatabaseClearExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
@@ -50,17 +49,8 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     @Autowired
     MemberRepository memberRepository;
 
-    @Autowired
-    FestivalService festivalService;
-
-    @Autowired
-    StageService stageService;
-
-    @Autowired
+    @SpyBean
     MemberTicketRepository memberTicketRepository;
-
-    @Autowired
-    TicketRepository ticketRepository;
 
     @Autowired
     StageRepository stageRepository;
@@ -90,28 +80,43 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     @Sql(scripts = "/ticketing-test-data.sql",
         config = @SqlConfig(transactionMode = TransactionMode.ISOLATED))
-    void 예약() throws InterruptedException {
+    void 동시에_100명이_예약() {
         // given
-        Member member = memberRepository.findById(1L).get();
+        int tryCount = 100;
+        Member member = memberRepository.save(MemberFixture.member().build());
         TicketingRequest request = new TicketingRequest(1L);
+        ExecutorService executor = Executors.newFixedThreadPool(16);
+        doReturn(false)
+            .when(memberTicketRepository)
+            .existsByOwnerAndStage(any(Member.class), any(Stage.class));
         given(timeProvider.now())
             .willReturn(LocalDateTime.MIN);
 
-        int threadCount = 1000;
-        ExecutorService executorService = Executors.newFixedThreadPool(32);
-        CountDownLatch latch = new CountDownLatch(threadCount);
-        for (int i = 0; i < threadCount; i++) {
-            executorService.submit(() -> {
-                try {
-                    ticketService.ticketing(member.getId(), request);
-                } finally {
-                    latch.countDown();
-                }
-            });
-        }
-        latch.await();
+        // when
+        List<CompletableFuture<Void>> futures = IntStream.range(0, tryCount)
+            .mapToObj(i -> CompletableFuture.runAsync(() -> {
+                ticketService.ticketing(member.getId(), request);
+            }, executor).exceptionally(e -> null))
+            .toList();
+        futures.forEach(CompletableFuture::join);
 
-        assertThat(memberTicketRepository.count()).isEqualTo(100);
+        // then
+        assertThat(memberTicketRepository.count()).isEqualTo(50);
+    }
+
+    @Test
+    @Sql("/ticketing-test-data.sql")
+    void 중복으로_티켓을_예매하면_예외() {
+        // given
+        Member member = memberRepository.save(MemberFixture.member().build());
+        TicketingRequest request = new TicketingRequest(1L);
+        Long memberId = member.getId();
+        ticketService.ticketing(memberId, request);
+
+        // when & then
+        assertThatThrownBy(() -> ticketService.ticketing(memberId, request))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("예매 가능한 수량을 초과했습니다.");
     }
 
     @Test

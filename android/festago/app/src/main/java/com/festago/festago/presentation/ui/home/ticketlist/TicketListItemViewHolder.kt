@@ -6,7 +6,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketListBinding
-import com.festago.festago.presentation.model.TicketUiModel
+import com.festago.festago.presentation.model.MemberTicketUiModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -19,12 +19,12 @@ class TicketListItemViewHolder(
         binding.vm = vm
     }
 
-    fun bind(item: TicketUiModel) {
+    fun bind(item: MemberTicketUiModel) {
         binding.ticket = item
         setTicketEntryBtn(item)
     }
 
-    private fun setTicketEntryBtn(item: TicketUiModel) {
+    private fun setTicketEntryBtn(item: MemberTicketUiModel) {
         val btn = binding.btnTicketEntry
         val isAfterEntryTime = LocalDateTime.now().isAfter(item.entryTime)
         btn.isEnabled = isAfterEntryTime
@@ -35,7 +35,7 @@ class TicketListItemViewHolder(
     private fun setTicketEntryBtnText(
         isAfterEntryTime: Boolean,
         btn: Button,
-        ticket: TicketUiModel,
+        ticket: MemberTicketUiModel,
     ) {
         if (isAfterEntryTime) {
             btn.text = btn.context.getString(R.string.ticket_list_btn_ticket_entry)

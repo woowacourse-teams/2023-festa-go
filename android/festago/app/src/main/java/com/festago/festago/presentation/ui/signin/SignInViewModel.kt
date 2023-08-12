@@ -35,14 +35,14 @@ class SignInViewModel(
     }
 
     class SignInViewModelFactory(
-        private val socialSignRepository: AuthRepository,
+        private val authRepository: AuthRepository,
         private val analyticsHelper: AnalyticsHelper,
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
-                return SignInViewModel(socialSignRepository, analyticsHelper) as T
+                return SignInViewModel(authRepository, analyticsHelper) as T
             }
             throw IllegalArgumentException("Unknown ViewModel Class")
         }

@@ -18,7 +18,6 @@ import com.festago.dto.FestivalResponse;
 import com.festago.support.FestivalFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
-import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,9 +42,6 @@ class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     TicketRepository ticketRepository;
-
-    @Autowired
-    EntityManager entityManager;
 
     @Test
     void 축제를_생성한다() {
@@ -73,9 +69,6 @@ class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
         Ticket ticket2 = ticketRepository.save(
             TicketFixture.ticket().stage(stage).ticketType(TicketType.STUDENT).build());
         ticket2.addTicketEntryTime(ticketOpenTime.minusHours(1), LocalDateTime.now().minusMinutes(10), 200);
-
-        entityManager.flush();
-        entityManager.clear();
 
         // when
         FestivalDetailResponse response = festivalService.findDetail(festival.getId());

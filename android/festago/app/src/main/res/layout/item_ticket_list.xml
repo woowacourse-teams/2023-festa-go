@@ -13,7 +13,7 @@
 
         <variable
             name="ticket"
-            type="com.festago.festago.presentation.model.TicketUiModel" />
+            type="com.festago.festago.presentation.model.MemberTicketUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

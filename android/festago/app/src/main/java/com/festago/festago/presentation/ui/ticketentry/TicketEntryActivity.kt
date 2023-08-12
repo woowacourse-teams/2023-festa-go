@@ -8,8 +8,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.RetrofitClient
 import com.festago.festago.data.repository.TicketDefaultRepository
+import com.festago.festago.data.retrofit.AuthRetrofitClient
 import com.festago.festago.databinding.ActivityTicketEntryBinding
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.ui.ticketentry.TicketEntryViewModel.TicketEntryViewModelFactory
@@ -23,9 +23,9 @@ class TicketEntryActivity : AppCompatActivity() {
     private val vm: TicketEntryViewModel by viewModels {
         TicketEntryViewModelFactory(
             TicketDefaultRepository(
-                ticketRetrofitService = RetrofitClient.instance.ticketRetrofitService,
+                ticketRetrofitService = AuthRetrofitClient.ticketRetrofitService,
             ),
-            FirebaseAnalyticsHelper.getInstance(),
+            FirebaseAnalyticsHelper,
         )
     }
 
