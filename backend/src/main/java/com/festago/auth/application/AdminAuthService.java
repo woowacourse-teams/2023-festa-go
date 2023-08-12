@@ -7,8 +7,10 @@ import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.Role;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.AdminLoginRequest;
+import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
+import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.UnauthorizedException;
 import java.util.Optional;
@@ -66,5 +68,11 @@ public class AdminAuthService {
         if (admin.isEmpty()) {
             adminRepository.save(new Admin("admin", passwordEncoder.encode(password)));
         }
+    }
+
+    public void signup(AdminSignupRequest request) {
+        adminRepository.findByUsername(request.username()).ifPresentOrElse(it -> {
+            throw new BadRequestException(ErrorCode.DUPLICATE_ADMIN_ACCOUNT);
+        }, () -> adminRepository.save(new Admin(request.username(), passwordEncoder.encode(request.password()))));
     }
 }
