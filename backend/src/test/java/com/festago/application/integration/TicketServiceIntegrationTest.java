@@ -3,8 +3,8 @@ package com.festago.application.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
 
 import com.festago.application.TicketService;
 import com.festago.domain.Festival;
@@ -33,8 +33,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
@@ -111,6 +111,8 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         Member member = memberRepository.save(MemberFixture.member().build());
         TicketingRequest request = new TicketingRequest(1L);
         Long memberId = member.getId();
+        given(timeProvider.now())
+            .willReturn(LocalDateTime.MIN);
         ticketService.ticketing(memberId, request);
 
         // when & then

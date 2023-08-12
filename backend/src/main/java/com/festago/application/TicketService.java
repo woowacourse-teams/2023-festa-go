@@ -68,11 +68,11 @@ public class TicketService {
         Ticket ticket = findTicketById(request.ticketId());
         Member member = findMemberById(memberId);
         validateAlreadyReserved(member, ticket);
-        int reservedAmount = reserveTicket(request.ticketId());
+        int reserveSequence = getReserveSequence(request.ticketId());
         if (!ticket.canReserve(timeProvider.now())) {
             throw new BadRequestException(ErrorCode.TICKET_RESERVE_TIMEOUT);
         }
-        MemberTicket memberTicket = memberTicketRepository.save(ticket.createMemberTicket(member, reservedAmount));
+        MemberTicket memberTicket = memberTicketRepository.save(ticket.createMemberTicket(member, reserveSequence));
         return TicketingResponse.from(memberTicket);
     }
 
@@ -101,12 +101,6 @@ public class TicketService {
         if (memberTicketRepository.existsByOwnerAndStage(member, ticket.getStage())) {
             throw new BadRequestException(ErrorCode.RESERVE_TICKET_OVER_AMOUNT);
         }
-    }
-
-    private int reserveTicket(Long ticketId) {
-        TicketAmount ticketAmount = findTicketAmountById(ticketId);
-        ticketAmount.increaseReservedAmount();
-        return ticketAmount.getReservedAmount();
     }
 
     @Transactional(readOnly = true)
