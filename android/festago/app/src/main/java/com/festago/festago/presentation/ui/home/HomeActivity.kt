@@ -7,12 +7,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.festago.festago.R
-import com.festago.festago.data.datasource.AuthLocalDataSource
-import com.festago.festago.data.repository.AuthDefaultRepository
-import com.festago.festago.data.retrofit.AuthRetrofitClient
-import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.ActivityHomeBinding
-import com.festago.festago.presentation.ui.home.HomeViewModel.HomeViewModelFactory
+import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
@@ -23,15 +19,7 @@ class HomeActivity : AppCompatActivity() {
     private var _binding: ActivityHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val vm: HomeViewModel by viewModels {
-        HomeViewModelFactory(
-            AuthDefaultRepository(
-                authRetrofitService = NormalRetrofitClient.authRetrofitService,
-                authDataSource = AuthLocalDataSource(this),
-                userRetrofitService = AuthRetrofitClient.userRetrofitService,
-            ),
-        )
-    }
+    private val vm: HomeViewModel by viewModels { FestagoViewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
