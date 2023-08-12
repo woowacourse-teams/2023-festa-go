@@ -1,11 +1,12 @@
 package com.festago.application.integration;
 
+import com.festago.support.DatabaseClearExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-@Transactional
+@ExtendWith(DatabaseClearExtension.class)
 public abstract class ApplicationIntegrationTest {
 
 }
