@@ -5,6 +5,10 @@ import com.festago.festago.analytics.FirebaseAnalyticsHelper
 import com.festago.festago.data.datasource.AuthLocalDataSource
 import com.festago.festago.data.retrofit.AuthRetrofitClient
 import com.festago.festago.data.retrofit.NormalRetrofitClient
+import com.festago.festago.di.AnalysisContainer
+import com.festago.festago.di.LocalDataSourceContainer
+import com.festago.festago.di.RepositoryContainer
+import com.festago.festago.di.ServiceContainer
 import com.kakao.sdk.common.KakaoSdk
 
 class FestagoApplication : Application() {
@@ -17,14 +21,33 @@ class FestagoApplication : Application() {
     }
 
     private fun initRetrofit() {
-        val authLocalDataSource = AuthLocalDataSource.getInstance(applicationContext)
+        val authLocalDataSource = AuthLocalDataSource(applicationContext)
         NormalRetrofitClient.init(BuildConfig.BASE_URL)
         AuthRetrofitClient.init(BuildConfig.BASE_URL) {
             authLocalDataSource.token ?: NULL_TOKEN
         }
+
+        DependencyContainer.serviceContainer = ServiceContainer(
+            NormalRetrofitClient,
+            AuthRetrofitClient,
+        )
+        DependencyContainer.localDataSourceContainer = LocalDataSourceContainer(applicationContext)
+
+        DependencyContainer.repositoryContainer = RepositoryContainer(
+            DependencyContainer.localDataSourceContainer,
+            DependencyContainer.serviceContainer,
+        )
+
+        FirebaseAnalyticsHelper.init(applicationContext)
+        DependencyContainer.analysisContainer = AnalysisContainer()
     }
 
-    companion object {
+    companion object DependencyContainer {
         private const val NULL_TOKEN = "null"
+
+        lateinit var serviceContainer: ServiceContainer
+        lateinit var localDataSourceContainer: LocalDataSourceContainer
+        lateinit var repositoryContainer: RepositoryContainer
+        lateinit var analysisContainer: AnalysisContainer
     }
 }
