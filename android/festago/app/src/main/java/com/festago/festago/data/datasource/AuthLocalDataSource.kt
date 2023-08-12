@@ -5,9 +5,7 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
-class AuthLocalDataSource private constructor(
-    context: Context,
-) : AuthDataSource {
+class AuthLocalDataSource(context: Context) : AuthDataSource {
 
     private val sharedPreference: SharedPreferences by lazy {
         val masterKeyAlias = MasterKey
@@ -27,13 +25,5 @@ class AuthLocalDataSource private constructor(
     companion object {
         private const val ENCRYPTED_PREF_FILE = "encrypted_pref_file"
         private const val TOKEN_KEY = "TOKEN_KEY"
-
-        private var INSTANCE: AuthLocalDataSource? = null
-
-        @Synchronized
-        fun getInstance(context: Context): AuthLocalDataSource {
-            return INSTANCE ?: AuthLocalDataSource(context.applicationContext)
-                .also { INSTANCE = it }
-        }
     }
 }
