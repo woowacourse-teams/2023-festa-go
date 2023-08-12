@@ -11,14 +11,7 @@ import com.festago.festago.presentation.ui.FestagoViewModelFactory
 class TicketHistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTicketHistoryBinding
 
-    private val vm: TicketHistoryViewModel by viewModels {
-        TicketHistoryViewModelFactory(
-            TicketDefaultRepository(
-                ticketRetrofitService = AuthRetrofitClient.ticketRetrofitService,
-            ),
-            FirebaseAnalyticsHelper,
-        )
-    }
+    private val vm: TicketHistoryViewModel by viewModels { FestagoViewModelFactory }
 
     private var adapter: TicketHistoryAdapter = TicketHistoryAdapter()
 
