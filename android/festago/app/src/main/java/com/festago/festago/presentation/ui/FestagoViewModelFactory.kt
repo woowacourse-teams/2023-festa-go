@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.festago.festago.FestagoApplication
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryViewModel
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 
 val FestagoViewModelFactory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
     val repositoryContainer = FestagoApplication.DependencyContainer.repositoryContainer
@@ -12,6 +13,14 @@ val FestagoViewModelFactory: ViewModelProvider.Factory = object : ViewModelProvi
         return when {
             modelClass.isAssignableFrom(TicketHistoryViewModel::class.java) -> TicketHistoryViewModel(
                 ticketRepository = repositoryContainer.ticketRepository,
+                analyticsHelper = analysisContainer.analyticsHelper,
+            )
+
+            modelClass.isAssignableFrom(TicketReserveViewModel::class.java) -> TicketReserveViewModel(
+                reservationTicketRepository = repositoryContainer.reservationTicketRepository,
+                festivalRepository = repositoryContainer.festivalRepository,
+                ticketRepository = repositoryContainer.ticketRepository,
+                authRepository = repositoryContainer.authRepository,
                 analyticsHelper = analysisContainer.analyticsHelper,
             )
 

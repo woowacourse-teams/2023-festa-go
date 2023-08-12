@@ -33,7 +33,7 @@ class RepositoryContainer(
         userProfileService = serviceContainer.userRetrofitService,
     )
 
-    val reservationRepository: ReservationTicketRepository = ReservationTicketDefaultRepository(
+    val reservationTicketRepository: ReservationTicketRepository = ReservationTicketDefaultRepository(
         reservationTicketRetrofitService = serviceContainer.reservationTicketRetrofitService,
     )
 }
