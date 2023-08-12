@@ -8,16 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
-import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.datasource.AuthLocalDataSource
-import com.festago.festago.data.repository.AuthDefaultRepository
-import com.festago.festago.data.repository.TicketDefaultRepository
-import com.festago.festago.data.repository.UserDefaultRepository
-import com.festago.festago.data.retrofit.AuthRetrofitClient
-import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.FragmentMyPageBinding
+import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.home.HomeActivity
-import com.festago.festago.presentation.ui.home.mypage.MyPageViewModel.MyPageViewModelFactory
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryActivity
 
@@ -26,22 +19,7 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
 
-    private val vm: MyPageViewModel by viewModels {
-        MyPageViewModelFactory(
-            userRepository = UserDefaultRepository(
-                userProfileService = AuthRetrofitClient.userRetrofitService,
-            ),
-            ticketRepository = TicketDefaultRepository(
-                ticketRetrofitService = AuthRetrofitClient.ticketRetrofitService,
-            ),
-            authRepository = AuthDefaultRepository(
-                authRetrofitService = NormalRetrofitClient.authRetrofitService,
-                authDataSource = AuthLocalDataSource(requireContext()),
-                userRetrofitService = AuthRetrofitClient.userRetrofitService,
-            ),
-            analyticsHelper = FirebaseAnalyticsHelper,
-        )
-    }
+    private val vm: MyPageViewModel by viewModels { FestagoViewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,

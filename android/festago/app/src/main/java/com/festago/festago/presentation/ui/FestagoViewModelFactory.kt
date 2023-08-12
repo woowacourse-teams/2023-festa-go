@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.festago.festago.FestagoApplication
 import com.festago.festago.presentation.ui.home.HomeViewModel
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListViewModel
+import com.festago.festago.presentation.ui.home.mypage.MyPageViewModel
 import com.festago.festago.presentation.ui.signin.SignInViewModel
 import com.festago.festago.presentation.ui.ticketentry.TicketEntryViewModel
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryViewModel
@@ -40,6 +41,12 @@ val FestagoViewModelFactory: ViewModelProvider.Factory = object : ViewModelProvi
             )
             modelClass.isAssignableFrom(FestivalListViewModel::class.java) -> FestivalListViewModel(
                 festivalRepository = repositoryContainer.festivalRepository,
+                analyticsHelper = analysisContainer.analyticsHelper,
+            )
+            modelClass.isAssignableFrom(MyPageViewModel::class.java) -> MyPageViewModel(
+                userRepository = repositoryContainer.userRepository,
+                ticketRepository = repositoryContainer.ticketRepository,
+                authRepository = repositoryContainer.authRepository,
                 analyticsHelper = analysisContainer.analyticsHelper,
             )
 
