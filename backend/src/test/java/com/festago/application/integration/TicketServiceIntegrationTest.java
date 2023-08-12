@@ -3,7 +3,7 @@ package com.festago.application.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.when;
+import static org.mockito.Mockito.doReturn;
 
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
@@ -96,8 +96,9 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         Member member = memberRepository.save(MemberFixture.member().build());
         TicketingRequest request = new TicketingRequest(1L);
         ExecutorService executor = Executors.newFixedThreadPool(16);
-        when(memberTicketRepository.existsByOwnerAndStage(any(Member.class), any(Stage.class)))
-            .thenReturn(false);
+        doReturn(false)
+            .when(memberTicketRepository)
+            .existsByOwnerAndStage(any(Member.class), any(Stage.class));
 
         // when
         List<CompletableFuture<Void>> futures = IntStream.range(0, tryCount)

@@ -35,7 +35,7 @@ public class Ticket extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private TicketType ticketType;
 
-    @OneToOne(mappedBy = "ticket", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "ticket", optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private TicketAmount ticketAmount;
 
     @OneToMany(cascade = CascadeType.PERSIST)

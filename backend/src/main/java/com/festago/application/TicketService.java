@@ -62,23 +62,12 @@ public class TicketService {
     }
 
     public TicketingResponse ticketing(Long memberId, TicketingRequest request) {
-        int reservedAmount = reserveTicket(request.ticketId());
         Ticket ticket = findTicketById(request.ticketId());
         Member member = findMemberById(memberId);
         validateAlreadyReserved(member, ticket);
+        int reservedAmount = reserveTicket(request.ticketId());
         MemberTicket memberTicket = memberTicketRepository.save(ticket.createMemberTicket(member, reservedAmount));
         return TicketingResponse.from(memberTicket);
-    }
-
-    private int reserveTicket(Long ticketId) {
-        TicketAmount ticketAmount = findTicketAmountById(ticketId);
-        ticketAmount.increaseReservedAmount();
-        return ticketAmount.getReservedAmount();
-    }
-
-    private TicketAmount findTicketAmountById(Long ticketId) {
-        return ticketAmountRepository.findByTicketIdForUpdate(ticketId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
     }
 
     private Ticket findTicketById(Long ticketId) {
@@ -95,6 +84,17 @@ public class TicketService {
         if (memberTicketRepository.existsByOwnerAndStage(member, ticket.getStage())) {
             throw new BadRequestException(ErrorCode.RESERVE_TICKET_OVER_AMOUNT);
         }
+    }
+
+    private int reserveTicket(Long ticketId) {
+        TicketAmount ticketAmount = findTicketAmountById(ticketId);
+        ticketAmount.increaseReservedAmount();
+        return ticketAmount.getReservedAmount();
+    }
+
+    private TicketAmount findTicketAmountById(Long ticketId) {
+        return ticketAmountRepository.findByTicketIdForUpdate(ticketId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
