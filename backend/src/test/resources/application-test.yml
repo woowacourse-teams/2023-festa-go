@@ -11,6 +11,8 @@ spring:
     open-in-view: false
 
 logging:
+  file:
+    path: ./
   level:
     org:
       hibernate:

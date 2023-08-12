@@ -1,0 +1,54 @@
+name: Android CI
+
+on:
+  push:
+    branches:
+      - dev
+    paths: ['android/festago/**']
+  pull_request:
+    branches:
+      - dev
+    paths: 'android/festago/**'
+
+defaults:
+  run:
+    working-directory: android/festago
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: zulu
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: add google-services.json
+      run: echo '${{ secrets.ANDROID_USER_GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
+      
+    - name: add local.properties
+      run: |
+        echo kakao_native_app_key=\"${{ secrets.ANDROID_USER_KAKAO_NATIVE_APP_KEY }}\" >> ./local.properties
+        echo kakao_redirection_scheme=\"${{ secrets.ANDROID_USER_KAKAO_REDIRECTION_SCHEME }}\" >> ./local.properties
+        echo base_url=\"$${{ secrets.ANDROID_USER_BASE_URL }}\" >> ./local.properties
+      
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Run ktlint
+      run: ./gradlew ktlintCheck
+
+    - name: Run unit tests
+      run: ./gradlew testDebugUnitTest
+        
+    - name: Build assemble release apk
+      run: ./gradlew assembleRelease      
+

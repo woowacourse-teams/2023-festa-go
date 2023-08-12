@@ -28,7 +28,7 @@ public class FestagoOAuth2Client implements OAuth2Client {
     @Override
     public UserInfo getUserInfo(String accessToken) {
         return userInfoMap.getOrDefault(accessToken, () -> {
-            throw new BadRequestException(ErrorCode.OAUTH2_INVALID_CODE);
+            throw new BadRequestException(ErrorCode.OAUTH2_INVALID_TOKEN);
         }).get();
     }
 

@@ -9,7 +9,7 @@ import com.festago.festago.databinding.FragmentTicketReserveBottomSheetBinding
 import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
-import com.festago.festago.presentation.util.getParcelableArrayCompat
+import com.festago.festago.presentation.util.getParcelableArrayListCompat
 import com.festago.festago.presentation.util.getParcelableCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -47,7 +47,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
             getParcelableCompat<ReservationStageUiModel>(KEY_STAGE)?.let { stage ->
                 binding.stage = stage
             }
-            getParcelableArrayCompat<ReservationTicketUiModel>(KEY_ITEM)?.let {
+            getParcelableArrayListCompat<ReservationTicketUiModel>(KEY_ITEM)?.let {
                 ticketTypeAdapter.submitList(it.map(::TicketReserveBottomItem))
             }
         }
@@ -74,7 +74,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
         ) = TicketReserveBottomSheetFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(KEY_STAGE, stage)
-                putParcelableArray(KEY_ITEM, items.toTypedArray())
+                putParcelableArrayList(KEY_ITEM, items as ArrayList)
             }
         }
     }

@@ -8,6 +8,7 @@ plugins {
     kotlin("plugin.serialization") version "1.8.22"
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -46,7 +47,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     dataBinding {
@@ -55,6 +56,10 @@ android {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -127,6 +132,9 @@ dependencies {
 
     // kakao login
     implementation("com.kakao.sdk:v2-user:2.12.0")
+
+    // Encrypted SharedPreference
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
 }
 
 fun getSecretKey(propertyKey: String): String {

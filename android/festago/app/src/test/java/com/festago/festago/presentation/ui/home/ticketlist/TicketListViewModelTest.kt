@@ -5,6 +5,7 @@ import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.domain.model.Ticket
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.fixture.TicketFixture
+import com.festago.festago.presentation.mapper.toMemberTicketModel
 import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -66,7 +67,7 @@ class TicketListViewModelTest {
 
             // and
             val actual = (vm.uiState.value as TicketListUiState.Success).tickets
-            val expected = tickets.toPresentation()
+            val expected = tickets.toPresentation().toMemberTicketModel()
             assertThat(actual).isEqualTo(expected)
         }
         softly.assertAll()
@@ -93,7 +94,7 @@ class TicketListViewModelTest {
 
             // and
             val actual = (vm.uiState.value as TicketListUiState.Success).tickets
-            val expected = fakeEmptyTickets.toPresentation()
+            val expected = fakeEmptyTickets.toPresentation().toMemberTicketModel()
             assertThat(actual).isEqualTo(expected)
         }
         softly.assertAll()
