@@ -5,6 +5,7 @@ import com.festago.auth.domain.Login;
 import com.festago.auth.dto.LoginMember;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,7 @@ public class AuthController {
     }
 
     @DeleteMapping
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Void> deleteMember(@Login LoginMember loginMember) {
         authService.deleteMember(loginMember.memberId());
         return ResponseEntity.ok()
