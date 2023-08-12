@@ -5,6 +5,7 @@ import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
 import com.festago.auth.application.AdminAuthService;
+import com.festago.auth.dto.AdminInitializeRequest;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.dto.AdminResponse;
 import com.festago.dto.FestivalCreateRequest;
@@ -119,5 +120,11 @@ public class AdminController {
     @GetMapping("/warn")
     public ResponseEntity<Void> getWarn() {
         throw new InternalServerException(ErrorCode.FOR_TEST_ERROR);
+    }
+
+    @PostMapping("/initialize")
+    public ResponseEntity<Void> initialFirstAdmin(@RequestBody AdminInitializeRequest request) {
+        adminAuthService.initialFirstAdminAccount(request.password());
+        return ResponseEntity.notFound().build();
     }
 }

@@ -11,6 +11,7 @@ import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.UnauthorizedException;
+import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,5 +59,12 @@ public class AdminAuthService {
                 return memberRepository.save(newMember);
             });
         return new AuthPayload(member.getId(), Role.ADMIN);
+    }
+
+    public void initialFirstAdminAccount(String password) {
+        Optional<Admin> admin = adminRepository.findByUsername("admin");
+        if (admin.isEmpty()) {
+            adminRepository.save(new Admin("admin", passwordEncoder.encode(password)));
+        }
     }
 }
