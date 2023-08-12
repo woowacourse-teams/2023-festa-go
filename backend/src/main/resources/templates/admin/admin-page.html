@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>어드민 페이지</title>
-  <link href="style.css" rel="stylesheet">
+  <link th:href="@{/css/admin/admin-page.css}" rel="stylesheet">
 </head>
 <body>
 <div class="container">
   <div class="form-section">
     <h2>축제 생성 요청</h2>
-    <form id="createFestivalForm" method="post" th:action="@{/admin/festivals}">
+    <form id="createFestivalForm" method="post" action="#">
       <label for="name">이름:</label>
       <input id="name" name="name" required type="text"><br>
 
@@ -28,7 +28,7 @@
 
   <div class="form-section">
     <h2>공연 생성 요청</h2>
-    <form id="createPerformanceForm" method="post" th:action="@{/admin/stages}">
+    <form id="createPerformanceForm" method="post" action="#">
       <label for="startTime">시작 시간:</label>
       <input id="startTime" name="startTime" required type="datetime-local"><br>
 
@@ -47,7 +47,7 @@
 
   <div class="form-section">
     <h2>티켓 생성 요청</h2>
-    <form id="createTicketForm" method="post" th:action="@{/admin/tickets}">
+    <form id="createTicketForm" method="post" action="#">
       <label for="stageId">공연장 ID:</label>
       <input id="stageId" name="stageId" required type="text"><br>
 
@@ -69,6 +69,6 @@
 </div>
 <div id="dataSection"></div>
 
-<script th:src="@{/admin.js}" type="text/javascript"></script>
+<script th:src="@{/admin/admin-page.js}" type="text/javascript" defer></script>
 </body>
 </html>

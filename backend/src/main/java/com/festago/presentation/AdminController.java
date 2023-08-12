@@ -67,7 +67,12 @@ public class AdminController {
 
     @GetMapping
     public ModelAndView adminPage() {
-        return new ModelAndView("admin");
+        return new ModelAndView("admin/admin-page");
+    }
+
+    @GetMapping("/login")
+    public ModelAndView loginPage() {
+        return new ModelAndView("admin/login");
     }
 
     @GetMapping("/data")
