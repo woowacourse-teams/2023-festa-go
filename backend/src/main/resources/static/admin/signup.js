@@ -2,9 +2,17 @@ document.getElementById("signupForm").addEventListener("submit",
     function (event) {
       event.preventDefault();
       const formData = new FormData(event.target);
+      const username = formData.get("username");
+      const password = formData.get("password");
+      const confirmPassword = formData.get("confirmPassword");
+      if (password !== confirmPassword) {
+        alert("비밀번호와 확인 비밀번호가 맞지 않습니다!")
+        return;
+      }
+
       const signupRequest = {
-        username: formData.get("username"),
-        password: formData.get("password"),
+        username: username,
+        password: password,
       };
 
       fetch("/admin/signup", {
