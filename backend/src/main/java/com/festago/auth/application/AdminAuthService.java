@@ -75,7 +75,7 @@ public class AdminAuthService {
 
     private void validateExistsUsername(String username) {
         if (adminRepository.existsByUsername(username)) {
-            throw new BadRequestException(ErrorCode.DUPLICATE_ADMIN_ACCOUNT);
+            throw new BadRequestException(ErrorCode.DUPLICATE_ACCOUNT_USERNAME);
         }
     }
 }
