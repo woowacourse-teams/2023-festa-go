@@ -9,12 +9,11 @@ import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.domain.Member;
-import com.festago.domain.MemberRepository;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.UnauthorizedException;
+import java.util.Objects;
 import java.util.Optional;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,23 +21,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AdminAuthService {
 
+    private static final String ADMIN = "admin";
+
     private final AuthProvider authProvider;
     private final AdminRepository adminRepository;
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public AdminAuthService(AuthProvider authProvider, AdminRepository adminRepository,
-                            MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+    public AdminAuthService(AuthProvider authProvider, AdminRepository adminRepository) {
         this.authProvider = authProvider;
         this.adminRepository = adminRepository;
-        this.memberRepository = memberRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
     public String login(AdminLoginRequest request) {
         Admin admin = findAdmin(request);
-        validatePassword(request.password(), admin.getPassword());
+        validatePassword(admin.getPassword(), request.password());
         AuthPayload authPayload = getAuthPayload(admin);
         return authProvider.provide(authPayload);
     }
@@ -48,31 +44,37 @@ public class AdminAuthService {
             .orElseThrow(() -> new UnauthorizedException(ErrorCode.INVALID_PASSWORD));
     }
 
-    private void validatePassword(String password, String encodedPassword) {
-        if (!passwordEncoder.matches(password, encodedPassword)) {
+    private void validatePassword(String password, String comparePassword) {
+        if (!Objects.equals(password, comparePassword)) {
             throw new UnauthorizedException(ErrorCode.INVALID_PASSWORD);
         }
     }
 
     private AuthPayload getAuthPayload(Admin admin) {
-        Member member = memberRepository.findBySocialIdAndSocialType(admin.getUsername(), SocialType.ADMIN)
-            .orElseGet(() -> {
-                Member newMember = new Member(admin.getUsername(), SocialType.ADMIN, admin.getUsername(), null);
-                return memberRepository.save(newMember);
-            });
-        return new AuthPayload(member.getId(), Role.ADMIN);
+        Long memberId = admin.getMemberId();
+        return new AuthPayload(memberId, Role.ADMIN);
     }
 
     public void initialFirstAdminAccount(String password) {
-        Optional<Admin> admin = adminRepository.findByUsername("admin");
+        Optional<Admin> admin = adminRepository.findByUsername(ADMIN);
+        Member member = new Member(ADMIN, SocialType.FESTAGO, ADMIN, "");
         if (admin.isEmpty()) {
-            adminRepository.save(new Admin("admin", passwordEncoder.encode(password)));
+            adminRepository.save(new Admin(ADMIN, password, member));
         }
     }
 
     public void signup(AdminSignupRequest request) {
-        adminRepository.findByUsername(request.username()).ifPresentOrElse(it -> {
+        String username = request.username();
+        String password = request.password();
+        validateExistsUsername(username);
+        Member member = new Member(username, SocialType.FESTAGO, username, "");
+        Admin admin = new Admin(username, password, member);
+        adminRepository.save(admin);
+    }
+
+    private void validateExistsUsername(String username) {
+        if (adminRepository.existsByUsername(username)) {
             throw new BadRequestException(ErrorCode.DUPLICATE_ADMIN_ACCOUNT);
-        }, () -> adminRepository.save(new Admin(request.username(), passwordEncoder.encode(request.password()))));
+        }
     }
 }
