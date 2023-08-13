@@ -6,13 +6,13 @@ import com.festago.exception.InternalServerException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
+import java.util.Optional;
 
 public class OAuth2Clients {
 
-    private final Map<SocialType, Supplier<OAuth2Client>> oAuth2ClientMap;
+    private final Map<SocialType, OAuth2Client> oAuth2ClientMap;
 
-    private OAuth2Clients(Map<SocialType, Supplier<OAuth2Client>> oAuth2ClientMap) {
+    private OAuth2Clients(Map<SocialType, OAuth2Client> oAuth2ClientMap) {
         this.oAuth2ClientMap = oAuth2ClientMap;
     }
 
@@ -21,14 +21,13 @@ public class OAuth2Clients {
     }
 
     public OAuth2Client getClient(SocialType socialType) {
-        return oAuth2ClientMap.getOrDefault(socialType, () -> {
-            throw new BadRequestException(ErrorCode.OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE);
-        }).get();
+        return Optional.ofNullable(oAuth2ClientMap.get(socialType))
+            .orElseThrow(() -> new BadRequestException(ErrorCode.OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE));
     }
 
     public static class OAuth2ClientsBuilder {
 
-        private final Map<SocialType, Supplier<OAuth2Client>> oAuth2ClientMap = new EnumMap<>(SocialType.class);
+        private final Map<SocialType, OAuth2Client> oAuth2ClientMap = new EnumMap<>(SocialType.class);
 
         private OAuth2ClientsBuilder() {
         }
@@ -45,7 +44,7 @@ public class OAuth2Clients {
             if (oAuth2ClientMap.containsKey(socialType)) {
                 throw new InternalServerException(ErrorCode.DUPLICATE_SOCIAL_TYPE);
             }
-            oAuth2ClientMap.put(socialType, () -> oAuth2Client);
+            oAuth2ClientMap.put(socialType, oAuth2Client);
             return this;
         }
 
