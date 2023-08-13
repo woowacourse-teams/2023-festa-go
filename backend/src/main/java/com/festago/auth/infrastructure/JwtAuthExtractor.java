@@ -33,7 +33,7 @@ public class JwtAuthExtractor implements AuthExtractor {
         Claims claims = getClaims(token);
         Long memberId = claims.get(MEMBER_ID_KEY, Long.class);
         String role = claims.get(ROLE_ID_KEY, String.class);
-        return new AuthPayload(memberId, Role.of(role));
+        return new AuthPayload(memberId, Role.from(role));
     }
 
     private Claims getClaims(String code) {

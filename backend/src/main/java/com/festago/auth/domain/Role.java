@@ -8,7 +8,7 @@ public enum Role {
     ADMIN,
     ;
 
-    public static Role of(String role) {
+    public static Role from(String role) {
         try {
             return valueOf(role);
         } catch (NullPointerException | IllegalArgumentException e) {
