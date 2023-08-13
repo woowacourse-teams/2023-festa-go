@@ -8,6 +8,7 @@ import com.festago.auth.application.AdminAuthService;
 import com.festago.auth.dto.AdminInitializeRequest;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
+import com.festago.auth.dto.AdminSignupResponse;
 import com.festago.dto.AdminResponse;
 import com.festago.dto.FestivalCreateRequest;
 import com.festago.dto.FestivalResponse;
@@ -135,9 +136,9 @@ public class AdminController {
     }
 
     @PostMapping("/signup") // TODO 추후 최초 admin 계정만 접속하도록
-    public ResponseEntity<Void> signupAdminAccount(@RequestBody AdminSignupRequest request) {
-        adminAuthService.signup(request);
+    public ResponseEntity<AdminSignupResponse> signupAdminAccount(@RequestBody AdminSignupRequest request) {
+        AdminSignupResponse response = adminAuthService.signup(request);
         return ResponseEntity.ok()
-            .build();
+            .body(response);
     }
 }
