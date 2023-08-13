@@ -12,6 +12,7 @@ import com.festago.dto.TicketingRequest;
 import com.festago.dto.TicketingResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/member-tickets")
+@Tag(name = "유저 티켓 요청")
 public class MemberTicketController {
 
     private final EntryService entryService;

@@ -5,6 +5,7 @@ import com.festago.auth.domain.Login;
 import com.festago.auth.dto.LoginMember;
 import com.festago.dto.MemberProfileResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/members")
+@Tag(name = "유저 정보 요청")
 public class MemberController {
 
     private final MemberService memberService;
