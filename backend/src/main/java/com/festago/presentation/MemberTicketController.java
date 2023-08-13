@@ -10,6 +10,7 @@ import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.dto.TicketingRequest;
 import com.festago.dto.TicketingResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,7 @@ public class MemberTicketController {
     }
 
     @PostMapping("/{memberTicketId}/qr")
+    @Operation(description = "티켓 제시용 QR 코드를 생성한다.")
     public ResponseEntity<EntryCodeResponse> createQR(
         @Login LoginMember loginMember,
         @PathVariable Long memberTicketId) {
@@ -49,6 +51,7 @@ public class MemberTicketController {
     }
 
     @PostMapping
+    @Operation(description = "티켓을 예매한다.")
     public ResponseEntity<TicketingResponse> ticketing(
         @Login LoginMember loginMember,
         @RequestBody TicketingRequest request) {
@@ -58,6 +61,7 @@ public class MemberTicketController {
     }
 
     @GetMapping("/{memberTicketId}")
+    @Operation(description = "로그인한 맴버의 특정 티켓을 조회한다.")
     public ResponseEntity<MemberTicketResponse> findById(
         @Login LoginMember loginMember,
         @PathVariable Long memberTicketId) {
@@ -67,6 +71,7 @@ public class MemberTicketController {
     }
 
     @GetMapping
+    @Operation(description = "유저가 가진 모든 티켓을 조회한다.")
     public ResponseEntity<MemberTicketsResponse> findAll(
         @Login LoginMember loginMember,
         @RequestParam(defaultValue = "0") int page,
@@ -78,6 +83,7 @@ public class MemberTicketController {
     }
 
     @GetMapping("/current")
+    @Operation(description = "유저의 티켓 중 입장 시간이 24시간이상 지나지 않은 티켓을 현재 시간에 가까운 순서대로 입장 가능, 입장 예정 티켓으로 구분하여 반환하다.")
     public ResponseEntity<MemberTicketsResponse> findCurrent(@Login LoginMember loginMember) {
         Pageable pageable = PageRequest.of(0, 100);
         MemberTicketsResponse response = memberTicketService.findCurrent(loginMember.memberId(), pageable);

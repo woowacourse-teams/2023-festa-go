@@ -5,6 +5,7 @@ import com.festago.auth.domain.Login;
 import com.festago.auth.dto.LoginMember;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/oauth2")
+    @Operation(description = "엑세스 토큰을 기반으로 로그인 요청을 보낸다.")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok()
@@ -32,6 +34,7 @@ public class AuthController {
 
     @DeleteMapping
     @SecurityRequirement(name = "bearerAuth")
+    @Operation(description = "회원 탈퇴 요청을 보낸다.")
     public ResponseEntity<Void> deleteMember(@Login LoginMember loginMember) {
         authService.deleteMember(loginMember.memberId());
         return ResponseEntity.ok()
