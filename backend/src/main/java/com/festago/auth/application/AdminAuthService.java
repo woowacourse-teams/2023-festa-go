@@ -13,7 +13,6 @@ import com.festago.exception.ErrorCode;
 import com.festago.exception.ForbiddenException;
 import com.festago.exception.UnauthorizedException;
 import java.util.Objects;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,11 +53,10 @@ public class AdminAuthService {
         return new AuthPayload(admin.getId(), Role.ADMIN);
     }
 
-    public void initialFirstAdminAccount(String password) {
-        Optional<Admin> admin = adminRepository.findByUsername(ADMIN);
-        if (admin.isEmpty()) {
-            adminRepository.save(new Admin(ADMIN, password));
-        }
+    public void initializeRootAdmin(String password) {
+        adminRepository.findByUsername(ADMIN).ifPresentOrElse(admin -> {
+            throw new BadRequestException(ErrorCode.DUPLICATE_ACCOUNT_USERNAME);
+        }, () -> adminRepository.save(new Admin(ADMIN, password)));
     }
 
     public AdminSignupResponse signup(Long adminId, AdminSignupRequest request) {

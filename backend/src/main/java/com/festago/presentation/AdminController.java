@@ -6,10 +6,10 @@ import com.festago.application.StageService;
 import com.festago.application.TicketService;
 import com.festago.auth.annotation.Admin;
 import com.festago.auth.application.AdminAuthService;
-import com.festago.auth.dto.AdminInitializeRequest;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.auth.dto.AdminSignupResponse;
+import com.festago.auth.dto.RootAdminInitializeRequest;
 import com.festago.dto.AdminResponse;
 import com.festago.dto.FestivalCreateRequest;
 import com.festago.dto.FestivalResponse;
@@ -126,9 +126,10 @@ public class AdminController {
     }
 
     @PostMapping("/initialize")
-    public ResponseEntity<Void> initialFirstAdmin(@RequestBody AdminInitializeRequest request) {
-        adminAuthService.initialFirstAdminAccount(request.password());
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> initializeRootAdmin(@RequestBody RootAdminInitializeRequest request) {
+        adminAuthService.initializeRootAdmin(request.password());
+        return ResponseEntity.ok()
+            .build();
     }
 
     @GetMapping("/signup")

@@ -1,6 +1,6 @@
 package com.festago.auth.dto;
 
-public record AdminInitializeRequest(
+public record RootAdminInitializeRequest(
     String password
 ) {
 
