@@ -1,7 +1,6 @@
 package com.festago.presentation;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -11,23 +10,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.MemberService;
 import com.festago.application.MemberTicketService;
-import com.festago.auth.domain.AuthExtractor;
-import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.Role;
 import com.festago.dto.MemberProfileResponse;
-import com.festago.support.TestConfig;
+import com.festago.support.CustomWebMvcTest;
+import com.festago.support.WithMockAuth;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(MemberController.class)
-@Import(TestConfig.class)
+@CustomWebMvcTest(MemberController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class MemberControllerTest {
@@ -44,18 +38,14 @@ class MemberControllerTest {
     @MockBean
     MemberTicketService memberTicketService;
 
-    @MockBean
-    AuthExtractor authExtractor;
-
     @Test
+    @WithMockAuth
     void 회원_정보_반환() throws Exception {
         // given
         String token = "sampleToken";
         MemberProfileResponse expected = new MemberProfileResponse(1L, "닉네임", "www.profileImageUrl.com");
         given(memberService.findMemberProfile(anyLong()))
             .willReturn(expected);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(get("/members/profile")

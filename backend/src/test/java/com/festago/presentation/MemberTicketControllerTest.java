@@ -16,9 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
 import com.festago.application.TicketService;
-import com.festago.auth.domain.AuthExtractor;
-import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.Role;
 import com.festago.domain.EntryState;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketFestivalResponse;
@@ -27,7 +24,8 @@ import com.festago.dto.MemberTicketsResponse;
 import com.festago.dto.StageResponse;
 import com.festago.dto.TicketingRequest;
 import com.festago.dto.TicketingResponse;
-import com.festago.support.TestConfig;
+import com.festago.support.CustomWebMvcTest;
+import com.festago.support.WithMockAuth;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.stream.LongStream;
@@ -35,15 +33,12 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(MemberTicketController.class)
-@Import(TestConfig.class)
+@CustomWebMvcTest(MemberTicketController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class MemberTicketControllerTest {
@@ -63,10 +58,8 @@ class MemberTicketControllerTest {
     @MockBean
     TicketService ticketService;
 
-    @MockBean
-    AuthExtractor authExtractor;
-
     @Test
+    @WithMockAuth
     void QR을_생성한다() throws Exception {
         // given
         Long memberTicketId = 1L;
@@ -78,8 +71,6 @@ class MemberTicketControllerTest {
 
         given(entryService.createEntryCode(anyLong(), anyLong()))
             .willReturn(expected);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(post("/member-tickets/{memberTicketId}/qr", memberTicketId)
@@ -94,6 +85,7 @@ class MemberTicketControllerTest {
     }
 
     @Test
+    @WithMockAuth
     void 단일_티켓을_조회한다() throws Exception {
         // given
         Long memberTicketId = 1L;
@@ -108,8 +100,6 @@ class MemberTicketControllerTest {
 
         given(memberTicketService.findById(memberId, memberTicketId))
             .willReturn(expected);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(get("/member-tickets/{memberTicketId}", memberTicketId)
@@ -125,6 +115,7 @@ class MemberTicketControllerTest {
     }
 
     @Test
+    @WithMockAuth
     void 회원의_모든_티켓을_조회한다() throws Exception {
         // given
         Long memberId = 1L;
@@ -141,8 +132,6 @@ class MemberTicketControllerTest {
 
         given(memberTicketService.findAll(eq(memberId), any(Pageable.class)))
             .willReturn(expected);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(get("/member-tickets")
@@ -158,6 +147,7 @@ class MemberTicketControllerTest {
     }
 
     @Test
+    @WithMockAuth
     void 현재_티켓_리스트를_조회한다() throws Exception {
         // given
         Long memberId = 1L;
@@ -174,8 +164,6 @@ class MemberTicketControllerTest {
 
         given(memberTicketService.findCurrent(eq(memberId), any(Pageable.class)))
             .willReturn(expected);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(get("/member-tickets/current")
@@ -191,6 +179,7 @@ class MemberTicketControllerTest {
     }
 
     @Test
+    @WithMockAuth
     void 티켓팅을_통해_멤버의_티켓을_생성한다() throws Exception {
         // given
         Long memberTicketId = 1L;
@@ -204,8 +193,6 @@ class MemberTicketControllerTest {
 
         given(ticketService.ticketing(anyLong(), any()))
             .willReturn(expected);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.MEMBER));
 
         // when & then
         String content = mockMvc.perform(post("/member-tickets")

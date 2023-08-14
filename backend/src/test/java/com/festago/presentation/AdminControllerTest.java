@@ -15,8 +15,6 @@ import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
 import com.festago.auth.application.AdminAuthService;
-import com.festago.auth.domain.AuthExtractor;
-import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.Role;
 import com.festago.domain.TicketType;
 import com.festago.dto.ErrorResponse;
@@ -28,6 +26,8 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.support.CustomWebMvcTest;
+import com.festago.support.WithMockAuth;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -36,12 +36,11 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(AdminController.class)
+@CustomWebMvcTest(AdminController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AdminControllerTest {
@@ -67,14 +66,9 @@ class AdminControllerTest {
     @MockBean
     AdminAuthService adminAuthService;
 
-    @MockBean
-    AuthExtractor authExtractor;
-
     @Test
+    @WithMockAuth
     void 토큰의_Role이_어드민이_아니면_로그인_페이지로_리다이렉트() throws Exception {
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.MEMBER));
-
         mockMvc.perform(get("/admin")
                 .cookie(new Cookie("token", "token")))
             .andExpect(status().is3xxRedirection())
@@ -82,13 +76,14 @@ class AdminControllerTest {
     }
 
     @Test
-    void 쿠키에_토큰_없으면_로그인_페이지로_리다이렉트() throws Exception {
+    void 쿠키에_토큰이_없으면_로그인_페이지로_리다이렉트() throws Exception {
         mockMvc.perform(get("/admin"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/admin/login"));
     }
 
     @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 축제_생성() throws Exception {
         // given
         String festivalName = "테코 대학교";
@@ -111,8 +106,6 @@ class AdminControllerTest {
 
         given(festivalService.create(any()))
             .willReturn(expected);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.ADMIN));
 
         // when && then
         String content = mockMvc.perform(post("/admin/festivals")
@@ -129,6 +122,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 존재_하지_않는_축제_무대_생성_예외() throws Exception {
         // given
         String startTime = "2023-07-27T18:00:00";
@@ -147,8 +141,6 @@ class AdminControllerTest {
 
         given(stageService.create(any()))
             .willThrow(exception);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.ADMIN));
 
         // when && then
         String content = mockMvc.perform(post("/admin/stages")
@@ -165,6 +157,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 무대_생성() throws Exception {
         // given
         String startTime = "2023-07-27T18:00:00";
@@ -182,8 +175,6 @@ class AdminControllerTest {
 
         given(stageService.create(any()))
             .willReturn(expected);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.ADMIN));
 
         // when && then
         String content = mockMvc.perform(post("/admin/stages")
@@ -200,6 +191,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 존재_하지_않는_무대_티켓_예외() throws Exception {
         // given
         String entryTime = "2023-07-27T18:00:00";
@@ -216,8 +208,6 @@ class AdminControllerTest {
 
         given(ticketService.create(any()))
             .willThrow(exception);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.ADMIN));
 
         // when && then
         String content = mockMvc.perform(post("/admin/tickets")
@@ -234,6 +224,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 티켓_생성() throws Exception {
         // given
         long ticketId = 1L;
@@ -252,8 +243,6 @@ class AdminControllerTest {
 
         given(ticketService.create(any()))
             .willReturn(expected);
-        given(authExtractor.extract(any()))
-            .willReturn(new AuthPayload(1L, Role.ADMIN));
 
         // when && then
         String content = mockMvc.perform(post("/admin/tickets")
