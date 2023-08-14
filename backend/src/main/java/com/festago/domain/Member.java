@@ -16,6 +16,8 @@ import org.hibernate.annotations.Where;
 @Where(clause = "deleted_at is null")
 public class Member extends BaseTimeEntity {
 
+    private static final String DEFAULT_IMAGE_URL = "https://festa-go.site/images/default-profile.png";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,7 +49,7 @@ public class Member extends BaseTimeEntity {
         this.socialId = socialId;
         this.socialType = socialType;
         this.nickname = nickname;
-        this.profileImage = (profileImage != null) ? profileImage : "https://example.com/default_profile.jpg";
+        this.profileImage = (profileImage != null) ? profileImage : DEFAULT_IMAGE_URL;
     }
 
     public Long getId() {
