@@ -4,6 +4,7 @@ import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
 
 public enum Role {
+    ANONYMOUS,
     MEMBER,
     ADMIN,
     ;

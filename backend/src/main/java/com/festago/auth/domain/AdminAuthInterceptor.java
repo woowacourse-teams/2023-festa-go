@@ -1,39 +1,37 @@
 package com.festago.auth.domain;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Objects;
+import java.util.Optional;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class AdminAuthInterceptor implements HandlerInterceptor {
 
-    private static final String TOKEN = "token";
-
     private final AuthExtractor authExtractor;
+    private final TokenExtractor tokenExtractor;
+    private final AuthenticateContext context;
 
-    public AdminAuthInterceptor(AuthExtractor authExtractor) {
+    public AdminAuthInterceptor(AuthExtractor authExtractor, TokenExtractor tokenExtractor,
+                                AuthenticateContext context) {
         this.authExtractor = authExtractor;
+        this.tokenExtractor = tokenExtractor;
+        this.context = context;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
         throws Exception {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
+        Optional<String> token = tokenExtractor.extract(request);
+        if (token.isEmpty()) {
             return redirectLoginPage(response);
         }
-        for (Cookie cookie : cookies) {
-            if (Objects.equals(TOKEN, cookie.getName())) {
-                AuthPayload payload = authExtractor.extract(cookie.getValue());
-                if (payload.getRole() == Role.ADMIN) {
-                    return true;
-                }
-                return redirectLoginPage(response);
-            }
+        AuthPayload payload = authExtractor.extract(token.get());
+        if (payload.getRole() != Role.ADMIN) {
+            return redirectLoginPage(response);
         }
-        return redirectLoginPage(response);
+        context.setAuthenticate(payload.getMemberId(), payload.getRole());
+        return true;
     }
 
     private boolean redirectLoginPage(HttpServletResponse response) throws IOException {

@@ -28,6 +28,9 @@ public enum ErrorCode {
     INVALID_PASSWORD("비밀번호가 틀렸거나, 해당 계정이 없습니다."),
     DUPLICATE_ACCOUNT_USERNAME("해당 계정이 존재합니다."),
 
+    // 403
+    NOT_ENOUGH_PERMISSION("해당 권한이 없습니다."),
+
     // 404
     MEMBER_TICKET_NOT_FOUND("존재하지 않은 멤버 티켓입니다."),
     MEMBER_NOT_FOUND("존재하지 않는 멤버입니다."),
