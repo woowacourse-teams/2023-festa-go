@@ -10,6 +10,7 @@ import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.auth.dto.AdminSignupResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
+import com.festago.exception.ForbiddenException;
 import com.festago.exception.UnauthorizedException;
 import java.util.Objects;
 import java.util.Optional;
@@ -60,7 +61,8 @@ public class AdminAuthService {
         }
     }
 
-    public AdminSignupResponse signup(AdminSignupRequest request) {
+    public AdminSignupResponse signup(Long adminId, AdminSignupRequest request) {
+        validateRootAdmin(adminId);
         String username = request.username();
         String password = request.password();
         validateExistsUsername(username);
@@ -72,5 +74,15 @@ public class AdminAuthService {
         if (adminRepository.existsByUsername(username)) {
             throw new BadRequestException(ErrorCode.DUPLICATE_ACCOUNT_USERNAME);
         }
+    }
+
+    private void validateRootAdmin(Long adminId) {
+        adminRepository.findById(adminId)
+            .map(Admin::getUsername)
+            .filter(username -> Objects.equals(username, ADMIN))
+            .ifPresentOrElse(username -> {
+            }, () -> {
+                throw new ForbiddenException(ErrorCode.NOT_ENOUGH_PERMISSION);
+            });
     }
 }

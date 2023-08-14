@@ -4,6 +4,7 @@ import com.festago.application.AdminService;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
+import com.festago.auth.annotation.Admin;
 import com.festago.auth.application.AdminAuthService;
 import com.festago.auth.dto.AdminInitializeRequest;
 import com.festago.auth.dto.AdminLoginRequest;
@@ -130,14 +131,15 @@ public class AdminController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/signup") // TODO 추후 최초 admin 계정만 접속하도록
+    @GetMapping("/signup")
     public ModelAndView signupPage() {
         return new ModelAndView("admin/signup");
     }
 
-    @PostMapping("/signup") // TODO 추후 최초 admin 계정만 접속하도록
-    public ResponseEntity<AdminSignupResponse> signupAdminAccount(@RequestBody AdminSignupRequest request) {
-        AdminSignupResponse response = adminAuthService.signup(request);
+    @PostMapping("/signup")
+    public ResponseEntity<AdminSignupResponse> signupAdminAccount(@RequestBody AdminSignupRequest request,
+                                                                  @Admin Long adminId) {
+        AdminSignupResponse response = adminAuthService.signup(adminId, request);
         return ResponseEntity.ok()
             .body(response);
     }

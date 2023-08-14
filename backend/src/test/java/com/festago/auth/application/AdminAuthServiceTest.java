@@ -3,6 +3,7 @@ package com.festago.auth.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -13,6 +14,7 @@ import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.auth.dto.AdminSignupResponse;
 import com.festago.exception.BadRequestException;
+import com.festago.exception.ForbiddenException;
 import com.festago.exception.UnauthorizedException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -95,26 +97,42 @@ class AdminAuthServiceTest {
             AdminSignupRequest request = new AdminSignupRequest("admin", "admin");
             given(adminRepository.existsByUsername(anyString()))
                 .willReturn(true);
+            given(adminRepository.findById(anyLong()))
+                .willReturn(Optional.of(new Admin("admin", "admin")));
 
             // when & then
-            assertThatThrownBy(() -> adminAuthService.signup(request))
+            assertThatThrownBy(() -> adminAuthService.signup(1L, request))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("해당 계정이 존재합니다.");
         }
 
         @Test
+        void Root_어드민이_아니면_예외() {
+            // given
+            AdminSignupRequest request = new AdminSignupRequest("newAdmin", "newAdmin");
+            given(adminRepository.findById(anyLong()))
+                .willReturn(Optional.of(new Admin("mewAdmin", "newAdmin")));
+
+            // when & then
+            assertThatThrownBy(() -> adminAuthService.signup(1L, request))
+                .isInstanceOf(ForbiddenException.class)
+                .hasMessage("해당 권한이 없습니다.");
+        }
+
+        @Test
         void 성공() {
             // given
-            Admin admin = new Admin(1L, "admin", "admin");
-            AdminSignupRequest request = new AdminSignupRequest("admin", "admin");
+            AdminSignupRequest request = new AdminSignupRequest("newAdmin", "newAdmin");
             given(adminRepository.save(any(Admin.class)))
-                .willReturn(admin);
+                .willReturn(new Admin(1L, "newAdmin", "newAdmin"));
+            given(adminRepository.findById(anyLong()))
+                .willReturn(Optional.of(new Admin(1L, "admin", "admin")));
 
             // when
-            AdminSignupResponse response = adminAuthService.signup(request);
+            AdminSignupResponse response = adminAuthService.signup(1L, request);
 
             // then
-            assertThat(response.username()).isEqualTo("admin");
+            assertThat(response.username()).isEqualTo("newAdmin");
         }
     }
 }
