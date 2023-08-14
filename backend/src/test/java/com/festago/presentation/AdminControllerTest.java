@@ -83,6 +83,12 @@ class AdminControllerTest {
     }
 
     @Test
+    void 권한이_없어도_로그인_페이지_접속_가능() throws Exception {
+        mockMvc.perform(get("/admin/login"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
     @WithMockAuth(role = Role.ADMIN)
     void 축제_생성() throws Exception {
         // given
