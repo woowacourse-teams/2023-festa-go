@@ -102,6 +102,14 @@ class JwtAuthExtractorTest {
     }
 
     @Test
+    void token이_null이면_예외() {
+        // when & then
+        assertThatThrownBy(() -> jwtAuthExtractor.extract(null))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessage("올바르지 않은 로그인 토큰입니다.");
+    }
+
+    @Test
     void 토큰_추출_성공() {
         // given
         Long memberId = 1L;

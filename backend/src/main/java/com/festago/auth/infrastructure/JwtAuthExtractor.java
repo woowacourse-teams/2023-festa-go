@@ -42,7 +42,7 @@ public class JwtAuthExtractor implements AuthExtractor {
                 .getBody();
         } catch (ExpiredJwtException e) {
             throw new UnauthorizedException(ErrorCode.EXPIRED_AUTH_TOKEN);
-        } catch (JwtException e) {
+        } catch (JwtException | IllegalArgumentException e) {
             throw new UnauthorizedException(ErrorCode.INVALID_AUTH_TOKEN);
         }
     }
