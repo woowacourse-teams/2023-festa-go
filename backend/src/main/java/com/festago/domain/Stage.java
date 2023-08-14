@@ -2,7 +2,6 @@ package com.festago.domain;
 
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +22,16 @@ public class Stage extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
     private LocalDateTime startTime;
 
+    @Size(max = 255)
     private String lineUp;
 
+    @NotNull
     private LocalDateTime ticketOpenTime;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Festival festival;
 

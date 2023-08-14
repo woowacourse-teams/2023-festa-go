@@ -2,11 +2,11 @@ package com.festago.domain;
 
 import com.festago.auth.domain.SocialType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -22,13 +22,19 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Size(max = 255)
     private String socialId;
 
-    @Enumerated(EnumType.STRING)
+    @NotNull
     private SocialType socialType;
 
+    @NotNull
+    @Size(max = 30)
     private String nickname;
 
+    @NotNull
+    @Size(max = 255)
     private String profileImage;
 
     private LocalDateTime deletedAt = null;

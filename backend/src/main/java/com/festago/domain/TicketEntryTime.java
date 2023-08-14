@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,25 +19,27 @@ public class TicketEntryTime extends BaseTimeEntity implements Comparable<Ticket
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private LocalDateTime entryTime;
 
-    private Integer amount;
+    @Min(value = 0)
+    private int amount;
 
     protected TicketEntryTime() {
     }
 
-    public TicketEntryTime(LocalDateTime entryTime, Integer amount) {
+    public TicketEntryTime(LocalDateTime entryTime, int amount) {
         this(null, entryTime, amount);
     }
 
-    private TicketEntryTime(Long id, LocalDateTime entryTime, Integer amount) {
+    private TicketEntryTime(Long id, LocalDateTime entryTime, int amount) {
         validate(amount);
         this.id = id;
         this.entryTime = entryTime;
         this.amount = amount;
     }
 
-    private void validate(Integer amount) {
+    private void validate(int amount) {
         if (amount < MIN_TOTAL_AMOUNT) {
             throw new BadRequestException(ErrorCode.INVALID_MIN_TICKET_AMOUNT);
         }

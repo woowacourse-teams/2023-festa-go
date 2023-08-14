@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -20,19 +22,25 @@ public class MemberTicket extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private EntryState entryState = EntryState.BEFORE_ENTRY;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Member owner;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Stage stage;
 
+    @Min(value = 0)
     private int number;
 
+    @NotNull
     private LocalDateTime entryTime;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private TicketType ticketType;
 
