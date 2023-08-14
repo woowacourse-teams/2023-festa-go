@@ -47,7 +47,7 @@ public class Member extends BaseTimeEntity {
         this.socialId = socialId;
         this.socialType = socialType;
         this.nickname = nickname;
-        this.profileImage = profileImage;
+        this.profileImage = (profileImage != null) ? profileImage : "https://example.com/default_profile.jpg";
     }
 
     public Long getId() {
