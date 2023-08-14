@@ -40,12 +40,12 @@ public class AdminAuthService {
 
     private Admin findAdmin(AdminLoginRequest request) {
         return adminRepository.findByUsername(request.username())
-            .orElseThrow(() -> new UnauthorizedException(ErrorCode.INVALID_PASSWORD));
+            .orElseThrow(() -> new UnauthorizedException(ErrorCode.INCORRECT_PASSWORD_OR_ACCOUNT));
     }
 
     private void validatePassword(String password, String comparePassword) {
         if (!Objects.equals(password, comparePassword)) {
-            throw new UnauthorizedException(ErrorCode.INVALID_PASSWORD);
+            throw new UnauthorizedException(ErrorCode.INCORRECT_PASSWORD_OR_ACCOUNT);
         }
     }
 

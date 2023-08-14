@@ -25,7 +25,7 @@ public enum ErrorCode {
     INVALID_AUTH_TOKEN("올바르지 않은 로그인 토큰입니다."),
     NOT_BEARER_TOKEN_TYPE("Bearer 타입의 토큰이 아닙니다."),
     NEED_AUTH_TOKEN("로그인이 필요한 서비스입니다."),
-    INVALID_PASSWORD("비밀번호가 틀렸거나, 해당 계정이 없습니다."),
+    INCORRECT_PASSWORD_OR_ACCOUNT("비밀번호가 틀렸거나, 해당 계정이 없습니다."),
     DUPLICATE_ACCOUNT_USERNAME("해당 계정이 존재합니다."),
 
     // 403
