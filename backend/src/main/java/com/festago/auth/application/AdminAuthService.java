@@ -5,11 +5,9 @@ import com.festago.auth.domain.AdminRepository;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.Role;
-import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.auth.dto.AdminSignupResponse;
-import com.festago.domain.Member;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.UnauthorizedException;
@@ -52,15 +50,13 @@ public class AdminAuthService {
     }
 
     private AuthPayload getAuthPayload(Admin admin) {
-        Long memberId = admin.getMemberId();
-        return new AuthPayload(memberId, Role.ADMIN);
+        return new AuthPayload(admin.getId(), Role.ADMIN);
     }
 
     public void initialFirstAdminAccount(String password) {
         Optional<Admin> admin = adminRepository.findByUsername(ADMIN);
-        Member member = new Member(ADMIN, SocialType.FESTAGO, ADMIN, "");
         if (admin.isEmpty()) {
-            adminRepository.save(new Admin(ADMIN, password, member));
+            adminRepository.save(new Admin(ADMIN, password));
         }
     }
 
@@ -68,8 +64,7 @@ public class AdminAuthService {
         String username = request.username();
         String password = request.password();
         validateExistsUsername(username);
-        Member member = new Member(username, SocialType.FESTAGO, username, "");
-        Admin admin = adminRepository.save(new Admin(username, password, member));
+        Admin admin = adminRepository.save(new Admin(username, password));
         return new AdminSignupResponse(admin.getUsername());
     }
 

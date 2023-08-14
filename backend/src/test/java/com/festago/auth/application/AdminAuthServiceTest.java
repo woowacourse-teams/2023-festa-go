@@ -9,11 +9,9 @@ import static org.mockito.BDDMockito.given;
 import com.festago.auth.domain.Admin;
 import com.festago.auth.domain.AdminRepository;
 import com.festago.auth.domain.AuthProvider;
-import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.auth.dto.AdminSignupResponse;
-import com.festago.domain.Member;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.UnauthorizedException;
 import java.util.Optional;
@@ -59,8 +57,7 @@ class AdminAuthServiceTest {
         @Test
         void 비밀번호가_틀리면_예외() {
             // given
-            Member member = new Member(1L, "admin", SocialType.FESTAGO, "admin", "");
-            Admin admin = new Admin(1L, "admin", "admin", member);
+            Admin admin = new Admin(1L, "admin", "admin");
             AdminLoginRequest request = new AdminLoginRequest("admin", "password");
             given(adminRepository.findByUsername(anyString()))
                 .willReturn(Optional.of(admin));
@@ -74,8 +71,7 @@ class AdminAuthServiceTest {
         @Test
         void 성공() {
             // given
-            Member member = new Member(1L, "admin", SocialType.FESTAGO, "admin", "");
-            Admin admin = new Admin(1L, "admin", "admin", member);
+            Admin admin = new Admin(1L, "admin", "admin");
             AdminLoginRequest request = new AdminLoginRequest("admin", "admin");
             given(adminRepository.findByUsername(anyString()))
                 .willReturn(Optional.of(admin));
@@ -109,8 +105,7 @@ class AdminAuthServiceTest {
         @Test
         void 성공() {
             // given
-            Member member = new Member(1L, "admin", SocialType.FESTAGO, "admin", "");
-            Admin admin = new Admin(1L, "admin", "admin", member);
+            Admin admin = new Admin(1L, "admin", "admin");
             AdminSignupRequest request = new AdminSignupRequest("admin", "admin");
             given(adminRepository.save(any(Admin.class)))
                 .willReturn(admin);
