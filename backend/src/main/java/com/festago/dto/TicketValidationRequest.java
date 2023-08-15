@@ -1,5 +1,7 @@
 package com.festago.dto;
 
-public record TicketValidationRequest(String code) {
+import jakarta.validation.constraints.NotNull;
+
+public record TicketValidationRequest(@NotNull String code) {
 
 }
