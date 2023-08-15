@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class Festival extends BaseTimeEntity {
@@ -46,7 +47,7 @@ public class Festival extends BaseTimeEntity {
     }
 
     public Festival(Long id, String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
-        validate(startDate, endDate);
+        validate(name, startDate, endDate, thumbnail);
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -54,7 +55,29 @@ public class Festival extends BaseTimeEntity {
         this.thumbnail = thumbnail;
     }
 
-    private void validate(LocalDate startDate, LocalDate endDate) {
+    private void validate(String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
+        checkNotNull(name, startDate, endDate, thumbnail);
+        checkLength(name, thumbnail);
+        validateDate(startDate, endDate);
+    }
+
+    private void checkNotNull(String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
+        if (Objects.isNull(name) ||
+            Objects.isNull(startDate) ||
+            Objects.isNull(endDate) ||
+            Objects.isNull(thumbnail)) {
+            throw new IllegalArgumentException("Festival 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
+        }
+    }
+
+    private void checkLength(String name, String thumbnail) {
+        if (name.length() > 50 ||
+            thumbnail.length() > 255) {
+            throw new IllegalArgumentException("Festival 의 필드로 허용된 길이를 넘은 column 을 넣을 수 없습니다.");
+        }
+    }
+
+    private void validateDate(LocalDate startDate, LocalDate endDate) {
         if (startDate.isAfter(endDate)) {
             throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_DURATION);
         }

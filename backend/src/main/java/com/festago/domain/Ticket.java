@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -54,10 +55,22 @@ public class Ticket extends BaseTimeEntity {
     }
 
     public Ticket(Long id, Stage stage, TicketType ticketType) {
+        validate(stage, ticketType);
         this.id = id;
         this.stage = stage;
         this.ticketType = ticketType;
         this.ticketAmount = new TicketAmount(this);
+    }
+
+    private void validate(Stage stage, TicketType ticketType) {
+        checkNotNull(stage, ticketType);
+    }
+
+    private void checkNotNull(Stage stage, TicketType ticketType) {
+        if (Objects.isNull(stage) ||
+            Objects.isNull(ticketType)) {
+            throw new IllegalArgumentException("Ticket 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
+        }
     }
 
     public void addTicketEntryTime(LocalDateTime currentTime, LocalDateTime entryTime, int amount) {

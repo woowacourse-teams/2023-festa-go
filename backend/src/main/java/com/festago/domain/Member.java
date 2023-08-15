@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -51,11 +52,34 @@ public class Member extends BaseTimeEntity {
     }
 
     public Member(Long id, String socialId, SocialType socialType, String nickname, String profileImage) {
+        validate(socialId, socialType, nickname, profileImage);
         this.id = id;
         this.socialId = socialId;
         this.socialType = socialType;
         this.nickname = nickname;
         this.profileImage = (profileImage != null) ? profileImage : DEFAULT_IMAGE_URL;
+    }
+
+    private void validate(String socialId, SocialType socialType, String nickname, String profileImage) {
+        checkNotNull(socialId, socialType, nickname, profileImage);
+        checkLength(socialId, nickname, profileImage);
+    }
+
+    private void checkNotNull(String socialId, SocialType socialType, String nickname, String profileImage) {
+        if (Objects.isNull(socialId) ||
+            Objects.isNull(socialType) ||
+            Objects.isNull(nickname) ||
+            Objects.isNull(profileImage)) {
+            throw new IllegalArgumentException("Member 는 허용되지 않은 null 값으로 생성할 수 없습니다.");
+        }
+    }
+
+    private void checkLength(String socialId, String nickname, String profileImage) {
+        if (socialId.length() > 255 ||
+            nickname.length() > 30 ||
+            profileImage.length() > 255) {
+            throw new IllegalArgumentException("Member 의 필드로 허용된 길이를 넘은 column 을 넣을 수 없습니다.");
+        }
     }
 
     public Long getId() {

@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class TicketEntryTime extends BaseTimeEntity implements Comparable<TicketEntryTime> {
@@ -33,13 +34,31 @@ public class TicketEntryTime extends BaseTimeEntity implements Comparable<Ticket
     }
 
     private TicketEntryTime(Long id, LocalDateTime entryTime, int amount) {
-        validate(amount);
+        validate(entryTime, amount);
         this.id = id;
         this.entryTime = entryTime;
         this.amount = amount;
     }
 
-    private void validate(int amount) {
+    private void validate(LocalDateTime entryTime, int amount) {
+        checkNotNull(entryTime);
+        checkScope(amount);
+        validateAmont(amount);
+    }
+
+    private void checkNotNull(LocalDateTime entryTime) {
+        if (Objects.isNull(entryTime)) {
+            throw new IllegalArgumentException("TicketEntryTime 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
+        }
+    }
+
+    private void checkScope(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("TicketEntryTime 의 필드로 허용된 범위를 넘은 column 을 넣을 수 없습니다.");
+        }
+    }
+
+    private void validateAmont(int amount) {
         if (amount < MIN_TOTAL_AMOUNT) {
             throw new BadRequestException(ErrorCode.INVALID_MIN_TICKET_AMOUNT);
         }

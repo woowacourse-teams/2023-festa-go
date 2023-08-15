@@ -53,12 +53,33 @@ public class MemberTicket extends BaseTimeEntity {
 
     public MemberTicket(Long id, Member owner, Stage stage, int number, LocalDateTime entryTime,
                         TicketType ticketType) {
+        validate(owner, stage, number, entryTime, ticketType);
         this.id = id;
         this.owner = owner;
         this.stage = stage;
         this.number = number;
         this.entryTime = entryTime;
         this.ticketType = ticketType;
+    }
+
+    private void validate(Member owner, Stage stage, int number, LocalDateTime entryTime, TicketType ticketType) {
+        checkNotNull(owner, stage, entryTime, ticketType);
+        checkScope(number);
+    }
+
+    private void checkNotNull(Member owner, Stage stage, LocalDateTime entryTime, TicketType ticketType) {
+        if (Objects.isNull(owner) ||
+            Objects.isNull(stage) ||
+            Objects.isNull(entryTime) ||
+            Objects.isNull(ticketType)) {
+            throw new IllegalArgumentException("MemberTicket 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
+        }
+    }
+
+    private void checkScope(int number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("MemberTicket 의 필드로 허용된 범위를 넘은 column 을 넣을 수 없습니다.");
+        }
     }
 
     public void changeState(EntryState originState) {
