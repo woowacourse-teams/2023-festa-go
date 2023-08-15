@@ -19,17 +19,17 @@ object AuthRetrofitClient {
     val userRetrofitService: UserRetrofitService by lazy {
         authRetrofit.create(UserRetrofitService::class.java)
     }
-    fun init(baseUrl: String = "", tokenProvider: () -> String) {
+    fun init(baseUrl: String = "", token: String) {
         if (::authRetrofit.isInitialized) return
         authRetrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
-            .client(getOkHttpClient(tokenProvider))
+            .client(getOkHttpClient(token))
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
     }
 
-    private fun getOkHttpClient(tokenProvider: () -> String): OkHttpClient = OkHttpClient
+    private fun getOkHttpClient(token: String): OkHttpClient = OkHttpClient
         .Builder()
-        .addInterceptor(AuthInterceptor(tokenProvider))
+        .addInterceptor(AuthInterceptor(token))
         .build()
 }
