@@ -1,12 +1,10 @@
 package com.festago.festago.data.retrofit
 
-import com.festago.festago.data.datasource.AuthLocalDataSource
+import com.festago.festago.data.datasource.AuthDataSource
 
-class TokenFactory(
-    private val authLocalDataSource: AuthLocalDataSource,
-) {
+class TokenFactory(private val authDataSource: AuthDataSource) {
     val token: String
-        get() = authLocalDataSource.token ?: NULL_TOKEN
+        get() = authDataSource.token ?: NULL_TOKEN
 
     companion object {
         private const val NULL_TOKEN = "null"

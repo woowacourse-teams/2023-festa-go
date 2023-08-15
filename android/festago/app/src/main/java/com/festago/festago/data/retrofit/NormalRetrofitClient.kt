@@ -8,9 +8,12 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
-object NormalRetrofitClient {
+class NormalRetrofitClient(baseUrl: String = "") {
 
-    private lateinit var normalRetrofit: Retrofit
+    private val normalRetrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .build()
 
     val festivalRetrofitService: FestivalRetrofitService by lazy {
         normalRetrofit.create(FestivalRetrofitService::class.java)
@@ -22,13 +25,5 @@ object NormalRetrofitClient {
 
     val reservationTicketRetrofitService: ReservationTicketRetrofitService by lazy {
         normalRetrofit.create(ReservationTicketRetrofitService::class.java)
-    }
-
-    fun init(baseUrl: String = "") {
-        if (::normalRetrofit.isInitialized) return
-        normalRetrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-            .build()
     }
 }
