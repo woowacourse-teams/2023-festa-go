@@ -16,6 +16,6 @@ jobs:
         uses: appleboy/jenkins-action@master
         with:
           url: ${{ secrets.JENKINS_URL }}
-          user: "festago-admin"
+          user: "festago"
           token: ${{ secrets.JENKINS_API_TOKEN}}
           job: "festago-dev-cd"
