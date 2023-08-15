@@ -5,6 +5,7 @@ import com.festago.auth.domain.Role;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.ForbiddenException;
 import org.springframework.core.MethodParameter;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -13,11 +14,13 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class RoleArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final Role role;
-    private final AuthenticateContext authenticationContext;
+    private final AuthenticateContext authenticateContext;
 
-    public RoleArgumentResolver(Role role, AuthenticateContext authenticationContext) {
+    public RoleArgumentResolver(Role role, AuthenticateContext authenticateContext) {
+        Assert.notNull(authenticateContext, "The authenticateContext must not be null");
+        Assert.notNull(role, "The role must not be null");
         this.role = role;
-        this.authenticationContext = authenticationContext;
+        this.authenticateContext = authenticateContext;
     }
 
     @Override
@@ -29,9 +32,9 @@ public class RoleArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Long resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                 NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        if (authenticationContext.getRole() != this.role) {
+        if (authenticateContext.getRole() != this.role) {
             throw new ForbiddenException(ErrorCode.NOT_ENOUGH_PERMISSION);
         }
-        return authenticationContext.getId();
+        return authenticateContext.getId();
     }
 }
