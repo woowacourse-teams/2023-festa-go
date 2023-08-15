@@ -26,11 +26,10 @@ class FestagoApplication : Application() {
 
         DependencyContainer.tokenContainer = TokenContainer(authLocalDataSource)
         NormalRetrofitClient.init(BuildConfig.BASE_URL)
-        AuthRetrofitClient.init(BuildConfig.BASE_URL, DependencyContainer.tokenContainer.token)
 
         DependencyContainer.serviceContainer = ServiceContainer(
             NormalRetrofitClient,
-            AuthRetrofitClient,
+            AuthRetrofitClient(BuildConfig.BASE_URL, DependencyContainer.tokenContainer.token),
         )
         DependencyContainer.localDataSourceContainer = LocalDataSourceContainer(applicationContext)
 
