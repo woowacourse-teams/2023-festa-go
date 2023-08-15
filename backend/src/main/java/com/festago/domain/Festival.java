@@ -71,10 +71,17 @@ public class Festival extends BaseTimeEntity {
     }
 
     private void checkLength(String name, String thumbnail) {
-        if (name.length() > 50 ||
-            thumbnail.length() > 255) {
+        if (overLength(name, 50) ||
+            overLength(thumbnail, 255)) {
             throw new IllegalArgumentException("Festival 의 필드로 허용된 길이를 넘은 column 을 넣을 수 없습니다.");
         }
+    }
+
+    private boolean overLength(String target, int maxLength) {
+        if (Objects.isNull(target)) {
+            return false;
+        }
+        return target.length() > maxLength;
     }
 
     private void validateDate(LocalDate startDate, LocalDate endDate) {

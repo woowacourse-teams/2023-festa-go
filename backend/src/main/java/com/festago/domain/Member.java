@@ -52,7 +52,7 @@ public class Member extends BaseTimeEntity {
     }
 
     public Member(Long id, String socialId, SocialType socialType, String nickname, String profileImage) {
-        validate(socialId, socialType, nickname);
+        validate(socialId, socialType, nickname, profileImage);
         this.id = id;
         this.socialId = socialId;
         this.socialType = socialType;
@@ -60,7 +60,7 @@ public class Member extends BaseTimeEntity {
         this.profileImage = (profileImage != null) ? profileImage : DEFAULT_IMAGE_URL;
     }
 
-    private void validate(String socialId, SocialType socialType, String nickname) {
+    private void validate(String socialId, SocialType socialType, String nickname, String profileImage) {
         checkNotNull(socialId, socialType, nickname);
         checkLength(socialId, nickname, profileImage);
     }
@@ -74,11 +74,18 @@ public class Member extends BaseTimeEntity {
     }
 
     private void checkLength(String socialId, String nickname, String profileImage) {
-        if (socialId.length() > 255 ||
-            nickname.length() > 30 ||
-            profileImage.length() > 255) {
+        if (overLength(socialId, 255) ||
+            overLength(nickname, 30) ||
+            overLength(profileImage, 255)) {
             throw new IllegalArgumentException("Member 의 필드로 허용된 길이를 넘은 column 을 넣을 수 없습니다.");
         }
+    }
+
+    private boolean overLength(String target, int maxLength) {
+        if (Objects.isNull(target)) {
+            return false;
+        }
+        return target.length() > maxLength;
     }
 
     public Long getId() {

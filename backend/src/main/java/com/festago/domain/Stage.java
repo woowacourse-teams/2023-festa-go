@@ -75,9 +75,16 @@ public class Stage extends BaseTimeEntity {
     }
 
     private void checkLength(String lineUp) {
-        if (lineUp.length() > 255) {
+        if (overLength(lineUp, 255)) {
             throw new IllegalArgumentException("Stage 의 필드로 허용된 범위를 넘은 column 을 넣을 수 없습니다.");
         }
+    }
+
+    private boolean overLength(String target, int maxLength) {
+        if (Objects.isNull(target)) {
+            return false;
+        }
+        return target.length() > maxLength;
     }
 
     private void validateTime(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
