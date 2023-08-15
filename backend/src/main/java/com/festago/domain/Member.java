@@ -18,7 +18,7 @@ import org.hibernate.annotations.Where;
 public class Member extends BaseTimeEntity {
 
     private static final String DEFAULT_IMAGE_URL = "https://festa-go.site/images/default-profile.png";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -52,7 +52,7 @@ public class Member extends BaseTimeEntity {
     }
 
     public Member(Long id, String socialId, SocialType socialType, String nickname, String profileImage) {
-        validate(socialId, socialType, nickname, profileImage);
+        validate(socialId, socialType, nickname);
         this.id = id;
         this.socialId = socialId;
         this.socialType = socialType;
@@ -60,16 +60,15 @@ public class Member extends BaseTimeEntity {
         this.profileImage = (profileImage != null) ? profileImage : DEFAULT_IMAGE_URL;
     }
 
-    private void validate(String socialId, SocialType socialType, String nickname, String profileImage) {
-        checkNotNull(socialId, socialType, nickname, profileImage);
+    private void validate(String socialId, SocialType socialType, String nickname) {
+        checkNotNull(socialId, socialType, nickname);
         checkLength(socialId, nickname, profileImage);
     }
 
-    private void checkNotNull(String socialId, SocialType socialType, String nickname, String profileImage) {
+    private void checkNotNull(String socialId, SocialType socialType, String nickname) {
         if (Objects.isNull(socialId) ||
             Objects.isNull(socialType) ||
-            Objects.isNull(nickname) ||
-            Objects.isNull(profileImage)) {
+            Objects.isNull(nickname)) {
             throw new IllegalArgumentException("Member 는 허용되지 않은 null 값으로 생성할 수 없습니다.");
         }
     }
