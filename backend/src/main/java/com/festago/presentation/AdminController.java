@@ -13,6 +13,7 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
+import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class AdminController {
     }
 
     @PostMapping("/festivals")
-    public ResponseEntity<FestivalResponse> createFestival(@RequestBody FestivalCreateRequest request) {
+    public ResponseEntity<FestivalResponse> createFestival(@RequestBody @Valid FestivalCreateRequest request) {
         FestivalResponse response = festivalService.create(request);
         return ResponseEntity.ok()
             .body(response);

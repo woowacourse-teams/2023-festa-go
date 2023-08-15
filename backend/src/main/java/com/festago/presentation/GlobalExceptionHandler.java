@@ -16,14 +16,16 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Order(1)
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
     private static final String LOG_FORMAT = "\n[🚨ERROR]\n{}: {} ({} {})\n[CALLED BY] {} \n[REQUEST BODY] \n{}";
     private static final String LOG_FORMAT_WITH_TRACE = "\n[🚨ERROR]\n{} ({} {})\n[CALLED BY] {} \n[REQUEST BODY] \n{}";
@@ -52,6 +54,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(NotFoundException e, HttpServletRequest request) throws IOException {
         log(Level.INFO, e, request);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.from(e));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
+        MethodArgumentNotValidException e,
+        HttpServletRequest request) throws IOException {
+        log(Level.INFO, new BadRequestException(ErrorCode.INVALID_REQUEST_ARGUMENT), request);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse.from(ErrorCode.INVALID_REQUEST_ARGUMENT, e));
     }
 
     @ExceptionHandler(InternalServerException.class)
