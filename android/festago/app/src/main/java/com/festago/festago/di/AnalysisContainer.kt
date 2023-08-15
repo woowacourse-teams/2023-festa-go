@@ -4,6 +4,5 @@ import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
 
 class AnalysisContainer {
-    val analyticsHelper: AnalyticsHelper =
-        FirebaseAnalyticsHelper
+    val analyticsHelper: AnalyticsHelper = FirebaseAnalyticsHelper
 }
