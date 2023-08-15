@@ -1,10 +1,6 @@
 name: CI-Back
 
 on:
-  push:
-    branches:
-      - dev
-    paths: 'backend/**'
   pull_request:
     branches:
       - dev

@@ -1,0 +1,21 @@
+name: CD-Back-Dev
+
+on:
+  push:
+    branches:
+      - dev
+    paths: 'backend/**'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: trigger to jenkins dev cd
+        uses: appleboy/jenkins-action@master
+        with:
+          url: ${{ secrets.JENKINS_URL }}
+          user: "festago-admin"
+          token: ${{ secrets.JENKINS_API_TOKEN}}
+          job: "festago-dev-cd"
