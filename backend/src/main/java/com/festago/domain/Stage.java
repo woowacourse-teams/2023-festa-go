@@ -46,6 +46,10 @@ public class Stage extends BaseTimeEntity {
         this(null, startTime, lineUp, ticketOpenTime, festival);
     }
 
+    public Stage(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
+        this(null, startTime, null, ticketOpenTime, festival);
+    }
+
     public Stage(Long id, LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime,
                  Festival festival) {
         validate(startTime, lineUp, ticketOpenTime, festival);

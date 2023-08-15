@@ -8,6 +8,7 @@ import com.festago.dto.StageCreateRequest;
 import com.festago.dto.StageResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +26,14 @@ public class StageService {
 
     public StageResponse create(StageCreateRequest request) {
         Festival festival = findFestivalById(request.festivalId());
-        Stage newStage = stageRepository.save(new Stage(
-            request.startTime(),
-            request.lineUp(),
-            request.ticketOpenTime(),
-            festival));
-
+        Stage newStage = stageRepository.save(toStageEntity(request, festival));
         return StageResponse.from(newStage);
+    }
+
+    private Stage toStageEntity(StageCreateRequest request, Festival festival) {
+        return Objects.isNull(request.lineUp()) ?
+            new Stage(request.startTime(), request.ticketOpenTime(), festival) :
+            new Stage(request.startTime(), request.lineUp(), request.ticketOpenTime(), festival);
     }
 
     private Festival findFestivalById(Long festivalId) {
