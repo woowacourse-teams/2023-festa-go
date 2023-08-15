@@ -8,12 +8,8 @@
         <import type="java.time.format.DateTimeFormatter" />
 
         <variable
-            name="vm"
-            type="com.festago.festago.presentation.ui.home.ticketlist.TicketListViewModel" />
-
-        <variable
             name="ticket"
-            type="com.festago.festago.presentation.model.MemberTicketUiModel" />
+            type="com.festago.festago.presentation.model.TicketListItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -112,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:onClick="@{() -> vm.showTicketEntry(ticket.id)}"
+                    android:onClick="@{() -> ticket.onTicketEntry.invoke(ticket.id)}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toBottomOf="@id/ivStageThumbnail" />

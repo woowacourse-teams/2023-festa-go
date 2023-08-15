@@ -100,7 +100,7 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
     }
 
     private fun initView() {
-        adapter = TicketListAdapter(vm)
+        adapter = TicketListAdapter()
         binding.rvTicketList.adapter = adapter
         vm.loadCurrentTickets()
         initRefresh()
