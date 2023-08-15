@@ -24,22 +24,22 @@ class FestagoApplication : Application() {
     private fun initRetrofit() {
         val authLocalDataSource = AuthLocalDataSource(applicationContext)
 
-        DependencyContainer.tokenContainer = TokenContainer(authLocalDataSource)
+        tokenContainer = TokenContainer(authLocalDataSource)
         NormalRetrofitClient.init(BuildConfig.BASE_URL)
 
-        DependencyContainer.serviceContainer = ServiceContainer(
+        serviceContainer = ServiceContainer(
             NormalRetrofitClient,
-            AuthRetrofitClient(BuildConfig.BASE_URL, DependencyContainer.tokenContainer.token),
+            AuthRetrofitClient(BuildConfig.BASE_URL, tokenContainer.token),
         )
-        DependencyContainer.localDataSourceContainer = LocalDataSourceContainer(applicationContext)
+        localDataSourceContainer = LocalDataSourceContainer(applicationContext)
 
-        DependencyContainer.repositoryContainer = RepositoryContainer(
-            DependencyContainer.localDataSourceContainer,
-            DependencyContainer.serviceContainer,
+        repositoryContainer = RepositoryContainer(
+            localDataSourceContainer,
+            serviceContainer,
         )
 
         FirebaseAnalyticsHelper.init(applicationContext)
-        DependencyContainer.analysisContainer = AnalysisContainer()
+        analysisContainer = AnalysisContainer()
     }
 
     companion object DependencyContainer {
