@@ -19,6 +19,7 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
+import com.festago.exception.UnauthorizedException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -26,12 +27,14 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/admin")
@@ -143,5 +146,10 @@ public class AdminController {
         AdminSignupResponse response = adminAuthService.signup(adminId, request);
         return ResponseEntity.ok()
             .body(response);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public RedirectView handle(UnauthorizedException e) {
+        return new RedirectView("/admin/login");
     }
 }

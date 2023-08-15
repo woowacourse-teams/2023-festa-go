@@ -1,9 +1,8 @@
 package com.festago.auth.config;
 
-import com.festago.auth.domain.AdminAuthInterceptor;
 import com.festago.auth.domain.AuthExtractor;
+import com.festago.auth.domain.AuthInterceptor;
 import com.festago.auth.domain.AuthenticateContext;
-import com.festago.auth.domain.MemberAuthInterceptor;
 import com.festago.auth.domain.Role;
 import com.festago.auth.infrastructure.CookieTokenExtractor;
 import com.festago.auth.infrastructure.HeaderTokenExtractor;
@@ -42,12 +41,22 @@ public class LoginConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public AdminAuthInterceptor adminAuthInterceptor() {
-        return new AdminAuthInterceptor(authExtractor, new CookieTokenExtractor(), authenticateContext);
+    public AuthInterceptor adminAuthInterceptor() {
+        return AuthInterceptor.builder()
+            .authExtractor(authExtractor)
+            .tokenExtractor(new CookieTokenExtractor())
+            .authenticateContext(authenticateContext)
+            .role(Role.ADMIN)
+            .build();
     }
 
     @Bean
-    public MemberAuthInterceptor memberAuthInterceptor() {
-        return new MemberAuthInterceptor(authExtractor, new HeaderTokenExtractor(), authenticateContext);
+    public AuthInterceptor memberAuthInterceptor() {
+        return AuthInterceptor.builder()
+            .authExtractor(authExtractor)
+            .tokenExtractor(new HeaderTokenExtractor())
+            .authenticateContext(authenticateContext)
+            .role(Role.MEMBER)
+            .build();
     }
 }

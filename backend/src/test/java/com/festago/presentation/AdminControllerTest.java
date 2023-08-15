@@ -68,11 +68,10 @@ class AdminControllerTest {
 
     @Test
     @WithMockAuth
-    void 토큰의_Role이_어드민이_아니면_로그인_페이지로_리다이렉트() throws Exception {
+    void 토큰의_Role이_어드민이_아니면_404_NotFound() throws Exception {
         mockMvc.perform(get("/admin")
                 .cookie(new Cookie("token", "token")))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/admin/login"));
+            .andExpect(status().isNotFound());
     }
 
     @Test
