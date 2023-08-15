@@ -4,6 +4,7 @@ import com.festago.festago.data.datasource.AuthDataSource
 import com.festago.festago.data.dto.OauthRequest
 import com.festago.festago.data.service.AuthRetrofitService
 import com.festago.festago.data.service.UserRetrofitService
+import com.festago.festago.data.util.runCatchingWithErrorHandler
 import com.festago.festago.domain.repository.AuthRepository
 import com.kakao.sdk.user.UserApiClient
 
@@ -20,16 +21,13 @@ class AuthDefaultRepository(
         get() = authDataSource.token
 
     override suspend fun signIn(socialType: String, token: String): Result<Unit> {
-        try {
-            val response = authRetrofitService.getOauthToken(OauthRequest(socialType, token))
-            if (response.isSuccessful && response.body() != null) {
-                authDataSource.token = response.body()!!.accessToken
+        authRetrofitService.getOauthToken(OauthRequest(socialType, token))
+            .runCatchingWithErrorHandler()
+            .getOrElse { error -> return Result.failure(error) }
+            .let {
+                authDataSource.token = it.accessToken
                 return Result.success(Unit)
             }
-            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
-        } catch (e: Exception) {
-            return Result.failure(e)
-        }
     }
 
     override suspend fun signOut(): Result<Unit> {
@@ -40,10 +38,9 @@ class AuthDefaultRepository(
     }
 
     override suspend fun deleteAccount(): Result<Unit> {
-        try {
-            val response = userRetrofitService.deleteUserAccount()
-
-            if (response.isSuccessful) {
+        userRetrofitService.deleteUserAccount().runCatchingWithErrorHandler()
+            .getOrElse { error -> return Result.failure(error) }
+            .let {
                 UserApiClient.instance.unlink { error ->
                     if (error == null) {
                         authDataSource.token = null
@@ -51,9 +48,5 @@ class AuthDefaultRepository(
                 }
                 return Result.success(Unit)
             }
-            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
-        } catch (e: Exception) {
-            return Result.failure(e)
-        }
     }
 }

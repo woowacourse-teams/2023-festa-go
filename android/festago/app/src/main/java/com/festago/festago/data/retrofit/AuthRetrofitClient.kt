@@ -8,18 +8,9 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-class AuthRetrofitClient private constructor(
-    baseUrl: String,
-    okHttpClient: OkHttpClient,
-) {
+object AuthRetrofitClient {
 
-    private val authRetrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-            .build()
-    }
+    private lateinit var authRetrofit: Retrofit
 
     val ticketRetrofitService: TicketRetrofitService by lazy {
         authRetrofit.create(TicketRetrofitService::class.java)
@@ -28,18 +19,17 @@ class AuthRetrofitClient private constructor(
     val userRetrofitService: UserRetrofitService by lazy {
         authRetrofit.create(UserRetrofitService::class.java)
     }
-
-    companion object {
-        private var _instance: AuthRetrofitClient? = null
-        val instance get() = _instance!!
-
-        fun create(baseUrl: String = "", token: String = "") {
-            _instance = AuthRetrofitClient(baseUrl, getOkHttpClient(token))
-        }
-
-        private fun getOkHttpClient(token: String): OkHttpClient = OkHttpClient
-            .Builder()
-            .addInterceptor(AuthInterceptor(token))
+    fun init(baseUrl: String = "", tokenProvider: () -> String) {
+        if (::authRetrofit.isInitialized) return
+        authRetrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(getOkHttpClient(tokenProvider))
+            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
     }
+
+    private fun getOkHttpClient(tokenProvider: () -> String): OkHttpClient = OkHttpClient
+        .Builder()
+        .addInterceptor(AuthInterceptor(tokenProvider))
+        .build()
 }

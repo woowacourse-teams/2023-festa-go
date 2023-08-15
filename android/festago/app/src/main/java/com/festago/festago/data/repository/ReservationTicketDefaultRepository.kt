@@ -1,6 +1,7 @@
 package com.festago.festago.data.repository
 
 import com.festago.festago.data.service.ReservationTicketRetrofitService
+import com.festago.festago.data.util.runCatchingWithErrorHandler
 import com.festago.festago.domain.model.ReservationTicket
 import com.festago.festago.domain.repository.ReservationTicketRepository
 
@@ -9,14 +10,9 @@ class ReservationTicketDefaultRepository(
 ) : ReservationTicketRepository {
 
     override suspend fun loadTicketTypes(stageId: Int): Result<List<ReservationTicket>> {
-        try {
-            val response = reservationTicketRetrofitService.getReservationTickets(stageId)
-            if (response.isSuccessful && response.body() != null) {
-                return Result.success(response.body()!!.toDomain())
-            }
-            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
-        } catch (e: Exception) {
-            return Result.failure(e)
-        }
+        reservationTicketRetrofitService.getReservationTickets(stageId)
+            .runCatchingWithErrorHandler()
+            .getOrElse { error -> return Result.failure(error) }
+            .let { return Result.success(it.toDomain()) }
     }
 }

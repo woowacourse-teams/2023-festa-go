@@ -1,5 +1,6 @@
 package com.festago.festago.presentation.ui.home.mypage
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import com.festago.festago.databinding.FragmentMyPageBinding
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.ui.home.mypage.MyPageViewModel.MyPageViewModelFactory
 import com.festago.festago.presentation.ui.signin.SignInActivity
+import com.festago.festago.presentation.ui.tickethistory.TicketHistoryActivity
 
 class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
@@ -27,15 +29,15 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     private val vm: MyPageViewModel by viewModels {
         MyPageViewModelFactory(
             userRepository = UserDefaultRepository(
-                userProfileService = AuthRetrofitClient.instance.userRetrofitService,
+                userProfileService = AuthRetrofitClient.userRetrofitService,
             ),
             ticketRepository = TicketDefaultRepository(
-                ticketRetrofitService = AuthRetrofitClient.instance.ticketRetrofitService,
+                ticketRetrofitService = AuthRetrofitClient.ticketRetrofitService,
             ),
             authRepository = AuthDefaultRepository(
                 authRetrofitService = NormalRetrofitClient.authRetrofitService,
                 authDataSource = AuthLocalDataSource.getInstance(requireContext()),
-                userRetrofitService = AuthRetrofitClient.instance.userRetrofitService,
+                userRetrofitService = AuthRetrofitClient.userRetrofitService,
             ),
             analyticsHelper = FirebaseAnalyticsHelper,
         )
@@ -72,6 +74,8 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
                 is MyPageEvent.ShowSignIn -> handleShowSignInEvent()
                 is MyPageEvent.SignOutSuccess -> handleSignOutSuccessEvent()
                 is MyPageEvent.DeleteAccountSuccess -> handleDeleteAccountSuccess()
+                is MyPageEvent.ShowTicketHistory -> handleShowTicketHistory()
+                is MyPageEvent.ShowConfirmDelete -> handleShowConfirmDelete()
             }
         }
     }
@@ -91,6 +95,25 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     private fun restartHome() {
         requireActivity().finishAffinity()
         startActivity(HomeActivity.getIntent(requireContext()))
+    }
+
+    private fun handleShowTicketHistory() {
+        startActivity(TicketHistoryActivity.getIntent(requireContext()))
+    }
+
+    private fun handleShowConfirmDelete() {
+        val dialog = AlertDialog.Builder(requireContext()).apply {
+            setTitle(getString(R.string.confirm_delete_dialog_title))
+            setMessage(getString(R.string.confirm_delete_dialog_message))
+            setPositiveButton(getString(R.string.confirm_delete_dialog_yes)) { dialog, _ ->
+                vm.deleteAccount()
+                dialog.dismiss()
+            }
+            setNegativeButton(getString(R.string.confirm_delete_dialog_no)) { dialog, _ ->
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
     }
 
     private fun initView() {

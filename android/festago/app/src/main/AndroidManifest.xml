@@ -54,6 +54,11 @@
                     android:scheme="@string/kakao_redirection_scheme" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".presentation.ui.tickethistory.TicketHistoryActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

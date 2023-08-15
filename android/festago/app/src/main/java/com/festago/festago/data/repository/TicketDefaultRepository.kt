@@ -2,6 +2,7 @@ package com.festago.festago.data.repository
 
 import com.festago.festago.data.dto.ReservedTicketRequest
 import com.festago.festago.data.service.TicketRetrofitService
+import com.festago.festago.data.util.runCatchingWithErrorHandler
 import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.domain.model.Ticket
 import com.festago.festago.domain.model.TicketCode
@@ -12,63 +13,33 @@ class TicketDefaultRepository(
 ) : TicketRepository {
 
     override suspend fun loadTicket(ticketId: Long): Result<Ticket> {
-        try {
-            val response = ticketRetrofitService.getTicket(ticketId)
-            if (response.isSuccessful && response.body() != null) {
-                return Result.success(response.body()!!.toDomain())
-            }
-            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
-        } catch (e: Exception) {
-            return Result.failure(e)
-        }
+        ticketRetrofitService.getTicket(ticketId).runCatchingWithErrorHandler()
+            .getOrElse { error -> return Result.failure(error) }
+            .let { return Result.success(it.toDomain()) }
     }
 
     override suspend fun loadCurrentTickets(): Result<List<Ticket>> {
-        try {
-            val response = ticketRetrofitService.getCurrentTickets()
-            if (response.isSuccessful && response.body() != null) {
-                return Result.success(response.body()!!.toDomain())
-            }
-            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
-        } catch (e: Exception) {
-            return Result.failure(e)
-        }
+        ticketRetrofitService.getCurrentTickets().runCatchingWithErrorHandler()
+            .getOrElse { error -> return Result.failure(error) }
+            .let { return Result.success(it.toDomain()) }
     }
 
     override suspend fun loadTicketCode(ticketId: Long): Result<TicketCode> {
-        try {
-            val response = ticketRetrofitService.getTicketCode(ticketId)
-            if (response.isSuccessful && response.body() != null) {
-                return Result.success(response.body()!!.toDomain())
-            }
-            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
-        } catch (e: Exception) {
-            return Result.failure(e)
-        }
+        ticketRetrofitService.getTicketCode(ticketId).runCatchingWithErrorHandler()
+            .getOrElse { error -> return Result.failure(error) }
+            .let { return Result.success(it.toDomain()) }
     }
 
     override suspend fun loadHistoryTickets(size: Int): Result<List<Ticket>> {
-        try {
-            val response = ticketRetrofitService.getHistoryTickets(size)
-            if (response.isSuccessful && response.body() != null) {
-                return Result.success(response.body()!!.toDomain())
-            }
-            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
-        } catch (e: Exception) {
-            return Result.failure(e)
-        }
+        ticketRetrofitService.getHistoryTickets(size).runCatchingWithErrorHandler()
+            .getOrElse { error -> return Result.failure(error) }
+            .let { return Result.success(it.toDomain()) }
     }
 
     override suspend fun reserveTicket(ticketId: Int): Result<ReservedTicket> {
-        try {
-            val response =
-                ticketRetrofitService.postReserveTicket(ReservedTicketRequest(ticketId))
-            if (response.isSuccessful && response.body() != null) {
-                return Result.success(response.body()!!.toDomain())
-            }
-            return Result.failure(Throwable("code: ${response.code()} message: ${response.message()}"))
-        } catch (e: Exception) {
-            return Result.failure(e)
-        }
+        ticketRetrofitService.postReserveTicket(ReservedTicketRequest(ticketId))
+            .runCatchingWithErrorHandler()
+            .getOrElse { error -> return Result.failure(error) }
+            .let { return Result.success(it.toDomain()) }
     }
 }

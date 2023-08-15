@@ -251,4 +251,63 @@ class MyPageViewModelTest {
         }
         softly.assertAll()
     }
+
+    @Test
+    fun `로그아웃에 성공하면 SignOutSuccess 이벤트가 발생하고 에러 상태이다`() {
+        // given
+        coEvery {
+            authRepository.signOut()
+        } answers {
+            Result.success(Unit)
+        }
+
+        // when
+        vm.signOut()
+
+        // then
+        val softly = SoftAssertions().apply {
+            assertThat(vm.event.getValue() is MyPageEvent.SignOutSuccess).isTrue
+            assertThat(vm.uiState.value is MyPageUiState.Error).isTrue
+
+            // and
+            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+        }
+        softly.assertAll()
+    }
+
+    @Test
+    fun `회원탈퇴 확인 이벤트가 발생한다`() {
+        // when
+        vm.showConfirmDelete()
+
+        // then
+        assertThat(vm.event.getValue() is MyPageEvent.ShowConfirmDelete).isTrue
+    }
+
+    @Test
+    fun `회원 탈퇴에 성공하면 DeleteAccountSuccess 이벤트가 발생하고 에러상태다`() {
+        // given
+        coEvery {
+            authRepository.deleteAccount()
+        } answers {
+            Result.success(Unit)
+        }
+
+        // when
+        vm.deleteAccount()
+
+        // then
+        val softly = SoftAssertions().apply {
+            assertThat(vm.event.getValue() is MyPageEvent.DeleteAccountSuccess).isTrue
+            assertThat(vm.uiState.value is MyPageUiState.Error).isTrue
+
+            // and
+            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+        }
+        softly.assertAll()
+    }
 }
