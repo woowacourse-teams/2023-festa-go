@@ -9,6 +9,6 @@ public record StageCreateRequest(
     @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime startTime,
     String lineUp,
     @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime ticketOpenTime,
-    @NotNull Long festivalId) {
+    @NotNull(message = "festivalId 는 null 일 수 없습니다.") Long festivalId) {
 
 }

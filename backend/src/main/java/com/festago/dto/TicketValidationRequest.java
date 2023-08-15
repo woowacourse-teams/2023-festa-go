@@ -2,6 +2,7 @@ package com.festago.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-public record TicketValidationRequest(@NotNull String code) {
+public record TicketValidationRequest(
+    @NotNull(message = "code 는 null 일 수 없습니다.") String code) {
 
 }
