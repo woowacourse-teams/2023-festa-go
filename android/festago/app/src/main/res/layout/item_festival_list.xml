@@ -7,11 +7,7 @@
 
         <variable
             name="festival"
-            type="com.festago.festago.presentation.model.FestivalUiModel" />
-
-        <variable
-            name="vm"
-            type="com.festago.festago.presentation.ui.home.festivallist.FestivalListViewModel" />
+            type="com.festago.festago.presentation.model.FestivalItemUiState" />
 
     </data>
 
@@ -20,7 +16,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> vm.showTicketReserve(festival.id)}"
+        android:onClick="@{() -> festival.onFestivalDetail.invoke(festival.id)}"
         android:padding="8dp">
 
         <androidx.cardview.widget.CardView

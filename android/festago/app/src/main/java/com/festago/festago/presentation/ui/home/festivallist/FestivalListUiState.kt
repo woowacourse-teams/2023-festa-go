@@ -1,11 +1,13 @@
 package com.festago.festago.presentation.ui.home.festivallist
 
-import com.festago.festago.presentation.model.FestivalUiModel
+import com.festago.festago.presentation.model.FestivalItemUiState
 
 sealed interface FestivalListUiState {
     object Loading : FestivalListUiState
 
-    data class Success(val festivals: List<FestivalUiModel>) : FestivalListUiState {
+    data class Success(
+        val festivals: List<FestivalItemUiState>
+    ) : FestivalListUiState {
         val hasFestival get() = festivals.isNotEmpty()
     }
 
