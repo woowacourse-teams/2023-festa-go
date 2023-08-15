@@ -1,13 +1,23 @@
 package com.festago.auth.domain;
 
+import com.festago.auth.annotation.Admin;
+import com.festago.auth.annotation.Anonymous;
+import com.festago.auth.annotation.Member;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
+import java.lang.annotation.Annotation;
 
 public enum Role {
-    ANONYMOUS,
-    MEMBER,
-    ADMIN,
+    ANONYMOUS(Anonymous.class),
+    MEMBER(Member.class),
+    ADMIN(Admin.class),
     ;
+
+    private final Class<? extends Annotation> annotation;
+
+    Role(Class<? extends Annotation> annotation) {
+        this.annotation = annotation;
+    }
 
     public static Role from(String role) {
         try {
@@ -15,5 +25,9 @@ public enum Role {
         } catch (NullPointerException | IllegalArgumentException e) {
             throw new InternalServerException(ErrorCode.INVALID_ROLE_NAME);
         }
+    }
+
+    public Class<? extends Annotation> getAnnotation() {
+        return annotation;
     }
 }
