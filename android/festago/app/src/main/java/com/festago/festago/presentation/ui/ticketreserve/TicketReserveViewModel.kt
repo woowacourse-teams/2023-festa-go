@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.festago.domain.model.ReservationStage
 import com.festago.domain.repository.AuthRepository
 import com.festago.domain.repository.FestivalRepository
 import com.festago.domain.repository.ReservationTicketRepository
 import com.festago.domain.repository.TicketRepository
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.domain.model.ReservationStage
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
@@ -42,7 +42,7 @@ class TicketReserveViewModel(
                                 name = it.name,
                                 thumbnail = it.thumbnail,
                                 endDate = it.endDate,
-                                startDate = it.startDate
+                                startDate = it.startDate,
                             ),
                             stages = it.reservationStages.toTicketReserveItems(),
                         ),
