@@ -2,7 +2,6 @@ package com.festago.domain;
 
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +20,6 @@ public class Student {
     private Long id;
 
     @NotNull
-    @Column(unique = true)
     @OneToOne(fetch = FetchType.LAZY)
     private Member member;
 
