@@ -7,18 +7,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.R
-import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.datasource.AuthLocalDataSource
-import com.festago.festago.data.repository.AuthDefaultRepository
-import com.festago.festago.data.repository.FestivalDefaultRepository
-import com.festago.festago.data.repository.ReservationTicketDefaultRepository
-import com.festago.festago.data.repository.TicketDefaultRepository
-import com.festago.festago.data.retrofit.AuthRetrofitClient
-import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.model.ReservationTicketUiModel
+import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.reservationcomplete.ReservationCompleteActivity
 import com.festago.festago.presentation.ui.signin.SignInActivity
@@ -26,7 +19,6 @@ import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.Rese
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketSuccess
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowSignIn
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowTicketTypes
-import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.Companion.TicketReservationViewModelFactory
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
@@ -37,25 +29,7 @@ import java.util.Locale
 class TicketReserveActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTicketReserveBinding
 
-    private val vm: TicketReserveViewModel by viewModels {
-        TicketReservationViewModelFactory(
-            ReservationTicketDefaultRepository(
-                reservationTicketRetrofitService = NormalRetrofitClient.reservationTicketRetrofitService,
-            ),
-            FestivalDefaultRepository(
-                festivalRetrofitService = NormalRetrofitClient.festivalRetrofitService,
-            ),
-            TicketDefaultRepository(
-                ticketRetrofitService = AuthRetrofitClient.ticketRetrofitService,
-            ),
-            AuthDefaultRepository(
-                authRetrofitService = NormalRetrofitClient.authRetrofitService,
-                authDataSource = AuthLocalDataSource.getInstance(this),
-                userRetrofitService = AuthRetrofitClient.userRetrofitService,
-            ),
-            FirebaseAnalyticsHelper,
-        )
-    }
+    private val vm: TicketReserveViewModel by viewModels { FestagoViewModelFactory }
 
     private val contentsAdapter by lazy { TicketReserveAdapter() }
     private val headerAdapter by lazy { TicketReserveHeaderAdapter() }

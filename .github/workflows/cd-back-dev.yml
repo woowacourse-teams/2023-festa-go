@@ -1,10 +1,12 @@
-name: CI-Back
+name: CD-Back-Dev
 
 on:
-  pull_request:
+  push:
     branches:
       - dev
     paths: 'backend/**'
+
+  workflow_dispatch:
 
 defaults:
   run:
@@ -29,18 +31,13 @@ jobs:
       - name: gradlew 권한 부여
         run: chmod +x gradlew
 
-      - name: Gradle build
-        run: ./gradlew build
+      - name: Gradle Test
+        run: ./gradlew test
 
-      - name: 테스트 결과 PR에 커멘트 등록
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
+      - name: trigger to jenkins dev cd
+        uses: appleboy/jenkins-action@master
         with:
-          files: '**/build/test-results/test/TEST-*.xml'
-
-      - name: 테스트 실패 Check 코멘트 등록
-        uses: mikepenz/action-junit-report@v3
-        if: always()
-        with:
-          report_paths: '**/build/test-results/test/TEST-*.xml'
-          token: ${{ github.token }}
+          url: ${{ secrets.JENKINS_URL }}
+          user: "festago"
+          token: ${{ secrets.JENKINS_API_TOKEN}}
+          job: "festago-dev-cd"

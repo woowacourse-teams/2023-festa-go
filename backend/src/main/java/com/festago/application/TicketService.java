@@ -16,6 +16,7 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.dto.TicketingRequest;
 import com.festago.dto.TicketingResponse;
+import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
 import java.time.LocalDateTime;
@@ -61,22 +62,12 @@ public class TicketService {
     }
 
     public TicketingResponse ticketing(Long memberId, TicketingRequest request) {
-        int reservedAmount = reserveTicket(request);
         Ticket ticket = findTicketById(request.ticketId());
         Member member = findMemberById(memberId);
+        validateAlreadyReserved(member, ticket);
+        int reservedAmount = reserveTicket(request.ticketId());
         MemberTicket memberTicket = memberTicketRepository.save(ticket.createMemberTicket(member, reservedAmount));
         return TicketingResponse.from(memberTicket);
-    }
-
-    private int reserveTicket(TicketingRequest request) {
-        TicketAmount ticketAmount = findTicketAmountById(request.ticketId());
-        ticketAmount.increaseReservedAmount();
-        return ticketAmount.getReservedAmount();
-    }
-
-    private TicketAmount findTicketAmountById(Long ticketAmountId) {
-        return ticketAmountRepository.findByTicketIdForUpdate(ticketAmountId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
     }
 
     private Ticket findTicketById(Long ticketId) {
@@ -87,6 +78,23 @@ public class TicketService {
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    private void validateAlreadyReserved(Member member, Ticket ticket) {
+        if (memberTicketRepository.existsByOwnerAndStage(member, ticket.getStage())) {
+            throw new BadRequestException(ErrorCode.RESERVE_TICKET_OVER_AMOUNT);
+        }
+    }
+
+    private int reserveTicket(Long ticketId) {
+        TicketAmount ticketAmount = findTicketAmountById(ticketId);
+        ticketAmount.increaseReservedAmount();
+        return ticketAmount.getReservedAmount();
+    }
+
+    private TicketAmount findTicketAmountById(Long ticketId) {
+        return ticketAmountRepository.findByTicketIdForUpdate(ticketId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)

@@ -3,7 +3,6 @@ package com.festago.festago.presentation.ui.home.mypage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
@@ -14,7 +13,6 @@ import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.model.TicketUiModel
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
-import com.kakao.sdk.auth.TokenManagerProvider
 import kotlinx.coroutines.launch
 
 class MyPageViewModel(
@@ -55,16 +53,6 @@ class MyPageViewModel(
                         _uiState.value = current.copy(userProfile = it.toPresentation())
                 }
             }.onFailure {
-                if (it.message.toString().contains("401")) {
-                    authRepository.signIn(
-                        socialType = "KAKAO",
-                        token = TokenManagerProvider.instance.manager.getToken()?.accessToken ?: "",
-                    ).onSuccess {
-                        loadUserInfo()
-                        return
-                    }
-                }
-
                 _uiState.value = MyPageUiState.Error
                 analyticsHelper.logNetworkFailure(
                     key = KEY_LOAD_USER_INFO,
@@ -132,27 +120,6 @@ class MyPageViewModel(
 
     fun showTicketHistory() {
         _event.setValue(MyPageEvent.ShowTicketHistory)
-    }
-
-    class MyPageViewModelFactory(
-        private val userRepository: UserRepository,
-        private val ticketRepository: TicketRepository,
-        private val authRepository: AuthRepository,
-        private val analyticsHelper: AnalyticsHelper,
-    ) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(MyPageViewModel::class.java)) {
-                return MyPageViewModel(
-                    userRepository = userRepository,
-                    ticketRepository = ticketRepository,
-                    authRepository = authRepository,
-                    analyticsHelper = analyticsHelper,
-                ) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel Class")
-        }
     }
 
     companion object {
