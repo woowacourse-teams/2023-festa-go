@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.mapper
 
-import com.festago.festago.domain.model.Reservation
+import com.festago.domain.model.Reservation
 import com.festago.festago.presentation.model.ReservationUiModel
 
 fun Reservation.toPresentation() = ReservationUiModel(

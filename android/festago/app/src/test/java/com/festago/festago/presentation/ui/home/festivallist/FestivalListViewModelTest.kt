@@ -1,9 +1,9 @@
 package com.festago.festago.presentation.ui.home.festivallist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.festago.domain.model.Festival
 import com.festago.domain.repository.FestivalRepository
 import com.festago.festago.analytics.AnalyticsHelper
-import com.festago.festago.domain.model.Festival
 import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk

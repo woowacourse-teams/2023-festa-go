@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.mapper
 
-import com.festago.festago.domain.model.TicketCondition
+import com.festago.domain.model.TicketCondition
 import com.festago.festago.presentation.model.TicketConditionUiModel
 
 fun TicketCondition.toPresentation(): TicketConditionUiModel =

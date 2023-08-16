@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.festago.domain.model.model.timer.Timer
+import com.festago.domain.model.TicketCode
+import com.festago.domain.model.timer.Timer
+import com.festago.domain.model.timer.TimerListener
 import com.festago.domain.repository.TicketRepository
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.domain.model.TicketCode
-import com.festago.festago.domain.model.timer.TimerListener
 import com.festago.festago.presentation.mapper.toPresentation
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,7 @@
 package com.festago.festago.data.dto
 
-import com.festago.festago.domain.model.Ticket
-import com.festago.festago.domain.model.TicketCondition
+import com.festago.domain.model.Ticket
+import com.festago.domain.model.TicketCondition
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime

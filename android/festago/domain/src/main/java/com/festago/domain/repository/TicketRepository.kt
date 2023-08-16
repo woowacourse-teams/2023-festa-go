@@ -1,8 +1,8 @@
 package com.festago.domain.repository
 
-import com.festago.festago.domain.model.ReservedTicket
-import com.festago.festago.domain.model.Ticket
-import com.festago.festago.domain.model.TicketCode
+import com.festago.domain.model.ReservedTicket
+import com.festago.domain.model.Ticket
+import com.festago.domain.model.TicketCode
 
 interface TicketRepository {
     suspend fun loadTicket(ticketId: Long): Result<Ticket>

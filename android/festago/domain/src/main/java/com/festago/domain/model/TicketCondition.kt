@@ -1,4 +1,4 @@
-package com.festago.festago.domain.model
+package com.festago.domain.model
 
 enum class TicketCondition {
     BEFORE_ENTRY,

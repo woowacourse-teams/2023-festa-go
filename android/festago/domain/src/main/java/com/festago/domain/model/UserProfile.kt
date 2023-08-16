@@ -1,4 +1,4 @@
-package com.festago.festago.domain.model
+package com.festago.domain.model
 
 data class UserProfile(
     val memberId: Long,

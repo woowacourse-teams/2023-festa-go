@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.mapper
 
-import com.festago.festago.domain.model.ReservationStage
+import com.festago.domain.model.ReservationStage
 import com.festago.festago.presentation.model.ReservationStageUiModel
 import com.festago.festago.presentation.model.TicketReserveItemUiModel
 import java.time.LocalDateTime

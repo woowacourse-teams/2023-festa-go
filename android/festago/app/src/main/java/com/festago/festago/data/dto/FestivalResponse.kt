@@ -1,6 +1,6 @@
 package com.festago.festago.data.dto
 
-import com.festago.festago.domain.model.Festival
+import com.festago.domain.model.Festival
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 

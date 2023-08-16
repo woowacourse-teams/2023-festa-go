@@ -6,8 +6,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
+import com.festago.domain.model.ReservedTicket
 import com.festago.festago.databinding.ActivityTicketReserveBinding
-import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.mapper.toTicketReserveItem
 import com.festago.festago.presentation.model.ReservationTicketUiModel
