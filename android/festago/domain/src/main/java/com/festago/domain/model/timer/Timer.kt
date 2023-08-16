@@ -1,5 +1,6 @@
-package com.festago.festago.domain.model.timer
+package com.festago.domain.model.model.timer
 
+import com.festago.festago.domain.model.timer.TimerListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

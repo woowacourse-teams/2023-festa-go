@@ -1,4 +1,4 @@
-package com.festago.festago.domain.repository
+package com.festago.domain.repository
 
 import com.festago.festago.domain.model.Festival
 import com.festago.festago.domain.model.Reservation

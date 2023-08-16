@@ -1,4 +1,4 @@
-package com.festago.festago.domain.repository
+package com.festago.domain.repository
 
 interface AuthRepository {
     val isSigned: Boolean

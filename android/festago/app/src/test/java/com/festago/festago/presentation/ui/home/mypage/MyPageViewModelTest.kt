@@ -1,15 +1,15 @@
 package com.festago.festago.presentation.ui.home.mypage
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.festago.domain.repository.AuthRepository
+import com.festago.domain.repository.TicketRepository
+import com.festago.domain.repository.UserRepository
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.domain.model.MemberTicketFestival
 import com.festago.festago.domain.model.Stage
 import com.festago.festago.domain.model.Ticket
 import com.festago.festago.domain.model.TicketCondition
 import com.festago.festago.domain.model.UserProfile
-import com.festago.festago.domain.repository.AuthRepository
-import com.festago.festago.domain.repository.TicketRepository
-import com.festago.festago.domain.repository.UserRepository
 import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk

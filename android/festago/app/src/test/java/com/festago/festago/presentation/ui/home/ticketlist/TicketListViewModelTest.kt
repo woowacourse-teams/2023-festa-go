@@ -1,9 +1,9 @@
 package com.festago.festago.presentation.ui.home.ticketlist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.festago.domain.repository.TicketRepository
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.domain.model.Ticket
-import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.fixture.TicketFixture
 import com.festago.festago.presentation.mapper.toMemberTicketModel
 import com.festago.festago.presentation.mapper.toPresentation
