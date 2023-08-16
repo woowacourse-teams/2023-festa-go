@@ -10,7 +10,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 @Component
-public class ServletRequestWrapping extends OncePerRequestFilter {
+public class RequestWrappingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
