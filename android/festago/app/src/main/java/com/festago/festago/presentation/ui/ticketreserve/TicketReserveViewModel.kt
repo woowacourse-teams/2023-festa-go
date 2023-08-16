@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
+import com.festago.festago.domain.model.ReservationStage
 import com.festago.festago.domain.repository.AuthRepository
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.domain.repository.ReservationTicketRepository
@@ -14,6 +15,7 @@ import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class TicketReserveViewModel(
     private val reservationTicketRepository: ReservationTicketRepository,
@@ -34,7 +36,16 @@ class TicketReserveViewModel(
             festivalRepository.loadFestivalDetail(festivalId)
                 .onSuccess {
                     _uiState.setValue(
-                        TicketReserveUiState.Success(it.toPresentation(), authRepository.isSigned),
+                        TicketReserveUiState.Success(
+                            festival = ReservationFestivalUiState(
+                                id = it.id,
+                                name = it.name,
+                                thumbnail = it.thumbnail,
+                                endDate = it.endDate,
+                                startDate = it.startDate
+                            ),
+                            stages = it.reservationStages.toTicketReserveItems(),
+                        ),
                     )
                 }.onFailure {
                     _uiState.value = TicketReserveUiState.Error
@@ -46,14 +57,14 @@ class TicketReserveViewModel(
         }
     }
 
-    fun showTicketTypes(stageId: Int) {
+    fun showTicketTypes(stageId: Int, stageStartTime: LocalDateTime) {
         viewModelScope.launch {
             if (authRepository.isSigned) {
                 reservationTicketRepository.loadTicketTypes(stageId)
                     .onSuccess { tickets ->
                         _event.setValue(
                             TicketReserveEvent.ShowTicketTypes(
-                                stageId,
+                                stageStartTime,
                                 tickets.map { it.toPresentation() },
                             ),
                         )
@@ -75,6 +86,21 @@ class TicketReserveViewModel(
                     _event.setValue(TicketReserveEvent.ReserveTicketFailed)
                 }
         }
+    }
+
+    private fun ReservationStage.toTicketReserveItem() = TicketReserveItemUiState(
+        id = id,
+        lineUp = lineUp,
+        startTime = startTime,
+        ticketOpenTime = ticketOpenTime,
+        reservationTickets = reservationTickets.map { it.toPresentation() },
+        canReserve = LocalDateTime.now().isAfter(ticketOpenTime),
+        isSigned = authRepository.isSigned,
+        onShowStageTickets = ::showTicketTypes,
+    )
+
+    private fun List<ReservationStage>.toTicketReserveItems() = map {
+        it.toTicketReserveItem()
     }
 
     companion object {

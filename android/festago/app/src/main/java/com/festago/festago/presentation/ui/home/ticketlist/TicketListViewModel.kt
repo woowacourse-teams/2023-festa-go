@@ -6,12 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
+import com.festago.festago.domain.model.Ticket
 import com.festago.festago.domain.repository.TicketRepository
-import com.festago.festago.presentation.mapper.toMemberTicketModel
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class TicketListViewModel(
     private val ticketRepository: TicketRepository,
@@ -28,8 +29,7 @@ class TicketListViewModel(
         viewModelScope.launch {
             ticketRepository.loadCurrentTickets()
                 .onSuccess { tickets ->
-                    _uiState.value =
-                        TicketListUiState.Success(tickets.toPresentation().toMemberTicketModel())
+                    _uiState.value = TicketListUiState.Success(tickets.map { it.toUiState() })
                 }.onFailure {
                     _uiState.value = TicketListUiState.Error
                     analyticsHelper.logNetworkFailure(KEY_LOAD_TICKETS_LOG, it.message.toString())
@@ -40,6 +40,20 @@ class TicketListViewModel(
     fun showTicketEntry(ticketId: Long) {
         _event.setValue(TicketListEvent.ShowTicketEntry(ticketId))
     }
+
+    private fun Ticket.toUiState() = TicketListItemUiState(
+        id = id,
+        number = number,
+        entryTime = entryTime,
+        reserveAt = reserveAt,
+        condition = condition.toPresentation(),
+        stage = stage.toPresentation(),
+        festivalId = festivalTicket.id,
+        festivalName = festivalTicket.name,
+        festivalThumbnail = festivalTicket.thumbnail,
+        canEntry = LocalDateTime.now().isAfter(entryTime),
+        onTicketEntry = ::showTicketEntry,
+    )
 
     companion object {
         private const val KEY_LOAD_TICKETS_LOG = "load_tickets"

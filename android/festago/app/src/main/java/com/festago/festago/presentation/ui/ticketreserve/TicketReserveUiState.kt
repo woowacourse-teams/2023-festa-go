@@ -1,12 +1,10 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
-import com.festago.festago.presentation.model.ReservationUiModel
-
 sealed interface TicketReserveUiState {
     object Loading : TicketReserveUiState
     class Success(
-        val reservation: ReservationUiModel,
-        val isSigned: Boolean,
+        val festival: ReservationFestivalUiState,
+        val stages: List<TicketReserveItemUiState>,
     ) : TicketReserveUiState
 
     object Error : TicketReserveUiState
