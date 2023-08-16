@@ -1,5 +1,6 @@
-package com.festago.festago.data.retrofit
+package com.festago.festago.di
 
+import com.festago.festago.data.retrofit.AuthInterceptor
 import com.festago.festago.data.service.TicketRetrofitService
 import com.festago.festago.data.service.UserRetrofitService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -8,11 +9,11 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-class AuthRetrofitClient(baseUrl: String, tokenManager: TokenManager) {
+class AuthServiceContainer(baseUrl: String, tokenContainer: TokenContainer) {
 
     private val okHttpClient: OkHttpClient = OkHttpClient
         .Builder()
-        .addInterceptor(AuthInterceptor(tokenManager))
+        .addInterceptor(AuthInterceptor(tokenContainer.tokenManager))
         .build()
 
     private val authRetrofit: Retrofit = Retrofit.Builder()

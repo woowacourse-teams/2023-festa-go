@@ -1,15 +1,14 @@
 package com.festago.festago.di
 
 import com.festago.festago.data.repository.TokenDefaultRepository
-import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.data.retrofit.TokenManager
 
 class TokenContainer(
-    normalRetrofitClient: NormalRetrofitClient,
+    normalServiceContainer: NormalServiceContainer,
     localDataSourceContainer: LocalDataSourceContainer,
 ) {
     val tokenRepository = TokenDefaultRepository(
-        tokenRetrofitService = normalRetrofitClient.tokenRetrofitService,
+        tokenRetrofitService = normalServiceContainer.tokenRetrofitService,
         tokenLocalDataSource = localDataSourceContainer.tokenDataSource,
     )
     val tokenManager = TokenManager(tokenRepository)

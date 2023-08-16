@@ -1,4 +1,4 @@
-package com.festago.festago.data.retrofit
+package com.festago.festago.di
 
 import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.service.ReservationTicketRetrofitService
@@ -8,8 +8,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
-class NormalRetrofitClient(baseUrl: String = "") {
-
+class NormalServiceContainer(baseUrl: String) {
     private val normalRetrofit: Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))

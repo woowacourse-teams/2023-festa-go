@@ -2,12 +2,11 @@ package com.festago.festago
 
 import android.app.Application
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.retrofit.AuthRetrofitClient
-import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.di.AnalysisContainer
+import com.festago.festago.di.AuthServiceContainer
 import com.festago.festago.di.LocalDataSourceContainer
+import com.festago.festago.di.NormalServiceContainer
 import com.festago.festago.di.RepositoryContainer
-import com.festago.festago.di.ServiceContainer
 import com.festago.festago.di.TokenContainer
 import com.kakao.sdk.common.KakaoSdk
 
@@ -25,25 +24,21 @@ class FestagoApplication : Application() {
     }
 
     private fun initRepositoryContainer() {
-        val normalRetrofitClient = NormalRetrofitClient(BuildConfig.BASE_URL)
+        normalServiceContainer = NormalServiceContainer(BuildConfig.BASE_URL)
 
         tokenContainer = TokenContainer(
-            normalRetrofitClient = normalRetrofitClient,
+            normalServiceContainer = normalServiceContainer,
             localDataSourceContainer = LocalDataSourceContainer(applicationContext),
         )
 
-        val authRetrofitClient = AuthRetrofitClient(
+        authServiceContainer = AuthServiceContainer(
             baseUrl = BuildConfig.BASE_URL,
-            tokenManager = tokenContainer.tokenManager,
-        )
-
-        serviceContainer = ServiceContainer(
-            normalRetrofitClient = normalRetrofitClient,
-            authRetrofitClient = authRetrofitClient,
+            tokenContainer = tokenContainer,
         )
 
         repositoryContainer = RepositoryContainer(
-            serviceContainer = serviceContainer,
+            authServiceContainer = authServiceContainer,
+            normalServiceContainer = normalServiceContainer,
             tokenContainer = tokenContainer,
         )
     }
@@ -54,7 +49,8 @@ class FestagoApplication : Application() {
     }
 
     companion object DependencyContainer {
-        lateinit var serviceContainer: ServiceContainer
+        lateinit var normalServiceContainer: NormalServiceContainer
+        lateinit var authServiceContainer: AuthServiceContainer
         lateinit var repositoryContainer: RepositoryContainer
         lateinit var analysisContainer: AnalysisContainer
         lateinit var tokenContainer: TokenContainer
