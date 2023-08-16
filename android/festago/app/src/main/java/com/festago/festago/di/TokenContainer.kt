@@ -9,7 +9,7 @@ class TokenContainer(
     localDataSourceContainer: LocalDataSourceContainer,
 ) {
     val tokenRepository = TokenDefaultRepository(
-        authRetrofitService = normalRetrofitClient.authRetrofitService,
+        tokenRetrofitService = normalRetrofitClient.tokenRetrofitService,
         tokenLocalDataSource = localDataSourceContainer.tokenDataSource,
     )
     val tokenManager = TokenManager(tokenRepository)

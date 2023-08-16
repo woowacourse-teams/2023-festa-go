@@ -2,14 +2,14 @@ package com.festago.festago.data.repository
 
 import com.festago.festago.data.datasource.TokenDataSource
 import com.festago.festago.data.dto.OauthRequest
-import com.festago.festago.data.service.AuthRetrofitService
+import com.festago.festago.data.service.TokenRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
 import com.festago.festago.domain.repository.TokenRepository
 import kotlinx.coroutines.runBlocking
 
 class TokenDefaultRepository(
     private val tokenLocalDataSource: TokenDataSource,
-    private val authRetrofitService: AuthRetrofitService,
+    private val tokenRetrofitService: TokenRetrofitService,
 ) : TokenRepository {
     override var token: String?
         get() = tokenLocalDataSource.token
@@ -17,9 +17,19 @@ class TokenDefaultRepository(
             tokenLocalDataSource.token = value
         }
 
+    override suspend fun signIn(socialType: String, token: String): Result<Unit> {
+        tokenRetrofitService.getOauthToken(OauthRequest(socialType, token))
+            .runCatchingWithErrorHandler()
+            .getOrElse { error -> return Result.failure(error) }
+            .let {
+                tokenLocalDataSource.token = it.accessToken
+                return Result.success(Unit)
+            }
+    }
+
     override fun refreshToken(token: String): Result<Unit> {
         return runBlocking {
-            authRetrofitService.getOauthToken(
+            tokenRetrofitService.getOauthToken(
                 oauthRequest = OauthRequest(
                     socialType = "KAKAO",
                     accessToken = token,

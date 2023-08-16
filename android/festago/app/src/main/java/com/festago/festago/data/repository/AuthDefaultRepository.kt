@@ -1,7 +1,5 @@
 package com.festago.festago.data.repository
 
-import com.festago.festago.data.dto.OauthRequest
-import com.festago.festago.data.service.AuthRetrofitService
 import com.festago.festago.data.service.UserRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
 import com.festago.festago.domain.repository.AuthRepository
@@ -9,7 +7,6 @@ import com.festago.festago.domain.repository.TokenRepository
 import com.kakao.sdk.user.UserApiClient
 
 class AuthDefaultRepository(
-    private val authRetrofitService: AuthRetrofitService,
     private val userRetrofitService: UserRetrofitService,
     private val tokenRepository: TokenRepository,
 ) : AuthRepository {
@@ -21,13 +18,7 @@ class AuthDefaultRepository(
         get() = tokenRepository.token
 
     override suspend fun signIn(socialType: String, token: String): Result<Unit> {
-        authRetrofitService.getOauthToken(OauthRequest(socialType, token))
-            .runCatchingWithErrorHandler()
-            .getOrElse { error -> return Result.failure(error) }
-            .let {
-                tokenRepository.token = it.accessToken
-                return Result.success(Unit)
-            }
+        return tokenRepository.signIn(socialType, token)
     }
 
     override suspend fun signOut(): Result<Unit> {

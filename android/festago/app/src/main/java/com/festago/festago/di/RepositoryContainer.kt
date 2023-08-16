@@ -16,7 +16,6 @@ class RepositoryContainer(
     tokenContainer: TokenContainer,
 ) {
     val authRepository: AuthRepository = AuthDefaultRepository(
-        authRetrofitService = serviceContainer.authRetrofitService,
         tokenRepository = tokenContainer.tokenRepository,
         userRetrofitService = serviceContainer.userRetrofitService,
     )

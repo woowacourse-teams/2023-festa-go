@@ -2,7 +2,6 @@ package com.festago.festago.di
 
 import com.festago.festago.data.retrofit.AuthRetrofitClient
 import com.festago.festago.data.retrofit.NormalRetrofitClient
-import com.festago.festago.data.service.AuthRetrofitService
 import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.service.ReservationTicketRetrofitService
 import com.festago.festago.data.service.TicketRetrofitService
@@ -12,8 +11,6 @@ class ServiceContainer(
     normalRetrofitClient: NormalRetrofitClient,
     authRetrofitClient: AuthRetrofitClient,
 ) {
-    val authRetrofitService: AuthRetrofitService =
-        normalRetrofitClient.authRetrofitService
 
     val festivalRetrofitService: FestivalRetrofitService =
         normalRetrofitClient.festivalRetrofitService
