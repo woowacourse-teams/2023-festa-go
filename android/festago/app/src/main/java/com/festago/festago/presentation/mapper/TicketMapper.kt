@@ -1,9 +1,7 @@
 package com.festago.festago.presentation.mapper
 
 import com.festago.domain.model.Ticket
-import com.festago.festago.presentation.model.MemberTicketUiModel
 import com.festago.festago.presentation.model.TicketUiModel
-import java.time.LocalDateTime
 
 fun Ticket.toPresentation(): TicketUiModel = TicketUiModel(
     id = id,
@@ -17,21 +15,5 @@ fun Ticket.toPresentation(): TicketUiModel = TicketUiModel(
     festivalThumbnail = festivalTicket.thumbnail,
 )
 
-fun TicketUiModel.toMemberTicketModel(): MemberTicketUiModel = MemberTicketUiModel(
-    id = id,
-    number = number,
-    entryTime = entryTime,
-    condition = condition,
-    stage = stage,
-    reserveAt = reserveAt,
-    festivalId = festivalId,
-    festivalName = festivalName,
-    festivalThumbnail = festivalThumbnail,
-    canEntry = LocalDateTime.now().isAfter(entryTime),
-)
-
 fun List<Ticket>.toPresentation(): List<TicketUiModel> =
     this.map { ticket -> ticket.toPresentation() }
-
-fun List<TicketUiModel>.toMemberTicketModel(): List<MemberTicketUiModel> =
-    this.map { ticketUiModel -> ticketUiModel.toMemberTicketModel() }

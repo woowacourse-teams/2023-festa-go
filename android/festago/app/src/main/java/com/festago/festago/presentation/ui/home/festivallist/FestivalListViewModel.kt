@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.festago.domain.repository.FestivalRepository
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.ShowTicketReserve
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
@@ -27,7 +26,18 @@ class FestivalListViewModel(
         viewModelScope.launch {
             festivalRepository.loadFestivals()
                 .onSuccess {
-                    _uiState.value = FestivalListUiState.Success(it.toPresentation())
+                    _uiState.value = FestivalListUiState.Success(
+                        festivals = it.map { festival ->
+                            FestivalItemUiState(
+                                id = festival.id,
+                                name = festival.name,
+                                startDate = festival.startDate,
+                                endDate = festival.endDate,
+                                thumbnail = festival.thumbnail,
+                                onFestivalDetail = ::showTicketReserve
+                            )
+                        }
+                    )
                 }.onFailure {
                     _uiState.value = FestivalListUiState.Error
                     analyticsHelper.logNetworkFailure(KEY_LOAD_FESTIVALS_LOG, it.message.toString())

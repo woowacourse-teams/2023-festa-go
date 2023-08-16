@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.domain.model.Festival
 import com.festago.domain.repository.FestivalRepository
 import com.festago.festago.analytics.AnalyticsHelper
-import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +18,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.Exception
 import java.time.LocalDate
 
 class FestivalListViewModelTest {
@@ -78,7 +76,7 @@ class FestivalListViewModelTest {
 
             // and
             val actual = (vm.uiState.value as FestivalListUiState.Success).festivals
-            val expected = fakeFestivals.map { it.toPresentation() }
+            val expected = fakeFestivals.map { it.toUiState() }
             assertThat(actual).isEqualTo(expected)
         }
         softly.assertAll()
@@ -142,4 +140,13 @@ class FestivalListViewModelTest {
         // then
         assertThat(vm.event.getValue()).isInstanceOf(FestivalListEvent.ShowTicketReserve::class.java)
     }
+
+    private fun Festival.toUiState() = FestivalItemUiState(
+        id = id,
+        name = name,
+        startDate = startDate,
+        endDate = endDate,
+        thumbnail = thumbnail,
+        onFestivalDetail = vm::showTicketReserve
+    )
 }

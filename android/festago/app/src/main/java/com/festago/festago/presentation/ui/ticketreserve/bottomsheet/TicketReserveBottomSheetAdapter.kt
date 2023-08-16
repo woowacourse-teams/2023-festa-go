@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 
 class TicketReserveBottomSheetAdapter(
     private val callback: TicketReserveBottomSheetCallback,
-) :
-    ListAdapter<TicketReserveBottomItem, TicketReserveBottomViewHolder>(diffUtil) {
+) : ListAdapter<TicketReserveBottomItem, TicketReserveBottomViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

@@ -5,7 +5,6 @@ import com.festago.domain.model.Ticket
 import com.festago.domain.repository.TicketRepository
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.presentation.fixture.TicketFixture
-import com.festago.festago.presentation.mapper.toMemberTicketModel
 import com.festago.festago.presentation.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -21,6 +20,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.LocalDateTime
 
 class TicketListViewModelTest {
     private lateinit var vm: TicketListViewModel
@@ -67,7 +67,7 @@ class TicketListViewModelTest {
 
             // and
             val actual = (vm.uiState.value as TicketListUiState.Success).tickets
-            val expected = tickets.toPresentation().toMemberTicketModel()
+            val expected = tickets.map { it.toUiState() }
             assertThat(actual).isEqualTo(expected)
         }
         softly.assertAll()
@@ -94,7 +94,7 @@ class TicketListViewModelTest {
 
             // and
             val actual = (vm.uiState.value as TicketListUiState.Success).tickets
-            val expected = fakeEmptyTickets.toPresentation().toMemberTicketModel()
+            val expected = fakeEmptyTickets.map { it.toUiState() }
             assertThat(actual).isEqualTo(expected)
         }
         softly.assertAll()
@@ -164,4 +164,18 @@ class TicketListViewModelTest {
         val expected = 1L
         assertThat(actual).isEqualTo(expected)
     }
+
+    private fun Ticket.toUiState() = TicketListItemUiState(
+        id = id,
+        number = number,
+        entryTime = entryTime,
+        reserveAt = reserveAt,
+        condition = condition.toPresentation(),
+        stage = stage.toPresentation(),
+        festivalId = festivalTicket.id,
+        festivalName = festivalTicket.name,
+        festivalThumbnail = festivalTicket.thumbnail,
+        canEntry = LocalDateTime.now().isAfter(entryTime),
+        onTicketEntry = vm::showTicketEntry,
+    )
 }
