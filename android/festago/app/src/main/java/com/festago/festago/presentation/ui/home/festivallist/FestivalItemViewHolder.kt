@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.databinding.ItemFestivalListBinding
-import com.festago.festago.presentation.model.FestivalItemUiState
 
 class FestivalItemViewHolder(
     private val binding: ItemFestivalListBinding,

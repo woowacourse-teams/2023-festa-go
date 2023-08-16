@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.domain.model.Festival
 import com.festago.festago.domain.repository.FestivalRepository
-import com.festago.festago.presentation.model.FestivalItemUiState
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

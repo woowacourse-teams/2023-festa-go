@@ -6,7 +6,6 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketListBinding
-import com.festago.festago.presentation.model.TicketListItemUiState
 import java.time.format.DateTimeFormatter
 
 class TicketListItemViewHolder(

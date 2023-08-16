@@ -1,7 +1,5 @@
 package com.festago.festago.presentation.ui.home.festivallist
 
-import com.festago.festago.presentation.model.FestivalItemUiState
-
 sealed interface FestivalListUiState {
     object Loading : FestivalListUiState
 

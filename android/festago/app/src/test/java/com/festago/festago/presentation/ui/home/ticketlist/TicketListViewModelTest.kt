@@ -6,7 +6,6 @@ import com.festago.festago.domain.model.Ticket
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.fixture.TicketFixture
 import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.model.TicketListItemUiState
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

@@ -3,7 +3,7 @@ package com.festago.festago.presentation.ui.ticketreserve.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.festago.festago.presentation.model.ReservationFestivalUiState
+import com.festago.festago.presentation.ui.ticketreserve.ReservationFestivalUiState
 import com.festago.festago.presentation.ui.ticketreserve.viewHolder.TicketReserveHeaderViewHolder
 
 class TicketReserveHeaderAdapter :

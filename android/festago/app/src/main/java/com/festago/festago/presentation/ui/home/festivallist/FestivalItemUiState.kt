@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.model
+package com.festago.festago.presentation.ui.home.festivallist
 
 import java.time.LocalDate
 

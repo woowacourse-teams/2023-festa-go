@@ -12,8 +12,6 @@ import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.domain.repository.ReservationTicketRepository
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.model.ReservationFestivalUiState
-import com.festago.festago.presentation.model.TicketReserveItemUiState
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch

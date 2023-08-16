@@ -2,7 +2,7 @@ package com.festago.festago.presentation.mapper
 
 import com.festago.festago.domain.model.ReservationStage
 import com.festago.festago.presentation.model.ReservationStageUiModel
-import com.festago.festago.presentation.model.TicketReserveItemUiState
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveItemUiState
 import java.time.LocalDateTime
 
 fun List<ReservationStage>.toPresentation() = map { it.toPresentation() }

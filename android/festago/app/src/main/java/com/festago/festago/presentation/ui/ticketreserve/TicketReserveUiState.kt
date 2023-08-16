@@ -1,8 +1,5 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
-import com.festago.festago.presentation.model.ReservationFestivalUiState
-import com.festago.festago.presentation.model.TicketReserveItemUiState
-
 sealed interface TicketReserveUiState {
     object Loading : TicketReserveUiState
     class Success(

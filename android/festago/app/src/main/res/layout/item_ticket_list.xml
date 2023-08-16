@@ -9,7 +9,7 @@
 
         <variable
             name="ticket"
-            type="com.festago.festago.presentation.model.TicketListItemUiState" />
+            type="com.festago.festago.presentation.ui.home.ticketlist.TicketListItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

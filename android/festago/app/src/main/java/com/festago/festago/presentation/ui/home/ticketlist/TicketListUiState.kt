@@ -1,7 +1,5 @@
 package com.festago.festago.presentation.ui.home.ticketlist
 
-import com.festago.festago.presentation.model.TicketListItemUiState
-
 sealed interface TicketListUiState {
     object Loading : TicketListUiState
 

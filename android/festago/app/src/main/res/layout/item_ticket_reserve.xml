@@ -11,7 +11,7 @@
 
         <variable
             name="stage"
-            type="com.festago.festago.presentation.model.TicketReserveItemUiState" />
+            type="com.festago.festago.presentation.ui.ticketreserve.TicketReserveItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -3,7 +3,6 @@ package com.festago.festago.presentation.ui.home.festivallist
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.festago.festago.presentation.model.FestivalItemUiState
 
 class FestivalListAdapter : ListAdapter<FestivalItemUiState, FestivalItemViewHolder>(diffUtil) {
 

@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.domain.repository.FestivalRepository
-import com.festago.festago.presentation.model.FestivalItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.ShowTicketReserve
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData

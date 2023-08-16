@@ -1,5 +1,7 @@
-package com.festago.festago.presentation.model
+package com.festago.festago.presentation.ui.home.ticketlist
 
+import com.festago.festago.presentation.model.StageUiModel
+import com.festago.festago.presentation.model.TicketConditionUiModel
 import java.time.LocalDateTime
 
 data class TicketListItemUiState(

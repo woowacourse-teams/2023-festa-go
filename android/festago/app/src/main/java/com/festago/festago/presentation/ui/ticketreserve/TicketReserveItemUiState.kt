@@ -1,6 +1,7 @@
-package com.festago.festago.presentation.model
+package com.festago.festago.presentation.ui.ticketreserve
 
 import android.os.Parcelable
+import com.festago.festago.presentation.model.ReservationTicketUiModel
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 

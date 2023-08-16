@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveBinding
-import com.festago.festago.presentation.model.TicketReserveItemUiState
+import com.festago.festago.presentation.ui.ticketreserve.TicketReserveItemUiState
 import java.time.format.DateTimeFormatter
 
 class TicketReserveViewHolder(

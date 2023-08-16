@@ -9,7 +9,6 @@ import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.domain.model.Ticket
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.model.TicketListItemUiState
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch

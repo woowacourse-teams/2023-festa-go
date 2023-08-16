@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.model
+package com.festago.festago.presentation.ui.ticketreserve
 
 import java.time.LocalDate
 

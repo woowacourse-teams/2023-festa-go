@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveHeaderBinding
-import com.festago.festago.presentation.model.ReservationFestivalUiState
+import com.festago.festago.presentation.ui.ticketreserve.ReservationFestivalUiState
 import java.time.format.DateTimeFormatter
 
 class TicketReserveHeaderViewHolder(

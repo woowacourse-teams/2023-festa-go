@@ -7,7 +7,7 @@
 
         <variable
             name="festival"
-            type="com.festago.festago.presentation.model.FestivalItemUiState" />
+            type="com.festago.festago.presentation.ui.home.festivallist.FestivalItemUiState" />
 
     </data>
 

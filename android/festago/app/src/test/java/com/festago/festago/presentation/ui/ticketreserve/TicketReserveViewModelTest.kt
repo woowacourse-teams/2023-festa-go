@@ -11,7 +11,6 @@ import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.domain.repository.ReservationTicketRepository
 import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.model.ReservationFestivalUiState
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
