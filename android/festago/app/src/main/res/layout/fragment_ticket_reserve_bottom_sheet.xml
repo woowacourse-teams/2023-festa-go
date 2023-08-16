@@ -10,16 +10,16 @@
         <import type="java.util.Locale" />
 
         <variable
-            name="vm"
-            type="com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel" />
-
-        <variable
-            name="stage"
-            type="com.festago.festago.presentation.model.ReservationStageUiModel" />
+            name="stageStartTime"
+            type="String" />
 
         <variable
             name="selectedTicketTypeId"
             type="int" />
+
+        <variable
+            name="onReserve"
+            type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,9 +47,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
-            android:text="@{stage.startTime.format(DateTimeFormatter.ofPattern(@string/ticket_reserve_tv_start_time, Locale.KOREA))}"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:text="@{stageStartTime}"
             app:layout_constraintEnd_toEndOf="@id/endGuideLine"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toTopOf="parent"
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="28dp"
-            android:onClick="@{() -> vm.reserveTicket(selectedTicketTypeId)}"
+            android:onClick="@{() -> onReserve.invoke(selectedTicketTypeId)}"
             android:text="@string/ticket_reserve_tv_btn_reserve_ticket"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

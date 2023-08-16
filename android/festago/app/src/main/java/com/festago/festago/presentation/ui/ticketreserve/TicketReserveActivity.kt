@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
+import com.festago.festago.R
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
 import com.festago.festago.data.datasource.AuthLocalDataSource
 import com.festago.festago.data.repository.AuthDefaultRepository
@@ -17,7 +18,6 @@ import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.domain.model.ReservedTicket
 import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.mapper.toTicketReserveItem
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.reservationcomplete.ReservationCompleteActivity
@@ -30,6 +30,9 @@ import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel.
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class TicketReserveActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTicketReserveBinding
@@ -54,7 +57,7 @@ class TicketReserveActivity : AppCompatActivity() {
         )
     }
 
-    private val contentsAdapter by lazy { TicketReserveAdapter(vm) }
+    private val contentsAdapter by lazy { TicketReserveAdapter() }
     private val headerAdapter by lazy { TicketReserveHeaderAdapter() }
     private val concatAdapter by lazy { ConcatAdapter(headerAdapter, contentsAdapter) }
 
@@ -84,17 +87,28 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun handleEvent(event: TicketReserveEvent) = when (event) {
-        is ShowTicketTypes -> handleShowTicketTypes(event.stageId, event.tickets)
+        is ShowTicketTypes -> handleShowTicketTypes(
+            stageStartTime = event.stageStartTime,
+            tickets = event.tickets
+        )
+
         is ReserveTicketSuccess -> handleReserveTicketSuccess(event.reservedTicket)
         is ReserveTicketFailed -> handleReserveTicketFailed()
         is ShowSignIn -> handleShowSignIn()
     }
 
-    private fun handleShowTicketTypes(stageId: Int, tickets: List<ReservationTicketUiModel>) {
-        contentsAdapter.currentList.find { it.id == stageId }?.let { stage ->
-            TicketReserveBottomSheetFragment.newInstance(stage.toPresentation(), tickets)
-                .show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
-        }
+    private fun handleShowTicketTypes(
+        stageStartTime: LocalDateTime,
+        tickets: List<ReservationTicketUiModel>
+    ) {
+        TicketReserveBottomSheetFragment.newInstance(
+            stageStartTime.format(
+                DateTimeFormatter.ofPattern(
+                    getString(R.string.ticket_reserve_tv_start_time), Locale.KOREA
+                )
+            ),
+            tickets,
+        ).show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
     }
 
     private fun handleReserveTicketSuccess(reservedTicket: ReservedTicket) {
@@ -135,10 +149,8 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun updateSuccess(successState: TicketReserveUiState.Success) {
-        headerAdapter.submitList(listOf(successState.reservation))
-        val contents =
-            successState.reservation.reservationStages.toTicketReserveItem(successState.isSigned)
-        contentsAdapter.submitList(contents)
+        headerAdapter.submitList(listOf(successState.festival))
+        contentsAdapter.submitList(successState.stages)
         binding.srlTicketReserve.isRefreshing = false
     }
 

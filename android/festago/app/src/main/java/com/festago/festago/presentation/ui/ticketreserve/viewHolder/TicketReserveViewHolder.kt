@@ -5,36 +5,29 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveBinding
-import com.festago.festago.presentation.model.TicketReserveItemUiModel
-import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
+import com.festago.festago.presentation.model.TicketReserveItemUiState
 import java.time.format.DateTimeFormatter
 
 class TicketReserveViewHolder(
     private val binding: ItemTicketReserveBinding,
-    vm: TicketReserveViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
-    init {
-        binding.vm = vm
-    }
 
-    fun bind(item: TicketReserveItemUiModel) {
+    fun bind(item: TicketReserveItemUiState) {
         binding.stage = item
+        binding.btnReserveTicket.isEnabled = !item.isSigned || item.canReserve
 
         when {
             !item.isSigned -> {
-                binding.btnReserveTicket.isEnabled = true
                 binding.btnReserveTicket.text =
                     binding.root.context.getString(R.string.ticket_reserve_tv_signin)
             }
 
             item.canReserve -> {
-                binding.btnReserveTicket.isEnabled = true
                 binding.btnReserveTicket.text =
                     binding.root.context.getString(R.string.ticket_reserve_tv_btn_reserve_ticket)
             }
 
             else -> {
-                binding.btnReserveTicket.isEnabled = false
                 val pattern = DateTimeFormatter.ofPattern(
                     binding.root.context.getString(R.string.ticket_reserve_tv_btn_reserve_ticket_not_open),
                 )
@@ -54,16 +47,13 @@ class TicketReserveViewHolder(
     }
 
     companion object {
-        fun of(
-            parent: ViewGroup,
-            vm: TicketReserveViewModel,
-        ): TicketReserveViewHolder {
+        fun from(parent: ViewGroup): TicketReserveViewHolder {
             val binding = ItemTicketReserveBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return TicketReserveViewHolder(binding, vm)
+            return TicketReserveViewHolder(binding)
         }
     }
 }
