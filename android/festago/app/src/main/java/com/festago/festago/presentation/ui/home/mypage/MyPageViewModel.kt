@@ -13,7 +13,6 @@ import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.model.TicketUiModel
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
-import com.kakao.sdk.auth.TokenManagerProvider
 import kotlinx.coroutines.launch
 
 class MyPageViewModel(
@@ -54,16 +53,6 @@ class MyPageViewModel(
                         _uiState.value = current.copy(userProfile = it.toPresentation())
                 }
             }.onFailure {
-                if (it.message.toString().contains("401")) {
-                    authRepository.signIn(
-                        socialType = "KAKAO",
-                        token = TokenManagerProvider.instance.manager.getToken()?.accessToken ?: "",
-                    ).onSuccess {
-                        loadUserInfo()
-                        return
-                    }
-                }
-
                 _uiState.value = MyPageUiState.Error
                 analyticsHelper.logNetworkFailure(
                     key = KEY_LOAD_USER_INFO,

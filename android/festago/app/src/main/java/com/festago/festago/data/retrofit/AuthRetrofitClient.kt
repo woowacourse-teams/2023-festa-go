@@ -8,11 +8,11 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-class AuthRetrofitClient(baseUrl: String, token: String) {
+class AuthRetrofitClient(baseUrl: String, tokenManager: TokenManager) {
 
     private val okHttpClient: OkHttpClient = OkHttpClient
         .Builder()
-        .addInterceptor(AuthInterceptor(token))
+        .addInterceptor(AuthInterceptor(tokenManager))
         .build()
 
     private val authRetrofit: Retrofit = Retrofit.Builder()

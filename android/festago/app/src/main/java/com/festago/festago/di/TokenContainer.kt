@@ -1,8 +1,8 @@
 package com.festago.festago.di
 
-import com.festago.festago.data.datasource.AuthDataSource
-import com.festago.festago.data.retrofit.TokenFactory
+import com.festago.festago.data.retrofit.TokenManager
+import com.festago.festago.domain.repository.TokenRepository
 
-class TokenContainer(authDataSource: AuthDataSource) {
-    val token = TokenFactory(authDataSource).token
+class TokenContainer(tokenRepository: TokenRepository) {
+    val tokenManager = TokenManager(tokenRepository)
 }
