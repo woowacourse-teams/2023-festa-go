@@ -1,4 +1,4 @@
-package com.festago.domain.model
+package com.festago.festago.model
 
 import java.time.LocalDateTime
 

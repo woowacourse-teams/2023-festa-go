@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
-import com.festago.domain.model.ReservedTicket
+import com.festago.festago.model.ReservedTicket
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 import java.time.LocalDateTime
 

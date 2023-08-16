@@ -1,7 +1,7 @@
-package com.festago.domain.repository
+package com.festago.festago.repository
 
-import com.festago.domain.model.Festival
-import com.festago.domain.model.Reservation
+import com.festago.festago.model.Festival
+import com.festago.festago.model.Reservation
 
 interface FestivalRepository {
     suspend fun loadFestivals(): Result<List<Festival>>

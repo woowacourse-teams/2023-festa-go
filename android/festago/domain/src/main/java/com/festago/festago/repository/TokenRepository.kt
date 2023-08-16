@@ -1,4 +1,4 @@
-package com.festago.festago.domain.repository
+package com.festago.festago.repository
 
 interface TokenRepository {
     var token: String?

@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.festago.domain.repository.FestivalRepository
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.ShowTicketReserve
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
+import com.festago.festago.repository.FestivalRepository
 import kotlinx.coroutines.launch
 
 class FestivalListViewModel(
@@ -34,9 +34,9 @@ class FestivalListViewModel(
                                 startDate = festival.startDate,
                                 endDate = festival.endDate,
                                 thumbnail = festival.thumbnail,
-                                onFestivalDetail = ::showTicketReserve
+                                onFestivalDetail = ::showTicketReserve,
                             )
-                        }
+                        },
                     )
                 }.onFailure {
                     _uiState.value = FestivalListUiState.Error

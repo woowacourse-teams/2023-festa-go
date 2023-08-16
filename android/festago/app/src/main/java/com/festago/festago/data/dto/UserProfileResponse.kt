@@ -1,6 +1,6 @@
 package com.festago.festago.data.dto
 
-import com.festago.domain.model.UserProfile
+import com.festago.festago.model.UserProfile
 import kotlinx.serialization.Serializable
 
 @Serializable

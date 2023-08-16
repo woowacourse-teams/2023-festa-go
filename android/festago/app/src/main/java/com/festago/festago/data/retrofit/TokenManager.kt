@@ -1,6 +1,6 @@
 package com.festago.festago.data.retrofit
 
-import com.festago.festago.domain.repository.TokenRepository
+import com.festago.festago.repository.TokenRepository
 import com.kakao.sdk.auth.TokenManagerProvider
 
 class TokenManager(private val tokenRepository: TokenRepository) {

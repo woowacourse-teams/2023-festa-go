@@ -4,7 +4,7 @@ import com.festago.festago.data.datasource.TokenDataSource
 import com.festago.festago.data.dto.OauthRequest
 import com.festago.festago.data.service.TokenRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
-import com.festago.festago.domain.repository.TokenRepository
+import com.festago.festago.repository.TokenRepository
 import kotlinx.coroutines.runBlocking
 
 class TokenDefaultRepository(

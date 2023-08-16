@@ -1,9 +1,9 @@
 package com.festago.festago.data.repository
 
-import com.festago.domain.model.UserProfile
-import com.festago.domain.repository.UserRepository
 import com.festago.festago.data.service.UserRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
+import com.festago.festago.model.UserProfile
+import com.festago.festago.repository.UserRepository
 
 class UserDefaultRepository(
     private val userProfileService: UserRetrofitService,

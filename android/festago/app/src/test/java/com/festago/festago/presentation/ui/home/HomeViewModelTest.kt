@@ -1,7 +1,7 @@
 package com.festago.festago.presentation.ui.home
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.festago.domain.repository.AuthRepository
+import com.festago.festago.repository.AuthRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

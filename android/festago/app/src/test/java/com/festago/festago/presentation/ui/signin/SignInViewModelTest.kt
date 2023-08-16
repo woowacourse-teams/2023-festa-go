@@ -1,8 +1,8 @@
 package com.festago.festago.presentation.ui.signin
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.festago.domain.repository.AuthRepository
 import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.repository.AuthRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

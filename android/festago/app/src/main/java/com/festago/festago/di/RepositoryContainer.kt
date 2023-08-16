@@ -1,15 +1,15 @@
 package com.festago.festago.di
 
-import com.festago.domain.repository.AuthRepository
-import com.festago.domain.repository.FestivalRepository
-import com.festago.domain.repository.ReservationTicketRepository
-import com.festago.domain.repository.TicketRepository
-import com.festago.domain.repository.UserRepository
 import com.festago.festago.data.repository.AuthDefaultRepository
 import com.festago.festago.data.repository.FestivalDefaultRepository
 import com.festago.festago.data.repository.ReservationTicketDefaultRepository
 import com.festago.festago.data.repository.TicketDefaultRepository
 import com.festago.festago.data.repository.UserDefaultRepository
+import com.festago.festago.repository.AuthRepository
+import com.festago.festago.repository.FestivalRepository
+import com.festago.festago.repository.ReservationTicketRepository
+import com.festago.festago.repository.TicketRepository
+import com.festago.festago.repository.UserRepository
 
 class RepositoryContainer(
     private val authServiceContainer: AuthServiceContainer,

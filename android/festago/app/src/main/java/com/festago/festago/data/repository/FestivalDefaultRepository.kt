@@ -1,10 +1,10 @@
 package com.festago.festago.data.repository
 
-import com.festago.domain.model.Festival
-import com.festago.domain.model.Reservation
-import com.festago.domain.repository.FestivalRepository
 import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
+import com.festago.festago.model.Festival
+import com.festago.festago.model.Reservation
+import com.festago.festago.repository.FestivalRepository
 
 class FestivalDefaultRepository(
     private val festivalRetrofitService: FestivalRetrofitService,

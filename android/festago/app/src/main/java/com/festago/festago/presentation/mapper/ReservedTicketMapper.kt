@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.mapper
 
-import com.festago.domain.model.ReservedTicket
+import com.festago.festago.model.ReservedTicket
 import com.festago.festago.presentation.model.ReservedTicketUiModel
 
 fun ReservedTicket.toPresentation() = ReservedTicketUiModel(

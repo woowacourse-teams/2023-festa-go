@@ -1,6 +1,6 @@
 package com.festago.festago.data.dto
 
-import com.festago.domain.model.Festival
+import com.festago.festago.model.Festival
 import kotlinx.serialization.Serializable
 
 @Serializable
