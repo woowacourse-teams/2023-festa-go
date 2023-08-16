@@ -27,19 +27,13 @@ class TokenDefaultRepository(
             }
     }
 
-    override fun refreshToken(token: String): Result<Unit> {
-        return runBlocking {
-            tokenRetrofitService.getOauthToken(
-                oauthRequest = OauthRequest(
-                    socialType = "KAKAO",
-                    accessToken = token,
-                ),
-            ).runCatchingWithErrorHandler()
-                .getOrElse { error -> return@runBlocking Result.failure(error) }
-                .let {
-                    tokenLocalDataSource.token = it.accessToken
-                    return@runBlocking Result.success(Unit)
-                }
-        }
+    override fun refreshToken(token: String): Result<Unit> = runBlocking {
+        tokenRetrofitService.getOauthToken(OauthRequest("KAKAO", token))
+            .runCatchingWithErrorHandler()
+            .getOrElse { error -> return@runBlocking Result.failure(error) }
+            .let {
+                tokenLocalDataSource.token = it.accessToken
+                return@runBlocking Result.success(Unit)
+            }
     }
 }
