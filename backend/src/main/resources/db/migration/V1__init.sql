@@ -94,6 +94,27 @@ create table if not exists ticket_entry_time
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
+create table school
+(
+    id     bigint       not null auto_increment,
+    domain varchar(50)  not null,
+    name   varchar(255) not null,
+    primary key (id)
+) engine InnoDB
+  default charset = utf8mb4
+  collate = utf8mb4_0900_ai_ci;
+
+create table student
+(
+    id        bigint       not null auto_increment,
+    username  varchar(255) not null,
+    member_id bigint       not null,
+    school_id bigint       not null,
+    primary key (id)
+) engine InnoDB
+  default charset = utf8mb4
+  collate = utf8mb4_0900_ai_ci;
+
 alter table member_ticket
     add constraint fk_member_ticket__member
         foreign key (owner_id)
@@ -123,3 +144,13 @@ alter table ticket_entry_time
     add constraint fk_ticket_entry_time__ticket
         foreign key (ticket_id)
             references ticket (id);
+
+alter table student
+    add constraint fk_student__member
+        foreign key (member_id)
+            references member (id);
+
+alter table student
+    add constraint fk_student__school
+        foreign key (school_id)
+            references school (id);
