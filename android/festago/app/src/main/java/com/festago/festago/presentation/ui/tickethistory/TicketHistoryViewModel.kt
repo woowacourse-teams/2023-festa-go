@@ -3,7 +3,6 @@ package com.festago.festago.presentation.ui.tickethistory
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.domain.repository.TicketRepository
 import com.festago.festago.analytics.AnalyticsHelper
@@ -34,20 +33,6 @@ class TicketHistoryViewModel(
                         value = it.message.toString(),
                     )
                 }
-        }
-    }
-
-    class TicketHistoryViewModelFactory(
-        private val ticketRepository: TicketRepository,
-        private val analyticsHelper: AnalyticsHelper,
-    ) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(TicketHistoryViewModel::class.java)) {
-                return TicketHistoryViewModel(ticketRepository, analyticsHelper) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel Class")
         }
     }
 
