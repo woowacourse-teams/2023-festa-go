@@ -1,5 +1,6 @@
 package com.festago.presentation;
 
+import com.festago.aop.LogRequestBody;
 import com.festago.application.AdminService;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
@@ -44,6 +45,7 @@ public class AdminController {
         this.properties = buildProperties;
     }
 
+    @LogRequestBody(exceptionOnly = true, level = "WARN")
     @PostMapping("/festivals")
     public ResponseEntity<FestivalResponse> createFestival(@RequestBody FestivalCreateRequest request) {
         FestivalResponse response = festivalService.create(request);
