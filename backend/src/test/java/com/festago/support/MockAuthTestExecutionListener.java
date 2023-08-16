@@ -1,7 +1,7 @@
 package com.festago.support;
 
-import com.festago.auth.domain.AuthenticateContext;
 import com.festago.auth.domain.Role;
+import com.festago.auth.presentation.AuthenticateContext;
 import java.lang.reflect.Method;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestContext;

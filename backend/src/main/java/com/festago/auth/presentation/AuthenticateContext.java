@@ -1,5 +1,6 @@
-package com.festago.auth.domain;
+package com.festago.auth.presentation;
 
+import com.festago.auth.domain.Role;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 

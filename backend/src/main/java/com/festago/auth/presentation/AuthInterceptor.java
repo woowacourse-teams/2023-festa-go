@@ -1,5 +1,9 @@
-package com.festago.auth.domain;
+package com.festago.auth.presentation;
 
+import com.festago.auth.domain.AuthExtractor;
+import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.Role;
+import com.festago.auth.domain.TokenExtractor;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.ForbiddenException;
 import com.festago.exception.UnauthorizedException;

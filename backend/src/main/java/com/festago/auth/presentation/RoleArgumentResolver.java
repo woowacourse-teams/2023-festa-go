@@ -1,6 +1,5 @@
 package com.festago.auth.presentation;
 
-import com.festago.auth.domain.AuthenticateContext;
 import com.festago.auth.domain.Role;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.ForbiddenException;

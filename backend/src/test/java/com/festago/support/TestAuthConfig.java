@@ -2,7 +2,7 @@ package com.festago.support;
 
 import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.AuthenticateContext;
+import com.festago.auth.presentation.AuthenticateContext;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

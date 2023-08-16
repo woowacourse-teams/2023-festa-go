@@ -3,7 +3,6 @@ package com.festago.auth.presentation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.auth.domain.AuthenticateContext;
 import com.festago.auth.domain.Role;
 import com.festago.exception.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
