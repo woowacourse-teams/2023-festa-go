@@ -12,7 +12,7 @@ import com.festago.festago.domain.repository.TicketRepository
 import com.festago.festago.domain.repository.UserRepository
 
 class RepositoryContainer(
-    serviceContainer: ServiceContainer,
+    private val serviceContainer: ServiceContainer,
     tokenContainer: TokenContainer,
 ) {
     val authRepository: AuthRepository = AuthDefaultRepository(
@@ -20,20 +20,23 @@ class RepositoryContainer(
         userRetrofitService = serviceContainer.userRetrofitService,
     )
 
-    val festivalRepository: FestivalRepository = FestivalDefaultRepository(
-        festivalRetrofitService = serviceContainer.festivalRetrofitService,
-    )
+    val festivalRepository: FestivalRepository
+        get() = FestivalDefaultRepository(
+            festivalRetrofitService = serviceContainer.festivalRetrofitService,
+        )
 
-    val ticketRepository: TicketRepository = TicketDefaultRepository(
-        ticketRetrofitService = serviceContainer.ticketRetrofitService,
-    )
+    val ticketRepository: TicketRepository
+        get() = TicketDefaultRepository(
+            ticketRetrofitService = serviceContainer.ticketRetrofitService,
+        )
 
-    val userRepository: UserRepository = UserDefaultRepository(
-        userProfileService = serviceContainer.userRetrofitService,
-    )
+    val userRepository: UserRepository
+        get() = UserDefaultRepository(
+            userProfileService = serviceContainer.userRetrofitService,
+        )
 
-    val reservationTicketRepository: ReservationTicketRepository =
-        ReservationTicketDefaultRepository(
+    val reservationTicketRepository: ReservationTicketRepository
+        get() = ReservationTicketDefaultRepository(
             reservationTicketRetrofitService = serviceContainer.reservationTicketRetrofitService,
         )
 }
