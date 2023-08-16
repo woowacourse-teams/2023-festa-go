@@ -2,8 +2,8 @@ package com.festago.festago.data.repository
 
 import com.festago.festago.data.service.UserRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
-import com.festago.festago.domain.repository.AuthRepository
-import com.festago.festago.domain.repository.TokenRepository
+import com.festago.festago.repository.AuthRepository
+import com.festago.festago.repository.TokenRepository
 import com.kakao.sdk.user.UserApiClient
 
 class AuthDefaultRepository(

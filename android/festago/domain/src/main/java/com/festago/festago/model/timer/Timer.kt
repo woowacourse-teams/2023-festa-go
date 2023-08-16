@@ -1,4 +1,4 @@
-package com.festago.festago.domain.model.timer
+package com.festago.festago.model.timer
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

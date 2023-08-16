@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.domain.repository.AuthRepository
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
+import com.festago.festago.repository.AuthRepository
 import kotlinx.coroutines.launch
 
 class SignInViewModel(

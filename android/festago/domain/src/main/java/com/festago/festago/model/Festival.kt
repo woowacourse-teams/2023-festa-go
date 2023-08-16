@@ -1,11 +1,10 @@
-package com.festago.festago.domain.model
+package com.festago.festago.model
 
 import java.time.LocalDate
 
-data class Reservation(
-    val id: Int,
+data class Festival(
+    val id: Long,
     val name: String,
-    val reservationStages: List<ReservationStage>,
     val startDate: LocalDate,
     val endDate: LocalDate,
     val thumbnail: String,

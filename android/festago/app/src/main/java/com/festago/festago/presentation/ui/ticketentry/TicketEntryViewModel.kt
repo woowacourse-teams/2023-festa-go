@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.domain.model.TicketCode
-import com.festago.festago.domain.model.timer.Timer
-import com.festago.festago.domain.model.timer.TimerListener
-import com.festago.festago.domain.repository.TicketRepository
+import com.festago.festago.model.TicketCode
+import com.festago.festago.model.timer.Timer
+import com.festago.festago.model.timer.TimerListener
 import com.festago.festago.presentation.mapper.toPresentation
+import com.festago.festago.repository.TicketRepository
 import kotlinx.coroutines.launch
 
 class TicketEntryViewModel(

@@ -2,8 +2,8 @@ package com.festago.festago.presentation.ui.home.festivallist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.analytics.AnalyticsHelper
-import com.festago.festago.domain.model.Festival
-import com.festago.festago.domain.repository.FestivalRepository
+import com.festago.festago.model.Festival
+import com.festago.festago.repository.FestivalRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -147,6 +147,6 @@ class FestivalListViewModelTest {
         startDate = startDate,
         endDate = endDate,
         thumbnail = thumbnail,
-        onFestivalDetail = vm::showTicketReserve
+        onFestivalDetail = vm::showTicketReserve,
     )
 }

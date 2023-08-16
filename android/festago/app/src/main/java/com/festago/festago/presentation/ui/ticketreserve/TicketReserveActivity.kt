@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.R
 import com.festago.festago.databinding.ActivityTicketReserveBinding
-import com.festago.festago.domain.model.ReservedTicket
+import com.festago.festago.model.ReservedTicket
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.ui.FestagoViewModelFactory
@@ -63,7 +63,7 @@ class TicketReserveActivity : AppCompatActivity() {
     private fun handleEvent(event: TicketReserveEvent) = when (event) {
         is ShowTicketTypes -> handleShowTicketTypes(
             stageStartTime = event.stageStartTime,
-            tickets = event.tickets
+            tickets = event.tickets,
         )
 
         is ReserveTicketSuccess -> handleReserveTicketSuccess(event.reservedTicket)
@@ -73,13 +73,14 @@ class TicketReserveActivity : AppCompatActivity() {
 
     private fun handleShowTicketTypes(
         stageStartTime: LocalDateTime,
-        tickets: List<ReservationTicketUiModel>
+        tickets: List<ReservationTicketUiModel>,
     ) {
         TicketReserveBottomSheetFragment.newInstance(
             stageStartTime.format(
                 DateTimeFormatter.ofPattern(
-                    getString(R.string.ticket_reserve_tv_start_time), Locale.KOREA
-                )
+                    getString(R.string.ticket_reserve_tv_start_time),
+                    Locale.KOREA,
+                ),
             ),
             tickets,
         ).show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)

@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.domain.repository.AuthRepository
-import com.festago.festago.domain.repository.TicketRepository
-import com.festago.festago.domain.repository.UserRepository
 import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.model.TicketUiModel
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
+import com.festago.festago.repository.AuthRepository
+import com.festago.festago.repository.TicketRepository
+import com.festago.festago.repository.UserRepository
 import kotlinx.coroutines.launch
 
 class MyPageViewModel(
