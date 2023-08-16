@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.InternalResourceView;
 import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
@@ -149,7 +151,10 @@ public class AdminController {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public RedirectView handle(UnauthorizedException e) {
-        return new RedirectView("/admin/login");
+    public View handle(UnauthorizedException e) {
+        if (e.getErrorCode() == ErrorCode.EXPIRED_AUTH_TOKEN) {
+            return new RedirectView("/admin/login");
+        }
+        return new InternalResourceView("/error/404");
     }
 }
