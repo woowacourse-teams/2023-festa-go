@@ -15,12 +15,16 @@ class FestagoApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        FirebaseAnalyticsHelper.init(applicationContext)
-        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
-        initRetrofit()
+        initKakaoSdk()
+        initRepositoryContainer()
+        initFirebaseContainer()
     }
 
-    private fun initRetrofit() {
+    private fun initKakaoSdk() {
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
+    }
+
+    private fun initRepositoryContainer() {
         val normalRetrofitClient = NormalRetrofitClient(BuildConfig.BASE_URL)
 
         tokenContainer = TokenContainer(
@@ -42,7 +46,9 @@ class FestagoApplication : Application() {
             serviceContainer = serviceContainer,
             tokenContainer = tokenContainer,
         )
+    }
 
+    private fun initFirebaseContainer() {
         FirebaseAnalyticsHelper.init(applicationContext)
         analysisContainer = AnalysisContainer()
     }
