@@ -9,8 +9,8 @@ import com.festago.festago.data.service.TicketRetrofitService
 import com.festago.festago.data.service.UserRetrofitService
 
 class ServiceContainer(
-    private val normalRetrofitClient: NormalRetrofitClient,
-    private val authRetrofitClient: AuthRetrofitClient,
+    normalRetrofitClient: NormalRetrofitClient,
+    authRetrofitClient: AuthRetrofitClient,
 ) {
     val authRetrofitService: AuthRetrofitService =
         normalRetrofitClient.authRetrofitService

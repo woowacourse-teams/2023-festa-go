@@ -1,6 +1,6 @@
 package com.festago.festago.data.repository
 
-import com.festago.festago.data.datasource.AuthDataSource
+import com.festago.festago.data.datasource.TokenDataSource
 import com.festago.festago.data.dto.OauthRequest
 import com.festago.festago.data.service.AuthRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
@@ -8,11 +8,14 @@ import com.festago.festago.domain.repository.TokenRepository
 import kotlinx.coroutines.runBlocking
 
 class TokenDefaultRepository(
-    private val authLocalDataSource: AuthDataSource,
+    private val tokenLocalDataSource: TokenDataSource,
     private val authRetrofitService: AuthRetrofitService,
 ) : TokenRepository {
-    override val token: String?
-        get() = authLocalDataSource.token
+    override var token: String?
+        get() = tokenLocalDataSource.token
+        set(value) {
+            tokenLocalDataSource.token = value
+        }
 
     override fun refreshToken(token: String): Result<Unit> {
         return runBlocking {
@@ -24,7 +27,7 @@ class TokenDefaultRepository(
             ).runCatchingWithErrorHandler()
                 .getOrElse { error -> return@runBlocking Result.failure(error) }
                 .let {
-                    authLocalDataSource.token = it.accessToken
+                    tokenLocalDataSource.token = it.accessToken
                     return@runBlocking Result.success(Unit)
                 }
         }

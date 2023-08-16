@@ -1,9 +1,9 @@
 package com.festago.festago.di
 
 import android.content.Context
-import com.festago.festago.data.datasource.AuthDataSource
-import com.festago.festago.data.datasource.AuthLocalDataSource
+import com.festago.festago.data.datasource.TokenDataSource
+import com.festago.festago.data.datasource.TokenLocalDataSource
 
 class LocalDataSourceContainer(context: Context) {
-    val authDataSource: AuthDataSource = AuthLocalDataSource(context)
+    val tokenDataSource: TokenDataSource = TokenLocalDataSource(context)
 }

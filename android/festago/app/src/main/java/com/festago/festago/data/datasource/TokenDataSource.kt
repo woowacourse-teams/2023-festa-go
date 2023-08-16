@@ -1,5 +1,5 @@
 package com.festago.festago.data.datasource
 
-interface AuthDataSource {
+interface TokenDataSource {
     var token: String?
 }

@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
-class AuthLocalDataSource(context: Context) : AuthDataSource {
+class TokenLocalDataSource(context: Context) : TokenDataSource {
 
     private val sharedPreference: SharedPreferences by lazy {
         val masterKeyAlias = MasterKey

@@ -2,7 +2,6 @@ package com.festago.festago
 
 import android.app.Application
 import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.repository.TokenDefaultRepository
 import com.festago.festago.data.retrofit.AuthRetrofitClient
 import com.festago.festago.data.retrofit.NormalRetrofitClient
 import com.festago.festago.di.AnalysisContainer
@@ -22,22 +21,26 @@ class FestagoApplication : Application() {
     }
 
     private fun initRetrofit() {
-        localDataSourceContainer = LocalDataSourceContainer(applicationContext)
+        val normalRetrofitClient = NormalRetrofitClient(BuildConfig.BASE_URL)
+
         tokenContainer = TokenContainer(
-            tokenRepository = TokenDefaultRepository(
-                authRetrofitService = NormalRetrofitClient(BuildConfig.BASE_URL).authRetrofitService,
-                authLocalDataSource = localDataSourceContainer.authDataSource,
-            ),
+            normalRetrofitClient = normalRetrofitClient,
+            localDataSourceContainer = LocalDataSourceContainer(applicationContext),
+        )
+
+        val authRetrofitClient = AuthRetrofitClient(
+            baseUrl = BuildConfig.BASE_URL,
+            tokenManager = tokenContainer.tokenManager,
         )
 
         serviceContainer = ServiceContainer(
-            NormalRetrofitClient(BuildConfig.BASE_URL),
-            AuthRetrofitClient(BuildConfig.BASE_URL, tokenContainer.tokenManager),
+            normalRetrofitClient = normalRetrofitClient,
+            authRetrofitClient = authRetrofitClient,
         )
 
         repositoryContainer = RepositoryContainer(
-            localDataSourceContainer,
-            serviceContainer,
+            serviceContainer = serviceContainer,
+            tokenContainer = tokenContainer,
         )
 
         FirebaseAnalyticsHelper.init(applicationContext)
@@ -46,7 +49,6 @@ class FestagoApplication : Application() {
 
     companion object DependencyContainer {
         lateinit var serviceContainer: ServiceContainer
-        lateinit var localDataSourceContainer: LocalDataSourceContainer
         lateinit var repositoryContainer: RepositoryContainer
         lateinit var analysisContainer: AnalysisContainer
         lateinit var tokenContainer: TokenContainer
