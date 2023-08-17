@@ -10,12 +10,8 @@
         <import type="java.util.Locale" />
 
         <variable
-            name="vm"
-            type="com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel" />
-
-        <variable
             name="stage"
-            type="com.festago.festago.presentation.model.TicketReserveItemUiModel" />
+            type="com.festago.festago.presentation.ui.ticketreserve.TicketReserveItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -115,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="28dp"
-            android:onClick="@{() -> vm.showTicketTypes(stage.id)}"
+            android:onClick="@{() -> stage.onShowStageTickets.invoke(stage.id, stage.startTime)}"
             android:text="@string/ticket_reserve_btn_reserve_ticket"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

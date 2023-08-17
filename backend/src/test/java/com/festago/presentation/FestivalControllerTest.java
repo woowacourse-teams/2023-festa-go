@@ -12,7 +12,7 @@ import com.festago.application.FestivalService;
 import com.festago.dto.FestivalDetailResponse;
 import com.festago.dto.FestivalResponse;
 import com.festago.dto.FestivalsResponse;
-import com.festago.support.TestConfig;
+import com.festago.support.CustomWebMvcTest;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -21,14 +21,11 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(FestivalController.class)
-@Import(TestConfig.class)
+@CustomWebMvcTest(FestivalController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class FestivalControllerTest {
