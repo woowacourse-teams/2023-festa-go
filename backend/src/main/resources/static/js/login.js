@@ -1,4 +1,4 @@
-document.getElementById("loginForm").addEventListener("submit",
+﻿document.getElementById("loginForm").addEventListener("submit",
     function (event) {
       event.preventDefault();
       const formData = new FormData(event.target);
