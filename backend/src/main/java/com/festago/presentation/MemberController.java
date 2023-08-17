@@ -4,6 +4,7 @@ import com.festago.application.MemberService;
 import com.festago.auth.annotation.Member;
 import com.festago.dto.MemberProfileResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ public class MemberController {
     }
 
     @GetMapping("/profile")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(description = "현재 로그인한 유저의 프로필 정보를 조회한다.")
     public ResponseEntity<MemberProfileResponse> findMemberProfile(@Member Long memberId) {
         MemberProfileResponse response = memberService.findMemberProfile(memberId);
