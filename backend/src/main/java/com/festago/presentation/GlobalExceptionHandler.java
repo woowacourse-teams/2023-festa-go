@@ -46,8 +46,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<ErrorResponse> handle(ForbiddenException e, HttpServletRequest request)
-        throws IOException {
+    public ResponseEntity<ErrorResponse> handle(ForbiddenException e, HttpServletRequest request) {
         log(Level.INFO, e, request);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.from(e));
     }
