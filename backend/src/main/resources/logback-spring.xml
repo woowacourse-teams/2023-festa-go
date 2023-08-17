@@ -2,9 +2,9 @@
 
 <configuration>
   <property name="FILE_LOG_PATTERN"
-    value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] [%thread] %-5level [%C.%M:%L] - %msg%n"/>
+    value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] [%thread] %-5level [%C.%M:%L] - %msg %ex{5}%n"/>
   <property name="CONSOLE_LOG_PATTERN"
-    value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+    value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg %ex{5}%n"/>
 
   <springProfile name="local">
     <include resource="console-appender.xml"/>
