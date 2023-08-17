@@ -6,13 +6,14 @@ import static java.util.stream.Collectors.joining;
 import com.festago.domain.VerificationCode;
 import com.festago.domain.VerificationCodeProvider;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RandomVerificationCodeProvider implements VerificationCodeProvider {
 
-    private static final Random random = new Random();
+    private static final Random random = ThreadLocalRandom.current();
     private static final int CODE_LENGTH = 6;
 
     @Override
