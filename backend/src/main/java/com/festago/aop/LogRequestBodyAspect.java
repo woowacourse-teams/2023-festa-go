@@ -41,7 +41,7 @@ public class LogRequestBodyAspect {
         Level level = annotation.level();
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
-        if (attributes == null) {
+        if (attributes == null || !errorLogger.isEnabledForLevel(level)) {
             return pjp.proceed();
         }
         HttpServletRequest request = attributes.getRequest();
@@ -49,12 +49,7 @@ public class LogRequestBodyAspect {
             return pjp.proceed();
         }
 
-        if (!annotation.exceptionOnly() && errorLogger.isEnabledForLevel(level)) {
-            log(level, request);
-            return pjp.proceed();
-        }
-
-        if (annotation.exceptionOnly() && errorLogger.isEnabledForLevel(level)) {
+        if (annotation.exceptionOnly()) {
             try {
                 return pjp.proceed();
             } catch (Throwable e) {
@@ -63,6 +58,7 @@ public class LogRequestBodyAspect {
             }
         }
 
+        log(level, request);
         return pjp.proceed();
     }
 
