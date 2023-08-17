@@ -1,6 +1,6 @@
 package com.festago.festago.data.dto
 
-import com.festago.festago.domain.model.Reservation
+import com.festago.festago.model.Reservation
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 

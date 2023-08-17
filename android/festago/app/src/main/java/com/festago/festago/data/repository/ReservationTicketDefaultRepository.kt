@@ -2,8 +2,8 @@ package com.festago.festago.data.repository
 
 import com.festago.festago.data.service.ReservationTicketRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
-import com.festago.festago.domain.model.ReservationTicket
-import com.festago.festago.domain.repository.ReservationTicketRepository
+import com.festago.festago.model.ReservationTicket
+import com.festago.festago.repository.ReservationTicketRepository
 
 class ReservationTicketDefaultRepository(
     private val reservationTicketRetrofitService: ReservationTicketRetrofitService,

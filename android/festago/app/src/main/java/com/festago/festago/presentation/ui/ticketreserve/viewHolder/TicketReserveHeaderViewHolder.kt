@@ -7,15 +7,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveHeaderBinding
-import com.festago.festago.presentation.model.ReservationUiModel
+import com.festago.festago.presentation.ui.ticketreserve.ReservationFestivalUiState
 import java.time.format.DateTimeFormatter
 
 class TicketReserveHeaderViewHolder(
     private val binding: ItemTicketReserveHeaderBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ReservationUiModel) {
-        val formatter =
-            DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.ticket_reserve_tv_date_range_format))
+    fun bind(item: ReservationFestivalUiState) {
+        val formatter = DateTimeFormatter.ofPattern(
+            binding.root.context.getString(R.string.ticket_reserve_tv_date_range_format)
+        )
 
         binding.tvDateRange.text =
             binding.root.context.getString(R.string.ticket_reserve_tv_date_range)

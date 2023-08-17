@@ -2,7 +2,7 @@ package com.festago.presentation;
 
 import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
-import com.festago.application.TicketService;
+import com.festago.application.TicketingService;
 import com.festago.auth.annotation.Member;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketResponse;
@@ -27,13 +27,13 @@ public class MemberTicketController {
 
     private final EntryService entryService;
     private final MemberTicketService memberTicketService;
-    private final TicketService ticketService;
+    private final TicketingService ticketingService;
 
     public MemberTicketController(EntryService entryService, MemberTicketService memberTicketService,
-                                  TicketService ticketService) {
+                                  TicketingService ticketingService) {
         this.entryService = entryService;
         this.memberTicketService = memberTicketService;
-        this.ticketService = ticketService;
+        this.ticketingService = ticketingService;
     }
 
     @PostMapping("/{memberTicketId}/qr")
@@ -47,7 +47,7 @@ public class MemberTicketController {
     @PostMapping
     public ResponseEntity<TicketingResponse> ticketing(@Member Long memberId,
                                                        @RequestBody TicketingRequest request) {
-        TicketingResponse response = ticketService.ticketing(memberId, request);
+        TicketingResponse response = ticketingService.ticketing(memberId, request);
         return ResponseEntity.ok()
             .body(response);
     }

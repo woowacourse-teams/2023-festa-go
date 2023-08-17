@@ -1,12 +1,13 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
-import com.festago.festago.domain.model.ReservedTicket
+import com.festago.festago.model.ReservedTicket
 import com.festago.festago.presentation.model.ReservationTicketUiModel
+import java.time.LocalDateTime
 
 sealed interface TicketReserveEvent {
     class ShowTicketTypes(
-        val stageId: Int,
-        val tickets: List<ReservationTicketUiModel>
+        val stageStartTime: LocalDateTime,
+        val tickets: List<ReservationTicketUiModel>,
     ) : TicketReserveEvent
 
     class ReserveTicketSuccess(val reservedTicket: ReservedTicket) : TicketReserveEvent
