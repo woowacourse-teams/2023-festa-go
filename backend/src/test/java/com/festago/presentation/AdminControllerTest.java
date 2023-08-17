@@ -2,11 +2,11 @@ package com.festago.presentation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +15,7 @@ import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
 import com.festago.auth.application.AdminAuthService;
+import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.Role;
 import com.festago.domain.TicketType;
 import com.festago.dto.ErrorResponse;
@@ -26,6 +27,7 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.exception.UnauthorizedException;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import jakarta.servlet.http.Cookie;
@@ -37,6 +39,7 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -66,24 +69,42 @@ class AdminControllerTest {
     @MockBean
     AdminAuthService adminAuthService;
 
+    @SpyBean
+    AuthExtractor authExtractor;
+
     @Test
     @WithMockAuth
     void 토큰의_Role이_어드민이_아니면_404_NotFound() throws Exception {
+        // when & then
         mockMvc.perform(get("/admin")
                 .cookie(new Cookie("token", "token")))
             .andExpect(status().isNotFound());
     }
 
     @Test
-    void 쿠키에_토큰이_없으면_로그인_페이지로_리다이렉트() throws Exception {
+    void 쿠키에_토큰이_없으면_404_NotFound() throws Exception {
+        // when & then
         mockMvc.perform(get("/admin"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/admin/login"));
+            .andExpect(status().isNotFound());
     }
 
     @Test
     void 권한이_없어도_로그인_페이지_접속_가능() throws Exception {
+        // when & then
         mockMvc.perform(get("/admin/login"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth
+    void 토큰의_만료기간이_지나면_로그인_페이지로_리다이렉트() throws Exception {
+        // given
+        given(authExtractor.extract(anyString()))
+            .willThrow(new UnauthorizedException(ErrorCode.EXPIRED_AUTH_TOKEN));
+
+        // when & then
+        mockMvc.perform(get("/admin/login")
+                .cookie(new Cookie("token", "token")))
             .andExpect(status().isOk());
     }
 

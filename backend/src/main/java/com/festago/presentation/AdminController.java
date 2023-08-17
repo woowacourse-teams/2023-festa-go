@@ -20,6 +20,7 @@ import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
 import com.festago.exception.UnauthorizedException;
+import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -151,10 +152,11 @@ public class AdminController {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public View handle(UnauthorizedException e) {
+    public View handle(UnauthorizedException e, HttpServletResponse response) {
         if (e.getErrorCode() == ErrorCode.EXPIRED_AUTH_TOKEN) {
             return new RedirectView("/admin/login");
         }
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         return new InternalResourceView("/error/404");
     }
 }

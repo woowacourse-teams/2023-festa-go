@@ -1,7 +1,6 @@
 package com.festago.support;
 
 import com.festago.auth.domain.AuthExtractor;
-import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.presentation.AuthenticateContext;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +15,6 @@ public class TestAuthConfig {
 
     @Bean
     public AuthExtractor authExtractor(AuthenticateContext authenticateContext) {
-        return token -> new AuthPayload(authenticateContext.getId(), authenticateContext.getRole());
+        return new MockAuthExtractor(authenticateContext);
     }
 }
