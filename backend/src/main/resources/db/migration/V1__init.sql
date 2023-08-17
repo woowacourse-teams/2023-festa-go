@@ -115,6 +115,16 @@ create table student
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
+CREATE TABLE admin
+(
+    id       BIGINT AUTO_INCREMENT NOT NULL,
+    username VARCHAR(255)          NULL,
+    password VARCHAR(255)          NULL,
+    primary key (id)
+) engine InnoDB
+  default charset = utf8mb4
+  collate = utf8mb4_0900_ai_ci;
+
 alter table member_ticket
     add constraint fk_member_ticket__member
         foreign key (owner_id)
