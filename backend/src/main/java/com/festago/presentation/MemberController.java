@@ -24,7 +24,7 @@ public class MemberController {
 
     @GetMapping("/profile")
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(description = "현재 로그인한 유저의 프로필 정보를 조회한다.")
+    @Operation(description = "현재 로그인한 유저의 프로필 정보를 조회한다.", summary = "사용자 정보 조회")
     public ResponseEntity<MemberProfileResponse> findMemberProfile(@Member Long memberId) {
         MemberProfileResponse response = memberService.findMemberProfile(memberId);
         return ResponseEntity.ok()

@@ -22,7 +22,7 @@ public class StageController {
     }
 
     @GetMapping("/{stageId}/tickets")
-    @Operation(description = "특정 무대의 티켓 정보를 보여준다.")
+    @Operation(description = "특정 무대의 티켓 정보를 보여준다.", summary = "무대 티켓 목록 조회")
     public ResponseEntity<StageTicketsResponse> findStageTickets(@PathVariable Long stageId) {
         StageTicketsResponse response = ticketService.findStageTickets(stageId);
         return ResponseEntity.ok()

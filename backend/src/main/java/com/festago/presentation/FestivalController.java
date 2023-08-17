@@ -23,7 +23,7 @@ public class FestivalController {
     }
 
     @GetMapping
-    @Operation(description = "모든 축제들을 조회한다.")
+    @Operation(description = "모든 축제들을 조회한다.", summary = "축제 목록 조회")
     public ResponseEntity<FestivalsResponse> findAll() {
         FestivalsResponse response = festivalService.findAll();
         return ResponseEntity.ok()
@@ -31,7 +31,7 @@ public class FestivalController {
     }
 
     @GetMapping("/{festivalId}")
-    @Operation(description = "해당 Id 의 축제를 조회한다.")
+    @Operation(description = "해당 Id 의 축제를 조회한다.", summary = "축제 상세 정보 조회")
     public ResponseEntity<FestivalDetailResponse> findDetail(@PathVariable Long festivalId) {
         FestivalDetailResponse response = festivalService.findDetail(festivalId);
         return ResponseEntity.ok()

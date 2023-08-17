@@ -24,7 +24,7 @@ public class StaffMemberTicketController {
     }
 
     @PostMapping("/validation")
-    @Operation(description = "스태프가 티켓을 검사한다.")
+    @Operation(description = "스태프가 티켓을 검사한다.", summary = "티켓 검사")
     public ResponseEntity<TicketValidationResponse> validate(@RequestBody TicketValidationRequest request) {
         TicketValidationResponse response = entryService.validate(request);
         return ResponseEntity.ok()
