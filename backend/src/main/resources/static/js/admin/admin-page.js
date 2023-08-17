@@ -1,4 +1,4 @@
-// Function to fetch data and update dataSection
+﻿// Function to fetch data and update dataSection
 function fetchDataAndUpdateDataSection() {
   fetch("/admin/data")
   .then(response => {
