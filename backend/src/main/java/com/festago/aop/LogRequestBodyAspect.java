@@ -50,7 +50,7 @@ public class LogRequestBodyAspect {
         }
 
         if (!annotation.exceptionOnly() && errorLogger.isEnabledForLevel(level)) {
-            logging(level, request);
+            log(level, request);
             return pjp.proceed();
         }
 
@@ -58,7 +58,7 @@ public class LogRequestBodyAspect {
             try {
                 return pjp.proceed();
             } catch (Throwable e) {
-                logging(level, request);
+                log(level, request);
                 throw e;
             }
         }
@@ -71,7 +71,7 @@ public class LogRequestBodyAspect {
             || request.getContentLengthLong() > MAX_CONTENT_LENGTH;
     }
 
-    private void logging(Level level, HttpServletRequest request) {
+    private void log(Level level, HttpServletRequest request) {
         errorLogger.get(level)
             .log("[REQUEST BODY]\n{}", getRequestPayload(request));
     }
