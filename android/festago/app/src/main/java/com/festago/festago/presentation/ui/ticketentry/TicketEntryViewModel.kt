@@ -3,15 +3,14 @@ package com.festago.festago.presentation.ui.ticketentry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.domain.model.TicketCode
-import com.festago.festago.domain.model.timer.Timer
-import com.festago.festago.domain.model.timer.TimerListener
-import com.festago.festago.domain.repository.TicketRepository
+import com.festago.festago.model.TicketCode
+import com.festago.festago.model.timer.Timer
+import com.festago.festago.model.timer.TimerListener
 import com.festago.festago.presentation.mapper.toPresentation
+import com.festago.festago.repository.TicketRepository
 import kotlinx.coroutines.launch
 
 class TicketEntryViewModel(
@@ -97,20 +96,6 @@ class TicketEntryViewModel(
                 }
             }
         }
-
-    class TicketEntryViewModelFactory(
-        private val ticketRepository: TicketRepository,
-        private val analyticsHelper: AnalyticsHelper,
-    ) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(TicketEntryViewModel::class.java)) {
-                return TicketEntryViewModel(ticketRepository, analyticsHelper) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel Class")
-        }
-    }
 
     companion object {
         private const val KEY_LOAD_Ticket_LOG = "load_ticket"

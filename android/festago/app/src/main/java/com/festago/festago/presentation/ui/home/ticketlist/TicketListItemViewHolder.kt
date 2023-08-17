@@ -6,36 +6,28 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketListBinding
-import com.festago.festago.presentation.model.MemberTicketUiModel
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class TicketListItemViewHolder(
     val binding: ItemTicketListBinding,
-    vm: TicketListViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    init {
-        binding.vm = vm
-    }
-
-    fun bind(item: MemberTicketUiModel) {
+    fun bind(item: TicketListItemUiState) {
         binding.ticket = item
         setTicketEntryBtn(item)
     }
 
-    private fun setTicketEntryBtn(item: MemberTicketUiModel) {
+    private fun setTicketEntryBtn(item: TicketListItemUiState) {
         val btn = binding.btnTicketEntry
-        val isAfterEntryTime = LocalDateTime.now().isAfter(item.entryTime)
-        btn.isEnabled = isAfterEntryTime
+        btn.isEnabled = item.canEntry
 
-        setTicketEntryBtnText(isAfterEntryTime = isAfterEntryTime, btn = btn, ticket = item)
+        setTicketEntryBtnText(isAfterEntryTime = item.canEntry, btn = btn, ticket = item)
     }
 
     private fun setTicketEntryBtnText(
         isAfterEntryTime: Boolean,
         btn: Button,
-        ticket: MemberTicketUiModel,
+        ticket: TicketListItemUiState,
     ) {
         if (isAfterEntryTime) {
             btn.text = btn.context.getString(R.string.ticket_list_btn_ticket_entry)
@@ -49,13 +41,13 @@ class TicketListItemViewHolder(
     }
 
     companion object {
-        fun of(parent: ViewGroup, vm: TicketListViewModel): TicketListItemViewHolder {
+        fun from(parent: ViewGroup): TicketListItemViewHolder {
             val binding = ItemTicketListBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return TicketListItemViewHolder(binding, vm)
+            return TicketListItemViewHolder(binding)
         }
     }
 }

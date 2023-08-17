@@ -21,12 +21,18 @@ public enum ErrorCode {
     OAUTH2_INVALID_TOKEN("잘못된 OAuth2 토큰입니다."),
     ALREADY_STUDENT_VERIFIED("이미 학교 인증이 완료된 사용자입니다."),
     DUPLICATE_STUDENT_EMAIL("이미 인증된 이메일입니다."),
+    TICKET_CANNOT_RESERVE_STAGE_START("공연의 시작 시간 이후로 예매할 수 없습니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
     INVALID_AUTH_TOKEN("올바르지 않은 로그인 토큰입니다."),
     NOT_BEARER_TOKEN_TYPE("Bearer 타입의 토큰이 아닙니다."),
     NEED_AUTH_TOKEN("로그인이 필요한 서비스입니다."),
+    INCORRECT_PASSWORD_OR_ACCOUNT("비밀번호가 틀렸거나, 해당 계정이 없습니다."),
+    DUPLICATE_ACCOUNT_USERNAME("해당 계정이 존재합니다."),
+
+    // 403
+    NOT_ENOUGH_PERMISSION("해당 권한이 없습니다."),
 
     // 404
     MEMBER_TICKET_NOT_FOUND("존재하지 않은 멤버 티켓입니다."),
@@ -46,6 +52,7 @@ public enum ErrorCode {
     DUPLICATE_SOCIAL_TYPE("중복된 OAuth2 제공자 입니다."),
     OAUTH2_PROVIDER_NOT_RESPONSE("OAuth2 제공자 서버에 문제가 발생했습니다."),
     INVALID_ENTRY_CODE_OFFSET("올바르지 않은 입장코드 오프셋입니다."),
+    INVALID_ROLE_NAME("해당하는 Role이 없습니다."),
     FOR_TEST_ERROR("테스트용 에러입니다."),
     ;
 

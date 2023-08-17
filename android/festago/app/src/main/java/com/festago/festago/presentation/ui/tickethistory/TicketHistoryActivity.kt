@@ -5,23 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.data.repository.TicketDefaultRepository
-import com.festago.festago.data.retrofit.AuthRetrofitClient
 import com.festago.festago.databinding.ActivityTicketHistoryBinding
-import com.festago.festago.presentation.ui.tickethistory.TicketHistoryViewModel.TicketHistoryViewModelFactory
+import com.festago.festago.presentation.ui.FestagoViewModelFactory
 
 class TicketHistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTicketHistoryBinding
 
-    private val vm: TicketHistoryViewModel by viewModels {
-        TicketHistoryViewModelFactory(
-            TicketDefaultRepository(
-                ticketRetrofitService = AuthRetrofitClient.ticketRetrofitService,
-            ),
-            FirebaseAnalyticsHelper,
-        )
-    }
+    private val vm: TicketHistoryViewModel by viewModels { FestagoViewModelFactory }
 
     private var adapter: TicketHistoryAdapter = TicketHistoryAdapter()
 
