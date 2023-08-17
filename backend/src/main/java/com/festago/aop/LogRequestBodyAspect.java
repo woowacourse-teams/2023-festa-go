@@ -38,7 +38,7 @@ public class LogRequestBodyAspect {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         LogRequestBody annotation = method.getAnnotation(LogRequestBody.class);
-        Level level = Level.valueOf(annotation.level());
+        Level level = annotation.level();
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
         if (attributes == null) {
