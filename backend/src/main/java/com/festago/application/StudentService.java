@@ -46,11 +46,8 @@ public class StudentService {
         Member member = findMember(memberId);
         School school = findSchool(request.schoolId());
         VerificationCode code = codeProvider.provide();
-        studentCodeRepository.findByMember(member).ifPresentOrElse(
-            studentCode -> studentCode.updateCode(code, school),
-            () -> studentCodeRepository.save(new StudentCode(code, member, school))
-        );
-
+        studentCodeRepository.deleteByMember(member);
+        studentCodeRepository.save(new StudentCode(code, member, school));
         mailClient.send(new VerificationMailPayload(code, request.username(), school.getDomain()));
     }
 
