@@ -4,6 +4,7 @@ import com.festago.dto.ErrorResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.FestaGoException;
+import com.festago.exception.ForbiddenException;
 import com.festago.exception.InternalServerException;
 import com.festago.exception.NotFoundException;
 import com.festago.exception.UnauthorizedException;
@@ -42,6 +43,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(UnauthorizedException e, HttpServletRequest request) {
         log(Level.INFO, e, request);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.from(e));
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorResponse> handle(ForbiddenException e, HttpServletRequest request)
+        throws IOException {
+        log(Level.INFO, e, request);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.from(e));
     }
 
     @ExceptionHandler(NotFoundException.class)

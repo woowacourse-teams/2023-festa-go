@@ -2,9 +2,8 @@ package com.festago.presentation;
 
 import com.festago.application.EntryService;
 import com.festago.application.MemberTicketService;
-import com.festago.application.TicketService;
-import com.festago.auth.domain.Login;
-import com.festago.auth.dto.LoginMember;
+import com.festago.application.TicketingService;
+import com.festago.auth.annotation.Member;
 import com.festago.dto.EntryCodeResponse;
 import com.festago.dto.MemberTicketResponse;
 import com.festago.dto.MemberTicketsResponse;
@@ -28,57 +27,53 @@ public class MemberTicketController {
 
     private final EntryService entryService;
     private final MemberTicketService memberTicketService;
-    private final TicketService ticketService;
+    private final TicketingService ticketingService;
 
     public MemberTicketController(EntryService entryService, MemberTicketService memberTicketService,
-                                  TicketService ticketService) {
+                                  TicketingService ticketingService) {
         this.entryService = entryService;
         this.memberTicketService = memberTicketService;
-        this.ticketService = ticketService;
+        this.ticketingService = ticketingService;
     }
 
     @PostMapping("/{memberTicketId}/qr")
-    public ResponseEntity<EntryCodeResponse> createQR(
-        @Login LoginMember loginMember,
-        @PathVariable Long memberTicketId) {
-        EntryCodeResponse response = entryService.createEntryCode(loginMember.memberId(), memberTicketId);
+    public ResponseEntity<EntryCodeResponse> createQR(@Member Long memberId,
+                                                      @PathVariable Long memberTicketId) {
+        EntryCodeResponse response = entryService.createEntryCode(memberId, memberTicketId);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @PostMapping
-    public ResponseEntity<TicketingResponse> ticketing(
-        @Login LoginMember loginMember,
-        @RequestBody TicketingRequest request) {
-        TicketingResponse response = ticketService.ticketing(loginMember.memberId(), request);
+    public ResponseEntity<TicketingResponse> ticketing(@Member Long memberId,
+                                                       @RequestBody TicketingRequest request) {
+        TicketingResponse response = ticketingService.ticketing(memberId, request);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @GetMapping("/{memberTicketId}")
-    public ResponseEntity<MemberTicketResponse> findById(
-        @Login LoginMember loginMember,
-        @PathVariable Long memberTicketId) {
-        MemberTicketResponse response = memberTicketService.findById(loginMember.memberId(), memberTicketId);
+    public ResponseEntity<MemberTicketResponse> findById(@Member Long memberId,
+                                                         @PathVariable Long memberTicketId) {
+        MemberTicketResponse response = memberTicketService.findById(memberId, memberTicketId);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @GetMapping
-    public ResponseEntity<MemberTicketsResponse> findAll(
-        @Login LoginMember loginMember,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "100") int size) {
+    public ResponseEntity<MemberTicketsResponse> findAll(@Member Long memberId,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "100") int size) {
         Pageable pageRequest = PageRequest.of(page, size, Sort.by("entryTime").descending());
-        MemberTicketsResponse response = memberTicketService.findAll(loginMember.memberId(), pageRequest);
+        MemberTicketsResponse response = memberTicketService.findAll(memberId, pageRequest);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @GetMapping("/current")
-    public ResponseEntity<MemberTicketsResponse> findCurrent(@Login LoginMember loginMember) {
+    public ResponseEntity<MemberTicketsResponse> findCurrent(@Member Long memberId) {
         Pageable pageable = PageRequest.of(0, 100);
-        MemberTicketsResponse response = memberTicketService.findCurrent(loginMember.memberId(), pageable);
+        MemberTicketsResponse response = memberTicketService.findCurrent(memberId, pageable);
         return ResponseEntity.ok()
             .body(response);
     }

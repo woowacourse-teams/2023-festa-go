@@ -78,8 +78,7 @@ function createTable(data) {
 
       if (typeof item[key] === "object") {
         // If the value is an object (entryTimeAmount), format it with new lines
-        const formattedEntryTimeAmount = formatEntryTimeAmount(item[key]);
-        cell.textContent = formattedEntryTimeAmount;
+        cell.textContent = formatEntryTimeAmount(item[key]);
         cell.style.whiteSpace = "pre-line"; // Apply white-space: pre-line; style to allow line breaks
       } else {
         // If the value is not an object, display it normally
