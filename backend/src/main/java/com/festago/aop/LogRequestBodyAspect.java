@@ -77,10 +77,10 @@ public class LogRequestBodyAspect {
     }
 
     private String getRequestPayload(HttpServletRequest request) {
-        ContentCachingRequestWrapper cachedRequest = (ContentCachingRequestWrapper) request;
         try {
+            ContentCachingRequestWrapper cachedRequest = (ContentCachingRequestWrapper) request;
             return objectMapper.readTree(cachedRequest.getContentAsByteArray()).toPrettyString();
-        } catch (IOException e) {
+        } catch (IOException | ClassCastException e) {
             throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
