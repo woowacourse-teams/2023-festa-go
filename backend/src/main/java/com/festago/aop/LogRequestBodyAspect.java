@@ -24,6 +24,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 public class LogRequestBodyAspect {
 
     private static final long MAX_CONTENT_LENGTH = 1024;
+    private static final String LOG_FORMAT = "[REQUEST BODY]\n{}";
 
     private final ErrorLogger errorLogger;
     private final ObjectMapper objectMapper;
@@ -69,7 +70,7 @@ public class LogRequestBodyAspect {
 
     private void log(Level level, HttpServletRequest request) {
         errorLogger.get(level)
-            .log("[REQUEST BODY]\n{}", getRequestPayload(request));
+            .log(LOG_FORMAT, getRequestPayload(request));
     }
 
     private String getRequestPayload(HttpServletRequest request) {
