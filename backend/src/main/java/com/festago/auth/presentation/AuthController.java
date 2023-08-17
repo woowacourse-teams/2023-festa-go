@@ -1,8 +1,7 @@
 package com.festago.auth.presentation;
 
+import com.festago.auth.annotation.Member;
 import com.festago.auth.application.AuthService;
-import com.festago.auth.domain.Login;
-import com.festago.auth.dto.LoginMember;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +29,8 @@ public class AuthController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteMember(@Login LoginMember loginMember) {
-        authService.deleteMember(loginMember.memberId());
+    public ResponseEntity<Void> deleteMember(@Member Long memberId) {
+        authService.deleteMember(memberId);
         return ResponseEntity.ok()
             .build();
     }

@@ -1,8 +1,7 @@
 package com.festago.presentation;
 
 import com.festago.application.MemberService;
-import com.festago.auth.domain.Login;
-import com.festago.auth.dto.LoginMember;
+import com.festago.auth.annotation.Member;
 import com.festago.dto.MemberProfileResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +19,8 @@ public class MemberController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<MemberProfileResponse> findMemberProfile(@Login LoginMember loginMember) {
-        MemberProfileResponse response = memberService.findMemberProfile(loginMember.memberId());
+    public ResponseEntity<MemberProfileResponse> findMemberProfile(@Member Long memberId) {
+        MemberProfileResponse response = memberService.findMemberProfile(memberId);
         return ResponseEntity.ok()
             .body(response);
     }
