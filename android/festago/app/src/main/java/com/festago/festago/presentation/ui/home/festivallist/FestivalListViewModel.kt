@@ -3,15 +3,13 @@ package com.festago.festago.presentation.ui.home.festivallist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.domain.repository.FestivalRepository
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.ShowTicketReserve
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
+import com.festago.festago.repository.FestivalRepository
 import kotlinx.coroutines.launch
 
 class FestivalListViewModel(
@@ -28,7 +26,18 @@ class FestivalListViewModel(
         viewModelScope.launch {
             festivalRepository.loadFestivals()
                 .onSuccess {
-                    _uiState.value = FestivalListUiState.Success(it.toPresentation())
+                    _uiState.value = FestivalListUiState.Success(
+                        festivals = it.map { festival ->
+                            FestivalItemUiState(
+                                id = festival.id,
+                                name = festival.name,
+                                startDate = festival.startDate,
+                                endDate = festival.endDate,
+                                thumbnail = festival.thumbnail,
+                                onFestivalDetail = ::showTicketReserve,
+                            )
+                        },
+                    )
                 }.onFailure {
                     _uiState.value = FestivalListUiState.Error
                     analyticsHelper.logNetworkFailure(KEY_LOAD_FESTIVALS_LOG, it.message.toString())
@@ -38,20 +47,6 @@ class FestivalListViewModel(
 
     fun showTicketReserve(festivalId: Long) {
         _event.setValue(ShowTicketReserve(festivalId))
-    }
-
-    class FestivalListViewModelFactory(
-        private val festivalRepository: FestivalRepository,
-        private val analyticsHelper: AnalyticsHelper,
-    ) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(FestivalListViewModel::class.java)) {
-                return FestivalListViewModel(festivalRepository, analyticsHelper) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel Class")
-        }
     }
 
     companion object {

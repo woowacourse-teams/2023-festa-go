@@ -39,6 +39,9 @@ dependencies {
 
     // Logback Slack Alarm
     implementation "com.github.maricn:logback-slack-appender:1.4.0"
+
+    // Mockito
+    testImplementation 'org.mockito:mockito-inline'
 }
 
 tasks.named('test') {

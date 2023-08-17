@@ -2,15 +2,15 @@ package com.festago.festago.presentation.ui.ticketreserve
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.analytics.AnalyticsHelper
-import com.festago.festago.domain.model.Reservation
-import com.festago.festago.domain.model.ReservationStage
-import com.festago.festago.domain.model.ReservationTicket
-import com.festago.festago.domain.model.ReservedTicket
-import com.festago.festago.domain.repository.AuthRepository
-import com.festago.festago.domain.repository.FestivalRepository
-import com.festago.festago.domain.repository.ReservationTicketRepository
-import com.festago.festago.domain.repository.TicketRepository
+import com.festago.festago.model.Reservation
+import com.festago.festago.model.ReservationStage
+import com.festago.festago.model.ReservationTicket
+import com.festago.festago.model.ReservedTicket
 import com.festago.festago.presentation.mapper.toPresentation
+import com.festago.festago.repository.AuthRepository
+import com.festago.festago.repository.FestivalRepository
+import com.festago.festago.repository.ReservationTicketRepository
+import com.festago.festago.repository.TicketRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -103,8 +103,15 @@ class TicketReserveViewModelTest {
         assertThat(vm.uiState.value).isInstanceOf(TicketReserveUiState.Success::class.java)
 
         // and
-        val uiModel = vm.uiState.value as TicketReserveUiState.Success
-        assertThat(uiModel.reservation).isEqualTo(fakeReservation.toPresentation())
+        val festival = (vm.uiState.value as TicketReserveUiState.Success).festival
+        val expected = ReservationFestivalUiState(
+            id = festival.id,
+            name = festival.name,
+            thumbnail = festival.thumbnail,
+            endDate = festival.endDate,
+            startDate = festival.startDate,
+        )
+        assertThat(festival).isEqualTo(expected)
     }
 
     @Test
@@ -152,7 +159,7 @@ class TicketReserveViewModelTest {
         }
 
         // when
-        vm.showTicketTypes(1)
+        vm.showTicketTypes(1, LocalDateTime.MIN)
 
         // then
         assertThat(vm.event.getValue()).isInstanceOf(TicketReserveEvent.ShowTicketTypes::class.java)
@@ -174,7 +181,7 @@ class TicketReserveViewModelTest {
         }
 
         // when
-        vm.showTicketTypes(1)
+        vm.showTicketTypes(1, LocalDateTime.MIN)
 
         // then
         assertThat(vm.uiState.value).isEqualTo(TicketReserveUiState.Error)

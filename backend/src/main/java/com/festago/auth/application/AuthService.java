@@ -4,6 +4,7 @@ import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.OAuth2Client;
 import com.festago.auth.domain.OAuth2Clients;
+import com.festago.auth.domain.Role;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
@@ -45,7 +46,7 @@ public class AuthService {
     }
 
     private String getAccessToken(Member member) {
-        return authProvider.provide(new AuthPayload(member.getId()));
+        return authProvider.provide(new AuthPayload(member.getId(), Role.MEMBER));
     }
 
     private Member signUp(UserInfo userInfo) {

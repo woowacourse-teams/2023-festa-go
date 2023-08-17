@@ -1,13 +1,12 @@
 package com.festago.festago.presentation.ui.signin
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.domain.repository.AuthRepository
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
+import com.festago.festago.repository.AuthRepository
 import kotlinx.coroutines.launch
 
 class SignInViewModel(
@@ -31,20 +30,6 @@ class SignInViewModel(
                     _event.setValue(SignInEvent.SignInFailure)
                     analyticsHelper.logNetworkFailure(KEY_SIGN_IN_LOG, it.message.toString())
                 }
-        }
-    }
-
-    class SignInViewModelFactory(
-        private val authRepository: AuthRepository,
-        private val analyticsHelper: AnalyticsHelper,
-    ) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
-                return SignInViewModel(authRepository, analyticsHelper) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel Class")
         }
     }
 
