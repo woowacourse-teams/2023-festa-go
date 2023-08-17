@@ -1,6 +1,6 @@
 <resources>
     <!-- Strings related to app -->
-    <string name="app_name">festago</string>
+    <string name="app_name">페스타고</string>
 
     <!--date format-->
     <string name="ticket_entry_date_time_dot_format">yyyy.MM.dd</string>
