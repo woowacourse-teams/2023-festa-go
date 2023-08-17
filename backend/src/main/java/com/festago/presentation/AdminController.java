@@ -19,6 +19,7 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
+import io.swagger.v3.oas.annotations.Hidden;
 import com.festago.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
@@ -41,6 +42,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/admin")
+@Hidden
 public class AdminController {
 
     private final FestivalService festivalService;
