@@ -26,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/oauth2")
-    @Operation(description = "엑세스 토큰을 기반으로 로그인 요청을 보낸다.")
+    @Operation(description = "소셜 엑세스 토큰을 기반으로 로그인 요청을 보낸다.")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok()
