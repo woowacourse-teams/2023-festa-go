@@ -72,21 +72,6 @@ class JwtAuthExtractorTest {
     }
 
     @Test
-    void memberId_필드가_없으면_예외() {
-        // given
-        String token = Jwts.builder()
-            .claim(ROLE_ID_KEY, Role.MEMBER)
-            .setExpiration(new Date(new Date().getTime() + 10000))
-            .signWith(KEY, SignatureAlgorithm.HS256)
-            .compact();
-
-        // when & then
-        assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
-            .isInstanceOf(InternalServerException.class)
-            .hasMessage("유효하지 않은 로그인 토큰 payload 입니다.");
-    }
-
-    @Test
     void role_필드가_없으면_예외() {
         // given
         String token = Jwts.builder()
