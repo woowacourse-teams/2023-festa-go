@@ -69,7 +69,7 @@ class AuthControllerTest {
 
     @Test
     @WithMockAuth(role = Role.ADMIN)
-    void 멤버_권한이_아닌데_로그인하면_예외() throws Exception {
+    void 멤버_권한이_아닌데_탈퇴하면_예외() throws Exception {
         mockMvc.perform(delete("/auth")
                 .header("Authorization", "Bearer token")
                 .contentType(MediaType.APPLICATION_JSON))
