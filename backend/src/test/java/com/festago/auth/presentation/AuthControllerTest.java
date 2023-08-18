@@ -145,4 +145,29 @@ class AuthControllerTest {
         verify(memberFCMService, times(1))
             .saveMemberFCM(isNewMember, accessToken, fcmToken);
     }
+
+    @Test
+    void 로그인을_하지_않고_탈퇴를_하면_예외() throws Exception {
+        mockMvc.perform(delete("/auth")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 멤버_권한이_아닌데_탈퇴하면_예외() throws Exception {
+        mockMvc.perform(delete("/auth")
+                .header("Authorization", "Bearer token")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockAuth
+    void 회원_탈퇴를_한다() throws Exception {
+        mockMvc.perform(delete("/auth")
+                .header("Authorization", "Bearer token")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+    }
 }
