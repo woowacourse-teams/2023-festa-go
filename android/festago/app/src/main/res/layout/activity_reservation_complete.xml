@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <variable
+            name="reservationComplete"
+            type="com.festago.festago.presentation.model.ReservedTicketUiModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_ticket_gradient_primary"
+        tools:context=".presentation.ui.reservationcomplete.ReservationCompleteActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutReservationComplete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/space_lg"
+            android:layout_marginVertical="@dimen/space_xxlg"
+            android:background="@color/white"
+            android:padding="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/ivFestagoLogo"
+                android:layout_width="120dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="52dp"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_festago_logo_round"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/tvReservationComplete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/white"
+                android:text="@string/reservation_complete_tv_reservation_complete"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivFestagoLogo" />
+
+            <TextView
+                android:id="@+id/tvTicketNumberPrompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/reservation_complete_tv_ticket_number_prompt"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvReservationComplete" />
+
+            <TextView
+                android:id="@+id/tvReservationCompleteNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{Integer.toString(reservationComplete.number)}"
+                android:textColor="@color/black"
+                android:textSize="90sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTicketNumberPrompt"
+                tools:text="123" />
+
+            <TextView
+                android:id="@+id/tvEntryTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="52dp"
+                android:text="@{@string/reservation_complete_tv_entry_able_time(reservationComplete.entryTime.format(DateTimeFormatter.ofPattern(@string/reservation_complete_tv_time_format)))}"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvReservationCompleteNumber"
+                tools:text="[입장 가능 시간] 18:00 ~" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvEntryDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_lsm"
+            android:text="@{reservationComplete.entryTime.format(DateTimeFormatter.ofPattern(@string/reservation_complete_tv_date_format))}"
+            android:textColor="@color/md_theme_light_onPrimary"
+            android:textSize="@dimen/title_medium"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutReservationComplete"
+            tools:text="2023.7.5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

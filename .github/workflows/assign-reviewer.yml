@@ -1,0 +1,35 @@
+name: Assign Reviewer By Label
+on:
+  pull_request:
+    types: [ opened, edited, labeled, unlabeled ]
+
+jobs:
+  assign-reviewer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: All Label
+        uses: wow-actions/auto-assign@v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: BGuga, seokjin8678, xxeol2, carsago, SeongHoonC, EmilyCh0, re4rk
+          assignees: ${{ github.event.pull_request.user.login }}
+          includeLabels: ALL
+          excludeLabels: WIP
+
+      - name: Android Label
+        uses: wow-actions/auto-assign@v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: SeongHoonC, EmilyCh0, re4rk
+          assignees: ${{ github.event.pull_request.user.login }}
+          includeLabels: AN
+          excludeLabels: WIP
+
+      - name: Backend Label
+        uses: wow-actions/auto-assign@v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: BGuga, seokjin8678, xxeol2, carsago
+          assignees: ${{ github.event.pull_request.user.login }}
+          includeLabels: BE
+          excludeLabels: WIP

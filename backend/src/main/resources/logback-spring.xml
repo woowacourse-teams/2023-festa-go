@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+  <property name="FILE_LOG_PATTERN"
+    value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] [%thread] %-5level [%C.%M:%L] - %msg %ex{5}%n"/>
+  <property name="CONSOLE_LOG_PATTERN"
+    value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg %ex{5}%n"/>
+
+  <springProfile name="local">
+    <include resource="console-appender.xml"/>
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="dev">
+    <include resource="logs/common/file-info-appender.xml"/>
+    <include resource="logs/common/file-warn-appender.xml"/>
+    <include resource="logs/common/file-error-appender.xml"/>
+    <include resource="logs/error/file-info-appender.xml"/>
+    <include resource="logs/error/file-warn-appender.xml"/>
+    <include resource="logs/error/file-error-appender.xml"/>
+    <include resource="logs/slack/slack-error-appender.xml"/>
+
+    <logger additivity="false" level="INFO" name="ErrorLogger">
+      <appender-ref ref="ERROR_ERROR"/>
+      <appender-ref ref="ERROR_WARN"/>
+      <appender-ref ref="ERROR_INFO"/>
+      <appender-ref ref="ASYNC_SLACK_ERROR"/>
+    </logger>
+
+    <root level="INFO">
+      <appender-ref ref="FILE-INFO"/>
+      <appender-ref ref="FILE-WARN"/>
+      <appender-ref ref="FILE-ERROR"/>
+      <appender-ref ref="ASYNC_SLACK_ERROR"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="prod">
+    <include resource="logs/common/file-info-appender.xml"/>
+    <include resource="logs/common/file-warn-appender.xml"/>
+    <include resource="logs/common/file-error-appender.xml"/>
+    <include resource="logs/error/file-info-appender.xml"/>
+    <include resource="logs/error/file-warn-appender.xml"/>
+    <include resource="logs/error/file-error-appender.xml"/>
+    <include resource="logs/slack/slack-error-appender.xml"/>
+    <include resource="logs/slack/slack-warn-appender.xml"/>
+
+    <logger additivity="false" level="INFO" name="ErrorLogger">
+      <appender-ref ref="ERROR_ERROR"/>
+      <appender-ref ref="ERROR_WARN"/>
+      <appender-ref ref="ERROR_INFO"/>
+      <appender-ref ref="ASYNC_SLACK_ERROR"/>
+      <appender-ref ref="ASYNC_SLACK_WARN"/>
+    </logger>
+
+    <root level="INFO">
+      <appender-ref ref="FILE-INFO"/>
+      <appender-ref ref="FILE-WARN"/>
+      <appender-ref ref="FILE-ERROR"/>
+      <appender-ref ref="ASYNC_SLACK_ERROR"/>
+      <appender-ref ref="ASYNC_SLACK_WARN"/>
+    </root>
+  </springProfile>
+
+</configuration>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageViewModel" />
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState" />
+
+        <variable
+            name="successState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState.Success" />
+
+        <import type="java.time.format.DateTimeFormatter" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srlMyPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupUserProfile"
+                visibility="@{uiState.shouldShowSuccess}"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:constraint_referenced_ids="sivProfile, tvNickname, tvAccountTitle, tvSchoolAuthorization, tvLogout, tvWithdrawal, tvReserveListTitle, cvMemberTicket" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineStart"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="20dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineEnd"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="20dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineTop"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="20dp" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/sivProfile"
+                imageUrl="@{successState.userProfile.profileImage}"
+                android:layout_width="52dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                app:layout_constraintTop_toBottomOf="@id/guidelineTop"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
+                tools:src="@drawable/btn_circle_primary" />
+
+            <TextView
+                android:id="@+id/tvNickname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{successState.userProfile.nickName}"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/sivProfile"
+                app:layout_constraintStart_toEndOf="@id/sivProfile"
+                app:layout_constraintTop_toTopOf="@id/sivProfile"
+                tools:text="홍길동" />
+
+            <TextView
+                android:id="@+id/tvAccountTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/my_page_tv_account_title"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                app:layout_constraintTop_toBottomOf="@id/sivProfile" />
+
+            <TextView
+                android:id="@+id/tvSchoolAuthorization"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingVertical="8dp"
+                android:text="@string/my_page_tv_school_authorization"
+                app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                app:layout_constraintTop_toBottomOf="@id/tvAccountTitle" />
+
+            <TextView
+                android:id="@+id/tvLogout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.signOut()}"
+                android:paddingVertical="8dp"
+                android:text="@string/my_page_tv_logout"
+                app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                app:layout_constraintTop_toBottomOf="@id/tvSchoolAuthorization" />
+
+            <TextView
+                android:id="@+id/tvWithdrawal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.showConfirmDelete()}"
+                android:paddingVertical="8dp"
+                android:text="@string/my_page_tv_withdrawal"
+                app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                app:layout_constraintTop_toBottomOf="@id/tvLogout" />
+
+            <TextView
+                android:id="@+id/tvReserveListTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/my_page_tv_reserve_list_title"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                app:layout_constraintTop_toBottomOf="@id/tvWithdrawal" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvMemberTicket"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:minHeight="120dp"
+                android:onClick="@{() -> vm.showTicketHistory()}"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                app:layout_constraintTop_toBottomOf="@id/tvReserveListTitle">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <include
+                        android:id="@+id/includeTicketHistory"
+                        layout="@layout/item_ticket_history"
+                        visibility="@{successState.hasTicket}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:ticket="@{successState.ticket}" />
+
+                    <TextView
+                        visibility="@{successState.hasTicket}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@string/my_page_tv_more"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/includeTicketHistory" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    visibility="@{!successState.hasTicket}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/my_page_no_ticket"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.cardview.widget.CardView>
+
+            <ProgressBar
+                visibility="@{uiState.shouldShowLoading}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                visibility="@{uiState.shouldShowError}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/my_page_tv_error" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</layout>

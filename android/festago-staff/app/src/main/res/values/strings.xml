@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">festago-staff</string>
+    <string name="main_btn_check_ticket">티켓 검사</string>
+    <string name="main_label_staff">STAFF</string>
+
+    <!-- Strings related to ticket validation -->
+    <string name="ticket_validation_toast_camera_permission_granted">카메라 권한이 허용되었습니다.</string>
+    <string name="ticket_validation_toast_camera_permission_denied">카메라 권한을 거부했습니다.</string>
+    <string name="ticket_validation_toast_no_content">No content</string>
+</resources>

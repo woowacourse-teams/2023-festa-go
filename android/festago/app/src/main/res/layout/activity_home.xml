@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.home.HomeActivity">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_home_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="68dp" />
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/baNavigation"
+            style="@style/Widget.MaterialComponents.BottomAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:backgroundTint="?attr/colorSurface"
+            app:contentInsetStart="0dp"
+            app:fabAlignmentMode="center">
+
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bnvHome"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:background="#00000000"
+                app:itemActiveIndicatorStyle="@color/zxing_transparent"
+                app:itemIconSize="40dp"
+                app:itemIconTint="@drawable/menu_selector_color"
+                app:labelVisibilityMode="unlabeled"
+                app:menu="@menu/menu_bottom_navigation" />
+        </com.google.android.material.bottomappbar.BottomAppBar>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabTicket"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@drawable/menu_selector_color"
+            android:src="@drawable/ic_festago_coupon"
+            app:fabCustomSize="72dp"
+            app:tint="@color/white"
+            app:layout_anchor="@id/baNavigation"
+            app:maxImageSize="72dp" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

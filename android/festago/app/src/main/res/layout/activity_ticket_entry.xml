@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.festago.festago.presentation.model.TicketConditionUiModel" />
+
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <variable
+            name="vm"
+            type="com.festago.festago.presentation.ui.ticketentry.TicketEntryViewModel" />
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.ticketentry.TicketEntryUiState" />
+
+        <variable
+            name="successState"
+            type="com.festago.festago.presentation.ui.ticketentry.TicketEntryUiState.Success" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        background="@{successState.ticketBackgroundId}"
+        visibility="@{uiState.shouldShowSuccess}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutTicket"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/space_lg"
+            android:layout_marginVertical="@dimen/space_xxlg"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".presentation.ui.ticketentry.TicketEntryActivity">
+
+            <TextView
+                android:id="@+id/tvTicketStageName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_llg"
+                android:text="@{successState.ticket.festivalName}"
+                android:textColor="@color/md_theme_light_onSurface"
+                android:textSize="@dimen/title_medium"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="테코대학교 무슨축제" />
+
+            <TextView
+                android:id="@+id/tvTicketNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@{Integer.toString(successState.ticket.number)}"
+                android:textColor="@color/md_theme_light_onSurface"
+                android:textSize="90sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnTicketCondition"
+                tools:text="123" />
+
+            <Button
+                android:id="@+id/btnTicketCondition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lsm"
+                android:clickable="false"
+                android:minHeight="0dp"
+                android:textColor="@color/md_theme_light_onPrimary"
+                android:textSize="@dimen/label_large"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTicketStageName"
+                tools:text="입장전" />
+
+            <ProgressBar
+                android:id="@+id/pbRemainTime"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/space_md"
+                android:layout_marginVertical="@dimen/space_md"
+                android:max="@{successState.ticketCode.period}"
+                android:progress="@{successState.remainTime}"
+                android:scaleY="0.3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvRemainTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivQrCode" />
+
+            <ImageView
+                android:id="@+id/ivQrCode"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:importantForAccessibility="no"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTicketNumber"
+                tools:src="@drawable/img_festago_qr" />
+
+
+            <TextView
+                android:id="@+id/tvRemainTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_lsm"
+                android:text="@{Integer.toString(successState.remainTime)}"
+                android:textColor="@color/md_theme_light_onSurface"
+                android:textSize="@dimen/body_large"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/pbRemainTime"
+                app:layout_constraintEnd_toStartOf="@id/btnReNew"
+                app:layout_constraintTop_toTopOf="@+id/btnReNew"
+                tools:text="24" />
+
+            <ImageView
+                android:id="@+id/btnReNew"
+                background="@{successState.ticketConditionBackgroundId}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_lsm"
+                android:importantForAccessibility="no"
+                android:onClick="@{() -> vm.loadTicketCode(successState.ticket.id)}"
+                android:padding="@dimen/space_sm"
+                android:src="@drawable/ic_renew"
+                app:layout_constraintBottom_toBottomOf="@id/pbRemainTime"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/pbRemainTime" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvEntryDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_lsm"
+            android:text="@{successState.ticket.entryTime.format(DateTimeFormatter.ofPattern(@string/ticket_entry_date_time_dot_format))}"
+            android:textColor="@color/md_theme_light_onPrimary"
+            android:textSize="@dimen/title_medium"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutTicket"
+            tools:text="2023.7.5" />
+
+        <TextView
+            visibility="@{uiState.shouldShowError}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/ticket_entry_tv_error"
+            tools:visibility="gone" />
+
+        <ProgressBar
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

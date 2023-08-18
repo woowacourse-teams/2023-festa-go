@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.festago.festagostaff.presentation.ui.ticketvalidation.TicketValidationViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.ticketvalidation.TicketValidationActivity">
+
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:id="@+id/dbvScanner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space"
+            android:background="@drawable/btn_circle_primary"
+            android:importantForAccessibility="no"
+            android:onClick="@{() -> vm.clearLatestCode()}"
+            android:padding="@dimen/space_sm"
+            android:src="@drawable/ic_refresh"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dbvScanner"
+            app:tint="@color/md_theme_light_onPrimary" />
+
+        <TextView
+            android:id="@+id/tvScanResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{vm.ticketState}"
+            android:textSize="28sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dbvScanner" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
