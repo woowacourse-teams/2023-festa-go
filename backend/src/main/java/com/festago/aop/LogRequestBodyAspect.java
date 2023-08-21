@@ -3,15 +3,19 @@ package com.festago.aop;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
-import com.festago.presentation.ErrorLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -23,15 +27,18 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 @Aspect
 public class LogRequestBodyAspect {
 
+    private static final Logger errorLogger = LoggerFactory.getLogger("ErrorLogger");
     private static final long MAX_CONTENT_LENGTH = 1024;
-    private static final String LOG_FORMAT = "[REQUEST BODY]\n{}";
+    private static final String LOG_FORMAT = "\n[REQUEST BODY]\n{}";
 
-    private final ErrorLogger errorLogger;
+    private final Map<Level, BiConsumer<String, String>> loggerMap = new EnumMap<>(Level.class);
     private final ObjectMapper objectMapper;
 
-    public LogRequestBodyAspect(ErrorLogger errorLogger, ObjectMapper objectMapper) {
-        this.errorLogger = errorLogger;
+    public LogRequestBodyAspect(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
+        loggerMap.put(Level.INFO, errorLogger::info);
+        loggerMap.put(Level.WARN, errorLogger::warn);
+        loggerMap.put(Level.ERROR, errorLogger::error);
     }
 
     @Around("@annotation(LogRequestBody)")
@@ -69,8 +76,9 @@ public class LogRequestBodyAspect {
     }
 
     private void log(Level level, HttpServletRequest request) {
-        errorLogger.get(level)
-            .log(LOG_FORMAT, getRequestPayload(request));
+        loggerMap.getOrDefault(level, (ignore1, ignore2) -> {
+            })
+            .accept(LOG_FORMAT, getRequestPayload(request));
     }
 
     private String getRequestPayload(HttpServletRequest request) {
