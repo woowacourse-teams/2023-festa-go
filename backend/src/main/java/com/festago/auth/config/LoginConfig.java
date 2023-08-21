@@ -7,7 +7,6 @@ import com.festago.auth.infrastructure.HeaderTokenExtractor;
 import com.festago.auth.presentation.AuthInterceptor;
 import com.festago.auth.presentation.AuthenticateContext;
 import com.festago.auth.presentation.RoleArgumentResolver;
-import com.festago.presentation.ErrorLogger;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,10 +58,5 @@ public class LoginConfig implements WebMvcConfigurer {
             .authenticateContext(authenticateContext)
             .role(Role.MEMBER)
             .build();
-    }
-
-    @Bean
-    public ErrorLogger errorLogger() {
-        return new ErrorLogger();
     }
 }
