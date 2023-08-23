@@ -1,7 +1,6 @@
 package com.festago.presentation;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -12,21 +11,18 @@ import com.festago.application.EntryService;
 import com.festago.domain.EntryState;
 import com.festago.dto.TicketValidationRequest;
 import com.festago.dto.TicketValidationResponse;
-import com.festago.support.TestConfig;
+import com.festago.support.CustomWebMvcTest;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-@WebMvcTest(StaffMemberTicketController.class)
-@Import(TestConfig.class)
+@CustomWebMvcTest(StaffMemberTicketController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class StaffMemberTicketControllerTest {
@@ -45,7 +41,7 @@ class StaffMemberTicketControllerTest {
         // given
         TicketValidationRequest request = new TicketValidationRequest("anyCode");
         TicketValidationResponse expected = new TicketValidationResponse(EntryState.AFTER_ENTRY);
-        given(entryService.validate(eq(request)))
+        given(entryService.validate(request))
             .willReturn(expected);
 
         // when & then

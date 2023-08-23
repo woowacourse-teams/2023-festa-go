@@ -1,9 +1,9 @@
 package com.festago.auth.infrastructure;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.Role;
 import com.festago.exception.InternalServerException;
 import com.festago.exception.UnauthorizedException;
 import io.jsonwebtoken.Jwts;
@@ -12,6 +12,7 @@ import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,12 @@ import org.junit.jupiter.api.Test;
 class JwtAuthExtractorTest {
 
     private static final String MEMBER_ID_KEY = "memberId";
+    private static final String ROLE_ID_KEY = "role";
     private static final String SECRET_KEY = "1231231231231231223131231231231231231212312312";
     private static final Key KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
     JwtAuthExtractor jwtAuthExtractor = new JwtAuthExtractor(SECRET_KEY);
-    
+
     @Test
     void JWT_토큰의_형식이_아니면_예외() {
         // given
@@ -73,6 +75,7 @@ class JwtAuthExtractorTest {
     void memberId_필드가_없으면_예외() {
         // given
         String token = Jwts.builder()
+            .claim(ROLE_ID_KEY, Role.MEMBER)
             .setExpiration(new Date(new Date().getTime() + 10000))
             .signWith(KEY, SignatureAlgorithm.HS256)
             .compact();
@@ -84,11 +87,35 @@ class JwtAuthExtractorTest {
     }
 
     @Test
+    void role_필드가_없으면_예외() {
+        // given
+        String token = Jwts.builder()
+            .claim(MEMBER_ID_KEY, 1)
+            .setExpiration(new Date(new Date().getTime() + 10000))
+            .signWith(KEY, SignatureAlgorithm.HS256)
+            .compact();
+
+        // when & then
+        assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
+            .isInstanceOf(InternalServerException.class)
+            .hasMessage("해당하는 Role이 없습니다.");
+    }
+
+    @Test
+    void token이_null이면_예외() {
+        // when & then
+        assertThatThrownBy(() -> jwtAuthExtractor.extract(null))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessage("올바르지 않은 로그인 토큰입니다.");
+    }
+
+    @Test
     void 토큰_추출_성공() {
         // given
         Long memberId = 1L;
         String token = Jwts.builder()
             .claim(MEMBER_ID_KEY, memberId)
+            .claim(ROLE_ID_KEY, Role.MEMBER)
             .setExpiration(new Date(new Date().getTime() + 10000))
             .signWith(KEY, SignatureAlgorithm.HS256)
             .compact();
@@ -97,6 +124,9 @@ class JwtAuthExtractorTest {
         AuthPayload payload = jwtAuthExtractor.extract(token);
 
         // then
-        assertThat(payload.getMemberId()).isEqualTo(memberId);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(payload.getMemberId()).isEqualTo(memberId);
+            softly.assertThat(payload.getRole()).isEqualTo(Role.MEMBER);
+        });
     }
 }

@@ -3,6 +3,7 @@ package com.festago.auth.infrastructure;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.Role;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -19,7 +20,7 @@ class JwtAuthProviderTest {
     @Test
     void 토큰_생성_성공() {
         // given
-        AuthPayload authPayload = new AuthPayload(1L);
+        AuthPayload authPayload = new AuthPayload(1L, Role.MEMBER);
         JwtParser parser = Jwts.parserBuilder()
             .setSigningKey(SECRET_KEY.getBytes())
             .build();

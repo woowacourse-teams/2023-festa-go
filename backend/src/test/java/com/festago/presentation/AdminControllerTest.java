@@ -2,7 +2,9 @@ package com.festago.presentation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -12,6 +14,9 @@ import com.festago.application.AdminService;
 import com.festago.application.FestivalService;
 import com.festago.application.StageService;
 import com.festago.application.TicketService;
+import com.festago.auth.application.AdminAuthService;
+import com.festago.auth.domain.AuthExtractor;
+import com.festago.auth.domain.Role;
 import com.festago.domain.TicketType;
 import com.festago.dto.ErrorResponse;
 import com.festago.dto.FestivalCreateRequest;
@@ -22,7 +27,10 @@ import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
-import com.festago.support.TestConfig;
+import com.festago.exception.UnauthorizedException;
+import com.festago.support.CustomWebMvcTest;
+import com.festago.support.WithMockAuth;
+import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,14 +38,12 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(AdminController.class)
-@Import(TestConfig.class)
+@CustomWebMvcTest(AdminController.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AdminControllerTest {
@@ -60,7 +66,50 @@ class AdminControllerTest {
     @MockBean
     AdminService adminService;
 
+    @MockBean
+    AdminAuthService adminAuthService;
+
+    @SpyBean
+    AuthExtractor authExtractor;
+
     @Test
+    @WithMockAuth
+    void 토큰의_Role이_어드민이_아니면_404_NotFound() throws Exception {
+        // when & then
+        mockMvc.perform(get("/admin")
+                .cookie(new Cookie("token", "token")))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void 쿠키에_토큰이_없으면_404_NotFound() throws Exception {
+        // when & then
+        mockMvc.perform(get("/admin"))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void 권한이_없어도_로그인_페이지_접속_가능() throws Exception {
+        // when & then
+        mockMvc.perform(get("/admin/login"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth
+    void 토큰의_만료기간이_지나면_로그인_페이지로_리다이렉트() throws Exception {
+        // given
+        given(authExtractor.extract(anyString()))
+            .willThrow(new UnauthorizedException(ErrorCode.EXPIRED_AUTH_TOKEN));
+
+        // when & then
+        mockMvc.perform(get("/admin/login")
+                .cookie(new Cookie("token", "token")))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 축제_생성() throws Exception {
         // given
         String festivalName = "테코 대학교";
@@ -87,7 +136,8 @@ class AdminControllerTest {
         // when && then
         String content = mockMvc.perform(post("/admin/festivals")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
@@ -98,6 +148,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 존재_하지_않는_축제_무대_생성_예외() throws Exception {
         // given
         String startTime = "2023-07-27T18:00:00";
@@ -120,7 +171,8 @@ class AdminControllerTest {
         // when && then
         String content = mockMvc.perform(post("/admin/stages")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isNotFound())
             .andReturn()
@@ -131,6 +183,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 무대_생성() throws Exception {
         // given
         String startTime = "2023-07-27T18:00:00";
@@ -152,7 +205,8 @@ class AdminControllerTest {
         // when && then
         String content = mockMvc.perform(post("/admin/stages")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
@@ -163,6 +217,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 존재_하지_않는_무대_티켓_예외() throws Exception {
         // given
         String entryTime = "2023-07-27T18:00:00";
@@ -183,7 +238,8 @@ class AdminControllerTest {
         // when && then
         String content = mockMvc.perform(post("/admin/tickets")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isNotFound())
             .andReturn()
@@ -194,6 +250,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 티켓_생성() throws Exception {
         // given
         long ticketId = 1L;
@@ -216,7 +273,8 @@ class AdminControllerTest {
         // when && then
         String content = mockMvc.perform(post("/admin/tickets")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isOk())
             .andReturn()

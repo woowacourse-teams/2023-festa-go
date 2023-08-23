@@ -3,10 +3,10 @@ package com.festago.festago.data.repository
 import com.festago.festago.data.dto.ReservedTicketRequest
 import com.festago.festago.data.service.TicketRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
-import com.festago.festago.domain.model.ReservedTicket
-import com.festago.festago.domain.model.Ticket
-import com.festago.festago.domain.model.TicketCode
-import com.festago.festago.domain.repository.TicketRepository
+import com.festago.festago.model.ReservedTicket
+import com.festago.festago.model.Ticket
+import com.festago.festago.model.TicketCode
+import com.festago.festago.repository.TicketRepository
 
 class TicketDefaultRepository(
     private val ticketRetrofitService: TicketRetrofitService,

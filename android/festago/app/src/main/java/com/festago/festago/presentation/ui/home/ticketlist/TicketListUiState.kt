@@ -1,11 +1,9 @@
 package com.festago.festago.presentation.ui.home.ticketlist
 
-import com.festago.festago.presentation.model.MemberTicketUiModel
-
 sealed interface TicketListUiState {
     object Loading : TicketListUiState
 
-    data class Success(val tickets: List<MemberTicketUiModel>) : TicketListUiState {
+    data class Success(val tickets: List<TicketListItemUiState>) : TicketListUiState {
         val hasTicket get() = tickets.isNotEmpty()
         val hasNotTicket get() = tickets.isEmpty()
     }
