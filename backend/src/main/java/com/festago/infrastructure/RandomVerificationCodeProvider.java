@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class RandomVerificationCodeProvider implements VerificationCodeProvider {
 
-    private static final Random random = ThreadLocalRandom.current();
     private static final int CODE_LENGTH = 6;
 
     @Override
     public VerificationCode provide() {
+        Random random = ThreadLocalRandom.current();
         return IntStream.range(0, CODE_LENGTH)
             .mapToObj(i -> String.valueOf(random.nextInt(10)))
             .collect(collectingAndThen(joining(), VerificationCode::new));
