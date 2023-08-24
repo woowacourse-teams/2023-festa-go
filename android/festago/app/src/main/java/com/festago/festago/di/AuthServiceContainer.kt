@@ -1,6 +1,7 @@
 package com.festago.festago.di
 
 import com.festago.festago.data.retrofit.AuthInterceptor
+import com.festago.festago.data.service.StudentsVerificationRetrofitService
 import com.festago.festago.data.service.TicketRetrofitService
 import com.festago.festago.data.service.UserRetrofitService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -28,5 +29,9 @@ class AuthServiceContainer(baseUrl: String, tokenContainer: TokenContainer) {
 
     val userRetrofitService: UserRetrofitService by lazy {
         authRetrofit.create(UserRetrofitService::class.java)
+    }
+
+    val studentsVerificationRetrofitService: StudentsVerificationRetrofitService by lazy {
+        authRetrofit.create(StudentsVerificationRetrofitService::class.java)
     }
 }
