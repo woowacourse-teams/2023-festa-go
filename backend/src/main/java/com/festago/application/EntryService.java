@@ -4,6 +4,7 @@ import com.festago.domain.EntryCode;
 import com.festago.domain.EntryCodeExtractor;
 import com.festago.domain.EntryCodePayload;
 import com.festago.domain.EntryCodeProvider;
+import com.festago.domain.EntryCodeTime;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.dto.EntryCodeResponse;
@@ -13,6 +14,7 @@ import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
 import java.time.LocalDateTime;
+import java.util.Date;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +41,10 @@ public class EntryService {
         if (!memberTicket.canEntry(LocalDateTime.now())) {
             throw new BadRequestException(ErrorCode.NOT_ENTRY_TIME);
         }
-        EntryCode entryCode = EntryCode.create(entryCodeProvider, memberTicket);
-        return EntryCodeResponse.of(entryCode);
+        EntryCodeTime entryCodeTime = new EntryCodeTime();
+        String code = entryCodeProvider.provide(EntryCodePayload.from(memberTicket),
+            entryCodeTime.getExpiredAt(new Date().getTime()));
+        return EntryCodeResponse.of(new EntryCode(code, entryCodeTime));
     }
 
     private MemberTicket findMemberTicket(Long memberTicketId) {
