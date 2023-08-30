@@ -26,7 +26,7 @@ class JwtEntryCodeProviderTest {
     void expiredAt이_과거이면_예외() {
         // given
         Date now = new Date();
-        Date expiredAt = new Date(now.getTime() - 1000L);
+        Date expiredAt = new Date(now.getTime() - 1_000);
         MemberTicket memberTicket = MemberTicketFixture.memberTicket()
             .id(1L)
             .build();
@@ -40,7 +40,7 @@ class JwtEntryCodeProviderTest {
     @Test
     void JWT_토큰을_생성() {
         // given
-        long period = 30000;
+        long period = 30_000;
         MemberTicket memberTicket = MemberTicketFixture.memberTicket().id(1L).build();
         Date now = new Date();
         Date expiredAt = new Date(now.getTime() + period);
@@ -55,12 +55,11 @@ class JwtEntryCodeProviderTest {
             .parseClaimsJws(code)
             .getBody();
 
-        Long actualMemberTicketId = (long) ((int) claims.get("ticketId"));
+        Long actualMemberTicketId = claims.get("ticketId", Long.class);
         Date actualExpiredAt = claims.getExpiration();
 
         assertSoftly(softly -> {
-            softly.assertThat(actualExpiredAt.getTime() - now.getTime() / 1000 * 1000)
-                .isEqualTo(period);
+            softly.assertThat(actualExpiredAt).isEqualToIgnoringMillis(expiredAt);
             softly.assertThat(actualMemberTicketId).isEqualTo(memberTicket.getId());
         });
     }
