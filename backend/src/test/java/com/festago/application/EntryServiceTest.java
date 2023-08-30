@@ -25,6 +25,7 @@ import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,6 +51,9 @@ class EntryServiceTest {
 
     @Mock
     MemberTicketRepository memberTicketRepository;
+
+    @Spy
+    Clock clock = Clock.systemDefaultZone();
 
     @InjectMocks
     EntryService entryService;

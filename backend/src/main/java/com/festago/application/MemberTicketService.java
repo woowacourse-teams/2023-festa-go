@@ -12,6 +12,7 @@ import com.festago.dto.MemberTicketsResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,11 +26,13 @@ public class MemberTicketService {
 
     private final MemberTicketRepository memberTicketRepository;
     private final MemberRepository memberRepository;
+    private final Clock clock;
 
     public MemberTicketService(MemberTicketRepository memberTicketRepository,
-                               MemberRepository memberRepository) {
+                               MemberRepository memberRepository, Clock clock) {
         this.memberTicketRepository = memberTicketRepository;
         this.memberRepository = memberRepository;
+        this.clock = clock;
     }
 
     @Transactional(readOnly = true)
@@ -59,7 +62,7 @@ public class MemberTicketService {
     }
 
     private List<MemberTicket> filterCurrentMemberTickets(List<MemberTicket> memberTickets) {
-        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now(clock);
         return memberTickets.stream()
             .filter(memberTicket -> memberTicket.isBeforeEntry(currentTime) || memberTicket.canEntry(currentTime))
             .sorted(comparing((MemberTicket memberTicket) -> memberTicket.isBeforeEntry(currentTime))
