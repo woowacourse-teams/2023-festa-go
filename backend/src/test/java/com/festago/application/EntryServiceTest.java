@@ -26,7 +26,10 @@ import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
 import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -64,9 +67,16 @@ class EntryServiceTest {
         @Test
         void 입장_시간_전_요청하면_예외() {
             // given
-            LocalDateTime entryTime = LocalDateTime.now().plusMinutes(30);
+            LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
+            Instant now = Instant.from(ZonedDateTime.of(entryTime.minusHours(1), ZoneId.systemDefault()));
+            Festival festival = FestivalFixture.festival()
+                .startDate(entryTime.toLocalDate())
+                .endDate(entryTime.toLocalDate())
+                .build();
             Stage stage = StageFixture.stage()
-                .startTime(LocalDateTime.now().plusHours(1))
+                .festival(festival)
+                .startTime(entryTime.plusHours(2))
+                .ticketOpenTime(entryTime.minusHours(1))
                 .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
@@ -75,9 +85,10 @@ class EntryServiceTest {
                 .build();
             Long memberId = memberTicket.getOwner().getId();
             Long memberTicketId = memberTicket.getId();
-
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
+            given(clock.instant())
+                .willReturn(now);
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
@@ -88,15 +99,16 @@ class EntryServiceTest {
         @Test
         void 입장_시간이_24시간이_넘은_경우_예외() {
             // given
-            LocalDateTime stageStartTime = LocalDateTime.now().minusHours(24);
-            LocalDateTime entryTime = stageStartTime.minusSeconds(10);
+            LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
+            Instant now = Instant.from(ZonedDateTime.of(entryTime.plusHours(24), ZoneId.systemDefault()));
             Festival festival = FestivalFixture.festival()
-                .startDate(stageStartTime.toLocalDate())
-                .endDate(stageStartTime.toLocalDate())
+                .startDate(entryTime.toLocalDate())
+                .endDate(entryTime.toLocalDate())
                 .build();
             Stage stage = StageFixture.stage()
                 .festival(festival)
-                .startTime(stageStartTime)
+                .startTime(entryTime.plusHours(2))
+                .ticketOpenTime(entryTime.minusHours(1))
                 .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
@@ -105,9 +117,10 @@ class EntryServiceTest {
                 .build();
             Long memberId = memberTicket.getOwner().getId();
             Long memberTicketId = memberTicket.getId();
-
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
+            given(clock.instant())
+                .willReturn(now);
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
@@ -118,14 +131,12 @@ class EntryServiceTest {
         @Test
         void 자신의_티켓이_아니면_예외() {
             // given
-            LocalDateTime entryTime = LocalDateTime.now().minusMinutes(30);
             Long memberId = 1L;
             Member other = MemberFixture.member()
                 .id(2L)
                 .build();
             MemberTicket otherTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
-                .entryTime(entryTime)
                 .owner(other)
                 .build();
             Long memberTicketId = otherTicket.getId();
@@ -155,8 +166,21 @@ class EntryServiceTest {
         @Test
         void 성공() {
             // given
+            LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
+            Instant now = Instant.from(ZonedDateTime.of(entryTime, ZoneId.systemDefault()));
+            Festival festival = FestivalFixture.festival()
+                .startDate(entryTime.toLocalDate())
+                .endDate(entryTime.toLocalDate())
+                .build();
+            Stage stage = StageFixture.stage()
+                .festival(festival)
+                .startTime(entryTime.plusHours(2))
+                .ticketOpenTime(entryTime.minusHours(1))
+                .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
+                .stage(stage)
+                .entryTime(entryTime)
                 .build();
             String code = "3112321312123";
             Long memberId = memberTicket.getOwner().getId();
@@ -166,6 +190,8 @@ class EntryServiceTest {
                 .willReturn(Optional.of(memberTicket));
             given(entryCodeProvider.provide(any(), any()))
                 .willReturn(code);
+            given(clock.instant())
+                .willReturn(now);
 
             // when
             EntryCodeResponse entryCode = entryService.createEntryCode(memberId, memberTicketId);
