@@ -1,7 +1,7 @@
 package com.festago.infrastructure;
 
-import com.festago.domain.EntryCodePayload;
 import com.festago.domain.EntryCodeProvider;
+import com.festago.domain.MemberTicket;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
 import io.jsonwebtoken.Jwts;
@@ -23,12 +23,12 @@ public class JwtEntryCodeProvider implements EntryCodeProvider {
     }
 
     @Override
-    public String provide(EntryCodePayload entryCodePayload, Date expiredAt) {
+    public String provide(MemberTicket memberTicket, Date expiredAt) {
         validate(expiredAt);
 
         return Jwts.builder()
-            .claim(MEMBER_TICKET_ID_KEY, entryCodePayload.getMemberTicketId())
-            .claim(ENTRY_STATE_KEY, entryCodePayload.getEntryState().getIndex())
+            .claim(MEMBER_TICKET_ID_KEY, memberTicket.getId())
+            .claim(ENTRY_STATE_KEY, memberTicket.getEntryState().getIndex())
             .setExpiration(expiredAt)
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
