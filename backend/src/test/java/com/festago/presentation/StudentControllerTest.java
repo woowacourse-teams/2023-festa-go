@@ -32,6 +32,18 @@ class StudentControllerTest {
     StudentService studentService;
 
     @Test
+    void 인증이_되지_않으면_401() throws Exception {
+        // given
+        StudentSendMailRequest request = new StudentSendMailRequest("user", 1L);
+
+        // when & then
+        mockMvc.perform(post("/students/send-verification")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     @WithMockAuth
     void 학교_인증_요청() throws Exception {
         // given
@@ -43,5 +55,6 @@ class StudentControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isOk());
+
     }
 }

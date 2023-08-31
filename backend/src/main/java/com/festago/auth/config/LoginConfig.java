@@ -38,7 +38,7 @@ public class LoginConfig implements WebMvcConfigurer {
             .addPathPatterns("/admin/**", "/js/admin/**")
             .excludePathPatterns("/admin/login", "/admin/initialize");
         registry.addInterceptor(memberAuthInterceptor())
-            .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**")
+            .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**", "/students/**")
             .excludePathPatterns("/auth/oauth2");
     }
 
