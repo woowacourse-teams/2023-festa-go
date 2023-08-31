@@ -1,17 +1,17 @@
 package com.festago.festago.presentation.ui.ticketentry
 
 import com.festago.festago.R
+import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCode
-import com.festago.festago.presentation.model.TicketConditionUiModel.AFTER_ENTRY
-import com.festago.festago.presentation.model.TicketConditionUiModel.AWAY
-import com.festago.festago.presentation.model.TicketConditionUiModel.BEFORE_ENTRY
-import com.festago.festago.presentation.model.TicketUiModel
+import com.festago.festago.model.TicketCondition.AFTER_ENTRY
+import com.festago.festago.model.TicketCondition.AWAY
+import com.festago.festago.model.TicketCondition.BEFORE_ENTRY
 
 interface TicketEntryUiState {
     object Loading : TicketEntryUiState
 
     data class Success(
-        val ticket: TicketUiModel,
+        val ticket: Ticket,
         val ticketCode: TicketCode,
         val remainTime: Int,
     ) : TicketEntryUiState {

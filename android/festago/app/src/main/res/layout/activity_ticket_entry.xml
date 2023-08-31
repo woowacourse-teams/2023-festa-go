@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.festago.festago.presentation.model.TicketConditionUiModel" />
+        <import type="com.festago.festago.model.Ticket" />
 
         <import type="java.time.format.DateTimeFormatter" />
 
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_llg"
-                android:text="@{successState.ticket.festivalName}"
+                android:text="@{successState.ticket.festivalTicket.name}"
                 android:textColor="@color/md_theme_light_onSurface"
                 android:textSize="@dimen/title_medium"
                 android:textStyle="bold"
