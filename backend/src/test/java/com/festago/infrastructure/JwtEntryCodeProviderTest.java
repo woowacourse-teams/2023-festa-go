@@ -3,6 +3,7 @@ package com.festago.infrastructure;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.festago.domain.EntryCodePayload;
 import com.festago.domain.EntryCodeProvider;
 import com.festago.domain.MemberTicket;
 import com.festago.exception.InternalServerException;
@@ -30,9 +31,10 @@ class JwtEntryCodeProviderTest {
         MemberTicket memberTicket = MemberTicketFixture.memberTicket()
             .id(1L)
             .build();
+        EntryCodePayload entryCodePayload = EntryCodePayload.from(memberTicket);
 
         // when & then
-        assertThatThrownBy(() -> entryCodeProvider.provide(memberTicket, expiredAt))
+        assertThatThrownBy(() -> entryCodeProvider.provide(entryCodePayload, expiredAt))
             .isInstanceOf(InternalServerException.class)
             .hasMessage("올바르지 않은 입장코드 만료 일자입니다.");
     }
@@ -44,9 +46,10 @@ class JwtEntryCodeProviderTest {
         MemberTicket memberTicket = MemberTicketFixture.memberTicket().id(1L).build();
         Date now = new Date();
         Date expiredAt = new Date(now.getTime() + period);
+        EntryCodePayload entryCodePayload = EntryCodePayload.from(memberTicket);
 
         // when
-        String code = entryCodeProvider.provide(memberTicket, expiredAt);
+        String code = entryCodeProvider.provide(entryCodePayload, expiredAt);
 
         // then
         Claims claims = Jwts.parserBuilder()

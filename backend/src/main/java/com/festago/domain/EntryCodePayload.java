@@ -20,6 +20,10 @@ public class EntryCodePayload {
         }
     }
 
+    public static EntryCodePayload from(MemberTicket memberTicket) {
+        return new EntryCodePayload(memberTicket.getId(), memberTicket.getEntryState());
+    }
+
     public Long getMemberTicketId() {
         return memberTicketId;
     }

@@ -15,7 +15,6 @@ import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.Date;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +44,9 @@ public class EntryService {
             throw new BadRequestException(ErrorCode.NOT_ENTRY_TIME);
         }
         EntryCodeTime entryCodeTime = EntryCodeTime.create();
-        String code = entryCodeProvider.provide(memberTicket,
-            entryCodeTime.getExpiredAt(new Date().getTime())); // TODO 추후 Clock 사용 시 clock.millis() 고려
+        long currentTimeMillis = clock.millis();
+        String code = entryCodeProvider.provide(EntryCodePayload.from(memberTicket),
+            entryCodeTime.getExpiredAt(currentTimeMillis));
         return EntryCodeResponse.of(new EntryCode(code, entryCodeTime));
     }
 
