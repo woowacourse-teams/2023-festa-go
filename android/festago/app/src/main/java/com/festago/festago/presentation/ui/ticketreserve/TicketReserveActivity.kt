@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.R
 import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.model.ReservedTicket
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.reservationcomplete.ReservationCompleteActivity
+import com.festago.festago.presentation.ui.reservationcomplete.ReservedTicketArg
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketFailed
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketSuccess
@@ -87,7 +87,12 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun handleReserveTicketSuccess(reservedTicket: ReservedTicket) {
-        val intent = ReservationCompleteActivity.getIntent(this, reservedTicket.toPresentation())
+        val reservedTicketArg = ReservedTicketArg(
+            ticketId = reservedTicket.id,
+            number = reservedTicket.number,
+            entryTime = reservedTicket.entryTime,
+        )
+        val intent = ReservationCompleteActivity.getIntent(this, reservedTicketArg)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()

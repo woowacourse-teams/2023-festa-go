@@ -9,7 +9,7 @@
 
         <variable
             name="reservationComplete"
-            type="com.festago.festago.presentation.model.ReservedTicketUiModel" />
+            type="com.festago.festago.presentation.ui.reservationcomplete.ReservedTicketArg" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
