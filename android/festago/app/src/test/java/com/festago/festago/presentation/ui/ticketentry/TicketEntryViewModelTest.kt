@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.TicketCode
 import com.festago.festago.presentation.fixture.TicketFixture
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.repository.TicketRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -72,7 +71,7 @@ class TicketEntryViewModelTest {
 
             // and
             val actualTicket = (vm.uiState.value as TicketEntryUiState.Success).ticket
-            assertThat(actualTicket).isEqualTo(TicketFixture.getMemberTicket().toPresentation())
+            assertThat(actualTicket).isEqualTo(TicketFixture.getMemberTicket())
             val actualTicketCode = (vm.uiState.value as TicketEntryUiState.Success).ticketCode
             assertThat(actualTicketCode).isEqualTo(getFakeTicketCode())
         }
