@@ -7,7 +7,7 @@ import com.festago.festago.model.TicketCondition.AFTER_ENTRY
 import com.festago.festago.model.TicketCondition.AWAY
 import com.festago.festago.model.TicketCondition.BEFORE_ENTRY
 
-interface TicketEntryUiState {
+sealed interface TicketEntryUiState {
     object Loading : TicketEntryUiState
 
     data class Success(
