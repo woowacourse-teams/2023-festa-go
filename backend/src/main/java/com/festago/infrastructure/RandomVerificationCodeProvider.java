@@ -12,14 +12,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class RandomVerificationCodeProvider implements VerificationCodeProvider {
 
-    private static final int CODE_LENGTH = 6;
-
     @Override
     public VerificationCode provide() {
         Random random = ThreadLocalRandom.current();
         return random.ints(0, 10)
             .mapToObj(String::valueOf)
-            .limit(CODE_LENGTH)
+            .limit(VerificationCode.LENGTH)
             .collect(collectingAndThen(joining(), VerificationCode::new));
     }
 }

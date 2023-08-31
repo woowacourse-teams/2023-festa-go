@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class VerificationCode {
 
     private static final Pattern POSITIVE_REGEX = Pattern.compile("^\\d+$");
-    private static final int CODE_LENGTH = 6;
+    public static final int LENGTH = 6;
 
     @Column(name = "code")
     private String value;
@@ -36,7 +36,7 @@ public class VerificationCode {
     }
 
     private void validateLength(String value) {
-        if (value.length() != CODE_LENGTH) {
+        if (value.length() != LENGTH) {
             throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
