@@ -15,7 +15,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -27,18 +26,19 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 @Aspect
 public class LogRequestBodyAspect {
 
-    private static final Logger errorLogger = LoggerFactory.getLogger("ErrorLogger");
     private static final long MAX_CONTENT_LENGTH = 1024;
     private static final String LOG_FORMAT = "\n[REQUEST BODY]\n{}";
 
     private final Map<Level, BiConsumer<String, String>> loggerMap = new EnumMap<>(Level.class);
     private final ObjectMapper objectMapper;
+    private final Logger errorLogger;
 
-    public LogRequestBodyAspect(ObjectMapper objectMapper) {
+    public LogRequestBodyAspect(ObjectMapper objectMapper, Logger errorLogger) {
         this.objectMapper = objectMapper;
-        loggerMap.put(Level.INFO, errorLogger::info);
-        loggerMap.put(Level.WARN, errorLogger::warn);
-        loggerMap.put(Level.ERROR, errorLogger::error);
+        this.errorLogger = errorLogger;
+        loggerMap.put(Level.INFO, this.errorLogger::info);
+        loggerMap.put(Level.WARN, this.errorLogger::warn);
+        loggerMap.put(Level.ERROR, this.errorLogger::error);
     }
 
     @Around("@annotation(LogRequestBody)")

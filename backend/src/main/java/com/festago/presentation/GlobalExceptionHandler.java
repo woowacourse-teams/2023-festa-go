@@ -11,7 +11,6 @@ import com.festago.exception.NotFoundException;
 import com.festago.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,8 +19,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-
-    private static final Logger errorLogger = LoggerFactory.getLogger("ErrorLogger");
 
     private static final String LOG_FORMAT_INFO = "\n[🔵INFO] - ({} {})\n(id: {}, role: {})\n{}\n {}: {}";
     private static final String LOG_FORMAT_WARN = "\n[🟠WARN] - ({} {})\n(id: {}, role: {})\n{}";
@@ -52,9 +49,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
 
     private final AuthenticateContext authenticateContext;
+    private final Logger errorLogger;
 
-    public GlobalExceptionHandler(AuthenticateContext authenticateContext) {
+    public GlobalExceptionHandler(AuthenticateContext authenticateContext, Logger errorLogger) {
         this.authenticateContext = authenticateContext;
+        this.errorLogger = errorLogger;
     }
 
     @ExceptionHandler(BadRequestException.class)
