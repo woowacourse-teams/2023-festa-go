@@ -19,6 +19,7 @@ import com.festago.exception.NotFoundException;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +45,9 @@ class MemberTicketServiceTest {
 
     @Mock
     MemberRepository memberRepository;
+
+    @Spy
+    Clock clock = Clock.systemDefaultZone();
 
     @InjectMocks
     MemberTicketService memberTicketService;
