@@ -49,7 +49,7 @@ public class TicketingService {
     }
 
     private Ticket findTicketById(Long ticketId) {
-        return ticketRepository.findById(ticketId)
+        return ticketRepository.findByIdWithFetch(ticketId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
     }
 
