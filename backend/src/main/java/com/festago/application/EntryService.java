@@ -12,6 +12,7 @@ import com.festago.dto.TicketValidationResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +24,14 @@ public class EntryService {
     private final EntryCodeProvider entryCodeProvider;
     private final EntryCodeExtractor entryCodeExtractor;
     private final MemberTicketRepository memberTicketRepository;
+    private final Clock clock;
 
     public EntryService(EntryCodeProvider entryCodeProvider, EntryCodeExtractor entryCodeExtractor,
-                        MemberTicketRepository memberTicketRepository) {
+                        MemberTicketRepository memberTicketRepository, Clock clock) {
         this.entryCodeProvider = entryCodeProvider;
         this.entryCodeExtractor = entryCodeExtractor;
         this.memberTicketRepository = memberTicketRepository;
+        this.clock = clock;
     }
 
     public EntryCodeResponse createEntryCode(Long memberId, Long memberTicketId) {
@@ -36,7 +39,7 @@ public class EntryService {
         if (!memberTicket.isOwner(memberId)) {
             throw new BadRequestException(ErrorCode.NOT_MEMBER_TICKET_OWNER);
         }
-        if (!memberTicket.canEntry(LocalDateTime.now())) {
+        if (!memberTicket.canEntry(LocalDateTime.now(clock))) {
             throw new BadRequestException(ErrorCode.NOT_ENTRY_TIME);
         }
         EntryCode entryCode = EntryCode.create(entryCodeProvider, memberTicket);
