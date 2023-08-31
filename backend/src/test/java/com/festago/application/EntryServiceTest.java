@@ -1,6 +1,5 @@
 package com.festago.application;
 
-import static com.festago.support.TimeInstantProvider.setCurrentTime;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +25,7 @@ import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
+import com.festago.support.TimeInstantProvider;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -88,7 +88,7 @@ class EntryServiceTest {
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
             given(clock.instant())
-                .willReturn(setCurrentTime(entryTime.minusHours(1)));
+                .willReturn(TimeInstantProvider.from(entryTime.minusHours(1)));
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
@@ -119,7 +119,7 @@ class EntryServiceTest {
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
             given(clock.instant())
-                .willReturn(setCurrentTime(entryTime.plusHours(24)));
+                .willReturn(TimeInstantProvider.from((entryTime.plusHours(24))));
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
