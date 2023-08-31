@@ -1,5 +1,6 @@
 package com.festago.application;
 
+import static com.festago.support.TimeInstantProvider.setCurrentTime;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
@@ -68,7 +69,6 @@ class EntryServiceTest {
         void 입장_시간_전_요청하면_예외() {
             // given
             LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
-            Instant now = Instant.from(ZonedDateTime.of(entryTime.minusHours(1), ZoneId.systemDefault()));
             Festival festival = FestivalFixture.festival()
                 .startDate(entryTime.toLocalDate())
                 .endDate(entryTime.toLocalDate())
@@ -88,7 +88,7 @@ class EntryServiceTest {
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
             given(clock.instant())
-                .willReturn(now);
+                .willReturn(setCurrentTime(entryTime.minusHours(1)));
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
@@ -100,7 +100,6 @@ class EntryServiceTest {
         void 입장_시간이_24시간이_넘은_경우_예외() {
             // given
             LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
-            Instant now = Instant.from(ZonedDateTime.of(entryTime.plusHours(24), ZoneId.systemDefault()));
             Festival festival = FestivalFixture.festival()
                 .startDate(entryTime.toLocalDate())
                 .endDate(entryTime.toLocalDate())
@@ -120,7 +119,7 @@ class EntryServiceTest {
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
             given(clock.instant())
-                .willReturn(now);
+                .willReturn(setCurrentTime(entryTime.plusHours(24)));
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
