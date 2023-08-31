@@ -18,7 +18,7 @@ class EntryCodeTimeTest {
     @ValueSource(longs = {0, -1})
     void 입장_코드의_수명이_0_또는_음수이면_예외(long period) {
         // when & then
-        assertThatThrownBy(() -> new EntryCodeTime(period, 0))
+        assertThatThrownBy(() -> EntryCodeTime.of(period, 0))
             .isInstanceOf(InternalServerException.class)
             .hasMessage("올바르지 않은 입장코드 유효기간입니다.");
     }
@@ -26,7 +26,7 @@ class EntryCodeTimeTest {
     @Test
     void 입장_코드의_오프셋이_음수이면_예외() {
         // when & tehn
-        assertThatThrownBy(() -> new EntryCodeTime(30, -1))
+        assertThatThrownBy(() -> EntryCodeTime.of(30, -1))
             .isInstanceOf(InternalServerException.class)
             .hasMessage("올바르지 않은 입장코드 오프셋입니다.");
     }
@@ -35,6 +35,6 @@ class EntryCodeTimeTest {
     @ValueSource(longs = {0, 1})
     void 입장_코드의_오프셋이_0이상이면_성공(long offset) {
         assertThatNoException()
-            .isThrownBy(() -> new EntryCodeTime(30, offset));
+            .isThrownBy(() -> EntryCodeTime.of(30, offset));
     }
 }

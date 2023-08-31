@@ -41,7 +41,7 @@ public class EntryService {
         if (!memberTicket.canEntry(LocalDateTime.now())) {
             throw new BadRequestException(ErrorCode.NOT_ENTRY_TIME);
         }
-        EntryCodeTime entryCodeTime = new EntryCodeTime();
+        EntryCodeTime entryCodeTime = EntryCodeTime.create();
         String code = entryCodeProvider.provide(memberTicket,
             entryCodeTime.getExpiredAt(new Date().getTime())); // TODO 추후 Clock 사용 시 clock.millis() 고려
         return EntryCodeResponse.of(new EntryCode(code, entryCodeTime));

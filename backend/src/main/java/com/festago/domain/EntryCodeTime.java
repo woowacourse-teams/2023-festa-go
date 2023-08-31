@@ -6,8 +6,7 @@ import java.util.Date;
 
 public class EntryCodeTime {
 
-    private static final long DEFAULT_PERIOD = 30;
-    private static final long DEFAULT_OFFSET = 10;
+    private static final EntryCodeTime DEFAULT_ENTRY_TIME = new EntryCodeTime(30, 10);
     private static final int MILLISECOND_FACTOR = 1000;
     private static final int MINIMUM_PERIOD = 0;
     private static final int MINIMUM_OFFSET = 0;
@@ -15,14 +14,18 @@ public class EntryCodeTime {
     private final long period;
     private final long offset;
 
-    public EntryCodeTime() {
-        this(DEFAULT_PERIOD, DEFAULT_OFFSET);
-    }
-
-    public EntryCodeTime(long period, long offset) {
+    private EntryCodeTime(long period, long offset) {
         validate(period, offset);
         this.period = period;
         this.offset = offset;
+    }
+
+    public static EntryCodeTime create() {
+        return DEFAULT_ENTRY_TIME;
+    }
+
+    public static EntryCodeTime of(long period, long offset) {
+        return new EntryCodeTime(period, offset);
     }
 
     private void validate(long period, long offset) {
