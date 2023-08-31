@@ -23,11 +23,11 @@ class ReservationCompleteActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val reservationComplete =
+        val reservedTicket =
             intent.getParcelableExtraCompat<ReservedTicketArg>(
                 KEY_RESERVATION_COMPLETE,
             )
-        binding.reservationComplete = reservationComplete
+        binding.reservedTicket = reservedTicket
     }
 
     companion object {
