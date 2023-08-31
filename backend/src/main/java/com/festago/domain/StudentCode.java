@@ -39,11 +39,6 @@ public class StudentCode extends BaseTimeEntity {
         this.school = school;
     }
 
-    public void updateCode(VerificationCode code, School school) {
-        this.code = code;
-        this.school = school;
-    }
-
     public Long getId() {
         return id;
     }
