@@ -26,7 +26,7 @@ class TicketHistoryViewModel(
             ticketRepository.loadHistoryTickets(size)
                 .onSuccess { tickets ->
                     _uiState.value = TicketHistoryUiState.Success(
-                        tickets.map {it.toUiState() }
+                        tickets.map { it.toUiState() },
                     )
                 }.onFailure {
                     _uiState.value = TicketHistoryUiState.Error
@@ -38,7 +38,7 @@ class TicketHistoryViewModel(
         }
     }
 
-    private fun Ticket.toUiState() : TicketHistoryItemUiState= TicketHistoryItemUiState(
+    private fun Ticket.toUiState(): TicketHistoryItemUiState = TicketHistoryItemUiState(
         id = id,
         number = number,
         entryTime = entryTime,
@@ -46,7 +46,7 @@ class TicketHistoryViewModel(
         stage = stage,
         festivalId = festivalTicket.id,
         festivalName = festivalTicket.name,
-        festivalThumbnail = festivalTicket.thumbnail
+        festivalThumbnail = festivalTicket.thumbnail,
     )
 
     companion object {
