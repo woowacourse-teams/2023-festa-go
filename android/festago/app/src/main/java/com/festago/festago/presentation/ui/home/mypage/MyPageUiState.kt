@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.ui.home.mypage
 
-import com.festago.festago.presentation.model.TicketUiModel
+import com.festago.festago.model.Ticket
 import com.festago.festago.presentation.model.UserProfileUiModel
 
 sealed interface MyPageUiState {
@@ -8,7 +8,7 @@ sealed interface MyPageUiState {
 
     data class Success(
         val userProfile: UserProfileUiModel = UserProfileUiModel(),
-        val ticket: TicketUiModel = TicketUiModel(),
+        val ticket: Ticket,
     ) : MyPageUiState {
         val hasTicket: Boolean get() = ticket.id != -1L
     }

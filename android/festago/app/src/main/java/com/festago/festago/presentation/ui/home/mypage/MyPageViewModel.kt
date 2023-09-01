@@ -6,14 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
+import com.festago.festago.model.MemberTicketFestival
+import com.festago.festago.model.Stage
+import com.festago.festago.model.Ticket
+import com.festago.festago.model.TicketCondition
 import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.model.TicketUiModel
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TicketRepository
 import com.festago.festago.repository.UserRepository
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class MyPageViewModel(
     private val userRepository: UserRepository,
@@ -27,6 +31,24 @@ class MyPageViewModel(
 
     private val _event = MutableSingleLiveData<MyPageEvent>()
     val event: SingleLiveData<MyPageEvent> = _event
+
+    // TODO : 해당 프로퍼티 PR전에 제거
+    val fakeTicket = Ticket(
+        id = -1L,
+        number = -1,
+        entryTime = LocalDateTime.MIN,
+        condition = TicketCondition.BEFORE_ENTRY,
+        stage = Stage(
+            id = -1,
+            startTime = LocalDateTime.MIN,
+        ),
+        festivalTicket = MemberTicketFestival(
+            id = -1,
+            name = "",
+            thumbnail = "",
+        ),
+        reserveAt = LocalDateTime.MIN,
+    )
 
     fun loadUserInfo() {
         if (!authRepository.isSigned) {
@@ -47,7 +69,7 @@ class MyPageViewModel(
                     is MyPageUiState.Error,
                     is MyPageUiState.Loading,
                     null,
-                    -> _uiState.value = MyPageUiState.Success(userProfile = it.toPresentation())
+                    -> _uiState.value = MyPageUiState.Success(userProfile = it.toPresentation(), fakeTicket)
 
                     is MyPageUiState.Success ->
                         _uiState.value = current.copy(userProfile = it.toPresentation())
@@ -64,7 +86,7 @@ class MyPageViewModel(
     private suspend fun loadFirstTicket() {
         ticketRepository.loadHistoryTickets(size = 1)
             .onSuccess {
-                val ticket = it.firstOrNull()?.toPresentation() ?: TicketUiModel()
+                val ticket = it.firstOrNull() ?: fakeTicket
                 when (val current = uiState.value) {
                     is MyPageUiState.Error, null -> Unit
 
