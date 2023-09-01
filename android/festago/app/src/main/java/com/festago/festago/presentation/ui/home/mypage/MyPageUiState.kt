@@ -1,16 +1,16 @@
 package com.festago.festago.presentation.ui.home.mypage
 
-import com.festago.festago.presentation.model.TicketUiModel
-import com.festago.festago.presentation.model.UserProfileUiModel
+import com.festago.festago.model.Ticket
+import com.festago.festago.model.UserProfile
 
 sealed interface MyPageUiState {
     object Loading : MyPageUiState
 
     data class Success(
-        val userProfile: UserProfileUiModel = UserProfileUiModel(),
-        val ticket: TicketUiModel = TicketUiModel(),
+        val userProfile: UserProfile,
+        val ticket: Ticket?,
     ) : MyPageUiState {
-        val hasTicket: Boolean get() = ticket.id != -1L
+        val hasTicket: Boolean get() = ticket != null
     }
 
     object Error : MyPageUiState

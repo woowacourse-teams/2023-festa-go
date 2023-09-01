@@ -6,13 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.model.TicketUiModel
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TicketRepository
 import com.festago.festago.repository.UserRepository
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class MyPageViewModel(
@@ -35,51 +34,22 @@ class MyPageViewModel(
             return
         }
         viewModelScope.launch {
-            loadUserProfile()
-            loadFirstTicket()
+            val deferredUserProfile = async { userRepository.loadUserProfile() }
+            val deferredHistoryTicket = async { ticketRepository.loadHistoryTickets(size = 1) }
+
+            runCatching {
+                _uiState.value = MyPageUiState.Success(
+                    userProfile = deferredUserProfile.await().getOrThrow(),
+                    ticket = deferredHistoryTicket.await().getOrThrow().firstOrNull(),
+                )
+            }.onFailure {
+                _uiState.value = MyPageUiState.Error
+                analyticsHelper.logNetworkFailure(
+                    key = KEY_LOAD_USER_INFO,
+                    value = it.message.toString(),
+                )
+            }
         }
-    }
-
-    private suspend fun loadUserProfile() {
-        userRepository.loadUserProfile()
-            .onSuccess {
-                when (val current = uiState.value) {
-                    is MyPageUiState.Error,
-                    is MyPageUiState.Loading,
-                    null,
-                    -> _uiState.value = MyPageUiState.Success(userProfile = it.toPresentation())
-
-                    is MyPageUiState.Success ->
-                        _uiState.value = current.copy(userProfile = it.toPresentation())
-                }
-            }.onFailure {
-                _uiState.value = MyPageUiState.Error
-                analyticsHelper.logNetworkFailure(
-                    key = KEY_LOAD_USER_INFO,
-                    value = it.message.toString(),
-                )
-            }
-    }
-
-    private suspend fun loadFirstTicket() {
-        ticketRepository.loadHistoryTickets(size = 1)
-            .onSuccess {
-                val ticket = it.firstOrNull()?.toPresentation() ?: TicketUiModel()
-                when (val current = uiState.value) {
-                    is MyPageUiState.Error, null -> Unit
-
-                    is MyPageUiState.Loading ->
-                        _uiState.value = MyPageUiState.Success(ticket = ticket)
-
-                    is MyPageUiState.Success -> _uiState.value = current.copy(ticket = ticket)
-                }
-            }.onFailure {
-                _uiState.value = MyPageUiState.Error
-                analyticsHelper.logNetworkFailure(
-                    key = KEY_LOAD_USER_INFO,
-                    value = it.message.toString(),
-                )
-            }
     }
 
     fun signOut() {
