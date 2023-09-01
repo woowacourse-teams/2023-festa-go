@@ -21,6 +21,7 @@ import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.Show
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowTicketTypes
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
+import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.BottomSheetReservationTicketArg
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -83,7 +84,7 @@ class TicketReserveActivity : AppCompatActivity() {
                 ),
             ),
             reservationTickets.map {
-                ReservationTicketArg(
+                BottomSheetReservationTicketArg(
                     id = it.id,
                     remainAmount = it.remainAmount,
                     ticketType = it.ticketType,
