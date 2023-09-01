@@ -162,7 +162,7 @@
 
                     <include
                         android:id="@+id/includeTicketHistory"
-                        layout="@layout/item_ticket_history"
+                        layout="@layout/layout_my_page_history"
                         visibility="@{successState.hasTicket}"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
