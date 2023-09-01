@@ -8,9 +8,9 @@ sealed interface MyPageUiState {
 
     data class Success(
         val userProfile: UserProfileUiModel = UserProfileUiModel(),
-        val ticket: Ticket,
+        val ticket: Ticket?,
     ) : MyPageUiState {
-        val hasTicket: Boolean get() = ticket.id != -1L
+        val hasTicket: Boolean get() = ticket != null
     }
 
     object Error : MyPageUiState

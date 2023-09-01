@@ -131,13 +131,13 @@ class MyPageViewModelTest {
 
             // and
             val actualTicket = (vm.uiState.value as MyPageUiState.Success).ticket
-            assertThat(actualTicket).isEqualTo(fakeTickets.first().toPresentation())
+            assertThat(actualTicket).isEqualTo(fakeTickets.first())
         }
         softly.assertAll()
     }
 
     @Test
-    fun `유저 프로필 받아오기에 성공하고, 첫번째 티켓을 받아오는 중이면 성공 상태이고, 티켓은 없다`() {
+    fun `유저 프로필 받아오기에 성공하고, 첫번째 티켓을 받아오는 중이면 로딩 상태이다`() {
         // given
         coEvery {
             userRepository.loadUserProfile()
@@ -163,19 +163,12 @@ class MyPageViewModelTest {
 
         // then
         val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value).isInstanceOf(MyPageUiState.Success::class.java)
+            assertThat(vm.uiState.value).isInstanceOf(MyPageUiState.Loading::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(true)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(true)
             assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
-
-            // and
-            assertThat((vm.uiState.value as MyPageUiState.Success).hasTicket).isFalse
-
-            // and
-            val actualTicket = (vm.uiState.value as MyPageUiState.Success).ticket
-            assertThat(actualTicket).isNotEqualTo(fakeTickets.first().toPresentation())
         }
         softly.assertAll()
     }
