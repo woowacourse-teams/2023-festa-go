@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
@@ -40,7 +39,7 @@ class MyPageViewModel(
 
             runCatching {
                 _uiState.value = MyPageUiState.Success(
-                    userProfile = deferredUserProfile.await().getOrThrow().toPresentation(),
+                    userProfile = deferredUserProfile.await().getOrThrow(),
                     ticket = deferredHistoryTicket.await().getOrThrow().firstOrNull(),
                 )
             }.onFailure {

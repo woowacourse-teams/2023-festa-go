@@ -7,7 +7,6 @@ import com.festago.festago.model.Stage
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCondition
 import com.festago.festago.model.UserProfile
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TicketRepository
 import com.festago.festago.repository.UserRepository
@@ -127,7 +126,7 @@ class MyPageViewModelTest {
 
             // and
             val actualUserProfile = (vm.uiState.value as MyPageUiState.Success).userProfile
-            assertThat(actualUserProfile).isEqualTo(fakeUserProfile.toPresentation())
+            assertThat(actualUserProfile).isEqualTo(fakeUserProfile)
 
             // and
             val actualTicket = (vm.uiState.value as MyPageUiState.Success).ticket
