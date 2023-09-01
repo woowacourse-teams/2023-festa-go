@@ -6,7 +6,6 @@ import com.festago.festago.model.Reservation
 import com.festago.festago.model.ReservationStage
 import com.festago.festago.model.ReservationTicket
 import com.festago.festago.model.ReservedTicket
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
 import com.festago.festago.repository.ReservationTicketRepository
@@ -166,7 +165,7 @@ class TicketReserveViewModelTest {
 
         // and
         val event = vm.event.getValue() as TicketReserveEvent.ShowTicketTypes
-        assertThat(event.tickets).isEqualTo(fakeReservationTickets.map { it.toPresentation() })
+        assertThat(event.tickets).isEqualTo(fakeReservationTickets)
     }
 
     @Test

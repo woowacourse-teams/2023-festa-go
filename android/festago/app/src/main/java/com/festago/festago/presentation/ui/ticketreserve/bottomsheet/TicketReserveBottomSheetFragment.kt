@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.festago.festago.databinding.FragmentTicketReserveBottomSheetBinding
-import com.festago.festago.presentation.model.ReservationTicketUiModel
+import com.festago.festago.presentation.ui.ticketreserve.ReservationTicketArg
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 import com.festago.festago.presentation.util.getParcelableArrayListCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -44,7 +44,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
             getString(KEY_STAGE_START_TIME)?.let { startTime ->
                 binding.stageStartTime = startTime
             }
-            getParcelableArrayListCompat<ReservationTicketUiModel>(KEY_ITEMS)?.let {
+            getParcelableArrayListCompat<ReservationTicketArg>(KEY_ITEMS)?.let {
                 ticketTypeAdapter.submitList(it.map(::TicketReserveBottomItem))
             }
         }
@@ -69,7 +69,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
 
         fun newInstance(
             stageStartTime: String,
-            items: List<ReservationTicketUiModel>,
+            items: List<ReservationTicketArg>,
         ) = TicketReserveBottomSheetFragment().apply {
             arguments = Bundle().apply {
                 putString(KEY_STAGE_START_TIME, stageStartTime)
