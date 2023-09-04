@@ -19,6 +19,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val ticketTypeAdapter = TicketReserveBottomSheetAdapter { ticketId ->
         binding.selectedTicketTypeId = ticketId
+        binding.btnReserveTicket.isEnabled = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +56,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
         binding.rvTicketTypes.adapter = ticketTypeAdapter
         val onReserve: (Int) -> Unit = { id -> vm.reserveTicket(id) }
         binding.onReserve = onReserve
+        binding.btnReserveTicket.isEnabled = false
     }
 
     override fun onDestroyView() {
