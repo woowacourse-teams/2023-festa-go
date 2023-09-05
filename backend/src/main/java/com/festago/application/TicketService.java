@@ -8,10 +8,12 @@ import com.festago.domain.TicketType;
 import com.festago.dto.StageTicketsResponse;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
+import com.festago.event.TicketAmountChangeEvent;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +23,14 @@ public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final StageRepository stageRepository;
+    private final ApplicationEventPublisher publisher;
     private final Clock clock;
 
-    public TicketService(TicketRepository ticketRepository, StageRepository stageRepository, Clock clock) {
+    public TicketService(TicketRepository ticketRepository, StageRepository stageRepository,
+                         ApplicationEventPublisher publisher, Clock clock) {
         this.ticketRepository = ticketRepository;
         this.stageRepository = stageRepository;
+        this.publisher = publisher;
         this.clock = clock;
     }
 
@@ -38,6 +43,7 @@ public class TicketService {
 
         ticket.addTicketEntryTime(LocalDateTime.now(clock), request.entryTime(), request.amount());
 
+        publisher.publishEvent(new TicketAmountChangeEvent(ticket.getId(), ticket.getTicketAmount().getTotalAmount()));
         return TicketCreateResponse.from(ticket);
     }
 
