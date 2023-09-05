@@ -41,6 +41,10 @@ dependencies {
     // Logback Slack Alarm
     implementation "com.github.maricn:logback-slack-appender:1.4.0"
 
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
     // Mockito
     testImplementation 'org.mockito:mockito-inline'
 }
