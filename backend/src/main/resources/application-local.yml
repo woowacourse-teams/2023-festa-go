@@ -14,6 +14,10 @@ spring:
   h2:
     console:
       enabled: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 logging:
   file:
