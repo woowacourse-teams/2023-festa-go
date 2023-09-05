@@ -1,6 +1,5 @@
 package com.festago.festago.presentation.ui.studentverification
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.presentation.ui.studentsverification.StudentVerificationUiState
 import com.festago.festago.presentation.ui.studentsverification.StudentsVerificationViewModel
@@ -17,7 +16,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 class StudentsVerificationViewModelTest {
@@ -25,9 +23,6 @@ class StudentsVerificationViewModelTest {
     private lateinit var studentsVerificationRepository: StudentsVerificationRepository
     private lateinit var schoolRepository: SchoolRepository
     private lateinit var analyticsHelper: AnalyticsHelper
-
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before

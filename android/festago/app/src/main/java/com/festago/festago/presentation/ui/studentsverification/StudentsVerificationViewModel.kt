@@ -1,7 +1,5 @@
 package com.festago.festago.presentation.ui.studentsverification
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
@@ -10,6 +8,9 @@ import com.festago.festago.model.timer.Timer
 import com.festago.festago.model.timer.TimerListener
 import com.festago.festago.repository.SchoolRepository
 import com.festago.festago.repository.StudentsVerificationRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class StudentsVerificationViewModel(
@@ -19,8 +20,8 @@ class StudentsVerificationViewModel(
 ) : ViewModel() {
 
     private val _uiState =
-        MutableLiveData<StudentVerificationUiState>(StudentVerificationUiState.Loading)
-    val uiState: LiveData<StudentVerificationUiState> = _uiState
+        MutableStateFlow<StudentVerificationUiState>(StudentVerificationUiState.Loading)
+    val uiState: StateFlow<StudentVerificationUiState> = _uiState.asStateFlow()
 
     private val timer: Timer = Timer()
 
