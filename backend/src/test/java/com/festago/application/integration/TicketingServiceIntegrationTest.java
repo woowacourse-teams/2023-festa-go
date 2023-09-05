@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
+import com.festago.application.MemoryTicketAmountService;
 import com.festago.application.TicketingService;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
@@ -20,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -42,6 +44,14 @@ class TicketingServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @SpyBean
     Clock clock;
+
+    @Autowired
+    MemoryTicketAmountService memoryTicketAmountService;
+
+    @BeforeEach
+    void setUp() {
+        memoryTicketAmountService.clear();
+    }
 
     @Test
     @Sql("/ticketing-test-data.sql")

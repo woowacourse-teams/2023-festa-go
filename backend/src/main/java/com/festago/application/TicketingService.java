@@ -5,8 +5,6 @@ import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.domain.Ticket;
-import com.festago.domain.TicketAmount;
-import com.festago.domain.TicketAmountRepository;
 import com.festago.domain.TicketRepository;
 import com.festago.dto.TicketingRequest;
 import com.festago.dto.TicketingResponse;
@@ -22,17 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TicketingService {
 
+    private final TicketAmountService ticketAmountService;
     private final MemberTicketRepository memberTicketRepository;
-    private final TicketAmountRepository ticketAmountRepository;
     private final TicketRepository ticketRepository;
     private final MemberRepository memberRepository;
     private final Clock clock;
 
-    public TicketingService(MemberTicketRepository memberTicketRepository,
-                            TicketAmountRepository ticketAmountRepository,
+    public TicketingService(TicketAmountService redisTicketAmountService, MemberTicketRepository memberTicketRepository,
                             TicketRepository ticketRepository, MemberRepository memberRepository, Clock clock) {
+        this.ticketAmountService = redisTicketAmountService;
         this.memberTicketRepository = memberTicketRepository;
-        this.ticketAmountRepository = ticketAmountRepository;
         this.ticketRepository = ticketRepository;
         this.memberRepository = memberRepository;
         this.clock = clock;
@@ -42,7 +39,8 @@ public class TicketingService {
         Ticket ticket = findTicketById(request.ticketId());
         Member member = findMemberById(memberId);
         validateAlreadyReserved(member, ticket);
-        int reserveSequence = getReserveSequence(request.ticketId());
+        Integer reserveSequence = ticketAmountService.getSequence(ticket)
+            .orElseThrow(() -> new BadRequestException(ErrorCode.TICKET_SOLD_OUT));
         MemberTicket memberTicket = ticket.createMemberTicket(member, reserveSequence, LocalDateTime.now(clock));
         memberTicketRepository.save(memberTicket);
         return TicketingResponse.from(memberTicket);
@@ -62,16 +60,5 @@ public class TicketingService {
         if (memberTicketRepository.existsByOwnerAndStage(member, ticket.getStage())) {
             throw new BadRequestException(ErrorCode.RESERVE_TICKET_OVER_AMOUNT);
         }
-    }
-
-    private int getReserveSequence(Long ticketId) {
-        TicketAmount ticketAmount = findTicketAmountById(ticketId);
-        ticketAmount.increaseReservedAmount();
-        return ticketAmount.getReservedAmount();
-    }
-
-    private TicketAmount findTicketAmountById(Long ticketId) {
-        return ticketAmountRepository.findByTicketIdForUpdate(ticketId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
     }
 }
