@@ -18,4 +18,13 @@ public record StageTicketResponse(Long id,
             ticketAmount.calculateRemainAmount()
         );
     }
+
+    public StageTicketResponse setRemainAmount(int remainAmount) {
+        return new StageTicketResponse(
+            this.id,
+            this.ticketType,
+            this.totalAmount,
+            remainAmount
+        );
+    }
 }

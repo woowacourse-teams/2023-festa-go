@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.TicketService;
+import com.festago.application.TicketReadService;
 import com.festago.domain.TicketType;
 import com.festago.dto.StageTicketResponse;
 import com.festago.dto.StageTicketsResponse;
@@ -35,7 +35,7 @@ class StageControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    TicketService ticketService;
+    TicketReadService ticketReadService;
 
     @Test
     void 공연의_티켓_정보를_조회() throws Exception {
@@ -46,7 +46,7 @@ class StageControllerTest {
                 new StageTicketResponse(2L, TicketType.VISITOR, 50, 30)
             ));
 
-        given(ticketService.findStageTickets(anyLong()))
+        given(ticketReadService.findStageTickets(anyLong()))
             .willReturn(expected);
 
         // when & then
