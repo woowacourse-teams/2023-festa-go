@@ -39,7 +39,7 @@ public class TicketingService {
         Ticket ticket = findTicketById(request.ticketId());
         Member member = findMemberById(memberId);
         validateAlreadyReserved(member, ticket);
-        Integer reserveSequence = ticketAmountService.getSequence(ticket)
+        Integer reserveSequence = ticketAmountService.getSequence(ticket, member)
             .orElseThrow(() -> new BadRequestException(ErrorCode.TICKET_SOLD_OUT));
         MemberTicket memberTicket = ticket.createMemberTicket(member, reserveSequence, LocalDateTime.now(clock));
         memberTicketRepository.save(memberTicket);

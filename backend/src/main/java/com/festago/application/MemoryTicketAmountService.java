@@ -1,5 +1,6 @@
 package com.festago.application;
 
+import com.festago.domain.Member;
 import com.festago.domain.Ticket;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +16,7 @@ public class MemoryTicketAmountService implements TicketAmountService {
     private final Map<Long, AtomicInteger> ticketAmountMap = new ConcurrentHashMap<>();
 
     @Override
-    public Optional<Integer> getSequence(Ticket ticket) {
+    public Optional<Integer> getSequence(Ticket ticket, Member member) {
         Integer totalAmount = ticket.getTicketAmount().getTotalAmount();
         int quantity = ticketAmountMap.computeIfAbsent(ticket.getId(),
             ignore -> new AtomicInteger(totalAmount)).decrementAndGet();
