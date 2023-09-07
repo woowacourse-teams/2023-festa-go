@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class RedisTicketAmountService implements TicketAmountService {
 
-    private static final String MAX_MEMBER_RESERVE_COUNT = "1";
+    private static final String MAX_MEMBER_TRIAL_COUNT = "1";
+    
     private final RedisTemplate<String, String> redisTemplate;
     private final RedisScript<Long> redisScript;
 
@@ -26,8 +27,8 @@ public class RedisTicketAmountService implements TicketAmountService {
     public Optional<Integer> getSequence(Ticket ticket, Member member) {
         Long remainAmount = redisTemplate.execute(
             redisScript,
-            List.of(makeMemberId(ticket, member), makeTicketAmountKey(ticket)),
-            MAX_MEMBER_RESERVE_COUNT);
+            List.of(makeMemberKey(ticket, member), makeTicketAmountKey(ticket)),
+            MAX_MEMBER_TRIAL_COUNT);
         if (remainAmount == null || remainAmount < 0) {
             return Optional.empty();
         }
@@ -35,7 +36,7 @@ public class RedisTicketAmountService implements TicketAmountService {
         return Optional.of(totalAmount - remainAmount.intValue());
     }
 
-    private String makeMemberId(Ticket ticket, Member member) {
+    private String makeMemberKey(Ticket ticket, Member member) {
         Long stageId = ticket.getStage().getId();
         Long memberId = member.getId();
         return String.format("trialCount_%d_%d", stageId, memberId);

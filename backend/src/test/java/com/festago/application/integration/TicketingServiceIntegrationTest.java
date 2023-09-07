@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -55,12 +56,41 @@ class TicketingServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Test
     @Sql("/ticketing-test-data.sql")
-    void 동시에_100명이_예약() {
+    void 동시에_100명이_예매() {
         // given
         int tryCount = 100;
-        Member member = memberRepository.save(MemberFixture.member().build());
+        for (int i = 0; i < tryCount; i++) {
+            memberRepository.save(MemberFixture.member().build());
+        }
         TicketingRequest request = new TicketingRequest(1L);
         ExecutorService executor = Executors.newFixedThreadPool(16);
+        doReturn(false)
+            .when(memberTicketRepository)
+            .existsByOwnerAndStage(any(Member.class), any(Stage.class));
+        doReturn(Instant.parse("2023-07-24T03:21:31Z"))
+            .when(clock)
+            .instant();
+
+        // when
+        List<CompletableFuture<Void>> futures = LongStream.rangeClosed(1, tryCount)
+            .mapToObj(i -> CompletableFuture.runAsync(() -> {
+                ticketingService.ticketing(i, request);
+            }, executor).exceptionally(e -> null))
+            .toList();
+        futures.forEach(CompletableFuture::join);
+
+        // then
+        assertThat(memberTicketRepository.count()).isEqualTo(50);
+    }
+
+    @Test
+    @Sql("/ticketing-test-data.sql")
+    void 한_유저가_동시에_여러번_따닥_예매() {
+        // given
+        int tryCount = 2;
+        Member member = memberRepository.save(MemberFixture.member().build());
+        TicketingRequest request = new TicketingRequest(1L);
+        ExecutorService executor = Executors.newFixedThreadPool(2);
         doReturn(false)
             .when(memberTicketRepository)
             .existsByOwnerAndStage(any(Member.class), any(Stage.class));
@@ -77,7 +107,7 @@ class TicketingServiceIntegrationTest extends ApplicationIntegrationTest {
         futures.forEach(CompletableFuture::join);
 
         // then
-        assertThat(memberTicketRepository.count()).isEqualTo(50);
+        assertThat(memberTicketRepository.count()).isEqualTo(1);
     }
 
     @Test
