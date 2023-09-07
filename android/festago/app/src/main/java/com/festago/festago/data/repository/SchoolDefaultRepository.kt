@@ -4,7 +4,7 @@ import com.festago.festago.repository.SchoolRepository
 
 class SchoolDefaultRepository() : SchoolRepository {
 
-    override suspend fun loadSchoolEmail(schoolId: Int): Result<String> {
+    override suspend fun loadSchoolEmail(schoolId: Long): Result<String> {
         // TODO: API 연동 작업 필요
         return Result.success("festago.com")
     }

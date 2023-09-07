@@ -7,7 +7,7 @@ class StudentsVerificationDefaultRepository(
     private val studentsVerificationRetrofitService: StudentsVerificationRetrofitService,
 ) : StudentsVerificationRepository {
 
-    override suspend fun sendVerificationCode(userName: String, schoolId: Int): Result<Unit> {
+    override suspend fun sendVerificationCode(userName: String, schoolId: Long): Result<Unit> {
         // TODO: API 연동 작업 필요
         return Result.success(Unit)
 
