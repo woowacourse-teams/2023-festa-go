@@ -3,7 +3,11 @@ package com.festago.festago.presentation.ui.studentsverification
 sealed interface StudentVerificationUiState {
     object Loading : StudentVerificationUiState
 
-    data class Success(val schoolEmail: String, val remainTime: Int) : StudentVerificationUiState
+    data class Success(
+        val schoolEmail: String,
+        val remainTime: Int,
+        val isValidateCode: Boolean = false,
+    ) : StudentVerificationUiState
 
     object Error : StudentVerificationUiState
 

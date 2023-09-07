@@ -128,4 +128,61 @@ class StudentsVerificationViewModelTest {
         // then
         assertThat(vm.uiState.value is StudentVerificationUiState.Loading).isTrue
     }
+
+    @Test
+    fun `화면 불러오기 성공 상태일 때 인증 번호가 유효하다면 인증 코드가 유효함 상태로 변경한다`() {
+        // given
+        val fakeEmail = "test.com"
+
+        coEvery {
+            schoolRepository.loadSchoolEmail(any())
+        } returns Result.success(fakeEmail)
+        vm.loadSchoolEmail(1)
+
+        // when
+        vm.studentVerificationCode.value = "123456"
+
+        // then
+        val softly = SoftAssertions().apply {
+            assertThat(vm.uiState.value is StudentVerificationUiState.Success).isTrue
+
+            val uiState =
+                (vm.uiState.value as StudentVerificationUiState.Success)
+            assertThat(uiState.isValidateCode).isTrue
+        }
+        softly.assertAll()
+    }
+
+    @Test
+    fun `화면 불러오기 성공 상태일 때 인증 번호가 유효하지 않다면 인증 코드가 유효하지 않음 상태로 변경한다`() {
+        // given
+        val fakeEmail = "test.com"
+
+        coEvery {
+            schoolRepository.loadSchoolEmail(any())
+        } returns Result.success(fakeEmail)
+        vm.loadSchoolEmail(1)
+
+        // when
+        vm.studentVerificationCode.value = "1234"
+        // then
+
+        val softly = SoftAssertions().apply {
+            assertThat(vm.uiState.value is StudentVerificationUiState.Success).isTrue
+
+            val uiState =
+                (vm.uiState.value as StudentVerificationUiState.Success)
+            assertThat(uiState.isValidateCode).isFalse
+        }
+        softly.assertAll()
+    }
+
+    @Test
+    fun `화면 불러오기 성공 상태가 아닐 때 화면 상태를 변경할 수 없다 `() {
+        // when
+        vm.studentVerificationCode.value = "1234"
+
+        // then
+        assertThat(vm.uiState.value is StudentVerificationUiState.Loading).isTrue
+    }
 }

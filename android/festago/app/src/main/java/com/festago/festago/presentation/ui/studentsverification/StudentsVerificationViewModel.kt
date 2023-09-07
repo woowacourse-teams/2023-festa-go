@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
+import com.festago.festago.model.StudentVerificationCode
 import com.festago.festago.model.timer.Timer
 import com.festago.festago.model.timer.TimerListener
 import com.festago.festago.repository.SchoolRepository
@@ -23,9 +24,43 @@ class StudentsVerificationViewModel(
         MutableStateFlow<StudentVerificationUiState>(StudentVerificationUiState.Loading)
     val uiState: StateFlow<StudentVerificationUiState> = _uiState.asStateFlow()
 
+    val studentVerificationCode = MutableStateFlow("")
+
     private val timer: Timer = Timer()
 
-    fun loadSchoolEmail(schoolId: Int) {
+    init {
+        validateStudentVerificationCode()
+    }
+
+    private fun validateStudentVerificationCode() {
+        viewModelScope.launch {
+            studentVerificationCode.collect { code ->
+                checkValidateCodeWhenSuccess(code)
+            }
+        }
+    }
+
+    private fun checkValidateCodeWhenSuccess(code: String) {
+        val state = uiState.value
+        if (state is StudentVerificationUiState.Success) {
+            updateIsValidation(code, state)
+        }
+    }
+
+    private fun updateIsValidation(
+        code: String,
+        state: StudentVerificationUiState.Success,
+    ) {
+        runCatching {
+            StudentVerificationCode(code)
+        }.onSuccess {
+            _uiState.value = state.copy(isValidateCode = true)
+        }.onFailure {
+            _uiState.value = state.copy(isValidateCode = false)
+        }
+    }
+
+    fun loadSchoolEmail(schoolId: Long) {
         viewModelScope.launch {
             schoolRepository.loadSchoolEmail(schoolId)
                 .onSuccess { email ->
@@ -44,7 +79,7 @@ class StudentsVerificationViewModel(
         }
     }
 
-    fun sendVerificationCode(userName: String, schoolId: Int) {
+    fun sendVerificationCode(userName: String, schoolId: Long) {
         viewModelScope.launch {
             studentsVerificationRepository.sendVerificationCode(userName, schoolId)
                 .onSuccess {
@@ -81,6 +116,14 @@ class StudentsVerificationViewModel(
             if (state is StudentVerificationUiState.Success) {
                 _uiState.value = state.copy(remainTime = MIN_REMAIN_TIME)
             }
+        }
+    }
+
+    fun confirmVerificationCode() {
+        viewModelScope.launch {
+            studentsVerificationRepository.requestVerificationCodeConfirm(
+                StudentVerificationCode(studentVerificationCode.value),
+            )
         }
     }
 
