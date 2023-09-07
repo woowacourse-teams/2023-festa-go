@@ -1,6 +1,7 @@
 package com.festago.festago.data.repository
 
 import com.festago.festago.data.service.StudentsVerificationRetrofitService
+import com.festago.festago.model.StudentVerificationCode
 import com.festago.festago.repository.StudentsVerificationRepository
 
 class StudentsVerificationDefaultRepository(
@@ -16,5 +17,10 @@ class StudentsVerificationDefaultRepository(
 //        ).runCatchingWithErrorHandler()
 //            .getOrElse { error -> return Result.failure(error) }
 //            .let { return Result.success(Unit) }
+    }
+
+    override suspend fun requestVerificationCodeConfirm(code: StudentVerificationCode): Result<Unit> {
+        // TODO: API 연동 작업 필요
+        return Result.success(Unit)
     }
 }
