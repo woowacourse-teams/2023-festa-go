@@ -61,6 +61,7 @@ class StudentsVerificationViewModel(
     }
 
     fun loadSchoolEmail(schoolId: Long) {
+        if (uiState.value is StudentVerificationUiState.Success) return
         viewModelScope.launch {
             schoolRepository.loadSchoolEmail(schoolId)
                 .onSuccess { email ->
