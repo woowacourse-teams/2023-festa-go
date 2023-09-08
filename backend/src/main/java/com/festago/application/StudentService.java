@@ -5,6 +5,7 @@ import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.domain.School;
 import com.festago.domain.SchoolRepository;
+import com.festago.domain.Student;
 import com.festago.domain.StudentCode;
 import com.festago.domain.StudentCodeRepository;
 import com.festago.domain.StudentRepository;
@@ -12,6 +13,7 @@ import com.festago.domain.VerificationCode;
 import com.festago.domain.VerificationCodeProvider;
 import com.festago.domain.VerificationMailPayload;
 import com.festago.dto.StudentSendMailRequest;
+import com.festago.dto.StudentVerificateRequest;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
@@ -47,7 +49,7 @@ public class StudentService {
         School school = findSchool(request.schoolId());
         VerificationCode code = codeProvider.provide();
         studentCodeRepository.deleteByMember(member);
-        studentCodeRepository.save(new StudentCode(code, member, school));
+        studentCodeRepository.save(new StudentCode(code, school, member, request.username()));
         mailClient.send(new VerificationMailPayload(code, request.username(), school.getDomain()));
     }
 
@@ -71,5 +73,14 @@ public class StudentService {
     private School findSchool(Long schoolId) {
         return schoolRepository.findById(schoolId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
+    }
+
+    public void verificate(Long memberId, StudentVerificateRequest request) {
+        validateStudent(memberId);
+        Member member = findMember(memberId);
+        StudentCode studentCode = studentCodeRepository.findByCode(new VerificationCode(request.code()))
+            .orElseThrow(() -> new BadRequestException(ErrorCode.INVALID_STUDENT_VERIFICATION_CODE));
+        studentRepository.save(new Student(member, studentCode.getSchool(), studentCode.getUsername()));
+        studentCodeRepository.deleteByMember(member);
     }
 }

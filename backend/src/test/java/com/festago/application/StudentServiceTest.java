@@ -2,6 +2,8 @@ package com.festago.application;
 
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.domain.MailClient;
@@ -9,11 +11,13 @@ import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.domain.School;
 import com.festago.domain.SchoolRepository;
+import com.festago.domain.StudentCode;
 import com.festago.domain.StudentCodeRepository;
 import com.festago.domain.StudentRepository;
 import com.festago.domain.VerificationCode;
 import com.festago.domain.VerificationCodeProvider;
 import com.festago.dto.StudentSendMailRequest;
+import com.festago.dto.StudentVerificateRequest;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.NotFoundException;
 import com.festago.support.MemberFixture;
@@ -166,6 +170,61 @@ class StudentServiceTest {
             // when & then
             assertThatNoException()
                 .isThrownBy(() -> studentService.sendVerificationMail(memberId, request));
+        }
+    }
+
+    @Nested
+    class 학생_인증 {
+
+        @Test
+        void 이미_학생인증정보가_존재하면_예외() {
+            // given
+            Long memberId = 1L;
+            StudentVerificateRequest request = new StudentVerificateRequest("123456");
+            given(studentRepository.existsByMemberId(memberId))
+                .willReturn(true);
+
+            // when & then
+            assertThatThrownBy(() -> studentService.verificate(memberId, request))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("이미 학교 인증이 완료된 사용자입니다.");
+        }
+
+        @Test
+        void 인증_코드가_존재하지_않으면_예외() {
+            // given
+            Long memberId = 1L;
+            StudentVerificateRequest request = new StudentVerificateRequest("123456");
+            given(memberRepository.findById(anyLong()))
+                .willReturn(Optional.of(MemberFixture.member().build()));
+            given(studentCodeRepository.findByCode(any()))
+                .willReturn(Optional.empty());
+
+            // when & then
+            assertThatThrownBy(() -> studentService.verificate(memberId, request))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("존재하지 않는 학생 인증 코드입니다.");
+        }
+
+        @Test
+        void 성공() {
+            // given
+            Long memberId = 1L;
+            StudentVerificateRequest request = new StudentVerificateRequest("123456");
+            Member member = MemberFixture.member().build();
+            given(memberRepository.findById(anyLong()))
+                .willReturn(Optional.of(member));
+            given(studentCodeRepository.findByCode(any()))
+                .willReturn(Optional.of(new StudentCode(
+                    new VerificationCode("123456"),
+                    new School("snu.ac.kr", "서울대학교"),
+                    member,
+                    "ohs"
+                )));
+
+            // when & then
+            assertThatNoException()
+                .isThrownBy(() -> studentService.verificate(memberId, request));
         }
     }
 }
