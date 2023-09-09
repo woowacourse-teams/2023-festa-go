@@ -15,6 +15,7 @@ public class SchoolService {
         this.schoolRepository = schoolRepository;
     }
 
+    @Transactional(readOnly = true)
     public SchoolsResponse findAll() {
         return SchoolsResponse.from(schoolRepository.findAll());
     }
