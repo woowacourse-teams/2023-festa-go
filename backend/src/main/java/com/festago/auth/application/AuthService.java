@@ -1,10 +1,7 @@
 package com.festago.auth.application;
 
-import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.OAuth2Client;
 import com.festago.auth.domain.OAuth2Clients;
-import com.festago.auth.domain.Role;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
@@ -16,28 +13,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class AuthService {
 
-    private final MemberRepository memberRepository;
+    private final LoginService loginService;
     private final OAuth2Clients oAuth2Clients;
-    private final AuthProvider authProvider;
+    private final MemberRepository memberRepository;
 
-    public AuthService(MemberRepository memberRepository, OAuth2Clients oAuth2Clients,
-                       AuthProvider authProvider) {
-        this.memberRepository = memberRepository;
+    public AuthService(LoginService loginService, OAuth2Clients oAuth2Clients,
+                       MemberRepository memberRepository) {
+        this.loginService = loginService;
         this.oAuth2Clients = oAuth2Clients;
-        this.authProvider = authProvider;
+        this.memberRepository = memberRepository;
     }
 
     public LoginResponse login(LoginRequest request) {
-        UserInfo userInfo = getUserInfo(request);
-        return memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
-            .map(member -> LoginResponse.isExists(getAccessToken(member), member.getNickname()))
-            .orElseGet(() -> {
-                Member member = signUp(userInfo);
-                return LoginResponse.isNew(getAccessToken(member), member.getNickname());
-            });
+        return loginService.login(getUserInfo(request));
     }
 
     private UserInfo getUserInfo(LoginRequest request) {
@@ -45,14 +35,7 @@ public class AuthService {
         return oAuth2Client.getUserInfo(request.accessToken());
     }
 
-    private String getAccessToken(Member member) {
-        return authProvider.provide(new AuthPayload(member.getId(), Role.MEMBER));
-    }
-
-    private Member signUp(UserInfo userInfo) {
-        return memberRepository.save(userInfo.toMember());
-    }
-
+    @Transactional
     public void deleteMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));

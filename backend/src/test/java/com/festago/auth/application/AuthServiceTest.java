@@ -4,14 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 
-import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.OAuth2Clients;
 import com.festago.auth.domain.SocialType;
+import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
@@ -35,60 +33,34 @@ class AuthServiceTest {
 
     MemberRepository memberRepository;
 
-    AuthProvider authProvider;
-
     AuthService authService;
+
+    LoginService loginService;
 
     @BeforeEach
     void setUp() {
-        memberRepository = mock(MemberRepository.class);
+        loginService = mock(LoginService.class);
         OAuth2Clients oAuth2Clients = OAuth2Clients.builder()
             .add(new FestagoOAuth2Client())
             .build();
-        authProvider = mock(AuthProvider.class);
-        authService = new AuthService(memberRepository, oAuth2Clients, authProvider);
+        memberRepository = mock(MemberRepository.class);
+
+        authService = new AuthService(loginService, oAuth2Clients, memberRepository);
     }
 
     @Test
-    void 신규_회원으로_로그인() {
-        // given
-        Member member = MemberFixture.member()
-            .id(1L)
-            .build();
-        given(memberRepository.findBySocialIdAndSocialType(anyString(), any(SocialType.class)))
-            .willReturn(Optional.empty());
-        given(memberRepository.save(any(Member.class)))
-            .willReturn(member);
-        given(authProvider.provide(any(AuthPayload.class)))
-            .willReturn("Bearer token");
+    void 로그인() {
         LoginRequest request = new LoginRequest(SocialType.FESTAGO, "1");
+
+        given(loginService.login(any(UserInfo.class)))
+            .willReturn(new LoginResponse("accessToken", "nickname", false));
 
         // when
         LoginResponse response = authService.login(request);
 
         // then
-        assertThat(response.isNew())
-            .isTrue();
-    }
-
-    @Test
-    void 기존_회원으로_로그인() {
-        // given
-        Member member = MemberFixture.member()
-            .id(1L)
-            .build();
-        given(memberRepository.findBySocialIdAndSocialType(anyString(), any(SocialType.class)))
-            .willReturn(Optional.of(member));
-        given(authProvider.provide(any(AuthPayload.class)))
-            .willReturn("Bearer token");
-        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "1");
-
-        // when
-        LoginResponse response = authService.login(request);
-
-        // then
-        assertThat(response.isNew())
-            .isFalse();
+        assertThat(response)
+            .isNotNull();
     }
 
     @Nested
