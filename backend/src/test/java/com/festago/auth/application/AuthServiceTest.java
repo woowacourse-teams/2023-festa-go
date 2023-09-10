@@ -7,9 +7,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 
+import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.OAuth2Clients;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
+import com.festago.auth.dto.LoginMemberDto;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
@@ -37,6 +40,8 @@ class AuthServiceTest {
 
     LoginService loginService;
 
+    AuthProvider authProvider;
+
     @BeforeEach
     void setUp() {
         loginService = mock(LoginService.class);
@@ -44,16 +49,24 @@ class AuthServiceTest {
             .add(new FestagoOAuth2Client())
             .build();
         memberRepository = mock(MemberRepository.class);
+        authProvider = mock(AuthProvider.class);
 
-        authService = new AuthService(loginService, oAuth2Clients, memberRepository);
+        authService = new AuthService(loginService, oAuth2Clients, memberRepository, authProvider);
     }
 
     @Test
     void 로그인() {
         LoginRequest request = new LoginRequest(SocialType.FESTAGO, "1");
 
+        Member member = MemberFixture.member()
+            .id(1L)
+            .build();
+
+        given(authProvider.provide(any(AuthPayload.class)))
+            .willReturn("Bearer token");
+
         given(loginService.login(any(UserInfo.class)))
-            .willReturn(new LoginResponse("accessToken", "nickname", false));
+            .willReturn(new LoginMemberDto(false, member));
 
         // when
         LoginResponse response = authService.login(request);

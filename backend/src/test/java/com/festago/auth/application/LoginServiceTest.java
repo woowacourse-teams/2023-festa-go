@@ -6,11 +6,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
-import com.festago.auth.dto.LoginResponse;
+import com.festago.auth.dto.LoginMemberDto;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.support.MemberFixture;
@@ -29,15 +27,13 @@ class LoginServiceTest {
 
     MemberRepository memberRepository;
 
-    AuthProvider authProvider;
 
     LoginService loginService;
 
     @BeforeEach
     void setUp() {
         memberRepository = mock(MemberRepository.class);
-        authProvider = mock(AuthProvider.class);
-        loginService = new LoginService(memberRepository, authProvider);
+        loginService = new LoginService(memberRepository);
     }
 
     @Test
@@ -50,13 +46,11 @@ class LoginServiceTest {
             .willReturn(Optional.empty());
         given(memberRepository.save(any(Member.class)))
             .willReturn(member);
-        given(authProvider.provide(any(AuthPayload.class)))
-            .willReturn("Bearer token");
         UserInfo userInfo = new UserInfo(member.getSocialId(), member.getSocialType(), member.getNickname(),
             member.getProfileImage());
 
         // when
-        LoginResponse response = loginService.login(userInfo);
+        LoginMemberDto response = loginService.login(userInfo);
 
         // then
         assertThat(response.isNew())
@@ -71,13 +65,11 @@ class LoginServiceTest {
             .build();
         given(memberRepository.findBySocialIdAndSocialType(anyString(), any(SocialType.class)))
             .willReturn(Optional.of(member));
-        given(authProvider.provide(any(AuthPayload.class)))
-            .willReturn("Bearer token");
         UserInfo userInfo = new UserInfo(member.getSocialId(), member.getSocialType(), member.getNickname(),
             member.getProfileImage());
 
         // when
-        LoginResponse response = loginService.login(userInfo);
+        LoginMemberDto response = loginService.login(userInfo);
 
         // then
         assertThat(response.isNew())
