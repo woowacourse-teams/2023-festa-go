@@ -29,28 +29,25 @@ class StudentVerificationViewModel(
     private val timer: Timer = Timer()
 
     init {
-        validateStudentVerificationCode()
+        initObserveStudentsVerificationCode()
     }
 
-    private fun validateStudentVerificationCode() {
+    private fun initObserveStudentsVerificationCode() {
         viewModelScope.launch {
             studentVerificationCode.collect { code ->
-                checkValidateCodeWhenSuccess(code)
+                handleOnUiStateSuccess {
+                    validateCode(code, it)
+                }
             }
         }
     }
 
-    private fun checkValidateCodeWhenSuccess(code: String) {
-        val state = uiState.value
-        if (state is StudentVerificationUiState.Success) {
-            updateIsValidation(code, state)
-        }
+    private fun handleOnUiStateSuccess(action: (state: StudentVerificationUiState.Success) -> Unit) {
+        val state = uiState.value as? StudentVerificationUiState.Success ?: return
+        action(state)
     }
 
-    private fun updateIsValidation(
-        code: String,
-        state: StudentVerificationUiState.Success,
-    ) {
+    private fun validateCode(code: String, state: StudentVerificationUiState.Success) {
         runCatching {
             StudentVerificationCode(code)
         }.onSuccess {
@@ -62,6 +59,7 @@ class StudentVerificationViewModel(
 
     fun loadSchoolEmail(schoolId: Long) {
         if (uiState.value is StudentVerificationUiState.Success) return
+
         viewModelScope.launch {
             schoolRepository.loadSchoolEmail(schoolId)
                 .onSuccess { email ->
@@ -84,11 +82,10 @@ class StudentVerificationViewModel(
         viewModelScope.launch {
             studentVerificationRepository.sendVerificationCode(userName, schoolId)
                 .onSuccess {
-                    val state = uiState.value
-                    if (state is StudentVerificationUiState.Success) {
+                    handleOnUiStateSuccess { state ->
                         _uiState.value = state.copy(remainTime = TIMER_PERIOD)
-                        setTimer()
                     }
+                    setTimer()
                 }
                 .onFailure {
                     analyticsHelper.logNetworkFailure(
@@ -106,15 +103,13 @@ class StudentVerificationViewModel(
 
     private fun createTimerListener(): TimerListener = object : TimerListener {
         override fun onTick(current: Int) {
-            val state = uiState.value
-            if (state is StudentVerificationUiState.Success) {
+            handleOnUiStateSuccess { state ->
                 _uiState.value = state.copy(remainTime = current)
             }
         }
 
         override fun onFinish() {
-            val state = uiState.value
-            if (state is StudentVerificationUiState.Success) {
+            handleOnUiStateSuccess { state ->
                 _uiState.value = state.copy(remainTime = MIN_REMAIN_TIME)
             }
         }
