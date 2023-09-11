@@ -1,14 +1,18 @@
 package com.festago.festago.presentation.ui.studentverification
 
 import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.model.StudentVerificationCode
 import com.festago.festago.repository.SchoolRepository
 import com.festago.festago.repository.StudentVerificationRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
@@ -16,16 +20,18 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class StudentVerificationViewModelTest {
+
+    private val testDispatcher = UnconfinedTestDispatcher()
     private lateinit var vm: StudentVerificationViewModel
     private lateinit var studentVerificationRepository: StudentVerificationRepository
     private lateinit var schoolRepository: SchoolRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+        Dispatchers.setMain(testDispatcher)
         studentVerificationRepository = mockk()
         schoolRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
@@ -138,7 +144,7 @@ class StudentVerificationViewModelTest {
         vm.loadSchoolEmail(1)
 
         // when
-        vm.studentVerificationCode.value = "123456"
+        vm.verificationCode.value = "123456"
 
         // then
         val softly = SoftAssertions().apply {
@@ -162,7 +168,7 @@ class StudentVerificationViewModelTest {
         vm.loadSchoolEmail(1)
 
         // when
-        vm.studentVerificationCode.value = "1234"
+        vm.verificationCode.value = "1234"
         // then
 
         val softly = SoftAssertions().apply {
@@ -178,9 +184,117 @@ class StudentVerificationViewModelTest {
     @Test
     fun `화면 불러오기 성공 상태가 아닐 때 화면 상태를 변경할 수 없다 `() {
         // when
-        vm.studentVerificationCode.value = "1234"
+        vm.verificationCode.value = "1234"
 
         // then
         assertThat(vm.uiState.value is StudentVerificationUiState.Loading).isTrue
+    }
+
+    @Test
+    fun `화면 불러오기 성공 상태일 때 인증 번호 확인이 성공하면 인증 성공 이벤트가 발생한다`() = runTest(testDispatcher) {
+        // given: uiState Success 일 때
+        coEvery {
+            schoolRepository.loadSchoolEmail(any())
+        } returns Result.success("test.com")
+
+        vm.loadSchoolEmail(1)
+
+        // given: timer 가 0초가 아닐 때
+        coEvery {
+            studentVerificationRepository.sendVerificationCode(any(), any())
+        } returns Result.success(Unit)
+
+        vm.sendVerificationCode("test", 1)
+
+        val fakeCode = "123456"
+
+        coEvery {
+            studentVerificationRepository.requestVerificationCodeConfirm(
+                StudentVerificationCode(fakeCode),
+            )
+        } returns Result.success(Unit)
+
+        vm.verificationCode.value = fakeCode
+
+        // sharedFlow Event 기다리기
+        val deferredEvent = async {
+            vm.event.first()
+        }
+
+        // when
+        vm.confirmVerificationCode()
+
+        // then
+        assertThat(deferredEvent.await())
+            .isEqualTo(StudentVerificationEvent.VerificationSuccess)
+    }
+
+    @Test
+    fun `화면 불러오기 성공 상태일 때 인증 번호 확인이 실패하면 인증 실패 이벤트가 발생한다`() = runTest(testDispatcher) {
+        // given: uiState Success 일 때
+        coEvery {
+            schoolRepository.loadSchoolEmail(any())
+        } returns Result.success("test.com")
+
+        vm.loadSchoolEmail(1)
+
+        // given: timer 가 0초가 아닐 때
+        coEvery {
+            studentVerificationRepository.sendVerificationCode(any(), any())
+        } returns Result.success(Unit)
+
+        val code = "123456"
+        vm.verificationCode.value = code
+
+        coEvery {
+            studentVerificationRepository.requestVerificationCodeConfirm(
+                StudentVerificationCode(code),
+            )
+        } returns Result.failure(Exception())
+
+        vm.sendVerificationCode("test", 1)
+
+        // sharedFlow Event 기다리기
+        val deferredEvent = async {
+            vm.event.first()
+        }
+
+        // when
+        vm.confirmVerificationCode()
+
+        // then
+        assertThat(deferredEvent.await())
+            .isEqualTo(StudentVerificationEvent.VerificationFailure)
+    }
+
+    @Test
+    fun `화면 불러오기 성공 상태일 때 타이머 시간이 0이면 타임 아웃 이벤트가 발생한다`() = runTest(testDispatcher) {
+        // given: uiState Success 일 때
+        coEvery {
+            schoolRepository.loadSchoolEmail(any())
+        } returns Result.success("test.com")
+
+        vm.loadSchoolEmail(1)
+
+        val code = "123456"
+        vm.verificationCode.value = code
+
+        coEvery {
+            studentVerificationRepository.requestVerificationCodeConfirm(
+                StudentVerificationCode(code),
+            )
+        } returns Result.success(Unit)
+
+        // sharedFlow Event 기다리기
+        val deferredEvent = async {
+            vm.event.first()
+        }
+
+        // when
+        vm.confirmVerificationCode()
+
+        // then
+        assertThat(deferredEvent.await())
+            .isEqualTo(StudentVerificationEvent.CodeTimeOut)
     }
 }
