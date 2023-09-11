@@ -11,12 +11,6 @@ class StudentsVerificationDefaultRepository(
     override suspend fun sendVerificationCode(userName: String, schoolId: Long): Result<Unit> {
         // TODO: API 연동 작업 필요
         return Result.success(Unit)
-
-//        studentsVerificationRetrofitService.sendVerificationCode(
-//            SendVerificationRequest(userName = userName, schoolId = schoolId),
-//        ).runCatchingWithErrorHandler()
-//            .getOrElse { error -> return Result.failure(error) }
-//            .let { return Result.success(Unit) }
     }
 
     override suspend fun requestVerificationCodeConfirm(code: StudentVerificationCode): Result<Unit> {
