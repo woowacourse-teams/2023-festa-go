@@ -6,7 +6,6 @@ import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +20,12 @@ public class AuthService {
     }
 
     public LoginMemberDto login(UserInfo userInfo) {
-        Optional<Member> optionalMember = memberRepository.findBySocialIdAndSocialType(userInfo.socialId(),
-            userInfo.socialType());
-        if (optionalMember.isPresent()) {
-            return LoginMemberDto.isExists(optionalMember.get());
-        }
-        Member member = signUp(userInfo);
-        return LoginMemberDto.isNew(member);
+        return memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
+            .map(LoginMemberDto::isExists)
+            .orElseGet(() -> {
+                Member member = signUp(userInfo);
+                return LoginMemberDto.isNew(member);
+            });
     }
 
     private Member signUp(UserInfo userInfo) {

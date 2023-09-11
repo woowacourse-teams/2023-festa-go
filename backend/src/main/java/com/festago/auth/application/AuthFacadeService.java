@@ -9,7 +9,6 @@ import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
-import com.festago.domain.Member;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,13 +27,12 @@ public class AuthFacadeService {
 
     public LoginResponse login(LoginRequest request) {
         LoginMemberDto loginMember = authService.login(getUserInfo(request));
-        Member member = loginMember.member();
-        String accessToken = getAccessToken(member);
+        String accessToken = getAccessToken(loginMember.memberId());
         return LoginResponse.of(accessToken, loginMember);
     }
 
-    private String getAccessToken(Member member) {
-        return authProvider.provide(new AuthPayload(member.getId(), Role.MEMBER));
+    private String getAccessToken(Long memberId) {
+        return authProvider.provide(new AuthPayload(memberId, Role.MEMBER));
     }
 
     private UserInfo getUserInfo(LoginRequest request) {

@@ -7,6 +7,6 @@ public record LoginResponse(
 ) {
 
     public static LoginResponse of(String accessToken, LoginMemberDto loginMember) {
-        return new LoginResponse(accessToken, loginMember.member().getNickname(), loginMember.isNew());
+        return new LoginResponse(accessToken, loginMember.nickname(), loginMember.isNew());
     }
 }

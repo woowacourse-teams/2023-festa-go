@@ -57,7 +57,7 @@ class AuthFacadeServiceTest {
             .willReturn("Bearer token");
 
         given(authService.login(any(UserInfo.class)))
-            .willReturn(new LoginMemberDto(false, member));
+            .willReturn(new LoginMemberDto(false, member.getId(), member.getNickname()));
 
         // when
         LoginResponse response = authFacadeService.login(request);

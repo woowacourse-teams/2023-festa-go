@@ -4,14 +4,15 @@ import com.festago.domain.Member;
 
 public record LoginMemberDto(
     boolean isNew,
-    Member member
+    Long memberId,
+    String nickname
 ) {
 
     public static LoginMemberDto isNew(Member member) {
-        return new LoginMemberDto(true, member);
+        return new LoginMemberDto(true, member.getId(), member.getNickname());
     }
 
     public static LoginMemberDto isExists(Member member) {
-        return new LoginMemberDto(false, member);
+        return new LoginMemberDto(false, member.getId(), member.getNickname());
     }
 }
