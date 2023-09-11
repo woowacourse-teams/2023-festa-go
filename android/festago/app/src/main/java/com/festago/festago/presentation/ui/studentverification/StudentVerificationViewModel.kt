@@ -35,12 +35,12 @@ class StudentVerificationViewModel(
     private val timer: Timer = Timer()
 
     init {
-        initObserveStudentsVerificationCode()
+        initObserveVerificationCode()
     }
 
-    private fun initObserveStudentsVerificationCode() {
+    private fun initObserveVerificationCode() {
         viewModelScope.launch {
-            studentVerificationCode.collect { code ->
+            verificationCode.collect { code ->
                 handleOnUiStateSuccess {
                     validateCode(code, it)
                 }
@@ -48,14 +48,14 @@ class StudentVerificationViewModel(
         }
     }
 
-    private fun handleOnUiStateSuccess(action: (state: StudentVerificationUiState.Success) -> Unit) {
+    private inline fun handleOnUiStateSuccess(action: (state: StudentVerificationUiState.Success) -> Unit) {
         val state = uiState.value as? StudentVerificationUiState.Success ?: return
         action(state)
     }
 
-    private fun validateCode(code: String, state: StudentVerificationUiState.Success) {
+    private fun validateCode(verificationCode: String, state: StudentVerificationUiState.Success) {
         runCatching {
-            StudentVerificationCode(code)
+            StudentVerificationCode(verificationCode)
         }.onSuccess {
             _uiState.value = state.copy(isValidateCode = true)
         }.onFailure {
