@@ -48,12 +48,17 @@ class StudentVerificationActivity : AppCompatActivity() {
     private fun initObserve() {
         repeatOnStarted {
             vm.uiState.collect { uiState ->
-                updateUiState(uiState)
+                handleUiState(uiState)
+            }
+        }
+        repeatOnStarted {
+            vm.event.collect { event ->
+                handleEvent(event)
             }
         }
     }
 
-    private fun updateUiState(uiState: StudentVerificationUiState) {
+    private fun handleUiState(uiState: StudentVerificationUiState) {
         binding.uiState = uiState
         when (uiState) {
             is StudentVerificationUiState.Success -> handleSuccess(uiState)
@@ -71,6 +76,14 @@ class StudentVerificationActivity : AppCompatActivity() {
             .format(format)
 
         binding.btnVerificationConfirm.isEnabled = uiState.isValidateCode
+    }
+
+    private fun handleEvent(event: StudentVerificationEvent) {
+        when (event) {
+            is StudentVerificationEvent.VerificationSuccess -> Unit
+            is StudentVerificationEvent.VerificationFailure -> Unit
+            is StudentVerificationEvent.CodeTimeOut -> Unit
+        }
     }
 
     companion object {
