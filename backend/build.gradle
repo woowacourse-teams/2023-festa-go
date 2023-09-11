@@ -43,6 +43,10 @@ dependencies {
 
     // Mockito
     testImplementation 'org.mockito:mockito-inline'
+
+    // Flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
 }
 
 tasks.named('test') {

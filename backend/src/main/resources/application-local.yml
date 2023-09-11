@@ -1,19 +1,21 @@
 spring:
   datasource:
-    hikari:
-      jdbc-url: jdbc:h2:~/festago;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-      username: sa
+    url: jdbc:mysql://localhost:13306/festago
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
       hibernate:
         format_sql: true
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     open-in-view: false
-  h2:
-    console:
-      enabled: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
 
 logging:
   file:
