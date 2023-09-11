@@ -34,6 +34,10 @@ public class Student extends BaseTimeEntity {
     protected Student() {
     }
 
+    public Student(Member member, School school, String username) {
+        this(null, member, school, username);
+    }
+
     public Student(Long id, Member member, School school, String username) {
         validate(member, school, username);
         this.id = id;

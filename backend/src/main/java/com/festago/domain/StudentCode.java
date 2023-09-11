@@ -1,5 +1,7 @@
 package com.festago.domain;
 
+import com.festago.exception.ErrorCode;
+import com.festago.exception.InternalServerException;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import org.springframework.util.StringUtils;
 
 @Entity
 public class StudentCode extends BaseTimeEntity {
@@ -25,18 +28,32 @@ public class StudentCode extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    private String username;
+
     protected StudentCode() {
     }
 
-    public StudentCode(VerificationCode code, Member member, School school) {
-        this(null, code, member, school);
+    public StudentCode(VerificationCode code, School school, Member member, String username) {
+        this(null, code, school, member, username);
     }
 
-    public StudentCode(Long id, VerificationCode code, Member member, School school) {
+    public StudentCode(Long id, VerificationCode code, School school, Member member, String username) {
+        validate(username);
         this.id = id;
         this.code = code;
-        this.member = member;
         this.school = school;
+        this.member = member;
+        this.username = username;
+    }
+
+    private void validate(String username) {
+        if (!StringUtils.hasText(username)) {
+            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+        if (username.length() > 255) {
+            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public Long getId() {
@@ -53,5 +70,9 @@ public class StudentCode extends BaseTimeEntity {
 
     public Member getMember() {
         return member;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

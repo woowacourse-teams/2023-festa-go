@@ -27,6 +27,10 @@ public class School extends BaseTimeEntity {
     protected School() {
     }
 
+    public School(String domain, String name) {
+        this(null, domain, name);
+    }
+
     public School(Long id, String domain, String name) {
         validate(domain, name);
         this.id = id;
