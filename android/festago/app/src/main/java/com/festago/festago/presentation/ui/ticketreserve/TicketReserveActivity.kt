@@ -8,12 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.R
 import com.festago.festago.databinding.ActivityTicketReserveBinding
+import com.festago.festago.model.ReservationTicket
 import com.festago.festago.model.ReservedTicket
-import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.model.ReservationTicketUiModel
 import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.reservationcomplete.ReservationCompleteActivity
+import com.festago.festago.presentation.ui.reservationcomplete.ReservedTicketArg
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketFailed
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ReserveTicketSuccess
@@ -21,6 +21,7 @@ import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.Show
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.ShowTicketTypes
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
+import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.BottomSheetReservationTicketArg
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -63,7 +64,7 @@ class TicketReserveActivity : AppCompatActivity() {
     private fun handleEvent(event: TicketReserveEvent) = when (event) {
         is ShowTicketTypes -> handleShowTicketTypes(
             stageStartTime = event.stageStartTime,
-            tickets = event.tickets,
+            reservationTickets = event.tickets,
         )
 
         is ReserveTicketSuccess -> handleReserveTicketSuccess(event.reservedTicket)
@@ -73,7 +74,7 @@ class TicketReserveActivity : AppCompatActivity() {
 
     private fun handleShowTicketTypes(
         stageStartTime: LocalDateTime,
-        tickets: List<ReservationTicketUiModel>,
+        reservationTickets: List<ReservationTicket>,
     ) {
         TicketReserveBottomSheetFragment.newInstance(
             stageStartTime.format(
@@ -82,12 +83,24 @@ class TicketReserveActivity : AppCompatActivity() {
                     Locale.KOREA,
                 ),
             ),
-            tickets,
+            reservationTickets.map {
+                BottomSheetReservationTicketArg(
+                    id = it.id,
+                    remainAmount = it.remainAmount,
+                    ticketType = it.ticketType,
+                    totalAmount = it.totalAmount
+                )
+            },
         ).show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
     }
 
     private fun handleReserveTicketSuccess(reservedTicket: ReservedTicket) {
-        val intent = ReservationCompleteActivity.getIntent(this, reservedTicket.toPresentation())
+        val reservedTicketArg = ReservedTicketArg(
+            ticketId = reservedTicket.id,
+            number = reservedTicket.number,
+            entryTime = reservedTicket.entryTime,
+        )
+        val intent = ReservationCompleteActivity.getIntent(this, reservedTicketArg)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()

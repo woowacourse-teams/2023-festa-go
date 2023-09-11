@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.databinding.ItemTicketHistoryBinding
-import com.festago.festago.presentation.model.TicketUiModel
 
 class TicketHistoryViewHolder(
     val binding: ItemTicketHistoryBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: TicketUiModel) {
+    fun bind(item: TicketHistoryItemUiState) {
         binding.ticket = item
     }
 

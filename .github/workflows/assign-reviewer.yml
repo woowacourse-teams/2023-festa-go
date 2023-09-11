@@ -1,8 +1,11 @@
 name: Assign Reviewer By Label
 on:
   pull_request:
-    types: [ opened, edited, labeled, unlabeled ]
-
+    types:
+      - opened
+      - edited
+      - labeled
+      - unlabeled
 jobs:
   assign-reviewer:
     runs-on: ubuntu-latest

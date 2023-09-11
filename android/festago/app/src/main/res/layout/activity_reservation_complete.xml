@@ -8,8 +8,8 @@
         <import type="java.time.format.DateTimeFormatter" />
 
         <variable
-            name="reservationComplete"
-            type="com.festago.festago.presentation.model.ReservedTicketUiModel" />
+            name="reservedTicket"
+            type="com.festago.festago.presentation.ui.reservationcomplete.ReservedTicketArg" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -76,7 +76,7 @@
                 android:id="@+id/tvReservationCompleteNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{Integer.toString(reservationComplete.number)}"
+                android:text="@{Integer.toString(reservedTicket.number)}"
                 android:textColor="@color/black"
                 android:textSize="90sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="52dp"
-                android:text="@{@string/reservation_complete_tv_entry_able_time(reservationComplete.entryTime.format(DateTimeFormatter.ofPattern(@string/reservation_complete_tv_time_format)))}"
+                android:text="@{@string/reservation_complete_tv_entry_able_time(reservedTicket.entryTime.format(DateTimeFormatter.ofPattern(@string/reservation_complete_tv_time_format)))}"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_lsm"
-            android:text="@{reservationComplete.entryTime.format(DateTimeFormatter.ofPattern(@string/reservation_complete_tv_date_format))}"
+            android:text="@{reservedTicket.entryTime.format(DateTimeFormatter.ofPattern(@string/reservation_complete_tv_date_format))}"
             android:textColor="@color/md_theme_light_onPrimary"
             android:textSize="@dimen/title_medium"
             android:textStyle="bold"
