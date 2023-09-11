@@ -8,7 +8,7 @@ create table if not exists festival
     start_date date,
     thumbnail  varchar(255),
     primary key (id)
-) engine InnoDB
+) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
@@ -23,7 +23,7 @@ create table if not exists member
     social_id     varchar(255),
     social_type   varchar(255),
     primary key (id)
-) engine InnoDB
+) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
@@ -39,7 +39,7 @@ create table if not exists member_ticket
     owner_id    bigint,
     stage_id    bigint,
     primary key (id)
-) engine InnoDB
+) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
@@ -53,7 +53,7 @@ create table if not exists stage
     ticket_open_time datetime(6),
     festival_id      bigint,
     primary key (id)
-) engine InnoDB
+) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
@@ -65,7 +65,7 @@ create table if not exists ticket
     ticket_type varchar(255),
     stage_id    bigint,
     primary key (id)
-) engine InnoDB
+) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
@@ -77,7 +77,7 @@ create table if not exists ticket_amount
     reserved_amount integer not null,
     total_amount    integer not null,
     primary key (ticket_id)
-) engine InnoDB
+) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
@@ -90,38 +90,57 @@ create table if not exists ticket_entry_time
     entry_time datetime(6),
     ticket_id  bigint,
     primary key (id)
-) engine InnoDB
+) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
-create table school
+create table if not exists school
 (
-    id     bigint       not null auto_increment,
-    domain varchar(50)  not null,
-    name   varchar(255) not null,
+    id         bigint       not null auto_increment,
+    created_at datetime     null,
+    updated_at datetime     null,
+    domain     varchar(50)  not null,
+    name       varchar(255) not null,
     primary key (id)
-) engine InnoDB
+) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
-create table student
+create table if not exists student
 (
-    id        bigint       not null auto_increment,
-    username  varchar(255) not null,
-    member_id bigint       not null,
-    school_id bigint       not null,
+    id         bigint       not null auto_increment,
+    created_at datetime     null,
+    updated_at datetime     null,
+    username   varchar(255) not null,
+    member_id  bigint       not null,
+    school_id  bigint       not null,
     primary key (id)
-) engine InnoDB
+) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
-CREATE TABLE admin
+create table if not exists student_code
 (
-    id       BIGINT AUTO_INCREMENT NOT NULL,
-    username VARCHAR(255)          NULL,
-    password VARCHAR(255)          NULL,
+    id         bigint auto_increment not null,
+    created_at datetime              null,
+    updated_at datetime              null,
+    school_id  bigint                null,
+    member_id  bigint                null,
+    code       varchar(255)          null,
     primary key (id)
-) engine InnoDB
+) engine innodb
+  default charset = utf8mb4
+  collate = utf8mb4_0900_ai_ci;
+
+create table if not exists admin
+(
+    id         bigint auto_increment not null,
+    created_at datetime              null,
+    updated_at datetime              null,
+    username   varchar(255)          null,
+    password   varchar(255)          null,
+    primary key (id)
+) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
 
@@ -162,5 +181,15 @@ alter table student
 
 alter table student
     add constraint fk_student__school
+        foreign key (school_id)
+            references school (id);
+
+alter table student_code
+    add constraint fk_student_code__member
+        foreign key (member_id)
+            references member (id);
+
+alter table student_code
+    add constraint fk_student_code__school
         foreign key (school_id)
             references school (id);
