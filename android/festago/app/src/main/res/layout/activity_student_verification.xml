@@ -75,18 +75,6 @@
             app:layout_constraintTop_toTopOf="@id/tilEmail"
             tools:text="\@naver.com" />
 
-        <TextView
-            android:id="@+id/tvUserNameGuide"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:gravity="start"
-            app:layout_constraintEnd_toStartOf="@+id/btnRequestVerificationCode"
-            app:layout_constraintStart_toStartOf="@id/glStart"
-            app:layout_constraintTop_toBottomOf="@id/tilEmail"
-            tools:text="이메일 형식이 아닙니다." />
-
         <Button
             android:id="@+id/btnRequestVerificationCode"
             android:layout_width="wrap_content"
@@ -118,7 +106,6 @@
                 android:text="@={vm.verificationCode}" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <TextView
             android:id="@+id/tvTimerVerificationCode"
             android:layout_width="wrap_content"
@@ -137,7 +124,6 @@
             style="@style/btnFesta"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
             android:onClick="@{_ -> vm.confirmVerificationCode()}"
             android:text="@string/student_verification_btn_student_verification_confirm"
             android:textStyle="bold"
