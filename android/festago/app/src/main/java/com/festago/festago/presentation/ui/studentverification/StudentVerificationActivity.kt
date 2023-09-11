@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.studentsverification
+package com.festago.festago.presentation.ui.studentverification
 
 import android.content.Context
 import android.content.Intent
@@ -18,7 +18,7 @@ class StudentVerificationActivity : AppCompatActivity() {
         ActivityStudentVerificationBinding.inflate(layoutInflater)
     }
 
-    private val vm: StudentsVerificationViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: StudentVerificationViewModel by viewModels { FestagoViewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

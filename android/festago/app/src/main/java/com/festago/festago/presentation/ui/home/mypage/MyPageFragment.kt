@@ -12,7 +12,7 @@ import com.festago.festago.databinding.FragmentMyPageBinding
 import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.ui.signin.SignInActivity
-import com.festago.festago.presentation.ui.studentsverification.StudentVerificationActivity
+import com.festago.festago.presentation.ui.studentverification.StudentVerificationActivity
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryActivity
 
 class MyPageFragment : Fragment(R.layout.fragment_my_page) {

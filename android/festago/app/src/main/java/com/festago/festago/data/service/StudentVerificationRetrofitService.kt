@@ -5,7 +5,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface StudentsVerificationRetrofitService {
+interface StudentVerificationRetrofitService {
     @POST("/students/send-verification")
     suspend fun sendVerificationCode(
         @Body sendVerificationRequest: SendVerificationRequest,

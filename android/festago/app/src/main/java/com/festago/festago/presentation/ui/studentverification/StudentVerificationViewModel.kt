@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.studentsverification
+package com.festago.festago.presentation.ui.studentverification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,15 +8,15 @@ import com.festago.festago.model.StudentVerificationCode
 import com.festago.festago.model.timer.Timer
 import com.festago.festago.model.timer.TimerListener
 import com.festago.festago.repository.SchoolRepository
-import com.festago.festago.repository.StudentsVerificationRepository
+import com.festago.festago.repository.StudentVerificationRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class StudentsVerificationViewModel(
+class StudentVerificationViewModel(
     private val schoolRepository: SchoolRepository,
-    private val studentsVerificationRepository: StudentsVerificationRepository,
+    private val studentVerificationRepository: StudentVerificationRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
@@ -82,7 +82,7 @@ class StudentsVerificationViewModel(
 
     fun sendVerificationCode(userName: String, schoolId: Long) {
         viewModelScope.launch {
-            studentsVerificationRepository.sendVerificationCode(userName, schoolId)
+            studentVerificationRepository.sendVerificationCode(userName, schoolId)
                 .onSuccess {
                     val state = uiState.value
                     if (state is StudentVerificationUiState.Success) {
@@ -122,7 +122,7 @@ class StudentsVerificationViewModel(
 
     fun confirmVerificationCode() {
         viewModelScope.launch {
-            studentsVerificationRepository.requestVerificationCodeConfirm(
+            studentVerificationRepository.requestVerificationCodeConfirm(
                 StudentVerificationCode(studentVerificationCode.value),
             )
         }

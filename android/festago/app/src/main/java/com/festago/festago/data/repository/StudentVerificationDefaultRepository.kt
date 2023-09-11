@@ -1,12 +1,12 @@
 package com.festago.festago.data.repository
 
-import com.festago.festago.data.service.StudentsVerificationRetrofitService
+import com.festago.festago.data.service.StudentVerificationRetrofitService
 import com.festago.festago.model.StudentVerificationCode
-import com.festago.festago.repository.StudentsVerificationRepository
+import com.festago.festago.repository.StudentVerificationRepository
 
-class StudentsVerificationDefaultRepository(
-    private val studentsVerificationRetrofitService: StudentsVerificationRetrofitService,
-) : StudentsVerificationRepository {
+class StudentVerificationDefaultRepository(
+    private val studentVerificationRetrofitService: StudentVerificationRetrofitService,
+) : StudentVerificationRepository {
 
     override suspend fun sendVerificationCode(userName: String, schoolId: Long): Result<Unit> {
         // TODO: API 연동 작업 필요

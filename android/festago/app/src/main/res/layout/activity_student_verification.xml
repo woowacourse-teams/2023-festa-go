@@ -7,18 +7,18 @@
 
         <variable
             name="vm"
-            type="com.festago.festago.presentation.ui.studentsverification.StudentsVerificationViewModel" />
+            type="com.festago.festago.presentation.ui.studentverification.StudentVerificationViewModel" />
 
         <variable
             name="uiState"
-            type="com.festago.festago.presentation.ui.studentsverification.StudentVerificationUiState" />
+            type="com.festago.festago.presentation.ui.studentverification.StudentVerificationUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         visibility="@{uiState.shouldShowSuccess}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.studentsverification.StudentVerificationActivity">
+        tools:context=".presentation.ui.studentverification.StudentVerificationActivity">
 
 
         <androidx.constraintlayout.widget.Guideline

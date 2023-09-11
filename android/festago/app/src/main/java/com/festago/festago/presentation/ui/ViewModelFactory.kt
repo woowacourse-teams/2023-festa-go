@@ -8,7 +8,7 @@ import com.festago.festago.presentation.ui.home.festivallist.FestivalListViewMod
 import com.festago.festago.presentation.ui.home.mypage.MyPageViewModel
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListViewModel
 import com.festago.festago.presentation.ui.signin.SignInViewModel
-import com.festago.festago.presentation.ui.studentsverification.StudentsVerificationViewModel
+import com.festago.festago.presentation.ui.studentverification.StudentVerificationViewModel
 import com.festago.festago.presentation.ui.ticketentry.TicketEntryViewModel
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryViewModel
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
@@ -64,9 +64,9 @@ val FestagoViewModelFactory: ViewModelProvider.Factory = object : ViewModelProvi
                 analyticsHelper = analysisContainer.analyticsHelper,
             )
 
-            modelClass.isAssignableFrom(StudentsVerificationViewModel::class.java) -> StudentsVerificationViewModel(
+            modelClass.isAssignableFrom(StudentVerificationViewModel::class.java) -> StudentVerificationViewModel(
                 schoolRepository = repositoryContainer.schoolRepository,
-                studentsVerificationRepository = repositoryContainer.studentsVerificationRepository,
+                studentVerificationRepository = repositoryContainer.studentVerificationRepository,
                 analyticsHelper = analysisContainer.analyticsHelper,
             )
 

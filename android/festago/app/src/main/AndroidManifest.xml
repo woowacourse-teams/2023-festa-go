@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ui.studentsverification.StudentVerificationActivity"
+            android:name=".presentation.ui.studentverification.StudentVerificationActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.ui.signin.SignInActivity"
@@ -58,7 +58,7 @@
         </activity>
         <activity
             android:name=".presentation.ui.tickethistory.TicketHistoryActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

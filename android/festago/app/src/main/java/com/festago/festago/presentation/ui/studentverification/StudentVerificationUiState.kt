@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.studentsverification
+package com.festago.festago.presentation.ui.studentverification
 
 sealed interface StudentVerificationUiState {
     object Loading : StudentVerificationUiState

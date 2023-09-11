@@ -1,10 +1,8 @@
 package com.festago.festago.presentation.ui.studentverification
 
 import com.festago.festago.analytics.AnalyticsHelper
-import com.festago.festago.presentation.ui.studentsverification.StudentVerificationUiState
-import com.festago.festago.presentation.ui.studentsverification.StudentsVerificationViewModel
 import com.festago.festago.repository.SchoolRepository
-import com.festago.festago.repository.StudentsVerificationRepository
+import com.festago.festago.repository.StudentVerificationRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -18,9 +16,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class StudentsVerificationViewModelTest {
-    private lateinit var vm: StudentsVerificationViewModel
-    private lateinit var studentsVerificationRepository: StudentsVerificationRepository
+class StudentVerificationViewModelTest {
+    private lateinit var vm: StudentVerificationViewModel
+    private lateinit var studentVerificationRepository: StudentVerificationRepository
     private lateinit var schoolRepository: SchoolRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
@@ -28,12 +26,12 @@ class StudentsVerificationViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        studentsVerificationRepository = mockk()
+        studentVerificationRepository = mockk()
         schoolRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
-        vm = StudentsVerificationViewModel(
+        vm = StudentVerificationViewModel(
             schoolRepository = schoolRepository,
-            studentsVerificationRepository = studentsVerificationRepository,
+            studentVerificationRepository = studentVerificationRepository,
             analyticsHelper = analyticsHelper,
         )
     }
@@ -88,7 +86,7 @@ class StudentsVerificationViewModelTest {
         val fakeEmail = "test.com"
 
         coEvery {
-            studentsVerificationRepository.sendVerificationCode(any(), any())
+            studentVerificationRepository.sendVerificationCode(any(), any())
         } returns Result.success(Unit)
 
         coEvery {
@@ -119,7 +117,7 @@ class StudentsVerificationViewModelTest {
     fun `이메일 불러오기가 완료되지 않은 상태에서 코드 전송에 성공해도 로딩 상태에서 변경되지 않는다`() {
         // given
         coEvery {
-            studentsVerificationRepository.sendVerificationCode(any(), any())
+            studentVerificationRepository.sendVerificationCode(any(), any())
         } returns Result.success(Unit)
 
         // when
