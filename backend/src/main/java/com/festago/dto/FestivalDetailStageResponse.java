@@ -4,11 +4,12 @@ import com.festago.domain.Stage;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record FestivalDetailStageResponse(Long id,
-                                          LocalDateTime startTime,
-                                          LocalDateTime ticketOpenTime,
-                                          String lineUp,
-                                          List<FestivalDetailTicketResponse> tickets) {
+public record FestivalDetailStageResponse(
+    Long id,
+    LocalDateTime startTime,
+    LocalDateTime ticketOpenTime,
+    String lineUp,
+    List<FestivalDetailTicketResponse> tickets) {
 
     public static FestivalDetailStageResponse from(Stage stage) {
         List<FestivalDetailTicketResponse> tickets = stage.getTickets().stream()

@@ -5,12 +5,13 @@ import com.festago.domain.Stage;
 import java.time.LocalDate;
 import java.util.List;
 
-public record FestivalDetailResponse(Long id,
-                                     String name,
-                                     LocalDate startDate,
-                                     LocalDate endDate,
-                                     String thumbnail,
-                                     List<FestivalDetailStageResponse> stages) {
+public record FestivalDetailResponse(
+    Long id,
+    String name,
+    LocalDate startDate,
+    LocalDate endDate,
+    String thumbnail,
+    List<FestivalDetailStageResponse> stages) {
 
     public static FestivalDetailResponse of(Festival festival, List<Stage> stages) {
         List<FestivalDetailStageResponse> stageResponses = stages.stream()
