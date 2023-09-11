@@ -5,31 +5,29 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.festago.festago.R
 import com.festago.festago.databinding.ActivityStudentVerificationBinding
 import com.festago.festago.presentation.ui.FestagoViewModelFactory
-import kotlinx.coroutines.launch
+import com.festago.festago.presentation.util.repeatOnStarted
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 class StudentVerificationActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityStudentVerificationBinding
+    private val binding: ActivityStudentVerificationBinding by lazy {
+        ActivityStudentVerificationBinding.inflate(layoutInflater)
+    }
 
     private val vm: StudentsVerificationViewModel by viewModels { FestagoViewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
-        initObserving()
         initView()
+        initObserve()
     }
 
     private fun initBinding() {
-        binding = ActivityStudentVerificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.lifecycleOwner = this
         binding.vm = vm
@@ -47,17 +45,19 @@ class StudentVerificationActivity : AppCompatActivity() {
         }
     }
 
-    private fun initObserving() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                vm.uiState.collect { uiState ->
-                    binding.uiState = uiState
-                    when (uiState) {
-                        is StudentVerificationUiState.Success -> handleSuccess(uiState)
-                        is StudentVerificationUiState.Loading, StudentVerificationUiState.Error -> {}
-                    }
-                }
+    private fun initObserve() {
+        repeatOnStarted {
+            vm.uiState.collect { uiState ->
+                updateUiState(uiState)
             }
+        }
+    }
+
+    private fun updateUiState(uiState: StudentVerificationUiState) {
+        binding.uiState = uiState
+        when (uiState) {
+            is StudentVerificationUiState.Success -> handleSuccess(uiState)
+            is StudentVerificationUiState.Loading, StudentVerificationUiState.Error -> Unit
         }
     }
 
@@ -76,6 +76,7 @@ class StudentVerificationActivity : AppCompatActivity() {
     companion object {
 
         private const val KEY_SCHOOL_ID = "KEY_SCHOOL_ID"
+
         fun getIntent(context: Context, schoolId: Long): Intent {
             return Intent(context, StudentVerificationActivity::class.java).apply {
                 putExtra(KEY_SCHOOL_ID, schoolId)
