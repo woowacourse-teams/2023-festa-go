@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.auth.application.AuthService;
+import com.festago.auth.application.AuthFacadeService;
 import com.festago.auth.domain.Role;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.LoginRequest;
@@ -36,13 +36,13 @@ class AuthControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    AuthService authService;
+    AuthFacadeService authFacadeService;
 
     @Test
     void OAuth2_로그인을_한다() throws Exception {
         // given
         LoginResponse expected = new LoginResponse("accesstoken", "nickname", true);
-        given(authService.login(any(LoginRequest.class)))
+        given(authFacadeService.login(any(LoginRequest.class)))
             .willReturn(expected);
         LoginRequest request = new LoginRequest(SocialType.FESTAGO, "code");
 

@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.application.integration.ApplicationIntegrationTest;
-import com.festago.auth.application.AuthService;
+import com.festago.auth.application.AuthFacadeService;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.domain.Member;
@@ -19,13 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AuthServiceIntegrationTest extends ApplicationIntegrationTest {
+class AuthFacadeServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     MemberRepository memberRepository;
 
     @Autowired
-    AuthService authService;
+    AuthFacadeService authFacadeService;
 
     @Autowired
     EntityManager entityManager;
@@ -34,12 +34,12 @@ class AuthServiceIntegrationTest extends ApplicationIntegrationTest {
     void 회원이_탈퇴하고_재가입하면_새로운_계정으로_가입() {
         // given
         LoginRequest request = new LoginRequest(SocialType.FESTAGO, "1");
-        authService.login(request);
+        authFacadeService.login(request);
         Member member = memberRepository.findBySocialIdAndSocialType("1", SocialType.FESTAGO).get();
 
         // when
         memberRepository.delete(member);
-        authService.login(request);
+        authFacadeService.login(request);
 
         // then
         assertThat(memberRepository.count()).isEqualTo(1);
@@ -51,7 +51,7 @@ class AuthServiceIntegrationTest extends ApplicationIntegrationTest {
         Member member = memberRepository.save(MemberFixture.member().build());
 
         // when
-        authService.deleteMember(member.getId());
+        authFacadeService.deleteMember(member.getId());
 
         // then
         String sql = "SELECT * FROM member WHERE id = :memberId AND deleted_at IS NOT NULL";
@@ -75,7 +75,7 @@ class AuthServiceIntegrationTest extends ApplicationIntegrationTest {
         Member member = memberRepository.save(MemberFixture.member().build());
 
         // when
-        authService.deleteMember(member.getId());
+        authFacadeService.deleteMember(member.getId());
 
         // then
         assertThat(memberRepository.findById(member.getId())).isEmpty();

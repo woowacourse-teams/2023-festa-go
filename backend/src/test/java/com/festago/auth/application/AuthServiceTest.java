@@ -4,29 +4,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
 
-import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.AuthProvider;
-import com.festago.auth.domain.OAuth2Clients;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
-import com.festago.auth.dto.LoginRequest;
-import com.festago.auth.dto.LoginResponse;
-import com.festago.auth.infrastructure.FestagoOAuth2Client;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.exception.NotFoundException;
 import com.festago.support.MemberFixture;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -34,46 +29,54 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
+    @Mock
     MemberRepository memberRepository;
 
+    @InjectMocks
     AuthService authService;
 
-    LoginService loginService;
+    @Nested
+    class 로그인 {
 
-    AuthProvider authProvider;
+        @Test
+        void 신규_회원으로_로그인() {
+            // given
+            Member member = MemberFixture.member()
+                .id(1L)
+                .build();
+            given(memberRepository.findBySocialIdAndSocialType(anyString(), any(SocialType.class)))
+                .willReturn(Optional.empty());
+            given(memberRepository.save(any(Member.class)))
+                .willReturn(member);
+            UserInfo userInfo = new UserInfo(member.getSocialId(), member.getSocialType(), member.getNickname(),
+                member.getProfileImage());
 
-    @BeforeEach
-    void setUp() {
-        loginService = mock(LoginService.class);
-        OAuth2Clients oAuth2Clients = OAuth2Clients.builder()
-            .add(new FestagoOAuth2Client())
-            .build();
-        memberRepository = mock(MemberRepository.class);
-        authProvider = mock(AuthProvider.class);
+            // when
+            LoginMemberDto response = authService.login(userInfo);
 
-        authService = new AuthService(loginService, oAuth2Clients, memberRepository, authProvider);
-    }
+            // then
+            assertThat(response.isNew())
+                .isTrue();
+        }
 
-    @Test
-    void 로그인() {
-        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "1");
+        @Test
+        void 기존_회원으로_로그인() {
+            // given
+            Member member = MemberFixture.member()
+                .id(1L)
+                .build();
+            given(memberRepository.findBySocialIdAndSocialType(anyString(), any(SocialType.class)))
+                .willReturn(Optional.of(member));
+            UserInfo userInfo = new UserInfo(member.getSocialId(), member.getSocialType(), member.getNickname(),
+                member.getProfileImage());
 
-        Member member = MemberFixture.member()
-            .id(1L)
-            .build();
+            // when
+            LoginMemberDto response = authService.login(userInfo);
 
-        given(authProvider.provide(any(AuthPayload.class)))
-            .willReturn("Bearer token");
-
-        given(loginService.login(any(UserInfo.class)))
-            .willReturn(new LoginMemberDto(false, member));
-
-        // when
-        LoginResponse response = authService.login(request);
-
-        // then
-        assertThat(response)
-            .isNotNull();
+            // then
+            assertThat(response.isNew())
+                .isFalse();
+        }
     }
 
     @Nested
