@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:digits="0123456789_abcdefghijklmnopqrstuvwxyz"
                 android:hint="@string/student_verification_tie_username"
-                android:maxLength="20" />
+                android:maxLength="30" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -115,7 +115,7 @@
                 android:digits="0123456789"
                 android:hint="@string/student_verification_tie_verification_code"
                 android:maxLength="6"
-                android:text="@={vm.studentVerificationCode}" />
+                android:text="@={vm.verificationCode}" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
