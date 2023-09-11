@@ -197,13 +197,13 @@ class StudentServiceTest {
             StudentVerificateRequest request = new StudentVerificateRequest("123456");
             given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(MemberFixture.member().build()));
-            given(studentCodeRepository.findByCode(any()))
+            given(studentCodeRepository.findByCodeAndMember(any(), any()))
                 .willReturn(Optional.empty());
 
             // when & then
             assertThatThrownBy(() -> studentService.verificate(memberId, request))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("존재하지 않는 학생 인증 코드입니다.");
+                .hasMessage("올바르지 않은 학생 인증 코드입니다.");
         }
 
         @Test
@@ -214,7 +214,7 @@ class StudentServiceTest {
             Member member = MemberFixture.member().build();
             given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(member));
-            given(studentCodeRepository.findByCode(any()))
+            given(studentCodeRepository.findByCodeAndMember(any(), any()))
                 .willReturn(Optional.of(new StudentCode(
                     new VerificationCode("123456"),
                     new School("snu.ac.kr", "서울대학교"),
