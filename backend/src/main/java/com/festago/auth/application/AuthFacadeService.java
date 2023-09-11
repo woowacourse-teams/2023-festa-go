@@ -30,10 +30,7 @@ public class AuthFacadeService {
         LoginMemberDto loginMember = authService.login(getUserInfo(request));
         Member member = loginMember.member();
         String accessToken = getAccessToken(member);
-        if (loginMember.isNew()) {
-            return LoginResponse.isNew(accessToken, member.getNickname());
-        }
-        return LoginResponse.isExists(accessToken, member.getNickname());
+        return LoginResponse.of(accessToken, loginMember);
     }
 
     private String getAccessToken(Member member) {

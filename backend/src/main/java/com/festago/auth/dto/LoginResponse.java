@@ -6,11 +6,7 @@ public record LoginResponse(
     boolean isNew
 ) {
 
-    public static LoginResponse isNew(String accessToken, String nickname) {
-        return new LoginResponse(accessToken, nickname, true);
-    }
-
-    public static LoginResponse isExists(String accessToken, String nickname) {
-        return new LoginResponse(accessToken, nickname, false);
+    public static LoginResponse of(String accessToken, LoginMemberDto loginMember) {
+        return new LoginResponse(accessToken, loginMember.member().getNickname(), loginMember.isNew());
     }
 }
