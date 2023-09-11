@@ -9,8 +9,11 @@ import com.festago.festago.model.timer.Timer
 import com.festago.festago.model.timer.TimerListener
 import com.festago.festago.repository.SchoolRepository
 import com.festago.festago.repository.StudentVerificationRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -24,7 +27,10 @@ class StudentVerificationViewModel(
         MutableStateFlow<StudentVerificationUiState>(StudentVerificationUiState.Loading)
     val uiState: StateFlow<StudentVerificationUiState> = _uiState.asStateFlow()
 
-    val studentVerificationCode = MutableStateFlow("")
+    private val _event = MutableSharedFlow<StudentVerificationEvent>()
+    val event: SharedFlow<StudentVerificationEvent> = _event.asSharedFlow()
+
+    val verificationCode = MutableStateFlow("")
 
     private val timer: Timer = Timer()
 
@@ -117,9 +123,20 @@ class StudentVerificationViewModel(
 
     fun confirmVerificationCode() {
         viewModelScope.launch {
+            val state = uiState.value as? StudentVerificationUiState.Success ?: return@launch
+
+            if (state.remainTime == MIN_REMAIN_TIME) {
+                _event.emit(StudentVerificationEvent.CodeTimeOut)
+                return@launch
+            }
+
             studentVerificationRepository.requestVerificationCodeConfirm(
-                StudentVerificationCode(studentVerificationCode.value),
-            )
+                StudentVerificationCode(verificationCode.value),
+            ).onSuccess {
+                _event.emit(StudentVerificationEvent.VerificationSuccess)
+            }.onFailure {
+                _event.emit(StudentVerificationEvent.VerificationFailure)
+            }
         }
     }
 
