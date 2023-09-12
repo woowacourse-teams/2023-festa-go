@@ -122,19 +122,16 @@ class StudentVerificationViewModelTest {
     }
 
     @Test
-    fun `이메일 불러오기가 완료되지 않은 상태에서 코드 전송에 성공해도 로딩 상태에서 변경되지 않는다`() {
-        // given
-        `인증 코드 전송하기`(Result.success(Unit))
-
+    fun `이메일 불러오기가 완료되지 않은 상태에서 코드 전송에 성공해도 불러오기 중이다`() {
         // when
-        vm.sendVerificationCode("test", 1)
+        `인증 코드 전송하기`(Result.success(Unit))
 
         // then
         assertThat(vm.uiState.value is StudentVerificationUiState.Loading).isTrue
     }
 
     @Test
-    fun `이메일 불러오기 성공 상태일 때 인증 번호가 유효하다면 인증 코드가 유효함 상태로 변경한다`() {
+    fun `이메일 불러오기 성공일 때 인증 번호가 유효하다면 인증 코드가 유효함 상태로 변경한다`() {
         // given
         `이메일 불러오기`(Result.success("test.com"))
 
@@ -197,7 +194,7 @@ class StudentVerificationViewModelTest {
         }
 
         // when
-        `인증 코드 확인하기`(Result.success(Unit), fakeCode)
+        `인증 코드 확인하기`(result = Result.success(Unit), fakeCode = fakeCode)
 
         // then
         assertThat(deferredEvent.await()).isEqualTo(StudentVerificationEvent.VerificationSuccess)
@@ -218,7 +215,7 @@ class StudentVerificationViewModelTest {
         }
 
         // when
-        `인증 코드 확인하기`(Result.failure(Exception()), fakeCode = fakeCode)
+        `인증 코드 확인하기`(result = Result.failure(Exception()), fakeCode = fakeCode)
 
         // then
         assertThat(deferredEvent.await()).isEqualTo(StudentVerificationEvent.VerificationFailure)
@@ -238,7 +235,7 @@ class StudentVerificationViewModelTest {
         }
 
         // when
-        `인증 코드 확인하기`(Result.success(Unit), fakeCode = fakeCode)
+        `인증 코드 확인하기`(result = Result.success(Unit), fakeCode = fakeCode)
 
         // then
         assertThat(deferredEvent.await()).isEqualTo(StudentVerificationEvent.CodeTimeOut)
