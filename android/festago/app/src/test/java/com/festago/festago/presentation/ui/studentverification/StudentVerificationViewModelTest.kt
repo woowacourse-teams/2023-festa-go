@@ -1,5 +1,6 @@
 package com.festago.festago.presentation.ui.studentverification
 
+import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.StudentVerificationCode
 import com.festago.festago.repository.SchoolRepository
@@ -8,8 +9,6 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -179,7 +178,7 @@ class StudentVerificationViewModelTest {
     }
 
     @Test
-    fun `이메일 불러오기와 인증 코드 전송이 성공일 때 인증 번호 확인이 성공하면 인증 성공 이벤트가 발생한다`() = runTest(testDispatcher) {
+    fun `이메일 불러오기와 인증 코드 전송이 성공일 때 인증 번호 확인이 성공하면 인증 성공 이벤트가 발생한다`() = runTest {
         // given
         `이메일 불러오기`(Result.success("test.com"))
         `인증 코드 전송하기`(Result.success(Unit))
@@ -188,20 +187,18 @@ class StudentVerificationViewModelTest {
 
         vm.verificationCode.value = fakeCode
 
-        // sharedFlow Event 기다리기
-        val deferredEvent = async {
-            vm.event.first()
+        vm.event.test {
+            // when
+            `인증 코드 확인하기`(result = Result.success(Unit), fakeCode = fakeCode)
+
+            // then
+            assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.VerificationSuccess)
+            cancelAndIgnoreRemainingEvents()
         }
-
-        // when
-        `인증 코드 확인하기`(result = Result.success(Unit), fakeCode = fakeCode)
-
-        // then
-        assertThat(deferredEvent.await()).isEqualTo(StudentVerificationEvent.VerificationSuccess)
     }
 
     @Test
-    fun `이메일 불러오기와 인증 코드 전송이 성공일 때 인증 번호 확인이 실패하면 인증 실패 이벤트가 발생한다`() = runTest(testDispatcher) {
+    fun `이메일 불러오기와 인증 코드 전송이 성공일 때 인증 번호 확인이 실패하면 인증 실패 이벤트가 발생한다`() = runTest {
         // given
         `이메일 불러오기`(Result.success("test.com"))
         `인증 코드 전송하기`(Result.success(Unit))
@@ -209,35 +206,46 @@ class StudentVerificationViewModelTest {
         val fakeCode = "123456"
         vm.verificationCode.value = fakeCode
 
-        // sharedFlow Event 기다리기
-        val deferredEvent = async {
-            vm.event.first()
+        vm.event.test {
+            // when
+            `인증 코드 확인하기`(result = Result.failure(Exception()), fakeCode = fakeCode)
+
+            // then
+            assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.VerificationFailure)
+            cancelAndIgnoreRemainingEvents()
         }
-
-        // when
-        `인증 코드 확인하기`(result = Result.failure(Exception()), fakeCode = fakeCode)
-
-        // then
-        assertThat(deferredEvent.await()).isEqualTo(StudentVerificationEvent.VerificationFailure)
     }
 
     @Test
-    fun `이메일 불러오기 성공이고 인증 코드 전송을 하지 않았을 때 타임 아웃 이벤트가 발생한다`() = runTest(testDispatcher) {
+    fun `이메일 불러오기 성공이고 인증 코드 전송을 하지 않았을 때 타임 아웃 이벤트가 발생한다1`() = runTest {
         // given
         `이메일 불러오기`(Result.success("test.com"))
 
         val fakeCode = "123456"
         vm.verificationCode.value = fakeCode
 
-        // sharedFlow Event 기다리기
-        val deferredEvent = async {
-            vm.event.first()
+        vm.event.test {
+            // when
+            `인증 코드 확인하기`(result = Result.success(Unit), fakeCode = fakeCode)
+
+            // then
+            assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.CodeTimeOut)
+            cancelAndIgnoreRemainingEvents()
         }
+    }
 
-        // when
-        `인증 코드 확인하기`(result = Result.success(Unit), fakeCode = fakeCode)
+    @Test
+    fun `이메일 불러오기 전이면 인증 코드 확인하기 요청을 보내도 이벤트가 발생하지 않는다`() = runTest {
+        // given
+        val fakeCode = "123456"
+        vm.verificationCode.value = fakeCode
 
-        // then
-        assertThat(deferredEvent.await()).isEqualTo(StudentVerificationEvent.CodeTimeOut)
+        vm.event.test {
+            // when
+            `인증 코드 확인하기`(result = Result.success(Unit), fakeCode = fakeCode)
+
+            // then
+            expectNoEvents()
+        }
     }
 }
