@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.auth.domain.Role;
-import com.festago.exception.ForbiddenException;
+import com.festago.common.exception.ForbiddenException;
+import com.festago.presentation.auth.AuthenticateContext;
+import com.festago.presentation.auth.RoleArgumentResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

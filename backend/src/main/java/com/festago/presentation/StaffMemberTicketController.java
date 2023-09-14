@@ -1,9 +1,9 @@
 package com.festago.presentation;
 
 
-import com.festago.application.EntryService;
-import com.festago.dto.TicketValidationRequest;
-import com.festago.dto.TicketValidationResponse;
+import com.festago.entry.application.EntryService;
+import com.festago.entry.dto.TicketValidationRequest;
+import com.festago.entry.dto.TicketValidationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

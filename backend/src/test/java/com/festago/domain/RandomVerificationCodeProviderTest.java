@@ -2,7 +2,8 @@ package com.festago.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.infrastructure.RandomVerificationCodeProvider;
+import com.festago.student.domain.VerificationCode;
+import com.festago.student.infrastructure.RandomVerificationCodeProvider;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;

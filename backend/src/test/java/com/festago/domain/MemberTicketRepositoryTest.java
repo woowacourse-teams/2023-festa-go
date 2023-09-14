@@ -2,11 +2,21 @@ package com.festago.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.festago.common.domain.BaseTimeEntity;
 import com.festago.config.JpaAuditingConfig;
+import com.festago.festival.domain.Festival;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.member.domain.Member;
+import com.festago.member.repository.MemberRepository;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
+import com.festago.ticket.repository.TicketRepository;
+import com.festago.ticketing.domain.MemberTicket;
+import com.festago.ticketing.repository.MemberTicketRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

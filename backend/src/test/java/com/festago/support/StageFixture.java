@@ -1,7 +1,7 @@
 package com.festago.support;
 
-import com.festago.domain.Festival;
-import com.festago.domain.Stage;
+import com.festago.festival.domain.Festival;
+import com.festago.stage.domain.Stage;
 import java.time.LocalDateTime;
 
 public class StageFixture {

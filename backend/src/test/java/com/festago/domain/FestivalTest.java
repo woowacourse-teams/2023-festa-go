@@ -3,7 +3,8 @@ package com.festago.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.exception.BadRequestException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.festival.domain.Festival;
 import com.festago.support.FestivalFixture;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

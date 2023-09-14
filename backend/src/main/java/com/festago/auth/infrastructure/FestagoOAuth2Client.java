@@ -1,10 +1,10 @@
 package com.festago.auth.infrastructure;
 
-import com.festago.auth.domain.OAuth2Client;
+import com.festago.auth.application.OAuth2Client;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
-import com.festago.exception.BadRequestException;
-import com.festago.exception.ErrorCode;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;

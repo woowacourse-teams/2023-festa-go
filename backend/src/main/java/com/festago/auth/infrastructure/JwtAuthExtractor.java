@@ -1,10 +1,10 @@
 package com.festago.auth.infrastructure;
 
-import com.festago.auth.domain.AuthExtractor;
+import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.Role;
-import com.festago.exception.ErrorCode;
-import com.festago.exception.UnauthorizedException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

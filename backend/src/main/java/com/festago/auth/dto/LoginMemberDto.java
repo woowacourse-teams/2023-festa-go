@@ -1,6 +1,6 @@
 package com.festago.auth.dto;
 
-import com.festago.domain.Member;
+import com.festago.member.domain.Member;
 
 public record LoginMemberDto(
     boolean isNew,

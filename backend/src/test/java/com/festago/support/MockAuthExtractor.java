@@ -1,8 +1,8 @@
 package com.festago.support;
 
-import com.festago.auth.domain.AuthExtractor;
+import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.presentation.AuthenticateContext;
+import com.festago.presentation.auth.AuthenticateContext;
 
 public class MockAuthExtractor implements AuthExtractor {
 

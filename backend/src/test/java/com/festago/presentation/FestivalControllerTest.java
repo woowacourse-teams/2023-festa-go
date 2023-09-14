@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.FestivalService;
-import com.festago.dto.FestivalDetailResponse;
-import com.festago.dto.FestivalResponse;
-import com.festago.dto.FestivalsResponse;
+import com.festago.festival.application.FestivalService;
+import com.festago.festival.dto.FestivalDetailResponse;
+import com.festago.festival.dto.FestivalResponse;
+import com.festago.festival.dto.FestivalsResponse;
 import com.festago.support.CustomWebMvcTest;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;

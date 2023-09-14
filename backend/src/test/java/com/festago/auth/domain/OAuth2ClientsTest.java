@@ -4,12 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-import com.festago.auth.domain.OAuth2Clients.OAuth2ClientsBuilder;
+import com.festago.auth.application.OAuth2Client;
+import com.festago.auth.application.OAuth2Clients;
+import com.festago.auth.application.OAuth2Clients.OAuth2ClientsBuilder;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
 import com.festago.auth.infrastructure.KakaoOAuth2Client;
 import com.festago.auth.infrastructure.KakaoOAuth2UserInfoClient;
-import com.festago.exception.BadRequestException;
-import com.festago.exception.InternalServerException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.InternalServerException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;

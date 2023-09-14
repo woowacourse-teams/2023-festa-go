@@ -4,9 +4,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.StudentService;
-import com.festago.dto.StudentSendMailRequest;
-import com.festago.dto.StudentVerificateRequest;
+import com.festago.student.application.StudentService;
+import com.festago.student.dto.StudentSendMailRequest;
+import com.festago.student.dto.StudentVerificateRequest;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import org.junit.jupiter.api.DisplayNameGeneration;

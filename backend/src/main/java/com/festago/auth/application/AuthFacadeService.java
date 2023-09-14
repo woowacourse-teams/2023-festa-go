@@ -1,9 +1,6 @@
 package com.festago.auth.application;
 
 import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.AuthProvider;
-import com.festago.auth.domain.OAuth2Client;
-import com.festago.auth.domain.OAuth2Clients;
 import com.festago.auth.domain.Role;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;

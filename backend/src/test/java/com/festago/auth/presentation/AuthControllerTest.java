@@ -14,6 +14,7 @@ import com.festago.auth.domain.Role;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
+import com.festago.presentation.AuthController;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import org.junit.jupiter.api.DisplayNameGeneration;

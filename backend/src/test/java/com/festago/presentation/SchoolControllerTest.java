@@ -7,9 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.SchoolService;
-import com.festago.dto.SchoolResponse;
-import com.festago.dto.SchoolsResponse;
+import com.festago.school.application.SchoolService;
+import com.festago.school.dto.SchoolResponse;
+import com.festago.school.dto.SchoolsResponse;
 import com.festago.support.CustomWebMvcTest;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
