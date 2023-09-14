@@ -1,9 +1,9 @@
-package com.festago.dto;
+package com.festago.ticketing.dto;
 
-import com.festago.domain.EntryState;
-import com.festago.domain.MemberTicket;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.dto.StageResponse;
+import com.festago.ticketing.domain.EntryState;
+import com.festago.ticketing.domain.MemberTicket;
 import java.time.LocalDateTime;
 
 public record MemberTicketResponse(

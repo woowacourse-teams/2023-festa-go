@@ -1,14 +1,15 @@
 package com.festago.domain;
 
-import static com.festago.domain.EntryState.AFTER_ENTRY;
-import static com.festago.domain.EntryState.AWAY;
-import static com.festago.domain.EntryState.BEFORE_ENTRY;
+import static com.festago.ticketing.domain.EntryState.AFTER_ENTRY;
+import static com.festago.ticketing.domain.EntryState.AWAY;
+import static com.festago.ticketing.domain.EntryState.BEFORE_ENTRY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.stage.domain.Stage;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
+import com.festago.ticketing.domain.MemberTicket;
 import com.festago.zfestival.domain.Festival;
 import com.festago.zmember.domain.Member;
 import java.time.LocalDateTime;

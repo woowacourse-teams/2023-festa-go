@@ -11,6 +11,7 @@ import com.festago.support.MemberFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
 import com.festago.ticket.domain.Ticket;
+import com.festago.ticketing.domain.MemberTicket;
 import com.festago.zfestival.domain.Festival;
 import com.festago.zmember.domain.Member;
 import java.time.LocalDateTime;

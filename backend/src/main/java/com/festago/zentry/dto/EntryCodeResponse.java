@@ -1,6 +1,6 @@
-package com.festago.dto;
+package com.festago.zentry.dto;
 
-import com.festago.domain.EntryCode;
+import com.festago.zentry.domain.EntryCode;
 
 public record EntryCodeResponse(
     String code,

@@ -10,6 +10,8 @@ import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
+import com.festago.ticketing.domain.MemberTicket;
+import com.festago.ticketing.repository.MemberTicketRepository;
 import com.festago.zfestival.domain.Festival;
 import com.festago.zfestival.repository.FestivalRepository;
 import com.festago.zmember.domain.Member;

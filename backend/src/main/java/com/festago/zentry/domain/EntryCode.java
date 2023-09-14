@@ -1,4 +1,4 @@
-package com.festago.domain;
+package com.festago.zentry.domain;
 
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;

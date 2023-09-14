@@ -1,6 +1,6 @@
-package com.festago.dto;
+package com.festago.ticketing.dto;
 
-import com.festago.domain.MemberTicket;
+import com.festago.ticketing.domain.MemberTicket;
 import java.time.LocalDateTime;
 
 public record TicketingResponse(

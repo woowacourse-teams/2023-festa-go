@@ -1,7 +1,9 @@
-package com.festago.domain;
+package com.festago.zentry.domain;
 
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
+import com.festago.ticketing.domain.EntryState;
+import com.festago.ticketing.domain.MemberTicket;
 
 public class EntryCodePayload {
 
@@ -14,14 +16,14 @@ public class EntryCodePayload {
         this.entryState = entryState;
     }
 
+    public static EntryCodePayload from(MemberTicket memberTicket) {
+        return new EntryCodePayload(memberTicket.getId(), memberTicket.getEntryState());
+    }
+
     private void validate(Long memberTicketId, EntryState entryState) {
         if (memberTicketId == null || entryState == null) {
             throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_PAYLOAD);
         }
-    }
-
-    public static EntryCodePayload from(MemberTicket memberTicket) {
-        return new EntryCodePayload(memberTicket.getId(), memberTicket.getEntryState());
     }
 
     public Long getMemberTicketId() {

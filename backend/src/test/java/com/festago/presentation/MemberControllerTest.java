@@ -8,9 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.MemberTicketService;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
+import com.festago.ticketing.application.MemberTicketService;
 import com.festago.zmember.application.MemberService;
 import com.festago.zmember.dto.MemberProfileResponse;
 import java.nio.charset.StandardCharsets;

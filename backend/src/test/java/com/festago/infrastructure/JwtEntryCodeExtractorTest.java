@@ -3,9 +3,10 @@ package com.festago.infrastructure;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.festago.domain.EntryCodePayload;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.InternalServerException;
+import com.festago.zentry.domain.EntryCodePayload;
+import com.festago.zentry.infrastructure.JwtEntryCodeExtractor;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

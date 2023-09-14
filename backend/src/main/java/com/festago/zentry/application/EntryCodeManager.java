@@ -1,9 +1,7 @@
-package com.festago.application;
+package com.festago.zentry.application;
 
-import com.festago.domain.EntryCode;
-import com.festago.domain.EntryCodeExtractor;
-import com.festago.domain.EntryCodePayload;
-import com.festago.domain.EntryCodeProvider;
+import com.festago.zentry.domain.EntryCode;
+import com.festago.zentry.domain.EntryCodePayload;
 import java.util.Date;
 import org.springframework.stereotype.Component;
 

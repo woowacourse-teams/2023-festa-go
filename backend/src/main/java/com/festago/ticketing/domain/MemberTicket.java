@@ -1,5 +1,6 @@
-package com.festago.domain;
+package com.festago.ticketing.domain;
 
+import com.festago.domain.BaseTimeEntity;
 import com.festago.stage.domain.Stage;
 import com.festago.ticket.domain.TicketType;
 import com.festago.zmember.domain.Member;

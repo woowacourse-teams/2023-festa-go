@@ -3,11 +3,12 @@ package com.festago.infrastructure;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.festago.domain.EntryCodePayload;
-import com.festago.domain.EntryCodeProvider;
-import com.festago.domain.MemberTicket;
 import com.festago.exception.InternalServerException;
 import com.festago.support.MemberTicketFixture;
+import com.festago.ticketing.domain.MemberTicket;
+import com.festago.zentry.application.EntryCodeProvider;
+import com.festago.zentry.domain.EntryCodePayload;
+import com.festago.zentry.infrastructure.JwtEntryCodeProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.util.Date;

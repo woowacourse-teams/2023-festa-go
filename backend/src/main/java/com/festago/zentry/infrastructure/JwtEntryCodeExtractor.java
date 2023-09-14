@@ -1,10 +1,10 @@
-package com.festago.infrastructure;
+package com.festago.zentry.infrastructure;
 
-import com.festago.domain.EntryCodeExtractor;
-import com.festago.domain.EntryCodePayload;
-import com.festago.domain.EntryState;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
+import com.festago.ticketing.domain.EntryState;
+import com.festago.zentry.application.EntryCodeExtractor;
+import com.festago.zentry.domain.EntryCodePayload;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

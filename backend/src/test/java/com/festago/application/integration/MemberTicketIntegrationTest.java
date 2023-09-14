@@ -2,9 +2,6 @@ package com.festago.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.application.MemberTicketService;
-import com.festago.domain.MemberTicketRepository;
-import com.festago.dto.MemberTicketsResponse;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
@@ -12,6 +9,9 @@ import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
+import com.festago.ticketing.application.MemberTicketService;
+import com.festago.ticketing.dto.MemberTicketsResponse;
+import com.festago.ticketing.repository.MemberTicketRepository;
 import com.festago.zfestival.domain.Festival;
 import com.festago.zfestival.repository.FestivalRepository;
 import com.festago.zmember.domain.Member;

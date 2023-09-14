@@ -1,4 +1,4 @@
-package com.festago.dto;
+package com.festago.ticketing.dto;
 
 import com.festago.zfestival.domain.Festival;
 

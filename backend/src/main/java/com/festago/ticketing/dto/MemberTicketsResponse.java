@@ -1,9 +1,9 @@
-package com.festago.dto;
+package com.festago.ticketing.dto;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-import com.festago.domain.MemberTicket;
+import com.festago.ticketing.domain.MemberTicket;
 import java.util.List;
 
 public record MemberTicketsResponse(

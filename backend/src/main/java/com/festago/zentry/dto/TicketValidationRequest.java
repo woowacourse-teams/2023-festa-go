@@ -1,4 +1,4 @@
-package com.festago.dto;
+package com.festago.zentry.dto;
 
 import jakarta.validation.constraints.NotNull;
 

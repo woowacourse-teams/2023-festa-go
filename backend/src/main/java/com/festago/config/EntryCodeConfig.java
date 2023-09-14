@@ -1,9 +1,9 @@
 package com.festago.config;
 
-import com.festago.domain.EntryCodeExtractor;
-import com.festago.domain.EntryCodeProvider;
-import com.festago.infrastructure.JwtEntryCodeExtractor;
-import com.festago.infrastructure.JwtEntryCodeProvider;
+import com.festago.zentry.application.EntryCodeExtractor;
+import com.festago.zentry.application.EntryCodeProvider;
+import com.festago.zentry.infrastructure.JwtEntryCodeExtractor;
+import com.festago.zentry.infrastructure.JwtEntryCodeProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

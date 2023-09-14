@@ -1,15 +1,15 @@
-package com.festago.application;
+package com.festago.zentry.application;
 
-import com.festago.domain.EntryCode;
-import com.festago.domain.EntryCodePayload;
-import com.festago.domain.MemberTicket;
-import com.festago.domain.MemberTicketRepository;
-import com.festago.dto.EntryCodeResponse;
-import com.festago.dto.TicketValidationRequest;
-import com.festago.dto.TicketValidationResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.ticketing.domain.MemberTicket;
+import com.festago.ticketing.repository.MemberTicketRepository;
+import com.festago.zentry.domain.EntryCode;
+import com.festago.zentry.domain.EntryCodePayload;
+import com.festago.zentry.dto.EntryCodeResponse;
+import com.festago.zentry.dto.TicketValidationRequest;
+import com.festago.zentry.dto.TicketValidationResponse;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;

@@ -5,12 +5,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
-import com.festago.application.TicketingService;
-import com.festago.domain.MemberTicketRepository;
-import com.festago.dto.TicketingRequest;
 import com.festago.exception.BadRequestException;
 import com.festago.stage.domain.Stage;
 import com.festago.support.MemberFixture;
+import com.festago.ticketing.application.TicketingService;
+import com.festago.ticketing.dto.TicketingRequest;
+import com.festago.ticketing.repository.MemberTicketRepository;
 import com.festago.zmember.domain.Member;
 import com.festago.zmember.repository.MemberRepository;
 import java.time.Clock;

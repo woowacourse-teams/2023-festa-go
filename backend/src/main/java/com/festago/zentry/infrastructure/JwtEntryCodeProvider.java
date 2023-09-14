@@ -1,9 +1,9 @@
-package com.festago.infrastructure;
+package com.festago.zentry.infrastructure;
 
-import com.festago.domain.EntryCodePayload;
-import com.festago.domain.EntryCodeProvider;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
+import com.festago.zentry.application.EntryCodeProvider;
+import com.festago.zentry.domain.EntryCodePayload;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
