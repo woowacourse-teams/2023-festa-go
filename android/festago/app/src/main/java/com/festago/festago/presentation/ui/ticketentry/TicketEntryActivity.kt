@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.festago.festago.databinding.ActivityTicketEntryBinding
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -66,7 +65,7 @@ class TicketEntryActivity : AppCompatActivity() {
 
     private fun handleSuccess(uiState: TicketEntryUiState.Success) {
         binding.successState = uiState
-        val ticketCode = uiState.ticketCode.toPresentation()
+        val ticketCode = uiState.ticketCode
 
         val bitmap = BarcodeEncoder().encodeBitmap(
             ticketCode.code,

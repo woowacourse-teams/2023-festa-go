@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-public class Student {
+public class Student extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +32,10 @@ public class Student {
     private String username;
 
     protected Student() {
+    }
+
+    public Student(Member member, School school, String username) {
+        this(null, member, school, username);
     }
 
     public Student(Long id, Member member, School school, String username) {

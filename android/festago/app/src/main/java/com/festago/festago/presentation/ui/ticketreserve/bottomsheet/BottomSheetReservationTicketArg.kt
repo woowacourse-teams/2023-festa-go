@@ -1,10 +1,10 @@
-package com.festago.festago.presentation.model
+package com.festago.festago.presentation.ui.ticketreserve.bottomsheet
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ReservationTicketUiModel(
+data class BottomSheetReservationTicketArg(
     val id: Int,
     val remainAmount: Int,
     val ticketType: String,

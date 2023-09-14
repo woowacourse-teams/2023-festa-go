@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.model.ReservationStage
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
@@ -65,7 +64,7 @@ class TicketReserveViewModel(
                         _event.setValue(
                             TicketReserveEvent.ShowTicketTypes(
                                 stageStartTime,
-                                tickets.map { it.toPresentation() },
+                                tickets,
                             ),
                         )
                     }.onFailure {
@@ -93,7 +92,7 @@ class TicketReserveViewModel(
         lineUp = lineUp,
         startTime = startTime,
         ticketOpenTime = ticketOpenTime,
-        reservationTickets = reservationTickets.map { it.toPresentation() },
+        reservationTickets = reservationTickets,
         canReserve = LocalDateTime.now().isAfter(ticketOpenTime),
         isSigned = authRepository.isSigned,
         onShowStageTickets = ::showTicketTypes,

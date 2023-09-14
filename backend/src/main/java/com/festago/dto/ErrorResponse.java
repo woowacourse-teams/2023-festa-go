@@ -4,7 +4,9 @@ import com.festago.exception.ErrorCode;
 import com.festago.exception.FestaGoException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-public record ErrorResponse(ErrorCode errorCode, String message) {
+public record ErrorResponse(
+    ErrorCode errorCode,
+    String message) {
 
     private static final String NOT_CUSTOM_EXCPETION = "Validation failed";
 

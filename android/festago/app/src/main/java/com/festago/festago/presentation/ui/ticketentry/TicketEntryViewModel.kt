@@ -9,7 +9,6 @@ import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.model.TicketCode
 import com.festago.festago.model.timer.Timer
 import com.festago.festago.model.timer.TimerListener
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.repository.TicketRepository
 import kotlinx.coroutines.launch
 
@@ -50,7 +49,7 @@ class TicketEntryViewModel(
                     ticketRepository.loadTicketCode(ticketId)
                         .onSuccess { ticketCode ->
                             _uiState.value = TicketEntryUiState.Success(
-                                ticket = ticket.toPresentation(),
+                                ticket = ticket,
                                 ticketCode = ticketCode,
                                 remainTime = ticketCode.period,
                             )

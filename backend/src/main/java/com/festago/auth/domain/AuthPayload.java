@@ -9,13 +9,13 @@ public class AuthPayload {
     private final Role role;
 
     public AuthPayload(Long memberId, Role role) {
-        validate(memberId, role);
+        validate(role);
         this.memberId = memberId;
         this.role = role;
     }
 
-    private void validate(Long memberId, Role role) {
-        if (memberId == null || role == null) {
+    private void validate(Role role) {
+        if (role == null) {
             throw new InternalServerException(ErrorCode.INVALID_AUTH_TOKEN_PAYLOAD);
         }
     }
