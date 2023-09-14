@@ -84,7 +84,7 @@ class StudentVerificationViewModelTest {
     }
 
     @Test
-    fun `이메일 불러오기에 성공하면 성공 상태가 된다`() {
+    fun `이메일 불러오기에 성공하면 성공 상태가 되고 이메일이 불러와진다`() {
         // given
         val fakeEmail = "test.com"
 
@@ -94,11 +94,12 @@ class StudentVerificationViewModelTest {
         `이메일을 불러오면`()
 
         // then
-        assertSoftly {
+        assertSoftly { softly ->
             val uiState = vm.uiState.value as? StudentVerificationUiState.Success
 
-            it.assertThat(uiState).isNotNull
-            it.assertThat(uiState?.schoolEmail).isEqualTo(fakeEmail)
+            softly.assertThat(vm.uiState.value)
+                .isExactlyInstanceOf(StudentVerificationUiState.Success::class.java)
+            softly.assertThat(uiState?.schoolEmail).isEqualTo(fakeEmail)
         }
     }
 
@@ -111,7 +112,7 @@ class StudentVerificationViewModelTest {
         `이메일을 불러오면`()
 
         // then
-        assertThat(vm.uiState.value is StudentVerificationUiState.Error).isTrue
+        assertThat(vm.uiState.value).isExactlyInstanceOf(StudentVerificationUiState.Error::class.java)
     }
 
     @Test
@@ -127,12 +128,12 @@ class StudentVerificationViewModelTest {
         `인증 코드를 전송하면`()
 
         // then
-
-        assertSoftly {
+        assertSoftly { softly ->
             val uiState = vm.uiState.value as? StudentVerificationUiState.Success
 
-            it.assertThat(uiState).isNotNull
-            it.assertThat(uiState?.remainTime).isNotEqualTo(beforeRemainTime)
+            softly.assertThat(vm.uiState.value)
+                .isExactlyInstanceOf(StudentVerificationUiState.Success::class.java)
+            softly.assertThat(uiState?.remainTime).isNotEqualTo(beforeRemainTime)
         }
     }
 
@@ -145,7 +146,7 @@ class StudentVerificationViewModelTest {
         `인증 코드를 전송하면`()
 
         // then
-        assertThat(vm.uiState.value).isSameAs(StudentVerificationUiState.Loading)
+        assertThat(vm.uiState.value).isExactlyInstanceOf(StudentVerificationUiState.Loading::class.java)
     }
 
     @Test
@@ -158,11 +159,12 @@ class StudentVerificationViewModelTest {
         `인증 코드를 입력하면`("123456")
 
         // then
-        assertSoftly {
+        assertSoftly { softly ->
             val uiState = vm.uiState.value as? StudentVerificationUiState.Success
 
-            it.assertThat(uiState).isNotNull
-            it.assertThat(uiState?.isValidateCode).isTrue
+            softly.assertThat(vm.uiState.value)
+                .isExactlyInstanceOf(StudentVerificationUiState.Success::class.java)
+            softly.assertThat(uiState?.isValidateCode).isTrue
         }
     }
 
@@ -176,11 +178,12 @@ class StudentVerificationViewModelTest {
         `인증 코드를 입력하면`("1234")
 
         // then
-        assertSoftly {
+        assertSoftly { softly ->
             val uiState = vm.uiState.value as? StudentVerificationUiState.Success
 
-            it.assertThat(uiState).isNotNull
-            it.assertThat(uiState?.isValidateCode).isFalse
+            softly.assertThat(vm.uiState.value)
+                .isExactlyInstanceOf(StudentVerificationUiState.Success::class.java)
+            softly.assertThat(uiState?.isValidateCode).isFalse
         }
     }
 
@@ -227,7 +230,7 @@ class StudentVerificationViewModelTest {
             `인증 코드를 확인하면`()
 
             // then
-            assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.VerificationFailure)
+            assertThat(awaitItem()).isExactlyInstanceOf(StudentVerificationEvent.VerificationFailure::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
