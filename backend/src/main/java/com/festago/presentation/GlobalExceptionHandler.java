@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -57,6 +58,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public GlobalExceptionHandler(AuthenticateContext authenticateContext, Logger errorLogger) {
         this.authenticateContext = authenticateContext;
         this.errorLogger = errorLogger;
+    }
+
+    @ExceptionHandler(InvalidMediaTypeException.class)
+    public ResponseEntity<ErrorResponse> handle(InvalidMediaTypeException e) {
+        return ResponseEntity.badRequest().build();
     }
 
     @ExceptionHandler(BadRequestException.class)
