@@ -1,6 +1,6 @@
 package com.festago.auth.infrastructure;
 
-import com.festago.auth.domain.OAuth2Client;
+import com.festago.auth.application.OAuth2Client;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import org.springframework.stereotype.Component;

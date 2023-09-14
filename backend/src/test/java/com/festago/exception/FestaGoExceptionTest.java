@@ -2,6 +2,9 @@ package com.festago.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.FestaGoException;
+import com.festago.common.exception.InternalServerException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;

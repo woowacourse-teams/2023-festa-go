@@ -1,6 +1,6 @@
 package com.festago.auth.domain;
 
-import com.festago.zmember.domain.Member;
+import com.festago.member.domain.Member;
 
 public record UserInfo(
     String socialId,

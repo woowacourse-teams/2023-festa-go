@@ -7,11 +7,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.entry.application.EntryService;
+import com.festago.entry.dto.TicketValidationRequest;
+import com.festago.entry.dto.TicketValidationResponse;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.ticketing.domain.EntryState;
-import com.festago.zentry.application.EntryService;
-import com.festago.zentry.dto.TicketValidationRequest;
-import com.festago.zentry.dto.TicketValidationResponse;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

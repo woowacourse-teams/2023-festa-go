@@ -1,8 +1,8 @@
 package com.festago.ticket.domain;
 
-import com.festago.domain.BaseTimeEntity;
-import com.festago.exception.BadRequestException;
-import com.festago.exception.ErrorCode;
+import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

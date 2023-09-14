@@ -1,8 +1,8 @@
 package com.festago.presentation;
 
 import com.festago.auth.annotation.Member;
-import com.festago.zmember.application.MemberService;
-import com.festago.zmember.dto.MemberProfileResponse;
+import com.festago.member.application.MemberService;
+import com.festago.member.dto.MemberProfileResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

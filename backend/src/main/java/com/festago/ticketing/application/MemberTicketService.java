@@ -4,14 +4,14 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-import com.festago.exception.BadRequestException;
-import com.festago.exception.ErrorCode;
-import com.festago.exception.NotFoundException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
+import com.festago.member.repository.MemberRepository;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.dto.MemberTicketResponse;
 import com.festago.ticketing.dto.MemberTicketsResponse;
 import com.festago.ticketing.repository.MemberTicketRepository;
-import com.festago.zmember.repository.MemberRepository;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;

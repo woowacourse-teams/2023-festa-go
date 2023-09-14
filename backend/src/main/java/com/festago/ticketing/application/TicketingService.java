@@ -1,8 +1,10 @@
 package com.festago.ticketing.application;
 
-import com.festago.exception.BadRequestException;
-import com.festago.exception.ErrorCode;
-import com.festago.exception.NotFoundException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
+import com.festago.member.domain.Member;
+import com.festago.member.repository.MemberRepository;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketAmount;
 import com.festago.ticket.repository.TicketAmountRepository;
@@ -11,8 +13,6 @@ import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.dto.TicketingRequest;
 import com.festago.ticketing.dto.TicketingResponse;
 import com.festago.ticketing.repository.MemberTicketRepository;
-import com.festago.zmember.domain.Member;
-import com.festago.zmember.repository.MemberRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;

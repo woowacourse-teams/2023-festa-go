@@ -6,16 +6,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 
 import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.AuthProvider;
-import com.festago.auth.domain.OAuth2Clients;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
+import com.festago.member.domain.Member;
 import com.festago.support.MemberFixture;
-import com.festago.zmember.domain.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

@@ -1,7 +1,7 @@
 package com.festago.presentation;
 
-import com.festago.application.SchoolService;
-import com.festago.dto.SchoolsResponse;
+import com.festago.school.application.SchoolService;
+import com.festago.school.dto.SchoolsResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

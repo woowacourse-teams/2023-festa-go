@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.Role;
-import com.festago.exception.InternalServerException;
-import com.festago.exception.UnauthorizedException;
+import com.festago.common.exception.InternalServerException;
+import com.festago.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

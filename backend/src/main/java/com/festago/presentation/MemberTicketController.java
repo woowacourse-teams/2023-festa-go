@@ -1,14 +1,14 @@
 package com.festago.presentation;
 
 import com.festago.auth.annotation.Member;
+import com.festago.entry.application.EntryService;
+import com.festago.entry.dto.EntryCodeResponse;
 import com.festago.ticketing.application.MemberTicketService;
 import com.festago.ticketing.application.TicketingService;
 import com.festago.ticketing.dto.MemberTicketResponse;
 import com.festago.ticketing.dto.MemberTicketsResponse;
 import com.festago.ticketing.dto.TicketingRequest;
 import com.festago.ticketing.dto.TicketingResponse;
-import com.festago.zentry.application.EntryService;
-import com.festago.zentry.dto.EntryCodeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

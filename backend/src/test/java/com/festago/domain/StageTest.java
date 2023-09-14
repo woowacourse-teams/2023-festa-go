@@ -3,10 +3,10 @@ package com.festago.domain;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.exception.BadRequestException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.festival.domain.Festival;
 import com.festago.support.FestivalFixture;
 import com.festago.support.StageFixture;
-import com.festago.zfestival.domain.Festival;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

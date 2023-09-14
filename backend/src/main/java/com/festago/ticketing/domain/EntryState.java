@@ -1,7 +1,7 @@
 package com.festago.ticketing.domain;
 
-import com.festago.exception.ErrorCode;
-import com.festago.exception.InternalServerException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.InternalServerException;
 
 public enum EntryState {
     BEFORE_ENTRY(0),

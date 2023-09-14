@@ -1,9 +1,9 @@
 package com.festago.ticketing.domain;
 
-import com.festago.domain.BaseTimeEntity;
+import com.festago.common.domain.BaseTimeEntity;
+import com.festago.member.domain.Member;
 import com.festago.stage.domain.Stage;
 import com.festago.ticket.domain.TicketType;
-import com.festago.zmember.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

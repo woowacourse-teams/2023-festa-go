@@ -5,14 +5,14 @@ import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 
+import com.festago.festival.domain.Festival;
+import com.festago.festival.repository.FestivalRepository;
 import com.festago.stage.application.StageService;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.dto.StageCreateRequest;
 import com.festago.stage.dto.StageResponse;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
-import com.festago.zfestival.domain.Festival;
-import com.festago.zfestival.repository.FestivalRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;

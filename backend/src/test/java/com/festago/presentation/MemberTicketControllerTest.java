@@ -13,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.entry.application.EntryService;
+import com.festago.entry.dto.EntryCodeResponse;
 import com.festago.stage.dto.StageResponse;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
@@ -24,8 +26,6 @@ import com.festago.ticketing.dto.MemberTicketResponse;
 import com.festago.ticketing.dto.MemberTicketsResponse;
 import com.festago.ticketing.dto.TicketingRequest;
 import com.festago.ticketing.dto.TicketingResponse;
-import com.festago.zentry.application.EntryService;
-import com.festago.zentry.dto.EntryCodeResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.stream.LongStream;

@@ -1,12 +1,12 @@
 package com.festago.auth.config;
 
-import com.festago.auth.domain.AuthExtractor;
+import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.Role;
 import com.festago.auth.infrastructure.CookieTokenExtractor;
 import com.festago.auth.infrastructure.HeaderTokenExtractor;
-import com.festago.auth.presentation.AuthInterceptor;
-import com.festago.auth.presentation.AuthenticateContext;
-import com.festago.auth.presentation.RoleArgumentResolver;
+import com.festago.presentation.auth.AuthInterceptor;
+import com.festago.presentation.auth.AuthenticateContext;
+import com.festago.presentation.auth.RoleArgumentResolver;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

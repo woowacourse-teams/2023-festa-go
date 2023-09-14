@@ -1,8 +1,8 @@
 package com.festago.presentation;
 
-import com.festago.zfestival.application.FestivalService;
-import com.festago.zfestival.dto.FestivalDetailResponse;
-import com.festago.zfestival.dto.FestivalsResponse;
+import com.festago.festival.application.FestivalService;
+import com.festago.festival.dto.FestivalDetailResponse;
+import com.festago.festival.dto.FestivalsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

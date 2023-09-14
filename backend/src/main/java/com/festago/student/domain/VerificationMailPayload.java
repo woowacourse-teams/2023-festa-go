@@ -1,7 +1,7 @@
 package com.festago.student.domain;
 
-import com.festago.exception.ErrorCode;
-import com.festago.exception.InternalServerException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.InternalServerException;
 
 public class VerificationMailPayload {
 

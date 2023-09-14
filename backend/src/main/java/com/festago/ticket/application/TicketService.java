@@ -1,7 +1,7 @@
 package com.festago.ticket.application;
 
-import com.festago.exception.ErrorCode;
-import com.festago.exception.NotFoundException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.ticket.domain.Ticket;

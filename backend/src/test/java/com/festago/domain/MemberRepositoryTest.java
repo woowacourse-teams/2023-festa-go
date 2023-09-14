@@ -3,9 +3,9 @@ package com.festago.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.festago.member.domain.Member;
+import com.festago.member.repository.MemberRepository;
 import com.festago.support.MemberFixture;
-import com.festago.zmember.domain.Member;
-import com.festago.zmember.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
