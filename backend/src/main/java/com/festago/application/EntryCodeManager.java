@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EntryCodeManager {
 
-    private static final int MILLISECOND_FACTOR = 1000;
+    private static final int MILLISECOND_FACTOR = 1_000;
     private static final int DEFAULT_PERIOD = 30;
     private static final int DEFAULT_OFFSET = 10;
 
