@@ -1,6 +1,6 @@
-package com.festago.dto;
+package com.festago.zfestival.dto;
 
-import com.festago.domain.Stage;
+import com.festago.stage.domain.Stage;
 import java.time.LocalDateTime;
 import java.util.List;
 

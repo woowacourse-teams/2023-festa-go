@@ -1,6 +1,6 @@
 package com.festago.dto;
 
-import com.festago.domain.Festival;
+import com.festago.zfestival.domain.Festival;
 
 public record MemberTicketFestivalResponse(
     Long id,

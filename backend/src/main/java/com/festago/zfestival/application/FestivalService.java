@@ -1,18 +1,18 @@
-package com.festago.application;
+package com.festago.zfestival.application;
 
 import static java.util.Comparator.comparing;
 
-import com.festago.domain.Festival;
-import com.festago.domain.FestivalRepository;
-import com.festago.domain.Stage;
-import com.festago.domain.StageRepository;
-import com.festago.dto.FestivalCreateRequest;
-import com.festago.dto.FestivalDetailResponse;
-import com.festago.dto.FestivalResponse;
-import com.festago.dto.FestivalsResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.repository.StageRepository;
+import com.festago.zfestival.domain.Festival;
+import com.festago.zfestival.dto.FestivalCreateRequest;
+import com.festago.zfestival.dto.FestivalDetailResponse;
+import com.festago.zfestival.dto.FestivalResponse;
+import com.festago.zfestival.dto.FestivalsResponse;
+import com.festago.zfestival.repository.FestivalRepository;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,8 @@ package com.festago.dto;
 
 import com.festago.domain.EntryState;
 import com.festago.domain.MemberTicket;
-import com.festago.domain.Stage;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.dto.StageResponse;
 import java.time.LocalDateTime;
 
 public record MemberTicketResponse(

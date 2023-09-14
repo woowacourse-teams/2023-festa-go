@@ -2,12 +2,16 @@ package com.festago.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.festago.stage.domain.Stage;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketType;
 import com.festago.ticket.repository.TicketRepository;
+import com.festago.zfestival.domain.Festival;
+import com.festago.zfestival.repository.FestivalRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

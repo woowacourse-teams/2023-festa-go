@@ -1,5 +1,6 @@
 package com.festago.domain;
 
+import com.festago.stage.domain.Stage;
 import com.festago.ticket.domain.TicketType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

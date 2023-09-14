@@ -3,7 +3,7 @@ package com.festago.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.domain.Stage;
+import com.festago.stage.domain.Stage;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
 import com.festago.ticket.application.TicketService;

@@ -1,9 +1,9 @@
-package com.festago.dto;
+package com.festago.zfestival.dto;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-import com.festago.domain.Festival;
+import com.festago.zfestival.domain.Festival;
 import java.util.List;
 
 public record FestivalsResponse(

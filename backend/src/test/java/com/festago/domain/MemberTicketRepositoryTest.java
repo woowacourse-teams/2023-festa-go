@@ -3,11 +3,15 @@ package com.festago.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.config.JpaAuditingConfig;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
+import com.festago.zfestival.domain.Festival;
+import com.festago.zfestival.repository.FestivalRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

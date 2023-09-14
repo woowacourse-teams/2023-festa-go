@@ -2,7 +2,8 @@ package com.festago.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.domain.Festival;
+import com.festago.zfestival.domain.Festival;
+import com.festago.zfestival.dto.FestivalCreateRequest;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

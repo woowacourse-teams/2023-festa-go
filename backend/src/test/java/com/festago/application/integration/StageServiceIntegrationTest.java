@@ -2,10 +2,10 @@ package com.festago.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.application.StageService;
-import com.festago.domain.FestivalRepository;
-import com.festago.dto.StageCreateRequest;
 import com.festago.exception.NotFoundException;
+import com.festago.stage.application.StageService;
+import com.festago.stage.dto.StageCreateRequest;
+import com.festago.zfestival.repository.FestivalRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.exception.BadRequestException;
 import com.festago.support.FestivalFixture;
+import com.festago.zfestival.domain.Festival;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;

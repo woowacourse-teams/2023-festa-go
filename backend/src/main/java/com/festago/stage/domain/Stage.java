@@ -1,8 +1,10 @@
-package com.festago.domain;
+package com.festago.stage.domain;
 
+import com.festago.domain.BaseTimeEntity;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.ticket.domain.Ticket;
+import com.festago.zfestival.domain.Festival;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

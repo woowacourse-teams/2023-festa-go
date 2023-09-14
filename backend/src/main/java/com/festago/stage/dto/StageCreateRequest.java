@@ -1,4 +1,4 @@
-package com.festago.dto;
+package com.festago.stage.dto;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;

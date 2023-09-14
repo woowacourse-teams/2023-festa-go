@@ -1,6 +1,6 @@
-package com.festago.dto;
+package com.festago.zfestival.dto;
 
-import com.festago.domain.Festival;
+import com.festago.zfestival.domain.Festival;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;

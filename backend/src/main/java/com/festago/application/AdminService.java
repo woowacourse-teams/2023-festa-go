@@ -1,17 +1,17 @@
 package com.festago.application;
 
-import com.festago.domain.Festival;
-import com.festago.domain.FestivalRepository;
-import com.festago.domain.Stage;
-import com.festago.domain.StageRepository;
 import com.festago.dto.AdminFestivalResponse;
 import com.festago.dto.AdminResponse;
 import com.festago.dto.AdminStageResponse;
 import com.festago.dto.AdminTicketResponse;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.repository.StageRepository;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketAmount;
 import com.festago.ticket.domain.TicketEntryTime;
 import com.festago.ticket.repository.TicketRepository;
+import com.festago.zfestival.domain.Festival;
+import com.festago.zfestival.repository.FestivalRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

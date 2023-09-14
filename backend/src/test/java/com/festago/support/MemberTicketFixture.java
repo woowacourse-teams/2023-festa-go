@@ -2,7 +2,7 @@ package com.festago.support;
 
 import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
-import com.festago.domain.Stage;
+import com.festago.stage.domain.Stage;
 import com.festago.ticket.domain.TicketType;
 import java.time.LocalDateTime;
 

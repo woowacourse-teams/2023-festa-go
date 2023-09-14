@@ -1,6 +1,6 @@
 package com.festago.support;
 
-import com.festago.domain.Festival;
+import com.festago.zfestival.domain.Festival;
 import java.time.LocalDate;
 
 public class FestivalFixture {

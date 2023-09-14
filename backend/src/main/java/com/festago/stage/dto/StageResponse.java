@@ -1,6 +1,6 @@
-package com.festago.dto;
+package com.festago.stage.dto;
 
-import com.festago.domain.Stage;
+import com.festago.stage.domain.Stage;
 import java.time.LocalDateTime;
 
 public record StageResponse(

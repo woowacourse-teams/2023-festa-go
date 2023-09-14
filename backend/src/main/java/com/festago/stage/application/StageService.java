@@ -1,13 +1,13 @@
-package com.festago.application;
+package com.festago.stage.application;
 
-import com.festago.domain.Festival;
-import com.festago.domain.FestivalRepository;
-import com.festago.domain.Stage;
-import com.festago.domain.StageRepository;
-import com.festago.dto.StageCreateRequest;
-import com.festago.dto.StageResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.dto.StageCreateRequest;
+import com.festago.stage.dto.StageResponse;
+import com.festago.stage.repository.StageRepository;
+import com.festago.zfestival.domain.Festival;
+import com.festago.zfestival.repository.FestivalRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
