@@ -43,7 +43,7 @@ public class JwtEntryCodeExtractor implements EntryCodeExtractor {
                 .getBody();
         } catch (ExpiredJwtException e) {
             throw new BadRequestException(ErrorCode.EXPIRED_ENTRY_CODE);
-        } catch (JwtException e) {
+        } catch (JwtException | IllegalArgumentException e) {
             throw new BadRequestException(ErrorCode.INVALID_ENTRY_CODE);
         }
     }

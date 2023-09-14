@@ -7,9 +7,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.domain.EntryCodeExtractor;
+import com.festago.domain.EntryCode;
 import com.festago.domain.EntryCodePayload;
-import com.festago.domain.EntryCodeProvider;
 import com.festago.domain.EntryState;
 import com.festago.domain.Festival;
 import com.festago.domain.Member;
@@ -48,10 +47,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class EntryServiceTest {
 
     @Mock
-    EntryCodeProvider entryCodeProvider;
-
-    @Mock
-    EntryCodeExtractor entryCodeExtractor;
+    EntryCodeManager entryCodeManager;
 
     @Mock
     MemberTicketRepository memberTicketRepository;
@@ -181,24 +177,24 @@ class EntryServiceTest {
                 .stage(stage)
                 .entryTime(entryTime)
                 .build();
-            String code = "3112321312123";
+            EntryCode entryCode = new EntryCode("1234", 30, 10);
             Long memberId = memberTicket.getOwner().getId();
             Long memberTicketId = memberTicket.getId();
 
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
-            given(entryCodeProvider.provide(any(), any()))
-                .willReturn(code);
+            given(entryCodeManager.provide(any(EntryCodePayload.class), anyLong()))
+                .willReturn(entryCode);
             given(clock.instant())
                 .willReturn(now);
 
             // when
-            EntryCodeResponse entryCode = entryService.createEntryCode(memberId, memberTicketId);
+            EntryCodeResponse response = entryService.createEntryCode(memberId, memberTicketId);
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(entryCode.code()).isEqualTo(code);
-                softly.assertThat(entryCode.period()).isEqualTo(30);
+                softly.assertThat(response.code()).isEqualTo(entryCode.getCode());
+                softly.assertThat(response.period()).isEqualTo(30);
             });
         }
     }
@@ -213,7 +209,7 @@ class EntryServiceTest {
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
                 .build();
-            given(entryCodeExtractor.extract(anyString()))
+            given(entryCodeManager.extract(anyString()))
                 .willReturn(new EntryCodePayload(1L, EntryState.BEFORE_ENTRY));
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
@@ -235,7 +231,7 @@ class EntryServiceTest {
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
                 .build();
-            given(entryCodeExtractor.extract(anyString()))
+            given(entryCodeManager.extract(anyString()))
                 .willReturn(new EntryCodePayload(1L, EntryState.AFTER_ENTRY));
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));

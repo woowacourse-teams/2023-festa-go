@@ -39,6 +39,16 @@ class JwtEntryCodeExtractorTest {
     }
 
     @Test
+    void 토큰이_null_이면_예외() {
+        String code = null;
+
+        // when & then
+        assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("올바르지 않은 입장코드입니다.");
+    }
+
+    @Test
     void 기간이_만료된_토큰이면_예외() {
         //given
         String code = Jwts.builder()
