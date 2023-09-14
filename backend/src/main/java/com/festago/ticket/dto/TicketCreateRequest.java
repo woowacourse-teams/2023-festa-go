@@ -1,6 +1,6 @@
-package com.festago.dto;
+package com.festago.ticket.dto;
 
-import com.festago.domain.TicketType;
+import com.festago.ticket.domain.TicketType;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;

@@ -1,6 +1,6 @@
-package com.festago.dto;
+package com.festago.ticket.dto;
 
-import com.festago.domain.Ticket;
+import com.festago.ticket.domain.Ticket;
 
 public record TicketCreateResponse(
     Long id) {

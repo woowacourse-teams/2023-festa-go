@@ -1,8 +1,8 @@
 package com.festago.dto;
 
-import com.festago.domain.Ticket;
-import com.festago.domain.TicketAmount;
-import com.festago.domain.TicketType;
+import com.festago.ticket.domain.Ticket;
+import com.festago.ticket.domain.TicketAmount;
+import com.festago.ticket.domain.TicketType;
 
 public record FestivalDetailTicketResponse(
     Long id,

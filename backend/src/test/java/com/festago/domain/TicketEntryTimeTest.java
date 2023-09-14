@@ -3,6 +3,7 @@ package com.festago.domain;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.exception.BadRequestException;
+import com.festago.ticket.domain.TicketEntryTime;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

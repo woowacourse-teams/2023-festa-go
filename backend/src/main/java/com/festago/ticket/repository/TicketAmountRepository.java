@@ -1,5 +1,6 @@
-package com.festago.domain;
+package com.festago.ticket.repository;
 
+import com.festago.ticket.domain.TicketAmount;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

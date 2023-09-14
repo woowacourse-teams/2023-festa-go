@@ -1,5 +1,8 @@
-package com.festago.domain;
+package com.festago.ticket.repository;
 
+import com.festago.domain.Stage;
+import com.festago.ticket.domain.Ticket;
+import com.festago.ticket.domain.TicketType;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

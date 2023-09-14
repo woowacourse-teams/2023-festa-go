@@ -4,13 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.domain.Stage;
-import com.festago.domain.Ticket;
-import com.festago.domain.TicketRepository;
-import com.festago.domain.TicketType;
-import com.festago.dto.StageTicketResponse;
-import com.festago.dto.StageTicketsResponse;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
+import com.festago.ticket.application.TicketService;
+import com.festago.ticket.domain.Ticket;
+import com.festago.ticket.domain.TicketType;
+import com.festago.ticket.dto.StageTicketResponse;
+import com.festago.ticket.dto.StageTicketsResponse;
+import com.festago.ticket.repository.TicketRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -27,7 +28,7 @@ class TicketServiceTest {
 
     @Mock
     TicketRepository ticketRepository;
-    
+
     @InjectMocks
     TicketService ticketService;
 

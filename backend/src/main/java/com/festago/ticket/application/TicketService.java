@@ -1,15 +1,15 @@
-package com.festago.application;
+package com.festago.ticket.application;
 
 import com.festago.domain.Stage;
 import com.festago.domain.StageRepository;
-import com.festago.domain.Ticket;
-import com.festago.domain.TicketRepository;
-import com.festago.domain.TicketType;
-import com.festago.dto.StageTicketsResponse;
-import com.festago.dto.TicketCreateRequest;
-import com.festago.dto.TicketCreateResponse;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.ticket.domain.Ticket;
+import com.festago.ticket.domain.TicketType;
+import com.festago.ticket.dto.StageTicketsResponse;
+import com.festago.ticket.dto.TicketCreateRequest;
+import com.festago.ticket.dto.TicketCreateResponse;
+import com.festago.ticket.repository.TicketRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;

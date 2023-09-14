@@ -2,6 +2,7 @@ package com.festago.domain;
 
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
+import com.festago.ticket.domain.Ticket;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

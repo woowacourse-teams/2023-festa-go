@@ -1,8 +1,8 @@
 package com.festago.support;
 
 import com.festago.domain.Stage;
-import com.festago.domain.Ticket;
-import com.festago.domain.TicketType;
+import com.festago.ticket.domain.Ticket;
+import com.festago.ticket.domain.TicketType;
 
 public class TicketFixture {
 

@@ -1,6 +1,6 @@
 package com.festago.dto;
 
-import com.festago.domain.TicketType;
+import com.festago.ticket.domain.TicketType;
 import java.time.LocalDateTime;
 import java.util.Map;
 

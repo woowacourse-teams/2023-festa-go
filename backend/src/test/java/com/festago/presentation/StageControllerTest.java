@@ -8,11 +8,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.TicketService;
-import com.festago.domain.TicketType;
-import com.festago.dto.StageTicketResponse;
-import com.festago.dto.StageTicketsResponse;
 import com.festago.support.CustomWebMvcTest;
+import com.festago.ticket.application.TicketService;
+import com.festago.ticket.domain.TicketType;
+import com.festago.ticket.dto.StageTicketResponse;
+import com.festago.ticket.dto.StageTicketsResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;

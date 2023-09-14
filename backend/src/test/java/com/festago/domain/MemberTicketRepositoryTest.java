@@ -7,6 +7,7 @@ import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
+import com.festago.ticket.repository.TicketRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
