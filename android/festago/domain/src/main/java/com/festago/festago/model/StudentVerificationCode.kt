@@ -5,7 +5,7 @@ value class StudentVerificationCode(val value: String) {
 
     init {
         require(
-            TextValidator(DIGITS.toList(), CODE_LENGTH).isValid(value),
+            TextValidator.of(DIGITS, CODE_LENGTH).isValid(value),
         ) { ERROR_CODE_VALIDATION }
     }
 

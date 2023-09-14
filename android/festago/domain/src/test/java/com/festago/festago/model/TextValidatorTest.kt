@@ -10,7 +10,10 @@ class TextValidatorTest {
     @ValueSource(strings = ["asdf", "fkwk", "test"])
     fun `알파벳만 허용하고 기대 길이가 4 일 때 다음은 검증된 Text 이다`(text: String) {
         // given
-        val textValidator = TextValidator.of("abcdefghijklmnopqrstuvwxyz", 4)
+        val textValidator = TextValidator.of(
+            allowedCharSequence = "abcdefghijklmnopqrstuvwxyz",
+            expectedLength = 4,
+        )
 
         // when
         val isValidText = textValidator.isValid(text)
@@ -23,7 +26,7 @@ class TextValidatorTest {
     @ValueSource(strings = ["12345", "23456", "20382"])
     fun `숫자만 허용하고 기대 길이가 5 일 때 다음은 검증된 Text 이다`(text: String) {
         // given
-        val textValidator = TextValidator.of("0123456789", 5)
+        val textValidator = TextValidator.of(allowedCharSequence = "0123456789", expectedLength = 5)
 
         // when
         val isValidText = textValidator.isValid(text)
@@ -36,7 +39,7 @@ class TextValidatorTest {
     @ValueSource(strings = ["asd12", "145667", "11"])
     fun `숫자만 허용하고 기대 길이가 4 일 때 다음은 검증된 Text 가 아니다`(text: String) {
         // given
-        val textValidator = TextValidator.of("0123456789", 4)
+        val textValidator = TextValidator.of(allowedCharSequence = "0123456789", expectedLength = 4)
 
         // when
         val isValidText = textValidator.isValid(text)
