@@ -12,13 +12,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class EntryCodeTimeTest {
+class EntryCodeTest {
 
     @ParameterizedTest
     @ValueSource(longs = {0, -1})
     void 입장_코드의_수명이_0_또는_음수이면_예외(long period) {
         // when & then
-        assertThatThrownBy(() -> EntryCodeTime.of(period, 0))
+        assertThatThrownBy(() -> new EntryCode("code", period, 0))
             .isInstanceOf(InternalServerException.class)
             .hasMessage("올바르지 않은 입장코드 유효기간입니다.");
     }
@@ -26,7 +26,7 @@ class EntryCodeTimeTest {
     @Test
     void 입장_코드의_오프셋이_음수이면_예외() {
         // when & tehn
-        assertThatThrownBy(() -> EntryCodeTime.of(30, -1))
+        assertThatThrownBy(() -> new EntryCode("code", 30, -1))
             .isInstanceOf(InternalServerException.class)
             .hasMessage("올바르지 않은 입장코드 오프셋입니다.");
     }
@@ -35,6 +35,6 @@ class EntryCodeTimeTest {
     @ValueSource(longs = {0, 1})
     void 입장_코드의_오프셋이_0이상이면_성공(long offset) {
         assertThatNoException()
-            .isThrownBy(() -> EntryCodeTime.of(30, offset));
+            .isThrownBy(() -> new EntryCode("code", 30, offset));
     }
 }

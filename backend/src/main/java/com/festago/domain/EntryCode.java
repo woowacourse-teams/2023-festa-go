@@ -1,13 +1,35 @@
 package com.festago.domain;
 
+import com.festago.exception.ErrorCode;
+import com.festago.exception.InternalServerException;
+
 public class EntryCode {
 
-    private final String code;
-    private final EntryCodeTime entryCodeTime;
+    private static final int MINIMUM_PERIOD = 0;
+    private static final int MINIMUM_OFFSET = 0;
 
-    public EntryCode(String code, EntryCodeTime entryCodeTime) {
+    private final String code;
+    private final long period;
+    private final long offset;
+
+    public EntryCode(String code, long period, long offset) {
+        validate(period, offset);
         this.code = code;
-        this.entryCodeTime = entryCodeTime;
+        this.period = period;
+        this.offset = offset;
+    }
+
+    private void validate(long period, long offset) {
+        if (period <= MINIMUM_PERIOD) {
+            throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_PERIOD);
+        }
+        if (isNegative(offset)) {
+            throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_OFFSET);
+        }
+    }
+
+    private boolean isNegative(long offset) {
+        return offset < MINIMUM_OFFSET;
     }
 
     public String getCode() {
@@ -15,10 +37,10 @@ public class EntryCode {
     }
 
     public long getPeriod() {
-        return entryCodeTime.getPeriod();
+        return period;
     }
 
     public long getOffset() {
-        return entryCodeTime.getOffset();
+        return offset;
     }
 }
