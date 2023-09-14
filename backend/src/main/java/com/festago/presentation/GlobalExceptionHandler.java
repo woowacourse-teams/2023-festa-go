@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String LOG_FORMAT_INFO = "\n[🔵INFO] - ({} {})\n(id: {}, role: {})\n{}\n {}: {}";
-    private static final String LOG_FORMAT_WARN = "\n[🟠WARN] - ({} {})\n(id: {}, role: {})\n{}";
+    private static final String LOG_FORMAT_WARN = "\n[🟠WARN] - ({} {})\n(id: {}, role: {})\n{}\n {}: {}";
     private static final String LOG_FORMAT_ERROR = "\n[🔴ERROR] - ({} {})\n(id: {}, role: {})";
     // INFO
     /*
@@ -37,7 +37,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         (id: 1, role: MEMBER)
         FOR_TEST_ERROR
          com.festago.exception.InternalServerException: 테스트용 에러입니다.
-          at com.festago.presentation.AdminController.getWarn(AdminController.java:134)
      */
 
     // ERROR
@@ -105,7 +104,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private void logWarn(FestaGoException e, HttpServletRequest request) {
         if (errorLogger.isWarnEnabled()) {
             errorLogger.warn(LOG_FORMAT_WARN, request.getMethod(), request.getRequestURI(), authenticateContext.getId(),
-                authenticateContext.getRole(), e.getErrorCode(), e);
+                authenticateContext.getRole(), e.getErrorCode(),
+                e.getClass().getName(), e.getMessage());
         }
     }
 
