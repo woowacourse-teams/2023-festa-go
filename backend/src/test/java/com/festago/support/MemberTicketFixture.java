@@ -1,9 +1,9 @@
 package com.festago.support;
 
-import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
 import com.festago.stage.domain.Stage;
 import com.festago.ticket.domain.TicketType;
+import com.festago.zmember.domain.Member;
 import java.time.LocalDateTime;
 
 public class MemberTicketFixture {

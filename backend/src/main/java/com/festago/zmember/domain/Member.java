@@ -1,6 +1,7 @@
-package com.festago.domain;
+package com.festago.zmember.domain;
 
 import com.festago.auth.domain.SocialType;
+import com.festago.domain.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

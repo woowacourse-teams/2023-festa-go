@@ -1,8 +1,8 @@
 package com.festago.student.repository;
 
-import com.festago.domain.Member;
 import com.festago.student.domain.StudentCode;
 import com.festago.student.domain.VerificationCode;
+import com.festago.zmember.domain.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

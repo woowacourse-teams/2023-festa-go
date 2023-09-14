@@ -6,13 +6,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 import com.festago.application.TicketingService;
-import com.festago.domain.Member;
-import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.dto.TicketingRequest;
 import com.festago.exception.BadRequestException;
 import com.festago.stage.domain.Stage;
 import com.festago.support.MemberFixture;
+import com.festago.zmember.domain.Member;
+import com.festago.zmember.repository.MemberRepository;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.List;

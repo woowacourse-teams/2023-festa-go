@@ -1,6 +1,6 @@
-package com.festago.dto;
+package com.festago.zmember.dto;
 
-import com.festago.domain.Member;
+import com.festago.zmember.domain.Member;
 
 public record MemberProfileResponse(
     Long memberId,

@@ -1,11 +1,11 @@
 package com.festago.ticket.domain;
 
 import com.festago.domain.BaseTimeEntity;
-import com.festago.domain.Member;
 import com.festago.domain.MemberTicket;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.stage.domain.Stage;
+import com.festago.zmember.domain.Member;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

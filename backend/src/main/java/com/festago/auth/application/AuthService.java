@@ -2,10 +2,10 @@ package com.festago.auth.application;
 
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
-import com.festago.domain.Member;
-import com.festago.domain.MemberRepository;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.zmember.domain.Member;
+import com.festago.zmember.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,7 +1,5 @@
 package com.festago.application;
 
-import com.festago.domain.Member;
-import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.dto.TicketingRequest;
@@ -13,6 +11,8 @@ import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketAmount;
 import com.festago.ticket.repository.TicketAmountRepository;
 import com.festago.ticket.repository.TicketRepository;
+import com.festago.zmember.domain.Member;
+import com.festago.zmember.repository.MemberRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;

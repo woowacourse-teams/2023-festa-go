@@ -10,6 +10,7 @@ import com.festago.support.FestivalFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
 import com.festago.zfestival.domain.Festival;
+import com.festago.zmember.domain.Member;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

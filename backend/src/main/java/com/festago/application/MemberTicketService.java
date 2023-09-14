@@ -4,7 +4,6 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.dto.MemberTicketResponse;
@@ -12,6 +11,7 @@ import com.festago.dto.MemberTicketsResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.zmember.repository.MemberRepository;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;

@@ -2,6 +2,7 @@ package com.festago.domain;
 
 import com.festago.stage.domain.Stage;
 import com.festago.ticket.domain.TicketType;
+import com.festago.zmember.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

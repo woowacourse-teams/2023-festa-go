@@ -3,8 +3,6 @@ package com.festago.application.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.application.MemberTicketService;
-import com.festago.domain.Member;
-import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.dto.MemberTicketsResponse;
 import com.festago.stage.domain.Stage;
@@ -16,6 +14,8 @@ import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
 import com.festago.zfestival.domain.Festival;
 import com.festago.zfestival.repository.FestivalRepository;
+import com.festago.zmember.domain.Member;
+import com.festago.zmember.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;

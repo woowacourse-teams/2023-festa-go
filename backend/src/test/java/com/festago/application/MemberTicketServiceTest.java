@@ -7,8 +7,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.domain.Member;
-import com.festago.domain.MemberRepository;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.dto.MemberTicketResponse;
@@ -19,6 +17,8 @@ import com.festago.stage.domain.Stage;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
+import com.festago.zmember.domain.Member;
+import com.festago.zmember.repository.MemberRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;

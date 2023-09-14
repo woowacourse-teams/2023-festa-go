@@ -12,6 +12,8 @@ import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
 import com.festago.zfestival.domain.Festival;
 import com.festago.zfestival.repository.FestivalRepository;
+import com.festago.zmember.domain.Member;
+import com.festago.zmember.repository.MemberRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

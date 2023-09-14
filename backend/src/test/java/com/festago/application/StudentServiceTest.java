@@ -6,8 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.domain.Member;
-import com.festago.domain.MemberRepository;
 import com.festago.domain.School;
 import com.festago.domain.SchoolRepository;
 import com.festago.exception.BadRequestException;
@@ -22,6 +20,8 @@ import com.festago.student.dto.StudentVerificateRequest;
 import com.festago.student.repository.StudentCodeRepository;
 import com.festago.student.repository.StudentRepository;
 import com.festago.support.MemberFixture;
+import com.festago.zmember.domain.Member;
+import com.festago.zmember.repository.MemberRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
