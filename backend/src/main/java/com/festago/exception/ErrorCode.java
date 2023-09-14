@@ -2,7 +2,7 @@ package com.festago.exception;
 
 public enum ErrorCode {
     // 400
-    INVALID_REQUEST_ARGUMENT("잘못된 요청 데이터입니다."),
+    INVALID_REQUEST_ARGUMENT("잘못된 요청입니다."),
     NOT_MEMBER_TICKET_OWNER("해당 예매 티켓의 주인이 아닙니다."),
     NOT_ENTRY_TIME("입장 가능한 시간이 아닙니다."),
     EXPIRED_ENTRY_CODE("만료된 입장 코드입니다."),
