@@ -28,7 +28,7 @@ public class TicketAmount extends BaseTimeEntity {
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
-    protected TicketAmount() {
+    public TicketAmount() {
     }
 
     public TicketAmount(Ticket ticket) {
