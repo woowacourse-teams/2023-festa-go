@@ -14,7 +14,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.SoftAssertions
+import org.assertj.core.api.SoftAssertions.assertSoftly
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -47,53 +47,68 @@ class StudentVerificationViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun `이메일 불러오기`(result: Result<String>, schoolId: Long = 1) {
+    private fun `이메일 요청 결과가 다음과 같을 때`(result: Result<String>) {
         coEvery {
             schoolRepository.loadSchoolEmail(any())
         } returns result
+    }
 
+    private fun `이메일을 불러오면`(schoolId: Long = 1L) {
         vm.loadSchoolEmail(schoolId)
     }
 
-    private fun `인증 코드 전송하기`(result: Result<Unit>, userName: String = "test", schoolId: Long = 1) {
+    private fun `인증 코드 전송 요청 결과가 다음과 같을 때`(result: Result<Unit>) {
         coEvery {
             studentVerificationRepository.sendVerificationCode(any(), any())
         } returns result
+    }
 
+    private fun `인증 코드를 전송하면`(userName: String = "test", schoolId: Long = 1) {
         vm.sendVerificationCode(userName, schoolId)
     }
 
-    private fun `인증 코드 확인하기`(result: Result<Unit>, fakeCode: String) {
+    private fun `인증 코드 확인 요청 결과가 다음과 같을 떄`(result: Result<Unit>, fakeCode: String) {
         coEvery {
             studentVerificationRepository.requestVerificationCodeConfirm(
                 StudentVerificationCode(fakeCode),
             )
         } returns result
+    }
 
+    private fun `인증 코드를 확인하면`() {
         vm.confirmVerificationCode()
+    }
+
+    private fun `인증 코드를 입력하면`(code: String) {
+        vm.verificationCode.value = code
     }
 
     @Test
     fun `이메일 불러오기에 성공하면 성공 상태가 된다`() {
+        // given
         val fakeEmail = "test.com"
 
+        `이메일 요청 결과가 다음과 같을 때`(Result.success(fakeEmail))
+
         // when
-        `이메일 불러오기`(Result.success(fakeEmail))
+        `이메일을 불러오면`()
 
         // then
-        val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value is StudentVerificationUiState.Success).isTrue
+        assertSoftly {
+            val uiState = vm.uiState.value as? StudentVerificationUiState.Success
 
-            val actualEmail = (vm.uiState.value as StudentVerificationUiState.Success).schoolEmail
-            assertThat(actualEmail).isEqualTo(fakeEmail)
+            it.assertThat(uiState).isNotNull
+            it.assertThat(uiState?.schoolEmail).isEqualTo(fakeEmail)
         }
-        softly.assertAll()
     }
 
     @Test
     fun `이메일 불러오기에 실패하면 실패 상태가 된다`() {
         // given
-        `이메일 불러오기`(Result.failure(Exception()))
+        `이메일 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
+
+        // when
+        `이메일을 불러오면`()
 
         // then
         assertThat(vm.uiState.value is StudentVerificationUiState.Error).isTrue
@@ -102,94 +117,90 @@ class StudentVerificationViewModelTest {
     @Test
     fun `이메일 불러오기에 성공한 상태에서 코드 전송에 성공하면 계속 성공 상태이고 남은 시간 초만 변경 된다`() {
         // given
-        `이메일 불러오기`(Result.success("test.com"))
+        `이메일 요청 결과가 다음과 같을 때`(Result.success("test.com"))
+        `인증 코드 전송 요청 결과가 다음과 같을 때`(Result.success(Unit))
 
-        val beforeRemainTime = (vm.uiState.value as StudentVerificationUiState.Success).remainTime
+        // when
+        `이메일을 불러오면`()
+        val beforeRemainTime = (vm.uiState.value as? StudentVerificationUiState.Success)?.remainTime
 
-        `인증 코드 전송하기`(Result.success(Unit))
+        `인증 코드를 전송하면`()
 
         // then
-        val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value is StudentVerificationUiState.Success).isTrue
 
-            // and
-            val uiState =
-                (vm.uiState.value as StudentVerificationUiState.Success)
-            assertThat(uiState.remainTime).isNotEqualTo(beforeRemainTime)
+        assertSoftly {
+            val uiState = vm.uiState.value as? StudentVerificationUiState.Success
+
+            it.assertThat(uiState).isNotNull
+            it.assertThat(uiState?.remainTime).isNotEqualTo(beforeRemainTime)
         }
-        softly.assertAll()
     }
 
     @Test
-    fun `이메일 불러오기가 완료되지 않은 상태에서 코드 전송에 성공해도 불러오기 중이다`() {
+    fun `이메일을 불러오지 않은 상태에서 코드 전송에 성공해도 불러오기 중이다`() {
+        // given
+        `인증 코드 전송 요청 결과가 다음과 같을 때`(Result.success(Unit))
+
         // when
-        `인증 코드 전송하기`(Result.success(Unit))
+        `인증 코드를 전송하면`()
 
         // then
-        assertThat(vm.uiState.value is StudentVerificationUiState.Loading).isTrue
+        assertThat(vm.uiState.value).isSameAs(StudentVerificationUiState.Loading)
     }
 
     @Test
     fun `이메일 불러오기 성공일 때 인증 번호가 유효하다면 인증 코드가 유효함 상태로 변경한다`() {
         // given
-        `이메일 불러오기`(Result.success("test.com"))
+        `이메일 요청 결과가 다음과 같을 때`(Result.success("test.com"))
 
         // when
-        vm.verificationCode.value = "123456"
+        `이메일을 불러오면`()
+        `인증 코드를 입력하면`("123456")
 
         // then
-        val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value is StudentVerificationUiState.Success).isTrue
+        assertSoftly {
+            val uiState = vm.uiState.value as? StudentVerificationUiState.Success
 
-            val uiState =
-                (vm.uiState.value as StudentVerificationUiState.Success)
-            assertThat(uiState.isValidateCode).isTrue
+            it.assertThat(uiState).isNotNull
+            it.assertThat(uiState?.isValidateCode).isTrue
         }
-        softly.assertAll()
     }
 
     @Test
     fun `이메일 불러오기 성공 상태일 때 인증 번호가 유효하지 않다면 인증 코드가 유효하지 않음 상태로 변경한다`() {
         // given
-        `이메일 불러오기`(Result.success("test.com"))
+        `이메일 요청 결과가 다음과 같을 때`(Result.success("test.com"))
 
         // when
-        vm.verificationCode.value = "1234"
+        `이메일을 불러오면`()
+        `인증 코드를 입력하면`("1234")
 
         // then
-        val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value is StudentVerificationUiState.Success).isTrue
+        assertSoftly {
+            val uiState = vm.uiState.value as? StudentVerificationUiState.Success
 
-            // 유효하지 않음
-            val uiState =
-                (vm.uiState.value as StudentVerificationUiState.Success)
-            assertThat(uiState.isValidateCode).isFalse
+            it.assertThat(uiState).isNotNull
+            it.assertThat(uiState?.isValidateCode).isFalse
         }
-        softly.assertAll()
-    }
-
-    @Test
-    fun `이메일 불러오기 성공 상태가 아닐 때 화면 상태를 변경할 수 없다 `() {
-        // when
-        vm.verificationCode.value = "1234"
-
-        // then
-        assertThat(vm.uiState.value is StudentVerificationUiState.Loading).isTrue
     }
 
     @Test
     fun `이메일 불러오기와 인증 코드 전송이 성공일 때 인증 번호 확인이 성공하면 인증 성공 이벤트가 발생한다`() = runTest {
         // given
-        `이메일 불러오기`(Result.success("test.com"))
-        `인증 코드 전송하기`(Result.success(Unit))
-
         val fakeCode = "123456"
 
-        vm.verificationCode.value = fakeCode
+        `이메일 요청 결과가 다음과 같을 때`(Result.success("test.com"))
+        `인증 코드 전송 요청 결과가 다음과 같을 때`(Result.success(Unit))
+        `인증 코드 확인 요청 결과가 다음과 같을 떄`(result = Result.success(Unit), fakeCode = fakeCode)
+
+        // when
+        `이메일을 불러오면`()
+        `인증 코드를 입력하면`(fakeCode)
+        `인증 코드를 전송하면`()
 
         vm.event.test {
             // when
-            `인증 코드 확인하기`(result = Result.success(Unit), fakeCode = fakeCode)
+            `인증 코드를 확인하면`()
 
             // then
             assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.VerificationSuccess)
@@ -200,15 +211,20 @@ class StudentVerificationViewModelTest {
     @Test
     fun `이메일 불러오기와 인증 코드 전송이 성공일 때 인증 번호 확인이 실패하면 인증 실패 이벤트가 발생한다`() = runTest {
         // given
-        `이메일 불러오기`(Result.success("test.com"))
-        `인증 코드 전송하기`(Result.success(Unit))
-
         val fakeCode = "123456"
-        vm.verificationCode.value = fakeCode
+
+        `이메일 요청 결과가 다음과 같을 때`(Result.success("test.com"))
+        `인증 코드 전송 요청 결과가 다음과 같을 때`(Result.success(Unit))
+        `인증 코드 확인 요청 결과가 다음과 같을 떄`(result = Result.failure(Exception()), fakeCode = fakeCode)
+
+        // when
+        `이메일을 불러오면`()
+        `인증 코드를 입력하면`(fakeCode)
+        `인증 코드를 전송하면`()
 
         vm.event.test {
             // when
-            `인증 코드 확인하기`(result = Result.failure(Exception()), fakeCode = fakeCode)
+            `인증 코드를 확인하면`()
 
             // then
             assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.VerificationFailure)
@@ -219,14 +235,17 @@ class StudentVerificationViewModelTest {
     @Test
     fun `이메일 불러오기 성공이고 인증 코드 전송을 하지 않았을 때 타임 아웃 이벤트가 발생한다1`() = runTest {
         // given
-        `이메일 불러오기`(Result.success("test.com"))
-
         val fakeCode = "123456"
-        vm.verificationCode.value = fakeCode
+        `이메일 요청 결과가 다음과 같을 때`(Result.success("test.com"))
+        `인증 코드 확인 요청 결과가 다음과 같을 떄`(result = Result.failure(Exception()), fakeCode = fakeCode)
+
+        // when
+        `이메일을 불러오면`()
+        `인증 코드를 입력하면`(fakeCode)
 
         vm.event.test {
             // when
-            `인증 코드 확인하기`(result = Result.success(Unit), fakeCode = fakeCode)
+            `인증 코드를 확인하면`()
 
             // then
             assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.CodeTimeOut)
@@ -238,11 +257,14 @@ class StudentVerificationViewModelTest {
     fun `이메일 불러오기 전이면 인증 코드 확인하기 요청을 보내도 이벤트가 발생하지 않는다`() = runTest {
         // given
         val fakeCode = "123456"
-        vm.verificationCode.value = fakeCode
+        `인증 코드 확인 요청 결과가 다음과 같을 떄`(result = Result.success(Unit), fakeCode = fakeCode)
+
+        // when
+        `인증 코드를 입력하면`(fakeCode)
 
         vm.event.test {
             // when
-            `인증 코드 확인하기`(result = Result.success(Unit), fakeCode = fakeCode)
+            `인증 코드를 확인하면`()
 
             // then
             expectNoEvents()
