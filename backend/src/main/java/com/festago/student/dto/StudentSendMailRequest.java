@@ -1,4 +1,4 @@
-package com.festago.dto;
+package com.festago.student.dto;
 
 public record StudentSendMailRequest(
     String username,

@@ -1,9 +1,9 @@
 package com.festago.presentation;
 
-import com.festago.application.StudentService;
 import com.festago.auth.annotation.Member;
-import com.festago.dto.StudentSendMailRequest;
-import com.festago.dto.StudentVerificateRequest;
+import com.festago.student.application.StudentService;
+import com.festago.student.dto.StudentSendMailRequest;
+import com.festago.student.dto.StudentVerificateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

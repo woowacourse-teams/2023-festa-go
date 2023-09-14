@@ -1,5 +1,8 @@
-package com.festago.domain;
+package com.festago.student.domain;
 
+import com.festago.domain.BaseTimeEntity;
+import com.festago.domain.Member;
+import com.festago.domain.School;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
 import jakarta.persistence.Embedded;

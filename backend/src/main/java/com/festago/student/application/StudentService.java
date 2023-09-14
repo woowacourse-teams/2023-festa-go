@@ -1,22 +1,20 @@
-package com.festago.application;
+package com.festago.student.application;
 
-import com.festago.domain.MailClient;
 import com.festago.domain.Member;
 import com.festago.domain.MemberRepository;
 import com.festago.domain.School;
 import com.festago.domain.SchoolRepository;
-import com.festago.domain.Student;
-import com.festago.domain.StudentCode;
-import com.festago.domain.StudentCodeRepository;
-import com.festago.domain.StudentRepository;
-import com.festago.domain.VerificationCode;
-import com.festago.domain.VerificationCodeProvider;
-import com.festago.domain.VerificationMailPayload;
-import com.festago.dto.StudentSendMailRequest;
-import com.festago.dto.StudentVerificateRequest;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.NotFoundException;
+import com.festago.student.domain.Student;
+import com.festago.student.domain.StudentCode;
+import com.festago.student.domain.VerificationCode;
+import com.festago.student.domain.VerificationMailPayload;
+import com.festago.student.dto.StudentSendMailRequest;
+import com.festago.student.dto.StudentVerificateRequest;
+import com.festago.student.repository.StudentCodeRepository;
+import com.festago.student.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

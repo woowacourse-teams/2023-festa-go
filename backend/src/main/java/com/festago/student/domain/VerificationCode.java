@@ -1,4 +1,4 @@
-package com.festago.domain;
+package com.festago.student.domain;
 
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
@@ -9,9 +9,8 @@ import java.util.regex.Pattern;
 @Embeddable
 public class VerificationCode {
 
-    private static final Pattern POSITIVE_REGEX = Pattern.compile("^\\d+$");
     public static final int LENGTH = 6;
-
+    private static final Pattern POSITIVE_REGEX = Pattern.compile("^\\d+$");
     @Column(name = "code")
     private String value;
 

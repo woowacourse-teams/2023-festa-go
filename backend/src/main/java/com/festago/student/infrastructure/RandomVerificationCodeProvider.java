@@ -1,10 +1,10 @@
-package com.festago.infrastructure;
+package com.festago.student.infrastructure;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.joining;
 
-import com.festago.domain.VerificationCode;
-import com.festago.domain.VerificationCodeProvider;
+import com.festago.student.application.VerificationCodeProvider;
+import com.festago.student.domain.VerificationCode;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.stereotype.Component;
