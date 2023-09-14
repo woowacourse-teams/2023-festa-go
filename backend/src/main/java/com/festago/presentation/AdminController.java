@@ -1,6 +1,5 @@
 package com.festago.presentation;
 
-import com.festago.application.AdminService;
 import com.festago.auth.annotation.Admin;
 import com.festago.auth.application.AdminAuthService;
 import com.festago.auth.dto.AdminLoginRequest;
@@ -18,6 +17,7 @@ import com.festago.stage.dto.StageResponse;
 import com.festago.ticket.application.TicketService;
 import com.festago.ticket.dto.TicketCreateRequest;
 import com.festago.ticket.dto.TicketCreateResponse;
+import com.festago.zadmin.application.AdminService;
 import com.festago.zfestival.application.FestivalService;
 import com.festago.zfestival.dto.FestivalCreateRequest;
 import com.festago.zfestival.dto.FestivalResponse;

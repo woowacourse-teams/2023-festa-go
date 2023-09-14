@@ -1,4 +1,4 @@
-package com.festago.application;
+package com.festago.zadmin.application;
 
 import com.festago.dto.AdminFestivalResponse;
 import com.festago.dto.AdminResponse;

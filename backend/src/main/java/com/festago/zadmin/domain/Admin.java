@@ -1,4 +1,4 @@
-package com.festago.auth.domain;
+package com.festago.zadmin.domain;
 
 import com.festago.domain.BaseTimeEntity;
 import jakarta.persistence.Entity;

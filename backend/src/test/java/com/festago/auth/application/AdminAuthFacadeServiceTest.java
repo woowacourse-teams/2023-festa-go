@@ -7,8 +7,6 @@ import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.auth.domain.Admin;
-import com.festago.auth.domain.AdminRepository;
 import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
@@ -16,6 +14,8 @@ import com.festago.auth.dto.AdminSignupResponse;
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ForbiddenException;
 import com.festago.exception.UnauthorizedException;
+import com.festago.zadmin.domain.Admin;
+import com.festago.zadmin.repository.AdminRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

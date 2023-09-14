@@ -1,5 +1,6 @@
-package com.festago.auth.domain;
+package com.festago.zadmin.repository;
 
+import com.festago.zadmin.domain.Admin;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

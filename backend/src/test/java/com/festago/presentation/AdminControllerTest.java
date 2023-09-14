@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.AdminService;
 import com.festago.auth.application.AdminAuthService;
 import com.festago.auth.domain.AuthExtractor;
 import com.festago.auth.domain.Role;
@@ -27,6 +26,7 @@ import com.festago.ticket.application.TicketService;
 import com.festago.ticket.domain.TicketType;
 import com.festago.ticket.dto.TicketCreateRequest;
 import com.festago.ticket.dto.TicketCreateResponse;
+import com.festago.zadmin.application.AdminService;
 import com.festago.zfestival.application.FestivalService;
 import com.festago.zfestival.dto.FestivalCreateRequest;
 import com.festago.zfestival.dto.FestivalResponse;

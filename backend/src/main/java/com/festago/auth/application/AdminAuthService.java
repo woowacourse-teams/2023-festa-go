@@ -1,7 +1,5 @@
 package com.festago.auth.application;
 
-import com.festago.auth.domain.Admin;
-import com.festago.auth.domain.AdminRepository;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.Role;
@@ -12,6 +10,8 @@ import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.ForbiddenException;
 import com.festago.exception.UnauthorizedException;
+import com.festago.zadmin.domain.Admin;
+import com.festago.zadmin.repository.AdminRepository;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
