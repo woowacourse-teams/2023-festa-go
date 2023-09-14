@@ -17,10 +17,11 @@ import com.festago.dto.StageCreateRequest;
 import com.festago.dto.StageResponse;
 import com.festago.dto.TicketCreateRequest;
 import com.festago.dto.TicketCreateResponse;
+import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
 import com.festago.exception.InternalServerException;
-import io.swagger.v3.oas.annotations.Hidden;
 import com.festago.exception.UnauthorizedException;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -131,6 +132,11 @@ public class AdminController {
     @GetMapping("/warn")
     public ResponseEntity<Void> getWarn() {
         throw new InternalServerException(ErrorCode.FOR_TEST_ERROR);
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<Void> getInfo() {
+        throw new BadRequestException(ErrorCode.FOR_TEST_ERROR);
     }
 
     @PostMapping("/initialize")
