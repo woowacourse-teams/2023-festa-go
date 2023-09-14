@@ -78,7 +78,8 @@ public class StudentService {
     public void verificate(Long memberId, StudentVerificateRequest request) {
         validateStudent(memberId);
         Member member = findMember(memberId);
-        StudentCode studentCode = studentCodeRepository.findByCodeAndMember(new VerificationCode(request.code()), member)
+        StudentCode studentCode = studentCodeRepository.findByCodeAndMember(new VerificationCode(request.code()),
+                member)
             .orElseThrow(() -> new BadRequestException(ErrorCode.INVALID_STUDENT_VERIFICATION_CODE));
         studentRepository.save(new Student(member, studentCode.getSchool(), studentCode.getUsername()));
         studentCodeRepository.deleteByMember(member);

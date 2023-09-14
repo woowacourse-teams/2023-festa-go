@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 public class TicketEntryTime extends BaseTimeEntity implements Comparable<TicketEntryTime> {
@@ -47,7 +46,7 @@ public class TicketEntryTime extends BaseTimeEntity implements Comparable<Ticket
     }
 
     private void checkNotNull(LocalDateTime entryTime) {
-        if (Objects.isNull(entryTime)) {
+        if (entryTime == null) {
             throw new IllegalArgumentException("TicketEntryTime 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
         }
     }

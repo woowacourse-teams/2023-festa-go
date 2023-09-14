@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -66,9 +65,9 @@ public class Member extends BaseTimeEntity {
     }
 
     private void checkNotNull(String socialId, SocialType socialType, String nickname) {
-        if (Objects.isNull(socialId) ||
-            Objects.isNull(socialType) ||
-            Objects.isNull(nickname)) {
+        if (socialId == null ||
+            socialType == null ||
+            nickname == null) {
             throw new IllegalArgumentException("Member 는 허용되지 않은 null 값으로 생성할 수 없습니다.");
         }
     }
@@ -82,7 +81,7 @@ public class Member extends BaseTimeEntity {
     }
 
     private boolean overLength(String target, int maxLength) {
-        if (Objects.isNull(target)) {
+        if (target == null) {
             return false;
         }
         return target.length() > maxLength;

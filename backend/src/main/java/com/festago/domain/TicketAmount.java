@@ -9,7 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Min;
-import java.util.Objects;
 
 @Entity
 public class TicketAmount extends BaseTimeEntity {
@@ -41,7 +40,7 @@ public class TicketAmount extends BaseTimeEntity {
     }
 
     private void checkNotNull(Ticket ticket) {
-        if (Objects.isNull(ticket)) {
+        if (ticket == null) {
             throw new IllegalArgumentException("TicketAmount 는 허용되지 않은 null 값으로 생성할 수 없습니다.");
         }
     }

@@ -16,7 +16,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -67,8 +66,8 @@ public class Ticket extends BaseTimeEntity {
     }
 
     private void checkNotNull(Stage stage, TicketType ticketType) {
-        if (Objects.isNull(stage) ||
-            Objects.isNull(ticketType)) {
+        if (stage == null ||
+            ticketType == null) {
             throw new IllegalArgumentException("Ticket 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
         }
     }

@@ -10,7 +10,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 public class Festival extends BaseTimeEntity {
@@ -62,10 +61,10 @@ public class Festival extends BaseTimeEntity {
     }
 
     private void checkNotNull(String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
-        if (Objects.isNull(name) ||
-            Objects.isNull(startDate) ||
-            Objects.isNull(endDate) ||
-            Objects.isNull(thumbnail)) {
+        if (name == null ||
+            startDate == null ||
+            endDate == null ||
+            thumbnail == null) {
             throw new IllegalArgumentException("Festival 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
         }
     }
@@ -78,7 +77,7 @@ public class Festival extends BaseTimeEntity {
     }
 
     private boolean overLength(String target, int maxLength) {
-        if (Objects.isNull(target)) {
+        if (target == null) {
             return false;
         }
         return target.length() > maxLength;

@@ -14,7 +14,6 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Stage extends BaseTimeEntity {
@@ -67,9 +66,9 @@ public class Stage extends BaseTimeEntity {
     }
 
     private void checkNotNull(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
-        if (Objects.isNull(startTime) ||
-            Objects.isNull(ticketOpenTime) ||
-            Objects.isNull(festival)) {
+        if (startTime == null ||
+            ticketOpenTime == null ||
+            festival == null) {
             throw new IllegalArgumentException("Stage 는 허용되지 않은 null 값으로 생성할 수 없습니다.");
         }
     }
@@ -81,7 +80,7 @@ public class Stage extends BaseTimeEntity {
     }
 
     private boolean overLength(String target, int maxLength) {
-        if (Objects.isNull(target)) {
+        if (target == null) {
             return false;
         }
         return target.length() > maxLength;

@@ -68,10 +68,10 @@ public class MemberTicket extends BaseTimeEntity {
     }
 
     private void checkNotNull(Member owner, Stage stage, LocalDateTime entryTime, TicketType ticketType) {
-        if (Objects.isNull(owner) ||
-            Objects.isNull(stage) ||
-            Objects.isNull(entryTime) ||
-            Objects.isNull(ticketType)) {
+        if (owner == null ||
+            stage == null ||
+            entryTime == null ||
+            ticketType == null) {
             throw new IllegalArgumentException("MemberTicket 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
         }
     }
