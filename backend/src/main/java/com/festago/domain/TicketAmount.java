@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Min;
 
 @Entity
 public class TicketAmount extends BaseTimeEntity {
@@ -15,8 +16,10 @@ public class TicketAmount extends BaseTimeEntity {
     @Id
     private Long id;
 
+    @Min(value = 0)
     private int reservedAmount = 0;
 
+    @Min(value = 0)
     private int totalAmount = 0;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -28,7 +31,18 @@ public class TicketAmount extends BaseTimeEntity {
     }
 
     public TicketAmount(Ticket ticket) {
+        validate(ticket);
         this.ticket = ticket;
+    }
+
+    private void validate(Ticket ticket) {
+        checkNotNull(ticket);
+    }
+
+    private void checkNotNull(Ticket ticket) {
+        if (ticket == null) {
+            throw new IllegalArgumentException("TicketAmount 는 허용되지 않은 null 값으로 생성할 수 없습니다.");
+        }
     }
 
     public void increaseReservedAmount() {

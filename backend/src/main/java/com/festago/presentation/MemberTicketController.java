@@ -12,6 +12,7 @@ import com.festago.dto.TicketingResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -53,7 +54,7 @@ public class MemberTicketController {
     @PostMapping
     @Operation(description = "티켓을 예매한다.", summary = "티켓 예매")
     public ResponseEntity<TicketingResponse> ticketing(@Member Long memberId,
-                                                       @RequestBody TicketingRequest request) {
+                                                       @RequestBody @Valid TicketingRequest request) {
         TicketingResponse response = ticketingService.ticketing(memberId, request);
         return ResponseEntity.ok()
             .body(response);

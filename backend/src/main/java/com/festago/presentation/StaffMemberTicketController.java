@@ -6,6 +6,7 @@ import com.festago.dto.TicketValidationRequest;
 import com.festago.dto.TicketValidationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ public class StaffMemberTicketController {
 
     @PostMapping("/validation")
     @Operation(description = "스태프가 티켓을 검사한다.", summary = "티켓 검사")
-    public ResponseEntity<TicketValidationResponse> validate(@RequestBody TicketValidationRequest request) {
+    public ResponseEntity<TicketValidationResponse> validate(@RequestBody @Valid TicketValidationRequest request) {
         TicketValidationResponse response = entryService.validate(request);
         return ResponseEntity.ok()
             .body(response);

@@ -2,7 +2,6 @@ package com.festago.domain;
 
 import com.festago.exception.BadRequestException;
 import com.festago.exception.ErrorCode;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +22,16 @@ public class Stage extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
     private LocalDateTime startTime;
 
+    @Size(max = 255)
     private String lineUp;
 
+    @NotNull
     private LocalDateTime ticketOpenTime;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Festival festival;
 
@@ -41,9 +45,13 @@ public class Stage extends BaseTimeEntity {
         this(null, startTime, lineUp, ticketOpenTime, festival);
     }
 
+    public Stage(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
+        this(null, startTime, null, ticketOpenTime, festival);
+    }
+
     public Stage(Long id, LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime,
                  Festival festival) {
-        validate(startTime, ticketOpenTime, festival);
+        validate(startTime, lineUp, ticketOpenTime, festival);
         this.id = id;
         this.startTime = startTime;
         this.lineUp = lineUp;
@@ -51,7 +59,34 @@ public class Stage extends BaseTimeEntity {
         this.festival = festival;
     }
 
-    private void validate(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
+    private void validate(LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime, Festival festival) {
+        checkNotNull(startTime, ticketOpenTime, festival);
+        checkLength(lineUp);
+        validateTime(startTime, ticketOpenTime, festival);
+    }
+
+    private void checkNotNull(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
+        if (startTime == null ||
+            ticketOpenTime == null ||
+            festival == null) {
+            throw new IllegalArgumentException("Stage 는 허용되지 않은 null 값으로 생성할 수 없습니다.");
+        }
+    }
+
+    private void checkLength(String lineUp) {
+        if (overLength(lineUp, 255)) {
+            throw new IllegalArgumentException("Stage 의 필드로 허용된 범위를 넘은 column 을 넣을 수 없습니다.");
+        }
+    }
+
+    private boolean overLength(String target, int maxLength) {
+        if (target == null) {
+            return false;
+        }
+        return target.length() > maxLength;
+    }
+
+    private void validateTime(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
         if (festival.isNotInDuration(startTime)) {
             throw new BadRequestException(ErrorCode.INVALID_STAGE_START_TIME);
         }

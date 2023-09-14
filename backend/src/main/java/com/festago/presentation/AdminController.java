@@ -23,6 +23,7 @@ import com.festago.exception.InternalServerException;
 import com.festago.exception.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -65,21 +66,21 @@ public class AdminController {
     }
 
     @PostMapping("/festivals")
-    public ResponseEntity<FestivalResponse> createFestival(@RequestBody FestivalCreateRequest request) {
+    public ResponseEntity<FestivalResponse> createFestival(@RequestBody @Valid FestivalCreateRequest request) {
         FestivalResponse response = festivalService.create(request);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @PostMapping("/stages")
-    public ResponseEntity<StageResponse> createStage(@RequestBody StageCreateRequest request) {
+    public ResponseEntity<StageResponse> createStage(@RequestBody @Valid StageCreateRequest request) {
         StageResponse response = stageService.create(request);
         return ResponseEntity.ok()
             .body(response);
     }
 
     @PostMapping("/tickets")
-    public ResponseEntity<TicketCreateResponse> createTicket(@RequestBody TicketCreateRequest request) {
+    public ResponseEntity<TicketCreateResponse> createTicket(@RequestBody @Valid TicketCreateRequest request) {
         TicketCreateResponse response = ticketService.create(request);
         return ResponseEntity.ok()
             .body(response);
@@ -96,7 +97,7 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody AdminLoginRequest request) {
+    public ResponseEntity<Void> login(@RequestBody @Valid AdminLoginRequest request) {
         String token = adminAuthService.login(request);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, getCookie(token))
             .build();
@@ -140,7 +141,7 @@ public class AdminController {
     }
 
     @PostMapping("/initialize")
-    public ResponseEntity<Void> initializeRootAdmin(@RequestBody RootAdminInitializeRequest request) {
+    public ResponseEntity<Void> initializeRootAdmin(@RequestBody @Valid RootAdminInitializeRequest request) {
         adminAuthService.initializeRootAdmin(request.password());
         return ResponseEntity.ok()
             .build();
@@ -152,7 +153,7 @@ public class AdminController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<AdminSignupResponse> signupAdminAccount(@RequestBody AdminSignupRequest request,
+    public ResponseEntity<AdminSignupResponse> signupAdminAccount(@RequestBody @Valid AdminSignupRequest request,
                                                                   @Admin Long adminId) {
         AdminSignupResponse response = adminAuthService.signup(adminId, request);
         return ResponseEntity.ok()
