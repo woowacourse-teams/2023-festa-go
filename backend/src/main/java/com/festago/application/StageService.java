@@ -25,14 +25,13 @@ public class StageService {
 
     public StageResponse create(StageCreateRequest request) {
         Festival festival = findFestivalById(request.festivalId());
-        Stage newStage = stageRepository.save(toStageEntity(request, festival));
-        return StageResponse.from(newStage);
-    }
+        Stage newStage = stageRepository.save(new Stage(
+            request.startTime(),
+            request.lineUp(),
+            request.ticketOpenTime(),
+            festival));
 
-    private Stage toStageEntity(StageCreateRequest request, Festival festival) {
-        return request.lineUp() == null ?
-            new Stage(request.startTime(), request.ticketOpenTime(), festival) :
-            new Stage(request.startTime(), request.lineUp(), request.ticketOpenTime(), festival);
+        return StageResponse.from(newStage);
     }
 
     private Festival findFestivalById(Long festivalId) {
