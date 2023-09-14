@@ -6,6 +6,7 @@ import com.festago.dto.StudentSendMailRequest;
 import com.festago.dto.StudentVerificateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +36,7 @@ public class StudentController {
     @PostMapping("/verification")
     @Operation(description = "학교 인증을 수행한다.", summary = "학생 인증 수행")
     public ResponseEntity<Void> verificate(@Member Long memberId,
-                                           @RequestBody StudentVerificateRequest request) {
+                                           @RequestBody @Valid StudentVerificateRequest request) {
         studentService.verificate(memberId, request);
         return ResponseEntity.ok()
             .build();

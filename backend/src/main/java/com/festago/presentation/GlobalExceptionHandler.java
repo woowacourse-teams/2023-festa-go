@@ -11,18 +11,22 @@ import com.festago.exception.NotFoundException;
 import com.festago.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.InvalidMediaTypeException;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String LOG_FORMAT_INFO = "\n[🔵INFO] - ({} {})\n(id: {}, role: {})\n{}\n {}: {}";
-    private static final String LOG_FORMAT_WARN = "\n[🟠WARN] - ({} {})\n(id: {}, role: {})\n{}";
+    private static final String LOG_FORMAT_WARN = "\n[🟠WARN] - ({} {})\n(id: {}, role: {})\n{}\n {}: {}";
     private static final String LOG_FORMAT_ERROR = "\n[🔴ERROR] - ({} {})\n(id: {}, role: {})";
     // INFO
     /*
@@ -38,7 +42,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         (id: 1, role: MEMBER)
         FOR_TEST_ERROR
          com.festago.exception.InternalServerException: 테스트용 에러입니다.
-          at com.festago.presentation.AdminController.getWarn(AdminController.java:134)
      */
 
     // ERROR
@@ -100,18 +103,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             .body(ErrorResponse.from(ErrorCode.INTERNAL_SERVER_ERROR));
     }
 
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers,
+                                                                  HttpStatusCode status, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse.from(ErrorCode.INVALID_REQUEST_ARGUMENT));
+    }
+
     private void logInfo(FestaGoException e, HttpServletRequest request) {
         if (errorLogger.isInfoEnabled()) {
             errorLogger.info(LOG_FORMAT_INFO, request.getMethod(), request.getRequestURI(), authenticateContext.getId(),
-                authenticateContext.getRole(), e.getErrorCode(),
-                e.getClass().getName(), e.getMessage());
+                authenticateContext.getRole(), e.getErrorCode(), e.getClass().getName(), e.getMessage());
         }
     }
 
     private void logWarn(FestaGoException e, HttpServletRequest request) {
         if (errorLogger.isWarnEnabled()) {
             errorLogger.warn(LOG_FORMAT_WARN, request.getMethod(), request.getRequestURI(), authenticateContext.getId(),
-                authenticateContext.getRole(), e.getErrorCode(), e);
+                authenticateContext.getRole(), e.getErrorCode(), e.getClass().getName(), e.getMessage());
         }
     }
 

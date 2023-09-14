@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -20,19 +22,25 @@ public class MemberTicket extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private EntryState entryState = EntryState.BEFORE_ENTRY;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Member owner;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Stage stage;
 
+    @Min(value = 0)
     private int number;
 
+    @NotNull
     private LocalDateTime entryTime;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private TicketType ticketType;
 
@@ -45,12 +53,33 @@ public class MemberTicket extends BaseTimeEntity {
 
     public MemberTicket(Long id, Member owner, Stage stage, int number, LocalDateTime entryTime,
                         TicketType ticketType) {
+        validate(owner, stage, number, entryTime, ticketType);
         this.id = id;
         this.owner = owner;
         this.stage = stage;
         this.number = number;
         this.entryTime = entryTime;
         this.ticketType = ticketType;
+    }
+
+    private void validate(Member owner, Stage stage, int number, LocalDateTime entryTime, TicketType ticketType) {
+        checkNotNull(owner, stage, entryTime, ticketType);
+        checkScope(number);
+    }
+
+    private void checkNotNull(Member owner, Stage stage, LocalDateTime entryTime, TicketType ticketType) {
+        if (owner == null ||
+            stage == null ||
+            entryTime == null ||
+            ticketType == null) {
+            throw new IllegalArgumentException("MemberTicket 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
+        }
+    }
+
+    private void checkScope(int number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("MemberTicket 의 필드로 허용된 범위를 넘은 column 을 넣을 수 없습니다.");
+        }
     }
 
     public void changeState(EntryState originState) {

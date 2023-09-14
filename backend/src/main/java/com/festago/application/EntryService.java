@@ -1,9 +1,7 @@
 package com.festago.application;
 
 import com.festago.domain.EntryCode;
-import com.festago.domain.EntryCodeExtractor;
 import com.festago.domain.EntryCodePayload;
-import com.festago.domain.EntryCodeProvider;
 import com.festago.domain.MemberTicket;
 import com.festago.domain.MemberTicketRepository;
 import com.festago.dto.EntryCodeResponse;
@@ -21,15 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class EntryService {
 
-    private final EntryCodeProvider entryCodeProvider;
-    private final EntryCodeExtractor entryCodeExtractor;
+    private final EntryCodeManager entryCodeManager;
     private final MemberTicketRepository memberTicketRepository;
     private final Clock clock;
 
-    public EntryService(EntryCodeProvider entryCodeProvider, EntryCodeExtractor entryCodeExtractor,
-                        MemberTicketRepository memberTicketRepository, Clock clock) {
-        this.entryCodeProvider = entryCodeProvider;
-        this.entryCodeExtractor = entryCodeExtractor;
+    public EntryService(EntryCodeManager entryCodeManager, MemberTicketRepository memberTicketRepository, Clock clock) {
+        this.entryCodeManager = entryCodeManager;
         this.memberTicketRepository = memberTicketRepository;
         this.clock = clock;
     }
@@ -42,7 +37,7 @@ public class EntryService {
         if (!memberTicket.canEntry(LocalDateTime.now(clock))) {
             throw new BadRequestException(ErrorCode.NOT_ENTRY_TIME);
         }
-        EntryCode entryCode = EntryCode.create(entryCodeProvider, memberTicket);
+        EntryCode entryCode = entryCodeManager.provide(EntryCodePayload.from(memberTicket), clock.millis());
         return EntryCodeResponse.of(entryCode);
     }
 
@@ -52,7 +47,7 @@ public class EntryService {
     }
 
     public TicketValidationResponse validate(TicketValidationRequest request) {
-        EntryCodePayload entryCodePayload = entryCodeExtractor.extract(request.code());
+        EntryCodePayload entryCodePayload = entryCodeManager.extract(request.code());
         MemberTicket memberTicket = findMemberTicket(entryCodePayload.getMemberTicketId());
         memberTicket.changeState(entryCodePayload.getEntryState());
         return TicketValidationResponse.from(memberTicket);
