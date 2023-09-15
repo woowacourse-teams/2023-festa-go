@@ -1,15 +1,18 @@
 package com.festago.fcm.domain;
 
+import com.festago.common.domain.BaseTimeEntity;
 import com.festago.member.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class MemberFCM {
+@Table(name = "member_fcm")
+public class MemberFCM extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
