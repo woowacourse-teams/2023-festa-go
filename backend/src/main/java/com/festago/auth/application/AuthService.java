@@ -39,9 +39,13 @@ public class AuthService {
 
     private void enrollFcm(Member member, String fcmToken) {
         // TODO : 멤버의 모든 FCM 을 지우지 않기 위해서는 멤버의 디바이스에 대한 식별자가 필요합니다.
+        deleteFCM(member);
+        memberFCMRepository.save(new MemberFCM(member, fcmToken));
+    }
+
+    private void deleteFCM(Member member) {
         List<MemberFCM> originFCMs = memberFCMRepository.findByMemberId(member.getId());
         memberFCMRepository.deleteAll(originFCMs);
-        memberFCMRepository.save(new MemberFCM(member, fcmToken));
     }
 
     private Member signUp(UserInfo userInfo) {
@@ -52,5 +56,6 @@ public class AuthService {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
         memberRepository.delete(member);
+        deleteFCM(member);
     }
 }
