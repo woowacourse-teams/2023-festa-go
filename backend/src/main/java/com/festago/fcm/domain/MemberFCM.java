@@ -26,7 +26,7 @@ public class MemberFCM {
         this(null, member, fcmToken);
     }
 
-    private MemberFCM(Long id, Member member, String fcmToken) {
+    public MemberFCM(Long id, Member member, String fcmToken) {
         validate(member, fcmToken);
         this.id = id;
         this.member = member;
