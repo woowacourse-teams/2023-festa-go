@@ -12,6 +12,7 @@ import com.festago.festago.databinding.FragmentMyPageBinding
 import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.ui.signin.SignInActivity
+import com.festago.festago.presentation.ui.studentverification.StudentVerificationActivity
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryActivity
 
 class MyPageFragment : Fragment(R.layout.fragment_my_page) {
@@ -101,6 +102,10 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
         binding.srlMyPage.setOnRefreshListener {
             vm.loadUserInfo()
+        }
+        // TODO: 학교 선택 화면 변경 필요
+        binding.tvSchoolAuthorization.setOnClickListener {
+            startActivity(StudentVerificationActivity.getIntent(requireContext(), 1L))
         }
     }
 

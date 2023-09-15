@@ -137,6 +137,9 @@ dependencies {
     // Encrypted SharedPreference
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
 
+    // turbine
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+
     // domain
     implementation(project(":domain"))
 }
