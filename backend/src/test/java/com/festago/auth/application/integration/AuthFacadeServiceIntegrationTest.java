@@ -33,7 +33,7 @@ class AuthFacadeServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 회원이_탈퇴하고_재가입하면_새로운_계정으로_가입() {
         // given
-        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "1");
+        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "1", "fcmToken");
         authFacadeService.login(request);
         Member member = memberRepository.findBySocialIdAndSocialType("1", SocialType.FESTAGO).get();
 

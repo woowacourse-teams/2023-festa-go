@@ -45,7 +45,7 @@ class AuthFacadeServiceTest {
 
     @Test
     void 로그인() {
-        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "1");
+        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "1", "fcmToken");
 
         Member member = MemberFixture.member()
             .id(1L)
@@ -54,7 +54,7 @@ class AuthFacadeServiceTest {
         given(authProvider.provide(any(AuthPayload.class)))
             .willReturn("Bearer token");
 
-        given(authService.login(any(UserInfo.class)))
+        given(authService.login(any(UserInfo.class), any()))
             .willReturn(new LoginMemberDto(false, member.getId(), member.getNickname()));
 
         // when

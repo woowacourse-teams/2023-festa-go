@@ -11,6 +11,7 @@ import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
 import com.festago.common.exception.NotFoundException;
+import com.festago.fcm.repository.MemberFCMRepository;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.support.MemberFixture;
@@ -32,6 +33,9 @@ class AuthServiceTest {
     @Mock
     MemberRepository memberRepository;
 
+    @Mock
+    MemberFCMRepository memberFCMRepository;
+
     @InjectMocks
     AuthService authService;
 
@@ -52,7 +56,7 @@ class AuthServiceTest {
                 member.getProfileImage());
 
             // when
-            LoginMemberDto response = authService.login(userInfo);
+            LoginMemberDto response = authService.login(userInfo, "fcmToken");
 
             // then
             assertThat(response.isNew())
@@ -71,7 +75,7 @@ class AuthServiceTest {
                 member.getProfileImage());
 
             // when
-            LoginMemberDto response = authService.login(userInfo);
+            LoginMemberDto response = authService.login(userInfo, "fcmToken");
 
             // then
             assertThat(response.isNew())
