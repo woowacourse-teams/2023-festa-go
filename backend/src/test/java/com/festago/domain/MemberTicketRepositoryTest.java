@@ -58,8 +58,8 @@ class MemberTicketRepositoryTest {
         @Test
         void 성공() {
             // given
-            Member member1 = memberRepository.save(MemberFixture.member().build());
-            Member member2 = memberRepository.save(MemberFixture.member().build());
+            Member member1 = memberRepository.save(MemberFixture.member().socialId("abc").build());
+            Member member2 = memberRepository.save(MemberFixture.member().socialId("def").build());
 
             Festival festival = festivalRepository.save(FestivalFixture.festival().build());
             Stage stage1 = stageRepository.save(StageFixture.stage().festival(festival).build());
