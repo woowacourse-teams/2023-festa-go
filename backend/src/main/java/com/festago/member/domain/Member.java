@@ -22,7 +22,7 @@ import org.hibernate.annotations.Where;
 @Table(
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "UniqueSocialMember",
+            name = "SOCIAL_UNIQUE",
             columnNames = {
                 "socialId",
                 "socialType"

@@ -1,20 +1,28 @@
 package com.festago.admin.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@Table(
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "UNIQUE_USERNAME",
+            columnNames = {"username"}
+        )
+    }
+)
 public class Admin extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String username;
 
     private String password;
