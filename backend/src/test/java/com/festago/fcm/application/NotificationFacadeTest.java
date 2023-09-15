@@ -44,7 +44,7 @@ class NotificationFacadeTest {
 
         EntryProcessEvent event = new EntryProcessEvent(1L);
 
-        // when
+        // when & then
         Assertions.assertThatThrownBy(() -> notificationFacade.receiveEvent(event)).isInstanceOf(InternalServerException.class);
     }
 
