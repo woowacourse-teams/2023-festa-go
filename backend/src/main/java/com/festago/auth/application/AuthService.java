@@ -6,12 +6,16 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class AuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private final MemberRepository memberRepository;
 
@@ -35,6 +39,12 @@ public class AuthService {
     public void deleteMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+        logDeleteMember(member);
         memberRepository.delete(member);
+    }
+
+    private void logDeleteMember(Member member) {
+        log.info("[DELETE MEMBER] memberId: {} / socialType: {} / socialId: {}",
+            member.getId(), member.getSocialType(), member.getSocialId());
     }
 }
