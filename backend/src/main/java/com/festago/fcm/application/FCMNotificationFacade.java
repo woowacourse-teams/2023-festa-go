@@ -19,15 +19,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Service
-public class NotificationFacade {
+public class FCMNotificationFacade {
 
-    private static final Logger logger = LoggerFactory.getLogger(NotificationFacade.class);
+    private static final Logger logger = LoggerFactory.getLogger(FCMNotificationFacade.class);
 
     private final FirebaseMessaging firebaseMessaging;
 
     private final MemberFCMService memberFCMService;
 
-    public NotificationFacade(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
+    public FCMNotificationFacade(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
         this.firebaseMessaging = firebaseMessaging;
         this.memberFCMService = memberFCMService;
     }

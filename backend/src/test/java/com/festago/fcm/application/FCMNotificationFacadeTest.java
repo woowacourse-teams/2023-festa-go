@@ -23,7 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class NotificationFacadeTest {
+class FCMNotificationFacadeTest {
 
     @Mock
     FirebaseMessaging firebaseMessaging;
@@ -32,7 +32,7 @@ class NotificationFacadeTest {
     MemberFCMService memberFCMService;
 
     @InjectMocks
-    NotificationFacade notificationFacade;
+    FCMNotificationFacade FCMNotificationFacade;
 
     @Test
     void 유저의_FCM_요청_중_하나라도_실패하면_예외() throws FirebaseMessagingException {
@@ -45,7 +45,8 @@ class NotificationFacadeTest {
         EntryProcessEvent event = new EntryProcessEvent(1L);
 
         // when & then
-        Assertions.assertThatThrownBy(() -> notificationFacade.receiveEvent(event)).isInstanceOf(InternalServerException.class);
+        Assertions.assertThatThrownBy(() -> FCMNotificationFacade.receiveEvent(event))
+            .isInstanceOf(InternalServerException.class);
     }
 
     private static class MockBatchResponse implements BatchResponse {
