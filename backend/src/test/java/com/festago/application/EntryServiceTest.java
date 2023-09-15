@@ -6,6 +6,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
@@ -14,6 +16,7 @@ import com.festago.entry.application.EntryService;
 import com.festago.entry.domain.EntryCode;
 import com.festago.entry.domain.EntryCodePayload;
 import com.festago.entry.dto.EntryCodeResponse;
+import com.festago.entry.dto.EntryProcessEvent;
 import com.festago.entry.dto.TicketValidationRequest;
 import com.festago.entry.dto.TicketValidationResponse;
 import com.festago.festival.domain.Festival;
@@ -42,6 +45,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -53,6 +57,9 @@ class EntryServiceTest {
 
     @Mock
     MemberTicketRepository memberTicketRepository;
+
+    @Mock
+    ApplicationEventPublisher publisher;
 
     @Spy
     Clock clock = Clock.systemDefaultZone();
@@ -246,6 +253,7 @@ class EntryServiceTest {
                 softly.assertThat(memberTicket.getEntryState()).isEqualTo(EntryState.BEFORE_ENTRY);
                 softly.assertThat(expect.updatedState()).isEqualTo(EntryState.BEFORE_ENTRY);
             });
+            verify(publisher, times(1)).publishEvent(any(EntryProcessEvent.class));
         }
     }
 }
