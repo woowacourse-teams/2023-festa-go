@@ -8,6 +8,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -15,8 +17,19 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
-@SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image = '' WHERE id=?")
+@SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image = '', social_id = null, social_type = null WHERE id=?")
 @Where(clause = "deleted_at is null")
+@Table(
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "UniqueSocialMember",
+            columnNames = {
+                "socialId",
+                "socialType"
+            }
+        )
+    }
+)
 public class Member extends BaseTimeEntity {
 
     private static final String DEFAULT_IMAGE_URL = "https://festa-go.site/images/default-profile.png";
