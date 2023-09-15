@@ -17,7 +17,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
-@SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image = '', social_id = null, social_type = null WHERE id=?")
+@SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image = '', social_id = null WHERE id=?")
 @Where(clause = "deleted_at is null")
 @Table(
     uniqueConstraints = {
@@ -38,7 +38,6 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @Size(max = 255)
     private String socialId;
 
