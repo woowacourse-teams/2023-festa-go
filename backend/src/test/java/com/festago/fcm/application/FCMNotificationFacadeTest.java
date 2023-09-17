@@ -45,7 +45,7 @@ class FCMNotificationFacadeTest {
         EntryProcessEvent event = new EntryProcessEvent(1L);
 
         // when & then
-        Assertions.assertThatThrownBy(() -> FCMNotificationFacade.receiveEvent(event))
+        Assertions.assertThatThrownBy(() -> FCMNotificationFacade.sendFcmNotification(event))
             .isInstanceOf(InternalServerException.class);
     }
 

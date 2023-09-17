@@ -24,7 +24,6 @@ public class FCMNotificationFacade {
     private static final Logger logger = LoggerFactory.getLogger(FCMNotificationFacade.class);
 
     private final FirebaseMessaging firebaseMessaging;
-
     private final MemberFCMService memberFCMService;
 
     public FCMNotificationFacade(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
@@ -34,7 +33,7 @@ public class FCMNotificationFacade {
 
     @TransactionalEventListener
     @Async
-    public void receiveEvent(EntryProcessEvent event) {
+    public void sendFcmNotification(EntryProcessEvent event) {
         // TODO: channelId로 이벤트 구분 하는 로직 필요
         List<Message> messages = createMessages(getMemberFCMToken(event.memberId()), null);
         try {

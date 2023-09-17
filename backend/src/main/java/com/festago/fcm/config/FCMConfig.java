@@ -23,16 +23,6 @@ public class FCMConfig {
     @Value("${fcm.key.scope}")
     private String fireBaseScope;
 
-    private Optional<FirebaseApp> defaultFirebaseApp() {
-        List<FirebaseApp> firebaseAppList = FirebaseApp.getApps();
-        if (firebaseAppList == null || firebaseAppList.isEmpty()) {
-            return Optional.empty();
-        }
-        return firebaseAppList.stream()
-            .filter(firebaseApp -> firebaseApp.getName().equals(FirebaseApp.DEFAULT_APP_NAME))
-            .findAny();
-    }
-
     @Bean
     public FirebaseMessaging firebaseMessaging() throws IOException {
         Optional<FirebaseApp> defaultFirebaseApp = defaultFirebaseApp();
@@ -42,6 +32,16 @@ public class FCMConfig {
         return FirebaseMessaging.getInstance(
             FirebaseApp.initializeApp(createFirebaseOption())
         );
+    }
+
+    private Optional<FirebaseApp> defaultFirebaseApp() {
+        List<FirebaseApp> firebaseAppList = FirebaseApp.getApps();
+        if (firebaseAppList == null || firebaseAppList.isEmpty()) {
+            return Optional.empty();
+        }
+        return firebaseAppList.stream()
+            .filter(firebaseApp -> firebaseApp.getName().equals(FirebaseApp.DEFAULT_APP_NAME))
+            .findAny();
     }
 
     private FirebaseOptions createFirebaseOption() throws IOException {

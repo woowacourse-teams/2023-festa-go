@@ -23,7 +23,8 @@ public class AuthFacadeService {
     }
 
     public LoginResponse login(LoginRequest request) {
-        LoginMemberDto loginMember = authService.login(getUserInfo(request), request.fcmToken());
+        UserInfo userInfo = getUserInfo(request);
+        LoginMemberDto loginMember = authService.login(userInfo, request.fcmToken());
         String accessToken = getAccessToken(loginMember.memberId());
         return LoginResponse.of(accessToken, loginMember);
     }
