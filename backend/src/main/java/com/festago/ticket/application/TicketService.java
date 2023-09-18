@@ -12,22 +12,18 @@ import com.festago.ticket.dto.TicketCreateResponse;
 import com.festago.ticket.repository.TicketRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final StageRepository stageRepository;
     private final Clock clock;
-
-    public TicketService(TicketRepository ticketRepository, StageRepository stageRepository, Clock clock) {
-        this.ticketRepository = ticketRepository;
-        this.stageRepository = stageRepository;
-        this.clock = clock;
-    }
 
     public TicketCreateResponse create(TicketCreateRequest request) {
         Stage stage = findStageById(request.stageId());

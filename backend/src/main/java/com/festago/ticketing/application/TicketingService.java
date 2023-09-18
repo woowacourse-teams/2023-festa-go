@@ -15,11 +15,13 @@ import com.festago.ticketing.dto.TicketingResponse;
 import com.festago.ticketing.repository.MemberTicketRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class TicketingService {
 
     private final MemberTicketRepository memberTicketRepository;
@@ -27,16 +29,6 @@ public class TicketingService {
     private final TicketRepository ticketRepository;
     private final MemberRepository memberRepository;
     private final Clock clock;
-
-    public TicketingService(MemberTicketRepository memberTicketRepository,
-                            TicketAmountRepository ticketAmountRepository,
-                            TicketRepository ticketRepository, MemberRepository memberRepository, Clock clock) {
-        this.memberTicketRepository = memberTicketRepository;
-        this.ticketAmountRepository = ticketAmountRepository;
-        this.ticketRepository = ticketRepository;
-        this.memberRepository = memberRepository;
-        this.clock = clock;
-    }
 
     public TicketingResponse ticketing(Long memberId, TicketingRequest request) {
         Ticket ticket = findTicketById(request.ticketId());

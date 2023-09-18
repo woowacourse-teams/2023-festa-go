@@ -11,8 +11,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Festival extends BaseTimeEntity {
 
     private static final String DEFAULT_THUMBNAIL = "https://picsum.photos/536/354";
@@ -34,9 +37,6 @@ public class Festival extends BaseTimeEntity {
     @NotNull
     @Size(max = 255)
     private String thumbnail;
-
-    protected Festival() {
-    }
 
     public Festival(String name, LocalDate startDate, LocalDate endDate) {
         this(null, name, startDate, endDate, DEFAULT_THUMBNAIL);

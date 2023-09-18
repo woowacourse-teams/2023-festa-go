@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,18 +30,12 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/member-tickets")
 @Tag(name = "유저 티켓 요청")
+@RequiredArgsConstructor
 public class MemberTicketController {
 
     private final EntryService entryService;
     private final MemberTicketService memberTicketService;
     private final TicketingService ticketingService;
-
-    public MemberTicketController(EntryService entryService, MemberTicketService memberTicketService,
-                                  TicketingService ticketingService) {
-        this.entryService = entryService;
-        this.memberTicketService = memberTicketService;
-        this.ticketingService = ticketingService;
-    }
 
     @PostMapping("/{memberTicketId}/qr")
     @Operation(description = "티켓 제시용 QR 코드를 생성한다.", summary = "티켓 제시용 QR 생성")

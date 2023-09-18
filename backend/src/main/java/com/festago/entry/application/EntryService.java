@@ -12,22 +12,18 @@ import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.repository.MemberTicketRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class EntryService {
 
     private final EntryCodeManager entryCodeManager;
     private final MemberTicketRepository memberTicketRepository;
     private final Clock clock;
-
-    public EntryService(EntryCodeManager entryCodeManager, MemberTicketRepository memberTicketRepository, Clock clock) {
-        this.entryCodeManager = entryCodeManager;
-        this.memberTicketRepository = memberTicketRepository;
-        this.clock = clock;
-    }
 
     public EntryCodeResponse createEntryCode(Long memberId, Long memberTicketId) {
         MemberTicket memberTicket = findMemberTicket(memberTicketId);

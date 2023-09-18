@@ -6,21 +6,16 @@ import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthFacadeService {
 
     private final AuthService authService;
     private final OAuth2Clients oAuth2Clients;
     private final AuthProvider authProvider;
-
-    public AuthFacadeService(AuthService authService, OAuth2Clients oAuth2Clients,
-                             AuthProvider authProvider) {
-        this.authService = authService;
-        this.oAuth2Clients = oAuth2Clients;
-        this.authProvider = authProvider;
-    }
 
     public LoginResponse login(LoginRequest request) {
         LoginMemberDto loginMember = authService.login(getUserInfo(request));

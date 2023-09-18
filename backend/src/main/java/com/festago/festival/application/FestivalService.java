@@ -15,20 +15,17 @@ import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import java.time.LocalDate;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class FestivalService {
 
     private final FestivalRepository festivalRepository;
     private final StageRepository stageRepository;
-
-    public FestivalService(FestivalRepository festivalRepository, StageRepository stageRepository) {
-        this.festivalRepository = festivalRepository;
-        this.stageRepository = stageRepository;
-    }
 
     public FestivalResponse create(FestivalCreateRequest request) {
         Festival festival = request.toEntity();
