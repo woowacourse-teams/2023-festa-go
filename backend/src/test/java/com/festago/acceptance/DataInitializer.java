@@ -4,6 +4,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class DataInitializer implements InitializingBean {
 
     private List<String> tableNames;
 
-    private List<String> metaTableNames = List.of(
+    private Set<String> metaTableNames = Set.of(
         "sys_config",
         "flyway_schema_history",
         "CONSTANTS",
