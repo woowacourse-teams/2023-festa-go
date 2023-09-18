@@ -1,7 +1,5 @@
 package com.festago.acceptance;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -10,6 +8,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Profile("test")
 public class DataInitializer implements InitializingBean {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private DataSource dataSource;
@@ -69,16 +68,15 @@ public class DataInitializer implements InitializingBean {
     }
 
     private void truncateAllTables() {
-        entityManager.flush();
-        entityManager.createNativeQuery("SET foreign_key_checks = 0;").executeUpdate();
+        jdbcTemplate.execute("SET foreign_key_checks = 0;");
         tableNames.forEach(
             tableName -> executeQueryWithTable(tableName)
         );
-        entityManager.createNativeQuery("SET foreign_key_checks = 1;").executeUpdate();
+        jdbcTemplate.execute("SET foreign_key_checks = 1;");
     }
 
     private void executeQueryWithTable(String tableName) {
-        entityManager.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
+        jdbcTemplate.execute("TRUNCATE TABLE " + tableName);
     }
 }
 
