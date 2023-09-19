@@ -23,7 +23,6 @@ annotation class NormalRetrofitQualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class AuthRetrofitQualifier
 
-
 @InstallIn(SingletonComponent::class)
 @Module
 object ApiModule {
