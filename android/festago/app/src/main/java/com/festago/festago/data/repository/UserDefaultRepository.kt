@@ -4,8 +4,11 @@ import com.festago.festago.data.service.UserRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
 import com.festago.festago.model.UserProfile
 import com.festago.festago.repository.UserRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserDefaultRepository(
+@Singleton
+class UserDefaultRepository @Inject constructor(
     private val userProfileService: UserRetrofitService,
 ) : UserRepository {
     override suspend fun loadUserProfile(): Result<UserProfile> {

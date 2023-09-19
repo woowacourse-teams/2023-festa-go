@@ -10,9 +10,12 @@ import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.S
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.FestivalRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FestivalListViewModel(
+@HiltViewModel
+class FestivalListViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {

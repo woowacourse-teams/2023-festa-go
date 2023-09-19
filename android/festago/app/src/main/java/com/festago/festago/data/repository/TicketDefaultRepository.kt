@@ -7,8 +7,11 @@ import com.festago.festago.model.ReservedTicket
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCode
 import com.festago.festago.repository.TicketRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TicketDefaultRepository(
+@Singleton
+class TicketDefaultRepository @Inject constructor(
     private val ticketRetrofitService: TicketRetrofitService,
 ) : TicketRepository {
 

@@ -9,6 +9,7 @@ import com.festago.festago.model.timer.Timer
 import com.festago.festago.model.timer.TimerListener
 import com.festago.festago.repository.SchoolRepository
 import com.festago.festago.repository.StudentVerificationRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,8 +17,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StudentVerificationViewModel(
+@HiltViewModel
+class StudentVerificationViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository,
     private val studentVerificationRepository: StudentVerificationRepository,
     private val analyticsHelper: AnalyticsHelper,

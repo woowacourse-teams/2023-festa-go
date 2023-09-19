@@ -7,18 +7,19 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.festago.festago.R
 import com.festago.festago.databinding.ActivityStudentVerificationBinding
-import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.util.repeatOnStarted
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+@AndroidEntryPoint
 class StudentVerificationActivity : AppCompatActivity() {
 
     private val binding: ActivityStudentVerificationBinding by lazy {
         ActivityStudentVerificationBinding.inflate(layoutInflater)
     }
 
-    private val vm: StudentVerificationViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: StudentVerificationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

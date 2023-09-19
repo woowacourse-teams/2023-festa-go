@@ -7,8 +7,11 @@ import com.festago.festago.presentation.ui.home.HomeItemType.TICKET_LIST
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeViewModel(private val authRepository: AuthRepository) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
 
     private val _event = MutableSingleLiveData<HomeEvent>()
     val event: SingleLiveData<HomeEvent> = _event
