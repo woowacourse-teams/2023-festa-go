@@ -6,9 +6,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class TokenLocalDataSource @Inject constructor(
     @ApplicationContext context: Context
 ) : TokenDataSource {

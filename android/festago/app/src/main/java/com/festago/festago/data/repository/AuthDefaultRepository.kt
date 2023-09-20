@@ -6,9 +6,7 @@ import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TokenRepository
 import com.kakao.sdk.user.UserApiClient
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class AuthDefaultRepository @Inject constructor(
     private val userRetrofitService: UserRetrofitService,
     private val tokenRepository: TokenRepository,

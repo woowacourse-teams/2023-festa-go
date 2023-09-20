@@ -5,9 +5,7 @@ import com.festago.festago.data.util.runCatchingWithErrorHandler
 import com.festago.festago.model.UserProfile
 import com.festago.festago.repository.UserRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class UserDefaultRepository @Inject constructor(
     private val userProfileService: UserRetrofitService,
 ) : UserRepository {

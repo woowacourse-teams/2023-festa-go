@@ -3,9 +3,7 @@ package com.festago.festago.data.retrofit
 import com.festago.festago.repository.TokenRepository
 import com.kakao.sdk.auth.TokenManagerProvider
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class TokenManager @Inject constructor(private val tokenRepository: TokenRepository) {
 
     val token: String

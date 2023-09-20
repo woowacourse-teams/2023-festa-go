@@ -6,9 +6,7 @@ import com.festago.festago.model.Festival
 import com.festago.festago.model.Reservation
 import com.festago.festago.repository.FestivalRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class FestivalDefaultRepository @Inject constructor(
     private val festivalRetrofitService: FestivalRetrofitService,
 ) : FestivalRepository {
