@@ -14,13 +14,16 @@ public class MemberFCM extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final Long id;
+    private Long id;
 
     @NotNull
-    private final Long memberId;
+    private Long memberId;
 
     @NotNull
-    private final String fcmToken;
+    private String fcmToken;
+
+    protected MemberFCM() {
+    }
 
     public MemberFCM(Long memberId, String fcmToken) {
         this(null, memberId, fcmToken);
