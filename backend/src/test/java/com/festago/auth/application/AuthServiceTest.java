@@ -6,12 +6,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
+import com.festago.auth.dto.event.MemberDeleteEvent;
+import com.festago.auth.dto.event.MemberLoginEvent;
 import com.festago.common.exception.NotFoundException;
-import com.festago.fcm.repository.MemberFCMRepository;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.support.MemberFixture;
@@ -24,6 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -34,7 +38,7 @@ class AuthServiceTest {
     MemberRepository memberRepository;
 
     @Mock
-    MemberFCMRepository memberFCMRepository;
+    ApplicationEventPublisher publisher;
 
     @InjectMocks
     AuthService authService;
@@ -61,6 +65,7 @@ class AuthServiceTest {
             // then
             assertThat(response.isNew())
                 .isTrue();
+            verify(publisher, times(1)).publishEvent(any(MemberLoginEvent.class));
         }
 
         @Test
@@ -80,6 +85,7 @@ class AuthServiceTest {
             // then
             assertThat(response.isNew())
                 .isFalse();
+            verify(publisher, times(1)).publishEvent(any(MemberLoginEvent.class));
         }
     }
 
@@ -110,6 +116,7 @@ class AuthServiceTest {
             // when & then
             assertThatNoException()
                 .isThrownBy(() -> authService.deleteMember(memberId));
+            verify(publisher, times(1)).publishEvent(any(MemberDeleteEvent.class));
         }
     }
 }

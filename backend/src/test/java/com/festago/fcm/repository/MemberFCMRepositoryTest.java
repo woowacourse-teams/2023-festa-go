@@ -24,10 +24,11 @@ class MemberFCMRepositoryTest {
     void member_의_MemberFCM_을_찾을_수_있다() {
         // given
         Member member = memberRepository.save(new Member("socialId", SocialType.FESTAGO, "nickname", "image.jpg"));
-        MemberFCM expect = memberFCMRepository.save(new MemberFCM(member, "fcmToken"));
+        Long memberId = member.getId();
+        MemberFCM expect = memberFCMRepository.save(new MemberFCM(memberId, "fcmToken"));
 
         // when
-        List<MemberFCM> actual = memberFCMRepository.findByMemberId(member.getId());
+        List<MemberFCM> actual = memberFCMRepository.findByMemberId(memberId);
 
         // then
         assertThat(actual).contains(expect);

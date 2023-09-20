@@ -27,7 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @ExtendWith(MockitoExtension.class)
-class FCMEventListenerTest {
+class FCMNotificationEventListenerTest {
 
     @Mock
     FirebaseMessaging firebaseMessaging;
@@ -36,7 +36,7 @@ class FCMEventListenerTest {
     MemberFCMService memberFCMService;
 
     @InjectMocks
-    FCMEventListener FCMEventListener;
+    FCMNotificationEventListener FCMNotificationEventListener;
 
     @Test
     void 유저의_FCM_요청_중_하나라도_실패하면_예외() throws FirebaseMessagingException {
@@ -49,7 +49,7 @@ class FCMEventListenerTest {
         EntryProcessEvent event = new EntryProcessEvent(1L);
 
         // when & then
-        Assertions.assertThatThrownBy(() -> FCMEventListener.sendFcmNotification(event))
+        Assertions.assertThatThrownBy(() -> FCMNotificationEventListener.sendFcmNotification(event))
             .isInstanceOf(InternalServerException.class);
     }
 

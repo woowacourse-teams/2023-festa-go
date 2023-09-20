@@ -22,14 +22,14 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @Profile("!test")
 @Component
-public class FCMEventListener {
+public class FCMNotificationEventListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(FCMEventListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(FCMNotificationEventListener.class);
 
     private final FirebaseMessaging firebaseMessaging;
     private final MemberFCMService memberFCMService;
 
-    public FCMEventListener(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
+    public FCMNotificationEventListener(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
         this.firebaseMessaging = firebaseMessaging;
         this.memberFCMService = memberFCMService;
     }
@@ -79,12 +79,12 @@ public class FCMEventListener {
             .build();
     }
 
-    private void checkAllSuccess(BatchResponse batchResponse, Long memberid) {
+    private void checkAllSuccess(BatchResponse batchResponse, Long memberId) {
         List<SendResponse> failSend = batchResponse.getResponses().stream()
             .filter(sendResponse -> !sendResponse.isSuccessful())
             .toList();
 
-        logger.warn("member {} 에 대한 다음 요청들이 실패했습니다. {}", memberid, failSend);
+        logger.warn("member {} 에 대한 다음 요청들이 실패했습니다. {}", memberId, failSend);
         throw new InternalServerException(ErrorCode.FAIL_SEND_FCM_MESSAGE);
     }
 }

@@ -11,7 +11,7 @@ public record MemberFCMResponse(
     public static MemberFCMResponse from(MemberFCM memberFCM) {
         return new MemberFCMResponse(
             memberFCM.getId(),
-            memberFCM.getMember().getId(),
+            memberFCM.getMemberId(),
             memberFCM.getFcmToken()
         );
     }
