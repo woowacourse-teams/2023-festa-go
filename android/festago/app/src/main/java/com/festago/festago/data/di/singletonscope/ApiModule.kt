@@ -1,4 +1,4 @@
-package com.festago.festago.data.di
+package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.BuildConfig
 import com.festago.festago.data.retrofit.AuthInterceptor

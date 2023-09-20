@@ -1,4 +1,4 @@
-package com.festago.festago.data.di
+package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.FirebaseAnalyticsHelper

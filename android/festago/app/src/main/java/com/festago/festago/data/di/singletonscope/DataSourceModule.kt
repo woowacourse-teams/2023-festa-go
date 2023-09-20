@@ -1,4 +1,4 @@
-package com.festago.festago.data.di
+package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.data.datasource.TokenDataSource
 import com.festago.festago.data.datasource.TokenLocalDataSource
