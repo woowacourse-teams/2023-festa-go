@@ -33,7 +33,6 @@ public class TicketService {
     public TicketCreateResponse create(TicketCreateRequest request) {
         Stage stage = findStageById(request.stageId());
         TicketType ticketType = request.ticketType();
-        // TODO: n+1
         School school = stage.getFestival().getSchool();
 
         Ticket ticket = ticketRepository.findByTicketTypeAndStage(ticketType, stage)
@@ -45,7 +44,7 @@ public class TicketService {
     }
 
     private Stage findStageById(Long stageId) {
-        return stageRepository.findById(stageId)
+        return stageRepository.findByIdWithFetch(stageId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.STAGE_NOT_FOUND));
     }
 
