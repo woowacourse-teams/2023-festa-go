@@ -3,6 +3,7 @@ package com.festago.fcm.application;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 import com.festago.entry.dto.event.EntryProcessEvent;
+import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.MemberFCMResponse;
 import com.google.firebase.messaging.AndroidConfig;
 import com.google.firebase.messaging.AndroidNotification;
@@ -37,8 +38,7 @@ public class FCMNotificationEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     public void sendFcmNotification(EntryProcessEvent event) {
-        // TODO: channelId로 이벤트 구분 하는 로직 필요
-        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()), null);
+        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()), FCMChannel.NOT_DEFINED.name());
         try {
             BatchResponse batchResponse = firebaseMessaging.sendAll(messages);
             checkAllSuccess(batchResponse, event.memberId());
