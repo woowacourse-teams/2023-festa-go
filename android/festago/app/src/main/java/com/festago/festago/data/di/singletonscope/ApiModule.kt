@@ -23,6 +23,10 @@ annotation class NormalRetrofitQualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class AuthRetrofitQualifier
 
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class BaseUrlQualifier
+
 @InstallIn(SingletonComponent::class)
 @Module
 object ApiModule {
@@ -37,7 +41,7 @@ object ApiModule {
     @Provides
     @Singleton
     @NormalRetrofitQualifier
-    fun providesNormalRetrofit(baseUrl: String): Retrofit = Retrofit.Builder()
+    fun providesNormalRetrofit(@BaseUrlQualifier baseUrl: String): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
@@ -45,14 +49,17 @@ object ApiModule {
     @Provides
     @Singleton
     @AuthRetrofitQualifier
-    fun providesAuthRetrofit(baseUrl: String, okHttpClient: OkHttpClient): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-            .build()
+    fun providesAuthRetrofit(
+        @BaseUrlQualifier baseUrl: String,
+        okHttpClient: OkHttpClient
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .client(okHttpClient)
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .build()
 
     @Provides
     @Singleton
+    @BaseUrlQualifier
     fun providesBaseUrl(): String = BuildConfig.BASE_URL
 }
