@@ -3,8 +3,9 @@ package com.festago.festago.data.repository
 import com.festago.festago.data.service.StudentVerificationRetrofitService
 import com.festago.festago.model.StudentVerificationCode
 import com.festago.festago.repository.StudentVerificationRepository
+import javax.inject.Inject
 
-class StudentVerificationDefaultRepository(
+class StudentVerificationDefaultRepository @Inject constructor(
     private val studentVerificationRetrofitService: StudentVerificationRetrofitService,
 ) : StudentVerificationRepository {
 

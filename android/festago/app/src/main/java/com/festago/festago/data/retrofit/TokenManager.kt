@@ -2,8 +2,9 @@ package com.festago.festago.data.retrofit
 
 import com.festago.festago.repository.TokenRepository
 import com.kakao.sdk.auth.TokenManagerProvider
+import javax.inject.Inject
 
-class TokenManager(private val tokenRepository: TokenRepository) {
+class TokenManager @Inject constructor(private val tokenRepository: TokenRepository) {
 
     val token: String
         get() = tokenRepository.token ?: NULL_TOKEN

@@ -9,6 +9,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("org.jlleitschuh.gradle.ktlint")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -63,12 +64,23 @@ kotlin {
     jvmToolchain(17)
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
+    // domain
+    implementation(project(":domain"))
+
     // android
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     // recyclerview
     implementation("androidx.recyclerview:recyclerview:1.3.1-rc01")
@@ -139,9 +151,6 @@ dependencies {
 
     // turbine
     testImplementation("app.cash.turbine:turbine:1.0.0")
-
-    // domain
-    implementation(project(":domain"))
 }
 
 fun getSecretKey(propertyKey: String): String {

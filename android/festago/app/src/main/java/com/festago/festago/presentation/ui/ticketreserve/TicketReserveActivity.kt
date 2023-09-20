@@ -10,7 +10,6 @@ import com.festago.festago.R
 import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.model.ReservationTicket
 import com.festago.festago.model.ReservedTicket
-import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.reservationcomplete.ReservationCompleteActivity
 import com.festago.festago.presentation.ui.reservationcomplete.ReservedTicketArg
@@ -23,14 +22,16 @@ import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAd
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.BottomSheetReservationTicketArg
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+@AndroidEntryPoint
 class TicketReserveActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTicketReserveBinding
 
-    private val vm: TicketReserveViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: TicketReserveViewModel by viewModels()
 
     private val contentsAdapter by lazy { TicketReserveAdapter() }
     private val headerAdapter by lazy { TicketReserveHeaderAdapter() }
