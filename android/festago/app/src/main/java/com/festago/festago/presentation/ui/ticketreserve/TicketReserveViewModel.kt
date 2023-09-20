@@ -13,10 +13,13 @@ import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
 import com.festago.festago.repository.ReservationTicketRepository
 import com.festago.festago.repository.TicketRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class TicketReserveViewModel(
+@HiltViewModel
+class TicketReserveViewModel @Inject constructor(
     private val reservationTicketRepository: ReservationTicketRepository,
     private val festivalRepository: FestivalRepository,
     private val ticketRepository: TicketRepository,

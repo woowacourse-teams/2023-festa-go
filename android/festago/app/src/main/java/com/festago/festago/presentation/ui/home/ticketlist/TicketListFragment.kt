@@ -11,9 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentTicketListBinding
-import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.ticketentry.TicketEntryActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
 
     private var _binding: FragmentTicketListBinding? = null
@@ -23,7 +24,7 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-    private val vm: TicketListViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: TicketListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

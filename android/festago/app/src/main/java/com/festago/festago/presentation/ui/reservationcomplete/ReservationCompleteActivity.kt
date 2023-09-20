@@ -6,7 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.festago.festago.databinding.ActivityReservationCompleteBinding
 import com.festago.festago.presentation.util.getParcelableExtraCompat
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReservationCompleteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReservationCompleteBinding

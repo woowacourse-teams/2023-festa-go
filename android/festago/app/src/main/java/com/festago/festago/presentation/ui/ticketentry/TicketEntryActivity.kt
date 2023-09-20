@@ -8,15 +8,16 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.festago.festago.databinding.ActivityTicketEntryBinding
-import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TicketEntryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTicketEntryBinding
 
-    private val vm: TicketEntryViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: TicketEntryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

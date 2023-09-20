@@ -4,8 +4,9 @@ import com.festago.festago.data.service.ReservationTicketRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
 import com.festago.festago.model.ReservationTicket
 import com.festago.festago.repository.ReservationTicketRepository
+import javax.inject.Inject
 
-class ReservationTicketDefaultRepository(
+class ReservationTicketDefaultRepository @Inject constructor(
     private val reservationTicketRetrofitService: ReservationTicketRetrofitService,
 ) : ReservationTicketRepository {
 

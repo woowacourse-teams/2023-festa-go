@@ -109,4 +109,14 @@
     <string name="confirm_delete_dialog_yes">탈퇴</string>
     <string name="confirm_delete_dialog_no">취소</string>
 
+    <!-- Strings related to student verification -->
+
+    <string name="student_verification_tie_username">학교 이메일</string>
+    <string name="student_verification_tie_verification_code">인증 코드</string>
+    <string name="student_verification_btn_student_verification">인증 번호 받기</string>
+    <string name="student_verification_btn_student_verification_confirm">인증 번호 확인</string>
+    <string name="student_verification_tv_email_format">\@%s</string>
+    <string name="student_verification_tv_timer_format">mm:ss</string>
+    <string name="student_verification_tv_error">학교 정보 받아오기에 실패했습니다.</string>
+
 </resources>
