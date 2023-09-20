@@ -16,14 +16,18 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.SendResponse;
 import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+@DisplayNameGeneration(ReplaceUnderscores.class)
+@SuppressWarnings("NonAsciiCharacters")
 @ExtendWith(MockitoExtension.class)
-class FCMNotificationFacadeTest {
+class FCMNotificationEventListenerTest {
 
     @Mock
     FirebaseMessaging firebaseMessaging;
@@ -32,7 +36,7 @@ class FCMNotificationFacadeTest {
     MemberFCMService memberFCMService;
 
     @InjectMocks
-    FCMNotificationFacade FCMNotificationFacade;
+    FCMNotificationEventListener FCMNotificationEventListener;
 
     @Test
     void 유저의_FCM_요청_중_하나라도_실패하면_예외() throws FirebaseMessagingException {
@@ -45,7 +49,7 @@ class FCMNotificationFacadeTest {
         EntryProcessEvent event = new EntryProcessEvent(1L);
 
         // when & then
-        Assertions.assertThatThrownBy(() -> FCMNotificationFacade.sendFcmNotification(event))
+        Assertions.assertThatThrownBy(() -> FCMNotificationEventListener.sendFcmNotification(event))
             .isInstanceOf(InternalServerException.class);
     }
 

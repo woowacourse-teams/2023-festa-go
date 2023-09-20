@@ -14,19 +14,21 @@ import com.google.firebase.messaging.SendResponse;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-@Service
-public class FCMNotificationFacade {
+@Profile("!test")
+@Component
+public class FCMNotificationEventListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(FCMNotificationFacade.class);
+    private static final Logger logger = LoggerFactory.getLogger(FCMNotificationEventListener.class);
 
     private final FirebaseMessaging firebaseMessaging;
     private final MemberFCMService memberFCMService;
 
-    public FCMNotificationFacade(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
+    public FCMNotificationEventListener(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
         this.firebaseMessaging = firebaseMessaging;
         this.memberFCMService = memberFCMService;
     }
