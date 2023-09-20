@@ -1,12 +1,10 @@
 package com.festago.fcm.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.member.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,25 +17,24 @@ public class MemberFCM extends BaseTimeEntity {
     private final Long id;
 
     @NotNull
-    @ManyToOne
-    private final Member member;
+    private final Long memberId;
 
     @NotNull
     private final String fcmToken;
 
-    public MemberFCM(Member member, String fcmToken) {
-        this(null, member, fcmToken);
+    public MemberFCM(Long memberId, String fcmToken) {
+        this(null, memberId, fcmToken);
     }
 
-    public MemberFCM(Long id, Member member, String fcmToken) {
-        validate(member, fcmToken);
+    public MemberFCM(Long id, Long memberId, String fcmToken) {
+        validate(memberId, fcmToken);
         this.id = id;
-        this.member = member;
+        this.memberId = memberId;
         this.fcmToken = fcmToken;
     }
 
-    private void validate(Member member, String fcmToken) {
-        if (member == null || fcmToken == null) {
+    private void validate(Long memberId, String fcmToken) {
+        if (memberId == null || fcmToken == null) {
             throw new IllegalArgumentException("MemberFCM 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
         }
     }
@@ -46,8 +43,8 @@ public class MemberFCM extends BaseTimeEntity {
         return id;
     }
 
-    public Member getMember() {
-        return member;
+    public Long getMemberId() {
+        return memberId;
     }
 
     public String getFcmToken() {
