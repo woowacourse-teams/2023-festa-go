@@ -5,9 +5,12 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
+import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
 import com.festago.ticket.domain.Ticket;
@@ -36,12 +39,16 @@ class StageRepositoryTest {
     TicketRepository ticketRepository;
 
     @Autowired
+    SchoolRepository schoolRepository;
+
+    @Autowired
     EntityManager entityManager;
 
     @Test
     void 티켓이_존재하지_않을때도_무대가_조회된다() {
         // given
-        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+        School school = schoolRepository.save(SchoolFixture.school().build());
+        Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
         Stage stage1 = stageRepository.save(StageFixture.stage().festival(festival).build());
         Stage stage2 = stageRepository.save(StageFixture.stage().festival(festival).build());
 
@@ -58,7 +65,8 @@ class StageRepositoryTest {
     @Test
     void 해당_축제의_무대가_모두_조회된다() {
         // given
-        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+        School school = schoolRepository.save(SchoolFixture.school().build());
+        Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
         stageRepository.save(StageFixture.stage().festival(festival).build());
 
         // when
@@ -71,12 +79,13 @@ class StageRepositoryTest {
     @Test
     void 티켓_정보까지_모두_조회된다() {
         // given
-        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+        School school = schoolRepository.save(SchoolFixture.school().build());
+        Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
         Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
         Ticket ticket1 = ticketRepository.save(
-            TicketFixture.ticket().ticketType(TicketType.STUDENT).stage(stage).build());
+            TicketFixture.ticket().ticketType(TicketType.STUDENT).stage(stage).school(school).build());
         Ticket ticket2 = ticketRepository.save(
-            TicketFixture.ticket().ticketType(TicketType.VISITOR).stage(stage).build());
+            TicketFixture.ticket().ticketType(TicketType.VISITOR).stage(stage).school(school).build());
         ticket1.getTicketAmount().addTotalAmount(100);
         ticket2.getTicketAmount().addTotalAmount(200);
         entityManager.flush();

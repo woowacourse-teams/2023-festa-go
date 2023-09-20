@@ -11,6 +11,8 @@ import com.festago.festival.dto.FestivalDetailResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.dto.FestivalsResponse;
 import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import java.time.LocalDate;
@@ -24,14 +26,19 @@ public class FestivalService {
 
     private final FestivalRepository festivalRepository;
     private final StageRepository stageRepository;
+    private final SchoolRepository schoolRepository;
 
-    public FestivalService(FestivalRepository festivalRepository, StageRepository stageRepository) {
+    public FestivalService(FestivalRepository festivalRepository, StageRepository stageRepository,
+                           SchoolRepository schoolRepository) {
         this.festivalRepository = festivalRepository;
         this.stageRepository = stageRepository;
+        this.schoolRepository = schoolRepository;
     }
 
     public FestivalResponse create(FestivalCreateRequest request) {
-        Festival festival = request.toEntity();
+        School school = schoolRepository.findById(request.schoolId())
+            .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
+        Festival festival = request.toEntity(school);
         validate(festival);
         Festival newFestival = festivalRepository.save(festival);
         return FestivalResponse.from(newFestival);

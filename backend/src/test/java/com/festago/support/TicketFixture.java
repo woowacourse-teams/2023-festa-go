@@ -1,5 +1,6 @@
 package com.festago.support;
 
+import com.festago.school.domain.School;
 import com.festago.stage.domain.Stage;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketType;
@@ -9,6 +10,7 @@ public class TicketFixture {
     private Long id;
     private Stage stage = StageFixture.stage().build();
     private TicketType ticketType = TicketType.VISITOR;
+    private School school = SchoolFixture.school().build();
 
     private TicketFixture() {
     }
@@ -32,7 +34,12 @@ public class TicketFixture {
         return this;
     }
 
+    public TicketFixture school(School school) {
+        this.school = school;
+        return this;
+    }
+
     public Ticket build() {
-        return new Ticket(id, stage, ticketType);
+        return new Ticket(id, stage, ticketType, school);
     }
 }

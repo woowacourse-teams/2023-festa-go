@@ -7,9 +7,12 @@ import static org.mockito.Mockito.doReturn;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
+import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
 import com.festago.ticket.application.TicketService;
 import com.festago.ticket.domain.TicketAmount;
@@ -46,6 +49,9 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     @Autowired
     TicketAmountRepository ticketAmountRepository;
 
+    @Autowired
+    SchoolRepository schoolRepository;
+
     @SpyBean
     Clock clock;
 
@@ -72,7 +78,9 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         doReturn(stageStartTime.minusWeeks(1).toInstant(ZoneOffset.UTC))
             .when(clock)
             .instant();
+        School school = schoolRepository.save(SchoolFixture.school().build());
         Festival festival = festivalRepository.save(FestivalFixture.festival()
+            .school(school)
             .startDate(stageStartTime.toLocalDate())
             .endDate(stageStartTime.toLocalDate())
             .build());
@@ -99,7 +107,9 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         doReturn(stageStartTime.minusWeeks(1).toInstant(ZoneOffset.UTC))
             .when(clock)
             .instant();
+        School school = schoolRepository.save(SchoolFixture.school().build());
         Festival festival = festivalRepository.save(FestivalFixture.festival()
+            .school(school)
             .startDate(stageStartTime.toLocalDate())
             .endDate(stageStartTime.toLocalDate())
             .build());

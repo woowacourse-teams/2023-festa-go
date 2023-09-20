@@ -121,7 +121,8 @@ class AdminControllerTest {
             festivalName,
             LocalDate.parse(startDate),
             LocalDate.parse(endDate),
-            "");
+            "",
+            1L);
 
         FestivalResponse expected = new FestivalResponse(
             1L,

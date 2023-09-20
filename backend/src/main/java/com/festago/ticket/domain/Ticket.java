@@ -4,6 +4,7 @@ import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.member.domain.Member;
+import com.festago.school.domain.School;
 import com.festago.stage.domain.Stage;
 import com.festago.ticketing.domain.MemberTicket;
 import jakarta.persistence.CascadeType;
@@ -39,6 +40,9 @@ public class Ticket extends BaseTimeEntity {
     private Stage stage;
 
     @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    private School school;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private TicketType ticketType;
 
@@ -53,16 +57,17 @@ public class Ticket extends BaseTimeEntity {
     protected Ticket() {
     }
 
-    public Ticket(Stage stage, TicketType ticketType) {
-        this(null, stage, ticketType);
+    public Ticket(Stage stage, TicketType ticketType, School school) {
+        this(null, stage, ticketType, school);
     }
 
-    public Ticket(Long id, Stage stage, TicketType ticketType) {
+    public Ticket(Long id, Stage stage, TicketType ticketType, School school) {
         validate(stage, ticketType);
         this.id = id;
         this.stage = stage;
         this.ticketType = ticketType;
         this.ticketAmount = new TicketAmount(this);
+        this.school = school;
     }
 
     private void validate(Stage stage, TicketType ticketType) {

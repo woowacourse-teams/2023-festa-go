@@ -2,6 +2,7 @@ package com.festago.ticket.application;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
+import com.festago.school.domain.School;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.ticket.domain.Ticket;
@@ -32,9 +33,11 @@ public class TicketService {
     public TicketCreateResponse create(TicketCreateRequest request) {
         Stage stage = findStageById(request.stageId());
         TicketType ticketType = request.ticketType();
+        // TODO: n+1
+        School school = stage.getFestival().getSchool();
 
         Ticket ticket = ticketRepository.findByTicketTypeAndStage(ticketType, stage)
-            .orElseGet(() -> ticketRepository.save(new Ticket(stage, ticketType)));
+            .orElseGet(() -> ticketRepository.save(new Ticket(stage, ticketType, school)));
 
         ticket.addTicketEntryTime(LocalDateTime.now(clock), request.entryTime(), request.amount());
 
