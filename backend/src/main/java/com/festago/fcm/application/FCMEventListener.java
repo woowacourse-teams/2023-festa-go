@@ -2,7 +2,7 @@ package com.festago.fcm.application;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
-import com.festago.entry.dto.EntryProcessEvent;
+import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.fcm.dto.MemberFCMResponse;
 import com.google.firebase.messaging.AndroidConfig;
 import com.google.firebase.messaging.AndroidNotification;
@@ -22,14 +22,14 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @Profile("!test")
 @Component
-public class FCMNotificationEventListener {
+public class FCMEventListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(FCMNotificationEventListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(FCMEventListener.class);
 
     private final FirebaseMessaging firebaseMessaging;
     private final MemberFCMService memberFCMService;
 
-    public FCMNotificationEventListener(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
+    public FCMEventListener(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
         this.firebaseMessaging = firebaseMessaging;
         this.memberFCMService = memberFCMService;
     }

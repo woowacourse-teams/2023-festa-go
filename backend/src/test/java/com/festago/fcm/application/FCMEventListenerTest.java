@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.festago.common.exception.InternalServerException;
-import com.festago.entry.dto.EntryProcessEvent;
+import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.fcm.dto.MemberFCMResponse;
 import com.festago.fcm.dto.MemberFCMsResponse;
 import com.google.firebase.messaging.BatchResponse;
@@ -27,7 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @ExtendWith(MockitoExtension.class)
-class FCMNotificationEventListenerTest {
+class FCMEventListenerTest {
 
     @Mock
     FirebaseMessaging firebaseMessaging;
@@ -36,7 +36,7 @@ class FCMNotificationEventListenerTest {
     MemberFCMService memberFCMService;
 
     @InjectMocks
-    FCMNotificationEventListener FCMNotificationEventListener;
+    FCMEventListener FCMEventListener;
 
     @Test
     void 유저의_FCM_요청_중_하나라도_실패하면_예외() throws FirebaseMessagingException {
@@ -49,7 +49,7 @@ class FCMNotificationEventListenerTest {
         EntryProcessEvent event = new EntryProcessEvent(1L);
 
         // when & then
-        Assertions.assertThatThrownBy(() -> FCMNotificationEventListener.sendFcmNotification(event))
+        Assertions.assertThatThrownBy(() -> FCMEventListener.sendFcmNotification(event))
             .isInstanceOf(InternalServerException.class);
     }
 
