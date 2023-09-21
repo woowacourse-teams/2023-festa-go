@@ -132,6 +132,10 @@ public class Ticket extends BaseTimeEntity {
         return stage;
     }
 
+    public School getSchool() {
+        return school;
+    }
+
     public TicketType getTicketType() {
         return ticketType;
     }
