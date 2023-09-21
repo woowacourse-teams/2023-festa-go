@@ -105,6 +105,7 @@ public class AdminService {
         return festivals.stream()
             .map(festival -> new AdminFestivalResponse(
                 festival.getId(),
+                festival.getSchool().getId(),
                 festival.getName(),
                 festival.getStartDate(),
                 festival.getEndDate(),
