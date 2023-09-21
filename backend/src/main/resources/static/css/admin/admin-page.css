@@ -27,7 +27,7 @@
   margin: 10px; /* Add some margin around each form section */
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  min-width: 300px; /* Set a minimum width for each form section to prevent them from becoming too narrow */
+  min-width: 230px; /* Set a minimum width for each form section to prevent them from becoming too narrow */
 }
 
 h2 {
