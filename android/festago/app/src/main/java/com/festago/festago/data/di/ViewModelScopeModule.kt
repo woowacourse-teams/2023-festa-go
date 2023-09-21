@@ -1,9 +1,11 @@
 package com.festago.festago.data.di
 
 import com.festago.festago.data.repository.ReservationTicketDefaultRepository
+import com.festago.festago.data.repository.SchoolDefaultRepository
 import com.festago.festago.data.repository.StudentVerificationDefaultRepository
 import com.festago.festago.data.repository.UserDefaultRepository
 import com.festago.festago.repository.ReservationTicketRepository
+import com.festago.festago.repository.SchoolRepository
 import com.festago.festago.repository.StudentVerificationRepository
 import com.festago.festago.repository.UserRepository
 import dagger.Binds
@@ -26,5 +28,9 @@ interface ViewModelScopeModule {
 
     @Binds
     @ViewModelScoped
-    fun binsUserDefaultRepository(userRepository: UserDefaultRepository): UserRepository
+    fun bindsUserDefaultRepository(userRepository: UserDefaultRepository): UserRepository
+
+    @Binds
+    @ViewModelScoped
+    fun bindsSelectSchoolRepository(schoolRepository: SchoolDefaultRepository): SchoolRepository
 }

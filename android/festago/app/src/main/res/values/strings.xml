@@ -119,4 +119,8 @@
     <string name="student_verification_tv_timer_format">mm:ss</string>
     <string name="student_verification_tv_error">학교 정보 받아오기에 실패했습니다.</string>
 
+    <!-- Strings related to select school -->
+    <string name="select_school_btn_next">다음</string>
+    <string name="select_school_til_select_school">학교 선택</string>
+
 </resources>
