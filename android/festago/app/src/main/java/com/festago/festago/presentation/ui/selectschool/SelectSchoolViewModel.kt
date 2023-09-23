@@ -31,11 +31,39 @@ class SelectSchoolViewModel @Inject constructor(
         loadSchools()
     }
 
+    fun selectSchool(schoolId: Long) {
+        if (uiState.value is SelectSchoolUiState.Success) {
+            _uiState.value =
+                (uiState.value as SelectSchoolUiState.Success).copy(selectedSchoolId = schoolId)
+        }
+    }
+
+    fun showStudentVerification() {
+        viewModelScope.launch {
+            if (uiState.value is SelectSchoolUiState.Success) {
+                val success = uiState.value as SelectSchoolUiState.Success
+                success.selectedSchoolId?.let { schoolId ->
+                    _event.emit(
+                        SelectSchoolEvent.ShowStudentVerification(schoolId)
+                    )
+                }
+            }
+        }
+    }
+
     private fun loadSchools() {
         viewModelScope.launch {
             schoolRepository.loadSchools()
                 .onSuccess { schools ->
-                    _uiState.value = SelectSchoolUiState.Success(schools)
+                    _uiState.value = SelectSchoolUiState.Success(
+                        schools.map {
+                            SchoolUiState(
+                                id = it.id,
+                                domain = it.domain,
+                                name = it.name,
+                                selectedSchool = ::selectSchool,
+                            )
+                        })
                 }
                 .onFailure {
                     _uiState.value = SelectSchoolUiState.Error
