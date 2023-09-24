@@ -14,6 +14,10 @@ import com.festago.common.exception.InternalServerException;
 import com.festago.festival.application.FestivalService;
 import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.FestivalResponse;
+import com.festago.school.application.SchoolService;
+import com.festago.school.dto.SchoolCreateRequest;
+import com.festago.school.dto.SchoolResponse;
+import com.festago.school.dto.SchoolUpdateRequest;
 import com.festago.stage.application.StageService;
 import com.festago.stage.dto.StageCreateRequest;
 import com.festago.stage.dto.StageResponse;
@@ -29,7 +33,10 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,16 +53,18 @@ public class AdminController {
     private final AdminService adminService;
     private final AdminAuthService adminAuthService;
     private final Optional<BuildProperties> properties;
+    private final SchoolService schoolService;
 
     public AdminController(FestivalService festivalService, StageService stageService, TicketService ticketService,
                            AdminService adminService, AdminAuthService adminAuthService,
-                           Optional<BuildProperties> buildProperties) {
+                           Optional<BuildProperties> properties, SchoolService schoolService) {
         this.festivalService = festivalService;
         this.stageService = stageService;
         this.ticketService = ticketService;
         this.adminService = adminService;
         this.adminAuthService = adminAuthService;
-        this.properties = buildProperties;
+        this.properties = properties;
+        this.schoolService = schoolService;
     }
 
     @PostMapping("/festivals")
@@ -77,6 +86,28 @@ public class AdminController {
         TicketCreateResponse response = ticketService.create(request);
         return ResponseEntity.ok()
             .body(response);
+    }
+
+    @PostMapping("/schools")
+    public ResponseEntity<SchoolResponse> createSchool(@RequestBody @Valid SchoolCreateRequest request) {
+        SchoolResponse response = schoolService.create(request);
+        return ResponseEntity.ok()
+            .body(response);
+    }
+
+    @PatchMapping("/schools/{schoolId}")
+    public ResponseEntity<Void> updateSchool(@RequestBody @Valid SchoolUpdateRequest request,
+                                             @PathVariable Long schoolId) {
+        schoolService.update(schoolId, request);
+        return ResponseEntity.ok()
+            .build();
+    }
+
+    @DeleteMapping("/schools/{schoolId}")
+    public ResponseEntity<Void> deleteSchool(@PathVariable Long schoolId) {
+        schoolService.delete(schoolId);
+        return ResponseEntity.ok()
+            .build();
     }
 
     @PostMapping("/login")

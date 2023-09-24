@@ -40,29 +40,34 @@ public class School extends BaseTimeEntity {
     }
 
     private void validate(String domain, String name) {
-        checkNotNull(domain, name);
-        checkLength(domain, name);
+        checkNotNull(domain);
+        checkNotNull(name);
+        checkLength(domain, 50);
+        checkLength(name, 255);
     }
 
-    private void checkNotNull(String domain, String name) {
-        if (domain == null ||
-            name == null) {
+    private void checkNotNull(String input) {
+        if (input == null) {
             throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private void checkLength(String domain, String name) {
-        if (overLength(domain, 50) ||
-            overLength(name, 255)) {
+    private void checkLength(String input, int maxLength) {
+        if (input.length() > maxLength) {
             throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private boolean overLength(String target, int maxLength) {
-        if (target == null) {
-            return false;
-        }
-        return target.length() > maxLength;
+    public void changeDomain(String domain) {
+        checkNotNull(domain);
+        checkLength(domain, 50);
+        this.domain = domain;
+    }
+
+    public void changeName(String name) {
+        checkNotNull(name);
+        checkLength(name, 255);
+        this.name = name;
     }
 
     public Long getId() {

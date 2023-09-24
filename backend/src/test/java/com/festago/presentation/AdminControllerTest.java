@@ -2,8 +2,12 @@ package com.festago.presentation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,6 +23,10 @@ import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.festival.application.FestivalService;
 import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.FestivalResponse;
+import com.festago.school.application.SchoolService;
+import com.festago.school.dto.SchoolCreateRequest;
+import com.festago.school.dto.SchoolResponse;
+import com.festago.school.dto.SchoolUpdateRequest;
 import com.festago.stage.application.StageService;
 import com.festago.stage.dto.StageCreateRequest;
 import com.festago.stage.dto.StageResponse;
@@ -66,6 +74,9 @@ class AdminControllerTest {
 
     @MockBean
     AdminAuthService adminAuthService;
+
+    @MockBean
+    SchoolService schoolService;
 
     @SpyBean
     AuthExtractor authExtractor;
@@ -260,5 +271,75 @@ class AdminControllerTest {
             .getContentAsString(StandardCharsets.UTF_8);
         TicketCreateResponse actual = objectMapper.readValue(content, TicketCreateResponse.class);
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_생성() throws Exception {
+        // given
+        String domain = "teco.ac.kr";
+        String name = "테코대학교";
+
+        SchoolCreateRequest request = new SchoolCreateRequest(domain, name);
+        SchoolResponse expected = new SchoolResponse(1L, domain, name);
+        given(schoolService.create(any(SchoolCreateRequest.class)))
+            .willReturn(expected);
+
+        // when & then
+        String content = mockMvc.perform(post("/admin/schools")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+        SchoolResponse actual = objectMapper.readValue(content, SchoolResponse.class);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_수정() throws Exception {
+        // given
+        SchoolUpdateRequest request = new SchoolUpdateRequest("teco.ac.kr", "테코대학교");
+
+        // when & then
+        mockMvc.perform(patch("/admin/schools/{id}", 1L)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 존재_하지_않는_학교_수정_예외() throws Exception {
+        // given
+        SchoolUpdateRequest request = new SchoolUpdateRequest("teco.ac.kr", "테코대학교");
+
+        willThrow(new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND))
+            .given(schoolService).update(anyLong(), any(SchoolUpdateRequest.class));
+
+        // when & then
+        mockMvc.perform(patch("/admin/schools/{id}", 1L)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_삭제() throws Exception {
+        // when & then
+        mockMvc.perform(delete("/admin/schools/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk());
     }
 }
