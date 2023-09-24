@@ -13,6 +13,7 @@ import com.festago.festival.dto.FestivalsResponse;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,12 @@ public class FestivalService {
 
     private final FestivalRepository festivalRepository;
     private final StageRepository stageRepository;
+    private final Clock clock;
 
-    public FestivalService(FestivalRepository festivalRepository, StageRepository stageRepository) {
+    public FestivalService(FestivalRepository festivalRepository, StageRepository stageRepository, Clock clock) {
         this.festivalRepository = festivalRepository;
         this.stageRepository = stageRepository;
+        this.clock = clock;
     }
 
     public FestivalResponse create(FestivalCreateRequest request) {
@@ -38,7 +41,7 @@ public class FestivalService {
     }
 
     private void validate(Festival festival) {
-        if (!festival.canCreate(LocalDate.now())) {
+        if (!festival.canCreate(LocalDate.now(clock))) {
             throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_START_DATE);
         }
     }
