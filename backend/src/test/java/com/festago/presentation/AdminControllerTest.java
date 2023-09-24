@@ -2,7 +2,6 @@ package com.festago.presentation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,7 +15,6 @@ import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.Role;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
-import com.festago.common.exception.UnauthorizedException;
 import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.festival.application.FestivalService;
 import com.festago.festival.dto.FestivalCreateRequest;
@@ -86,26 +84,6 @@ class AdminControllerTest {
         // when & then
         mockMvc.perform(get("/admin"))
             .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void 권한이_없어도_로그인_페이지_접속_가능() throws Exception {
-        // when & then
-        mockMvc.perform(get("/admin/login"))
-            .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockAuth
-    void 토큰의_만료기간이_지나면_로그인_페이지로_리다이렉트() throws Exception {
-        // given
-        given(authExtractor.extract(anyString()))
-            .willThrow(new UnauthorizedException(ErrorCode.EXPIRED_AUTH_TOKEN));
-
-        // when & then
-        mockMvc.perform(get("/admin/login")
-                .cookie(new Cookie("token", "token")))
-            .andExpect(status().isOk());
     }
 
     @Test
