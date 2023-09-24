@@ -58,7 +58,7 @@ function modifySchool(e) {
     domain: formData.get("domain"),
   };
   const schoolId = formData.get("id");
-  fetch(`/admin/schools/${schoolId}`, {
+  fetch(`/admin/api/schools/${schoolId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json"
@@ -92,7 +92,7 @@ function openDeleteConfirmModal() {
 function deleteSchool() {
   console.log("qqc")
   const schoolId = idInput.value;
-  fetch(`/admin/schools/${schoolId}`, {
+  fetch(`/admin/api/schools/${schoolId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json"
@@ -109,7 +109,7 @@ function deleteSchool() {
   })
   .then(() => {
     alert("학교가 성공적으로 삭제되었습니다!");
-    location.replace("/admin/view/create-school");
+    location.replace("/admin/create-school");
   })
   .catch(error => {
     alert(error.message);

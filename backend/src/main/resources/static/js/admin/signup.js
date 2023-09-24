@@ -15,7 +15,7 @@
         password: password,
       };
 
-      fetch("/admin/signup", {
+      fetch("/admin/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

@@ -47,7 +47,7 @@ function submitFestival(e) {
   };
   validate(festivalData)
 
-  fetch("/admin/festivals", {
+  fetch("/admin/api/festivals", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

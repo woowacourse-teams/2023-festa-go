@@ -32,7 +32,7 @@ class AdminViewControllerTest {
     @Test
     void 권한이_없어도_로그인_페이지_접속_가능() throws Exception {
         // when & then
-        mockMvc.perform(get("/admin/view/login"))
+        mockMvc.perform(get("/admin/login"))
             .andExpect(status().isOk());
     }
 
@@ -44,7 +44,7 @@ class AdminViewControllerTest {
             .willThrow(new UnauthorizedException(ErrorCode.EXPIRED_AUTH_TOKEN));
 
         // when & then
-        mockMvc.perform(get("/admin/view/login")
+        mockMvc.perform(get("/admin/login")
                 .cookie(new Cookie("token", "token")))
             .andExpect(status().isOk());
     }

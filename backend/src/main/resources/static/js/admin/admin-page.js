@@ -1,6 +1,6 @@
 ﻿// Function to fetch data and update dataSection
 function fetchDataAndUpdateDataSection() {
-  fetch("/admin/data")
+  fetch("/admin/api/data")
   .then(response => {
     if (!response.ok) {
       throw new Error("응답을 가져올 수 없습니다.");
@@ -124,7 +124,7 @@ document.getElementById("createFestivalForm").addEventListener("submit",
         thumbnail: formData.get("thumbnail")
       };
 
-      fetch("/admin/festivals", {
+      fetch("/admin/api/festivals", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -164,7 +164,7 @@ document.getElementById("createPerformanceForm").addEventListener("submit",
         festivalId: formData.get("festivalId")
       };
 
-      fetch("/admin/stages", {
+      fetch("/admin/api/stages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -204,7 +204,7 @@ document.getElementById("createTicketForm").addEventListener("submit",
         entryTime: formData.get("entryTime")
       };
 
-      fetch("/admin/tickets", {
+      fetch("/admin/api/tickets", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

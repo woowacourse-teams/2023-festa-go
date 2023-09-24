@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.InternalResourceView;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-@RequestMapping("/admin/view")
+@RequestMapping("/admin")
 @Hidden
 public class AdminViewController {
 

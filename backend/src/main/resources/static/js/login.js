@@ -7,7 +7,7 @@
         password: formData.get("password"),
       };
 
-      fetch("/admin/login", {
+      fetch("/admin/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

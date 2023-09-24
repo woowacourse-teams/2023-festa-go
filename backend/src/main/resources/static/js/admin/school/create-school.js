@@ -55,7 +55,7 @@ function submitSchool(e) {
     domain: formData.get("domain"),
   };
 
-  fetch("/admin/schools", {
+  fetch("/admin/api/schools", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

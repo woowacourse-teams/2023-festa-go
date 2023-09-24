@@ -123,7 +123,7 @@ class AdminControllerTest {
             .willReturn(expected);
 
         // when && then
-        String content = mockMvc.perform(post("/admin/festivals")
+        String content = mockMvc.perform(post("/admin/api/festivals")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -158,7 +158,7 @@ class AdminControllerTest {
             .willThrow(exception);
 
         // when && then
-        String content = mockMvc.perform(post("/admin/stages")
+        String content = mockMvc.perform(post("/admin/api/stages")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -192,7 +192,7 @@ class AdminControllerTest {
             .willReturn(expected);
 
         // when && then
-        String content = mockMvc.perform(post("/admin/stages")
+        String content = mockMvc.perform(post("/admin/api/stages")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -225,7 +225,7 @@ class AdminControllerTest {
             .willThrow(exception);
 
         // when && then
-        String content = mockMvc.perform(post("/admin/tickets")
+        String content = mockMvc.perform(post("/admin/api/tickets")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -260,7 +260,7 @@ class AdminControllerTest {
             .willReturn(expected);
 
         // when && then
-        String content = mockMvc.perform(post("/admin/tickets")
+        String content = mockMvc.perform(post("/admin/api/tickets")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -286,7 +286,7 @@ class AdminControllerTest {
             .willReturn(expected);
 
         // when & then
-        String content = mockMvc.perform(post("/admin/schools")
+        String content = mockMvc.perform(post("/admin/api/schools")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -306,7 +306,7 @@ class AdminControllerTest {
         SchoolUpdateRequest request = new SchoolUpdateRequest("teco.ac.kr", "테코대학교");
 
         // when & then
-        mockMvc.perform(patch("/admin/schools/{id}", 1L)
+        mockMvc.perform(patch("/admin/api/schools/{id}", 1L)
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -324,7 +324,7 @@ class AdminControllerTest {
             .given(schoolService).update(anyLong(), any(SchoolUpdateRequest.class));
 
         // when & then
-        mockMvc.perform(patch("/admin/schools/{id}", 1L)
+        mockMvc.perform(patch("/admin/api/schools/{id}", 1L)
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -336,7 +336,7 @@ class AdminControllerTest {
     @WithMockAuth(role = Role.ADMIN)
     void 학교_삭제() throws Exception {
         // when & then
-        mockMvc.perform(delete("/admin/schools/{id}", 1L)
+        mockMvc.perform(delete("/admin/api/schools/{id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
             .andDo(print())
