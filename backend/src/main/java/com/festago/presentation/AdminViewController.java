@@ -32,6 +32,21 @@ public class AdminViewController {
         return "admin/signup";
     }
 
+    @GetMapping("/create-festival")
+    public String createFestivalPage() {
+        return "admin/create-festival";
+    }
+
+    @GetMapping("/create-school")
+    public String createSchoolPage() {
+        return "admin/school/create-school";
+    }
+
+    @GetMapping("/modify-school")
+    public String updateSchoolPage() {
+        return "admin/school/modify-school";
+    }
+
     @ExceptionHandler(UnauthorizedException.class)
     public View handle(UnauthorizedException e, HttpServletResponse response) {
 
