@@ -32,19 +32,19 @@ public class AdminViewController {
         return "admin/signup";
     }
 
-    @GetMapping("/create-festival")
+    @GetMapping("/festivals")
     public String createFestivalPage() {
-        return "admin/create-festival";
+        return "admin/festival/manage-festival";
     }
 
-    @GetMapping("/create-school")
+    @GetMapping("/schools")
     public String createSchoolPage() {
-        return "admin/school/create-school";
+        return "admin/school/manage-school";
     }
 
-    @GetMapping("/modify-school")
+    @GetMapping("/schools/detail")
     public String updateSchoolPage() {
-        return "admin/school/modify-school";
+        return "admin/school/manage-school-detail";
     }
 
     @ExceptionHandler(UnauthorizedException.class)

@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.festago.auth.application.AuthExtractor;
+import com.festago.auth.domain.Role;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import com.festago.support.CustomWebMvcTest;
@@ -45,6 +46,33 @@ class AdminViewControllerTest {
 
         // when & then
         mockMvc.perform(get("/admin/login")
+                .cookie(new Cookie("token", "token")))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 축제_관리_페이지_접속_성공() throws Exception {
+        // when & then
+        mockMvc.perform(get("/admin/festivals")
+                .cookie(new Cookie("token", "token")))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_관리_페이지_접속_성공() throws Exception {
+        // when & then
+        mockMvc.perform(get("/admin/schools")
+                .cookie(new Cookie("token", "token")))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_세부_관리_페이지_접속_성공() throws Exception {
+        // when & then
+        mockMvc.perform(get("/admin/schools/detail")
                 .cookie(new Cookie("token", "token")))
             .andExpect(status().isOk());
     }

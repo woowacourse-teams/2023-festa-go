@@ -47,10 +47,10 @@ function setModalBody(status) {
 fetchSchool();
 
 function init() {
-  schoolUpdateForm.addEventListener("submit", modifySchool);
+  schoolUpdateForm.addEventListener("submit", manageSchoolDetail);
 }
 
-function modifySchool(e) {
+function manageSchoolDetail(e) {
   e.preventDefault();
   const formData = new FormData(e.target);
   const schoolData = {
