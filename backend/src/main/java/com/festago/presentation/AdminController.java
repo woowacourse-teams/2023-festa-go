@@ -14,6 +14,7 @@ import com.festago.common.exception.InternalServerException;
 import com.festago.festival.application.FestivalService;
 import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.FestivalResponse;
+import com.festago.festival.dto.FestivalUpdateRequest;
 import com.festago.school.application.SchoolService;
 import com.festago.school.dto.SchoolCreateRequest;
 import com.festago.school.dto.SchoolResponse;
@@ -73,6 +74,22 @@ public class AdminController {
         return ResponseEntity.ok()
             .body(response);
     }
+
+    @PatchMapping("/festivals/{festivalId}")
+    public ResponseEntity<Void> updateFestival(@RequestBody @Valid FestivalUpdateRequest request,
+                                               @PathVariable Long festivalId) {
+        festivalService.update(festivalId, request);
+        return ResponseEntity.ok()
+            .build();
+    }
+
+    @DeleteMapping("/festivals/{festivalId}")
+    public ResponseEntity<Void> deleteFestival(@PathVariable Long festivalId) {
+        festivalService.delete(festivalId);
+        return ResponseEntity.ok()
+            .build();
+    }
+
 
     @PostMapping("/stages")
     public ResponseEntity<StageResponse> createStage(@RequestBody @Valid StageCreateRequest request) {

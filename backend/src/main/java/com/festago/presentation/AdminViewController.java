@@ -33,17 +33,22 @@ public class AdminViewController {
     }
 
     @GetMapping("/festivals")
-    public String createFestivalPage() {
+    public String manageFestivalPage() {
         return "admin/festival/manage-festival";
     }
 
+    @GetMapping("/festivals/detail")
+    public String manageFestivalDetailPage() {
+        return "admin/festival/manage-festival-detail";
+    }
+
     @GetMapping("/schools")
-    public String createSchoolPage() {
+    public String manageSchoolPage() {
         return "admin/school/manage-school";
     }
 
     @GetMapping("/schools/detail")
-    public String updateSchoolPage() {
+    public String manageSchoolDetailPage() {
         return "admin/school/manage-school-detail";
     }
 

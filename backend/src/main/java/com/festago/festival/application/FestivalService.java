@@ -9,6 +9,7 @@ import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.FestivalDetailResponse;
 import com.festago.festival.dto.FestivalResponse;
+import com.festago.festival.dto.FestivalUpdateRequest;
 import com.festago.festival.dto.FestivalsResponse;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.stage.domain.Stage;
@@ -16,6 +17,7 @@ import com.festago.stage.repository.StageRepository;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,11 +56,31 @@ public class FestivalService {
 
     @Transactional(readOnly = true)
     public FestivalDetailResponse findDetail(Long festivalId) {
-        Festival festival = festivalRepository.findById(festivalId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
+        Festival festival = findFestival(festivalId);
         List<Stage> stages = stageRepository.findAllDetailByFestivalId(festivalId).stream()
             .sorted(comparing(Stage::getStartTime))
             .toList();
         return FestivalDetailResponse.of(festival, stages);
+    }
+
+    private Festival findFestival(Long festivalId) {
+        return festivalRepository.findById(festivalId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
+    }
+
+    public void update(Long festivalId, FestivalUpdateRequest request) {
+        Festival festival = findFestival(festivalId);
+        festival.changeName(request.name());
+        festival.changeThumbnail(request.thumbnail());
+        festival.changeDate(request.startDate(), request.endDate());
+    }
+
+    public void delete(Long festivalId) {
+        try {
+            festivalRepository.deleteById(festivalId);
+            festivalRepository.flush();
+        } catch (DataIntegrityViolationException e) {
+            throw new BadRequestException(ErrorCode.DELETE_CONSTRAINT_FESTIVAL);
+        }
     }
 }

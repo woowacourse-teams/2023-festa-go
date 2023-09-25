@@ -88,6 +88,22 @@ public class Festival extends BaseTimeEntity {
         return date.isBefore(startDate) || date.isAfter(endDate);
     }
 
+    public void changeName(String name) {
+        validateName(name);
+        this.name = name;
+    }
+
+    public void changeThumbnail(String thumbnail) {
+        validateThumbnail(thumbnail);
+        this.thumbnail = thumbnail;
+    }
+
+    public void changeDate(LocalDate startDate, LocalDate endDate) {
+        validateDate(startDate, endDate);
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public Long getId() {
         return id;
     }

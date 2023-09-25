@@ -9,6 +9,7 @@ import com.festago.school.dto.SchoolResponse;
 import com.festago.school.dto.SchoolUpdateRequest;
 import com.festago.school.dto.SchoolsResponse;
 import com.festago.school.repository.SchoolRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +63,11 @@ public class SchoolService {
 
     public void delete(Long schoolId) {
         // TODO 지금은 외래키 제약조건 때문에 참조하는 다른 엔티티가 있으면 예외가 발생하지만, 추후 이미 가입된 학생이 있다는 등 예외가 필요할듯
-        schoolRepository.deleteById(schoolId);
+        try {
+            schoolRepository.deleteById(schoolId);
+            schoolRepository.flush();
+        } catch (DataIntegrityViolationException e) {
+            throw new BadRequestException(ErrorCode.DELETE_CONSTRAINT_FESTIVAL);
+        }
     }
 }

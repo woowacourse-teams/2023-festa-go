@@ -25,6 +25,7 @@ public enum ErrorCode {
     INVALID_STUDENT_VERIFICATION_CODE("올바르지 않은 학생 인증 코드입니다."),
     EXISTS_SCHOOL_NAME("이미 존재하는 학교 이름입니다."),
     EXISTS_SCHOOL_DOMAIN("이미 존재하는 학교 도메인입니다."),
+    DELETE_CONSTRAINT_FESTIVAL("공연이 등록된 축제는 삭제할 수 없습니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
