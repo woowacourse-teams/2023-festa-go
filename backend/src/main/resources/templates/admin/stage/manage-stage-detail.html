@@ -16,41 +16,77 @@
       <a class="fs-5 text-decoration-none" id="returnLink">축제 상세 페이지 이동</a>
     </p>
   </div>
-  <div class="my-3 text-center">
-    <p class="fs-2 fw-semibold">공연 수정</p>
+  <div class="row">
+    <div class="col-md-6 col-12">
+      <div class="my-3 text-center">
+        <p class="fs-2 fw-semibold">공연 수정</p>
+      </div>
+      <form id="schoolUpdateForm">
+        <input type="hidden" id="id" name="id">
+        <input type="hidden" id="festivalId" name="festivalId">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="fakeId" name="fakeId" disabled readonly>
+          <label for="fakeId">ID</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="fakeFestivalId" name="fakeFestivalId" disabled
+                 readonly>
+          <label for="fakeFestivalId">축제 ID</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="datetime-local" class="form-control" id="startTime" name="startTime"
+                 required>
+          <label for="startTime">시작시간</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="datetime-local" class="form-control" id="ticketOpenTime"
+                 name="ticketOpenTime"
+                 required>
+          <label for="ticketOpenTime">티켓 오픈 시간</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="lineUp" name="lineUp">
+          <label for="lineUp">라인업</label>
+        </div>
+        <div class="text-center d-grid mb-3">
+          <button type="submit" class="btn btn-primary btn-lg" id="updateBtn">수정</button>
+        </div>
+      </form>
+      <div class="text-center d-grid">
+        <button class="btn btn-danger btn-lg" id="deleteBtn">삭제</button>
+      </div>
+    </div>
+    <div class="col-md-6 col-12">
+      <div class="my-3 text-center">
+        <p class="fs-2 fw-semibold">티켓 생성</p>
+      </div>
+      <form id="ticketCreateForm">
+        <div class="mb-3">
+          <select class="form-select py-3" id="ticketTypeSelect" name="ticketType" required>
+            <option id="school-placeholder" value="" selected>티켓 종류</option>
+            <option value="VISITOR">외부인</option>
+            <option value="STUDENT">재학생</option>
+            <label for="ticketTypeSelect">티켓 종류</label>
+          </select>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" id="amount" name="amount" required>
+          <label for="amount">수량</label>
+          <div class="invalid-feedback" id="amount-feedback"></div>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="datetime-local" class="form-control" id="entryTime" name="entryTime"
+                 required>
+          <label for="entryTime">입장 시간</label>
+          <div class="invalid-feedback" id="entryTime-feedback"></div>
+        </div>
+        <div class="text-center d-grid mb-3">
+          <button type="submit" class="btn btn-primary btn-lg">생성</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <form id="schoolUpdateForm">
-    <input type="hidden" id="id" name="id">
-    <input type="hidden" id="festivalId" name="festivalId">
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="fakeId" name="fakeId" disabled readonly>
-      <label for="fakeId">ID</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="fakeFestivalId" name="fakeFestivalId" disabled
-             readonly>
-      <label for="fakeFestivalId">축제 ID</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="datetime-local" class="form-control" id="startTime" name="startTime" required>
-      <label for="startTime">시작시간</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="datetime-local" class="form-control" id="ticketOpenTime" name="ticketOpenTime"
-             required>
-      <label for="ticketOpenTime">티켓 오픈 시간</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="lineUp" name="lineUp" required>
-      <label for="lineUp">라인업</label>
-    </div>
-    <div class="text-center d-grid mb-3">
-      <button type="submit" class="btn btn-primary btn-lg" id="updateBtn">수정</button>
-    </div>
-  </form>
-  <div class="text-center d-grid">
-    <button class="btn btn-danger btn-lg" id="deleteBtn">삭제</button>
-  </div>
+
   <hr/>
   <div class="my-3 text-center">
     <p class="fs-2 fw-semibold">티켓 목록</p>
@@ -61,13 +97,13 @@
         ID
       </div>
       <div class="col-3">
-        시작시간
+        티켓 종류
       </div>
       <div class="col-3">
-        티켓 오픈 시간
+        총 수량
       </div>
       <div class="col-3">
-        라인업
+        남은 수량
       </div>
     </div>
   </div>
