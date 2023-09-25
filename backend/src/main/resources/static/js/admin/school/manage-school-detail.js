@@ -1,5 +1,8 @@
 ﻿import {getResourceId} from "../../common/UrlParser.js";
 
+const deleteConfirmModal = new bootstrap.Modal(
+    document.getElementById("deleteConfirmModal"));
+
 function fetchSchool() {
   const idInput = document.getElementById("id");
   const fakeIdInput = document.getElementById("fakeId");
@@ -81,8 +84,6 @@ function updateSchool(e) {
 init();
 
 function openDeleteConfirmModal() {
-  const deleteConfirmModal = new bootstrap.Modal(
-      document.getElementById("deleteConfirmModal"));
   deleteConfirmModal.show();
 }
 
@@ -109,6 +110,7 @@ function deleteSchool() {
     location.replace("/admin/schools");
   })
   .catch(error => {
+    deleteConfirmModal.hide();
     alert(error.message);
   });
 }
