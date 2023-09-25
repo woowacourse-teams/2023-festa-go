@@ -36,7 +36,12 @@ fetchSchool();
 
 function init() {
   const schoolUpdateForm = document.getElementById("schoolUpdateForm");
+  const deleteBtn = document.getElementById("deleteBtn");
+  const actualDeleteBtn = document.getElementById("actualDeleteBtn");
+
   schoolUpdateForm.addEventListener("submit", updateSchool);
+  deleteBtn.addEventListener("click", openDeleteConfirmModal);
+  actualDeleteBtn.addEventListener("click", deleteSchool)
 }
 
 function updateSchool(e) {
