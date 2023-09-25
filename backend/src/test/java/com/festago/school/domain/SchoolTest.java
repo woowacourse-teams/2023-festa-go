@@ -56,7 +56,7 @@ class SchoolTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 50})
+    @ValueSource(ints = {1, 50})
     void 학교를_생성할때_도메인이_50글자_이내_성공(int length) {
         // given
         String domain = "1".repeat(length);
@@ -69,7 +69,7 @@ class SchoolTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 255})
+    @ValueSource(ints = {1, 255})
     void 학교를_생성할때_이름이_255글자_이내_성공(int length) {
         // given
         String name = "1".repeat(length);
