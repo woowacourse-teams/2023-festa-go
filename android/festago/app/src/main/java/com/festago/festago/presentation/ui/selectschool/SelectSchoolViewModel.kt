@@ -31,15 +31,7 @@ class SelectSchoolViewModel @Inject constructor(
         viewModelScope.launch {
             schoolRepository.loadSchools()
                 .onSuccess { schools ->
-                    _uiState.value = SelectSchoolUiState.Success(
-                        schools.map {
-                            SchoolUiState(
-                                id = it.id,
-                                domain = it.domain,
-                                name = it.name,
-                                selectedSchool = ::selectSchool,
-                            )
-                        })
+                    _uiState.value = SelectSchoolUiState.Success(schools)
                 }
                 .onFailure {
                     _uiState.value = SelectSchoolUiState.Error
