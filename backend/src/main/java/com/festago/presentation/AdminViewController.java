@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.InternalResourceView;
@@ -37,8 +38,8 @@ public class AdminViewController {
         return "admin/festival/manage-festival";
     }
 
-    @GetMapping("/festivals/detail")
-    public String manageFestivalDetailPage() {
+    @GetMapping("/festivals/{festivalId}")
+    public String manageFestivalDetailPage(@PathVariable String festivalId) {
         return "admin/festival/manage-festival-detail";
     }
 
@@ -47,8 +48,8 @@ public class AdminViewController {
         return "admin/school/manage-school";
     }
 
-    @GetMapping("/schools/detail")
-    public String manageSchoolDetailPage() {
+    @GetMapping("/schools/{schoolId}")
+    public String manageSchoolDetailPage(@PathVariable String schoolId) {
         return "admin/school/manage-school-detail";
     }
 

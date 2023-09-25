@@ -1,4 +1,5 @@
 ﻿import {validate} from "./common-festival.js"
+import {getResourceId} from "../../common/UrlParser.js";
 
 const deleteConfirmModal = new bootstrap.Modal(
     document.getElementById("deleteConfirmModal"));
@@ -14,8 +15,7 @@ function fetchFestival() {
   const endDateInput = document.getElementById("endDate");
   const updateBtn = document.getElementById("updateBtn");
   const deleteBtn = document.getElementById("deleteBtn");
-  const currentUrl = new URL(window.location.href);
-  const festivalId = currentUrl.searchParams.get("id");
+  const festivalId = getResourceId(new URL(window.location.href));
   const errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
 
   fetch(`/festivals/${festivalId}`).then(res => {
@@ -27,7 +27,7 @@ function fetchFestival() {
       updateBtn.setAttribute("disabled", "");
       deleteBtn.setAttribute("disabled", "");
       return res.json().then(data => {
-        throw new Error(data.message)
+        throw new Error(data.message || data.detail)
       })
     }
     return res.json();
@@ -40,6 +40,7 @@ function fetchFestival() {
     thumbnailInput.value = festival.thumbnail;
     startDateInput.value = festival.startDate;
     endDateInput.value = festival.endDate;
+    renderStages(festival.stages)
   }).catch(error => {
     const errorModalBody = document.getElementById("errorModalBody");
     errorModalBody.textContent = error.message;
@@ -127,4 +128,41 @@ function deleteFestival() {
     deleteConfirmModal.hide();
     alert(error.message);
   });
+}
+
+function renderStages(stages) {
+  const stageGrid = document.getElementById("stageGrid");
+  for (const stage of stages) {
+    const row = document.createElement("div");
+    row.classList.add("row", "align-items-center", "gx-0", "py-1",
+        "border-top");
+
+    const idColumn = document.createElement("div");
+    idColumn.classList.add("col-1");
+    idColumn.textContent = stage.id;
+
+    const startTimeColumn = document.createElement("div");
+    startTimeColumn.classList.add("col-3");
+    startTimeColumn.textContent = stage.startTime;
+
+    const ticketOpenTimeColumn = document.createElement("div");
+    ticketOpenTimeColumn.classList.add("col-3");
+    ticketOpenTimeColumn.textContent = stage.ticketOpenTime;
+
+    const lineUpColumn = document.createElement("div");
+    lineUpColumn.classList.add("col-3");
+    lineUpColumn.textContent = stage.lineUp;
+
+    const buttonColumn = document.createElement("div");
+    buttonColumn.classList.add("col-2")
+    const button = document.createElement("a");
+    button.classList.add("btn", "btn-primary");
+    button.setAttribute("href", `stages/${stage.id}`);
+    button.textContent = "편집";
+    buttonColumn.append(button);
+
+    row.append(idColumn, startTimeColumn, ticketOpenTimeColumn, lineUpColumn,
+        buttonColumn);
+    stageGrid.append(row);
+  }
 }

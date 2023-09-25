@@ -1,12 +1,13 @@
-﻿function fetchSchool() {
+﻿import {getResourceId} from "../../common/UrlParser.js";
+
+function fetchSchool() {
   const idInput = document.getElementById("id");
   const fakeIdInput = document.getElementById("fakeId");
   const nameInput = document.getElementById("name");
   const domainInput = document.getElementById("domain");
   const updateBtn = document.getElementById("updateBtn");
   const deleteBtn = document.getElementById("deleteBtn");
-  const currentUrl = new URL(window.location.href);
-  const schoolId = currentUrl.searchParams.get("id");
+  const schoolId = getResourceId(new URL(window.location.href));
   const errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
 
   fetch(`/schools/${schoolId}`).then(res => {
@@ -16,7 +17,7 @@
       updateBtn.setAttribute("disabled", "");
       deleteBtn.setAttribute("disabled", "");
       return res.json().then(data => {
-        throw new Error(data.message)
+        throw new Error(data.message || data.detail)
       })
     }
     return res.json();

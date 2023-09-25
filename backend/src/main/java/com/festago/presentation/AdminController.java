@@ -90,7 +90,6 @@ public class AdminController {
             .build();
     }
 
-
     @PostMapping("/stages")
     public ResponseEntity<StageResponse> createStage(@RequestBody @Valid StageCreateRequest request) {
         StageResponse response = stageService.create(request);

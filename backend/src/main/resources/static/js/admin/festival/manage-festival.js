@@ -44,7 +44,7 @@ function fetchFestivals() {
       buttonColumn.classList.add("col-2")
       const button = document.createElement("a");
       button.classList.add("btn", "btn-primary");
-      button.setAttribute("href", `festivals/detail?id=${festival.id}`);
+      button.setAttribute("href", `festivals/${festival.id}`);
       button.textContent = "편집";
       buttonColumn.append(button);
 

@@ -61,6 +61,15 @@ class AdminViewControllerTest {
 
     @Test
     @WithMockAuth(role = Role.ADMIN)
+    void 축제_세부_관리_페이지_접속_성공() throws Exception {
+        // when & then
+        mockMvc.perform(get("/admin/festivals/{id}", 1)
+                .cookie(new Cookie("token", "token")))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 학교_관리_페이지_접속_성공() throws Exception {
         // when & then
         mockMvc.perform(get("/admin/schools")
@@ -72,7 +81,7 @@ class AdminViewControllerTest {
     @WithMockAuth(role = Role.ADMIN)
     void 학교_세부_관리_페이지_접속_성공() throws Exception {
         // when & then
-        mockMvc.perform(get("/admin/schools/detail")
+        mockMvc.perform(get("/admin/schools/{id}", 1)
                 .cookie(new Cookie("token", "token")))
             .andExpect(status().isOk());
     }
