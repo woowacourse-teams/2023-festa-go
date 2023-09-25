@@ -85,4 +85,13 @@ class AdminViewControllerTest {
                 .cookie(new Cookie("token", "token")))
             .andExpect(status().isOk());
     }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 공연_세부_관리_페이지_접속_성공() throws Exception {
+        // when & then
+        mockMvc.perform(get("/admin/stages/{id}", 1)
+                .cookie(new Cookie("token", "token")))
+            .andExpect(status().isOk());
+    }
 }

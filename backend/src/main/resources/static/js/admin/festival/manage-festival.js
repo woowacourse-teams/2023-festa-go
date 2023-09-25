@@ -1,4 +1,4 @@
-﻿import {validate} from "./common-festival.js"
+﻿import {validateFestival} from "./common-festival.js"
 
 function fetchFestivals() {
   const festivalGrid = document.getElementById("festivalGrid");
@@ -105,7 +105,7 @@ function submitFestival(e) {
     thumbnail: formData.get("thumbnail"),
     schoolId: formData.get("school"),
   };
-  validate(festivalData)
+  validateFestival(festivalData)
 
   fetch("/admin/api/festivals", {
     method: "POST",

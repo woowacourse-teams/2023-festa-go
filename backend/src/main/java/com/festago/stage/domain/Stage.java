@@ -3,6 +3,7 @@ package com.festago.stage.domain;
 import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
+import com.festago.common.util.Validator;
 import com.festago.festival.domain.Festival;
 import com.festago.ticket.domain.Ticket;
 import jakarta.persistence.Entity;
@@ -17,6 +18,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.util.Assert;
 
 @Entity
 public class Stage extends BaseTimeEntity {
@@ -63,43 +65,43 @@ public class Stage extends BaseTimeEntity {
     }
 
     private void validate(LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime, Festival festival) {
-        checkNotNull(startTime, ticketOpenTime, festival);
-        checkLength(lineUp);
+        validateLineUp(lineUp);
+        validateFestival(festival);
         validateTime(startTime, ticketOpenTime, festival);
     }
 
-    private void checkNotNull(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
-        if (startTime == null ||
-            ticketOpenTime == null ||
-            festival == null) {
-            throw new IllegalArgumentException("Stage 는 허용되지 않은 null 값으로 생성할 수 없습니다.");
-        }
+    private void validateLineUp(String lineUp) {
+        Validator.maxLength(lineUp, 255, "lineUp은 50글자를 넘을 수 없습니다.");
     }
 
-    private void checkLength(String lineUp) {
-        if (overLength(lineUp, 255)) {
-            throw new IllegalArgumentException("Stage 의 필드로 허용된 범위를 넘은 column 을 넣을 수 없습니다.");
-        }
-    }
-
-    private boolean overLength(String target, int maxLength) {
-        if (target == null) {
-            return false;
-        }
-        return target.length() > maxLength;
+    private void validateFestival(Festival festival) {
+        Assert.notNull(festival, "festival은 null 값이 될 수 없습니다.");
     }
 
     private void validateTime(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
+        Assert.notNull(startTime, "startTime은 null 값이 될 수 없습니다.");
+        Assert.notNull(ticketOpenTime, "ticketOpenTime은 null 값이 될 수 없습니다.");
+        if (ticketOpenTime.isAfter(startTime) || ticketOpenTime.isEqual(startTime)) {
+            throw new IllegalArgumentException("티켓 오픈 시간은 공연 시작 이전 이어야 합니다.");
+        }
         if (festival.isNotInDuration(startTime)) {
             throw new BadRequestException(ErrorCode.INVALID_STAGE_START_TIME);
-        }
-        if (ticketOpenTime.isAfter(startTime) || ticketOpenTime.isEqual(startTime)) {
-            throw new BadRequestException(ErrorCode.INVALID_TICKET_OPEN_TIME);
         }
     }
 
     public boolean isStart(LocalDateTime currentTime) {
         return currentTime.isAfter(startTime);
+    }
+
+    public void changeTime(LocalDateTime startTime, LocalDateTime ticketOpenTime) {
+        validateTime(startTime, ticketOpenTime, this.festival);
+        this.startTime = startTime;
+        this.ticketOpenTime = ticketOpenTime;
+    }
+
+    public void changeLineUp(String lineUp) {
+        validateLineUp(lineUp);
+        this.lineUp = lineUp;
     }
 
     public Long getId() {

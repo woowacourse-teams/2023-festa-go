@@ -22,6 +22,7 @@ import com.festago.school.dto.SchoolUpdateRequest;
 import com.festago.stage.application.StageService;
 import com.festago.stage.dto.StageCreateRequest;
 import com.festago.stage.dto.StageResponse;
+import com.festago.stage.dto.StageUpdateRequest;
 import com.festago.ticket.application.TicketService;
 import com.festago.ticket.dto.TicketCreateRequest;
 import com.festago.ticket.dto.TicketCreateResponse;
@@ -95,6 +96,21 @@ public class AdminController {
         StageResponse response = stageService.create(request);
         return ResponseEntity.ok()
             .body(response);
+    }
+
+    @PatchMapping("/stages/{stageId}")
+    public ResponseEntity<Void> updateStage(@RequestBody @Valid StageUpdateRequest request,
+                                            @PathVariable Long stageId) {
+        stageService.update(stageId, request);
+        return ResponseEntity.ok()
+            .build();
+    }
+
+    @DeleteMapping("/stages/{stageId}")
+    public ResponseEntity<Void> deleteStage(@PathVariable Long stageId) {
+        stageService.delete(stageId);
+        return ResponseEntity.ok()
+            .build();
     }
 
     @PostMapping("/tickets")

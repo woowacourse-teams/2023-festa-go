@@ -16,47 +16,81 @@
       <a href="/admin/festivals" class="fs-5 text-decoration-none">축제 목록 이동</a>
     </p>
   </div>
-  <div class="my-3 text-center">
-    <p class="fs-2 fw-semibold">축제 수정</p>
-  </div>
-  <form id="festivalUpdateForm">
-    <input type="hidden" id="id" name="id">
-    <input type="hidden" id="schoolId" name="schoolId">
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="fakeId" name="fakeId" disabled readonly>
-      <label for="fakeId">ID</label>
+  <div class="row">
+    <div class="col-md-6 col-12">
+      <div class="my-3 text-center">
+        <p class="fs-2 fw-semibold">축제 수정</p>
+      </div>
+      <form id="festivalUpdateForm">
+        <input type="hidden" id="id" name="id">
+        <input type="hidden" id="schoolId" name="schoolId">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="fakeId" name="fakeId" disabled readonly>
+          <label for="fakeId">ID</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="fakeSchoolId" name="fakeSchoolId" disabled
+                 readonly>
+          <label for="fakeSchoolId">학교 ID</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="name" name="name" required>
+          <label for="name">이름</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="url" class="form-control" id="thumbnail" name="thumbnail" required>
+          <label for="thumbnail">썸네일</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="date" class="form-control" id="festivalStartDate" name="festivalStartDate"
+                 required>
+          <label for="festivalStartDate">시작일</label>
+          <div class="invalid-feedback" id="festivalStartDate-feedback"></div>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="date" class="form-control" id="festivalEndDate" name="festivalEndDate"
+                 required>
+          <label for="festivalEndDate">종료일</label>
+          <div class="invalid-feedback" id="festivalEndDate-feedback"></div>
+        </div>
+        <div class="text-center d-grid mb-3">
+          <button type="submit" class="btn btn-primary btn-lg" id="festivalUpdateBtn">수정</button>
+        </div>
+      </form>
+      <div class="text-center d-grid">
+        <button class="btn btn-danger btn-lg" id="festivalDeleteBtn">
+          삭제
+        </button>
+      </div>
     </div>
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="fakeSchoolId" name="fakeSchoolId" disabled
-             readonly>
-      <label for="fakeSchoolId">학교 ID</label>
+    <div class="col-md-6 col-12">
+      <div class="my-3 text-center">
+        <p class="fs-2 fw-semibold">공연 등록</p>
+      </div>
+      <form id="stageCreateForm">
+        <div class="form-floating mb-3">
+          <input type="datetime-local" class="form-control" id="stageStartTime"
+                 name="stageStartTime"
+                 required>
+          <label for="stageStartTime">시작시간</label>
+          <div class="invalid-feedback" id="stageStartTime-feedback"></div>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="datetime-local" class="form-control" id="ticketOpenTime"
+                 name="ticketOpenTime"
+                 required>
+          <label for="ticketOpenTime">티켓 오픈 시간</label>
+          <div class="invalid-feedback" id="ticketOpenTime-feedback"></div>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="lineUp" name="lineUp">
+          <label for="lineUp">라인업</label>
+        </div>
+        <div class="text-center d-grid mb-3">
+          <button type="submit" class="btn btn-primary btn-lg">생성</button>
+        </div>
+      </form>
     </div>
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="name" name="name" required>
-      <label for="name">이름</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="url" class="form-control" id="thumbnail" name="thumbnail" required>
-      <label for="thumbnail">썸네일</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="date" class="form-control" id="startDate" name="startDate" required>
-      <label for="startDate">시작일</label>
-      <div class="invalid-feedback" id="startDate-feedback"></div>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="date" class="form-control" id="endDate" name="endDate" required>
-      <label for="endDate">종료일</label>
-      <div class="invalid-feedback" id="endDate-feedback"></div>
-    </div>
-    <div class="text-center d-grid mb-3">
-      <button type="submit" class="btn btn-primary btn-lg" id="updateBtn">수정</button>
-    </div>
-  </form>
-  <div class="text-center d-grid">
-    <button class="btn btn-danger btn-lg" id="deleteBtn">
-      삭제
-    </button>
   </div>
   <hr/>
   <div class="my-3 text-center">

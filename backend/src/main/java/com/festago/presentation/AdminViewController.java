@@ -53,6 +53,11 @@ public class AdminViewController {
         return "admin/school/manage-school-detail";
     }
 
+    @GetMapping("/stages/{stageId}")
+    public String manageStagePage(@PathVariable String stageId) {
+        return "admin/stage/manage-stage-detail";
+    }
+
     @ExceptionHandler(UnauthorizedException.class)
     public View handle(UnauthorizedException e, HttpServletResponse response) {
 

@@ -1,4 +1,4 @@
-﻿import {validate} from "./common-festival.js"
+﻿import {validateFestival} from "./common-festival.js"
 import {getResourceId} from "../../common/UrlParser.js";
 
 const deleteConfirmModal = new bootstrap.Modal(
@@ -11,10 +11,10 @@ function fetchFestival() {
   const fakeSchoolIdInput = document.getElementById("fakeSchoolId");
   const nameInput = document.getElementById("name");
   const thumbnailInput = document.getElementById("thumbnail");
-  const startDateInput = document.getElementById("startDate");
-  const endDateInput = document.getElementById("endDate");
-  const updateBtn = document.getElementById("updateBtn");
-  const deleteBtn = document.getElementById("deleteBtn");
+  const startDateInput = document.getElementById("festivalStartDate");
+  const endDateInput = document.getElementById("festivalEndDate");
+  const updateBtn = document.getElementById("festivalUpdateBtn");
+  const deleteBtn = document.getElementById("festivalDeleteBtn");
   const festivalId = getResourceId(new URL(window.location.href));
   const errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
 
@@ -52,12 +52,14 @@ fetchFestival();
 
 function init() {
   const festivalUpdateForm = document.getElementById("festivalUpdateForm");
-  const deleteBtn = document.getElementById("deleteBtn");
+  const deleteBtn = document.getElementById("festivalDeleteBtn");
   const actualDeleteBtn = document.getElementById("actualDeleteBtn");
+  const stageCreateFrom = document.getElementById("stageCreateForm");
 
   festivalUpdateForm.addEventListener("submit", updateFestival);
-  deleteBtn.addEventListener("click", openDeleteConfirmModal)
-  actualDeleteBtn.addEventListener("click", deleteFestival)
+  deleteBtn.addEventListener("click", openDeleteConfirmModal);
+  actualDeleteBtn.addEventListener("click", deleteFestival);
+  stageCreateFrom.addEventListener("submit", createStage);
 }
 
 function updateFestival(e) {
@@ -65,11 +67,11 @@ function updateFestival(e) {
   const formData = new FormData(e.target);
   const festivalData = {
     name: formData.get("name"),
-    startDate: formData.get("startDate"),
-    endDate: formData.get("endDate"),
+    startDate: formData.get("festivalStartDate"),
+    endDate: formData.get("festivalEndDate"),
     thumbnail: formData.get("thumbnail"),
   };
-  validate(festivalData)
+  validateFestival(festivalData)
   const festivalId = formData.get("id");
   fetch(`/admin/api/festivals/${festivalId}`, {
     method: "PATCH",
@@ -157,12 +159,76 @@ function renderStages(stages) {
     buttonColumn.classList.add("col-2")
     const button = document.createElement("a");
     button.classList.add("btn", "btn-primary");
-    button.setAttribute("href", `stages/${stage.id}`);
+    button.setAttribute("href", `/admin/stages/${stage.id}`);
     button.textContent = "편집";
     buttonColumn.append(button);
 
     row.append(idColumn, startTimeColumn, ticketOpenTimeColumn, lineUpColumn,
         buttonColumn);
     stageGrid.append(row);
+  }
+}
+
+function createStage(e) {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const stageData = {
+    festivalId: document.getElementById("id").value,
+    startTime: formData.get("stageStartTime"),
+    ticketOpenTime: formData.get("ticketOpenTime"),
+    lineUp: formData.get("lineUp"),
+  };
+  validateStage(stageData);
+
+  fetch("/admin/api/stages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(stageData)
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      return response.json().then(data => {
+        throw new Error(data.message || "공연 생성에 실패하였습니다.");
+      });
+    }
+  })
+  .then(data => {
+    alert("공연이 성공적으로 생성되었습니다!");
+    location.reload();
+  })
+  .catch(error => {
+    alert(error.message);
+  });
+}
+
+function validateStage(stageData) {
+  const stageStartTime = new Date(stageData.startTime);
+  const ticketOpenTime = new Date(stageData.ticketOpenTime);
+  const now = new Date();
+  let hasError = false;
+  if (stageStartTime <= ticketOpenTime) {
+    document.getElementById("ticketOpenTime").classList.add("is-invalid");
+    document.getElementById("ticketOpenTime-feedback")
+        .textContent = "티켓 오픈 시간은 공연 시작 이전 이어야 합니다."
+    hasError = true;
+  }
+  if (stageStartTime < now) {
+    document.getElementById("stageStartTime").classList.add("is-invalid");
+    document.getElementById("stageStartTime-feedback")
+        .textContent = "공연 시작 시간은 현재보다 이후 이어야 합니다."
+    hasError = true;
+  }
+  if (ticketOpenTime < now) {
+    document.getElementById("ticketOpenTime").classList.add("is-invalid");
+    document.getElementById("ticketOpenTime-feedback")
+        .textContent = "티켓 오픈 시간은 현재보다 이후 이어야 합니다."
+    hasError = true;
+  }
+  if (hasError) {
+    throw new Error("검증이 실패하였습니다.");
   }
 }

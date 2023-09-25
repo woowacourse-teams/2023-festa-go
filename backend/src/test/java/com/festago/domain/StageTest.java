@@ -77,8 +77,8 @@ class StageTest {
             .festival(festival)
             .build()
         )
-            .isInstanceOf(BadRequestException.class)
-            .hasMessage("티켓은 공연 시작 전에 오픈되어야 합니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("티켓 오픈 시간은 공연 시작 이전 이어야 합니다.");
     }
 
     @Test

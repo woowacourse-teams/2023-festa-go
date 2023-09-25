@@ -30,6 +30,7 @@ import com.festago.school.dto.SchoolUpdateRequest;
 import com.festago.stage.application.StageService;
 import com.festago.stage.dto.StageCreateRequest;
 import com.festago.stage.dto.StageResponse;
+import com.festago.stage.dto.StageUpdateRequest;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import com.festago.ticket.application.TicketService;
@@ -186,7 +187,8 @@ class AdminControllerTest {
             LocalDateTime.parse(ticketOpenTime),
             festivalId);
 
-        StageResponse expected = new StageResponse(festivalId, LocalDateTime.parse(startTime));
+        StageResponse expected = new StageResponse(festivalId, festivalId, LocalDateTime.parse(startTime),
+            LocalDateTime.parse(ticketOpenTime), lineUp);
 
         given(stageService.create(any()))
             .willReturn(expected);
@@ -203,6 +205,37 @@ class AdminControllerTest {
             .getContentAsString(StandardCharsets.UTF_8);
         StageResponse actual = objectMapper.readValue(content, StageResponse.class);
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 무대_수정() throws Exception {
+        // given
+        String startTime = "2023-07-27T18:00:00";
+        String ticketOpenTime = "2023-07-26T18:00:00";
+        String lineUp = "글렌, 애쉬, 오리, 푸우";
+
+        StageUpdateRequest request = new StageUpdateRequest(LocalDateTime.parse(startTime),
+            LocalDateTime.parse(ticketOpenTime), lineUp);
+
+        // when & then
+        mockMvc.perform(patch("/admin/api/stages/{id}", 1L)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 무대_삭제() throws Exception {
+        // when & then
+        mockMvc.perform(delete("/admin/api/stages/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk());
     }
 
     @Test

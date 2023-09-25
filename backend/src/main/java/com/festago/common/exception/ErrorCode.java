@@ -7,7 +7,6 @@ public enum ErrorCode {
     NOT_ENTRY_TIME("입장 가능한 시간이 아닙니다."),
     EXPIRED_ENTRY_CODE("만료된 입장 코드입니다."),
     INVALID_ENTRY_CODE("올바르지 않은 입장코드입니다."),
-    INVALID_TICKET_OPEN_TIME("티켓은 공연 시작 전에 오픈되어야 합니다."),
     INVALID_STAGE_START_TIME("공연은 축제 기간 중에만 진행될 수 있습니다."),
     INVALID_MIN_TICKET_AMOUNT("티켓은 적어도 한장 이상 발급해야합니다."),
     LATE_TICKET_ENTRY_TIME("입장 시간은 공연 시간보다 빨라야합니다."),
@@ -26,6 +25,8 @@ public enum ErrorCode {
     EXISTS_SCHOOL_NAME("이미 존재하는 학교 이름입니다."),
     EXISTS_SCHOOL_DOMAIN("이미 존재하는 학교 도메인입니다."),
     DELETE_CONSTRAINT_FESTIVAL("공연이 등록된 축제는 삭제할 수 없습니다."),
+    DELETE_CONSTRAINT_STAGE("티켓이 등록된 공연은 삭제할 수 없습니다."),
+    DELETE_CONSTRAINT_SCHOOL("학생 또는 축제에 등록된 학교는 삭제할 수 없습니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),

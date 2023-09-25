@@ -1,5 +1,7 @@
 package com.festago.presentation;
 
+import com.festago.stage.application.StageService;
+import com.festago.stage.dto.StageResponse;
 import com.festago.ticket.application.TicketService;
 import com.festago.ticket.dto.StageTicketsResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,15 +18,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class StageController {
 
     private final TicketService ticketService;
+    private final StageService stageService;
 
-    public StageController(TicketService ticketService) {
+    public StageController(TicketService ticketService, StageService stageService) {
         this.ticketService = ticketService;
+        this.stageService = stageService;
     }
 
     @GetMapping("/{stageId}/tickets")
     @Operation(description = "특정 무대의 티켓 정보를 보여준다.", summary = "무대 티켓 목록 조회")
     public ResponseEntity<StageTicketsResponse> findStageTickets(@PathVariable Long stageId) {
         StageTicketsResponse response = ticketService.findStageTickets(stageId);
+        return ResponseEntity.ok()
+            .body(response);
+    }
+
+    @GetMapping("/{stageId}")
+    @Operation(description = "특정 무대의 정보를 보여준다.", summary = "무대 정보 조회")
+    public ResponseEntity<StageResponse> findStageDetail(@PathVariable Long stageId) {
+        StageResponse response = stageService.findDetail(stageId);
         return ResponseEntity.ok()
             .body(response);
     }

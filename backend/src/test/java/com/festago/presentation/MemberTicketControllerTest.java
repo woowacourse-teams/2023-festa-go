@@ -92,7 +92,7 @@ class MemberTicketControllerTest {
         Long memberId = 1L;
         String token = "sampleToken";
 
-        StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
+        StageResponse stageResponse = new StageResponse(1L, 1L, LocalDateTime.now(), LocalDateTime.now(), "푸우회장");
         MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
             "https://image.png");
         MemberTicketResponse expected = new MemberTicketResponse(memberTicketId, 1, LocalDateTime.now(),
@@ -121,7 +121,7 @@ class MemberTicketControllerTest {
         Long memberId = 1L;
         String token = "sampleToken";
 
-        StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
+        StageResponse stageResponse = new StageResponse(1L, 1L, LocalDateTime.now(), LocalDateTime.now(), "푸우회장");
         MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
             "https://image.png");
         MemberTicketsResponse expected = LongStream.range(0, 10L)
@@ -153,7 +153,7 @@ class MemberTicketControllerTest {
         Long memberId = 1L;
         String token = "sampleToken";
 
-        StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
+        StageResponse stageResponse = new StageResponse(1L, 1L, LocalDateTime.now(), LocalDateTime.now(), "푸우회장");
         MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
             "https://image.png");
         MemberTicketsResponse expected = LongStream.range(0, 10L)
