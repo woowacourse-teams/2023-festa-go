@@ -67,7 +67,7 @@ public class SchoolService {
             schoolRepository.deleteById(schoolId);
             schoolRepository.flush();
         } catch (DataIntegrityViolationException e) {
-            throw new BadRequestException(ErrorCode.DELETE_CONSTRAINT_FESTIVAL);
+            throw new BadRequestException(ErrorCode.DELETE_CONSTRAINT_SCHOOL);
         }
     }
 }
