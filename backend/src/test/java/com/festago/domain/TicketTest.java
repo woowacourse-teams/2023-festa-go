@@ -98,7 +98,7 @@ class TicketTest {
             // when & then
             assertThatThrownBy(() -> ticket.addTicketEntryTime(LocalDateTime.now(), startTime.minusHours(3), 100))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("티켓 예매 시작 후 새롭게 티켓을 발급할 수 없습니다.");
+                .hasMessage("티켓 오픈 시간 이후 새롭게 티켓을 발급할 수 없습니다.");
         }
 
         @Test

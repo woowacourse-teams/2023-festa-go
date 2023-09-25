@@ -14,7 +14,7 @@ public enum ErrorCode {
     EARLY_TICKET_ENTRY_THAN_OPEN("입장 시간은 티켓 오픈 시간 이후여야합니다."),
     TICKET_SOLD_OUT("매진된 티켓입니다."),
     INVALID_FESTIVAL_START_DATE("축제 시작 일자는 과거일 수 없습니다."),
-    INVALID_TICKET_CREATE_TIME("티켓 예매 시작 후 새롭게 티켓을 발급할 수 없습니다."),
+    INVALID_TICKET_CREATE_TIME("티켓 오픈 시간 이후 새롭게 티켓을 발급할 수 없습니다."),
     OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE("해당 OAuth2 제공자는 지원되지 않습니다."),
     RESERVE_TICKET_OVER_AMOUNT("예매 가능한 수량을 초과했습니다."),
     OAUTH2_INVALID_TOKEN("잘못된 OAuth2 토큰입니다."),
