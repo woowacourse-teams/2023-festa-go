@@ -27,6 +27,7 @@ class SelectSchoolActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initBinding()
         initObserve()
+        initView()
     }
 
     private fun initBinding() {
@@ -46,6 +47,10 @@ class SelectSchoolActivity : AppCompatActivity() {
                 handleEvent(event)
             }
         }
+    }
+
+    private fun initView() {
+        vm.loadSchools()
     }
 
     private fun handleUiState(uiState: SelectSchoolUiState) {

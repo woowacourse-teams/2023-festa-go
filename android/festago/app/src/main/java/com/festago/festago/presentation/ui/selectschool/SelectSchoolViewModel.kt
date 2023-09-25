@@ -27,8 +27,25 @@ class SelectSchoolViewModel @Inject constructor(
     private val _event = MutableSharedFlow<SelectSchoolEvent>()
     val event: SharedFlow<SelectSchoolEvent> = _event.asSharedFlow()
 
-    init {
-        loadSchools()
+    fun loadSchools() {
+        viewModelScope.launch {
+            schoolRepository.loadSchools()
+                .onSuccess { schools ->
+                    _uiState.value = SelectSchoolUiState.Success(
+                        schools.map {
+                            SchoolUiState(
+                                id = it.id,
+                                domain = it.domain,
+                                name = it.name,
+                                selectedSchool = ::selectSchool,
+                            )
+                        })
+                }
+                .onFailure {
+                    _uiState.value = SelectSchoolUiState.Error
+                    analyticsHelper.logNetworkFailure(KEY_LOAD_SCHOOLS_LOG, it.message.toString())
+                }
+        }
     }
 
     fun selectSchool(schoolId: Long) {
@@ -48,27 +65,6 @@ class SelectSchoolViewModel @Inject constructor(
                     )
                 }
             }
-        }
-    }
-
-    private fun loadSchools() {
-        viewModelScope.launch {
-            schoolRepository.loadSchools()
-                .onSuccess { schools ->
-                    _uiState.value = SelectSchoolUiState.Success(
-                        schools.map {
-                            SchoolUiState(
-                                id = it.id,
-                                domain = it.domain,
-                                name = it.name,
-                                selectedSchool = ::selectSchool,
-                            )
-                        })
-                }
-                .onFailure {
-                    _uiState.value = SelectSchoolUiState.Error
-                    analyticsHelper.logNetworkFailure(KEY_LOAD_SCHOOLS_LOG, it.message.toString())
-                }
         }
     }
 
