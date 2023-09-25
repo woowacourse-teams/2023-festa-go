@@ -3,7 +3,6 @@ package com.festago.school.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.common.exception.InternalServerException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ class SchoolTest {
 
         // when & then
         assertThatThrownBy(() -> new School(domain, "name"))
-            .isInstanceOf(InternalServerException.class);
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -31,7 +30,7 @@ class SchoolTest {
 
         // when & then
         assertThatThrownBy(() -> new School("domain", name))
-            .isInstanceOf(InternalServerException.class);
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -42,7 +41,7 @@ class SchoolTest {
         // when & then
         String domain = "1234567890".repeat(5) + "1";
         assertThatThrownBy(() -> school.changeDomain(domain))
-            .isInstanceOf(InternalServerException.class);
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -53,7 +52,7 @@ class SchoolTest {
         // when & then
         String name = "1234567890".repeat(25) + "123456";
         assertThatThrownBy(() -> school.changeName(name))
-            .isInstanceOf(InternalServerException.class);
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @ParameterizedTest

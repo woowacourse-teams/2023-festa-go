@@ -1,14 +1,14 @@
 package com.festago.school.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
+import com.festago.common.util.Validator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.util.Assert;
 
 @Entity
 public class School extends BaseTimeEntity {
@@ -40,33 +40,27 @@ public class School extends BaseTimeEntity {
     }
 
     private void validate(String domain, String name) {
-        checkNotNull(domain);
-        checkNotNull(name);
-        checkLength(domain, 50);
-        checkLength(name, 255);
+        validateDomain(domain);
+        validateName(name);
     }
 
-    private void checkNotNull(String input) {
-        if (input == null) {
-            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+    private void validateDomain(String domain) {
+        Assert.notNull(domain, "domain은 null 값이 될 수 없습니다.");
+        Validator.maxLength(domain, 50, "domain은 50글자를 넘을 수 없습니다.");
     }
 
-    private void checkLength(String input, int maxLength) {
-        if (input.length() > maxLength) {
-            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+    private void validateName(String name) {
+        Assert.notNull(name, "name은 null 값이 될 수 없습니다.");
+        Validator.maxLength(name, 255, "name은 255글자를 넘을 수 없습니다.");
     }
 
     public void changeDomain(String domain) {
-        checkNotNull(domain);
-        checkLength(domain, 50);
+        validateDomain(domain);
         this.domain = domain;
     }
 
     public void changeName(String name) {
-        checkNotNull(name);
-        checkLength(name, 255);
+        validateName(name);
         this.name = name;
     }
 
