@@ -1,7 +1,65 @@
-const schoolSelect = document.getElementById("schoolSelect");
-const festivalForm = document.getElementById("festivalForm");
+﻿import {validate} from "./common-festival.js"
+
+function fetchFestivals() {
+  const festivalGrid = document.getElementById("festivalGrid");
+
+  fetch("/festivals").then(res => {
+    if (!res.ok) {
+      disableSelector("서버에 연결할 수 없습니다.");
+      throw new Error("서버에 연결할 수 없습니다.")
+    }
+    return res.json();
+  }).then(data => {
+    const festivals = data.festivals;
+    for (const festival of festivals) {
+      const row = document.createElement("div");
+      row.classList.add("row", "align-items-center", "gx-0", "py-1",
+          "border-top");
+
+      const idColumn = document.createElement("div");
+      idColumn.classList.add("col-1");
+      idColumn.textContent = festival.id;
+
+      const schoolIdColumn = document.createElement("div");
+      schoolIdColumn.classList.add("col-1");
+      schoolIdColumn.textContent = "#";
+
+      const nameColumn = document.createElement("div");
+      nameColumn.classList.add("col-2");
+      nameColumn.textContent = festival.name;
+
+      const thumbnailColumn = document.createElement("div");
+      thumbnailColumn.classList.add("col-2");
+      thumbnailColumn.textContent = festival.thumbnail;
+
+      const startDateColumn = document.createElement("div");
+      startDateColumn.classList.add("col-2");
+      startDateColumn.textContent = festival.startDate;
+
+      const endDateColumn = document.createElement("div");
+      endDateColumn.classList.add("col-2");
+      endDateColumn.textContent = festival.endDate;
+
+      const buttonColumn = document.createElement("div");
+      buttonColumn.classList.add("col-2")
+      const button = document.createElement("a");
+      button.classList.add("btn", "btn-primary");
+      button.setAttribute("href", `festivals/detail?id=${festival.id}`);
+      button.textContent = "편집";
+      buttonColumn.append(button);
+
+      row.append(idColumn, schoolIdColumn, nameColumn, thumbnailColumn,
+          startDateColumn, endDateColumn, buttonColumn);
+      festivalGrid.append(row);
+    }
+  })
+}
+
+fetchFestivals();
 
 function fetchSchools() {
+  const schoolSelect = document.getElementById("schoolSelect");
+
   fetch("/schools").then(res => {
     if (!res.ok) {
       disableSelector("서버에 연결할 수 없습니다.");
@@ -24,6 +82,7 @@ function fetchSchools() {
 }
 
 function disableSelector(reason) {
+  const schoolSelect = document.getElementById("schoolSelect");
   schoolSelect.setAttribute("disabled", "");
   const schoolPlaceholder = document.getElementById("school-placeholder");
   schoolPlaceholder.textContent = reason;
@@ -32,6 +91,7 @@ function disableSelector(reason) {
 fetchSchools();
 
 function init() {
+  const festivalForm = document.getElementById("festivalForm");
   festivalForm.addEventListener("submit", submitFestival);
 }
 
@@ -70,34 +130,6 @@ function submitFestival(e) {
   .catch(error => {
     alert(error.message);
   });
-}
-
-function validate(festivalData) {
-  const startDate = new Date(festivalData.startDate);
-  const endDate = new Date(festivalData.endDate);
-  const now = new Date();
-  let hasError = false;
-  if (startDate < now) {
-    document.getElementById("startDate").classList.add("is-invalid");
-    document.getElementById("startDate-feedback")
-        .textContent = "시작일은 현재 시간보다 뒤여야 합니다"
-    hasError = true;
-  }
-  if (endDate < now) {
-    document.getElementById("endDate").classList.add("is-invalid");
-    document.getElementById("endDate-feedback")
-        .textContent = "종료일은 현재 시간보다 뒤여야 합니다."
-    hasError = true;
-  }
-  if (startDate > endDate) {
-    document.getElementById("startDate").classList.add("is-invalid");
-    document.getElementById("startDate-feedback")
-        .textContent = "종료일은 시작일보다 뒤여야 합니다."
-    hasError = true;
-  }
-  if (hasError) {
-    throw new Error("검증이 실패하였습니다.");
-  }
 }
 
 init();

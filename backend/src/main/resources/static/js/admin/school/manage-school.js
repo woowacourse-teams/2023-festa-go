@@ -1,10 +1,8 @@
-const schoolGrid = document.getElementById("schoolGrid");
-const schoolCreateForm = document.getElementById("schoolCreateForm");
+﻿function fetchSchools() {
+  const schoolGrid = document.getElementById("schoolGrid");
 
-function fetchSchools() {
   fetch("/schools").then(res => {
     if (!res.ok) {
-      disableSelector("서버에 연결할 수 없습니다.");
       throw new Error("서버에 연결할 수 없습니다.")
     }
     return res.json();
@@ -31,7 +29,7 @@ function fetchSchools() {
       buttonColumn.classList.add("col-2")
       const button = document.createElement("a");
       button.classList.add("btn", "btn-primary");
-      button.setAttribute("href", `modify-school?id=${school.id}`);
+      button.setAttribute("href", `schools/detail?id=${school.id}`);
       button.textContent = "편집";
       buttonColumn.append(button);
 
@@ -44,6 +42,7 @@ function fetchSchools() {
 fetchSchools();
 
 function init() {
+  const schoolCreateForm = document.getElementById("schoolCreateForm");
   schoolCreateForm.addEventListener("submit", submitSchool);
 }
 
