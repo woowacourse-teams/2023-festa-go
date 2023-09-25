@@ -91,11 +91,11 @@ function disableSelector(reason) {
 fetchSchools();
 
 function init() {
-  const festivalForm = document.getElementById("festivalForm");
-  festivalForm.addEventListener("submit", submitFestival);
+  const festivalCreateForm = document.getElementById("festivalCreateForm");
+  festivalCreateForm.addEventListener("submit", createFestival);
 }
 
-function submitFestival(e) {
+function createFestival(e) {
   e.preventDefault();
   const formData = new FormData(e.target);
   const festivalData = {

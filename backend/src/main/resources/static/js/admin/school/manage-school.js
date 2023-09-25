@@ -43,10 +43,10 @@ fetchSchools();
 
 function init() {
   const schoolCreateForm = document.getElementById("schoolCreateForm");
-  schoolCreateForm.addEventListener("submit", submitSchool);
+  schoolCreateForm.addEventListener("submit", createSchool);
 }
 
-function submitSchool(e) {
+function createSchool(e) {
   e.preventDefault();
   const formData = new FormData(e.target);
   const schoolData = {
