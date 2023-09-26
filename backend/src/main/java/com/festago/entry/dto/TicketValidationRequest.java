@@ -1,8 +1,8 @@
 package com.festago.entry.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public record TicketValidationRequest(
-    @NotNull(message = "code 는 null 일 수 없습니다.") String code) {
+    @NotBlank(message = "code 는 공백일 수 없습니다.") String code) {
 
 }
