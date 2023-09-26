@@ -47,6 +47,9 @@ dependencies {
     // Flyway
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-admin:8.1.0'
 }
 
 tasks.named('test') {
