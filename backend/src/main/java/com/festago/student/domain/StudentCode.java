@@ -1,5 +1,7 @@
 package com.festago.student.domain;
 
+import static java.time.temporal.ChronoUnit.SECONDS;
+
 import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
@@ -11,11 +13,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.util.StringUtils;
 
 @Entity
@@ -28,6 +31,8 @@ import org.springframework.util.StringUtils;
     }
 )
 public class StudentCode extends BaseTimeEntity {
+
+    private static final int MIN_REQUEST_TERM_SECONDS = 30;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,20 +49,25 @@ public class StudentCode extends BaseTimeEntity {
 
     private String username;
 
+    @CreatedDate
+    private LocalDateTime issuedAt;
+
     protected StudentCode() {
     }
 
     public StudentCode(VerificationCode code, School school, Member member, String username) {
-        this(null, code, school, member, username);
+        this(null, code, school, member, username, null);
     }
 
-    public StudentCode(Long id, VerificationCode code, School school, Member member, String username) {
+    public StudentCode(Long id, VerificationCode code, School school, Member member, String username,
+                       LocalDateTime issuedAt) {
         validate(username);
         this.id = id;
         this.code = code;
         this.school = school;
         this.member = member;
         this.username = username;
+        this.issuedAt = issuedAt;
     }
 
     private void validate(String username) {
@@ -68,6 +78,10 @@ public class StudentCode extends BaseTimeEntity {
         if (username.length() > 255) {
             throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public boolean canReissue(LocalDateTime currentTime) {
+        return SECONDS.between(issuedAt, currentTime) > MIN_REQUEST_TERM_SECONDS;
     }
 
     public Long getId() {
@@ -88,5 +102,9 @@ public class StudentCode extends BaseTimeEntity {
 
     public String getUsername() {
         return username;
+    }
+
+    public LocalDateTime getIssuedAt() {
+        return issuedAt;
     }
 }
