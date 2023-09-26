@@ -37,7 +37,7 @@ public class AuthEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional
     @Async
-    public void saveMemberFCM(MemberDeleteEvent memberLoginEvent) {
+    public void deleteMemberFCM(MemberDeleteEvent memberLoginEvent) {
         deleteFCM(memberLoginEvent.memberId());
     }
 }
