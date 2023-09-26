@@ -15,8 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SelectSchoolActivity : AppCompatActivity() {
 
-    private lateinit var adapter: ArrayAdapter<String>
-
     private val binding: ActivitySelectSchoolBinding by lazy {
         ActivitySelectSchoolBinding.inflate(layoutInflater)
     }
@@ -62,7 +60,7 @@ class SelectSchoolActivity : AppCompatActivity() {
     }
 
     private fun handleSuccess(uiState: SelectSchoolUiState.Success) {
-        adapter =
+        val adapter =
             ArrayAdapter(this, R.layout.item_select_school, uiState.schools.map { it.name })
         binding.actvSelectSchool.setAdapter(adapter)
         binding.actvSelectSchool.setOnItemClickListener { _, _, position, _ ->
