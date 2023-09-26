@@ -334,6 +334,36 @@ class AdminControllerTest {
 
     @Test
     @WithMockAuth(role = Role.ADMIN)
+    void 학교_생성_name_null이면_에외() throws Exception {
+        // given
+        SchoolCreateRequest request = new SchoolCreateRequest("teco.ac.kr", null);
+
+        // when & then
+        mockMvc.perform(post("/admin/api/schools")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_생성_domain_null이면_에외() throws Exception {
+        // given
+        SchoolCreateRequest request = new SchoolCreateRequest(null, "테코대학교");
+
+        // when & then
+        mockMvc.perform(post("/admin/api/schools")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 학교_수정() throws Exception {
         // given
         SchoolUpdateRequest request = new SchoolUpdateRequest("teco.ac.kr", "테코대학교");
@@ -345,6 +375,36 @@ class AdminControllerTest {
                 .cookie(new Cookie("token", "token")))
             .andDo(print())
             .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_수정_name_null이면_에외() throws Exception {
+        // given
+        SchoolUpdateRequest request = new SchoolUpdateRequest("teco.ac.kr", null);
+
+        // when & then
+        mockMvc.perform(patch("/admin/api/schools/{id}", 1L)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_수정_domain_null이면_에외() throws Exception {
+        // given
+        SchoolUpdateRequest request = new SchoolUpdateRequest(null, "테코대학교");
+
+        // when & then
+        mockMvc.perform(patch("/admin/api/schools/{id}", 1L)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isBadRequest());
     }
 
     @Test
