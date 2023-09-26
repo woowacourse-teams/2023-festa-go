@@ -20,6 +20,11 @@
         android:layout_height="match_parent"
         tools:context=".presentation.ui.selectschool.SelectSchoolActivity">
 
+        <ProgressBar
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/glStart"
             android:layout_width="0dp"
@@ -37,6 +42,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilSelectSchool"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -56,6 +62,7 @@
         <Button
             android:id="@+id/btnVerificationConfirm"
             style="@style/btnFesta"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -66,6 +73,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/glEnd"
             app:layout_constraintStart_toStartOf="@id/glStart" />
+
+        <TextView
+            visibility="@{uiState.shouldShowError}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/select_school_tv_error_message" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
