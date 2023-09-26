@@ -22,7 +22,9 @@ public class AuthEventListener {
         this.memberFCMRepository = memberFCMRepository;
     }
 
-    @TransactionalEventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional
+    @Async
     public void saveMemberFCM(MemberLoginEvent memberLoginEvent) {
         Long memberId = memberLoginEvent.memberId();
         deleteFCM(memberId);
