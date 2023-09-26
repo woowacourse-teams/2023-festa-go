@@ -2,8 +2,6 @@ package com.festago.auth.application;
 
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
-import com.festago.auth.dto.event.MemberDeleteEvent;
-import com.festago.auth.dto.event.MemberLoginEvent;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
@@ -11,7 +9,6 @@ import com.festago.member.repository.MemberRepository;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,16 +19,13 @@ public class AuthService {
     private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private final MemberRepository memberRepository;
-    private final ApplicationEventPublisher publisher;
 
-    public AuthService(MemberRepository memberRepository, ApplicationEventPublisher publisher) {
+    public AuthService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.publisher = publisher;
     }
 
-    public LoginMemberDto login(UserInfo userInfo, String fcmToken) {
+    public LoginMemberDto login(UserInfo userInfo) {
         LoginMemberDto loginMemberDto = handleLoginRequest(userInfo);
-        publisher.publishEvent(new MemberLoginEvent(loginMemberDto.memberId(), fcmToken));
         return loginMemberDto;
     }
 
@@ -54,7 +48,6 @@ public class AuthService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
         logDeleteMember(member);
         memberRepository.delete(member);
-        publisher.publishEvent(new MemberDeleteEvent(member.getId()));
     }
 
     private void logDeleteMember(Member member) {

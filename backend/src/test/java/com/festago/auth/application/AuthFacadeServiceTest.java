@@ -9,7 +9,6 @@ import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
-import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
 import com.festago.member.domain.Member;
@@ -45,8 +44,6 @@ class AuthFacadeServiceTest {
 
     @Test
     void 로그인() {
-        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "1", "fcmToken");
-
         Member member = MemberFixture.member()
             .id(1L)
             .build();
@@ -54,11 +51,11 @@ class AuthFacadeServiceTest {
         given(authProvider.provide(any(AuthPayload.class)))
             .willReturn("Bearer token");
 
-        given(authService.login(any(UserInfo.class), any()))
+        given(authService.login(any(UserInfo.class)))
             .willReturn(new LoginMemberDto(false, member.getId(), member.getNickname()));
 
         // when
-        LoginResponse response = authFacadeService.login(request);
+        LoginResponse response = authFacadeService.login(SocialType.FESTAGO, "1");
 
         // then
         assertThat(response)

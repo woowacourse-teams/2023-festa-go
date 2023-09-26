@@ -14,6 +14,7 @@ import com.festago.auth.domain.Role;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
+import com.festago.fcm.application.MemberFCMService;
 import com.festago.presentation.AuthController;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
@@ -39,11 +40,14 @@ class AuthControllerTest {
     @MockBean
     AuthFacadeService authFacadeService;
 
+    @MockBean
+    MemberFCMService memberFCMService;
+
     @Test
     void OAuth2_로그인을_한다() throws Exception {
         // given
         LoginResponse expected = new LoginResponse("accesstoken", "nickname", true);
-        given(authFacadeService.login(any(LoginRequest.class)))
+        given(authFacadeService.login(any(), any()))
             .willReturn(expected);
         LoginRequest request = new LoginRequest(SocialType.FESTAGO, "code", "fcmToken");
 

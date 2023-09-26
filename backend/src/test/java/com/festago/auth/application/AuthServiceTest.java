@@ -6,14 +6,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
-import com.festago.auth.dto.event.MemberDeleteEvent;
-import com.festago.auth.dto.event.MemberLoginEvent;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
@@ -27,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -36,9 +31,6 @@ class AuthServiceTest {
 
     @Mock
     MemberRepository memberRepository;
-
-    @Mock
-    ApplicationEventPublisher publisher;
 
     @InjectMocks
     AuthService authService;
@@ -60,12 +52,11 @@ class AuthServiceTest {
                 member.getProfileImage());
 
             // when
-            LoginMemberDto response = authService.login(userInfo, "fcmToken");
+            LoginMemberDto response = authService.login(userInfo);
 
             // then
             assertThat(response.isNew())
                 .isTrue();
-            verify(publisher, times(1)).publishEvent(any(MemberLoginEvent.class));
         }
 
         @Test
@@ -80,12 +71,11 @@ class AuthServiceTest {
                 member.getProfileImage());
 
             // when
-            LoginMemberDto response = authService.login(userInfo, "fcmToken");
+            LoginMemberDto response = authService.login(userInfo);
 
             // then
             assertThat(response.isNew())
                 .isFalse();
-            verify(publisher, times(1)).publishEvent(any(MemberLoginEvent.class));
         }
     }
 
@@ -116,7 +106,6 @@ class AuthServiceTest {
             // when & then
             assertThatNoException()
                 .isThrownBy(() -> authService.deleteMember(memberId));
-            verify(publisher, times(1)).publishEvent(any(MemberDeleteEvent.class));
         }
     }
 }

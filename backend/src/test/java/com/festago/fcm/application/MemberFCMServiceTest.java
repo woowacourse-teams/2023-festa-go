@@ -1,9 +1,15 @@
 package com.festago.fcm.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
+import com.festago.auth.application.AuthExtractor;
+import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.Role;
 import com.festago.fcm.domain.MemberFCM;
 import com.festago.fcm.dto.MemberFCMResponse;
 import com.festago.fcm.repository.MemberFCMRepository;
@@ -20,6 +26,9 @@ class MemberFCMServiceTest {
 
     @Mock
     MemberFCMRepository memberFCMRepository;
+
+    @Mock
+    AuthExtractor authExtractor;
 
     @InjectMocks
     MemberFCMService memberFCMService;
@@ -43,5 +52,21 @@ class MemberFCMServiceTest {
 
         // then
         assertThat(actual).isEqualTo(expect);
+    }
+
+    @Test
+    void 유저의_FCM_저장() {
+        // given
+        String accessToken = "accessToken";
+        String fcmToken = "fcmToken";
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(1L, Role.MEMBER));
+
+        // when
+        memberFCMService.saveMemberFCM(accessToken, fcmToken);
+
+        // then
+        verify(memberFCMRepository, times(1))
+            .save(any(MemberFCM.class));
     }
 }
