@@ -21,8 +21,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-@Profile("!test")
 @Component
+@Profile({"dev", "prod"})
 public class FCMNotificationEventListener {
 
     private static final Logger logger = LoggerFactory.getLogger(FCMNotificationEventListener.class);

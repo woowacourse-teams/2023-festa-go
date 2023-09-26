@@ -8,11 +8,13 @@ import com.festago.fcm.repository.MemberFCMRepository;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@Profile({"prod", "dev"})
 public class MemberFCMService {
 
     private static final Logger logger = LoggerFactory.getLogger(MemberFCMService.class);

@@ -5,7 +5,7 @@ import com.festago.auth.dto.event.MemberLoginEvent;
 import com.festago.fcm.domain.MemberFCM;
 import com.festago.fcm.repository.MemberFCMRepository;
 import java.util.List;
-import org.springframework.context.event.EventListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +13,7 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
+@Profile({"dev", "prod"})
 public class AuthEventListener {
 
     private final MemberFCMRepository memberFCMRepository;
@@ -21,8 +22,7 @@ public class AuthEventListener {
         this.memberFCMRepository = memberFCMRepository;
     }
 
-    @Transactional
-    @EventListener
+    @TransactionalEventListener
     public void saveMemberFCM(MemberLoginEvent memberLoginEvent) {
         Long memberId = memberLoginEvent.memberId();
         deleteFCM(memberId);
