@@ -1,6 +1,9 @@
 package com.festago.school.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.InternalServerException;
+import jakarta.persistence.Column;
 import com.festago.common.util.Validator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,10 +22,12 @@ public class School extends BaseTimeEntity {
 
     @NotNull
     @Size(max = 50)
+    @Column(unique = true)
     private String domain;
 
     @NotNull
     @Size(max = 255)
+    @Column(unique = true)
     private String name;
 
     protected School() {

@@ -1,11 +1,16 @@
 package com.festago.festival.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.school.domain.School;
 import com.festago.common.util.Validator;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
@@ -35,24 +40,29 @@ public class Festival extends BaseTimeEntity {
     @Size(max = 255)
     private String thumbnail;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    private School school;
+
     protected Festival() {
     }
 
-    public Festival(String name, LocalDate startDate, LocalDate endDate) {
-        this(null, name, startDate, endDate, DEFAULT_THUMBNAIL);
+    public Festival(String name, LocalDate startDate, LocalDate endDate, School school) {
+        this(null, name, startDate, endDate, DEFAULT_THUMBNAIL, school);
     }
 
-    public Festival(String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
-        this(null, name, startDate, endDate, thumbnail);
+    public Festival(String name, LocalDate startDate, LocalDate endDate, String thumbnail, School school) {
+        this(null, name, startDate, endDate, thumbnail, school);
     }
 
-    public Festival(Long id, String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
+    public Festival(Long id, String name, LocalDate startDate, LocalDate endDate, String thumbnail, School school) {
         validate(name, startDate, endDate, thumbnail);
         this.id = id;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.thumbnail = thumbnail;
+        this.school = school;
     }
 
     private void validate(String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
@@ -122,5 +132,9 @@ public class Festival extends BaseTimeEntity {
 
     public String getThumbnail() {
         return thumbnail;
+    }
+
+    public School getSchool() {
+        return school;
     }
 }

@@ -1,4 +1,4 @@
-function init() {
+﻿function init() {
   const serverVersionBtn = document.getElementById("serverVersionBtn");
   const infoLogBtn = document.getElementById("infoLogBtn");
   const warnLogBtn = document.getElementById("warnLogBtn");

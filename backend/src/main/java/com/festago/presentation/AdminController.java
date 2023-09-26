@@ -19,6 +19,9 @@ import com.festago.school.application.SchoolService;
 import com.festago.school.dto.SchoolCreateRequest;
 import com.festago.school.dto.SchoolResponse;
 import com.festago.school.dto.SchoolUpdateRequest;
+import com.festago.school.application.SchoolService;
+import com.festago.school.dto.SchoolCreateRequest;
+import com.festago.school.dto.SchoolResponse;
 import com.festago.stage.application.StageService;
 import com.festago.stage.dto.StageCreateRequest;
 import com.festago.stage.dto.StageResponse;
@@ -54,19 +57,19 @@ public class AdminController {
     private final TicketService ticketService;
     private final AdminService adminService;
     private final AdminAuthService adminAuthService;
-    private final Optional<BuildProperties> properties;
     private final SchoolService schoolService;
+    private final Optional<BuildProperties> properties;
 
     public AdminController(FestivalService festivalService, StageService stageService, TicketService ticketService,
                            AdminService adminService, AdminAuthService adminAuthService,
-                           Optional<BuildProperties> properties, SchoolService schoolService) {
+                           SchoolService schoolService, Optional<BuildProperties> buildProperties) {
         this.festivalService = festivalService;
         this.stageService = stageService;
         this.ticketService = ticketService;
         this.adminService = adminService;
         this.adminAuthService = adminAuthService;
-        this.properties = properties;
         this.schoolService = schoolService;
+        this.properties = buildProperties;
     }
 
     @PostMapping("/festivals")

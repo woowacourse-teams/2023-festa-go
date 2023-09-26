@@ -27,6 +27,9 @@ import com.festago.school.application.SchoolService;
 import com.festago.school.dto.SchoolCreateRequest;
 import com.festago.school.dto.SchoolResponse;
 import com.festago.school.dto.SchoolUpdateRequest;
+import com.festago.school.application.SchoolService;
+import com.festago.school.dto.SchoolCreateRequest;
+import com.festago.school.dto.SchoolResponse;
 import com.festago.stage.application.StageService;
 import com.festago.stage.dto.StageCreateRequest;
 import com.festago.stage.dto.StageResponse;
@@ -111,7 +114,8 @@ class AdminControllerTest {
             festivalName,
             LocalDate.parse(startDate),
             LocalDate.parse(endDate),
-            "");
+            "",
+            1L);
 
         FestivalResponse expected = new FestivalResponse(
             1L,

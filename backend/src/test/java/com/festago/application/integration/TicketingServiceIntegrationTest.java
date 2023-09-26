@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doReturn;
 import com.festago.common.exception.BadRequestException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.support.MemberFixture;
 import com.festago.ticketing.application.TicketingService;
@@ -36,6 +37,9 @@ class TicketingServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     TicketingService ticketingService;
+
+    @Autowired
+    SchoolRepository schoolRepository;
 
     @SpyBean
     MemberTicketRepository memberTicketRepository;

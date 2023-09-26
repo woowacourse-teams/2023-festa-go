@@ -6,11 +6,14 @@ import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
+import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
 import com.festago.ticketing.application.MemberTicketService;
@@ -44,11 +47,15 @@ class MemberTicketIntegrationTest extends ApplicationIntegrationTest {
     @Autowired
     TicketRepository ticketRepository;
 
+    @Autowired
+    SchoolRepository schoolRepository;
+
     @Test
     void 예매한_티켓_조회시_Pageable_적용() {
         // given
+        School school = schoolRepository.save(SchoolFixture.school().build());
         Member member = memberRepository.save(MemberFixture.member().build());
-        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+        Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
         Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
         for (int i = 0; i < 20; i++) {
             memberTicketRepository.save(MemberTicketFixture.memberTicket()

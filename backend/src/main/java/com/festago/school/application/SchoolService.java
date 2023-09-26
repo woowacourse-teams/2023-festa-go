@@ -39,19 +39,16 @@ public class SchoolService {
     }
 
     public SchoolResponse create(SchoolCreateRequest request) {
+        validateSchool(request);
         String domain = request.domain();
         String name = request.name();
-        validateCreate(domain, name);
         School school = schoolRepository.save(new School(domain, name));
         return SchoolResponse.from(school);
     }
 
-    private void validateCreate(String domain, String name) {
-        if (schoolRepository.existsByDomain(domain)) {
-            throw new BadRequestException(ErrorCode.EXISTS_SCHOOL_DOMAIN);
-        }
-        if (schoolRepository.existsByName(name)) {
-            throw new BadRequestException(ErrorCode.EXISTS_SCHOOL_NAME);
+    private void validateSchool(SchoolCreateRequest request) {
+        if (schoolRepository.existsByDomainOrName(request.domain(), request.name())) {
+            throw new BadRequestException(ErrorCode.DUPLICATE_SCHOOL);
         }
     }
 
