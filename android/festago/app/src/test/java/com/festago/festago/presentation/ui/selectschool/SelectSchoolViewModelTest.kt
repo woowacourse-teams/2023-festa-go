@@ -30,7 +30,7 @@ class SelectSchoolViewModelTest {
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         schoolRepository = mockk()
-        analyticsHelper = mockk()
+        analyticsHelper = mockk(relaxed = true)
         vm = SelectSchoolViewModel(
             schoolRepository = schoolRepository,
             analyticsHelper = analyticsHelper
