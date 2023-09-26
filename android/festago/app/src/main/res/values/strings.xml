@@ -123,5 +123,6 @@
     <string name="select_school_btn_next">다음</string>
     <string name="select_school_til_select_school">학교 선택</string>
     <string name="select_school_tv_error_message">학교 목록 불러오기에 실패했습니다.</string>
+    <string name="select_school_tv_select_school">학교 선택</string>
 
 </resources>
