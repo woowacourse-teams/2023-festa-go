@@ -49,8 +49,7 @@ public class StudentService {
         School school = findSchool(request.schoolId());
         validate(memberId, request);
         VerificationCode code = codeProvider.provide();
-        studentCodeRepository.deleteByMember(member);
-        studentCodeRepository.save(new StudentCode(code, school, member, request.username()));
+        saveStudentCode(request, member, code, school);
         mailClient.send(new VerificationMailPayload(code, request.username(), school.getDomain()));
     }
 
@@ -89,6 +88,12 @@ public class StudentService {
         if (studentRepository.existsByUsernameAndSchoolId(request.username(), request.schoolId())) {
             throw new BadRequestException(ErrorCode.DUPLICATE_STUDENT_EMAIL);
         }
+    }
+
+    private void saveStudentCode(StudentSendMailRequest request, Member member, VerificationCode code, School school) {
+        studentCodeRepository.deleteByMember(member);
+        studentRepository.flush();
+        studentCodeRepository.save(new StudentCode(code, school, member, request.username()));
     }
 
     public void verificate(Long memberId, StudentVerificateRequest request) {
