@@ -19,7 +19,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
         SELECT t FROM Ticket t
         JOIN FETCH t.stage s
         JOIN FETCH t.ticketEntryTimes et
-        JOIN FETCH t.school sc
         WHERE t.id = :ticketId
         """)
     Optional<Ticket> findByIdWithFetch(@Param("ticketId") Long ticketId);

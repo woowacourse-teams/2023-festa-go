@@ -58,7 +58,7 @@ public class TicketingService {
         if (ticket.getTicketType() != TicketType.STUDENT) {
             return;
         }
-        if (!studentRepository.existsByMemberAndSchool(member, ticket.getSchool())) {
+        if (!studentRepository.existsByMemberAndSchoolId(member, ticket.getSchoolId())) {
             throw new BadRequestException(ErrorCode.NEED_STUDENT_VERIFICATION);
         }
     }

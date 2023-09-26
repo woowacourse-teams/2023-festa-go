@@ -72,11 +72,11 @@ class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
         Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
         Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
         Ticket ticket1 = ticketRepository.save(
-            TicketFixture.ticket().stage(stage).school(school).ticketType(TicketType.VISITOR).build());
+            TicketFixture.ticket().stage(stage).ticketType(TicketType.VISITOR).build());
         LocalDateTime ticketOpenTime = stage.getTicketOpenTime();
         ticket1.addTicketEntryTime(ticketOpenTime.minusHours(1), LocalDateTime.now().minusMinutes(10), 100);
         Ticket ticket2 = ticketRepository.save(
-            TicketFixture.ticket().stage(stage).school(school).ticketType(TicketType.STUDENT).build());
+            TicketFixture.ticket().stage(stage).ticketType(TicketType.STUDENT).build());
         ticket2.addTicketEntryTime(ticketOpenTime.minusHours(1), LocalDateTime.now().minusMinutes(10), 200);
 
         // when

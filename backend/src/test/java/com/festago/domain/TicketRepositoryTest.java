@@ -47,11 +47,9 @@ class TicketRepositoryTest {
         Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
         Stage otherStage = stageRepository.save(StageFixture.stage().festival(festival).build());
 
-        ticketRepository.save(
-            TicketFixture.ticket().stage(stage).school(school).ticketType(TicketType.STUDENT).build());
-        ticketRepository.save(
-            TicketFixture.ticket().stage(stage).school(school).ticketType(TicketType.VISITOR).build());
-        ticketRepository.save(TicketFixture.ticket().stage(otherStage).school(school).build());
+        ticketRepository.save(TicketFixture.ticket().stage(stage).ticketType(TicketType.STUDENT).build());
+        ticketRepository.save(TicketFixture.ticket().stage(stage).ticketType(TicketType.VISITOR).build());
+        ticketRepository.save(TicketFixture.ticket().stage(otherStage).build());
 
         // when
         List<Ticket> actual = ticketRepository.findAllByStageId(stage.getId());

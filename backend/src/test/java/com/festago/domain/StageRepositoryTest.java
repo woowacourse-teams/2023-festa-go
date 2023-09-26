@@ -83,9 +83,9 @@ class StageRepositoryTest {
         Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
         Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
         Ticket ticket1 = ticketRepository.save(
-            TicketFixture.ticket().ticketType(TicketType.STUDENT).stage(stage).school(school).build());
+            TicketFixture.ticket().ticketType(TicketType.STUDENT).stage(stage).build());
         Ticket ticket2 = ticketRepository.save(
-            TicketFixture.ticket().ticketType(TicketType.VISITOR).stage(stage).school(school).build());
+            TicketFixture.ticket().ticketType(TicketType.VISITOR).stage(stage).build());
         ticket1.getTicketAmount().addTotalAmount(100);
         ticket2.getTicketAmount().addTotalAmount(200);
         entityManager.flush();

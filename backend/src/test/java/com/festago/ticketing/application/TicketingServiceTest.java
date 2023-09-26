@@ -8,7 +8,6 @@ import static org.mockito.BDDMockito.given;
 import com.festago.common.exception.BadRequestException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
-import com.festago.school.domain.School;
 import com.festago.stage.domain.Stage;
 import com.festago.student.repository.StudentRepository;
 import com.festago.support.MemberFixture;
@@ -72,7 +71,7 @@ class TicketingServiceTest {
 
         given(ticketRepository.findByIdWithFetch(anyLong()))
             .willReturn(Optional.of(TicketFixture.ticket().ticketType(TicketType.STUDENT).build()));
-        given(studentRepository.existsByMemberAndSchool(any(Member.class), any(School.class)))
+        given(studentRepository.existsByMemberAndSchoolId(any(Member.class), anyLong()))
             .willReturn(false);
 
         // when & then
