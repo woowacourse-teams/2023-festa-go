@@ -42,7 +42,7 @@ class StudentVerificationActivity : AppCompatActivity() {
 
     private fun initRequestVerificationCodeBtn(schoolId: Long) {
         binding.btnRequestVerificationCode.setOnClickListener {
-            vm.sendVerificationCode(binding.tieVerificationCode.text.toString(), schoolId)
+            vm.sendVerificationCode(binding.tieUserName.text.toString(), schoolId)
         }
     }
 
