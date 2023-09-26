@@ -1,5 +1,5 @@
 alter table ticket
-    add column school_id bigint not null;
+    add column school_id bigint;
 
 alter table ticket
     add constraint fk_ticket__school
