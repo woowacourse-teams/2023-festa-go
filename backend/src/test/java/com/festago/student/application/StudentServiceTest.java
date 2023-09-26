@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.lenient;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
@@ -24,6 +23,7 @@ import com.festago.student.repository.StudentCodeRepository;
 import com.festago.student.repository.StudentRepository;
 import com.festago.support.MemberFixture;
 import com.festago.support.SchoolFixture;
+import com.festago.support.SetUpMockito;
 import com.festago.support.StudentCodeFixture;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -79,21 +79,21 @@ class StudentServiceTest {
             Member member = MemberFixture.member().id(1L).build();
             School school = SchoolFixture.school().id(1L).build();
 
-            lenient()
-                .when(memberRepository.findById(anyLong()))
-                .thenReturn(Optional.of(member));
-            lenient()
-                .when(schoolRepository.findById(anyLong()))
-                .thenReturn(Optional.of(school));
-            lenient()
-                .when(studentCodeRepository.findByMemberId(anyLong()))
-                .thenReturn(Optional.empty());
-            lenient()
-                .when(studentRepository.existsByMemberId(anyLong()))
-                .thenReturn(false);
-            lenient()
-                .when(studentRepository.existsByUsernameAndSchoolId(anyString(), anyLong()))
-                .thenReturn(false);
+            SetUpMockito
+                .given(memberRepository.findById(anyLong()))
+                .willReturn(Optional.of(member));
+            SetUpMockito
+                .given(schoolRepository.findById(anyLong()))
+                .willReturn(Optional.of(school));
+            SetUpMockito
+                .given(studentCodeRepository.findByMemberId(anyLong()))
+                .willReturn(Optional.empty());
+            SetUpMockito
+                .given(studentRepository.existsByMemberId(anyLong()))
+                .willReturn(false);
+            SetUpMockito
+                .given(studentRepository.existsByUsernameAndSchoolId(anyString(), anyLong()))
+                .willReturn(false);
         }
 
         @Test
