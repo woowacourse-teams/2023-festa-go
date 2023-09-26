@@ -33,7 +33,7 @@ public class MemberFCMService {
     public MemberFCMsResponse findMemberFCM(Long memberId) {
         List<MemberFCM> memberFCM = memberFCMRepository.findByMemberId(memberId);
         if (memberFCM.size() < LEAST_MEMBER_FCM) {
-            log.error("member {} 의 FCM 코드가 발급되지 않았습니다.", memberId);
+            log.error("member {} 의 FCM 토큰이 발급되지 않았습니다.", memberId);
             throw new InternalServerException(ErrorCode.FCM_NOT_FOUND);
         }
         return MemberFCMsResponse.from(memberFCM);
