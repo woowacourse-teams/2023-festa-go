@@ -3,6 +3,7 @@ package com.festago.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.common.exception.BadRequestException;
@@ -15,9 +16,12 @@ import com.festago.festival.dto.FestivalDetailStageResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.dto.FestivalsResponse;
 import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
+import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,6 +47,9 @@ class FestivalServiceTest {
     @Mock
     StageRepository stageRepository;
 
+    @Mock
+    SchoolRepository schoolRepository;
+
     @InjectMocks
     FestivalService festivalService;
 
@@ -66,11 +73,30 @@ class FestivalServiceTest {
     class 축제_생성 {
 
         @Test
+        void 학교가_없으면_예외() {
+            // given
+            LocalDate today = LocalDate.now();
+            Long schoolId = 1L;
+            FestivalCreateRequest request = new FestivalCreateRequest("테코대학교", today, today, "http://image.png", 1L);
+
+            given(schoolRepository.findById(schoolId))
+                .willReturn(Optional.empty());
+
+            // when & then
+            assertThatThrownBy(() -> festivalService.create(request))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("존재하지 않는 학교입니다.");
+        }
+
+        @Test
         void 축제_생성시_시작일자가_과거이면_예외() {
             // given
             LocalDate today = LocalDate.now();
+            School school = SchoolFixture.school().build();
             FestivalCreateRequest request = new FestivalCreateRequest("테코대학교", today.minusDays(1), today,
-                "http://image.png");
+                "http://image.png", 1L);
+            given(schoolRepository.findById(anyLong()))
+                .willReturn(Optional.of(school));
 
             // when & then
             assertThatThrownBy(() -> festivalService.create(request))
@@ -84,9 +110,13 @@ class FestivalServiceTest {
             LocalDate today = LocalDate.now();
             String name = "테코대학교";
             String thumbnail = "http://image.png";
-            FestivalCreateRequest request = new FestivalCreateRequest(name, today, today, thumbnail);
-            Festival festival = new Festival(1L, name, today, today, thumbnail);
+            Long schoolId = 1L;
+            School school = SchoolFixture.school().id(schoolId).build();
+            FestivalCreateRequest request = new FestivalCreateRequest(name, today, today, thumbnail, schoolId);
+            Festival festival = new Festival(1L, name, today, today, thumbnail, school);
             FestivalResponse expected = new FestivalResponse(1L, name, today, today, thumbnail);
+            given(schoolRepository.findById(schoolId))
+                .willReturn(Optional.of(school));
             given(festivalRepository.save(any()))
                 .willReturn(festival);
 

@@ -13,21 +13,28 @@ function fetchDataAndUpdateDataSection() {
     // Clear existing data before appending new data
     dataSection.innerHTML = "";
 
-    // 1. 축제 생성 요청 데이터 섹션
+    // 1. 학교 생성 요청 데이터 섹션
+    const schoolDataDiv = createDataSection(
+        "학교 목록",
+        data.adminSchools
+    );
+    dataSection.appendChild(schoolDataDiv);
+
+    // 2. 축제 생성 요청 데이터 섹션
     const festivalDataDiv = createDataSection(
         "축제 목록",
         data.adminFestivalResponse
     );
     dataSection.appendChild(festivalDataDiv);
 
-    // 2. 공연 생성 요청 데이터 섹션
+    // 3. 공연 생성 요청 데이터 섹션
     const stageDataDiv = createDataSection(
         "공연 목록",
         data.adminStageResponse
     );
     dataSection.appendChild(stageDataDiv);
 
-    // 3. 티켓 생성 요청 데이터 섹션
+    // 4. 티켓 생성 요청 데이터 섹션
     const ticketDataDiv = createDataSection(
         "티켓 목록",
         data.adminTickets
@@ -112,6 +119,44 @@ function formatEntryTimeAmount(entryTimeAmount) {
   return formattedString;
 }
 
+// 학교 생성 버튼 클릭 시 요청 보내기
+document.getElementById("createSchoolForm").addEventListener("submit",
+    function (event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const festivalData = {
+        name: formData.get("schoolName"),
+        domain: formData.get("domain")
+      };
+
+      fetch("/admin/schools", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(festivalData)
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.json().then(data => {
+            throw new Error(data.message || "학교 생성에 실패하였습니다.");
+          });
+        }
+      })
+      .then(data => {
+        // 성공: 알림창 표시하고 폼 필드 초기화
+        alert("학교가 성공적으로 생성되었습니다!");
+        // Fetch data again and update dataSection
+        fetchDataAndUpdateDataSection();
+      })
+      .catch(error => {
+        // 오류: 알림창 표시
+        alert(error.message);
+      });
+    });
+
 // 축제 생성 버튼 클릭 시 요청 보내기
 document.getElementById("createFestivalForm").addEventListener("submit",
     function (event) {
@@ -121,7 +166,8 @@ document.getElementById("createFestivalForm").addEventListener("submit",
         name: formData.get("name"),
         startDate: formData.get("startDate"),
         endDate: formData.get("endDate"),
-        thumbnail: formData.get("thumbnail")
+        thumbnail: formData.get("thumbnail"),
+        schoolId: formData.get("schoolId")
       };
 
       fetch("/admin/festivals", {

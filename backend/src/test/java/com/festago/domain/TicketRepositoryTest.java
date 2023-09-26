@@ -4,9 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
+import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
 import com.festago.ticket.domain.Ticket;
@@ -33,10 +36,14 @@ class TicketRepositoryTest {
     @Autowired
     StageRepository stageRepository;
 
+    @Autowired
+    SchoolRepository schoolRepository;
+
     @Test
     void 공연의_ID로_티켓을_모두_조회() {
         // given
-        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+        School school = schoolRepository.save(SchoolFixture.school().build());
+        Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
         Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
         Stage otherStage = stageRepository.save(StageFixture.stage().festival(festival).build());
 

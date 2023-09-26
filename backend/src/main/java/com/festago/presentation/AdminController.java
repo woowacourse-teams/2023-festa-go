@@ -15,6 +15,9 @@ import com.festago.common.exception.UnauthorizedException;
 import com.festago.festival.application.FestivalService;
 import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.FestivalResponse;
+import com.festago.school.application.SchoolService;
+import com.festago.school.dto.SchoolCreateRequest;
+import com.festago.school.dto.SchoolResponse;
 import com.festago.stage.application.StageService;
 import com.festago.stage.dto.StageCreateRequest;
 import com.festago.stage.dto.StageResponse;
@@ -52,17 +55,26 @@ public class AdminController {
     private final TicketService ticketService;
     private final AdminService adminService;
     private final AdminAuthService adminAuthService;
+    private final SchoolService schoolService;
     private final Optional<BuildProperties> properties;
 
     public AdminController(FestivalService festivalService, StageService stageService, TicketService ticketService,
                            AdminService adminService, AdminAuthService adminAuthService,
-                           Optional<BuildProperties> buildProperties) {
+                           SchoolService schoolService, Optional<BuildProperties> buildProperties) {
         this.festivalService = festivalService;
         this.stageService = stageService;
         this.ticketService = ticketService;
         this.adminService = adminService;
         this.adminAuthService = adminAuthService;
+        this.schoolService = schoolService;
         this.properties = buildProperties;
+    }
+
+    @PostMapping("/schools")
+    public ResponseEntity<SchoolResponse> createSchool(@RequestBody @Valid SchoolCreateRequest request) {
+        SchoolResponse response = schoolService.create(request);
+        return ResponseEntity.ok()
+            .body(response);
     }
 
     @PostMapping("/festivals")

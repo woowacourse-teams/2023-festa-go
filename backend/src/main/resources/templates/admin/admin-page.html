@@ -8,6 +8,19 @@
 <body>
 <div class="container">
   <div class="form-section">
+    <h2>학교 생성 요청</h2>
+    <form id="createSchoolForm" method="post" action="#">
+      <label for="schoolName">이름:</label>
+      <input id="schoolName" name="schoolName" required type="text"><br>
+
+      <label for="domain">도메인:</label>
+      <input id="domain" name="domain" required type="text"><br>
+
+      <button type="submit">학교 생성</button>
+    </form>
+  </div>
+
+  <div class="form-section">
     <h2>축제 생성 요청</h2>
     <form id="createFestivalForm" method="post" action="#">
       <label for="name">이름:</label>
@@ -21,6 +34,9 @@
 
       <label for="thumbnail">썸네일:</label>
       <input id="thumbnail" name="thumbnail" required type="text"><br>
+
+      <label for="schoolId">학교 ID:</label>
+      <input id="schoolId" name="schoolId" required type="text"><br>
 
       <button type="submit">축제 생성</button>
     </form>
