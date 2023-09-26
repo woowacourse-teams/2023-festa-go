@@ -7,7 +7,7 @@ alter table ticket
             references school (id);
 
 alter table festival
-    add column school_id bigint not null;
+    add column school_id bigint;
 
 alter table festival
     add constraint fk_festival__school
