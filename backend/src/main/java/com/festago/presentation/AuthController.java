@@ -42,6 +42,7 @@ public class AuthController {
     @Operation(description = "회원 탈퇴 요청을 보낸다.", summary = "유저 회원 탈퇴")
     public ResponseEntity<Void> deleteMember(@Member Long memberId) {
         authFacadeService.deleteMember(memberId);
+        memberFCMService.deleteMemberFCM(memberId);
         return ResponseEntity.ok()
             .build();
     }

@@ -8,6 +8,7 @@ import com.festago.fcm.domain.MemberFCM;
 import com.festago.fcm.dto.MemberFCMsResponse;
 import com.festago.fcm.repository.MemberFCMRepository;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -43,6 +44,14 @@ public class MemberFCMService {
     public void saveMemberFCM(String accessToken, String fcmToken) {
         AuthPayload authPayload = authExtractor.extract(accessToken);
         Long memberId = authPayload.getMemberId();
+        Optional<MemberFCM> memberFCM = memberFCMRepository.findMemberFCMByMemberIdAndFcmToken(memberId, fcmToken);
+        if (memberFCM.isPresent()) {
+            return;
+        }
         memberFCMRepository.save(new MemberFCM(memberId, fcmToken));
+    }
+
+    public void deleteMemberFCM(Long memberId) {
+        memberFCMRepository.deleteAllByMemberId(memberId);
     }
 }

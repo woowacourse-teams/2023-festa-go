@@ -14,3 +14,6 @@ alter table member_fcm
     add constraint fk_member_fcm__member
         foreign key (member_id)
             references member (id);
+
+alter table member_fcm
+    add constraint unique_member_fcm unique (member_id, fcm_token);
