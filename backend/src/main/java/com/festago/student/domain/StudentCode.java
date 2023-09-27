@@ -8,6 +8,7 @@ import com.festago.member.domain.Member;
 import com.festago.school.domain.School;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,11 +16,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.StringUtils;
 
+
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class StudentCode {
 
     private static final int MIN_REQUEST_TERM_SECONDS = 30;
@@ -40,6 +45,7 @@ public class StudentCode {
 
     private String username;
 
+    @NotNull
     @CreatedDate
     private LocalDateTime issuedAt;
 
