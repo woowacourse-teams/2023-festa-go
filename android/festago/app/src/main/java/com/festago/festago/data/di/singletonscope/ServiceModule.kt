@@ -2,6 +2,7 @@ package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.service.ReservationTicketRetrofitService
+import com.festago.festago.data.service.SchoolRetrofitService
 import com.festago.festago.data.service.StudentVerificationRetrofitService
 import com.festago.festago.data.service.TicketRetrofitService
 import com.festago.festago.data.service.TokenRetrofitService
@@ -63,5 +64,13 @@ object ServiceModule {
         @AuthRetrofitQualifier retrofit: Retrofit
     ): StudentVerificationRetrofitService {
         return retrofit.create(StudentVerificationRetrofitService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesSchoolRetrofitService(
+        @NormalRetrofitQualifier retrofit: Retrofit
+    ): SchoolRetrofitService {
+        return retrofit.create(SchoolRetrofitService::class.java)
     }
 }
