@@ -1,5 +1,6 @@
 package com.festago.fcm.application;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -39,12 +40,27 @@ class FCMNotificationEventListenerTest {
     FCMNotificationEventListener FCMNotificationEventListener;
 
     @Test
+    void 유저의_모든_FCM_요청이_성공() throws FirebaseMessagingException {
+        // given
+        given(memberFCMService.findMemberFCM(anyLong())).willReturn(
+            new MemberFCMsResponse(List.of(new MemberFCMResponse(1L, 1L, "token1"),
+                new MemberFCMResponse(2L, 1L, "token2"))));
+
+        given(firebaseMessaging.sendAll(any())).willReturn(new SuccessMockBatchResponse());
+        EntryProcessEvent event = new EntryProcessEvent(1L);
+
+        // when & then
+        assertDoesNotThrow(() -> FCMNotificationEventListener.sendFcmNotification(event));
+    }
+
+    @Test
     void 유저의_FCM_요청_중_하나라도_실패하면_예외() throws FirebaseMessagingException {
         // given
         given(memberFCMService.findMemberFCM(anyLong())).willReturn(
-            new MemberFCMsResponse(List.of(new MemberFCMResponse(1L, 1L, "token1"), new MemberFCMResponse(2L, 1L, "token2"))));
+            new MemberFCMsResponse(List.of(new MemberFCMResponse(1L, 1L, "token1"),
+                new MemberFCMResponse(2L, 1L, "token2"))));
 
-        given(firebaseMessaging.sendAll(any())).willReturn(new MockBatchResponse());
+        given(firebaseMessaging.sendAll(any())).willReturn(new FailMockBatchResponse());
 
         EntryProcessEvent event = new EntryProcessEvent(1L);
 
@@ -53,12 +69,32 @@ class FCMNotificationEventListenerTest {
             .isInstanceOf(InternalServerException.class);
     }
 
-    private static class MockBatchResponse implements BatchResponse {
+    private static class FailMockBatchResponse implements BatchResponse {
 
         @Override
         public List<SendResponse> getResponses() {
             SendResponse mockResponse = mock(SendResponse.class);
             when(mockResponse.isSuccessful()).thenReturn(false);
+            return List.of(mockResponse, mockResponse);
+        }
+
+        @Override
+        public int getSuccessCount() {
+            return 0;
+        }
+
+        @Override
+        public int getFailureCount() {
+            return 0;
+        }
+    }
+
+    private static class SuccessMockBatchResponse implements BatchResponse {
+
+        @Override
+        public List<SendResponse> getResponses() {
+            SendResponse mockResponse = mock(SendResponse.class);
+            when(mockResponse.isSuccessful()).thenReturn(true);
             return List.of(mockResponse, mockResponse);
         }
 

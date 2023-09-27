@@ -30,7 +30,8 @@ public class FCMNotificationEventListener {
     private final FirebaseMessaging firebaseMessaging;
     private final MemberFCMService memberFCMService;
 
-    public FCMNotificationEventListener(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
+    public FCMNotificationEventListener(FirebaseMessaging firebaseMessaging,
+                                        MemberFCMService memberFCMService) {
         this.firebaseMessaging = firebaseMessaging;
         this.memberFCMService = memberFCMService;
     }
@@ -38,7 +39,8 @@ public class FCMNotificationEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     public void sendFcmNotification(EntryProcessEvent event) {
-        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()), FCMChannel.NOT_DEFINED.name());
+        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()),
+            FCMChannel.NOT_DEFINED.name());
         try {
             BatchResponse batchResponse = firebaseMessaging.sendAll(messages);
             checkAllSuccess(batchResponse, event.memberId());
@@ -83,7 +85,9 @@ public class FCMNotificationEventListener {
         List<SendResponse> failSend = batchResponse.getResponses().stream()
             .filter(sendResponse -> !sendResponse.isSuccessful())
             .toList();
-
+        if (failSend.isEmpty()) {
+            return;
+        }
         log.warn("member {} 에 대한 다음 요청들이 실패했습니다. {}", memberId, failSend);
         throw new InternalServerException(ErrorCode.FAIL_SEND_FCM_MESSAGE);
     }
