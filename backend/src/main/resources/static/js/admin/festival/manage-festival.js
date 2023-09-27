@@ -88,8 +88,8 @@ function createFestival(e) {
   const formData = new FormData(e.target);
   const festivalData = {
     name: formData.get("name"),
-    startDate: formData.get("startDate"),
-    endDate: formData.get("endDate"),
+    startDate: formData.get("festivalStartDate"),
+    endDate: formData.get("festivalEndDate"),
     thumbnail: formData.get("thumbnail"),
     schoolId: formData.get("school"),
   };
