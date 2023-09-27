@@ -10,3 +10,9 @@ drop index temp_member_index on student_code;
 
 alter table student_code
     add column issued_at datetime(6);
+
+alter table student_code
+    drop column created_at;
+
+alter table student_code
+    drop column updated_at;

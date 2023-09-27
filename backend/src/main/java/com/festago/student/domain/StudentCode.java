@@ -2,7 +2,6 @@ package com.festago.student.domain;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 import com.festago.member.domain.Member;
@@ -21,7 +20,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.util.StringUtils;
 
 @Entity
-public class StudentCode extends BaseTimeEntity {
+public class StudentCode {
 
     private static final int MIN_REQUEST_TERM_SECONDS = 30;
 
