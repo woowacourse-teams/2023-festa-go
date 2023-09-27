@@ -1,10 +1,8 @@
 package com.festago.festival.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.common.exception.BadRequestException;
-import com.festago.common.exception.ErrorCode;
-import com.festago.school.domain.School;
 import com.festago.common.util.Validator;
+import com.festago.school.domain.School;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

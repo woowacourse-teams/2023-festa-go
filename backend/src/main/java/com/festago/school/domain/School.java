@@ -1,10 +1,8 @@
 package com.festago.school.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
-import jakarta.persistence.Column;
 import com.festago.common.util.Validator;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

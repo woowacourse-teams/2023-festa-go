@@ -29,15 +29,15 @@ public class FestivalService {
 
     private final FestivalRepository festivalRepository;
     private final StageRepository stageRepository;
-    private final Clock clock;
     private final SchoolRepository schoolRepository;
+    private final Clock clock;
 
     public FestivalService(FestivalRepository festivalRepository, StageRepository stageRepository,
-                           Clock clock, SchoolRepository schoolRepository) {
+                           SchoolRepository schoolRepository, Clock clock) {
         this.festivalRepository = festivalRepository;
         this.stageRepository = stageRepository;
-        this.clock = clock;
         this.schoolRepository = schoolRepository;
+        this.clock = clock;
     }
 
     public FestivalResponse create(FestivalCreateRequest request) {
@@ -45,8 +45,7 @@ public class FestivalService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
         Festival festival = request.toEntity(school);
         validate(festival);
-        Festival newFestival = festivalRepository.save(festival);
-        return FestivalResponse.from(newFestival);
+        return FestivalResponse.from(festivalRepository.save(festival));
     }
 
     private void validate(Festival festival) {
@@ -80,6 +79,7 @@ public class FestivalService {
         festival.changeName(request.name());
         festival.changeThumbnail(request.thumbnail());
         festival.changeDate(request.startDate(), request.endDate());
+        validate(festival);
     }
 
     public void delete(Long festivalId) {

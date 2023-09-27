@@ -26,7 +26,7 @@ class FestivalTest {
         LocalDate tomorrow = today.plusDays(1);
 
         // when & then
-        assertThatThrownBy(() -> new Festival("테코대학교", tomorrow, today))
+        assertThatThrownBy(() -> new Festival("테코대학교", tomorrow, today, school))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("축제 시작 일은 종료일 이전이어야 합니다.");
     }
