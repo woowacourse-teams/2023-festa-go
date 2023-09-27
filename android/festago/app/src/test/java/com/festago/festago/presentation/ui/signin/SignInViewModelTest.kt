@@ -3,6 +3,7 @@ package com.festago.festago.presentation.ui.signin
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.repository.AuthRepository
+import com.google.firebase.messaging.FirebaseMessaging
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ class SignInViewModelTest {
     private lateinit var vm: SignInViewModel
     private lateinit var authRepository: AuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
+    private lateinit var firebaseMessaging: FirebaseMessaging
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -30,7 +32,8 @@ class SignInViewModelTest {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         authRepository = mockk(relaxed = true)
         analyticsHelper = mockk(relaxed = true)
-        vm = SignInViewModel(authRepository, analyticsHelper)
+        firebaseMessaging = mockk(relaxed = true)
+        vm = SignInViewModel(authRepository, firebaseMessaging, analyticsHelper)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -43,7 +46,7 @@ class SignInViewModelTest {
     fun `로그인 성공하면 성공 이벤트가 발생한다`() {
         // given
         coEvery {
-            authRepository.signIn(any(), any())
+            authRepository.signInLegacy(any(), any())
         } answers {
             Result.success(Unit)
         }
@@ -59,7 +62,7 @@ class SignInViewModelTest {
     fun `로그인 실패하면 실패 이벤트가 발생한다`() {
         // given
         coEvery {
-            authRepository.signIn(any(), any())
+            authRepository.signInLegacy(any(), any())
         } answers {
             Result.failure(Exception())
         }
