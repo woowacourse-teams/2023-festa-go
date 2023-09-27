@@ -1,5 +1,6 @@
 package com.festago.application;
 
+import static com.festago.common.exception.ErrorCode.FESTIVAL_NOT_FOUND;
 import static com.festago.common.exception.ErrorCode.INVALID_FESTIVAL_START_DATE;
 import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -142,7 +143,7 @@ class FestivalServiceTest {
 
             // when & then
             assertThatThrownBy(() -> festivalService.findDetail(festivalId)).isInstanceOf(NotFoundException.class)
-                .hasMessage(SCHOOL_NOT_FOUND.getMessage());
+                .hasMessage(FESTIVAL_NOT_FOUND.getMessage());
         }
 
         @Test
