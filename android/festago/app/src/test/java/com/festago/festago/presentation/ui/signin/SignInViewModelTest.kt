@@ -6,8 +6,10 @@ import com.festago.festago.repository.AuthRepository
 import com.google.firebase.messaging.FirebaseMessaging
 import io.mockk.coEvery
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -30,6 +32,9 @@ class SignInViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
+
+        mockkStatic("kotlinx.coroutines.tasks.TasksKt")
+
         authRepository = mockk(relaxed = true)
         analyticsHelper = mockk(relaxed = true)
         firebaseMessaging = mockk(relaxed = true)
@@ -45,11 +50,9 @@ class SignInViewModelTest {
     @Test
     fun `로그인 성공하면 성공 이벤트가 발생한다`() {
         // given
-        coEvery {
-            authRepository.signInLegacy(any(), any())
-        } answers {
-            Result.success(Unit)
-        }
+        coEvery { firebaseMessaging.token.await() } returns "fakeFcmToken"
+
+        coEvery { authRepository.signIn(any(), any(), any()) } answers { Result.success(Unit) }
 
         // when
         vm.signIn("testToken")
@@ -61,11 +64,11 @@ class SignInViewModelTest {
     @Test
     fun `로그인 실패하면 실패 이벤트가 발생한다`() {
         // given
+        coEvery { firebaseMessaging.token.await() } returns "fakeFcmToken"
+
         coEvery {
-            authRepository.signInLegacy(any(), any())
-        } answers {
-            Result.failure(Exception())
-        }
+            authRepository.signIn(any(), any(), any())
+        } answers { Result.failure(Exception()) }
 
         // when
         vm.signIn("testToken")
@@ -82,5 +85,18 @@ class SignInViewModelTest {
 
         // then
         assertThat(vm.event.getValue() is SignInEvent.ShowSignInPage).isTrue
+    }
+
+    @Test
+    fun `FCM 토큰을 불러오지 못하면 실패 이벤트가 발생한다`() {
+        // given
+        coEvery { firebaseMessaging.token } throws Exception()
+
+        // when
+        vm.signIn("testToken")
+
+        // then
+        println(vm.event.getValue())
+        assertThat(vm.event.getValue() is SignInEvent.SignInFailure).isTrue
     }
 }

@@ -9,6 +9,7 @@ import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -23,16 +24,23 @@ class SignInViewModel @Inject constructor(
     private val _event = MutableSingleLiveData<SignInEvent>()
     val event: SingleLiveData<SignInEvent> = _event
 
+    private val exceptionHandler: CoroutineExceptionHandler =
+        CoroutineExceptionHandler { _, throwable ->
+            _event.setValue(SignInEvent.SignInFailure)
+            analyticsHelper.logNetworkFailure(KEY_SIGN_IN_LOG, throwable.message.toString())
+        }
+
     fun signInKakao() {
         _event.setValue(SignInEvent.ShowSignInPage)
     }
 
     fun signIn(token: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
+            val fcmToken = firebaseMessaging.token.await()
             authRepository.signIn(
                 SOCIAL_TYPE_KAKAO,
                 token,
-                firebaseMessaging.token.await(),
+                fcmToken,
             ).onSuccess {
                 _event.setValue(SignInEvent.SignInSuccess)
             }.onFailure {
