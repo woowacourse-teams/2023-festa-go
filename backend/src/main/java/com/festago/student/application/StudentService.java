@@ -91,9 +91,11 @@ public class StudentService {
     }
 
     private void saveStudentCode(VerificationCode code, Member member, School school, String username) {
-        studentCodeRepository.deleteByMember(member);
-        studentRepository.flush();
-        studentCodeRepository.save(new StudentCode(code, school, member, username));
+        studentCodeRepository.findByMemberId(member.getId())
+            .ifPresentOrElse(
+                studentCode -> studentCode.reissue(code, school, username),
+                () -> studentCodeRepository.save(new StudentCode(code, school, member, username))
+            );
     }
 
     public void verificate(Long memberId, StudentVerificateRequest request) {

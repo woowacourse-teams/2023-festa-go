@@ -18,7 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.StringUtils;
 
@@ -46,7 +46,7 @@ public class StudentCode {
     private String username;
 
     @NotNull
-    @CreatedDate
+    @LastModifiedDate
     private LocalDateTime issuedAt;
 
     protected StudentCode() {
@@ -79,6 +79,12 @@ public class StudentCode {
 
     public boolean canReissue(LocalDateTime currentTime) {
         return SECONDS.between(issuedAt, currentTime) > MIN_REQUEST_TERM_SECONDS;
+    }
+
+    public void reissue(VerificationCode code, School school, String username) {
+        this.code = code;
+        this.school = school;
+        this.username = username;
     }
 
     public Long getId() {
