@@ -28,7 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @ExtendWith(MockitoExtension.class)
-class AdminAuthFacadeServiceTest {
+class AdminAuthServiceTest {
 
     @Mock
     AuthProvider authProvider;
