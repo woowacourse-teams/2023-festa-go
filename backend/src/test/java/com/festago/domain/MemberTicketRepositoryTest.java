@@ -8,11 +8,14 @@ import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
+import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
 import com.festago.ticketing.domain.MemberTicket;
@@ -52,6 +55,9 @@ class MemberTicketRepositoryTest {
     @Autowired
     FestivalRepository festivalRepository;
 
+    @Autowired
+    SchoolRepository schoolRepository;
+
     @Nested
     class 회원의_ID로_에매한_티켓을_모두_조회 {
 
@@ -61,7 +67,8 @@ class MemberTicketRepositoryTest {
             Member member1 = memberRepository.save(MemberFixture.member().socialId("abc").build());
             Member member2 = memberRepository.save(MemberFixture.member().socialId("def").build());
 
-            Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+            School school = schoolRepository.save(SchoolFixture.school().build());
+            Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
             Stage stage1 = stageRepository.save(StageFixture.stage().festival(festival).build());
             Stage stage2 = stageRepository.save(StageFixture.stage().festival(festival).build());
 
@@ -83,7 +90,8 @@ class MemberTicketRepositoryTest {
             int expected = 10;
             Member member = memberRepository.save(MemberFixture.member().build());
 
-            Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+            School school = schoolRepository.save(SchoolFixture.school().build());
+            Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
             Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
 
             for (int i = 0; i < 20; i++) {
@@ -103,7 +111,8 @@ class MemberTicketRepositoryTest {
             // given
             Member member = memberRepository.save(MemberFixture.member().build());
 
-            Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+            School school = schoolRepository.save(SchoolFixture.school().build());
+            Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
             Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
 
             List<MemberTicket> memberTickets = new ArrayList<>();
