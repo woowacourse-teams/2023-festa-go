@@ -11,7 +11,12 @@ public record StageResponse(
     String lineUp) {
 
     public static StageResponse from(Stage stage) {
-        return new StageResponse(stage.getId(), stage.getFestival().getId(), stage.getStartTime(),
-            stage.getTicketOpenTime(), stage.getLineUp());
+        return new StageResponse(
+            stage.getId(),
+            stage.getFestival().getId(),
+            stage.getStartTime(),
+            stage.getTicketOpenTime(),
+            stage.getLineUp()
+        );
     }
 }
