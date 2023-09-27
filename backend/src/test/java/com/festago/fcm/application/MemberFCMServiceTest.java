@@ -57,7 +57,7 @@ class MemberFCMServiceTest {
     }
 
     @Test
-    void 새로운_유저의_fcm_토큰이라면_저장() {
+    void 기존_유저의_새로운_FCM_토큰이라면_저장() {
         // given
         String accessToken = "accessToken";
         String fcmToken = "fcmToken";
@@ -68,7 +68,7 @@ class MemberFCMServiceTest {
             .willReturn(Optional.empty());
 
         // when
-        memberFCMService.saveMemberFCM(accessToken, fcmToken);
+        memberFCMService.saveOriginMemberFCM(accessToken, fcmToken);
 
         // then
         verify(memberFCMRepository, times(1))
@@ -76,7 +76,7 @@ class MemberFCMServiceTest {
     }
 
     @Test
-    void 이미_존재하는_유저의_토큰이라면_저장하지_않는다() {
+    void 기존_유저의_이미_존재하는_유저의_FCM_토큰이라면_저장하지_않는다() {
         // given
         String accessToken = "accessToken";
         String originToken = "fcmToken";
@@ -87,10 +87,27 @@ class MemberFCMServiceTest {
             .willReturn(Optional.of(new MemberFCM(memberId, originToken)));
 
         // when
-        memberFCMService.saveMemberFCM(accessToken, originToken);
+        memberFCMService.saveOriginMemberFCM(accessToken, originToken);
 
         // then
         verify(memberFCMRepository, never())
+            .save(any(MemberFCM.class));
+    }
+
+    @Test
+    void 새로운_유저의_FCM_토큰을_저장한다() {
+        // given
+        String accessToken = "accessToken";
+        String fcmToken = "fcmToken";
+        Long memberId = 1L;
+        given(authExtractor.extract(any()))
+            .willReturn(new AuthPayload(memberId, Role.MEMBER));
+
+        // when
+        memberFCMService.saveNewMemberFCM(accessToken, fcmToken);
+
+        // then
+        verify(memberFCMRepository, times(1))
             .save(any(MemberFCM.class));
     }
 

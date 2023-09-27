@@ -32,9 +32,19 @@ public class AuthController {
     @Operation(description = "소셜 엑세스 토큰을 기반으로 로그인 요청을 보낸다.", summary = "OAuth2 로그인")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = authFacadeService.login(request.socialType(), request.accessToken());
-        memberFCMService.saveMemberFCM(response.accessToken(), request.fcmToken());
+        registerFCM(response, request);
         return ResponseEntity.ok()
             .body(response);
+    }
+
+    private void registerFCM(LoginResponse response, LoginRequest request) {
+        String accessToken = response.accessToken();
+        String fcmToken = request.fcmToken();
+        if (response.isNew()) {
+            memberFCMService.saveNewMemberFCM(accessToken, fcmToken);
+            return;
+        }
+        memberFCMService.saveOriginMemberFCM(accessToken, fcmToken);
     }
 
     @DeleteMapping
