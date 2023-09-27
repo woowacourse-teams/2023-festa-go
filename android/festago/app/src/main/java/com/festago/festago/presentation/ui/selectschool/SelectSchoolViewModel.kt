@@ -31,7 +31,12 @@ class SelectSchoolViewModel @Inject constructor(
         viewModelScope.launch {
             schoolRepository.loadSchools()
                 .onSuccess { schools ->
-                    _uiState.value = SelectSchoolUiState.Success(schools)
+                    if (uiState.value is SelectSchoolUiState.Success) {
+                        val successState = (uiState.value as SelectSchoolUiState.Success)
+                        _uiState.value = successState.copy(schools = schools)
+                    } else {
+                        _uiState.value = SelectSchoolUiState.Success(schools)
+                    }
                 }
                 .onFailure {
                     _uiState.value = SelectSchoolUiState.Error
