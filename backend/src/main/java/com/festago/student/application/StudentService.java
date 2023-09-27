@@ -49,7 +49,7 @@ public class StudentService {
         School school = findSchool(request.schoolId());
         validate(memberId, request);
         VerificationCode code = codeProvider.provide();
-        saveStudentCode(request, member, code, school);
+        saveStudentCode(code, member, school, request.username());
         mailClient.send(new VerificationMailPayload(code, request.username(), school.getDomain()));
     }
 
@@ -90,10 +90,10 @@ public class StudentService {
         }
     }
 
-    private void saveStudentCode(StudentSendMailRequest request, Member member, VerificationCode code, School school) {
+    private void saveStudentCode(VerificationCode code, Member member, School school, String username) {
         studentCodeRepository.deleteByMember(member);
         studentRepository.flush();
-        studentCodeRepository.save(new StudentCode(code, school, member, request.username()));
+        studentCodeRepository.save(new StudentCode(code, school, member, username));
     }
 
     public void verificate(Long memberId, StudentVerificateRequest request) {
