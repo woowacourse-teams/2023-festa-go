@@ -39,6 +39,7 @@ public class Festival extends BaseTimeEntity {
     @Size(max = 255)
     private String thumbnail;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private School school;
 

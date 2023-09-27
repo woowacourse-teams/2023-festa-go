@@ -39,6 +39,7 @@ public class Ticket extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Stage stage;
 
+    @NotNull
     private Long schoolId;
 
     @NotNull
