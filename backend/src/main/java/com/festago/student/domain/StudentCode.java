@@ -13,23 +13,14 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.util.StringUtils;
 
 @Entity
-@Table(
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "unique_username__school",
-            columnNames = {"username", "school_id"}
-        )
-    }
-)
 public class StudentCode extends BaseTimeEntity {
 
     private static final int MIN_REQUEST_TERM_SECONDS = 30;
@@ -45,6 +36,7 @@ public class StudentCode extends BaseTimeEntity {
     private School school;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(unique = true)
     private Member member;
 
     private String username;
