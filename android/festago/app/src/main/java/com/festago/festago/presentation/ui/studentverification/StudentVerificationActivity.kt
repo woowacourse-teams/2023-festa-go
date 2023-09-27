@@ -64,8 +64,9 @@ class StudentVerificationActivity : AppCompatActivity() {
     private fun handleUiState(uiState: StudentVerificationUiState) {
         binding.uiState = uiState
         when (uiState) {
+            is StudentVerificationUiState.Loading -> Unit
             is StudentVerificationUiState.Success -> handleSuccess(uiState)
-            is StudentVerificationUiState.Loading, StudentVerificationUiState.Error -> Unit
+            is StudentVerificationUiState.Error -> Unit
         }
     }
 
