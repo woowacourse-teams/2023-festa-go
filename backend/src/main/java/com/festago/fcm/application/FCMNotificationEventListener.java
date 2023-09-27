@@ -77,12 +77,11 @@ public class FCMNotificationEventListener {
     }
 
     private void checkAllSuccess(BatchResponse batchResponse, Long memberId) {
-        List<SendResponse> failSend = batchResponse.getResponses().stream()
-            .filter(sendResponse -> !sendResponse.isSuccessful())
-            .toList();
-        if (failSend.isEmpty()) {
-            return;
+        if (batchResponse.getFailureCount() > 0) {
+            List<SendResponse> failSend = batchResponse.getResponses().stream()
+                .filter(sendResponse -> !sendResponse.isSuccessful())
+                .toList();
+            log.warn("member {} 에 대한 다음 요청들이 실패했습니다. {}", memberId, failSend);
         }
-        log.warn("member {} 에 대한 다음 요청들이 실패했습니다. {}", memberId, failSend);
     }
 }

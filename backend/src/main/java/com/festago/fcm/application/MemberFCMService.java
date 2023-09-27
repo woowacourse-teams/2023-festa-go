@@ -40,10 +40,9 @@ public class MemberFCMService {
     public void saveOriginMemberFCM(String accessToken, String fcmToken) {
         Long memberId = extractMemberId(accessToken);
         Optional<MemberFCM> memberFCM = memberFCMRepository.findMemberFCMByMemberIdAndFcmToken(memberId, fcmToken);
-        if (memberFCM.isPresent()) {
-            return;
+        if (memberFCM.isEmpty()) {
+            memberFCMRepository.save(new MemberFCM(memberId, fcmToken));
         }
-        memberFCMRepository.save(new MemberFCM(memberId, fcmToken));
     }
 
     private Long extractMemberId(String accessToken) {
