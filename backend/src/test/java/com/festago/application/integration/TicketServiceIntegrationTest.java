@@ -1,5 +1,6 @@
 package com.festago.application.integration;
 
+import static com.festago.common.exception.ErrorCode.STAGE_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doReturn;
@@ -68,7 +69,7 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         // when && then
         assertThatThrownBy(() -> ticketService.create(request))
             .isInstanceOf(NotFoundException.class)
-            .hasMessage("존재하지 않은 공연입니다.");
+            .hasMessage(STAGE_NOT_FOUND.getMessage());
     }
 
     @Test

@@ -1,5 +1,7 @@
 package com.festago.application;
 
+import static com.festago.common.exception.ErrorCode.INVALID_FESTIVAL_START_DATE;
+import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -85,7 +87,7 @@ class FestivalServiceTest {
             // when & then
             assertThatThrownBy(() -> festivalService.create(request))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 학교입니다.");
+                .hasMessage(SCHOOL_NOT_FOUND.getMessage());
         }
 
         @Test
@@ -101,7 +103,7 @@ class FestivalServiceTest {
             // when & then
             assertThatThrownBy(() -> festivalService.create(request))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("축제 시작 일자는 과거일 수 없습니다.");
+                .hasMessage(INVALID_FESTIVAL_START_DATE.getMessage());
         }
 
         @Test
@@ -140,7 +142,7 @@ class FestivalServiceTest {
 
             // when & then
             assertThatThrownBy(() -> festivalService.findDetail(festivalId)).isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 축제입니다.");
+                .hasMessage(SCHOOL_NOT_FOUND.getMessage());
         }
 
         @Test

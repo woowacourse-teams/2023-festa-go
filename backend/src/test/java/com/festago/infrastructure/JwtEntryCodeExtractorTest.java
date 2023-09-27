@@ -1,5 +1,9 @@
 package com.festago.infrastructure;
 
+import static com.festago.common.exception.ErrorCode.EXPIRED_ENTRY_CODE;
+import static com.festago.common.exception.ErrorCode.INVALID_ENTRY_CODE;
+import static com.festago.common.exception.ErrorCode.INVALID_ENTRY_CODE_PAYLOAD;
+import static com.festago.common.exception.ErrorCode.INVALID_ENTRY_STATE_INDEX;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -36,7 +40,7 @@ class JwtEntryCodeExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("올바르지 않은 입장코드입니다.");
+            .hasMessage(INVALID_ENTRY_CODE.getMessage());
     }
 
     @Test
@@ -46,7 +50,7 @@ class JwtEntryCodeExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("올바르지 않은 입장코드입니다.");
+            .hasMessage(INVALID_ENTRY_CODE.getMessage());
     }
 
     @Test
@@ -62,7 +66,7 @@ class JwtEntryCodeExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("만료된 입장 코드입니다.");
+            .hasMessage(EXPIRED_ENTRY_CODE.getMessage());
     }
 
     @Test
@@ -80,7 +84,7 @@ class JwtEntryCodeExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("올바르지 않은 입장코드입니다.");
+            .hasMessage(INVALID_ENTRY_CODE.getMessage());
     }
 
     @Test
@@ -95,7 +99,7 @@ class JwtEntryCodeExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("유효하지 않은 입장코드 payload 입니다.");
+            .hasMessage(INVALID_ENTRY_CODE_PAYLOAD.getMessage());
     }
 
     @Test
@@ -110,7 +114,7 @@ class JwtEntryCodeExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("올바르지 않은 입장상태 인덱스입니다.");
+            .hasMessage(INVALID_ENTRY_STATE_INDEX.getMessage());
     }
 
     @Test
