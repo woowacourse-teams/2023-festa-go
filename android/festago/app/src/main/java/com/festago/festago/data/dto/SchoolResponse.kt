@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SchoolResponse(
-    val domain: String,
     val id: Int,
+    val domain: String,
     val name: String
 ) {
     fun toDomain(): School = School(
