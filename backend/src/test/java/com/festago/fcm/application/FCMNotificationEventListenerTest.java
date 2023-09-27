@@ -1,13 +1,13 @@
 package com.festago.fcm.application;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-import com.festago.common.exception.InternalServerException;
 import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.fcm.dto.MemberFCMResponse;
 import com.festago.fcm.dto.MemberFCMsResponse;
@@ -16,7 +16,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.SendResponse;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -45,12 +44,21 @@ class FCMNotificationEventListenerTest {
         given(memberFCMService.findMemberFCM(anyLong())).willReturn(
             new MemberFCMsResponse(List.of(new MemberFCMResponse(1L, 1L, "token1"),
                 new MemberFCMResponse(2L, 1L, "token2"))));
+        BatchResponse mockBatchResponse = mock(BatchResponse.class);
+        given(mockBatchResponse.getFailureCount())
+            .willReturn(0);
 
-        given(firebaseMessaging.sendAll(any())).willReturn(new SuccessMockBatchResponse());
+        given(firebaseMessaging.sendAll(any())).willReturn(mockBatchResponse);
         EntryProcessEvent event = new EntryProcessEvent(1L);
 
-        // when & then
-        assertDoesNotThrow(() -> FCMNotificationEventListener.sendFcmNotification(event));
+        // when
+        FCMNotificationEventListener.sendFcmNotification(event);
+
+        // then
+        verify(mockBatchResponse, times(1))
+            .getFailureCount();
+        verify(mockBatchResponse, never())
+            .getResponses();
     }
 
     @Test
@@ -60,52 +68,29 @@ class FCMNotificationEventListenerTest {
             new MemberFCMsResponse(List.of(new MemberFCMResponse(1L, 1L, "token1"),
                 new MemberFCMResponse(2L, 1L, "token2"))));
 
-        given(firebaseMessaging.sendAll(any())).willReturn(new FailMockBatchResponse());
+        BatchResponse mockBatchResponse = mock(BatchResponse.class);
+        SendResponse mockSendResponse = mock(SendResponse.class);
+
+        given(mockSendResponse.isSuccessful())
+            .willReturn(false);
+        given(mockBatchResponse.getFailureCount())
+            .willReturn(1);
+        given(mockBatchResponse.getResponses())
+            .willReturn(List.of(mockSendResponse));
+
+        given(firebaseMessaging.sendAll(any())).willReturn(mockBatchResponse);
 
         EntryProcessEvent event = new EntryProcessEvent(1L);
 
-        // when & then
-        Assertions.assertThatThrownBy(() -> FCMNotificationEventListener.sendFcmNotification(event))
-            .isInstanceOf(InternalServerException.class);
-    }
+        // when
+        FCMNotificationEventListener.sendFcmNotification(event);
 
-    private static class FailMockBatchResponse implements BatchResponse {
-
-        @Override
-        public List<SendResponse> getResponses() {
-            SendResponse mockResponse = mock(SendResponse.class);
-            when(mockResponse.isSuccessful()).thenReturn(false);
-            return List.of(mockResponse, mockResponse);
-        }
-
-        @Override
-        public int getSuccessCount() {
-            return 0;
-        }
-
-        @Override
-        public int getFailureCount() {
-            return 0;
-        }
-    }
-
-    private static class SuccessMockBatchResponse implements BatchResponse {
-
-        @Override
-        public List<SendResponse> getResponses() {
-            SendResponse mockResponse = mock(SendResponse.class);
-            when(mockResponse.isSuccessful()).thenReturn(true);
-            return List.of(mockResponse, mockResponse);
-        }
-
-        @Override
-        public int getSuccessCount() {
-            return 0;
-        }
-
-        @Override
-        public int getFailureCount() {
-            return 0;
-        }
+        // then
+        verify(mockBatchResponse, times(1))
+            .getFailureCount();
+        verify(mockBatchResponse, times(1))
+            .getResponses();
+        verify(mockSendResponse, times(1))
+            .isSuccessful();
     }
 }
