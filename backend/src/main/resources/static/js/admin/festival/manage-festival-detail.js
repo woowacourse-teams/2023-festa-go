@@ -34,8 +34,8 @@ function fetchFestival() {
   }).then(festival => {
     idInput.value = festival.id;
     fakeIdInput.value = festival.id;
-    // TODO schoolIdInput.value = festival.schoolId
-    // TODO fakeIdInput.value = festival.schoolId
+    schoolIdInput.value = festival.schoolId
+    fakeSchoolIdInput.value = festival.schoolId
     nameInput.value = festival.name;
     thumbnailInput.value = festival.thumbnail;
     startDateInput.value = festival.startDate;

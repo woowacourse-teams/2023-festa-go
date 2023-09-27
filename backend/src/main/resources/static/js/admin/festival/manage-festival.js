@@ -5,7 +5,6 @@ function fetchFestivals() {
 
   fetch("/festivals").then(res => {
     if (!res.ok) {
-      disableSelector("서버에 연결할 수 없습니다.");
       throw new Error("서버에 연결할 수 없습니다.")
     }
     return res.json();
@@ -22,7 +21,7 @@ function fetchFestivals() {
 
       const schoolIdColumn = document.createElement("div");
       schoolIdColumn.classList.add("col-1");
-      schoolIdColumn.textContent = "#";
+      schoolIdColumn.textContent = festival.schoolId;
 
       const nameColumn = document.createElement("div");
       nameColumn.classList.add("col-2");
@@ -62,30 +61,19 @@ function fetchSchools() {
 
   fetch("/schools").then(res => {
     if (!res.ok) {
-      disableSelector("서버에 연결할 수 없습니다.");
       throw new Error("서버에 연결할 수 없습니다.")
     }
     return res.json();
   }).then(data => {
     const schools = data.schools;
-    if (schools.length === 0) {
-      disableSelector("학교 목록이 없습니다.");
-    }
-
     for (const school of schools) {
       const option = document.createElement("option");
-      option.textContent = school.name;
-      option.value = school.id;
+      const schoolId = school.id;
+      option.textContent = `${school.name} (ID=${schoolId})`;
+      option.value = schoolId;
       schoolSelect.append(option);
     }
   })
-}
-
-function disableSelector(reason) {
-  const schoolSelect = document.getElementById("schoolSelect");
-  schoolSelect.setAttribute("disabled", "");
-  const schoolPlaceholder = document.getElementById("school-placeholder");
-  schoolPlaceholder.textContent = reason;
 }
 
 fetchSchools();
