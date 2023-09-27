@@ -1,7 +1,5 @@
 package com.festago.fcm.application;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
 import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.MemberFCMResponse;
@@ -43,8 +41,7 @@ public class FCMNotificationEventListener {
             BatchResponse batchResponse = firebaseMessaging.sendAll(messages);
             checkAllSuccess(batchResponse, event.memberId());
         } catch (FirebaseMessagingException e) {
-            log.error("fail send FCM message", e);
-            throw new InternalServerException(ErrorCode.FAIL_SEND_FCM_MESSAGE);
+            log.warn("fail send FCM message", e);
         }
     }
 
@@ -87,6 +84,5 @@ public class FCMNotificationEventListener {
             return;
         }
         log.warn("member {} 에 대한 다음 요청들이 실패했습니다. {}", memberId, failSend);
-        throw new InternalServerException(ErrorCode.FAIL_SEND_FCM_MESSAGE);
     }
 }
