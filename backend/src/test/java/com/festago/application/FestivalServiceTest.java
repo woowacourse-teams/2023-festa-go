@@ -119,7 +119,7 @@ class FestivalServiceTest {
             School school = SchoolFixture.school().id(schoolId).build();
             FestivalCreateRequest request = new FestivalCreateRequest(name, today, today, thumbnail, schoolId);
             Festival festival = new Festival(1L, name, today, today, thumbnail, school);
-            FestivalResponse expected = new FestivalResponse(1L, name, today, today, thumbnail);
+            FestivalResponse expected = new FestivalResponse(1L, 1L, name, today, today, thumbnail);
             given(schoolRepository.findById(schoolId))
                 .willReturn(Optional.of(school));
             given(festivalRepository.save(any()))
