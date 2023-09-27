@@ -1,10 +1,10 @@
 package com.festago.school.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public record SchoolUpdateRequest(
-    @NotNull(message = "domain 은 null 일 수 없습니다.") String domain,
-    @NotNull(message = "name 은 null 일 수 없습니다.") String name
+    @NotBlank(message = "domain은 공백일 수 없습니다.") String domain,
+    @NotBlank(message = "name은 공백일 수 없습니다.") String name
 ) {
 
 }
