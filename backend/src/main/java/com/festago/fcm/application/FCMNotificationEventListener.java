@@ -30,8 +30,7 @@ public class FCMNotificationEventListener {
     private final FirebaseMessaging firebaseMessaging;
     private final MemberFCMService memberFCMService;
 
-    public FCMNotificationEventListener(FirebaseMessaging firebaseMessaging,
-                                        MemberFCMService memberFCMService) {
+    public FCMNotificationEventListener(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
         this.firebaseMessaging = firebaseMessaging;
         this.memberFCMService = memberFCMService;
     }
@@ -39,8 +38,7 @@ public class FCMNotificationEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     public void sendFcmNotification(EntryProcessEvent event) {
-        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()),
-            FCMChannel.NOT_DEFINED.name());
+        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()), FCMChannel.NOT_DEFINED.name());
         try {
             BatchResponse batchResponse = firebaseMessaging.sendAll(messages);
             checkAllSuccess(batchResponse, event.memberId());
