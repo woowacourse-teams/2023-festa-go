@@ -10,7 +10,7 @@ class TokenManager @Inject constructor(private val tokenRepository: TokenReposit
         get() = tokenRepository.token ?: NULL_TOKEN
 
     fun refreshToken() {
-        tokenRepository.refreshToken(
+        tokenRepository.refreshTokenLegacy(
             token = TokenManagerProvider.instance.manager.getToken()?.accessToken ?: NULL_TOKEN,
         )
     }
