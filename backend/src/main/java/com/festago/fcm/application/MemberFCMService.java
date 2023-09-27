@@ -55,6 +55,7 @@ public class MemberFCMService {
         return authPayload.getMemberId();
     }
 
+    @Async
     public void saveNewMemberFCM(String accessToken, String fcmToken) {
         Long memberId = extractMemberId(accessToken);
         memberFCMRepository.save(new MemberFCM(memberId, fcmToken));
