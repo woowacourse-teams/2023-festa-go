@@ -10,6 +10,7 @@ import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.FestivalDetailResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.dto.FestivalsResponse;
+import com.festago.festival.dto.event.FestivalCreateEvent;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
@@ -17,6 +18,7 @@ import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,12 +29,15 @@ public class FestivalService {
     private final FestivalRepository festivalRepository;
     private final StageRepository stageRepository;
     private final SchoolRepository schoolRepository;
+    private final ApplicationEventPublisher publisher;
+
 
     public FestivalService(FestivalRepository festivalRepository, StageRepository stageRepository,
-                           SchoolRepository schoolRepository) {
+                           SchoolRepository schoolRepository, ApplicationEventPublisher publisher) {
         this.festivalRepository = festivalRepository;
         this.stageRepository = stageRepository;
         this.schoolRepository = schoolRepository;
+        this.publisher = publisher;
     }
 
     public FestivalResponse create(FestivalCreateRequest request) {
@@ -41,6 +46,7 @@ public class FestivalService {
         Festival festival = request.toEntity(school);
         validate(festival);
         Festival newFestival = festivalRepository.save(festival);
+        publisher.publishEvent(new FestivalCreateEvent(newFestival.getId()));
         return FestivalResponse.from(newFestival);
     }
 
