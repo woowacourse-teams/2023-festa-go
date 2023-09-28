@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.common.exception.BadRequestException;
@@ -14,7 +15,6 @@ import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.staff.domain.StaffCode;
-import com.festago.staff.domain.StaffVerificationCode;
 import com.festago.staff.dto.StaffCodeResponse;
 import com.festago.staff.repository.StaffCodeRepository;
 import com.festago.support.FestivalFixture;
@@ -39,7 +39,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class StaffServiceTest {
 
     @Spy
-    StaffVerificationCodeProvider codeProvider;
+    StaffCodeProvider codeProvider;
 
     @Mock
     StaffCodeRepository staffCodeRepository;
@@ -68,7 +68,7 @@ class StaffServiceTest {
                 .willReturn(false);
 
             SetUpMockito
-                .given(staffCodeRepository.existsByCode(any(StaffVerificationCode.class)))
+                .given(staffCodeRepository.existsByCode(anyString()))
                 .willReturn(false);
 
             SetUpMockito
@@ -110,13 +110,13 @@ class StaffServiceTest {
             String firstCode = "festa1234";
             String secondCode = "festa5678";
             given(codeProvider.provide(any(Festival.class)))
-                .willReturn(new StaffVerificationCode(firstCode))
-                .willReturn(new StaffVerificationCode(secondCode));
+                .willReturn(firstCode)
+                .willReturn(secondCode);
 
-            given(staffCodeRepository.existsByCode(any(StaffVerificationCode.class)))
+            given(staffCodeRepository.existsByCode(anyString()))
                 .willAnswer(invocation -> {
-                    StaffVerificationCode code = invocation.getArgument(0);
-                    return Objects.equals(code.getValue(), firstCode);
+                    String code = invocation.getArgument(0);
+                    return Objects.equals(code, firstCode);
                 });
 
             // when

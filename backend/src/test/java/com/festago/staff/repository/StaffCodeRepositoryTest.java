@@ -8,7 +8,6 @@ import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.staff.domain.StaffCode;
-import com.festago.staff.domain.StaffVerificationCode;
 import com.festago.support.FestivalFixture;
 import com.festago.support.SchoolFixture;
 import com.festago.support.StaffCodeFixture;
@@ -41,7 +40,7 @@ class StaffCodeRepositoryTest {
         void 있으면_참() {
             // given
             Festival festival = saveFestival();
-            staffCodeRepository.save(StaffCodeFixture.staffCode().codeValue("festa1234").festival(festival).build());
+            staffCodeRepository.save(StaffCodeFixture.staffCode().code("festa1234").festival(festival).build());
 
             // when
             boolean result = staffCodeRepository.existsByFestival(festival);
@@ -71,10 +70,10 @@ class StaffCodeRepositoryTest {
             // given
             Festival festival = saveFestival();
             String code = "festa1234";
-            staffCodeRepository.save(StaffCodeFixture.staffCode().codeValue(code).festival(festival).build());
+            staffCodeRepository.save(StaffCodeFixture.staffCode().code(code).festival(festival).build());
 
             // when
-            boolean result = staffCodeRepository.existsByCode(new StaffVerificationCode(code));
+            boolean result = staffCodeRepository.existsByCode(code);
 
             // then
             assertThat(result).isTrue();
@@ -86,7 +85,7 @@ class StaffCodeRepositoryTest {
             String code = "festa1234";
 
             // when
-            boolean result = staffCodeRepository.existsByCode(new StaffVerificationCode(code));
+            boolean result = staffCodeRepository.existsByCode(code);
 
             // then
             assertThat(result).isFalse();
@@ -99,7 +98,7 @@ class StaffCodeRepositoryTest {
         String code = "festa1234";
         Festival festival = saveFestival();
         StaffCode saved = staffCodeRepository.save(
-            StaffCodeFixture.staffCode().codeValue(code).festival(festival).build());
+            StaffCodeFixture.staffCode().code(code).festival(festival).build());
 
         // when
         Optional<StaffCode> result = staffCodeRepository.findByCodeWithFetch(code);
@@ -114,7 +113,6 @@ class StaffCodeRepositoryTest {
 
     private Festival saveFestival() {
         School school = schoolRepository.save(SchoolFixture.school().build());
-        Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
-        return festival;
+        return festivalRepository.save(FestivalFixture.festival().school(school).build());
     }
 }

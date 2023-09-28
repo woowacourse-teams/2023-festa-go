@@ -10,7 +10,7 @@ public record StaffCodeResponse(
     public static StaffCodeResponse from(StaffCode staffCode) {
         return new StaffCodeResponse(
             staffCode.getId(),
-            staffCode.getCode().getValue()
+            staffCode.getCode()
         );
     }
 }

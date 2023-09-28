@@ -6,7 +6,6 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.staff.domain.StaffCode;
-import com.festago.staff.domain.StaffVerificationCode;
 import com.festago.staff.dto.StaffCodeResponse;
 import com.festago.staff.repository.StaffCodeRepository;
 import org.springframework.stereotype.Service;
@@ -18,10 +17,10 @@ public class StaffService {
 
     private final StaffCodeRepository staffCodeRepository;
     private final FestivalRepository festivalRepository;
-    private final StaffVerificationCodeProvider codeProvider;
+    private final StaffCodeProvider codeProvider;
 
     public StaffService(StaffCodeRepository staffCodeRepository,
-                        FestivalRepository festivalRepository, StaffVerificationCodeProvider codeProvider) {
+                        FestivalRepository festivalRepository, StaffCodeProvider codeProvider) {
         this.staffCodeRepository = staffCodeRepository;
         this.festivalRepository = festivalRepository;
         this.codeProvider = codeProvider;
@@ -32,15 +31,15 @@ public class StaffService {
         if (staffCodeRepository.existsByFestival(festival)) {
             throw new BadRequestException(ErrorCode.STAFF_CODE_EXIST);
         }
-        StaffVerificationCode code = createVerificationCode(festival);
+        String code = createVerificationCode(festival);
 
         StaffCode staffCode = staffCodeRepository.save(new StaffCode(code, festival));
 
         return StaffCodeResponse.from(staffCode);
     }
 
-    private StaffVerificationCode createVerificationCode(Festival festival) {
-        StaffVerificationCode code;
+    private String createVerificationCode(Festival festival) {
+        String code;
         do {
             code = codeProvider.provide(festival);
         } while (staffCodeRepository.existsByCode(code));

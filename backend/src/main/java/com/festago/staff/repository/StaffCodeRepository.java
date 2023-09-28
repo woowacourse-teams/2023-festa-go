@@ -2,7 +2,6 @@ package com.festago.staff.repository;
 
 import com.festago.festival.domain.Festival;
 import com.festago.staff.domain.StaffCode;
-import com.festago.staff.domain.StaffVerificationCode;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,13 +11,13 @@ public interface StaffCodeRepository extends JpaRepository<StaffCode, Long> {
 
     boolean existsByFestival(Festival festival);
 
-    boolean existsByCode(StaffVerificationCode code);
+    boolean existsByCode(String code);
 
     @Query("""
         SELECT sc
         FROM StaffCode sc
         LEFT JOIN FETCH sc.festival
-        WHERE sc.code.value = :code
+        WHERE sc.code = :code
         """)
     Optional<StaffCode> findByCodeWithFetch(@Param("code") String code);
 }
