@@ -9,8 +9,8 @@ import com.festago.staff.domain.StaffCode;
 import com.festago.staff.domain.StaffVerificationCode;
 import com.festago.staff.dto.StaffCodeResponse;
 import com.festago.staff.repository.StaffCodeRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
