@@ -9,12 +9,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.auth.application.StaffAuthService;
+import com.festago.auth.domain.Role;
 import com.festago.auth.dto.StaffLoginRequest;
 import com.festago.auth.dto.StaffLoginResponse;
 import com.festago.entry.application.EntryService;
 import com.festago.entry.dto.TicketValidationRequest;
 import com.festago.entry.dto.TicketValidationResponse;
 import com.festago.support.CustomWebMvcTest;
+import com.festago.support.WithMockAuth;
 import com.festago.ticketing.domain.EntryState;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -64,15 +66,17 @@ class StaffControllerTest {
     }
 
     @Test
+    @WithMockAuth(role = Role.STAFF)
     void QR을_검사한다() throws Exception {
         // given
         TicketValidationRequest request = new TicketValidationRequest("anyCode");
         TicketValidationResponse expected = new TicketValidationResponse(EntryState.AFTER_ENTRY);
-        given(entryService.validate(request))
+        given(entryService.validate(request, 1L))
             .willReturn(expected);
 
         // when & then
         String content = mockMvc.perform(post("/staff/member-tickets/validation")
+                .header("Authorization", "Bearer token")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())

@@ -1,6 +1,7 @@
 package com.festago.application;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static com.festago.common.exception.ErrorCode.NOT_ENOUGH_PERMISSION;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ForbiddenException;
 import com.festago.common.exception.NotFoundException;
 import com.festago.entry.application.EntryCodeManager;
 import com.festago.entry.application.EntryService;
@@ -25,6 +27,7 @@ import com.festago.stage.domain.Stage;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
+import com.festago.support.SetUpMockito;
 import com.festago.support.StageFixture;
 import com.festago.support.TimeInstantProvider;
 import com.festago.ticketing.domain.EntryState;
@@ -36,6 +39,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
@@ -211,20 +215,42 @@ class EntryServiceTest {
     @Nested
     class 티켓_검사 {
 
-        @Test
-        void 예매한_티켓의_입장_상태와_요청의_입장_상태가_같으면_에매한_티켓의_입장_상태를_변경한다() {
-            // given
-            TicketValidationRequest request = new TicketValidationRequest("code");
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-                .id(1L)
-                .build();
-            given(entryCodeManager.extract(anyString()))
+        TicketValidationRequest request;
+        Long festivalId;
+        MemberTicket memberTicket;
+
+        @BeforeEach
+        void setUp() {
+            request = new TicketValidationRequest("code");
+            festivalId = 1L;
+            Festival festival = FestivalFixture.festival().id(festivalId).build();
+            Stage stage = StageFixture.stage().festival(festival).build();
+            memberTicket = MemberTicketFixture.memberTicket().id(1L).stage(stage).build();
+
+            SetUpMockito
+                .given(entryCodeManager.extract(anyString()))
                 .willReturn(new EntryCodePayload(1L, EntryState.BEFORE_ENTRY));
-            given(memberTicketRepository.findById(anyLong()))
+            SetUpMockito
+                .given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
 
+        }
+
+        @Test
+        void 해당_축제의_티켓이_아니면_권한없음_예외_발생() {
+            // given
+            festivalId = 2L;
+
+            // when & then
+            assertThatThrownBy(() -> entryService.validate(request, festivalId))
+                .isInstanceOf(ForbiddenException.class)
+                .hasMessage(NOT_ENOUGH_PERMISSION.getMessage());
+        }
+
+        @Test
+        void 예매한_티켓의_입장_상태와_요청의_입장_상태가_같으면_에매한_티켓의_입장_상태를_변경한다() {
             // when
-            TicketValidationResponse expect = entryService.validate(request);
+            TicketValidationResponse expect = entryService.validate(request, festivalId);
 
             // then
             assertSoftly(softly -> {
@@ -236,17 +262,11 @@ class EntryServiceTest {
         @Test
         void 예매한_티켓의_입장_상태와_요청의_입장_상태가_다르면_에매한_티켓의_입장_상태를_변경하지_않는다() {
             // given
-            TicketValidationRequest request = new TicketValidationRequest("code");
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-                .id(1L)
-                .build();
             given(entryCodeManager.extract(anyString()))
                 .willReturn(new EntryCodePayload(1L, EntryState.AFTER_ENTRY));
-            given(memberTicketRepository.findById(anyLong()))
-                .willReturn(Optional.of(memberTicket));
 
             // when
-            TicketValidationResponse expect = entryService.validate(request);
+            TicketValidationResponse expect = entryService.validate(request, festivalId);
 
             // then
             assertSoftly(softly -> {

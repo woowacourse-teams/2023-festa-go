@@ -1,5 +1,6 @@
 package com.festago.presentation;
 
+import com.festago.auth.annotation.Staff;
 import com.festago.auth.application.StaffAuthService;
 import com.festago.auth.dto.StaffLoginRequest;
 import com.festago.auth.dto.StaffLoginResponse;
@@ -39,8 +40,10 @@ public class StaffController {
 
     @PostMapping("/member-tickets/validation")
     @Operation(description = "스태프가 티켓을 검사한다.", summary = "티켓 검사")
-    public ResponseEntity<TicketValidationResponse> validate(@RequestBody @Valid TicketValidationRequest request) {
-        TicketValidationResponse response = entryService.validate(request);
+    public ResponseEntity<TicketValidationResponse> validate(
+        @RequestBody @Valid TicketValidationRequest request,
+        @Staff Long festivalId) {
+        TicketValidationResponse response = entryService.validate(request, festivalId);
         return ResponseEntity.ok()
             .body(response);
     }

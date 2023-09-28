@@ -29,7 +29,7 @@ public enum ErrorCode {
     STAFF_CODE_EXIST("이미 스태프 코드가 존재합니다."),
     INVALID_SCHOOL_DOMAIN("올바르지 않은 학교 도에인입니다."),
 
-    // 401,
+    // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
     INVALID_AUTH_TOKEN("올바르지 않은 로그인 토큰입니다."),
     NOT_BEARER_TOKEN_TYPE("Bearer 타입의 토큰이 아닙니다."),
@@ -49,7 +49,7 @@ public enum ErrorCode {
     TICKET_NOT_FOUND("존재하지 않는 티켓입니다."),
     SCHOOL_NOT_FOUND("존재하지 않는 학교입니다."),
 
-    // 500,
+    // 500
     INTERNAL_SERVER_ERROR("서버 내부에 문제가 발생했습니다."),
     INVALID_ENTRY_CODE_PERIOD("올바르지 않은 입장코드 유효기간입니다."),
     INVALID_ENTRY_CODE_EXPIRATION_TIME("올바르지 않은 입장코드 만료 일자입니다."),

@@ -2,6 +2,7 @@ package com.festago.entry.application;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.ForbiddenException;
 import com.festago.common.exception.NotFoundException;
 import com.festago.entry.domain.EntryCode;
 import com.festago.entry.domain.EntryCodePayload;
@@ -51,11 +52,18 @@ public class EntryService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_TICKET_NOT_FOUND));
     }
 
-    public TicketValidationResponse validate(TicketValidationRequest request) {
+    public TicketValidationResponse validate(TicketValidationRequest request, Long festivalId) {
         EntryCodePayload entryCodePayload = entryCodeManager.extract(request.code());
         MemberTicket memberTicket = findMemberTicket(entryCodePayload.getMemberTicketId());
+        checkPermission(festivalId, memberTicket);
         memberTicket.changeState(entryCodePayload.getEntryState());
         publisher.publishEvent(new EntryProcessEvent(memberTicket.getOwner().getId()));
         return TicketValidationResponse.from(memberTicket);
+    }
+
+    private static void checkPermission(Long festivalId, MemberTicket memberTicket) {
+        if (!memberTicket.belongsFestival(festivalId)) {
+            throw new ForbiddenException(ErrorCode.NOT_ENOUGH_PERMISSION);
+        }
     }
 }

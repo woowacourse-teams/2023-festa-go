@@ -29,6 +29,7 @@ public class LoginConfig implements WebMvcConfigurer {
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new RoleArgumentResolver(Role.MEMBER, authenticateContext));
         resolvers.add(new RoleArgumentResolver(Role.ADMIN, authenticateContext));
+        resolvers.add(new RoleArgumentResolver(Role.STAFF, authenticateContext));
     }
 
     @Override
@@ -39,6 +40,9 @@ public class LoginConfig implements WebMvcConfigurer {
         registry.addInterceptor(memberAuthInterceptor())
             .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**", "/students/**")
             .excludePathPatterns("/auth/oauth2");
+        registry.addInterceptor(staffAuthInterceptor())
+            .addPathPatterns("/staff/**")
+            .excludePathPatterns("/staff/login");
     }
 
     @Bean
@@ -58,6 +62,16 @@ public class LoginConfig implements WebMvcConfigurer {
             .tokenExtractor(new HeaderTokenExtractor())
             .authenticateContext(authenticateContext)
             .role(Role.MEMBER)
+            .build();
+    }
+
+    @Bean
+    public AuthInterceptor staffAuthInterceptor() {
+        return AuthInterceptor.builder()
+            .authExtractor(authExtractor)
+            .tokenExtractor(new HeaderTokenExtractor())
+            .authenticateContext(authenticateContext)
+            .role(Role.STAFF)
             .build();
     }
 }

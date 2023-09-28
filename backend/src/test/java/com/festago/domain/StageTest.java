@@ -1,15 +1,19 @@
 package com.festago.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.festival.domain.Festival;
+import com.festago.stage.domain.Stage;
 import com.festago.support.FestivalFixture;
 import com.festago.support.StageFixture;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -99,4 +103,35 @@ class StageTest {
             .build());
     }
 
+    @Nested
+    class 해당_축제의_무대인지_확인 {
+
+        Long festivalId;
+        Stage stage;
+
+        @BeforeEach
+        void setUp() {
+            festivalId = 1L;
+            Festival festival = FestivalFixture.festival().id(festivalId).build();
+            stage = StageFixture.stage().festival(festival).build();
+        }
+
+        @Test
+        void 참() {
+            // when
+            boolean actual = stage.belongsToFestival(festivalId);
+
+            // then
+            assertThat(actual).isTrue();
+        }
+
+        @Test
+        void 거짓() {
+            // when
+            boolean actual = stage.belongsToFestival(festivalId + 1L);
+
+            // then
+            assertThat(actual).isFalse();
+        }
+    }
 }

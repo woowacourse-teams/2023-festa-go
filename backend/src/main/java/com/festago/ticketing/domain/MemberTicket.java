@@ -113,6 +113,10 @@ public class MemberTicket extends BaseTimeEntity {
             && currentTime.isBefore(entryTime.plusHours(ENTRY_LIMIT_HOUR));
     }
 
+    public boolean belongsFestival(Long festivalId) {
+        return stage.belongsToFestival(festivalId);
+    }
+
     public Long getId() {
         return id;
     }

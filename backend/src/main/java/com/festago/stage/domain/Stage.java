@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Stage extends BaseTimeEntity {
@@ -100,6 +101,10 @@ public class Stage extends BaseTimeEntity {
 
     public boolean isStart(LocalDateTime currentTime) {
         return currentTime.isAfter(startTime);
+    }
+
+    public boolean belongsToFestival(Long festivalId) {
+        return Objects.equals(festival.getId(), festivalId);
     }
 
     public Long getId() {
