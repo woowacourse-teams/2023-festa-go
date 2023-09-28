@@ -3,6 +3,7 @@ package com.festago.auth.application;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.Role;
 import com.festago.auth.dto.StaffLoginRequest;
+import com.festago.auth.dto.StaffLoginResponse;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import com.festago.festival.domain.Festival;
@@ -24,12 +25,13 @@ public class StaffAuthService {
     }
 
     @Transactional(readOnly = true)
-    public String login(StaffLoginRequest request) {
+    public StaffLoginResponse login(StaffLoginRequest request) {
         StaffCode staffCode = findStaffCode(request.code());
-        AuthPayload authPayload = createAuthPayload(staffCode.getFestival());
-        return authProvider.provide(authPayload);
+        Festival festival = staffCode.getFestival();
+        String accessToken = authProvider.provide(createAuthPayload(festival));
+        return new StaffLoginResponse(festival.getId(), accessToken);
     }
-
+    
     private StaffCode findStaffCode(String code) {
         return staffCodeRepository.findByCodeWithFetch(code)
             .orElseThrow(() -> new UnauthorizedException(ErrorCode.INCORRECT_STAFF_CODE));

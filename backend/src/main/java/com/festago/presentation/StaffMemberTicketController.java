@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/staff/member-tickets")
-@Tag(name = "스태프 요청")
+@Tag(name = "스태프 멤버 티켓 요청")
 public class StaffMemberTicketController {
 
     private final EntryService entryService;

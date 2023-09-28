@@ -1,14 +1,15 @@
 package com.festago.auth.application;
 
 import static com.festago.common.exception.ErrorCode.INCORRECT_STAFF_CODE;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.dto.StaffLoginRequest;
+import com.festago.auth.dto.StaffLoginResponse;
 import com.festago.common.exception.UnauthorizedException;
 import com.festago.festival.domain.Festival;
 import com.festago.staff.domain.StaffCode;
@@ -46,13 +47,15 @@ class StaffAuthServiceTest {
 
         StaffLoginRequest request;
         String token;
+        Long festivalId;
 
         @BeforeEach
         void setUp() {
             request = new StaffLoginRequest("festa1234");
             token = "staffToken";
+            festivalId = 1L;
 
-            Festival festival = FestivalFixture.festival().build();
+            Festival festival = FestivalFixture.festival().id(festivalId).build();
             StaffCode staffCode = StaffCodeFixture.staffCode().festival(festival).build();
 
             SetUpMockito
@@ -79,10 +82,13 @@ class StaffAuthServiceTest {
         @Test
         void 성공() {
             // when
-            String response = staffAuthService.login(request);
+            StaffLoginResponse response = staffAuthService.login(request);
 
             // then
-            assertThat(response).isEqualTo(token);
+            assertSoftly(softly -> {
+                softly.assertThat(response.accessToken()).isEqualTo(token);
+                softly.assertThat(response.festivalId()).isEqualTo(festivalId);
+            });
         }
     }
 }
