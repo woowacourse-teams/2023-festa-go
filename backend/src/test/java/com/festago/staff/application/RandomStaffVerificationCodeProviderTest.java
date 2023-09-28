@@ -26,7 +26,6 @@ class RandomStaffVerificationCodeProviderTest {
 
         // when
         StaffVerificationCode code = codeProvider.provide(festival);
-        System.out.println("code.getValue() = " + code.getValue());
 
         // then
         assertSoftly(softly -> {
