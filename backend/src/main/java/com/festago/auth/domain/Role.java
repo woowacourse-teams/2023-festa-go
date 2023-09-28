@@ -3,6 +3,7 @@ package com.festago.auth.domain;
 import com.festago.auth.annotation.Admin;
 import com.festago.auth.annotation.Anonymous;
 import com.festago.auth.annotation.Member;
+import com.festago.auth.annotation.Staff;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 import java.lang.annotation.Annotation;
@@ -11,7 +12,7 @@ public enum Role {
     ANONYMOUS(Anonymous.class),
     MEMBER(Member.class),
     ADMIN(Admin.class),
-    ;
+    STAFF(Staff.class);
 
     private final Class<? extends Annotation> annotation;
 
