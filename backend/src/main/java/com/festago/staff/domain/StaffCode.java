@@ -1,5 +1,7 @@
 package com.festago.staff.domain;
 
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.InternalServerException;
 import com.festago.festival.domain.Festival;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -8,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class StaffCode {
@@ -17,6 +20,7 @@ public class StaffCode {
     private Long id;
 
     @Embedded
+    @NotNull
     private StaffVerificationCode code;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,9 +34,16 @@ public class StaffCode {
     }
 
     public StaffCode(Long id, StaffVerificationCode code, Festival festival) {
+        checkNotNull(code, festival);
         this.id = id;
         this.code = code;
         this.festival = festival;
+    }
+
+    private void checkNotNull(StaffVerificationCode code, Festival festival) {
+        if (code == null || festival == null) {
+            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public Long getId() {

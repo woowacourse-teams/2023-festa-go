@@ -1,7 +1,7 @@
 create table staff_code
 (
     id          bigint not null auto_increment,
-    code        varchar(255),
+    code        varchar(255) not null,
     festival_id bigint,
     created_at  datetime(6),
     updated_at  datetime(6),
