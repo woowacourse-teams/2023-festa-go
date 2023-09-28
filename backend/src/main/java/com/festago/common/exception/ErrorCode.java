@@ -45,6 +45,7 @@ public enum ErrorCode {
     FESTIVAL_NOT_FOUND("존재하지 않는 축제입니다."),
     TICKET_NOT_FOUND("존재하지 않는 티켓입니다."),
     SCHOOL_NOT_FOUND("존재하지 않는 학교입니다."),
+    INVALID_SCHOOL_DOMAIN("올바르지 않은 학교 도에인입니다."),
 
     // 500
     INTERNAL_SERVER_ERROR("서버 내부에 문제가 발생했습니다."),
