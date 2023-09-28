@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.common.exception.BadRequestException;
@@ -21,6 +20,7 @@ import com.festago.staff.repository.StaffCodeRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.SchoolFixture;
 import com.festago.support.SetUpMockito;
+import java.util.Objects;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -68,7 +68,7 @@ class StaffServiceTest {
                 .willReturn(false);
 
             SetUpMockito
-                .given(staffCodeRepository.existsByCode(anyString()))
+                .given(staffCodeRepository.existsByCode(any(StaffVerificationCode.class)))
                 .willReturn(false);
 
             SetUpMockito
@@ -113,10 +113,11 @@ class StaffServiceTest {
                 .willReturn(new StaffVerificationCode(firstCode))
                 .willReturn(new StaffVerificationCode(secondCode));
 
-            given(staffCodeRepository.existsByCode(firstCode))
-                .willReturn(true);
-            given(staffCodeRepository.existsByCode(secondCode))
-                .willReturn(false);
+            given(staffCodeRepository.existsByCode(any(StaffVerificationCode.class)))
+                .willAnswer(invocation -> {
+                    StaffVerificationCode code = invocation.getArgument(0);
+                    return Objects.equals(code.getValue(), firstCode);
+                });
 
             // when
             StaffCodeResponse response = staffService.createStaffCode(1L);

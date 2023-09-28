@@ -43,7 +43,7 @@ public class StaffService {
         StaffVerificationCode code;
         do {
             code = codeProvider.provide(festival);
-        } while (staffCodeRepository.existsByCode(code.getValue()));
+        } while (staffCodeRepository.existsByCode(code));
         return code;
     }
 
