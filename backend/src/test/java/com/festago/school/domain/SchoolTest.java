@@ -2,6 +2,7 @@ package com.festago.school.domain;
 
 import static com.festago.common.exception.ErrorCode.INTERNAL_SERVER_ERROR;
 import static com.festago.common.exception.ErrorCode.INVALID_SCHOOL_DOMAIN;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -83,5 +84,18 @@ class SchoolTest {
                 .isInstanceOf(InternalServerException.class)
                 .hasMessage(INTERNAL_SERVER_ERROR.getMessage());
         }
+    }
+
+
+    @Test
+    void 약어_조회() {
+        // given
+        School school = new School("festa.ac.kr", "테코대학교");
+
+        // when
+        String abbreviation = school.findAbbreviation();
+
+        // then
+        assertThat(abbreviation).isEqualTo("festa");
     }
 }

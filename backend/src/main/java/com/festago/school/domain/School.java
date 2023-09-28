@@ -79,6 +79,11 @@ public class School extends BaseTimeEntity {
             throw new BadRequestException(ErrorCode.INVALID_SCHOOL_DOMAIN);
         }
     }
+    
+    public String findAbbreviation() {
+        int dotIndex = domain.indexOf(DOMAIN_DELIMITER);
+        return domain.substring(0, dotIndex);
+    }
 
     public Long getId() {
         return id;
