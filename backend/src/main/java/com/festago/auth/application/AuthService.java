@@ -25,8 +25,8 @@ public class AuthService {
     }
 
     public LoginMemberDto login(UserInfo userInfo) {
-        Optional<Member> originMember = memberRepository.findBySocialIdAndSocialType(userInfo.socialId(),
-            userInfo.socialType());
+        Optional<Member> originMember =
+            memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType());
         if (originMember.isPresent()) {
             Member member = originMember.get();
             return LoginMemberDto.isExists(member);
