@@ -2,6 +2,7 @@ package com.festago.festival.dto;
 
 import com.festago.festival.domain.Festival;
 import jakarta.validation.constraints.NotBlank;
+import com.festago.school.domain.School;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,10 +18,10 @@ public record FestivalCreateRequest(
     LocalDate endDate,
     String thumbnail) {
 
-    public Festival toEntity() {
+    public Festival toEntity(School school) {
         if (thumbnail == null || thumbnail.isBlank()) {
-            return new Festival(name, startDate, endDate);
+            return new Festival(name, startDate, endDate, school);
         }
-        return new Festival(name, startDate, endDate, thumbnail);
+        return new Festival(name, startDate, endDate, thumbnail, school);
     }
 }

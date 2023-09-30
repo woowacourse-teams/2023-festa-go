@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record LoginRequest(
     @NotNull(message = "socialType 은 null 일 수 없습니다.") SocialType socialType,
-    @NotBlank(message = "acessToken 은 공백일 수 없습니다.") String accessToken) {
+    @NotBlank(message = "acessToken 은 공백일 수 없습니다.") String accessToken,
+    @NotNull(message = "fcmToken 은 null 일 수 없습니다.") String fcmToken) {
 
 }

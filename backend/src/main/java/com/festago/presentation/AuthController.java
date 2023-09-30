@@ -4,6 +4,7 @@ import com.festago.auth.annotation.Member;
 import com.festago.auth.application.AuthFacadeService;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
+import com.festago.fcm.application.MemberFCMService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,15 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthFacadeService authFacadeService;
+    private final MemberFCMService memberFCMService;
 
-    public AuthController(AuthFacadeService authFacadeService) {
+    public AuthController(AuthFacadeService authFacadeService, MemberFCMService memberFCMService) {
         this.authFacadeService = authFacadeService;
+        this.memberFCMService = memberFCMService;
     }
 
     @PostMapping("/oauth2")
     @Operation(description = "소셜 엑세스 토큰을 기반으로 로그인 요청을 보낸다.", summary = "OAuth2 로그인")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        LoginResponse response = authFacadeService.login(request);
+        LoginResponse response = authFacadeService.login(request.socialType(), request.accessToken());
+        memberFCMService.saveMemberFCM(response.accessToken(), request.fcmToken());
         return ResponseEntity.ok()
             .body(response);
     }
