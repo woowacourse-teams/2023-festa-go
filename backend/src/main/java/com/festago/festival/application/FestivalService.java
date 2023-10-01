@@ -31,7 +31,6 @@ public class FestivalService {
     private final SchoolRepository schoolRepository;
     private final ApplicationEventPublisher publisher;
 
-
     public FestivalService(FestivalRepository festivalRepository, StageRepository stageRepository,
                            SchoolRepository schoolRepository, ApplicationEventPublisher publisher) {
         this.festivalRepository = festivalRepository;
