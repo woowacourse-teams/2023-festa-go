@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class StaffVerificationCodeTest {
+class StaffCodeTest {
 
     @Test
     void null이면_예외() {
         // when & then
-        assertThatThrownBy(() -> new StaffVerificationCode(null))
+        assertThatThrownBy(() -> new StaffCode(null))
             .isInstanceOf(InternalServerException.class)
             .hasMessage(INTERNAL_SERVER_ERROR.getMessage());
     }
@@ -25,6 +25,6 @@ class StaffVerificationCodeTest {
     void 생성() {
         // when & then
         assertThatNoException()
-            .isThrownBy(() -> new StaffVerificationCode("festa1234"));
+            .isThrownBy(() -> new StaffCode("festa1234"));
     }
 }

@@ -5,16 +5,16 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StaffCodeEventListener {
+public class StaffEventListener {
 
     private final StaffService staffService;
 
-    public StaffCodeEventListener(StaffService staffService) {
+    public StaffEventListener(StaffService staffService) {
         this.staffService = staffService;
     }
 
     @EventListener
-    public void createStaffCode(FestivalCreateEvent event) {
-        staffService.createStaffCode(event.festivalId());
+    public void createStaff(FestivalCreateEvent event) {
+        staffService.createStaff(event.festivalId());
     }
 }

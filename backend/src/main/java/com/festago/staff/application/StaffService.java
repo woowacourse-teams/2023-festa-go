@@ -5,9 +5,9 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
+import com.festago.staff.domain.Staff;
 import com.festago.staff.domain.StaffCode;
-import com.festago.staff.domain.StaffVerificationCode;
-import com.festago.staff.dto.StaffCodeResponse;
+import com.festago.staff.dto.StaffResponse;
 import com.festago.staff.repository.StaffCodeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,29 +18,29 @@ public class StaffService {
 
     private final StaffCodeRepository staffCodeRepository;
     private final FestivalRepository festivalRepository;
-    private final StaffVerificationCodeProvider codeProvider;
+    private final StaffCodeProvider codeProvider;
 
     public StaffService(StaffCodeRepository staffCodeRepository,
-                        FestivalRepository festivalRepository, StaffVerificationCodeProvider codeProvider) {
+                        FestivalRepository festivalRepository, StaffCodeProvider codeProvider) {
         this.staffCodeRepository = staffCodeRepository;
         this.festivalRepository = festivalRepository;
         this.codeProvider = codeProvider;
     }
 
-    public StaffCodeResponse createStaffCode(Long festivalId) {
+    public StaffResponse createStaff(Long festivalId) {
         Festival festival = findFestival(festivalId);
         if (staffCodeRepository.existsByFestival(festival)) {
             throw new BadRequestException(ErrorCode.STAFF_CODE_EXIST);
         }
-        StaffVerificationCode code = createVerificationCode(festival);
+        StaffCode code = createVerificationCode(festival);
 
-        StaffCode staffCode = staffCodeRepository.save(new StaffCode(code, festival));
+        Staff staff = staffCodeRepository.save(new Staff(code, festival));
 
-        return StaffCodeResponse.from(staffCode);
+        return StaffResponse.from(staff);
     }
 
-    private StaffVerificationCode createVerificationCode(Festival festival) {
-        StaffVerificationCode code;
+    private StaffCode createVerificationCode(Festival festival) {
+        StaffCode code;
         do {
             code = codeProvider.provide(festival);
         } while (staffCodeRepository.existsByCode(code));

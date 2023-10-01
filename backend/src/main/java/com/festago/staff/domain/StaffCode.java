@@ -2,59 +2,34 @@ package com.festago.staff.domain;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
-import com.festago.festival.domain.Festival;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
 
-@Entity
+@Embeddable
 public class StaffCode {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public static final int RANDOM_CODE_LENGTH = 4;
 
-    @Embedded
     @NotNull
-    private StaffVerificationCode code;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Festival festival;
+    @Column(name = "code")
+    private String value;
 
     protected StaffCode() {
     }
 
-    public StaffCode(StaffVerificationCode code, Festival festival) {
-        this(null, code, festival);
+    public StaffCode(String value) {
+        checkNotNull(value);
+        this.value = value;
     }
 
-    public StaffCode(Long id, StaffVerificationCode code, Festival festival) {
-        checkNotNull(code, festival);
-        this.id = id;
-        this.code = code;
-        this.festival = festival;
-    }
-
-    private void checkNotNull(StaffVerificationCode code, Festival festival) {
-        if (code == null || festival == null) {
+    private void checkNotNull(String value) {
+        if (value == null) {
             throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public StaffVerificationCode getCode() {
-        return code;
-    }
-
-    public Festival getFestival() {
-        return festival;
+    public String getValue() {
+        return value;
     }
 }

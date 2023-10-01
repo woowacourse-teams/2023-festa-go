@@ -4,7 +4,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.festival.domain.Festival;
 import com.festago.school.domain.School;
-import com.festago.staff.domain.StaffVerificationCode;
+import com.festago.staff.domain.StaffCode;
 import com.festago.support.FestivalFixture;
 import com.festago.support.SchoolFixture;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class RandomStaffVerificationCodeProviderTest {
+class RandomStaffCodeProviderTest {
 
-    RandomStaffVerificationCodeProvider codeProvider = new RandomStaffVerificationCodeProvider();
+    RandomStaffCodeProvider codeProvider = new RandomStaffCodeProvider();
 
     @Test
     void 생성() {
@@ -25,7 +25,7 @@ class RandomStaffVerificationCodeProviderTest {
         Festival festival = FestivalFixture.festival().school(school).build();
 
         // when
-        StaffVerificationCode code = codeProvider.provide(festival);
+        StaffCode code = codeProvider.provide(festival);
 
         // then
         assertSoftly(softly -> {

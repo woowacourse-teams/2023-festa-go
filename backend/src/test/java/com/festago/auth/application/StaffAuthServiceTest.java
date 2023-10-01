@@ -12,7 +12,7 @@ import com.festago.auth.dto.StaffLoginRequest;
 import com.festago.auth.dto.StaffLoginResponse;
 import com.festago.common.exception.UnauthorizedException;
 import com.festago.festival.domain.Festival;
-import com.festago.staff.domain.StaffCode;
+import com.festago.staff.domain.Staff;
 import com.festago.staff.repository.StaffCodeRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.SetUpMockito;
@@ -56,11 +56,11 @@ class StaffAuthServiceTest {
             festivalId = 1L;
 
             Festival festival = FestivalFixture.festival().id(festivalId).build();
-            StaffCode staffCode = StaffCodeFixture.staffCode().festival(festival).build();
+            Staff staff = StaffCodeFixture.staffCode().festival(festival).build();
 
             SetUpMockito
                 .given(staffCodeRepository.findByCodeWithFetch(anyString()))
-                .willReturn(Optional.of(staffCode));
+                .willReturn(Optional.of(staff));
 
             SetUpMockito
                 .given(authProvider.provide(any(AuthPayload.class)))

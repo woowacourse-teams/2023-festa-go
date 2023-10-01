@@ -7,8 +7,8 @@ import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
+import com.festago.staff.domain.Staff;
 import com.festago.staff.domain.StaffCode;
-import com.festago.staff.domain.StaffVerificationCode;
 import com.festago.support.FestivalFixture;
 import com.festago.support.SchoolFixture;
 import com.festago.support.StaffCodeFixture;
@@ -23,7 +23,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @DataJpaTest
-class StaffCodeRepositoryTest {
+class StaffRepositoryTest {
 
     @Autowired
     StaffCodeRepository staffCodeRepository;
@@ -74,7 +74,7 @@ class StaffCodeRepositoryTest {
             staffCodeRepository.save(StaffCodeFixture.staffCode().codeValue(code).festival(festival).build());
 
             // when
-            boolean result = staffCodeRepository.existsByCode(new StaffVerificationCode(code));
+            boolean result = staffCodeRepository.existsByCode(new StaffCode(code));
 
             // then
             assertThat(result).isTrue();
@@ -86,7 +86,7 @@ class StaffCodeRepositoryTest {
             String code = "festa1234";
 
             // when
-            boolean result = staffCodeRepository.existsByCode(new StaffVerificationCode(code));
+            boolean result = staffCodeRepository.existsByCode(new StaffCode(code));
 
             // then
             assertThat(result).isFalse();
@@ -98,11 +98,11 @@ class StaffCodeRepositoryTest {
         // given
         String code = "festa1234";
         Festival festival = saveFestival();
-        StaffCode saved = staffCodeRepository.save(
+        Staff saved = staffCodeRepository.save(
             StaffCodeFixture.staffCode().codeValue(code).festival(festival).build());
 
         // when
-        Optional<StaffCode> result = staffCodeRepository.findByCodeWithFetch(code);
+        Optional<Staff> result = staffCodeRepository.findByCodeWithFetch(code);
 
         // then
         assertSoftly(softly -> {

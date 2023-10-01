@@ -7,7 +7,7 @@ import com.festago.auth.dto.StaffLoginResponse;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import com.festago.festival.domain.Festival;
-import com.festago.staff.domain.StaffCode;
+import com.festago.staff.domain.Staff;
 import com.festago.staff.repository.StaffCodeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +26,13 @@ public class StaffAuthService {
 
     @Transactional(readOnly = true)
     public StaffLoginResponse login(StaffLoginRequest request) {
-        StaffCode staffCode = findStaffCode(request.code());
-        Festival festival = staffCode.getFestival();
+        Staff staff = findStaffCode(request.code());
+        Festival festival = staff.getFestival();
         String accessToken = authProvider.provide(createAuthPayload(festival));
         return new StaffLoginResponse(festival.getId(), accessToken);
     }
-    
-    private StaffCode findStaffCode(String code) {
+
+    private Staff findStaffCode(String code) {
         return staffCodeRepository.findByCodeWithFetch(code)
             .orElseThrow(() -> new UnauthorizedException(ErrorCode.INCORRECT_STAFF_CODE));
     }

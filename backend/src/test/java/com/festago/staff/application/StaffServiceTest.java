@@ -13,9 +13,9 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
+import com.festago.staff.domain.Staff;
 import com.festago.staff.domain.StaffCode;
-import com.festago.staff.domain.StaffVerificationCode;
-import com.festago.staff.dto.StaffCodeResponse;
+import com.festago.staff.dto.StaffResponse;
 import com.festago.staff.repository.StaffCodeRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.SchoolFixture;
@@ -39,7 +39,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class StaffServiceTest {
 
     @Spy
-    StaffVerificationCodeProvider codeProvider;
+    StaffCodeProvider codeProvider;
 
     @Mock
     StaffCodeRepository staffCodeRepository;
@@ -68,14 +68,14 @@ class StaffServiceTest {
                 .willReturn(false);
 
             SetUpMockito
-                .given(staffCodeRepository.existsByCode(any(StaffVerificationCode.class)))
+                .given(staffCodeRepository.existsByCode(any(StaffCode.class)))
                 .willReturn(false);
 
             SetUpMockito
-                .given(staffCodeRepository.save(any(StaffCode.class)))
+                .given(staffCodeRepository.save(any(Staff.class)))
                 .willAnswer(invocation -> {
-                    StaffCode staffCode = invocation.getArgument(0);
-                    return new StaffCode(1L, staffCode.getCode(), staffCode.getFestival());
+                    Staff staff = invocation.getArgument(0);
+                    return new Staff(1L, staff.getCode(), staff.getFestival());
                 });
 
         }
@@ -87,7 +87,7 @@ class StaffServiceTest {
                 .willReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> staffService.createStaffCode(1L))
+            assertThatThrownBy(() -> staffService.createStaff(1L))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(FESTIVAL_NOT_FOUND.getMessage());
         }
@@ -99,7 +99,7 @@ class StaffServiceTest {
                 .willReturn(true);
 
             // when & then
-            assertThatThrownBy(() -> staffService.createStaffCode(1L))
+            assertThatThrownBy(() -> staffService.createStaff(1L))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(STAFF_CODE_EXIST.getMessage());
         }
@@ -110,17 +110,17 @@ class StaffServiceTest {
             String firstCode = "festa1234";
             String secondCode = "festa5678";
             given(codeProvider.provide(any(Festival.class)))
-                .willReturn(new StaffVerificationCode(firstCode))
-                .willReturn(new StaffVerificationCode(secondCode));
+                .willReturn(new StaffCode(firstCode))
+                .willReturn(new StaffCode(secondCode));
 
-            given(staffCodeRepository.existsByCode(any(StaffVerificationCode.class)))
+            given(staffCodeRepository.existsByCode(any(StaffCode.class)))
                 .willAnswer(invocation -> {
-                    StaffVerificationCode code = invocation.getArgument(0);
+                    StaffCode code = invocation.getArgument(0);
                     return Objects.equals(code.getValue(), firstCode);
                 });
 
             // when
-            StaffCodeResponse response = staffService.createStaffCode(1L);
+            StaffResponse response = staffService.createStaff(1L);
 
             // then
             assertThat(response.code()).isEqualTo(secondCode);
