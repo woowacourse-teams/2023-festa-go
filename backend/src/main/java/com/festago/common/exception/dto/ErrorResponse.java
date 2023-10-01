@@ -6,9 +6,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 public record ErrorResponse(
     ErrorCode errorCode,
-    String message) {
+    String message
+) {
 
-    private static final String NOT_CUSTOM_EXCPETION = "Validation failed";
+    private static final String NOT_CUSTOM_EXCEPTION = "Validation failed";
 
     public static ErrorResponse from(FestaGoException festaGoException) {
         return ErrorResponse.from(festaGoException.getErrorCode());
@@ -19,7 +20,7 @@ public record ErrorResponse(
     }
 
     public static ErrorResponse from(ErrorCode errorCode, MethodArgumentNotValidException e) {
-        if (e.getMessage().startsWith(NOT_CUSTOM_EXCPETION)) {
+        if (e.getMessage().startsWith(NOT_CUSTOM_EXCEPTION)) {
             return new ErrorResponse(errorCode, errorCode.getMessage());
         }
         return new ErrorResponse(errorCode, e.getMessage());
