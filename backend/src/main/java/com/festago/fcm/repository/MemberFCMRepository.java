@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MemberFCMRepository extends JpaRepository<MemberFCM, Long> {
 
     List<MemberFCM> findByMemberId(Long memberId);
+
+    List<MemberFCM> findAllByMemberIdIn(List<Long> memberIds);
 }

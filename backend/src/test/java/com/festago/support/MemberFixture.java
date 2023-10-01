@@ -2,11 +2,12 @@ package com.festago.support;
 
 import com.festago.auth.domain.SocialType;
 import com.festago.member.domain.Member;
+import java.util.UUID;
 
 public class MemberFixture {
 
     private Long id;
-    private String socialId = "123";
+    private String socialId = UUID.randomUUID().toString();
     private SocialType socialType = SocialType.KAKAO;
     private String nickname = "nickname";
     private String profileImage = "https://profileImage.com/image.png";

@@ -10,9 +10,11 @@ import com.festago.ticket.domain.TicketType;
 import com.festago.ticket.dto.StageTicketsResponse;
 import com.festago.ticket.dto.TicketCreateRequest;
 import com.festago.ticket.dto.TicketCreateResponse;
+import com.festago.ticket.dto.event.TicketCreateEvent;
 import com.festago.ticket.repository.TicketRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +25,14 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final StageRepository stageRepository;
     private final Clock clock;
+    private final ApplicationEventPublisher publisher;
 
-    public TicketService(TicketRepository ticketRepository, StageRepository stageRepository, Clock clock) {
+    public TicketService(TicketRepository ticketRepository, StageRepository stageRepository, Clock clock,
+                         ApplicationEventPublisher publisher) {
         this.ticketRepository = ticketRepository;
         this.stageRepository = stageRepository;
         this.clock = clock;
+        this.publisher = publisher;
     }
 
     public TicketCreateResponse create(TicketCreateRequest request) {
@@ -40,6 +45,7 @@ public class TicketService {
 
         ticket.addTicketEntryTime(LocalDateTime.now(clock), request.entryTime(), request.amount());
 
+        publisher.publishEvent(new TicketCreateEvent(request.stageId(), request.entryTime()));
         return TicketCreateResponse.from(ticket);
     }
 

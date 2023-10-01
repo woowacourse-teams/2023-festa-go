@@ -20,6 +20,7 @@ import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.repository.MemberTicketRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -90,9 +91,7 @@ class MemberTicketRepositoryTest {
             int expected = 10;
             Member member = memberRepository.save(MemberFixture.member().build());
 
-            School school = schoolRepository.save(SchoolFixture.school().build());
-            Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
-            Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
+            Stage stage = saveStage();
 
             for (int i = 0; i < 20; i++) {
                 memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage).owner(member).build());
@@ -111,9 +110,7 @@ class MemberTicketRepositoryTest {
             // given
             Member member = memberRepository.save(MemberFixture.member().build());
 
-            School school = schoolRepository.save(SchoolFixture.school().build());
-            Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
-            Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
+            Stage stage = saveStage();
 
             List<MemberTicket> memberTickets = new ArrayList<>();
             for (int i = 0; i < 20; i++) {
@@ -133,5 +130,31 @@ class MemberTicketRepositoryTest {
 
             assertThat(actual).isEqualTo(expected);
         }
+    }
+
+    @Test
+    void 무대와_입장시간으로_멤버아이디리스트_조회() {
+        // given
+        LocalDateTime entryTime = LocalDateTime.now();
+        Stage stage = saveStage();
+        Member member1 = memberRepository.save(MemberFixture.member().build());
+        Member member2 = memberRepository.save(MemberFixture.member().build());
+        MemberTicket memberTicket1 = memberTicketRepository.save(
+            MemberTicketFixture.memberTicket().stage(stage).owner(member1).entryTime(entryTime).build());
+        MemberTicket memberTicket2 = memberTicketRepository.save(
+            MemberTicketFixture.memberTicket().stage(stage).owner(member2).entryTime(entryTime).build());
+
+        // when
+        List<Long> actual = memberTicketRepository.findAllOwnerIdByStageIdAndEntryTime(
+            stage.getId(), entryTime);
+
+        // then
+        assertThat(actual).containsExactlyInAnyOrder(member1.getId(), member2.getId());
+    }
+
+    private Stage saveStage() {
+        School school = schoolRepository.save(SchoolFixture.school().build());
+        Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
+        return stageRepository.save(StageFixture.stage().festival(festival).build());
     }
 }
