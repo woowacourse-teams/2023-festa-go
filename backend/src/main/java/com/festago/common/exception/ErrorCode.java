@@ -27,7 +27,7 @@ public enum ErrorCode {
     INVALID_STUDENT_VERIFICATION_CODE("올바르지 않은 학생 인증 코드입니다."),
     DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
     STAFF_CODE_EXIST("이미 스태프 코드가 존재합니다."),
-    INVALID_SCHOOL_DOMAIN("올바르지 않은 학교 도에인입니다."),
+    INVALID_SCHOOL_DOMAIN("올바르지 않은 학교 도메인입니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
