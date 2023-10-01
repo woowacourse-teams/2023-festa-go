@@ -27,7 +27,7 @@ public class StudentController {
     @PostMapping("/send-verification")
     @Operation(description = "학교 인증 이메일을 전송한다.", summary = "학생 인증 이메일 전송")
     public ResponseEntity<Void> sendEmail(@Member Long memberId,
-                                          @RequestBody StudentSendMailRequest request) {
+                                          @RequestBody @Valid StudentSendMailRequest request) {
         studentService.sendVerificationMail(memberId, request);
         return ResponseEntity.ok()
             .build();
