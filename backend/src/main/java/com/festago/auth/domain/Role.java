@@ -12,7 +12,8 @@ public enum Role {
     ANONYMOUS(Anonymous.class),
     MEMBER(Member.class),
     ADMIN(Admin.class),
-    STAFF(Staff.class);
+    STAFF(Staff.class),
+    ;
 
     private final Class<? extends Annotation> annotation;
 
