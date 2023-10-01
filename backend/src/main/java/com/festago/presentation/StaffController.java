@@ -42,8 +42,8 @@ public class StaffController {
     @Operation(description = "스태프가 티켓을 검사한다.", summary = "티켓 검사")
     public ResponseEntity<TicketValidationResponse> validate(
         @RequestBody @Valid TicketValidationRequest request,
-        @Staff Long festivalId) {
-        TicketValidationResponse response = entryService.validate(request, festivalId);
+        @Staff Long staffId) {
+        TicketValidationResponse response = entryService.validate(request, staffId);
         return ResponseEntity.ok()
             .body(response);
     }

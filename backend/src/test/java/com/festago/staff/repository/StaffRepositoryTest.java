@@ -11,7 +11,7 @@ import com.festago.staff.domain.Staff;
 import com.festago.staff.domain.StaffCode;
 import com.festago.support.FestivalFixture;
 import com.festago.support.SchoolFixture;
-import com.festago.support.StaffCodeFixture;
+import com.festago.support.StaffFixture;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -26,7 +26,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 class StaffRepositoryTest {
 
     @Autowired
-    StaffCodeRepository staffCodeRepository;
+    StaffRepository staffRepository;
 
     @Autowired
     FestivalRepository festivalRepository;
@@ -41,10 +41,10 @@ class StaffRepositoryTest {
         void 있으면_참() {
             // given
             Festival festival = saveFestival();
-            staffCodeRepository.save(StaffCodeFixture.staffCode().codeValue("festa1234").festival(festival).build());
+            staffRepository.save(StaffFixture.staff().codeValue("festa1234").festival(festival).build());
 
             // when
-            boolean result = staffCodeRepository.existsByFestival(festival);
+            boolean result = staffRepository.existsByFestival(festival);
 
             // then
             assertThat(result).isTrue();
@@ -56,7 +56,7 @@ class StaffRepositoryTest {
             Festival festival = saveFestival();
 
             // when
-            boolean result = staffCodeRepository.existsByFestival(festival);
+            boolean result = staffRepository.existsByFestival(festival);
 
             // then
             assertThat(result).isFalse();
@@ -71,10 +71,10 @@ class StaffRepositoryTest {
             // given
             Festival festival = saveFestival();
             String code = "festa1234";
-            staffCodeRepository.save(StaffCodeFixture.staffCode().codeValue(code).festival(festival).build());
+            staffRepository.save(StaffFixture.staff().codeValue(code).festival(festival).build());
 
             // when
-            boolean result = staffCodeRepository.existsByCode(new StaffCode(code));
+            boolean result = staffRepository.existsByCode(new StaffCode(code));
 
             // then
             assertThat(result).isTrue();
@@ -86,7 +86,7 @@ class StaffRepositoryTest {
             String code = "festa1234";
 
             // when
-            boolean result = staffCodeRepository.existsByCode(new StaffCode(code));
+            boolean result = staffRepository.existsByCode(new StaffCode(code));
 
             // then
             assertThat(result).isFalse();
@@ -98,11 +98,11 @@ class StaffRepositoryTest {
         // given
         String code = "festa1234";
         Festival festival = saveFestival();
-        Staff saved = staffCodeRepository.save(
-            StaffCodeFixture.staffCode().codeValue(code).festival(festival).build());
+        Staff saved = staffRepository.save(
+            StaffFixture.staff().codeValue(code).festival(festival).build());
 
         // when
-        Optional<Staff> result = staffCodeRepository.findByCodeWithFetch(code);
+        Optional<Staff> result = staffRepository.findByCodeWithFetch(code);
 
         // then
         assertSoftly(softly -> {

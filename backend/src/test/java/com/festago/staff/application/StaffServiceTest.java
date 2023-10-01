@@ -16,7 +16,7 @@ import com.festago.school.domain.School;
 import com.festago.staff.domain.Staff;
 import com.festago.staff.domain.StaffCode;
 import com.festago.staff.dto.StaffResponse;
-import com.festago.staff.repository.StaffCodeRepository;
+import com.festago.staff.repository.StaffRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.SchoolFixture;
 import com.festago.support.SetUpMockito;
@@ -42,7 +42,7 @@ class StaffServiceTest {
     StaffCodeProvider codeProvider;
 
     @Mock
-    StaffCodeRepository staffCodeRepository;
+    StaffRepository staffRepository;
 
     @Mock
     FestivalRepository festivalRepository;
@@ -64,15 +64,15 @@ class StaffServiceTest {
                 .willReturn(Optional.of(festival));
 
             SetUpMockito
-                .given(staffCodeRepository.existsByFestival(any(Festival.class)))
+                .given(staffRepository.existsByFestival(any(Festival.class)))
                 .willReturn(false);
 
             SetUpMockito
-                .given(staffCodeRepository.existsByCode(any(StaffCode.class)))
+                .given(staffRepository.existsByCode(any(StaffCode.class)))
                 .willReturn(false);
 
             SetUpMockito
-                .given(staffCodeRepository.save(any(Staff.class)))
+                .given(staffRepository.save(any(Staff.class)))
                 .willAnswer(invocation -> {
                     Staff staff = invocation.getArgument(0);
                     return new Staff(1L, staff.getCode(), staff.getFestival());
@@ -95,7 +95,7 @@ class StaffServiceTest {
         @Test
         void 이미_스태프코드가_존재하면_예외() {
             // given
-            given(staffCodeRepository.existsByFestival(any(Festival.class)))
+            given(staffRepository.existsByFestival(any(Festival.class)))
                 .willReturn(true);
 
             // when & then
@@ -113,7 +113,7 @@ class StaffServiceTest {
                 .willReturn(new StaffCode(firstCode))
                 .willReturn(new StaffCode(secondCode));
 
-            given(staffCodeRepository.existsByCode(any(StaffCode.class)))
+            given(staffRepository.existsByCode(any(StaffCode.class)))
                 .willAnswer(invocation -> {
                     StaffCode code = invocation.getArgument(0);
                     return Objects.equals(code.getValue(), firstCode);

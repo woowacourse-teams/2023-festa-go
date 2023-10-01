@@ -1,7 +1,7 @@
 package com.festago.auth.dto;
 
 public record StaffLoginResponse(
-    Long festivalId,
+    Long staffId,
     String accessToken
 ) {
 

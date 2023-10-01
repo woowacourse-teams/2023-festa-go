@@ -1,6 +1,7 @@
 package com.festago.application;
 
 import static com.festago.common.exception.ErrorCode.NOT_ENOUGH_PERMISSION;
+import static com.festago.common.exception.ErrorCode.STAFF_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,11 +24,14 @@ import com.festago.entry.dto.TicketValidationResponse;
 import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.festival.domain.Festival;
 import com.festago.member.domain.Member;
+import com.festago.staff.domain.Staff;
+import com.festago.staff.repository.StaffRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.SetUpMockito;
+import com.festago.support.StaffFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TimeInstantProvider;
 import com.festago.ticketing.domain.EntryState;
@@ -64,6 +68,9 @@ class EntryServiceTest {
 
     @Mock
     ApplicationEventPublisher publisher;
+
+    @Mock
+    StaffRepository staffRepository;
 
     @Spy
     Clock clock = Clock.systemDefaultZone();
@@ -216,17 +223,23 @@ class EntryServiceTest {
     class 티켓_검사 {
 
         TicketValidationRequest request;
+        Long staffId;
         Long festivalId;
         MemberTicket memberTicket;
 
         @BeforeEach
         void setUp() {
             request = new TicketValidationRequest("code");
-            festivalId = 1L;
+            staffId = 1L;
+            festivalId = 2L;
             Festival festival = FestivalFixture.festival().id(festivalId).build();
+            Staff staff = StaffFixture.staff().id(staffId).festival(festival).build();
             Stage stage = StageFixture.stage().festival(festival).build();
             memberTicket = MemberTicketFixture.memberTicket().id(1L).stage(stage).build();
 
+            SetUpMockito
+                .given(staffRepository.findById(staffId))
+                .willReturn(Optional.of(staff));
             SetUpMockito
                 .given(entryCodeManager.extract(anyString()))
                 .willReturn(new EntryCodePayload(1L, EntryState.BEFORE_ENTRY));
@@ -237,12 +250,29 @@ class EntryServiceTest {
         }
 
         @Test
-        void 해당_축제의_티켓이_아니면_권한없음_예외_발생() {
+        void 스태프가_없으면_예외_발생() {
             // given
-            festivalId = 2L;
+            given(staffRepository.findById(staffId))
+                .willReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> entryService.validate(request, festivalId))
+            assertThatThrownBy(() -> entryService.validate(request, staffId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(STAFF_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        void 해당_축제의_티켓이_아니면_권한없음_예외_발생() {
+            // given
+            festivalId = festivalId + 1L;
+            Festival festival = FestivalFixture.festival().id(festivalId).build();
+            Staff staff = StaffFixture.staff().id(staffId).festival(festival).build();
+
+            given(staffRepository.findById(staffId))
+                .willReturn(Optional.of(staff));
+
+            // when & then
+            assertThatThrownBy(() -> entryService.validate(request, staffId))
                 .isInstanceOf(ForbiddenException.class)
                 .hasMessage(NOT_ENOUGH_PERMISSION.getMessage());
         }
@@ -250,7 +280,7 @@ class EntryServiceTest {
         @Test
         void 예매한_티켓의_입장_상태와_요청의_입장_상태가_같으면_에매한_티켓의_입장_상태를_변경한다() {
             // when
-            TicketValidationResponse expect = entryService.validate(request, festivalId);
+            TicketValidationResponse expect = entryService.validate(request, staffId);
 
             // then
             assertSoftly(softly -> {
@@ -266,7 +296,7 @@ class EntryServiceTest {
                 .willReturn(new EntryCodePayload(1L, EntryState.AFTER_ENTRY));
 
             // when
-            TicketValidationResponse expect = entryService.validate(request, festivalId);
+            TicketValidationResponse expect = entryService.validate(request, staffId);
 
             // then
             assertSoftly(softly -> {

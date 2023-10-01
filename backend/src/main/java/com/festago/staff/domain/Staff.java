@@ -3,6 +3,7 @@ package com.festago.staff.domain;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 import com.festago.festival.domain.Festival;
+import com.festago.ticketing.domain.MemberTicket;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,6 +45,10 @@ public class Staff {
         if (code == null || festival == null) {
             throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public boolean canValidate(MemberTicket memberTicket) {
+        return memberTicket.belongsToFestival(festival.getId());
     }
 
     public Long getId() {

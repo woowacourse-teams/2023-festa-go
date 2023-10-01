@@ -4,37 +4,35 @@ import com.festago.festival.domain.Festival;
 import com.festago.staff.domain.Staff;
 import com.festago.staff.domain.StaffCode;
 
-public class StaffCodeFixture {
+public class StaffFixture {
 
     private Long id;
     private StaffCode code = new StaffCode("festa1234");
     private Festival festival = FestivalFixture.festival().build();
 
-    private StaffCodeFixture() {
+    private StaffFixture() {
     }
 
-    public static StaffCodeFixture staffCode() {
-        return new StaffCodeFixture();
+    public static StaffFixture staff() {
+        return new StaffFixture();
     }
 
-    public StaffCodeFixture id(Long id) {
+    public StaffFixture id(Long id) {
         this.id = id;
         return this;
     }
 
-    public StaffCodeFixture codeValue(String code) {
+    public StaffFixture codeValue(String code) {
         this.code = new StaffCode(code);
         return this;
-
     }
 
-    public StaffCodeFixture code(StaffCode code) {
+    public StaffFixture code(StaffCode code) {
         this.code = code;
         return this;
-
     }
 
-    public StaffCodeFixture festival(Festival festival) {
+    public StaffFixture festival(Festival festival) {
         this.festival = festival;
         return this;
     }

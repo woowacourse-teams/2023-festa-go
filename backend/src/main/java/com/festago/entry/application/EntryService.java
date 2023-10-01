@@ -10,6 +10,8 @@ import com.festago.entry.dto.EntryCodeResponse;
 import com.festago.entry.dto.TicketValidationRequest;
 import com.festago.entry.dto.TicketValidationResponse;
 import com.festago.entry.dto.event.EntryProcessEvent;
+import com.festago.staff.domain.Staff;
+import com.festago.staff.repository.StaffRepository;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.repository.MemberTicketRepository;
 import java.time.Clock;
@@ -24,13 +26,15 @@ public class EntryService {
 
     private final EntryCodeManager entryCodeManager;
     private final MemberTicketRepository memberTicketRepository;
+    private final StaffRepository staffRepository;
     private final ApplicationEventPublisher publisher;
     private final Clock clock;
 
     public EntryService(EntryCodeManager entryCodeManager, MemberTicketRepository memberTicketRepository,
-                        ApplicationEventPublisher publisher, Clock clock) {
+                        StaffRepository staffRepository, ApplicationEventPublisher publisher, Clock clock) {
         this.entryCodeManager = entryCodeManager;
         this.memberTicketRepository = memberTicketRepository;
+        this.staffRepository = staffRepository;
         this.publisher = publisher;
         this.clock = clock;
     }
@@ -52,17 +56,22 @@ public class EntryService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_TICKET_NOT_FOUND));
     }
 
-    public TicketValidationResponse validate(TicketValidationRequest request, Long festivalId) {
+    public TicketValidationResponse validate(TicketValidationRequest request, Long staffId) {
         EntryCodePayload entryCodePayload = entryCodeManager.extract(request.code());
         MemberTicket memberTicket = findMemberTicket(entryCodePayload.getMemberTicketId());
-        checkPermission(festivalId, memberTicket);
+        checkPermission(findStaff(staffId), memberTicket);
         memberTicket.changeState(entryCodePayload.getEntryState());
         publisher.publishEvent(new EntryProcessEvent(memberTicket.getOwner().getId()));
         return TicketValidationResponse.from(memberTicket);
     }
 
-    private void checkPermission(Long festivalId, MemberTicket memberTicket) {
-        if (!memberTicket.belongsFestival(festivalId)) {
+    private Staff findStaff(Long staffId) {
+        return staffRepository.findById(staffId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.STAFF_NOT_FOUND));
+    }
+
+    private void checkPermission(Staff staff, MemberTicket memberTicket) {
+        if (!staff.canValidate(memberTicket)) {
             throw new ForbiddenException(ErrorCode.NOT_ENOUGH_PERMISSION);
         }
     }

@@ -11,12 +11,10 @@ import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.dto.StaffLoginRequest;
 import com.festago.auth.dto.StaffLoginResponse;
 import com.festago.common.exception.UnauthorizedException;
-import com.festago.festival.domain.Festival;
 import com.festago.staff.domain.Staff;
-import com.festago.staff.repository.StaffCodeRepository;
-import com.festago.support.FestivalFixture;
+import com.festago.staff.repository.StaffRepository;
 import com.festago.support.SetUpMockito;
-import com.festago.support.StaffCodeFixture;
+import com.festago.support.StaffFixture;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -37,7 +35,7 @@ class StaffAuthServiceTest {
     AuthProvider authProvider;
 
     @Mock
-    StaffCodeRepository staffCodeRepository;
+    StaffRepository staffRepository;
 
     @InjectMocks
     StaffAuthService staffAuthService;
@@ -47,19 +45,18 @@ class StaffAuthServiceTest {
 
         StaffLoginRequest request;
         String token;
-        Long festivalId;
+        Long staffId;
 
         @BeforeEach
         void setUp() {
             request = new StaffLoginRequest("festa1234");
             token = "staffToken";
-            festivalId = 1L;
+            staffId = 1L;
 
-            Festival festival = FestivalFixture.festival().id(festivalId).build();
-            Staff staff = StaffCodeFixture.staffCode().festival(festival).build();
+            Staff staff = StaffFixture.staff().id(staffId).build();
 
             SetUpMockito
-                .given(staffCodeRepository.findByCodeWithFetch(anyString()))
+                .given(staffRepository.findByCodeWithFetch(anyString()))
                 .willReturn(Optional.of(staff));
 
             SetUpMockito
@@ -70,7 +67,7 @@ class StaffAuthServiceTest {
         @Test
         void 일치하는_코드가_없으면_예외() {
             // given
-            given(staffCodeRepository.findByCodeWithFetch(anyString()))
+            given(staffRepository.findByCodeWithFetch(anyString()))
                 .willReturn(Optional.empty());
 
             // when & then
@@ -87,7 +84,7 @@ class StaffAuthServiceTest {
             // then
             assertSoftly(softly -> {
                 softly.assertThat(response.accessToken()).isEqualTo(token);
-                softly.assertThat(response.festivalId()).isEqualTo(festivalId);
+                softly.assertThat(response.staffId()).isEqualTo(staffId);
             });
         }
     }
