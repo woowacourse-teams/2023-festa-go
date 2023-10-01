@@ -3,6 +3,7 @@ package com.festago.staff.domain;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 import com.festago.festival.domain.Festival;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -10,20 +11,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
 public class StaffCode {
-
-    public static final int RANDOM_CODE_LENGTH = 4;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Embedded
     @NotNull
-    @Size(max = 30)
-    private String code;
+    private StaffVerificationCode code;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Festival festival;
@@ -31,18 +29,18 @@ public class StaffCode {
     protected StaffCode() {
     }
 
-    public StaffCode(String code, Festival festival) {
+    public StaffCode(StaffVerificationCode code, Festival festival) {
         this(null, code, festival);
     }
 
-    public StaffCode(Long id, String code, Festival festival) {
+    public StaffCode(Long id, StaffVerificationCode code, Festival festival) {
         checkNotNull(code, festival);
         this.id = id;
         this.code = code;
         this.festival = festival;
     }
 
-    private void checkNotNull(String code, Festival festival) {
+    private void checkNotNull(StaffVerificationCode code, Festival festival) {
         if (code == null || festival == null) {
             throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
@@ -52,7 +50,7 @@ public class StaffCode {
         return id;
     }
 
-    public String getCode() {
+    public StaffVerificationCode getCode() {
         return code;
     }
 
