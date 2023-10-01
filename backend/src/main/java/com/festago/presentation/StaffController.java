@@ -32,7 +32,7 @@ public class StaffController {
 
     @PostMapping("/login")
     @Operation(description = "스태프 코드로 로그인한다.", summary = "스태프 로그인")
-    public ResponseEntity<StaffLoginResponse> login(@RequestBody StaffLoginRequest request) {
+    public ResponseEntity<StaffLoginResponse> login(@RequestBody @Valid StaffLoginRequest request) {
         StaffLoginResponse response = staffAuthService.login(request);
         return ResponseEntity.ok()
             .body(response);
