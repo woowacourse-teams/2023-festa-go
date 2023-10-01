@@ -104,10 +104,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers,
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+                                                                  HttpHeaders headers,
                                                                   HttpStatusCode status, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(ErrorResponse.from(ErrorCode.INVALID_REQUEST_ARGUMENT));
+            .body(ErrorResponse.from(ErrorCode.INVALID_REQUEST_ARGUMENT, e));
     }
 
     private void logInfo(FestaGoException e, HttpServletRequest request) {
