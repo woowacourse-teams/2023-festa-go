@@ -61,7 +61,7 @@ public class EntryService {
         return TicketValidationResponse.from(memberTicket);
     }
 
-    private static void checkPermission(Long festivalId, MemberTicket memberTicket) {
+    private void checkPermission(Long festivalId, MemberTicket memberTicket) {
         if (!memberTicket.belongsFestival(festivalId)) {
             throw new ForbiddenException(ErrorCode.NOT_ENOUGH_PERMISSION);
         }
