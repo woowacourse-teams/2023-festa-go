@@ -2,10 +2,13 @@ package com.festago.admin.application;
 
 import com.festago.admin.dto.AdminFestivalResponse;
 import com.festago.admin.dto.AdminResponse;
+import com.festago.admin.dto.AdminSchoolResponse;
 import com.festago.admin.dto.AdminStageResponse;
 import com.festago.admin.dto.AdminTicketResponse;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.ticket.domain.Ticket;
@@ -28,16 +31,25 @@ public class AdminService {
     private final FestivalRepository festivalRepository;
     private final StageRepository stageRepository;
     private final TicketRepository ticketRepository;
+    private final SchoolRepository schoolRepository;
 
     @Transactional(readOnly = true)
     public AdminResponse getAdminResponse() {
+        List<School> allSchool = schoolRepository.findAll();
         List<Ticket> allTicket = ticketRepository.findAll();
         List<Stage> allStage = stageRepository.findAll();
         List<Festival> allFestival = festivalRepository.findAll();
         return new AdminResponse(
+            schoolResponses(allSchool),
             ticketResponses(allTicket),
             stageResponses(allStage),
             festivalResponses(allFestival));
+    }
+
+    private List<AdminSchoolResponse> schoolResponses(List<School> schools) {
+        return schools.stream()
+            .map(AdminSchoolResponse::from)
+            .toList();
     }
 
     private List<AdminTicketResponse> ticketResponses(List<Ticket> tickets) {
@@ -86,6 +98,7 @@ public class AdminService {
         return festivals.stream()
             .map(festival -> new AdminFestivalResponse(
                 festival.getId(),
+                festival.getSchool().getId(),
                 festival.getName(),
                 festival.getStartDate(),
                 festival.getEndDate(),

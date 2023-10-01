@@ -5,8 +5,9 @@ import com.festago.festago.data.util.runCatchingWithErrorHandler
 import com.festago.festago.model.Festival
 import com.festago.festago.model.Reservation
 import com.festago.festago.repository.FestivalRepository
+import javax.inject.Inject
 
-class FestivalDefaultRepository(
+class FestivalDefaultRepository @Inject constructor(
     private val festivalRetrofitService: FestivalRetrofitService,
 ) : FestivalRepository {
     override suspend fun loadFestivals(): Result<List<Festival>> {

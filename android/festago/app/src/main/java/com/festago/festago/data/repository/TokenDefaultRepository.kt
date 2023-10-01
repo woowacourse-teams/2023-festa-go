@@ -6,8 +6,9 @@ import com.festago.festago.data.service.TokenRetrofitService
 import com.festago.festago.data.util.runCatchingWithErrorHandler
 import com.festago.festago.repository.TokenRepository
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
-class TokenDefaultRepository(
+class TokenDefaultRepository @Inject constructor(
     private val tokenLocalDataSource: TokenDataSource,
     private val tokenRetrofitService: TokenRetrofitService,
 ) : TokenRepository {

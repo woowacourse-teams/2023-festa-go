@@ -7,9 +7,12 @@ import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignInViewModel(
+@HiltViewModel
+class SignInViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {

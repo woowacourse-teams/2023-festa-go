@@ -8,16 +8,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentFestivalListBinding
-import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
-    private val vm: FestivalListViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: FestivalListViewModel by viewModels()
 
     private lateinit var adapter: FestivalListAdapter
     override fun onCreateView(

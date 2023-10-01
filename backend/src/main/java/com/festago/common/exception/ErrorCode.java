@@ -19,6 +19,7 @@ public enum ErrorCode {
     INVALID_TICKET_CREATE_TIME("티켓 예매 시작 후 새롭게 티켓을 발급할 수 없습니다."),
     OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE("해당 OAuth2 제공자는 지원되지 않습니다."),
     RESERVE_TICKET_OVER_AMOUNT("예매 가능한 수량을 초과했습니다."),
+    NEED_STUDENT_VERIFICATION("학생 인증이 필요합니다."),
     OAUTH2_INVALID_TOKEN("잘못된 OAuth2 토큰입니다."),
     ALREADY_STUDENT_VERIFIED("이미 학교 인증이 완료된 사용자입니다."),
     DUPLICATE_STUDENT_EMAIL("이미 인증된 이메일입니다."),
@@ -32,6 +33,7 @@ public enum ErrorCode {
     NEED_AUTH_TOKEN("로그인이 필요한 서비스입니다."),
     INCORRECT_PASSWORD_OR_ACCOUNT("비밀번호가 틀렸거나, 해당 계정이 없습니다."),
     DUPLICATE_ACCOUNT_USERNAME("해당 계정이 존재합니다."),
+    DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
 
     // 403
     NOT_ENOUGH_PERMISSION("해당 권한이 없습니다."),
@@ -56,7 +58,8 @@ public enum ErrorCode {
     INVALID_ENTRY_CODE_OFFSET("올바르지 않은 입장코드 오프셋입니다."),
     INVALID_ROLE_NAME("해당하는 Role이 없습니다."),
     FOR_TEST_ERROR("테스트용 에러입니다."),
-    ;
+    FAIL_SEND_FCM_MESSAGE("FCM Message 전송에 실패했습니다."),
+    FCM_NOT_FOUND("유효하지 않은 MemberFCM 이 감지 되었습니다.");
 
     private final String message;
 

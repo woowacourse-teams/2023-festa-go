@@ -7,9 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.repository.TicketRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TicketHistoryViewModel(
+@HiltViewModel
+class TicketHistoryViewModel @Inject constructor(
     private val ticketRepository: TicketRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {

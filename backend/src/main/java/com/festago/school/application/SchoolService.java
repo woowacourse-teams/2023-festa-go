@@ -1,5 +1,10 @@
 package com.festago.school.application;
 
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.school.domain.School;
+import com.festago.school.dto.SchoolCreateRequest;
+import com.festago.school.dto.SchoolResponse;
 import com.festago.school.dto.SchoolsResponse;
 import com.festago.school.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +17,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class SchoolService {
 
     private final SchoolRepository schoolRepository;
+
+    public SchoolResponse create(SchoolCreateRequest request) {
+        validateSchool(request);
+        School school = schoolRepository.save(new School(request.domain(), request.name()));
+        return SchoolResponse.from(school);
+    }
+
+    private void validateSchool(SchoolCreateRequest request) {
+        if (schoolRepository.existsByDomainOrName(request.domain(), request.name())) {
+            throw new BadRequestException(ErrorCode.DUPLICATE_SCHOOL);
+        }
+    }
 
     @Transactional(readOnly = true)
     public SchoolsResponse findAll() {

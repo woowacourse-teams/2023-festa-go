@@ -9,7 +9,9 @@ import com.festago.festago.databinding.FragmentTicketReserveBottomSheetBinding
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 import com.festago.festago.presentation.util.getParcelableArrayListCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentTicketReserveBottomSheetBinding? = null

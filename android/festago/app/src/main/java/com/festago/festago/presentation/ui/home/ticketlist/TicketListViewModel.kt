@@ -9,9 +9,12 @@ import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.TicketRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TicketListViewModel(
+@HiltViewModel
+class TicketListViewModel @Inject constructor(
     private val ticketRepository: TicketRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {

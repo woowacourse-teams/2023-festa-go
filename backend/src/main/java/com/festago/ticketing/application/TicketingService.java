@@ -5,8 +5,10 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
+import com.festago.student.repository.StudentRepository;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketAmount;
+import com.festago.ticket.domain.TicketType;
 import com.festago.ticket.repository.TicketAmountRepository;
 import com.festago.ticket.repository.TicketRepository;
 import com.festago.ticketing.domain.MemberTicket;
@@ -28,16 +30,27 @@ public class TicketingService {
     private final TicketAmountRepository ticketAmountRepository;
     private final TicketRepository ticketRepository;
     private final MemberRepository memberRepository;
+    private final StudentRepository studentRepository;
     private final Clock clock;
 
     public TicketingResponse ticketing(Long memberId, TicketingRequest request) {
         Ticket ticket = findTicketById(request.ticketId());
         Member member = findMemberById(memberId);
         validateAlreadyReserved(member, ticket);
+        validateStudent(member, ticket);
         int reserveSequence = getReserveSequence(request.ticketId());
         MemberTicket memberTicket = ticket.createMemberTicket(member, reserveSequence, LocalDateTime.now(clock));
         memberTicketRepository.save(memberTicket);
         return TicketingResponse.from(memberTicket);
+    }
+
+    private void validateStudent(Member member, Ticket ticket) {
+        if (ticket.getTicketType() != TicketType.STUDENT) {
+            return;
+        }
+        if (!studentRepository.existsByMemberAndSchoolId(member, ticket.getSchoolId())) {
+            throw new BadRequestException(ErrorCode.NEED_STUDENT_VERIFICATION);
+        }
     }
 
     private Ticket findTicketById(Long ticketId) {

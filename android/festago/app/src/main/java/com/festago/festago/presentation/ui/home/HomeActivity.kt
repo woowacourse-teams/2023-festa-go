@@ -8,18 +8,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.festago.festago.R
 import com.festago.festago.databinding.ActivityHomeBinding
-import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.signin.SignInActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
     private var _binding: ActivityHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val vm: HomeViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

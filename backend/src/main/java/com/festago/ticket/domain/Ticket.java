@@ -4,6 +4,7 @@ import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.member.domain.Member;
+import com.festago.school.domain.School;
 import com.festago.stage.domain.Stage;
 import com.festago.ticketing.domain.MemberTicket;
 import jakarta.persistence.CascadeType;
@@ -41,6 +42,8 @@ public class Ticket extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Stage stage;
 
+    private Long schoolId;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private TicketType ticketType;
@@ -53,16 +56,25 @@ public class Ticket extends BaseTimeEntity {
     @SortNatural
     private SortedSet<TicketEntryTime> ticketEntryTimes = new TreeSet<>();
 
-    public Ticket(Stage stage, TicketType ticketType) {
-        this(null, stage, ticketType);
+    public Ticket(Stage stage, TicketType ticketType, School school) {
+        this(null, stage, ticketType, school);
     }
 
-    public Ticket(Long id, Stage stage, TicketType ticketType) {
+    public Ticket(Stage stage, TicketType ticketType, Long schoolId) {
+        this(null, stage, ticketType, schoolId);
+    }
+
+    public Ticket(Long id, Stage stage, TicketType ticketType, School school) {
+        this(id, stage, ticketType, school.getId());
+    }
+
+    public Ticket(Long id, Stage stage, TicketType ticketType, Long schoolId) {
         validate(stage, ticketType);
         this.id = id;
         this.stage = stage;
         this.ticketType = ticketType;
         this.ticketAmount = new TicketAmount(this);
+        this.schoolId = schoolId;
     }
 
     private void validate(Stage stage, TicketType ticketType) {
@@ -125,6 +137,10 @@ public class Ticket extends BaseTimeEntity {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public Long getSchoolId() {
+        return schoolId;
     }
 
     public TicketType getTicketType() {

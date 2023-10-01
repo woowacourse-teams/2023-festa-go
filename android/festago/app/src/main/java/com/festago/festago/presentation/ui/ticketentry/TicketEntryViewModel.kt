@@ -10,9 +10,12 @@ import com.festago.festago.model.TicketCode
 import com.festago.festago.model.timer.Timer
 import com.festago.festago.model.timer.TimerListener
 import com.festago.festago.repository.TicketRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TicketEntryViewModel(
+@HiltViewModel
+class TicketEntryViewModel @Inject constructor(
     private val ticketRepository: TicketRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {

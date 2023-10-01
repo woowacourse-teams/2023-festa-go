@@ -8,11 +8,13 @@ import com.festago.entry.domain.EntryCodePayload;
 import com.festago.entry.dto.EntryCodeResponse;
 import com.festago.entry.dto.TicketValidationRequest;
 import com.festago.entry.dto.TicketValidationResponse;
+import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.repository.MemberTicketRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class EntryService {
 
     private final EntryCodeManager entryCodeManager;
     private final MemberTicketRepository memberTicketRepository;
+    private final ApplicationEventPublisher publisher;
     private final Clock clock;
 
     public EntryCodeResponse createEntryCode(Long memberId, Long memberTicketId) {
@@ -46,6 +49,7 @@ public class EntryService {
         EntryCodePayload entryCodePayload = entryCodeManager.extract(request.code());
         MemberTicket memberTicket = findMemberTicket(entryCodePayload.getMemberTicketId());
         memberTicket.changeState(entryCodePayload.getEntryState());
+        publisher.publishEvent(new EntryProcessEvent(memberTicket.getOwner().getId()));
         return TicketValidationResponse.from(memberTicket);
     }
 }

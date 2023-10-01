@@ -21,6 +21,9 @@ import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.festival.application.FestivalService;
 import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.FestivalResponse;
+import com.festago.school.application.SchoolService;
+import com.festago.school.dto.SchoolCreateRequest;
+import com.festago.school.dto.SchoolResponse;
 import com.festago.stage.application.StageService;
 import com.festago.stage.dto.StageCreateRequest;
 import com.festago.stage.dto.StageResponse;
@@ -69,6 +72,9 @@ class AdminControllerTest {
     @MockBean
     AdminAuthService adminAuthService;
 
+    @MockBean
+    SchoolService schoolService;
+
     @SpyBean
     AuthExtractor authExtractor;
 
@@ -110,6 +116,34 @@ class AdminControllerTest {
 
     @Test
     @WithMockAuth(role = Role.ADMIN)
+    void 학교_생성() throws Exception {
+        // given
+        String domain = "festago.com";
+        String name = "페스타고 대학교";
+
+        SchoolCreateRequest request = new SchoolCreateRequest(name, domain);
+
+        SchoolResponse expected = new SchoolResponse(1L, domain, name);
+
+        given(schoolService.create(any(SchoolCreateRequest.class)))
+            .willReturn(expected);
+
+        // when && then
+        String content = mockMvc.perform(post("/admin/schools")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+        SchoolResponse actual = objectMapper.readValue(content, SchoolResponse.class);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
     void 축제_생성() throws Exception {
         // given
         String festivalName = "테코 대학교";
@@ -121,7 +155,8 @@ class AdminControllerTest {
             festivalName,
             LocalDate.parse(startDate),
             LocalDate.parse(endDate),
-            "");
+            "",
+            1L);
 
         FestivalResponse expected = new FestivalResponse(
             1L,
