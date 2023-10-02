@@ -5,14 +5,12 @@ import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;
 import com.festago.fcm.dto.MemberFCMResponse;
 import java.util.List;
-import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
-@Profile({"dev", "prod"})
 public class FCMNotificationEventListener {
 
     private final FcmClient fcmClient;

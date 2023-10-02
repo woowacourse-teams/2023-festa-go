@@ -16,10 +16,12 @@ import com.google.firebase.messaging.SendResponse;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile({"dev", "prod"})
 public class FcmClientImpl implements FcmClient {
 
     private static final Logger log = LoggerFactory.getLogger(FcmClientImpl.class);

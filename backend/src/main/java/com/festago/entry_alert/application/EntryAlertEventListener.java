@@ -4,7 +4,6 @@ import com.festago.entry_alert.dto.EntryAlertResponse;
 import com.festago.ticket.dto.event.TicketCreateEvent;
 import java.time.Clock;
 import java.time.LocalDateTime;
-import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,6 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
-@Profile({"dev", "prod"})
 public class EntryAlertEventListener {
 
     private final EntryAlertService entryAlertService;
