@@ -36,6 +36,13 @@ public class EntryAlertService {
         this.fcmClient = fcmClient;
     }
 
+    @Transactional(readOnly = true)
+    public List<EntryAlertResponse> findAll() {
+        return entryAlertRepository.findAll().stream()
+            .map(alert -> new EntryAlertResponse(alert.getId(), alert.findAlertTime()))
+            .toList();
+    }
+
     public EntryAlertResponse create(Long stageId, LocalDateTime entryTime) {
         EntryAlert entryAlert = entryAlertRepository.save(new EntryAlert(stageId, entryTime));
         return new EntryAlertResponse(entryAlert.getId(), entryAlert.findAlertTime());
