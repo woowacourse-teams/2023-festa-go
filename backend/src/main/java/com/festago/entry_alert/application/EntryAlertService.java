@@ -65,7 +65,7 @@ public class EntryAlertService {
     private void sendMessages(List<String> tokens) {
         for (int i = 0; i < tokens.size(); i += BATCH_ALERT_SIZE) {
             List<String> subTokens = tokens.subList(i, Math.min(i + BATCH_ALERT_SIZE, tokens.size()));
-            fcmClient.sendAll(subTokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert());
+            fcmClient.sendAllAsync(subTokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert());
         }
     }
 }

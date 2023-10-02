@@ -1,6 +1,5 @@
 package com.festago.fcm.application;
 
-import com.festago.config.AsyncConfig;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;
 import java.util.List;
@@ -17,7 +16,12 @@ public class MockFcmClient implements FcmClient {
     private static final Logger log = LoggerFactory.getLogger(MockFcmClient.class);
 
     @Override
-    @Async(value = AsyncConfig.FCM_EXECUTOR_NAME)
+    @Async
+    public void sendAllAsync(List<String> tokens, FCMChannel channel, FcmPayload fcmPayload) {
+        sendAll(tokens, channel, fcmPayload);
+    }
+
+    @Override
     public void sendAll(List<String> tokens, FCMChannel channel, FcmPayload fcmPayload) {
         log.info("[FCM] title: {} / body: {} / to {} device", fcmPayload.title(), fcmPayload.body(), tokens.size());
     }

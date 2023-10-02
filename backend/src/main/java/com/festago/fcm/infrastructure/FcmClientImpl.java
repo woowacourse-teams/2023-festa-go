@@ -2,7 +2,6 @@ package com.festago.fcm.infrastructure;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
-import com.festago.config.AsyncConfig;
 import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;
@@ -33,7 +32,12 @@ public class FcmClientImpl implements FcmClient {
     }
 
     @Override
-    @Async(value = AsyncConfig.FCM_EXECUTOR_NAME)
+    @Async
+    public void sendAllAsync(List<String> tokens, FCMChannel channel, FcmPayload fcmPayload) {
+        sendAll(tokens, channel, fcmPayload);
+    }
+
+    @Override
     public void sendAll(List<String> tokens, FCMChannel channel, FcmPayload payload) {
         List<Message> messages = createMessages(tokens, channel, payload);
         try {

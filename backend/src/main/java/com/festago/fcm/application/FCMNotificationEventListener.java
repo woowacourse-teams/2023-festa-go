@@ -1,6 +1,5 @@
 package com.festago.fcm.application;
 
-import com.festago.config.AsyncConfig;
 import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;
@@ -23,7 +22,7 @@ public class FCMNotificationEventListener {
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    @Async(value = AsyncConfig.FCM_EXECUTOR_NAME)
+    @Async
     public void sendFcmNotification(EntryProcessEvent event) {
         List<String> tokens = getMemberFCMToken(event.memberId());
         fcmClient.sendAll(tokens, FCMChannel.ENTRY_PROCESS, FcmPayload.entryProcess());
