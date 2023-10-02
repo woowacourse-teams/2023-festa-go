@@ -1,6 +1,6 @@
-package com.festago.entry_alert.application;
+package com.festago.entryalert.application;
 
-import com.festago.entry_alert.dto.EntryAlertResponse;
+import com.festago.entryalert.dto.EntryAlertResponse;
 import com.festago.ticket.dto.event.TicketCreateEvent;
 import java.time.Clock;
 import java.time.LocalDateTime;

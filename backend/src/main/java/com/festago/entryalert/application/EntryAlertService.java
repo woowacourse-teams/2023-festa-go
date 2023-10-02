@@ -1,10 +1,10 @@
-package com.festago.entry_alert.application;
+package com.festago.entryalert.application;
 
 import com.festago.common.exception.ConflictException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.entry_alert.domain.EntryAlert;
-import com.festago.entry_alert.dto.EntryAlertResponse;
-import com.festago.entry_alert.repository.EntryAlertRepository;
+import com.festago.entryalert.domain.EntryAlert;
+import com.festago.entryalert.dto.EntryAlertResponse;
+import com.festago.entryalert.repository.EntryAlertRepository;
 import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;

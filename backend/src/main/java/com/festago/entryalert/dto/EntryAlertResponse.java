@@ -1,4 +1,4 @@
-package com.festago.entry_alert.dto;
+package com.festago.entryalert.dto;
 
 import java.time.LocalDateTime;
 

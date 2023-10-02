@@ -1,6 +1,6 @@
-package com.festago.entry_alert.repository;
+package com.festago.entryalert.repository;
 
-import com.festago.entry_alert.domain.EntryAlert;
+import com.festago.entryalert.domain.EntryAlert;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

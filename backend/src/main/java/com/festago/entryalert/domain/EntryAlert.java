@@ -1,4 +1,4 @@
-package com.festago.entry_alert.domain;
+package com.festago.entryalert.domain;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
