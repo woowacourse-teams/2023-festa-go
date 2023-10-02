@@ -32,7 +32,7 @@ public class EntryAlertEventListener {
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     @Async
     public void addEntryAlertSchedule(TicketCreateEvent event) {
         EntryAlert entryAlert = entryAlertRepository.save(new EntryAlert(event.stageId(), event.entryTime()));
