@@ -34,6 +34,11 @@ public class EntryAlertService {
         this.fcmClient = fcmClient;
     }
 
+    public EntryAlertResponse create(Long stageId, LocalDateTime entryTime) {
+        EntryAlert entryAlert = entryAlertRepository.save(new EntryAlert(stageId, entryTime));
+        return new EntryAlertResponse(entryAlert.getId(), entryAlert.findAlertTime());
+    }
+
     @Async
     public void sendEntryAlert(Long id) {
         EntryAlert entryAlert = entryAlertRepository.findByIdForUpdate(id)
