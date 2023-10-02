@@ -36,9 +36,8 @@ public class EntryAlertService {
 
     @Async
     public void sendEntryAlert(Long id) {
-        // TODO: 비관적락
-        EntryAlert entryAlert = entryAlertRepository.findById(id)
-            .orElseThrow(IllegalArgumentException::new);
+        EntryAlert entryAlert = entryAlertRepository.findByIdForUpdate(id)
+            .orElseThrow(() -> new ConflictException(ErrorCode.ALREADY_ALERT));
         List<Long> memberIds = memberTicketRepository.findAllOwnerIdByStageIdAndEntryTime(entryAlert.getStageId(),
             entryAlert.getEntryTime());
         // TODO: 500건씩 잘라서 가져오기.
