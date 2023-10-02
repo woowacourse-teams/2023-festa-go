@@ -7,7 +7,6 @@ import com.festago.entry_alert.dto.EntryAlertResponse;
 import com.festago.entry_alert.repository.EntryAlertRepository;
 import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.domain.FCMChannel;
-import com.festago.fcm.domain.MemberFCM;
 import com.festago.fcm.dto.FcmPayload;
 import com.festago.fcm.repository.MemberFCMRepository;
 import com.festago.ticketing.repository.MemberTicketRepository;
@@ -54,10 +53,7 @@ public class EntryAlertService {
             .orElseThrow(() -> new ConflictException(ErrorCode.ALREADY_ALERT));
         List<Long> memberIds = memberTicketRepository.findAllOwnerIdByStageIdAndEntryTime(entryAlert.getStageId(),
             entryAlert.getEntryTime());
-        List<String> tokens = memberFCMRepository.findAllByMemberIdIn(memberIds)
-            .stream()
-            .map(MemberFCM::getFcmToken)
-            .toList();
+        List<String> tokens = memberFCMRepository.findAllTokenByMemberIdIn(memberIds);
         sendMessages(tokens);
         entryAlertRepository.delete(entryAlert);
     }
