@@ -47,6 +47,9 @@ public enum ErrorCode {
     TICKET_NOT_FOUND("존재하지 않는 티켓입니다."),
     SCHOOL_NOT_FOUND("존재하지 않는 학교입니다."),
 
+    // 409
+    ALREADY_ALERT("이미 입장 알림이 전송되었습니다."),
+
     // 500
     INTERNAL_SERVER_ERROR("서버 내부에 문제가 발생했습니다."),
     INVALID_ENTRY_CODE_PERIOD("올바르지 않은 입장코드 유효기간입니다."),

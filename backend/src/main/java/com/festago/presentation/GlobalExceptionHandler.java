@@ -1,6 +1,7 @@
 package com.festago.presentation;
 
 import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ConflictException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.FestaGoException;
 import com.festago.common.exception.ForbiddenException;
@@ -89,6 +90,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.from(e));
     }
 
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponse> handle(ConflictException e, HttpServletRequest request) {
+        logInfo(e, request);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.from(e));
+    }
+
     @ExceptionHandler(InternalServerException.class)
     public ResponseEntity<ErrorResponse> handle(InternalServerException e, HttpServletRequest request) {
         logWarn(e, request);
@@ -104,7 +111,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers,
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+                                                                  HttpHeaders headers,
                                                                   HttpStatusCode status, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(ErrorResponse.from(ErrorCode.INVALID_REQUEST_ARGUMENT));
