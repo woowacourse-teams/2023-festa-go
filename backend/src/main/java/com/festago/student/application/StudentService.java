@@ -3,6 +3,7 @@ package com.festago.student.application;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
+import com.festago.common.exception.TooManyRequestException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.school.domain.School;
@@ -73,7 +74,7 @@ public class StudentService {
         studentCodeRepository.findByMemberId(memberId)
             .ifPresent(code -> {
                 if (!code.canReissue(LocalDateTime.now(clock))) {
-                    throw new BadRequestException(ErrorCode.TOO_FREQUENT_REQUESTS);
+                    throw new TooManyRequestException(ErrorCode.TOO_FREQUENT_REQUESTS);
                 }
             });
     }

@@ -25,7 +25,6 @@ public enum ErrorCode {
     DUPLICATE_STUDENT_EMAIL("이미 인증된 이메일입니다."),
     TICKET_CANNOT_RESERVE_STAGE_START("공연의 시작 시간 이후로 예매할 수 없습니다."),
     INVALID_STUDENT_VERIFICATION_CODE("올바르지 않은 학생 인증 코드입니다."),
-    TOO_FREQUENT_REQUESTS("너무 잦은 요청입니다. 잠시 후 다시 시도해주세요."),
 
 
     // 401
@@ -47,6 +46,9 @@ public enum ErrorCode {
     FESTIVAL_NOT_FOUND("존재하지 않는 축제입니다."),
     TICKET_NOT_FOUND("존재하지 않는 티켓입니다."),
     SCHOOL_NOT_FOUND("존재하지 않는 학교입니다."),
+
+    // 429
+    TOO_FREQUENT_REQUESTS("너무 잦은 요청입니다. 잠시 후 다시 시도해주세요."),
 
     // 500
     INTERNAL_SERVER_ERROR("서버 내부에 문제가 발생했습니다."),

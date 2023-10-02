@@ -1,5 +1,6 @@
 package com.festago.student.application;
 
+import static com.festago.common.exception.ErrorCode.TOO_FREQUENT_REQUESTS;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -9,6 +10,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
+import com.festago.common.exception.TooManyRequestException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.school.domain.School;
@@ -132,8 +134,8 @@ class StudentServiceTest {
 
             // when
             assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessage("너무 잦은 요청입니다. 잠시 후 다시 시도해주세요.");
+                .isInstanceOf(TooManyRequestException.class)
+                .hasMessage(TOO_FREQUENT_REQUESTS.getMessage());
         }
 
         @Test
