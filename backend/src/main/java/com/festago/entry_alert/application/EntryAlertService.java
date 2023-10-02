@@ -1,6 +1,9 @@
 package com.festago.entry_alert.application;
 
+import com.festago.common.exception.ConflictException;
+import com.festago.common.exception.ErrorCode;
 import com.festago.entry_alert.domain.EntryAlert;
+import com.festago.entry_alert.dto.EntryAlertResponse;
 import com.festago.entry_alert.repository.EntryAlertRepository;
 import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.domain.FCMChannel;
@@ -8,9 +11,8 @@ import com.festago.fcm.domain.MemberFCM;
 import com.festago.fcm.dto.FcmPayload;
 import com.festago.fcm.repository.MemberFCMRepository;
 import com.festago.ticketing.repository.MemberTicketRepository;
+import java.time.LocalDateTime;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class EntryAlertService {
 
-    private static final Logger log = LoggerFactory.getLogger(EntryAlertService.class);
+    private static final int BATCH_ALERT_SIZE = 500;
 
     private final EntryAlertRepository entryAlertRepository;
     private final MemberTicketRepository memberTicketRepository;
@@ -45,12 +47,18 @@ public class EntryAlertService {
             .orElseThrow(() -> new ConflictException(ErrorCode.ALREADY_ALERT));
         List<Long> memberIds = memberTicketRepository.findAllOwnerIdByStageIdAndEntryTime(entryAlert.getStageId(),
             entryAlert.getEntryTime());
-        // TODO: 500건씩 잘라서 가져오기.
         List<String> tokens = memberFCMRepository.findAllByMemberIdIn(memberIds)
             .stream()
             .map(MemberFCM::getFcmToken)
             .toList();
-        fcmClient.sendAll(tokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert());
+        sendMessages(tokens);
         entryAlertRepository.delete(entryAlert);
+    }
+
+    private void sendMessages(List<String> tokens) {
+        for (int i = 0; i < tokens.size(); i += BATCH_ALERT_SIZE) {
+            List<String> subTokens = tokens.subList(i, Math.min(i + BATCH_ALERT_SIZE, tokens.size()));
+            fcmClient.sendAll(subTokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert());
+        }
     }
 }

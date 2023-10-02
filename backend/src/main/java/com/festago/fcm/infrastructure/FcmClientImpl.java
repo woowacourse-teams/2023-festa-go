@@ -2,6 +2,7 @@ package com.festago.fcm.infrastructure;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
+import com.festago.config.AsyncConfig;
 import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;
@@ -15,6 +16,7 @@ import com.google.firebase.messaging.SendResponse;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,11 +31,7 @@ public class FcmClientImpl implements FcmClient {
     }
 
     @Override
-    public void sendAll(List<String> tokens, FCMChannel channel) {
-        sendAll(tokens, channel, FcmPayload.empty());
-    }
-
-    @Override
+    @Async(value = AsyncConfig.FCM_EXECUTOR_NAME)
     public void sendAll(List<String> tokens, FCMChannel channel, FcmPayload payload) {
         List<Message> messages = createMessages(tokens, channel, payload);
         try {

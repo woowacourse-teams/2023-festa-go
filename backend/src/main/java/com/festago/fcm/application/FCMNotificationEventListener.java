@@ -2,6 +2,7 @@ package com.festago.fcm.application;
 
 import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.fcm.domain.FCMChannel;
+import com.festago.fcm.dto.FcmPayload;
 import com.festago.fcm.dto.MemberFCMResponse;
 import java.util.List;
 import org.springframework.context.annotation.Profile;
@@ -26,7 +27,7 @@ public class FCMNotificationEventListener {
     @Async
     public void sendFcmNotification(EntryProcessEvent event) {
         List<String> tokens = getMemberFCMToken(event.memberId());
-        fcmClient.sendAll(tokens, FCMChannel.ENTRY_PROCESS);
+        fcmClient.sendAll(tokens, FCMChannel.ENTRY_PROCESS, FcmPayload.entryProcess());
     }
 
     private List<String> getMemberFCMToken(Long memberId) {
