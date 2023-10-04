@@ -88,6 +88,12 @@ class TicketEntryViewModelTest {
             flow { emit(Result.failure(Exception())) }
         }
 
+        coEvery {
+            ticketRepository.loadTicketCode(any())
+        } answers {
+            flow { emit(Result.success(getFakeTicketCode())) }
+        }
+
         // when
         vm.loadTicket(1L)
 
