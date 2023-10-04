@@ -11,16 +11,16 @@ import org.springframework.stereotype.Component;
 public class EntryAlertFcmClient {
 
     private final FcmClient fcmClient;
-    private final EntryAlertStatusService entryAlertStatusService;
+    private final EntryAlertResultHandler entryAlertResultHandler;
 
-    public EntryAlertFcmClient(FcmClient fcmClient, EntryAlertStatusService entryAlertStatusService) {
+    public EntryAlertFcmClient(FcmClient fcmClient, EntryAlertResultHandler entryAlertResultHandler) {
         this.fcmClient = fcmClient;
-        this.entryAlertStatusService = entryAlertStatusService;
+        this.entryAlertResultHandler = entryAlertResultHandler;
     }
 
     @Async
     public void sendAll(Long entryAlertId, List<String> tokens, FCMChannel channel, FcmPayload fcmPayload) {
         boolean isSuccess = fcmClient.sendAll(tokens, channel, fcmPayload);
-        entryAlertStatusService.updateRequestedEntryAlertStatus(entryAlertId, isSuccess);
+        entryAlertResultHandler.handle(entryAlertId, isSuccess);
     }
 }
