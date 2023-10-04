@@ -32,7 +32,7 @@ class FcmClientImplTest {
 
     @Mock
     FirebaseMessaging firebaseMessaging;
-
+    
     @InjectMocks
     FcmClientImpl fcmClient;
 

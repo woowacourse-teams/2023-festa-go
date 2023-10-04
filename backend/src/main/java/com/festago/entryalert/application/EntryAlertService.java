@@ -19,9 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class EntryAlertService {
-
-    private static final int BATCH_ALERT_SIZE = 500;
-
+    
     private final EntryAlertRepository entryAlertRepository;
     private final MemberTicketRepository memberTicketRepository;
     private final MemberFCMRepository memberFCMRepository;
@@ -54,14 +52,7 @@ public class EntryAlertService {
         List<Long> memberIds = memberTicketRepository.findAllOwnerIdByStageIdAndEntryTime(entryAlert.getStageId(),
             entryAlert.getEntryTime());
         List<String> tokens = memberFCMRepository.findAllTokenByMemberIdIn(memberIds);
-        sendMessages(tokens);
+        fcmClient.sendAll(tokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert());
         entryAlertRepository.delete(entryAlert);
-    }
-
-    private void sendMessages(List<String> tokens) {
-        for (int i = 0; i < tokens.size(); i += BATCH_ALERT_SIZE) {
-            List<String> subTokens = tokens.subList(i, Math.min(i + BATCH_ALERT_SIZE, tokens.size()));
-            fcmClient.sendAllAsync(subTokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert());
-        }
     }
 }

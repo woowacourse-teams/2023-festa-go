@@ -13,10 +13,11 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.SendResponse;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,22 +25,39 @@ import org.springframework.stereotype.Component;
 public class FcmClientImpl implements FcmClient {
 
     private static final Logger log = LoggerFactory.getLogger(FcmClientImpl.class);
+    private static final int BATCH_ALERT_SIZE = 500;
 
     private final FirebaseMessaging firebaseMessaging;
+    private final Executor taskExecutor;
 
-    public FcmClientImpl(FirebaseMessaging firebaseMessaging) {
+    public FcmClientImpl(FirebaseMessaging firebaseMessaging, Executor taskExecutor) {
         this.firebaseMessaging = firebaseMessaging;
-    }
-
-    @Override
-    @Async
-    public void sendAllAsync(List<String> tokens, FCMChannel channel, FcmPayload fcmPayload) {
-        sendAll(tokens, channel, fcmPayload);
+        this.taskExecutor = taskExecutor;
     }
 
     @Override
     public void sendAll(List<String> tokens, FCMChannel channel, FcmPayload payload) {
+        validateTokenSize(tokens);
         List<Message> messages = createMessages(tokens, channel, payload);
+
+        int messageSize = messages.size();
+        if (messageSize <= BATCH_ALERT_SIZE) {
+            sendMessages(messages, channel);
+            return;
+        }
+        for (int i = 0; i < messages.size(); i += BATCH_ALERT_SIZE) {
+            List<Message> batchMessages = messages.subList(i, i + BATCH_ALERT_SIZE);
+            CompletableFuture.runAsync(() -> sendMessages(batchMessages, channel), taskExecutor);
+        }
+    }
+
+    private void validateTokenSize(List<String> tokens) {
+        if (tokens.isEmpty()) {
+            throw new InternalServerException(ErrorCode.FCM_NOT_FOUND);
+        }
+    }
+
+    public void sendMessages(List<Message> messages, FCMChannel channel) {
         try {
             BatchResponse response = firebaseMessaging.sendAll(messages);
             checkAllSuccess(response, channel);
