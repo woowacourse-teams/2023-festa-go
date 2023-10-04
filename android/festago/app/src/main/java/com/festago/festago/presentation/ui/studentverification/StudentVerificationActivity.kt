@@ -49,12 +49,12 @@ class StudentVerificationActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
-        repeatOnStarted {
+        repeatOnStarted(this) {
             vm.uiState.collect { uiState ->
                 handleUiState(uiState)
             }
         }
-        repeatOnStarted {
+        repeatOnStarted(this) {
             vm.event.collect { event ->
                 handleEvent(event)
             }
