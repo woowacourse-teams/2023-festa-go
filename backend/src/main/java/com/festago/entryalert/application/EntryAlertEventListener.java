@@ -3,6 +3,7 @@ package com.festago.entryalert.application;
 import com.festago.entryalert.dto.EntryAlertResponse;
 import com.festago.ticket.dto.event.TicketCreateEvent;
 import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.slf4j.Logger;
@@ -37,14 +38,14 @@ public class EntryAlertEventListener {
     }
 
     private void addSchedule(EntryAlertResponse entryAlert) {
-        log.info("add entryAlert schedule: {}", entryAlert.id());
-        Runnable task = createEntryAlertTask(entryAlert.id());
-        LocalDateTime alertTime = entryAlert.alertTime();
-        taskScheduler.schedule(task, alertTime.atZone(clock.getZone()).toInstant());
+        Long entryAlertId = entryAlert.id();
+        log.info("add entryAlert schedule: {}", entryAlertId);
+        Instant alertTime = toInstant(entryAlert.alertTime());
+        taskScheduler.schedule(() -> entryAlertService.sendEntryAlert(entryAlertId), alertTime);
     }
 
-    private Runnable createEntryAlertTask(Long id) {
-        return () -> entryAlertService.sendEntryAlert(id);
+    private Instant toInstant(LocalDateTime localDateTime) {
+        return localDateTime.atZone(clock.getZone()).toInstant();
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
