@@ -10,6 +10,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -48,13 +49,13 @@ class TicketEntryViewModelTest {
         coEvery {
             ticketRepository.loadTicket(any())
         } answers {
-            Result.success(TicketFixture.getMemberTicket())
+            flow { emit(Result.success(TicketFixture.getMemberTicket())) }
         }
 
         coEvery {
             ticketRepository.loadTicketCode(any())
         } answers {
-            Result.success(getFakeTicketCode())
+            flow { emit(Result.success(getFakeTicketCode())) }
         }
 
         // when
@@ -84,7 +85,7 @@ class TicketEntryViewModelTest {
         coEvery {
             ticketRepository.loadTicket(any())
         } answers {
-            Result.failure(Exception())
+            flow { emit(Result.failure(Exception())) }
         }
 
         // when
@@ -109,7 +110,7 @@ class TicketEntryViewModelTest {
             ticketRepository.loadTicket(any())
         } coAnswers {
             delay(1000)
-            Result.success(TicketFixture.getMemberTicket())
+            flow { emit(Result.success(TicketFixture.getMemberTicket())) }
         }
 
         // when
@@ -133,7 +134,7 @@ class TicketEntryViewModelTest {
         coEvery {
             ticketRepository.loadTicketCode(any())
         } answers {
-            Result.failure(Exception())
+            flow { emit(Result.failure(Exception())) }
         }
 
         // when

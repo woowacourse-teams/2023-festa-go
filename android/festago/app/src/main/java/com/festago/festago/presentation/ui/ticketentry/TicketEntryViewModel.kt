@@ -11,6 +11,7 @@ import com.festago.festago.repository.TicketRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,8 +28,8 @@ class TicketEntryViewModel @Inject constructor(
 
     fun loadTicketCode(ticketId: Long) {
         viewModelScope.launch {
-            ticketRepository.loadTicketCode(ticketId)
-                .onSuccess {
+            ticketRepository.loadTicketCode(ticketId).collectLatest {
+                it.onSuccess {
                     val state = uiState.value
                     if (state is TicketEntryUiState.Success) {
                         _uiState.value = state.copy(ticketCode = it, remainTime = it.period)
@@ -41,16 +42,17 @@ class TicketEntryViewModel @Inject constructor(
                         value = it.message.toString(),
                     )
                 }
+            }
         }
     }
 
     fun loadTicket(ticketId: Long) {
         viewModelScope.launch {
             _uiState.value = TicketEntryUiState.Loading
-            ticketRepository.loadTicket(ticketId)
-                .onSuccess { ticket ->
-                    ticketRepository.loadTicketCode(ticketId)
-                        .onSuccess { ticketCode ->
+            ticketRepository.loadTicket(ticketId).collectLatest {
+                it.onSuccess { ticket ->
+                    ticketRepository.loadTicketCode(ticketId).collectLatest { result ->
+                        result.onSuccess { ticketCode ->
                             _uiState.value = TicketEntryUiState.Success(
                                 ticket = ticket,
                                 ticketCode = ticketCode,
@@ -64,6 +66,7 @@ class TicketEntryViewModel @Inject constructor(
                                 value = it.message.toString(),
                             )
                         }
+                    }
                 }.onFailure {
                     _uiState.value = TicketEntryUiState.Error
                     analyticsHelper.logNetworkFailure(
@@ -71,6 +74,7 @@ class TicketEntryViewModel @Inject constructor(
                         value = it.message.toString(),
                     )
                 }
+            }
         }
     }
 
