@@ -41,12 +41,12 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     }
 
     private fun initObserve() {
-        viewLifecycleOwner.repeatOnStarted {
+        repeatOnStarted(viewLifecycleOwner) {
             vm.uiState.collect { uiState ->
                 handleUiState(uiState)
             }
         }
-        viewLifecycleOwner.repeatOnStarted {
+        repeatOnStarted(viewLifecycleOwner) {
             vm.event.collect { event ->
                 handleEvent(event)
             }

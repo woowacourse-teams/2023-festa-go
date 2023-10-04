@@ -39,13 +39,13 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
     }
 
     private fun initObserve() {
-        viewLifecycleOwner.repeatOnStarted {
+        repeatOnStarted(viewLifecycleOwner) {
             vm.uiState.collect {
                 binding.uiState = it
                 updateUi(it)
             }
         }
-        viewLifecycleOwner.repeatOnStarted {
+        repeatOnStarted(viewLifecycleOwner) {
             vm.event.collect {
                 handleEvent(it)
             }
