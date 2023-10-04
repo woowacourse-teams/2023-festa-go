@@ -2,6 +2,7 @@ package com.festago.fcm.infrastructure;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
+import com.festago.common.utils.AsyncBatchExecutor;
 import com.festago.config.SchedulingConfig;
 import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.domain.FCMChannel;
@@ -13,9 +14,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.SendResponse;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,43 +43,15 @@ public class FcmClientImpl implements FcmClient {
         validateTokenSize(tokens);
         List<Message> messages = createMessages(tokens, channel, payload);
 
-        int messageSize = messages.size();
-        if (messageSize <= BATCH_ALERT_SIZE) {
+        AsyncBatchExecutor<Message> executor = new AsyncBatchExecutor<>(BATCH_ALERT_SIZE, taskExecutor);
+        return executor.execute(messages, batchMessages -> {
             try {
-                sendMessages(messages, channel);
+                sendMessages(batchMessages, channel);
                 return true;
             } catch (Exception e) {
                 return false;
             }
-        }
-
-        List<CompletableFuture<Boolean>> futures = new ArrayList<>();
-
-        for (int i = 0; i < messages.size(); i += BATCH_ALERT_SIZE) {
-            List<Message> batchMessages = messages.subList(i, Math.min(i + BATCH_ALERT_SIZE, messages.size()));
-            CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
-                try {
-                    sendMessages(batchMessages, channel);
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
-            }, taskExecutor);
-            futures.add(future);
-        }
-        CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-
-        try {
-            allOf.join();
-            for (CompletableFuture<Boolean> future : futures) {
-                if (!future.get()) {
-                    return false;
-                }
-            }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        });
     }
 
     private void validateTokenSize(List<String> tokens) {
