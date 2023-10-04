@@ -11,10 +11,8 @@ import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.Role;
 import com.festago.fcm.domain.MemberFCM;
-import com.festago.fcm.dto.MemberFCMResponse;
 import com.festago.fcm.repository.MemberFCMRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,22 +34,15 @@ class MemberFCMServiceTest {
     @Test
     void 유저의_FCM_정보를_가져온다() {
         // given
-        List<MemberFCM> memberFCMS = List.of(
-            new MemberFCM(1L, 1L, "token"),
-            new MemberFCM(2L, 1L, "token2")
-        );
-        given(memberFCMRepository.findByMemberId(anyLong()))
-            .willReturn(memberFCMS);
-
-        List<MemberFCMResponse> expect = memberFCMS.stream()
-            .map(MemberFCMResponse::from)
-            .collect(Collectors.toList());
+        List<String> tokens = List.of("token1", "token2");
+        given(memberFCMRepository.findAllTokenByMemberId(anyLong()))
+            .willReturn(tokens);
 
         // when
-        List<MemberFCMResponse> actual = memberFCMService.findMemberFCM(1L).memberFCMs();
+        List<String> actual = memberFCMService.findMemberFCMTokens(1L);
 
         // then
-        assertThat(actual).isEqualTo(expect);
+        assertThat(actual).isEqualTo(tokens);
     }
 
     @Test

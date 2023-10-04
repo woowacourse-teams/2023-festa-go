@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface MemberFCMRepository extends JpaRepository<MemberFCM, Long> {
-
-    List<MemberFCM> findByMemberId(Long memberId);
+    
+    @Query("SELECT mf.fcmToken FROM MemberFCM mf WHERE mf.memberId = :memberId")
+    List<String> findAllTokenByMemberId(@Param("memberId") Long memberId);
 
     @Query("SELECT mf.fcmToken FROM MemberFCM mf WHERE mf.memberId IN :memberIds")
     List<String> findAllTokenByMemberIdIn(@Param("memberIds") List<Long> memberIds);
