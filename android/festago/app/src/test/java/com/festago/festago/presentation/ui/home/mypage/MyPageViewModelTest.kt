@@ -72,14 +72,34 @@ class MyPageViewModelTest {
         Dispatchers.resetMain()
     }
 
-    @Test
-    fun `로그인 되지 않았다면 로그인 이벤트가 발생한다`() = runTest {
-        // given
+    private fun `로그인 상태가 다음과 같다`(result: Boolean) {
         coEvery {
             authRepository.isSigned
         } answers {
-            false
+            result
         }
+    }
+
+    private fun `유저 프로필 요청의 결과가 다음과 같다`(result: Result<UserProfile>) {
+        coEvery {
+            userRepository.loadUserProfile()
+        } answers {
+            result
+        }
+    }
+
+    private fun `과거 예매 내역 요청의 결과가 다음과 같다`(result: Result<List<Ticket>>) {
+        coEvery {
+            ticketRepository.loadHistoryTickets(any())
+        } answers {
+            result
+        }
+    }
+
+    @Test
+    fun `로그인 되지 않았다면 로그인 이벤트가 발생한다`() = runTest {
+        // given
+        `로그인 상태가 다음과 같다`(false)
 
         vm.event.test {
             // when
@@ -91,25 +111,13 @@ class MyPageViewModelTest {
     }
 
     @Test
-    fun `유저 프로필, 첫번째 티켓 받아오기에 성공하면 성공 상태다`() {
+    fun `유저 프로필, 과거 예매 내역 받아오기에 성공하면 성공 상태다`() {
         // given
-        coEvery {
-            userRepository.loadUserProfile()
-        } answers {
-            Result.success(fakeUserProfile)
-        }
+        `유저 프로필 요청의 결과가 다음과 같다`(Result.success(fakeUserProfile))
 
-        coEvery {
-            ticketRepository.loadHistoryTickets(1)
-        } answers {
-            Result.success(fakeTickets)
-        }
+        `과거 예매 내역 요청의 결과가 다음과 같다`(Result.success(fakeTickets))
 
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `로그인 상태가 다음과 같다`(true)
 
         // when
         vm.loadUserInfo()
@@ -135,13 +143,9 @@ class MyPageViewModelTest {
     }
 
     @Test
-    fun `유저 프로필 받아오기에 성공하고, 첫번째 티켓을 받아오는 중이면 로딩 상태이다`() {
+    fun `유저 프로필 받아오기에 성공하고, 과거 예매 내역을 받아오는 중이면 로딩 상태이다`() {
         // given
-        coEvery {
-            userRepository.loadUserProfile()
-        } answers {
-            Result.success(fakeUserProfile)
-        }
+        `유저 프로필 요청의 결과가 다음과 같다`(Result.success(fakeUserProfile))
 
         coEvery {
             ticketRepository.loadHistoryTickets(1)
@@ -150,11 +154,7 @@ class MyPageViewModelTest {
             Result.success(fakeTickets)
         }
 
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `로그인 상태가 다음과 같다`(true)
 
         // when
         vm.loadUserInfo()
@@ -174,23 +174,11 @@ class MyPageViewModelTest {
     @Test
     fun `유저 프로필 받아오기 실패하면 에러 상태다`() {
         // given
-        coEvery {
-            userRepository.loadUserProfile()
-        } answers {
-            Result.failure(Exception())
-        }
+        `유저 프로필 요청의 결과가 다음과 같다`(Result.failure(Exception()))
 
-        coEvery {
-            ticketRepository.loadHistoryTickets(1)
-        } answers {
-            Result.success(fakeTickets)
-        }
+        `과거 예매 내역 요청의 결과가 다음과 같다`(Result.success(fakeTickets))
 
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `로그인 상태가 다음과 같다`(true)
 
         // when
         vm.loadUserInfo()
@@ -208,25 +196,13 @@ class MyPageViewModelTest {
     }
 
     @Test
-    fun `첫번째 티켓 받아오기에 실패하면 에러 상태다`() {
+    fun `과거 예매 내역 받아오기에 실패하면 에러 상태다`() {
         // given
-        coEvery {
-            userRepository.loadUserProfile()
-        } answers {
-            Result.success(fakeUserProfile)
-        }
+        `유저 프로필 요청의 결과가 다음과 같다`(Result.success(fakeUserProfile))
 
-        coEvery {
-            ticketRepository.loadHistoryTickets(1)
-        } answers {
-            Result.failure(Exception())
-        }
+        `과거 예매 내역 요청의 결과가 다음과 같다`(Result.failure(Exception()))
 
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `로그인 상태가 다음과 같다`(true)
 
         // when
         vm.loadUserInfo()
@@ -300,9 +276,9 @@ class MyPageViewModelTest {
                 assertThat(vm.uiState.value is MyPageUiState.Error).isTrue
 
                 // and
-                assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-                assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-                assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+                assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
+                assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
+                assertThat(vm.uiState.value.shouldShowError).isEqualTo(true)
             }
             softly.assertAll()
         }
