@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentTicketListBinding
 import com.festago.festago.presentation.ui.ticketentry.TicketEntryActivity
+import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,9 +45,11 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
     }
 
     private fun initObserve() {
-        vm.uiState.observe(viewLifecycleOwner) {
-            binding.uiState = it
-            updateUi(it)
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.uiState.collect {
+                binding.uiState = it
+                updateUi(it)
+            }
         }
         vm.event.observe(viewLifecycleOwner) { event ->
             handleEvent(event)
