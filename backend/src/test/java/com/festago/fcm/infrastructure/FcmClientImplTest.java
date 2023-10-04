@@ -1,14 +1,11 @@
 package com.festago.fcm.infrastructure;
 
-import static com.festago.common.exception.ErrorCode.FAIL_SEND_FCM_MESSAGE;
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.festago.common.exception.InternalServerException;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;
 import com.google.firebase.messaging.BatchResponse;
@@ -32,7 +29,7 @@ class FcmClientImplTest {
 
     @Mock
     FirebaseMessaging firebaseMessaging;
-    
+
     @InjectMocks
     FcmClientImpl fcmClient;
 
@@ -53,10 +50,11 @@ class FcmClientImplTest {
         given(firebaseMessaging.sendAll(anyList()))
             .willReturn(new MockBatchResponse(false));
 
-        // when & then
-        assertThatThrownBy(() -> fcmClient.sendAll(tokens, fcmChannel, fcmPayload))
-            .isInstanceOf(InternalServerException.class)
-            .hasMessage(FAIL_SEND_FCM_MESSAGE.getMessage());
+        // when
+        boolean result = fcmClient.sendAll(tokens, fcmChannel, fcmPayload);
+
+        // then
+        assertThat(result).isFalse();
     }
 
     @Test
@@ -65,9 +63,11 @@ class FcmClientImplTest {
         given(firebaseMessaging.sendAll(anyList()))
             .willReturn(new MockBatchResponse(true));
 
-        // when & then
-        assertThatNoException()
-            .isThrownBy(() -> fcmClient.sendAll(tokens, fcmChannel, fcmPayload));
+        // when
+        boolean result = fcmClient.sendAll(tokens, fcmChannel, fcmPayload);
+
+        // then
+        assertThat(result).isTrue();
     }
 
     private static class MockBatchResponse implements BatchResponse {

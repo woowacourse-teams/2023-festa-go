@@ -5,6 +5,6 @@ import com.festago.fcm.dto.FcmPayload;
 import java.util.List;
 
 public interface FcmClient {
-    
-    void sendAll(List<String> tokens, FCMChannel channel, FcmPayload fcmPayload);
+
+    boolean sendAll(List<String> tokens, FCMChannel channel, FcmPayload fcmPayload);
 }

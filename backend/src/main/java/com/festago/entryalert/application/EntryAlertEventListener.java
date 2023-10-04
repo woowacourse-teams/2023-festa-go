@@ -33,7 +33,7 @@ public class EntryAlertEventListener {
 
     @EventListener(ApplicationReadyEvent.class)
     public void initEntryAlertSchedule() {
-        List<EntryAlertResponse> entryAlerts = entryAlertService.findAll();
+        List<EntryAlertResponse> entryAlerts = entryAlertService.findAllPending();
         entryAlerts.forEach(this::addSchedule);
     }
 

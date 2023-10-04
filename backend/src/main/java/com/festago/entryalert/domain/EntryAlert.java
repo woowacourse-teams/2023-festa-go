@@ -1,5 +1,6 @@
 package com.festago.entryalert.domain;
 
+import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import jakarta.persistence.Entity;
@@ -10,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-public class EntryAlert {
+public class EntryAlert extends BaseTimeEntity {
 
     private static final int ENTRY_ALERT_MINUTES_BEFORE = 10;
 
@@ -23,6 +24,9 @@ public class EntryAlert {
 
     @NotNull
     private LocalDateTime entryTime;
+
+    @NotNull
+    private AlertStatus status = AlertStatus.PENDING;
 
     protected EntryAlert() {
     }
@@ -44,6 +48,37 @@ public class EntryAlert {
         return new EntryAlert(stageId, entryTime);
     }
 
+    public boolean canRequest() {
+        return status == AlertStatus.PENDING;
+    }
+
+    public void request() {
+        validateNotPending();
+        this.status = AlertStatus.REQUESTED;
+    }
+
+    private void validateNotPending() {
+        if (status != AlertStatus.PENDING) {
+            throw new BadRequestException(ErrorCode.NOT_PENDING_ALERT);
+        }
+    }
+
+    public void send() {
+        validateNotRequested();
+        this.status = AlertStatus.SENT;
+    }
+
+    private void validateNotRequested() {
+        if (status != AlertStatus.REQUESTED) {
+            throw new BadRequestException(ErrorCode.NOT_PENDING_ALERT);
+        }
+    }
+
+    public void fail() {
+        validateNotRequested();
+        this.status = AlertStatus.FAILED;
+    }
+
     public LocalDateTime findAlertTime() {
         return entryTime.minusMinutes(ENTRY_ALERT_MINUTES_BEFORE);
     }
@@ -58,5 +93,9 @@ public class EntryAlert {
 
     public LocalDateTime getEntryTime() {
         return entryTime;
+    }
+
+    public AlertStatus getStatus() {
+        return status;
     }
 }

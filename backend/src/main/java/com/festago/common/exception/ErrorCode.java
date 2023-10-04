@@ -26,6 +26,9 @@ public enum ErrorCode {
     TICKET_CANNOT_RESERVE_STAGE_START("공연의 시작 시간 이후로 예매할 수 없습니다."),
     INVALID_STUDENT_VERIFICATION_CODE("올바르지 않은 학생 인증 코드입니다."),
     INVALID_ENTRY_ALERT_TIME("올바르지 않은 입장 알림 시간입니다"),
+    NOT_PENDING_ALERT("전송 대기중인 알림이 아닙니다."),
+    NOT_REQUESTED_ALERT("전송 요청중인 알림이 아닙니다."),
+
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
@@ -46,6 +49,7 @@ public enum ErrorCode {
     FESTIVAL_NOT_FOUND("존재하지 않는 축제입니다."),
     TICKET_NOT_FOUND("존재하지 않는 티켓입니다."),
     SCHOOL_NOT_FOUND("존재하지 않는 학교입니다."),
+    ENTRY_ALERT_NOT_FOUND("존재하지 않는 입장 알림입니다."),
 
     // 409
     ALREADY_ALERT("이미 입장 알림이 전송되었습니다."),
