@@ -22,6 +22,7 @@ import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAd
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.BottomSheetReservationTicketArg
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
+import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -53,9 +54,11 @@ class TicketReserveActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
-        vm.uiState.observe(this) { uiState ->
-            updateUi(uiState)
-            binding.uiState = uiState
+        repeatOnStarted(this) {
+            vm.uiState.collect { uiState ->
+                updateUi(uiState)
+                binding.uiState = uiState
+            }
         }
         vm.event.observe(this) { event ->
             handleEvent(event)
@@ -89,7 +92,7 @@ class TicketReserveActivity : AppCompatActivity() {
                     id = it.id,
                     remainAmount = it.remainAmount,
                     ticketType = it.ticketType,
-                    totalAmount = it.totalAmount
+                    totalAmount = it.totalAmount,
                 )
             },
         ).show(supportFragmentManager, TicketReserveBottomSheetFragment::class.java.name)
