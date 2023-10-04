@@ -60,8 +60,10 @@ class TicketReserveActivity : AppCompatActivity() {
                 binding.uiState = uiState
             }
         }
-        vm.event.observe(this) { event ->
-            handleEvent(event)
+        repeatOnStarted(this) {
+            vm.event.collect { event ->
+                handleEvent(event)
+            }
         }
     }
 

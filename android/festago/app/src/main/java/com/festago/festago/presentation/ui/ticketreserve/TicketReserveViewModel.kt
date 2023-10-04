@@ -5,15 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.model.ReservationStage
-import com.festago.festago.presentation.util.MutableSingleLiveData
-import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
 import com.festago.festago.repository.ReservationTicketRepository
 import com.festago.festago.repository.TicketRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -30,8 +31,8 @@ class TicketReserveViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<TicketReserveUiState>(TicketReserveUiState.Loading)
     val uiState: StateFlow<TicketReserveUiState> = _uiState.asStateFlow()
 
-    private val _event = MutableSingleLiveData<TicketReserveEvent>()
-    val event: SingleLiveData<TicketReserveEvent> = _event
+    private val _event = MutableSharedFlow<TicketReserveEvent>()
+    val event: SharedFlow<TicketReserveEvent> = _event.asSharedFlow()
 
     fun loadReservation(festivalId: Long = 0, refresh: Boolean = false) {
         if (!refresh && uiState.value is TicketReserveUiState.Success) return
@@ -63,7 +64,7 @@ class TicketReserveViewModel @Inject constructor(
             if (authRepository.isSigned) {
                 reservationTicketRepository.loadTicketTypes(stageId)
                     .onSuccess { tickets ->
-                        _event.setValue(
+                        _event.emit(
                             TicketReserveEvent.ShowTicketTypes(
                                 stageStartTime,
                                 tickets,
@@ -73,7 +74,7 @@ class TicketReserveViewModel @Inject constructor(
                         _uiState.value = TicketReserveUiState.Error
                     }
             } else {
-                _event.setValue(TicketReserveEvent.ShowSignIn)
+                _event.emit(TicketReserveEvent.ShowSignIn)
             }
         }
     }
@@ -82,9 +83,9 @@ class TicketReserveViewModel @Inject constructor(
         viewModelScope.launch {
             ticketRepository.reserveTicket(ticketId)
                 .onSuccess {
-                    _event.setValue(TicketReserveEvent.ReserveTicketSuccess(it))
+                    _event.emit(TicketReserveEvent.ReserveTicketSuccess(it))
                 }.onFailure {
-                    _event.setValue(TicketReserveEvent.ReserveTicketFailed)
+                    _event.emit(TicketReserveEvent.ReserveTicketFailed)
                 }
         }
     }
