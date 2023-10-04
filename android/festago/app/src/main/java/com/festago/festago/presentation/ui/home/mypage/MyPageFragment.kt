@@ -13,6 +13,7 @@ import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.ui.selectschool.SelectSchoolActivity
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryActivity
+import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,23 +41,35 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     }
 
     private fun initObserve() {
-        vm.uiState.observe(viewLifecycleOwner) { uiState ->
-            binding.uiState = uiState
-            when (uiState) {
-                is MyPageUiState.Loading, is MyPageUiState.Error -> Unit
-
-                is MyPageUiState.Success -> handleSuccess(uiState)
+        viewLifecycleOwner.repeatOnStarted {
+            vm.uiState.collect { uiState ->
+                handleUiState(uiState)
             }
-            binding.srlMyPage.isRefreshing = false
         }
-        vm.event.observe(viewLifecycleOwner) { event ->
-            when (event) {
-                is MyPageEvent.ShowSignIn -> handleShowSignInEvent()
-                is MyPageEvent.SignOutSuccess -> handleSignOutSuccessEvent()
-                is MyPageEvent.DeleteAccountSuccess -> handleDeleteAccountSuccess()
-                is MyPageEvent.ShowTicketHistory -> handleShowTicketHistory()
-                is MyPageEvent.ShowConfirmDelete -> handleShowConfirmDelete()
+        viewLifecycleOwner.repeatOnStarted {
+            vm.event.collect { event ->
+                handleEvent(event)
             }
+        }
+    }
+
+    private fun handleUiState(uiState: MyPageUiState) {
+        binding.uiState = uiState
+        when (uiState) {
+            is MyPageUiState.Loading, is MyPageUiState.Error -> Unit
+
+            is MyPageUiState.Success -> handleSuccess(uiState)
+        }
+        binding.srlMyPage.isRefreshing = false
+    }
+
+    private fun handleEvent(event: MyPageEvent) {
+        when (event) {
+            is MyPageEvent.ShowSignIn -> handleShowSignInEvent()
+            is MyPageEvent.SignOutSuccess -> handleSignOutSuccessEvent()
+            is MyPageEvent.DeleteAccountSuccess -> handleDeleteAccountSuccess()
+            is MyPageEvent.ShowTicketHistory -> handleShowTicketHistory()
+            is MyPageEvent.ShowConfirmDelete -> handleShowConfirmDelete()
         }
     }
 

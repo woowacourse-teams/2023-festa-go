@@ -1,18 +1,18 @@
 package com.festago.festago.presentation.ui.home.mypage
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.presentation.util.MutableSingleLiveData
-import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TicketRepository
 import com.festago.festago.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,16 +24,18 @@ class MyPageViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData<MyPageUiState>(MyPageUiState.Loading)
-    val uiState: LiveData<MyPageUiState> = _uiState
+    private val _uiState = MutableStateFlow<MyPageUiState>(MyPageUiState.Loading)
+    val uiState: StateFlow<MyPageUiState> = _uiState
 
-    private val _event = MutableSingleLiveData<MyPageEvent>()
-    val event: SingleLiveData<MyPageEvent> = _event
+    private val _event = MutableSharedFlow<MyPageEvent>()
+    val event: SharedFlow<MyPageEvent> = _event
 
     fun loadUserInfo() {
         if (!authRepository.isSigned) {
-            _event.setValue(MyPageEvent.ShowSignIn)
-            _uiState.value = MyPageUiState.Error
+            viewModelScope.launch {
+                _event.emit(MyPageEvent.ShowSignIn)
+                _uiState.value = MyPageUiState.Error
+            }
             return
         }
         viewModelScope.launch {
@@ -59,7 +61,7 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.signOut()
                 .onSuccess {
-                    _event.setValue(MyPageEvent.SignOutSuccess)
+                    _event.emit(MyPageEvent.SignOutSuccess)
                     _uiState.value = MyPageUiState.Error
                 }.onFailure {
                     _uiState.value = MyPageUiState.Error
@@ -72,14 +74,16 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun showConfirmDelete() {
-        _event.setValue(MyPageEvent.ShowConfirmDelete)
+        viewModelScope.launch {
+            _event.emit(MyPageEvent.ShowConfirmDelete)
+        }
     }
 
     fun deleteAccount() {
         viewModelScope.launch {
             authRepository.deleteAccount()
                 .onSuccess {
-                    _event.setValue(MyPageEvent.DeleteAccountSuccess)
+                    _event.emit(MyPageEvent.DeleteAccountSuccess)
                     _uiState.value = MyPageUiState.Error
                 }.onFailure {
                     _uiState.value = MyPageUiState.Error
@@ -92,7 +96,9 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun showTicketHistory() {
-        _event.setValue(MyPageEvent.ShowTicketHistory)
+        viewModelScope.launch {
+            _event.emit(MyPageEvent.ShowTicketHistory)
+        }
     }
 
     companion object {
