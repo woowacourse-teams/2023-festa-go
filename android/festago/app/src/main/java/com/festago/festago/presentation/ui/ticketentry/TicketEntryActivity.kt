@@ -52,7 +52,7 @@ class TicketEntryActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
-        vm.uiState.observe(this) { uiState ->
+        vm.uiStateLegacy.observe(this) { uiState ->
             binding.uiState = uiState
             when (uiState) {
                 is TicketEntryUiState.Loading, is TicketEntryUiState.Error -> Unit

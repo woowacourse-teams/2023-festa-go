@@ -62,17 +62,17 @@ class TicketEntryViewModelTest {
 
         // then
         val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value).isInstanceOf(TicketEntryUiState.Success::class.java)
+            assertThat(vm.uiStateLegacy.value).isInstanceOf(TicketEntryUiState.Success::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(true)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
+            assertThat(vm.uiStateLegacy.value?.shouldShowSuccess).isEqualTo(true)
+            assertThat(vm.uiStateLegacy.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiStateLegacy.value?.shouldShowError).isEqualTo(false)
 
             // and
-            val actualTicket = (vm.uiState.value as TicketEntryUiState.Success).ticket
+            val actualTicket = (vm.uiStateLegacy.value as TicketEntryUiState.Success).ticket
             assertThat(actualTicket).isEqualTo(TicketFixture.getMemberTicket())
-            val actualTicketCode = (vm.uiState.value as TicketEntryUiState.Success).ticketCode
+            val actualTicketCode = (vm.uiStateLegacy.value as TicketEntryUiState.Success).ticketCode
             assertThat(actualTicketCode).isEqualTo(getFakeTicketCode())
         }
         softly.assertAll()
@@ -92,12 +92,12 @@ class TicketEntryViewModelTest {
 
         // then
         val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value).isInstanceOf(TicketEntryUiState.Error::class.java)
+            assertThat(vm.uiStateLegacy.value).isInstanceOf(TicketEntryUiState.Error::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+            assertThat(vm.uiStateLegacy.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiStateLegacy.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiStateLegacy.value?.shouldShowError).isEqualTo(true)
         }
         softly.assertAll()
     }
@@ -117,12 +117,12 @@ class TicketEntryViewModelTest {
 
         // then
         val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value).isInstanceOf(TicketEntryUiState.Loading::class.java)
+            assertThat(vm.uiStateLegacy.value).isInstanceOf(TicketEntryUiState.Loading::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(true)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
+            assertThat(vm.uiStateLegacy.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiStateLegacy.value?.shouldShowLoading).isEqualTo(true)
+            assertThat(vm.uiStateLegacy.value?.shouldShowError).isEqualTo(false)
         }
         softly.assertAll()
     }
@@ -141,12 +141,12 @@ class TicketEntryViewModelTest {
 
         // then
         val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value).isInstanceOf(TicketEntryUiState.Error::class.java)
+            assertThat(vm.uiStateLegacy.value).isInstanceOf(TicketEntryUiState.Error::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+            assertThat(vm.uiStateLegacy.value?.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiStateLegacy.value?.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiStateLegacy.value?.shouldShowError).isEqualTo(true)
         }
         softly.assertAll()
     }

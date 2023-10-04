@@ -20,8 +20,8 @@ class TicketEntryViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData<TicketEntryUiState>()
-    val uiState: LiveData<TicketEntryUiState> = _uiState
+    private val _uiStateLegacy = MutableLiveData<TicketEntryUiState>()
+    val uiStateLegacy: LiveData<TicketEntryUiState> = _uiStateLegacy
 
     private val timer: Timer = Timer()
 
@@ -29,13 +29,13 @@ class TicketEntryViewModel @Inject constructor(
         viewModelScope.launch {
             ticketRepository.loadTicketCode(ticketId)
                 .onSuccess {
-                    val state = uiState.value
+                    val state = uiStateLegacy.value
                     if (state is TicketEntryUiState.Success) {
-                        _uiState.value = state.copy(ticketCode = it, remainTime = it.period)
+                        _uiStateLegacy.value = state.copy(ticketCode = it, remainTime = it.period)
                         setTimer(ticketId, it)
                     }
                 }.onFailure {
-                    _uiState.value = TicketEntryUiState.Error
+                    _uiStateLegacy.value = TicketEntryUiState.Error
                     analyticsHelper.logNetworkFailure(
                         key = KEY_LOAD_CODE_LOG,
                         value = it.message.toString(),
@@ -46,26 +46,26 @@ class TicketEntryViewModel @Inject constructor(
 
     fun loadTicket(ticketId: Long) {
         viewModelScope.launch {
-            _uiState.value = TicketEntryUiState.Loading
+            _uiStateLegacy.value = TicketEntryUiState.Loading
             ticketRepository.loadTicket(ticketId)
                 .onSuccess { ticket ->
                     ticketRepository.loadTicketCode(ticketId)
                         .onSuccess { ticketCode ->
-                            _uiState.value = TicketEntryUiState.Success(
+                            _uiStateLegacy.value = TicketEntryUiState.Success(
                                 ticket = ticket,
                                 ticketCode = ticketCode,
                                 remainTime = ticketCode.period,
                             )
                             setTimer(ticketId, ticketCode)
                         }.onFailure {
-                            _uiState.value = TicketEntryUiState.Error
+                            _uiStateLegacy.value = TicketEntryUiState.Error
                             analyticsHelper.logNetworkFailure(
                                 key = KEY_LOAD_CODE_LOG,
                                 value = it.message.toString(),
                             )
                         }
                 }.onFailure {
-                    _uiState.value = TicketEntryUiState.Error
+                    _uiStateLegacy.value = TicketEntryUiState.Error
                     analyticsHelper.logNetworkFailure(
                         key = KEY_LOAD_Ticket_LOG,
                         value = it.message.toString(),
@@ -85,9 +85,9 @@ class TicketEntryViewModel @Inject constructor(
     private fun createTimerListener(ticketId: Long, period: Int): TimerListener =
         object : TimerListener {
             override fun onTick(current: Int) {
-                val state = uiState.value
+                val state = uiStateLegacy.value
                 if (state is TicketEntryUiState.Success) {
-                    _uiState.value = state.copy(remainTime = current)
+                    _uiStateLegacy.value = state.copy(remainTime = current)
                 }
             }
 
