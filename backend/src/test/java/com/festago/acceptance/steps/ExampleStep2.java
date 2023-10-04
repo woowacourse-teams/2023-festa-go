@@ -18,7 +18,7 @@ public class ExampleStep2 {
         FestivalDetailResponse festivalInfo = RestAssured.given()
             .when()
             .get("festivals/{festivalId}", response.id())
-            .then().log().all()
+            .then()
             .extract()
             .as(FestivalDetailResponse.class);
         cucumberClient.addData("searchResult", festivalInfo);

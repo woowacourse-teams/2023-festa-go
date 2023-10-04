@@ -32,7 +32,7 @@ public class ExampleStep {
             .contentType(ContentType.JSON)
             .body(new RootAdminInitializeRequest(password))
             .post("admin/initialize")
-            .then().log().all()
+            .then()
             .statusCode(200);
 
         ExtractableResponse<Response> response = RestAssured.given()
@@ -56,7 +56,6 @@ public class ExampleStep {
             .body(request)
             .post("admin/festivals")
             .then()
-            .log().all()
             .extract()
             .body()
             .as(FestivalResponse.class);
