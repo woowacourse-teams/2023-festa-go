@@ -20,7 +20,9 @@ import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.repository.MemberTicketRepository;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -135,7 +137,7 @@ class MemberTicketRepositoryTest {
     @Test
     void 무대와_입장시간으로_멤버아이디리스트_조회() {
         // given
-        LocalDateTime entryTime = LocalDateTime.now();
+        LocalDateTime entryTime = LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC);
         Stage stage = saveStage();
         Member member1 = memberRepository.save(MemberFixture.member().build());
         Member member2 = memberRepository.save(MemberFixture.member().build());
@@ -145,12 +147,12 @@ class MemberTicketRepositoryTest {
             MemberTicketFixture.memberTicket().stage(stage).owner(member2).entryTime(entryTime).build());
 
         // when
-        List<Long> actual = memberTicketRepository.findAllOwnerIdByStageIdAndEntryTime(
-            stage.getId(), entryTime);
+        List<Long> actual = memberTicketRepository.findAllOwnerIdByStageIdAndEntryTime(stage.getId(), entryTime);
 
         // then
         assertThat(actual).containsExactlyInAnyOrder(member1.getId(), member2.getId());
     }
+
 
     private Stage saveStage() {
         School school = schoolRepository.save(SchoolFixture.school().build());
