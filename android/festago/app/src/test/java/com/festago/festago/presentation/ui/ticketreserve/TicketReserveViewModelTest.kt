@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.Reservation
 import com.festago.festago.model.ReservationStage
@@ -16,10 +16,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.assertj.core.api.SoftAssertions
+import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -59,9 +62,6 @@ class TicketReserveViewModelTest {
         number = 1,
     )
 
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
@@ -78,6 +78,12 @@ class TicketReserveViewModelTest {
             authRepository,
             analyticsHelper,
         )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -143,7 +149,7 @@ class TicketReserveViewModelTest {
     }
 
     @Test
-    fun `특정 공연의 티켓 타입을 보여주는 이벤트가 발생하면 해당 공연의 티켓 타입을 보여준다`() {
+    fun `특정 공연의 티켓 타입을 보여주는 이벤트가 발생하면 해당 공연의 티켓 타입을 보여준다`() = runTest {
         // given
         coEvery {
             reservationTicketRepository.loadTicketTypes(1)
@@ -151,21 +157,25 @@ class TicketReserveViewModelTest {
             Result.success(fakeReservationTickets)
         }
 
-        coEvery {
-            authRepository.isSigned
-        } answers {
+        coEvery { authRepository.isSigned } answers {
             true
         }
 
-        // when
-        vm.showTicketTypes(1, LocalDateTime.MIN)
+        vm.event.test {
+            // when
+            vm.showTicketTypes(1, LocalDateTime.MIN)
 
-        // then
-        assertThat(vm.event.getValue()).isInstanceOf(TicketReserveEvent.ShowTicketTypes::class.java)
+            // then
+            val softly = SoftAssertions().apply {
+                val event = awaitItem()
+                assertThat(event).isExactlyInstanceOf(TicketReserveEvent.ShowTicketTypes::class.java)
 
-        // and
-        val event = vm.event.getValue() as TicketReserveEvent.ShowTicketTypes
-        assertThat(event.tickets).isEqualTo(fakeReservationTickets)
+                // and
+                val actual = (event as? TicketReserveEvent.ShowTicketTypes)?.tickets
+                assertThat(actual).isEqualTo(fakeReservationTickets)
+            }
+            softly.assertAll()
+        }
     }
 
     @Test
@@ -187,22 +197,26 @@ class TicketReserveViewModelTest {
     }
 
     @Test
-    fun `티켓 유형을 선택하고 예약하면 예약 성공 이벤트가 발생한다`() {
+    fun `티켓 유형을 선택하고 예약하면 예약 성공 이벤트가 발생한다`() = runTest {
         // given
         coEvery {
             ticketRepository.reserveTicket(any())
         } answers {
             Result.success(fakeReservedTicket)
         }
-        // when
-        vm.reserveTicket(0)
 
-        // then
-        assertThat(vm.event.getValue()).isInstanceOf(TicketReserveEvent.ReserveTicketSuccess::class.java)
+        vm.event.test {
+            // when
+            vm.reserveTicket(0)
+
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(TicketReserveEvent.ReserveTicketSuccess::class.java)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
-    fun `티켓 유형을 선택하고 예약하는 것을 실패하면 예약 실패 이벤트가 발생한다`() {
+    fun `티켓 유형을 선택하고 예약하는 것을 실패하면 예약 실패 이벤트가 발생한다`() = runTest {
         // given
         coEvery {
             ticketRepository.reserveTicket(0)
@@ -210,10 +224,13 @@ class TicketReserveViewModelTest {
             Result.failure(Exception())
         }
 
-        // when
-        vm.reserveTicket(0)
+        vm.event.test {
+            // when
+            vm.reserveTicket(0)
 
-        // then
-        assertThat(vm.event.getValue()).isEqualTo(TicketReserveEvent.ReserveTicketFailed)
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(TicketReserveEvent.ReserveTicketFailed::class.java)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }
