@@ -154,12 +154,15 @@ class TicketListViewModelTest {
             vm.showTicketEntry(1L)
 
             // then
-            val event = awaitItem()
-            assertThat(event).isExactlyInstanceOf(TicketListEvent.ShowTicketEntry::class.java)
+            val softly = SoftAssertions().apply {
+                val event = awaitItem()
+                assertThat(event).isExactlyInstanceOf(TicketListEvent.ShowTicketEntry::class.java)
 
-            // and
-            val ticketId = (event as? TicketListEvent.ShowTicketEntry)?.ticketId
-            assertThat(ticketId).isEqualTo(1L)
+                // and
+                val ticketId = (event as? TicketListEvent.ShowTicketEntry)?.ticketId
+                assertThat(ticketId).isEqualTo(1L)
+            }
+            softly.assertAll()
         }
     }
 }
