@@ -3,7 +3,7 @@ package com.festago.fcm.infrastructure;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 import com.festago.common.utils.AsyncBatchExecutor;
-import com.festago.config.SchedulingConfig;
+import com.festago.config.AsyncConfig;
 import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;
@@ -33,7 +33,7 @@ public class FcmClientImpl implements FcmClient {
     private final Executor taskExecutor;
 
     public FcmClientImpl(FirebaseMessaging firebaseMessaging,
-                         @Qualifier(SchedulingConfig.FCM_EXECUTOR_NAME) Executor taskExecutor) {
+                         @Qualifier(AsyncConfig.FCM_EXECUTOR_NAME) Executor taskExecutor) {
         this.firebaseMessaging = firebaseMessaging;
         this.taskExecutor = taskExecutor;
     }
