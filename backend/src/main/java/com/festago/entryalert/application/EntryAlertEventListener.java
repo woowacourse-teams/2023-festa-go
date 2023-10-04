@@ -30,11 +30,10 @@ public class EntryAlertEventListener {
         this.clock = clock;
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    @Async
-    public void addEntryAlertSchedule(TicketCreateEvent event) {
-        EntryAlertResponse entryAlert = entryAlertService.create(event.stageId(), event.entryTime());
-        addSchedule(entryAlert);
+    @EventListener(ApplicationReadyEvent.class)
+    public void initEntryAlertSchedule() {
+        List<EntryAlertResponse> entryAlerts = entryAlertService.findAll();
+        entryAlerts.forEach(this::addSchedule);
     }
 
     private void addSchedule(EntryAlertResponse entryAlert) {
@@ -48,9 +47,10 @@ public class EntryAlertEventListener {
         return () -> entryAlertService.sendEntryAlert(id);
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void initEntryAlertSchedule() {
-        List<EntryAlertResponse> entryAlerts = entryAlertService.findAll();
-        entryAlerts.forEach(this::addSchedule);
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Async
+    public void addEntryAlertSchedule(TicketCreateEvent event) {
+        EntryAlertResponse entryAlert = entryAlertService.create(event.stageId(), event.entryTime());
+        addSchedule(entryAlert);
     }
 }
