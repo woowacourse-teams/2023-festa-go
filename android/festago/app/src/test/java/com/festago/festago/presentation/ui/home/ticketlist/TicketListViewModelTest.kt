@@ -163,6 +163,7 @@ class TicketListViewModelTest {
                 assertThat(ticketId).isEqualTo(1L)
             }
             softly.assertAll()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 }
