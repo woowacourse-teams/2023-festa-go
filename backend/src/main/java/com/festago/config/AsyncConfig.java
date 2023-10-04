@@ -25,7 +25,6 @@ public class AsyncConfig {
     public Executor fcmExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(4);
-        executor.setQueueCapacity(10);
         executor.initialize();
         return executor;
     }
