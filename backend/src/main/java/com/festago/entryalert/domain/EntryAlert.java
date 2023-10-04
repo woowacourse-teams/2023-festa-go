@@ -4,6 +4,8 @@ import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,6 +28,7 @@ public class EntryAlert extends BaseTimeEntity {
     private LocalDateTime entryTime;
 
     @NotNull
+    @Enumerated(value = EnumType.STRING)
     private AlertStatus status = AlertStatus.PENDING;
 
     protected EntryAlert() {
