@@ -14,6 +14,7 @@ import com.festago.festago.presentation.util.repeatOnStarted
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class TicketEntryActivity : AppCompatActivity() {
@@ -52,12 +53,14 @@ class TicketEntryActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
-        vm.uiStateLegacy.observe(this) { uiState ->
-            binding.uiState = uiState
-            when (uiState) {
-                is TicketEntryUiState.Loading, is TicketEntryUiState.Error -> Unit
-                is TicketEntryUiState.Success -> {
-                    handleSuccess(uiState)
+        repeatOnStarted(this) {
+            vm.uiState.collectLatest { uiState ->
+                binding.uiState = uiState
+                when (uiState) {
+                    is TicketEntryUiState.Loading, is TicketEntryUiState.Error -> Unit
+                    is TicketEntryUiState.Success -> {
+                        handleSuccess(uiState)
+                    }
                 }
             }
         }
