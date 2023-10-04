@@ -51,8 +51,10 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
                 updateUi(it)
             }
         }
-        vm.event.observe(viewLifecycleOwner) { event ->
-            handleEvent(event)
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect { event ->
+                handleEvent(event)
+            }
         }
     }
 

@@ -4,12 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.presentation.util.MutableSingleLiveData
-import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.TicketRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,8 +24,8 @@ class TicketListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<TicketListUiState>(TicketListUiState.Loading)
     val uiState: StateFlow<TicketListUiState> = _uiState.asStateFlow()
 
-    private val _event = MutableSingleLiveData<TicketListEvent>()
-    val event: SingleLiveData<TicketListEvent> = _event
+    private val _event = MutableSharedFlow<TicketListEvent>()
+    val event: SharedFlow<TicketListEvent> = _event.asSharedFlow()
 
     fun loadCurrentTickets() {
         viewModelScope.launch {
@@ -41,7 +42,9 @@ class TicketListViewModel @Inject constructor(
     }
 
     fun showTicketEntry(ticketId: Long) {
-        _event.setValue(TicketListEvent.ShowTicketEntry(ticketId))
+        viewModelScope.launch {
+            _event.emit(TicketListEvent.ShowTicketEntry(ticketId))
+        }
     }
 
     companion object {
