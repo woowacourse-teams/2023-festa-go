@@ -6,30 +6,29 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
+@Slf4j
 public class AuthService {
-
-    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private final MemberRepository memberRepository;
 
-    public AuthService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
-
     public LoginMemberDto login(UserInfo userInfo) {
-        return memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
-            .map(LoginMemberDto::isExists)
-            .orElseGet(() -> {
-                Member member = signUp(userInfo);
-                return LoginMemberDto.isNew(member);
-            });
+        Optional<Member> originMember =
+            memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType());
+        if (originMember.isPresent()) {
+            Member member = originMember.get();
+            return LoginMemberDto.isExists(member);
+        }
+        Member newMember = signUp(userInfo);
+        return LoginMemberDto.isNew(newMember);
     }
 
     private Member signUp(UserInfo userInfo) {

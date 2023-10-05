@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.selectschool.SelectSchoolActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.studentverification.StudentVerificationActivity"
             android:exported="false" />
         <activity

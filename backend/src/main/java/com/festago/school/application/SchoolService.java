@@ -9,19 +9,17 @@ import com.festago.school.dto.SchoolResponse;
 import com.festago.school.dto.SchoolUpdateRequest;
 import com.festago.school.dto.SchoolsResponse;
 import com.festago.school.repository.SchoolRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class SchoolService {
 
     private final SchoolRepository schoolRepository;
-
-    public SchoolService(SchoolRepository schoolRepository) {
-        this.schoolRepository = schoolRepository;
-    }
 
     @Transactional(readOnly = true)
     public SchoolsResponse findAll() {

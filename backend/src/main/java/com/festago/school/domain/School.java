@@ -9,9 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class School extends BaseTimeEntity {
 
     @Id
@@ -27,9 +30,6 @@ public class School extends BaseTimeEntity {
     @Size(max = 255)
     @Column(unique = true)
     private String name;
-
-    protected School() {
-    }
 
     public School(String domain, String name) {
         this(null, domain, name);

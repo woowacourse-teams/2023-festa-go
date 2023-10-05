@@ -1,11 +1,16 @@
 package com.festago.application;
 
+import static com.festago.common.exception.ErrorCode.MEMBER_TICKET_NOT_FOUND;
+import static com.festago.common.exception.ErrorCode.NOT_ENTRY_TIME;
+import static com.festago.common.exception.ErrorCode.NOT_MEMBER_TICKET_OWNER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
@@ -16,6 +21,7 @@ import com.festago.entry.domain.EntryCodePayload;
 import com.festago.entry.dto.EntryCodeResponse;
 import com.festago.entry.dto.TicketValidationRequest;
 import com.festago.entry.dto.TicketValidationResponse;
+import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.festival.domain.Festival;
 import com.festago.member.domain.Member;
 import com.festago.stage.domain.Stage;
@@ -42,6 +48,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -53,6 +60,9 @@ class EntryServiceTest {
 
     @Mock
     MemberTicketRepository memberTicketRepository;
+
+    @Mock
+    ApplicationEventPublisher publisher;
 
     @Spy
     Clock clock = Clock.systemDefaultZone();
@@ -91,7 +101,7 @@ class EntryServiceTest {
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("입장 가능한 시간이 아닙니다.");
+                .hasMessage(NOT_ENTRY_TIME.getMessage());
         }
 
         @Test
@@ -122,7 +132,7 @@ class EntryServiceTest {
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("입장 가능한 시간이 아닙니다.");
+                .hasMessage(NOT_ENTRY_TIME.getMessage());
         }
 
         @Test
@@ -144,7 +154,7 @@ class EntryServiceTest {
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("해당 예매 티켓의 주인이 아닙니다.");
+                .hasMessage(NOT_MEMBER_TICKET_OWNER.getMessage());
         }
 
         @Test
@@ -157,7 +167,7 @@ class EntryServiceTest {
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(1L, memberTicketId))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않은 멤버 티켓입니다.");
+                .hasMessage(MEMBER_TICKET_NOT_FOUND.getMessage());
         }
 
         @Test
@@ -246,6 +256,7 @@ class EntryServiceTest {
                 softly.assertThat(memberTicket.getEntryState()).isEqualTo(EntryState.BEFORE_ENTRY);
                 softly.assertThat(expect.updatedState()).isEqualTo(EntryState.BEFORE_ENTRY);
             });
+            verify(publisher, times(1)).publishEvent(any(EntryProcessEvent.class));
         }
     }
 }

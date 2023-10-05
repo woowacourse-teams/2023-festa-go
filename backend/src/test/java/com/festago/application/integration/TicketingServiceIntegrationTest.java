@@ -1,5 +1,6 @@
 package com.festago.application.integration;
 
+import static com.festago.common.exception.ErrorCode.RESERVE_TICKET_OVER_AMOUNT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -90,6 +91,6 @@ class TicketingServiceIntegrationTest extends ApplicationIntegrationTest {
         // when & then
         assertThatThrownBy(() -> ticketingService.ticketing(memberId, request))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("예매 가능한 수량을 초과했습니다.");
+            .hasMessage(RESERVE_TICKET_OVER_AMOUNT.getMessage());
     }
 }

@@ -13,9 +13,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudentCode extends BaseTimeEntity {
 
     @Id
@@ -32,9 +35,6 @@ public class StudentCode extends BaseTimeEntity {
     private Member member;
 
     private String username;
-
-    protected StudentCode() {
-    }
 
     public StudentCode(VerificationCode code, School school, Member member, String username) {
         this(null, code, school, member, username);
