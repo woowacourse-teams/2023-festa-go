@@ -10,11 +10,12 @@ import com.festago.festago.model.timer.Timer
 import com.festago.festago.model.timer.TimerListener
 import com.festago.festago.repository.TicketRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,86 +25,81 @@ class TicketEntryViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
-    private val ticketFlow =
-        MutableStateFlow<Result<Ticket>>(Result.failure(Throwable("ticket not loaded")))
+    private val ticketFlow = MutableSharedFlow<Result<Ticket>>()
 
-    private val ticketCodeFlow =
-        MutableStateFlow<Result<TicketCode>>(Result.failure(Throwable("ticket code not loaded")))
+    private val ticketCodeFlow = MutableSharedFlow<Result<TicketCode>>()
 
-    val uiState: StateFlow<TicketEntryUiState> =
-        combine(
-            ticketFlow,
-            ticketCodeFlow,
-        ) { ticketResult, ticketCodeResult ->
-            val ticket = ticketResult.getOrElse { logTicketError(it) }
-            val ticketCode = ticketCodeResult.getOrElse { logTicketCodeError(it) }
-            if (ticket is Ticket && ticketCode is TicketCode) {
-                TicketEntryUiState.Success(
-                    ticket = ticket,
-                    ticketCode = ticketCode,
-                    remainTime = ticketCode.period,
-                )
-            } else {
-                TicketEntryUiState.Error
-            }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = TicketEntryUiState.Loading,
-        )
+    private val _uiState: MutableStateFlow<TicketEntryUiState> =
+        MutableStateFlow(TicketEntryUiState.Loading)
+    val uiState: StateFlow<TicketEntryUiState> = _uiState.asStateFlow()
 
     private val timer: Timer = Timer()
 
+    init {
+        viewModelScope.launch {
+            combine(ticketFlow, ticketCodeFlow) { ticketResult, ticketCodeResult ->
+                runCatching {
+                    val ticket = ticketResult.getOrThrowWithLog()
+                    val ticketCode = ticketCodeResult.getOrThrowWithLog()
+
+                    setTimer(ticket.id, ticketCode)
+
+                    TicketEntryUiState.Success(
+                        ticket = ticket,
+                        ticketCode = ticketCode,
+                        remainTime = ticketCode.period,
+                    )
+                }.getOrElse { TicketEntryUiState.Error }
+            }.collectLatest { _uiState.value = it }
+        }
+    }
+
     fun loadTicketCode(ticketId: Long) {
         viewModelScope.launch {
-            ticketCodeFlow.value = ticketRepository.loadTicketCode(ticketId)
-            setTimer(ticketId, ticketCodeFlow.value.getOrThrow())
+            ticketCodeFlow.emit(ticketRepository.loadTicketCode(ticketId))
         }
     }
 
     fun loadTicket(ticketId: Long) {
         viewModelScope.launch {
-            ticketFlow.value = ticketRepository.loadTicket(ticketId)
+            ticketFlow.emit(ticketRepository.loadTicket(ticketId))
         }
     }
 
     private suspend fun setTimer(ticketId: Long, ticketCode: TicketCode) {
-        timer.timerListener = createTimerListener(
-            ticketId = ticketId,
-            period = ticketCode.period,
-        )
-        timer.start(ticketCode.period)
+        viewModelScope.launch {
+            timer.timerListener = createTimerListener(ticketId)
+            timer.start(ticketCode.period)
+        }
     }
 
-    private fun createTimerListener(ticketId: Long, period: Int): TimerListener =
-        object : TimerListener {
-            override fun onTick(current: Int) {
-                val state = uiState.value
-                if (state is TicketEntryUiState.Success) {
-                    ticketCodeFlow.value = Result.success(state.ticketCode.copy(period = current))
-                }
-            }
-
-            override fun onFinish() {
-                viewModelScope.launch {
-                    timer.start(period)
-                    loadTicketCode(ticketId)
-                }
+    private fun createTimerListener(ticketId: Long): TimerListener = object : TimerListener {
+        override fun onTick(current: Int) {
+            val state = uiState.value
+            if (state is TicketEntryUiState.Success) {
+                _uiState.value = state.copy(remainTime = current)
             }
         }
 
-    private fun logTicketError(exception: Throwable?) {
-        analyticsHelper.logNetworkFailure(
-            key = KEY_LOAD_Ticket_LOG,
-            value = exception?.message.toString(),
-        )
+        override fun onFinish() {
+            loadTicketCode(ticketId)
+        }
     }
 
-    private fun logTicketCodeError(exception: Throwable) {
+    private fun Result<Ticket>.getOrThrowWithLog(): Ticket = getOrElse { throwable ->
+        analyticsHelper.logNetworkFailure(
+            key = KEY_LOAD_Ticket_LOG,
+            value = throwable.message.toString(),
+        )
+        throw throwable
+    }
+
+    private fun Result<TicketCode>.getOrThrowWithLog(): TicketCode = getOrElse { throwable ->
         analyticsHelper.logNetworkFailure(
             key = KEY_LOAD_CODE_LOG,
-            value = exception.message.toString(),
+            value = throwable.message.toString(),
         )
+        throw throwable
     }
 
     companion object {
