@@ -13,7 +13,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -57,15 +56,15 @@ class TicketEntryViewModel @Inject constructor(
 
     fun loadTicketCode(ticketId: Long) {
         viewModelScope.launch {
-            ticketRepository.loadTicketCode(ticketId).collectLatest { ticketCodeFlow.value = it }
+            ticketCodeFlow.value = ticketRepository.loadTicketCode(ticketId)
             setTimer(ticketId, ticketCodeFlow.value.getOrThrow())
         }
     }
 
     fun loadTicket(ticketId: Long) {
         viewModelScope.launch {
-            ticketRepository.loadTicket(ticketId).collectLatest { ticketFlow.value = it }
-            ticketRepository.loadTicketCode(ticketId).collectLatest { ticketCodeFlow.value = it }
+            ticketCodeFlow.value = ticketRepository.loadTicketCode(ticketId)
+            ticketFlow.value = ticketRepository.loadTicket(ticketId)
             setTimer(ticketId, ticketCodeFlow.value.getOrThrow())
         }
     }
