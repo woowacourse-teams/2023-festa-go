@@ -1,12 +1,8 @@
 package com.festago.entryalert.application;
 
-import static com.festago.common.exception.ErrorCode.ALREADY_ALERT;
 import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.BDDMockito.given;
 
-import com.festago.common.exception.ConflictException;
 import com.festago.entryalert.domain.AlertStatus;
 import com.festago.entryalert.domain.EntryAlert;
 import com.festago.entryalert.repository.EntryAlertRepository;
@@ -74,18 +70,6 @@ class EntryAlertServiceTest {
             SetUpMockito
                 .given(memberFCMRepository.findAllTokenByMemberIdIn(anyList()))
                 .willReturn(List.of("token1", "token2", "token3"));
-        }
-
-        @Test
-        void 이미_전송된_알림이면_예외() {
-            // given
-            given(entryAlertRepository.findByIdAndStatusForUpdate(id, AlertStatus.PENDING))
-                .willReturn(Optional.empty());
-
-            // when & then
-            assertThatThrownBy(() -> entryAlertService.sendEntryAlert(id))
-                .isInstanceOf(ConflictException.class)
-                .hasMessage(ALREADY_ALERT.getMessage());
         }
 
         @Test

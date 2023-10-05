@@ -1,7 +1,5 @@
 package com.festago.entryalert.application;
 
-import com.festago.common.exception.ConflictException;
-import com.festago.common.exception.ErrorCode;
 import com.festago.entryalert.domain.AlertStatus;
 import com.festago.entryalert.domain.EntryAlert;
 import com.festago.entryalert.dto.EntryAlertResponse;
@@ -47,12 +45,13 @@ public class EntryAlertService {
 
     @Async
     public void sendEntryAlert(Long id) {
-        EntryAlert entryAlert = entryAlertRepository.findByIdAndStatusForUpdate(id, AlertStatus.PENDING)
-            .orElseThrow(() -> new ConflictException(ErrorCode.ALREADY_ALERT));
-        List<String> tokens = findFcmTokens(entryAlert);
-        log.info("EntryAlert 전송 시작 / entryAlertId: {} / to {} devices", id, tokens.size());
-        taskExecutor.execute(() -> fcmClient.sendAll(tokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert()));
-        entryAlert.changeRequested();
+        entryAlertRepository.findByIdAndStatusForUpdate(id, AlertStatus.PENDING)
+            .ifPresent(entryAlert -> {
+                List<String> tokens = findFcmTokens(entryAlert);
+                log.info("EntryAlert 전송 시작 / entryAlertId: {} / to {} devices", id, tokens.size());
+                taskExecutor.execute(() -> fcmClient.sendAll(tokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert()));
+                entryAlert.changeRequested();
+            });
     }
 
     private List<String> findFcmTokens(EntryAlert entryAlert) {
