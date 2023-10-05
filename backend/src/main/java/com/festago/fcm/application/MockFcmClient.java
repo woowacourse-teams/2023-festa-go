@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({"!prod", "!dev"})
+@Profile({"!prod & !dev"})
 public class MockFcmClient implements FcmClient {
 
     private static final Logger log = LoggerFactory.getLogger(MockFcmClient.class);
