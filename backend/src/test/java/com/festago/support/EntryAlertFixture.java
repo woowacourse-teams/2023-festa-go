@@ -38,7 +38,7 @@ public class EntryAlertFixture {
     public EntryAlert build() {
         EntryAlert entryAlert = new EntryAlert(id, stageId, entryTime);
         if (status != AlertStatus.PENDING) {
-            entryAlert.request();
+            entryAlert.changeRequested();
         }
         return entryAlert;
     }

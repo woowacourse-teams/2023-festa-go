@@ -24,7 +24,7 @@ class EntryAlertTest {
             EntryAlert entryAlert = EntryAlertFixture.entryAlert().status(AlertStatus.REQUESTED).build();
 
             // when & then
-            assertThatThrownBy(entryAlert::request)
+            assertThatThrownBy(entryAlert::changeRequested)
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(NOT_PENDING_ALERT.getMessage());
         }
@@ -35,7 +35,7 @@ class EntryAlertTest {
             EntryAlert entryAlert = EntryAlertFixture.entryAlert().status(AlertStatus.PENDING).build();
 
             // when
-            entryAlert.request();
+            entryAlert.changeRequested();
 
             // then
             assertThat(entryAlert.getStatus()).isEqualTo(AlertStatus.REQUESTED);

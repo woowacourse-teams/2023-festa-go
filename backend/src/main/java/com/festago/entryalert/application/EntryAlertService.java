@@ -52,7 +52,7 @@ public class EntryAlertService {
         List<String> tokens = findFcmTokens(entryAlert);
         log.info("EntryAlert 전송 시작 / entryAlertId: {} / to {} devices", id, tokens.size());
         taskExecutor.execute(() -> fcmClient.sendAll(tokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert()));
-        entryAlert.request();
+        entryAlert.changeRequested();
     }
 
     private List<String> findFcmTokens(EntryAlert entryAlert) {

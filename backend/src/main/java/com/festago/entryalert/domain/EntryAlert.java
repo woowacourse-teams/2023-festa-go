@@ -51,7 +51,7 @@ public class EntryAlert extends BaseTimeEntity {
         return new EntryAlert(stageId, entryTime);
     }
 
-    public void request() {
+    public void changeRequested() {
         validateNotPending();
         this.status = AlertStatus.REQUESTED;
     }
