@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.presentation.util.MutableSingleLiveData
-import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,8 +18,8 @@ class SignInViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
-    private val _event = MutableSingleLiveData<SignInEvent>()
-    val event: SingleLiveData<SignInEvent> = _event
+    private val _event = MutableSharedFlow<SignInEvent>()
+    val event: SharedFlow<SignInEvent> = _event
 
     private val exceptionHandler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
@@ -28,16 +28,18 @@ class SignInViewModel @Inject constructor(
         }
 
     fun signInKakao() {
-        _event.setValue(SignInEvent.ShowSignInPage)
+        viewModelScope.launch {
+            _event.emit(SignInEvent.ShowSignInPage)
+        }
     }
 
     fun signIn(token: String) {
         viewModelScope.launch(exceptionHandler) {
             authRepository.signIn(SOCIAL_TYPE_KAKAO, token)
                 .onSuccess {
-                    _event.setValue(SignInEvent.SignInSuccess)
+                    _event.emit(SignInEvent.SignInSuccess)
                 }.onFailure {
-                    _event.setValue(SignInEvent.SignInFailure)
+                    _event.emit(SignInEvent.SignInFailure)
                     analyticsHelper.logNetworkFailure(KEY_SIGN_IN_LOG, it.message.toString())
                 }
         }

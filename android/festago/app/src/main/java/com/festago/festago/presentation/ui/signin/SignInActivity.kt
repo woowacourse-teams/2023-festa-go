@@ -14,6 +14,7 @@ import com.festago.festago.databinding.ActivitySignInBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.util.loginWithKakao
+import com.festago.festago.presentation.util.repeatOnStarted
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,13 +45,17 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
-        vm.event.observe(this) { event ->
-            when (event) {
-                SignInEvent.ShowSignInPage -> handleSignInEvent()
-                SignInEvent.SignInSuccess -> handleSuccessEvent()
-                SignInEvent.SignInFailure -> handleFailureEvent()
+        repeatOnStarted(this) {
+            vm.event.collect {
+                handleEvent(it)
             }
         }
+    }
+
+    private fun handleEvent(it: SignInEvent) = when (it) {
+        SignInEvent.ShowSignInPage -> handleSignInEvent()
+        SignInEvent.SignInSuccess -> handleSuccessEvent()
+        SignInEvent.SignInFailure -> handleFailureEvent()
     }
 
     private fun initComment() {
