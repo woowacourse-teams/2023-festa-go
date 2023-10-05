@@ -6,9 +6,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 
-fun LifecycleOwner.repeatOnStarted(action: suspend () -> Unit) {
-    lifecycleScope.launch {
-        repeatOnLifecycle(Lifecycle.State.STARTED) {
+fun repeatOnStarted(lifecycleOwner: LifecycleOwner, action: suspend () -> Unit) {
+    lifecycleOwner.lifecycleScope.launch {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             action()
         }
     }
