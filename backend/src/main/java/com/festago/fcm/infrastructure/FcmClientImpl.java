@@ -40,7 +40,7 @@ public class FcmClientImpl implements FcmClient {
 
     @Override
     public boolean sendAll(List<String> tokens, FCMChannel channel, FcmPayload payload) {
-        validateTokenSize(tokens);
+        validateEmptyTokens(tokens);
         List<Message> messages = createMessages(tokens, channel, payload);
 
         AsyncBatchExecutor<Message> executor = new AsyncBatchExecutor<>(BATCH_ALERT_SIZE, taskExecutor);
@@ -54,7 +54,7 @@ public class FcmClientImpl implements FcmClient {
         });
     }
 
-    private void validateTokenSize(List<String> tokens) {
+    private void validateEmptyTokens(List<String> tokens) {
         if (tokens.isEmpty()) {
             throw new InternalServerException(ErrorCode.FCM_NOT_FOUND);
         }
