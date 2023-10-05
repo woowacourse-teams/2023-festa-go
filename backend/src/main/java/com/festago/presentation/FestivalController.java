@@ -5,6 +5,7 @@ import com.festago.festival.dto.FestivalDetailResponse;
 import com.festago.festival.dto.FestivalsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,13 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/festivals")
 @Tag(name = "축제 정보 요청")
+@RequiredArgsConstructor
 public class FestivalController {
 
     private final FestivalService festivalService;
-
-    public FestivalController(FestivalService festivalService) {
-        this.festivalService = festivalService;
-    }
 
     @GetMapping
     @Operation(description = "모든 축제들을 조회한다.", summary = "축제 목록 조회")

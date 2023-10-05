@@ -1,5 +1,7 @@
 package com.festago.domain;
 
+import static com.festago.common.exception.ErrorCode.INVALID_ENTRY_CODE_OFFSET;
+import static com.festago.common.exception.ErrorCode.INVALID_ENTRY_CODE_PERIOD;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
@@ -21,7 +23,7 @@ class EntryCodeTest {
         // when & then
         assertThatThrownBy(() -> new EntryCode("code", period, 0))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("올바르지 않은 입장코드 유효기간입니다.");
+            .hasMessage(INVALID_ENTRY_CODE_PERIOD.getMessage());
     }
 
     @Test
@@ -29,7 +31,7 @@ class EntryCodeTest {
         // when & tehn
         assertThatThrownBy(() -> new EntryCode("code", 30, -1))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("올바르지 않은 입장코드 오프셋입니다.");
+            .hasMessage(INVALID_ENTRY_CODE_OFFSET.getMessage());
     }
 
     @ParameterizedTest

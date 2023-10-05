@@ -1,5 +1,6 @@
 package com.festago.domain;
 
+import static com.festago.common.exception.ErrorCode.INVALID_MIN_TICKET_AMOUNT;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.common.exception.BadRequestException;
@@ -32,6 +33,6 @@ class TicketEntryTimeTest {
         // when & then
         assertThatThrownBy(() -> new TicketEntryTime(now, 0))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("티켓은 적어도 한장 이상 발급해야합니다.");
+            .hasMessage(INVALID_MIN_TICKET_AMOUNT.getMessage());
     }
 }

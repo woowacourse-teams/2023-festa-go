@@ -13,6 +13,8 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -30,6 +32,7 @@ import org.hibernate.annotations.Where;
         )
     }
 )
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
     private static final String DEFAULT_IMAGE_URL = "https://festa-go.site/images/default-profile.png";
@@ -54,9 +57,6 @@ public class Member extends BaseTimeEntity {
     private String profileImage;
 
     private LocalDateTime deletedAt = null;
-
-    protected Member() {
-    }
 
     public Member(Long id) {
         this.id = id;

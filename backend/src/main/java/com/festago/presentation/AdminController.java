@@ -30,6 +30,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -48,6 +49,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @RestController
 @RequestMapping("/admin")
 @Hidden
+@RequiredArgsConstructor
 public class AdminController {
 
     private final FestivalService festivalService;
@@ -57,18 +59,6 @@ public class AdminController {
     private final AdminAuthService adminAuthService;
     private final SchoolService schoolService;
     private final Optional<BuildProperties> properties;
-
-    public AdminController(FestivalService festivalService, StageService stageService, TicketService ticketService,
-                           AdminService adminService, AdminAuthService adminAuthService,
-                           SchoolService schoolService, Optional<BuildProperties> buildProperties) {
-        this.festivalService = festivalService;
-        this.stageService = stageService;
-        this.ticketService = ticketService;
-        this.adminService = adminService;
-        this.adminAuthService = adminAuthService;
-        this.schoolService = schoolService;
-        this.properties = buildProperties;
-    }
 
     @PostMapping("/schools")
     public ResponseEntity<SchoolResponse> createSchool(@RequestBody @Valid SchoolCreateRequest request) {

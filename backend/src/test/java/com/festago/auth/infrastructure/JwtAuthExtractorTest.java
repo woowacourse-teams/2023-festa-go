@@ -1,5 +1,8 @@
 package com.festago.auth.infrastructure;
 
+import static com.festago.common.exception.ErrorCode.EXPIRED_AUTH_TOKEN;
+import static com.festago.common.exception.ErrorCode.INVALID_AUTH_TOKEN;
+import static com.festago.common.exception.ErrorCode.INVALID_ROLE_NAME;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.auth.domain.AuthPayload;
@@ -36,7 +39,7 @@ class JwtAuthExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
             .isInstanceOf(UnauthorizedException.class)
-            .hasMessage("올바르지 않은 로그인 토큰입니다.");
+            .hasMessage(INVALID_AUTH_TOKEN.getMessage());
     }
 
     @Test
@@ -51,7 +54,7 @@ class JwtAuthExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
             .isInstanceOf(UnauthorizedException.class)
-            .hasMessage("만료된 로그인 토큰입니다.");
+            .hasMessage(EXPIRED_AUTH_TOKEN.getMessage());
     }
 
     @Test
@@ -68,7 +71,7 @@ class JwtAuthExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
             .isInstanceOf(UnauthorizedException.class)
-            .hasMessage("올바르지 않은 로그인 토큰입니다.");
+            .hasMessage(INVALID_AUTH_TOKEN.getMessage());
     }
 
     @Test
@@ -83,7 +86,7 @@ class JwtAuthExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("해당하는 Role이 없습니다.");
+            .hasMessage(INVALID_ROLE_NAME.getMessage());
     }
 
     @Test
@@ -91,7 +94,7 @@ class JwtAuthExtractorTest {
         // when & then
         assertThatThrownBy(() -> jwtAuthExtractor.extract(null))
             .isInstanceOf(UnauthorizedException.class)
-            .hasMessage("올바르지 않은 로그인 토큰입니다.");
+            .hasMessage(INVALID_AUTH_TOKEN.getMessage());
     }
 
     @Test
