@@ -63,9 +63,7 @@ class TicketEntryViewModel @Inject constructor(
 
     fun loadTicket(ticketId: Long) {
         viewModelScope.launch {
-            ticketCodeFlow.value = ticketRepository.loadTicketCode(ticketId)
             ticketFlow.value = ticketRepository.loadTicket(ticketId)
-            setTimer(ticketId, ticketCodeFlow.value.getOrThrow())
         }
     }
 

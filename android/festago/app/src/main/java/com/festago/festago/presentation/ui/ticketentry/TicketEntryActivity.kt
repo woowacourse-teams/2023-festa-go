@@ -78,6 +78,7 @@ class TicketEntryActivity : AppCompatActivity() {
 
     private fun initView(currentTicketId: Long) {
         vm.loadTicket(currentTicketId)
+        vm.loadTicketCode(currentTicketId)
     }
 
     private fun handleSuccess(uiState: TicketEntryUiState.Success) {
