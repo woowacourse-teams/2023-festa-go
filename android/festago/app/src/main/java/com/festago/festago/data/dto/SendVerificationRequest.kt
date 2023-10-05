@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SendVerificationRequest(
-    val userName: String,
-    val schoolId: Int,
+    val username: String,
+    val schoolId: Long,
 )

@@ -18,11 +18,13 @@ import com.festago.student.repository.StudentCodeRepository;
 import com.festago.student.repository.StudentRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class StudentService {
 
     private final MailClient mailClient;
@@ -32,18 +34,6 @@ public class StudentService {
     private final MemberRepository memberRepository;
     private final StudentRepository studentRepository;
     private final Clock clock;
-
-    public StudentService(MailClient mailClient, VerificationCodeProvider codeProvider,
-                          StudentCodeRepository studentCodeRepository, SchoolRepository schoolRepository,
-                          MemberRepository memberRepository, StudentRepository studentRepository, Clock clock) {
-        this.mailClient = mailClient;
-        this.codeProvider = codeProvider;
-        this.studentCodeRepository = studentCodeRepository;
-        this.schoolRepository = schoolRepository;
-        this.memberRepository = memberRepository;
-        this.studentRepository = studentRepository;
-        this.clock = clock;
-    }
 
     public void sendVerificationMail(Long memberId, StudentSendMailRequest request) {
         Member member = findMember(memberId);

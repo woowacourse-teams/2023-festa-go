@@ -251,7 +251,7 @@ class StudentVerificationViewModelTest {
             `인증 코드를 확인하면`()
 
             // then
-            assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.CodeTimeOut)
+            assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.VerificationTimeOut)
             cancelAndIgnoreRemainingEvents()
         }
     }

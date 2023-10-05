@@ -1,5 +1,6 @@
 package com.festago.auth.application;
 
+import static com.festago.common.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -92,7 +93,7 @@ class AuthServiceTest {
             // then
             assertThatThrownBy(() -> authService.deleteMember(memberId))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 멤버입니다.");
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
         }
 
         @Test

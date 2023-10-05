@@ -16,24 +16,19 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class MemberTicketService {
 
     private final MemberTicketRepository memberTicketRepository;
     private final MemberRepository memberRepository;
     private final Clock clock;
-
-    public MemberTicketService(MemberTicketRepository memberTicketRepository,
-                               MemberRepository memberRepository, Clock clock) {
-        this.memberTicketRepository = memberTicketRepository;
-        this.memberRepository = memberRepository;
-        this.clock = clock;
-    }
 
     @Transactional(readOnly = true)
     public MemberTicketResponse findById(Long memberId, Long memberTicketId) {

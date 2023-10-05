@@ -1,5 +1,6 @@
 package com.festago.ticketing.application;
 
+import static com.festago.common.exception.ErrorCode.NEED_STUDENT_VERIFICATION;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -71,6 +72,6 @@ class TicketingServiceTest {
         // when & then
         assertThatThrownBy(() -> ticketingService.ticketing(1L, request))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("학생 인증이 필요합니다.");
+            .hasMessage(NEED_STUDENT_VERIFICATION.getMessage());
     }
 }

@@ -2,6 +2,7 @@ package com.festago.student.domain;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
+import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 import com.festago.member.domain.Member;
@@ -18,14 +19,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.StringUtils;
 
-
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class StudentCode {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class StudentCode extends BaseTimeEntity {
 
     private static final int MIN_REQUEST_TERM_SECONDS = 30;
 
@@ -48,9 +51,6 @@ public class StudentCode {
     @NotNull
     @LastModifiedDate
     private LocalDateTime issuedAt;
-
-    protected StudentCode() {
-    }
 
     public StudentCode(VerificationCode code, School school, Member member, String username) {
         this(null, code, school, member, username, null);

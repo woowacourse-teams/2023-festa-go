@@ -1,5 +1,10 @@
 package com.festago.student.application;
 
+import static com.festago.common.exception.ErrorCode.ALREADY_STUDENT_VERIFIED;
+import static com.festago.common.exception.ErrorCode.DUPLICATE_STUDENT_EMAIL;
+import static com.festago.common.exception.ErrorCode.INVALID_STUDENT_VERIFICATION_CODE;
+import static com.festago.common.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
 import static com.festago.common.exception.ErrorCode.TOO_FREQUENT_REQUESTS;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -107,7 +112,7 @@ class StudentServiceTest {
             // when & then
             assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 멤버입니다.");
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
         }
 
         @Test
@@ -119,7 +124,7 @@ class StudentServiceTest {
             // when & then
             assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 학교입니다.");
+                .hasMessage(SCHOOL_NOT_FOUND.getMessage());
         }
 
         @Test
@@ -147,7 +152,7 @@ class StudentServiceTest {
             // when & then
             assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("이미 학교 인증이 완료된 사용자입니다.");
+                .hasMessage(ALREADY_STUDENT_VERIFIED.getMessage());
         }
 
         @Test
@@ -159,7 +164,7 @@ class StudentServiceTest {
             // when & then
             assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("이미 인증된 이메일입니다.");
+                .hasMessage(DUPLICATE_STUDENT_EMAIL.getMessage());
         }
 
         @Test
@@ -183,7 +188,7 @@ class StudentServiceTest {
             // when & then
             assertThatThrownBy(() -> studentService.verificate(memberId, request))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("이미 학교 인증이 완료된 사용자입니다.");
+                .hasMessage(ALREADY_STUDENT_VERIFIED.getMessage());
         }
 
         @Test
@@ -199,7 +204,7 @@ class StudentServiceTest {
             // when & then
             assertThatThrownBy(() -> studentService.verificate(memberId, request))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("올바르지 않은 학생 인증 코드입니다.");
+                .hasMessage(INVALID_STUDENT_VERIFICATION_CODE.getMessage());
         }
 
         @Test

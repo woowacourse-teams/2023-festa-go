@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentMyPageBinding
 import com.festago.festago.presentation.ui.home.HomeActivity
+import com.festago.festago.presentation.ui.selectschool.SelectSchoolActivity
 import com.festago.festago.presentation.ui.signin.SignInActivity
-import com.festago.festago.presentation.ui.studentverification.StudentVerificationActivity
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -104,9 +104,9 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
         binding.srlMyPage.setOnRefreshListener {
             vm.loadUserInfo()
         }
-        // TODO: 학교 선택 화면 변경 필요
+
         binding.tvSchoolAuthorization.setOnClickListener {
-            startActivity(StudentVerificationActivity.getIntent(requireContext(), 1L))
+            startActivity(SelectSchoolActivity.getIntent(requireContext()))
         }
     }
 

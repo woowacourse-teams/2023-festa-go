@@ -8,6 +8,7 @@ import com.festago.presentation.auth.AuthInterceptor;
 import com.festago.presentation.auth.AuthenticateContext;
 import com.festago.presentation.auth.RoleArgumentResolver;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -15,15 +16,11 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@RequiredArgsConstructor
 public class LoginConfig implements WebMvcConfigurer {
 
     private final AuthExtractor authExtractor;
     private final AuthenticateContext authenticateContext;
-
-    public LoginConfig(AuthExtractor authExtractor, AuthenticateContext context) {
-        this.authExtractor = authExtractor;
-        this.authenticateContext = context;
-    }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
