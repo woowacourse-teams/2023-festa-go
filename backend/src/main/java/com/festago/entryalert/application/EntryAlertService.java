@@ -14,6 +14,7 @@ import com.festago.ticketing.repository.MemberTicketRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class EntryAlertService {
 
     private final EntryAlertRepository entryAlertRepository;
@@ -48,6 +50,7 @@ public class EntryAlertService {
         EntryAlert entryAlert = entryAlertRepository.findByIdAndStatusForUpdate(id, AlertStatus.PENDING)
             .orElseThrow(() -> new ConflictException(ErrorCode.ALREADY_ALERT));
         List<String> tokens = findFcmTokens(entryAlert);
+        log.info("EntryAlert 전송 시작 / entryAlertId: {} / to {} devices", id, tokens.size());
         taskExecutor.execute(() -> fcmClient.sendAll(tokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert()));
         entryAlert.request();
     }
