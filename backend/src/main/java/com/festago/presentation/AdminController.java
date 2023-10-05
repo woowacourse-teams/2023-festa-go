@@ -59,14 +59,6 @@ public class AdminController {
     private final SchoolService schoolService;
     private final Optional<BuildProperties> properties;
 
-
-    @PostMapping("/schools")
-    public ResponseEntity<SchoolResponse> createSchool(@RequestBody @Valid SchoolCreateRequest request) {
-        SchoolResponse response = schoolService.create(request);
-        return ResponseEntity.ok()
-            .body(response);
-    }
-
     @PostMapping("/festivals")
     public ResponseEntity<FestivalResponse> createFestival(@RequestBody @Valid FestivalCreateRequest request) {
         FestivalResponse response = festivalService.create(request);
