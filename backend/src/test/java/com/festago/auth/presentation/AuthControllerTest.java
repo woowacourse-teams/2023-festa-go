@@ -3,7 +3,6 @@ package com.festago.auth.presentation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -98,7 +97,8 @@ class AuthControllerTest {
         // given
         String fcmToken = "fcmToken";
         String accessToken = "accessToken";
-        LoginResponse expected = new LoginResponse(accessToken, "nickname", true);
+        boolean isNewMember = true;
+        LoginResponse expected = new LoginResponse(accessToken, "nickname", isNewMember);
         given(authFacadeService.login(any(), any()))
             .willReturn(expected);
         LoginRequest request = new LoginRequest(SocialType.FESTAGO, "code", fcmToken);
@@ -116,9 +116,7 @@ class AuthControllerTest {
 
         assertThat(actual).isEqualTo(expected);
         verify(memberFCMService, times(1))
-            .saveNewMemberFCM(accessToken, fcmToken);
-        verify(memberFCMService, never())
-            .saveOriginMemberFCM(any(), any());
+            .saveMemberFCM(isNewMember, accessToken, fcmToken);
     }
 
     @Test
@@ -126,7 +124,8 @@ class AuthControllerTest {
         // given
         String fcmToken = "fcmToken";
         String accessToken = "accessToken";
-        LoginResponse expected = new LoginResponse(accessToken, "nickname", false);
+        boolean isNewMember = false;
+        LoginResponse expected = new LoginResponse(accessToken, "nickname", isNewMember);
         given(authFacadeService.login(any(), any()))
             .willReturn(expected);
         LoginRequest request = new LoginRequest(SocialType.FESTAGO, "code", fcmToken);
@@ -144,8 +143,6 @@ class AuthControllerTest {
 
         assertThat(actual).isEqualTo(expected);
         verify(memberFCMService, times(1))
-            .saveOriginMemberFCM(accessToken, fcmToken);
-        verify(memberFCMService, never())
-            .saveNewMemberFCM(any(), any());
+            .saveMemberFCM(isNewMember, accessToken, fcmToken);
     }
 }

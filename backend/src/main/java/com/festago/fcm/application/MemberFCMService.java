@@ -37,7 +37,15 @@ public class MemberFCMService {
     }
 
     @Async
-    public void saveOriginMemberFCM(String accessToken, String fcmToken) {
+    public void saveMemberFCM(boolean isNewMember, String accessToken, String fcmToken) {
+        if (isNewMember) {
+            saveNewMemberFCM(accessToken, fcmToken);
+            return;
+        }
+        saveOriginMemberFCM(accessToken, fcmToken);
+    }
+
+    private void saveOriginMemberFCM(String accessToken, String fcmToken) {
         Long memberId = extractMemberId(accessToken);
         Optional<MemberFCM> memberFCM = memberFCMRepository.findMemberFCMByMemberIdAndFcmToken(memberId, fcmToken);
         if (memberFCM.isEmpty()) {
@@ -50,8 +58,7 @@ public class MemberFCMService {
         return authPayload.getMemberId();
     }
 
-    @Async
-    public void saveNewMemberFCM(String accessToken, String fcmToken) {
+    private void saveNewMemberFCM(String accessToken, String fcmToken) {
         Long memberId = extractMemberId(accessToken);
         memberFCMRepository.save(new MemberFCM(memberId, fcmToken));
     }

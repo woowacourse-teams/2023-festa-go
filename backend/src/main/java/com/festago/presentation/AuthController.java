@@ -40,11 +40,7 @@ public class AuthController {
     private void registerFCM(LoginResponse response, LoginRequest request) {
         String accessToken = response.accessToken();
         String fcmToken = request.fcmToken();
-        if (response.isNew()) {
-            memberFCMService.saveNewMemberFCM(accessToken, fcmToken);
-            return;
-        }
-        memberFCMService.saveOriginMemberFCM(accessToken, fcmToken);
+        memberFCMService.saveMemberFCM(response.isNew(), accessToken, fcmToken);
     }
 
     @DeleteMapping

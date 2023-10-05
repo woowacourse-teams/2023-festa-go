@@ -61,6 +61,7 @@ class MemberFCMServiceTest {
         // given
         String accessToken = "accessToken";
         String fcmToken = "fcmToken";
+        boolean isNewMember = false;
         Long memberId = 1L;
         given(authExtractor.extract(any()))
             .willReturn(new AuthPayload(memberId, Role.MEMBER));
@@ -68,7 +69,7 @@ class MemberFCMServiceTest {
             .willReturn(Optional.empty());
 
         // when
-        memberFCMService.saveOriginMemberFCM(accessToken, fcmToken);
+        memberFCMService.saveMemberFCM(isNewMember, accessToken, fcmToken);
 
         // then
         verify(memberFCMRepository, times(1))
@@ -80,6 +81,7 @@ class MemberFCMServiceTest {
         // given
         String accessToken = "accessToken";
         String originToken = "fcmToken";
+        boolean isNewMember = false;
         Long memberId = 1L;
         given(authExtractor.extract(any()))
             .willReturn(new AuthPayload(memberId, Role.MEMBER));
@@ -87,7 +89,7 @@ class MemberFCMServiceTest {
             .willReturn(Optional.of(new MemberFCM(memberId, originToken)));
 
         // when
-        memberFCMService.saveOriginMemberFCM(accessToken, originToken);
+        memberFCMService.saveMemberFCM(isNewMember, accessToken, originToken);
 
         // then
         verify(memberFCMRepository, never())
@@ -99,12 +101,13 @@ class MemberFCMServiceTest {
         // given
         String accessToken = "accessToken";
         String fcmToken = "fcmToken";
+        boolean isNewMember = false;
         Long memberId = 1L;
         given(authExtractor.extract(any()))
             .willReturn(new AuthPayload(memberId, Role.MEMBER));
 
         // when
-        memberFCMService.saveNewMemberFCM(accessToken, fcmToken);
+        memberFCMService.saveMemberFCM(isNewMember, accessToken, fcmToken);
 
         // then
         verify(memberFCMRepository, times(1))
