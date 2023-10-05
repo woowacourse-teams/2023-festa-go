@@ -1,7 +1,5 @@
 package com.festago.fcm.infrastructure;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
 import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;
@@ -31,7 +29,9 @@ public class FcmClientImpl implements FcmClient {
 
     @Override
     public void sendAll(List<String> tokens, FCMChannel channel, FcmPayload payload) {
-        validateEmptyTokens(tokens);
+        if (tokens.isEmpty()) {
+            return;
+        }
         List<Message> messages = createMessages(tokens, channel, payload);
 
         if (messages.size() <= BATCH_ALERT_SIZE) {
@@ -42,12 +42,6 @@ public class FcmClientImpl implements FcmClient {
         for (int i = 0; i < messages.size(); i += BATCH_ALERT_SIZE) {
             List<Message> batchMessages = messages.subList(i, Math.min(i + BATCH_ALERT_SIZE, messages.size()));
             taskExecutor.execute(() -> sendMessages(batchMessages, channel));
-        }
-    }
-
-    private void validateEmptyTokens(List<String> tokens) {
-        if (tokens.isEmpty()) {
-            throw new InternalServerException(ErrorCode.FCM_NOT_FOUND);
         }
     }
 
