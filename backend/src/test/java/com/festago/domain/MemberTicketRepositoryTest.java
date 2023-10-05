@@ -20,9 +20,7 @@ import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.repository.MemberTicketRepository;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -137,7 +135,7 @@ class MemberTicketRepositoryTest {
     @Test
     void 무대와_입장시간으로_멤버아이디리스트_조회() {
         // given
-        LocalDateTime entryTime = LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC);
+        LocalDateTime entryTime = LocalDateTime.of(2023, 10, 5, 10, 30);
         Stage stage = saveStage();
         Member member1 = memberRepository.save(MemberFixture.member().build());
         Member member2 = memberRepository.save(MemberFixture.member().build());
