@@ -26,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.task.TaskExecutor;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -43,6 +44,9 @@ class EntryAlertServiceTest {
 
     @Mock
     FcmClient fcmClient;
+
+    @Mock
+    TaskExecutor taskExecutor;
 
     @InjectMocks
     EntryAlertService entryAlertService;
