@@ -44,7 +44,6 @@ class HomeViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(HomeEvent.ShowFestivalList::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -59,7 +58,6 @@ class HomeViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(HomeEvent.ShowFestivalList::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -74,7 +72,6 @@ class HomeViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(HomeEvent.ShowTicketList::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -89,7 +86,6 @@ class HomeViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(HomeEvent.ShowSignIn::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -104,7 +100,6 @@ class HomeViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(HomeEvent.ShowMyPage::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -118,7 +113,6 @@ class HomeViewModelTest {
             vm.loadHomeItem(HomeItemType.MY_PAGE)
 
             assertThat(awaitItem()).isExactlyInstanceOf(HomeEvent.ShowSignIn::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 }

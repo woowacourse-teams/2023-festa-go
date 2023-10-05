@@ -14,7 +14,6 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
@@ -163,7 +162,6 @@ class TicketListViewModelTest {
                 assertThat(ticketId).isEqualTo(1L)
             }
             softly.assertAll()
-            cancelAndIgnoreRemainingEvents()
         }
     }
 }

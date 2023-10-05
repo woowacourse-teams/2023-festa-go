@@ -211,7 +211,6 @@ class TicketReserveViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(TicketReserveEvent.ReserveTicketSuccess::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -230,7 +229,6 @@ class TicketReserveViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(TicketReserveEvent.ReserveTicketFailed::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 }
