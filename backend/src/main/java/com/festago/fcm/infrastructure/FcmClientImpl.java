@@ -45,7 +45,7 @@ public class FcmClientImpl implements FcmClient {
         }
     }
 
-    public void sendMessages(List<Message> messages, FCMChannel channel) {
+    private void sendMessages(List<Message> messages, FCMChannel channel) {
         try {
             BatchResponse response = firebaseMessaging.sendAll(messages);
             checkAllSuccess(response, channel);
