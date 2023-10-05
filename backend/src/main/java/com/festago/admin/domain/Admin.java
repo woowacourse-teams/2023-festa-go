@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(
@@ -17,6 +19,7 @@ import jakarta.persistence.UniqueConstraint;
         )
     }
 )
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Admin extends BaseTimeEntity {
 
     @Id
@@ -26,9 +29,6 @@ public class Admin extends BaseTimeEntity {
     private String username;
 
     private String password;
-
-    protected Admin() {
-    }
 
     public Admin(String username, String password) {
         this(null, username, password);

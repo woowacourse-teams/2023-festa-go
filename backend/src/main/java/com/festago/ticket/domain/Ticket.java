@@ -24,9 +24,12 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SortNatural;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Ticket extends BaseTimeEntity {
 
     private static final int EARLY_ENTRY_LIMIT = 12;
@@ -52,9 +55,6 @@ public class Ticket extends BaseTimeEntity {
     @JoinColumn(name = "ticket_id")
     @SortNatural
     private SortedSet<TicketEntryTime> ticketEntryTimes = new TreeSet<>();
-
-    protected Ticket() {
-    }
 
     public Ticket(Stage stage, TicketType ticketType, School school) {
         this(null, stage, ticketType, school);

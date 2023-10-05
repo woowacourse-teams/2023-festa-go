@@ -7,22 +7,18 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
-
     private final MemberRepository memberRepository;
-
-    public AuthService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
 
     public LoginMemberDto login(UserInfo userInfo) {
         Optional<Member> originMember =

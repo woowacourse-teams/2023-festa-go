@@ -10,8 +10,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Min;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
 public class TicketAmount extends BaseTimeEntity {
 
     @Id
@@ -27,9 +29,6 @@ public class TicketAmount extends BaseTimeEntity {
     @MapsId
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
-
-    public TicketAmount() {
-    }
 
     public TicketAmount(Ticket ticket) {
         validate(ticket);
