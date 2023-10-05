@@ -39,8 +39,8 @@ public class EntryAlertEventListener {
 
     private void addSchedule(EntryAlertResponse entryAlert) {
         Long entryAlertId = entryAlert.id();
-        log.info("add entryAlert schedule: {}", entryAlertId);
         Instant alertTime = toInstant(entryAlert.alertTime());
+        log.info("EntryAlert 스케쥴링 추가. entryAlertId: {}, alertTime: {}", entryAlertId, entryAlert.alertTime());
         taskScheduler.schedule(() -> entryAlertService.sendEntryAlert(entryAlertId), alertTime);
     }
 
