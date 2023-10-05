@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface MemberTicketRepository extends JpaRepository<MemberTicket, Long> {
 
@@ -21,5 +22,6 @@ public interface MemberTicketRepository extends JpaRepository<MemberTicket, Long
         WHERE m.stage.id = :stageId
         AND m.entryTime = :entryTime
         """)
-    List<Long> findAllOwnerIdByStageIdAndEntryTime(Long stageId, LocalDateTime entryTime);
+    List<Long> findAllOwnerIdByStageIdAndEntryTime(@Param("stageId") Long stageId,
+                                                   @Param("entryTime") LocalDateTime entryTime);
 }
