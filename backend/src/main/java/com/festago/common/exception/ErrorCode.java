@@ -25,6 +25,7 @@ public enum ErrorCode {
     DUPLICATE_STUDENT_EMAIL("이미 인증된 이메일입니다."),
     TICKET_CANNOT_RESERVE_STAGE_START("공연의 시작 시간 이후로 예매할 수 없습니다."),
     INVALID_STUDENT_VERIFICATION_CODE("올바르지 않은 학생 인증 코드입니다."),
+    DOMAIN_VALID_EXCEPTION("도메인에 대한 검증이 잘못 되었습니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),

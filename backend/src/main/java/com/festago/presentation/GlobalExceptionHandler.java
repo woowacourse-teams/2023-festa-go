@@ -1,6 +1,7 @@
 package com.festago.presentation;
 
 import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.DomainValidException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.FestaGoException;
 import com.festago.common.exception.ForbiddenException;
@@ -60,6 +61,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidMediaTypeException.class)
     public ResponseEntity<ErrorResponse> handle(InvalidMediaTypeException e) {
         return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(DomainValidException.class)
+    public ResponseEntity<ErrorResponse> handle(DomainValidException e) {
+        return ResponseEntity.badRequest().body(ErrorResponse.from(e));
     }
 
     @ExceptionHandler(BadRequestException.class)

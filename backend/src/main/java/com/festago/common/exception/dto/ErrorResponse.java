@@ -1,5 +1,6 @@
 package com.festago.common.exception.dto;
 
+import com.festago.common.exception.DomainValidException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.FestaGoException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,6 +17,10 @@ public record ErrorResponse(
 
     public static ErrorResponse from(ErrorCode errorCode) {
         return new ErrorResponse(errorCode, errorCode.getMessage());
+    }
+
+    public static ErrorResponse from(DomainValidException e) {
+        return new ErrorResponse(e.getErrorCode(), e.getMessage());
     }
 
     public static ErrorResponse from(ErrorCode errorCode, MethodArgumentNotValidException e) {
