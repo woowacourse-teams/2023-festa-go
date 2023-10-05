@@ -107,6 +107,7 @@ class MyPageViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(MyPageEvent.ShowSignIn::class.java)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -243,6 +244,7 @@ class MyPageViewModelTest {
                 assertThat(vm.uiState.value.shouldShowError).isEqualTo(true)
             }
             softly.assertAll()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -254,6 +256,7 @@ class MyPageViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(MyPageEvent.ShowConfirmDelete::class.java)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -281,6 +284,7 @@ class MyPageViewModelTest {
                 assertThat(vm.uiState.value.shouldShowError).isEqualTo(true)
             }
             softly.assertAll()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 }

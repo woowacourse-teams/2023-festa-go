@@ -139,6 +139,7 @@ class FestivalListViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(FestivalListEvent.ShowTicketReserve::class.java)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
