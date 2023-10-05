@@ -121,7 +121,6 @@ class SelectSchoolViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(SelectSchoolEvent.ShowStudentVerification::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
