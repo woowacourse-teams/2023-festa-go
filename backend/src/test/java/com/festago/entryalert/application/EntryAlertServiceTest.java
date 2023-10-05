@@ -10,6 +10,7 @@ import com.festago.common.exception.ConflictException;
 import com.festago.entryalert.domain.AlertStatus;
 import com.festago.entryalert.domain.EntryAlert;
 import com.festago.entryalert.repository.EntryAlertRepository;
+import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.repository.MemberFCMRepository;
 import com.festago.support.EntryAlertFixture;
 import com.festago.support.SetUpMockito;
@@ -41,7 +42,7 @@ class EntryAlertServiceTest {
     MemberFCMRepository memberFCMRepository;
 
     @Mock
-    EntryAlertFcmClient fcmClient;
+    FcmClient fcmClient;
 
     @InjectMocks
     EntryAlertService entryAlertService;

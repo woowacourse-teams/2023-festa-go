@@ -51,10 +51,6 @@ public class EntryAlert extends BaseTimeEntity {
         return new EntryAlert(stageId, entryTime);
     }
 
-    public boolean canRequest() {
-        return status == AlertStatus.PENDING;
-    }
-
     public void request() {
         validateNotPending();
         this.status = AlertStatus.REQUESTED;
@@ -64,22 +60,6 @@ public class EntryAlert extends BaseTimeEntity {
         if (status != AlertStatus.PENDING) {
             throw new BadRequestException(ErrorCode.NOT_PENDING_ALERT);
         }
-    }
-
-    public void send() {
-        validateNotRequested();
-        this.status = AlertStatus.SENT;
-    }
-
-    private void validateNotRequested() {
-        if (status != AlertStatus.REQUESTED) {
-            throw new BadRequestException(ErrorCode.NOT_PENDING_ALERT);
-        }
-    }
-
-    public void fail() {
-        validateNotRequested();
-        this.status = AlertStatus.FAILED;
     }
 
     public LocalDateTime findAlertTime() {

@@ -15,8 +15,7 @@ public class MockFcmClient implements FcmClient {
     private static final Logger log = LoggerFactory.getLogger(MockFcmClient.class);
 
     @Override
-    public boolean sendAll(List<String> tokens, FCMChannel channel, FcmPayload fcmPayload) {
+    public void sendAll(List<String> tokens, FCMChannel channel, FcmPayload fcmPayload) {
         log.info("[FCM] title: {} / body: {} / to {} device", fcmPayload.title(), fcmPayload.body(), tokens.size());
-        return true;
     }
 }

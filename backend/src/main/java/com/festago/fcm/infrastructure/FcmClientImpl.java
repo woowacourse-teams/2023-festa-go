@@ -2,8 +2,6 @@ package com.festago.fcm.infrastructure;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
-import com.festago.common.utils.AsyncBatchExecutor;
-import com.festago.config.AsyncConfig;
 import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;
@@ -13,45 +11,38 @@ import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.SendResponse;
 import java.util.List;
 import java.util.concurrent.Executor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @Profile({"dev", "prod"})
+@RequiredArgsConstructor
+@Slf4j
 public class FcmClientImpl implements FcmClient {
 
-    private static final Logger log = LoggerFactory.getLogger(FcmClientImpl.class);
     private static final int BATCH_ALERT_SIZE = 500;
 
     private final FirebaseMessaging firebaseMessaging;
     private final Executor taskExecutor;
 
-    public FcmClientImpl(FirebaseMessaging firebaseMessaging,
-                         @Qualifier(AsyncConfig.FCM_EXECUTOR_NAME) Executor taskExecutor) {
-        this.firebaseMessaging = firebaseMessaging;
-        this.taskExecutor = taskExecutor;
-    }
-
     @Override
-    public boolean sendAll(List<String> tokens, FCMChannel channel, FcmPayload payload) {
+    public void sendAll(List<String> tokens, FCMChannel channel, FcmPayload payload) {
         validateEmptyTokens(tokens);
         List<Message> messages = createMessages(tokens, channel, payload);
 
-        AsyncBatchExecutor<Message> executor = new AsyncBatchExecutor<>(BATCH_ALERT_SIZE, taskExecutor);
-        return executor.execute(messages, batchMessages -> {
-            try {
-                sendMessages(batchMessages, channel);
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        });
+        if (messages.size() <= BATCH_ALERT_SIZE) {
+            sendMessages(messages, channel);
+            return;
+        }
+
+        for (int i = 0; i < messages.size(); i += BATCH_ALERT_SIZE) {
+            List<Message> batchMessages = messages.subList(i, Math.min(i + BATCH_ALERT_SIZE, messages.size()));
+            taskExecutor.execute(() -> sendMessages(batchMessages, channel));
+        }
     }
 
     private void validateEmptyTokens(List<String> tokens) {
@@ -65,7 +56,7 @@ public class FcmClientImpl implements FcmClient {
             BatchResponse response = firebaseMessaging.sendAll(messages);
             checkAllSuccess(response, channel);
         } catch (FirebaseMessagingException e) {
-            throw new RuntimeException(e);
+            log.warn("[FCM: {}] 전송 실패: {}", channel, e.getMessagingErrorCode());
         }
     }
 
@@ -97,15 +88,10 @@ public class FcmClientImpl implements FcmClient {
     }
 
     private void checkAllSuccess(BatchResponse batchResponse, FCMChannel channel) {
-        List<SendResponse> failSend = batchResponse.getResponses().stream()
-            .filter(sendResponse -> !sendResponse.isSuccessful())
-            .toList();
-
-        if (failSend.isEmpty()) {
+        int failCount = batchResponse.getFailureCount();
+        if (failCount == 0) {
             return;
         }
-
-        log.warn("[FCM: {}] 다음 요청들이 실패했습니다. {}", channel, failSend);
-        throw new InternalServerException(ErrorCode.FAIL_SEND_FCM_MESSAGE);
+        log.warn("[FCM: {}] {}건의 요청들이 실패했습니다.", channel, failCount);
     }
 }

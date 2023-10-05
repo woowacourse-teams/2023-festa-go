@@ -40,12 +40,6 @@ public class EntryAlertFixture {
         if (status != AlertStatus.PENDING) {
             entryAlert.request();
         }
-        if (status == AlertStatus.SENT) {
-            entryAlert.send();
-        }
-        if (status == AlertStatus.FAILED) {
-            entryAlert.fail();
-        }
         return entryAlert;
     }
 }

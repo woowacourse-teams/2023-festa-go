@@ -6,32 +6,29 @@ import com.festago.entryalert.domain.AlertStatus;
 import com.festago.entryalert.domain.EntryAlert;
 import com.festago.entryalert.dto.EntryAlertResponse;
 import com.festago.entryalert.repository.EntryAlertRepository;
+import com.festago.fcm.application.FcmClient;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.FcmPayload;
 import com.festago.fcm.repository.MemberFCMRepository;
 import com.festago.ticketing.repository.MemberTicketRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class EntryAlertService {
 
     private final EntryAlertRepository entryAlertRepository;
     private final MemberTicketRepository memberTicketRepository;
     private final MemberFCMRepository memberFCMRepository;
-    private final EntryAlertFcmClient fcmClient;
-
-    public EntryAlertService(EntryAlertRepository entryAlertRepository, MemberTicketRepository memberTicketRepository,
-                             MemberFCMRepository memberFCMRepository, EntryAlertFcmClient fcmClient) {
-        this.entryAlertRepository = entryAlertRepository;
-        this.memberTicketRepository = memberTicketRepository;
-        this.memberFCMRepository = memberFCMRepository;
-        this.fcmClient = fcmClient;
-    }
+    private final FcmClient fcmClient;
+    private final TaskExecutor taskExecutor;
 
     @Transactional(readOnly = true)
     public List<EntryAlertResponse> findAllPending() {
@@ -50,10 +47,14 @@ public class EntryAlertService {
     public void sendEntryAlert(Long id) {
         EntryAlert entryAlert = entryAlertRepository.findByIdAndStatusForUpdate(id, AlertStatus.PENDING)
             .orElseThrow(() -> new ConflictException(ErrorCode.ALREADY_ALERT));
+        List<String> tokens = findFcmTokens(entryAlert);
+        taskExecutor.execute(() -> fcmClient.sendAll(tokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert()));
+        entryAlert.request();
+    }
+
+    private List<String> findFcmTokens(EntryAlert entryAlert) {
         List<Long> memberIds = memberTicketRepository.findAllOwnerIdByStageIdAndEntryTime(
             entryAlert.getStageId(), entryAlert.getEntryTime());
-        List<String> tokens = memberFCMRepository.findAllTokenByMemberIdIn(memberIds);
-        fcmClient.sendAll(entryAlert.getId(), tokens, FCMChannel.ENTRY_ALERT, FcmPayload.entryAlert());
-        entryAlert.request();
+        return memberFCMRepository.findAllTokenByMemberIdIn(memberIds);
     }
 }

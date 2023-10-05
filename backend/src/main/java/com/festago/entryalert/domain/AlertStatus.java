@@ -4,7 +4,5 @@ public enum AlertStatus {
 
     PENDING,
     REQUESTED,
-    SENT,
-    FAILED,
     ;
 }
