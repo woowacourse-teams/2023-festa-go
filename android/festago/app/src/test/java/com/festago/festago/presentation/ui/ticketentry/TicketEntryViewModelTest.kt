@@ -1,6 +1,5 @@
 package com.festago.festago.presentation.ui.ticketentry
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCode
@@ -17,16 +16,12 @@ import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 class TicketEntryViewModelTest {
     private lateinit var vm: TicketEntryViewModel
     private lateinit var ticketRepository: TicketRepository
     private lateinit var analyticsHelper: AnalyticsHelper
-
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
