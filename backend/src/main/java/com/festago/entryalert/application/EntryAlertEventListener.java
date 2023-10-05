@@ -6,8 +6,8 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.TaskScheduler;
@@ -17,19 +17,13 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class EntryAlertEventListener {
-
-    private static final Logger log = LoggerFactory.getLogger(EntryAlertEventListener.class);
 
     private final EntryAlertService entryAlertService;
     private final TaskScheduler taskScheduler;
     private final Clock clock;
-
-    public EntryAlertEventListener(EntryAlertService entryAlertService, TaskScheduler taskScheduler, Clock clock) {
-        this.entryAlertService = entryAlertService;
-        this.taskScheduler = taskScheduler;
-        this.clock = clock;
-    }
 
     @EventListener(ApplicationReadyEvent.class)
     public void initEntryAlertSchedule() {

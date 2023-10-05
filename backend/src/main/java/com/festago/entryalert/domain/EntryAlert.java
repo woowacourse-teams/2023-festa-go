@@ -11,8 +11,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EntryAlert extends BaseTimeEntity {
 
     private static final int ENTRY_ALERT_MINUTES_BEFORE = 10;
@@ -30,9 +33,6 @@ public class EntryAlert extends BaseTimeEntity {
     @NotNull
     @Enumerated(value = EnumType.STRING)
     private AlertStatus status = AlertStatus.PENDING;
-
-    protected EntryAlert() {
-    }
 
     public EntryAlert(Long stageId, LocalDateTime entryTime) {
         this(null, stageId, entryTime);
