@@ -124,10 +124,10 @@ class TicketHistoryViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Loading::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isFalse
-            assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isFalse
-            assertThat(vm.uiState.value?.shouldShowLoading).isTrue
-            assertThat(vm.uiState.value?.shouldShowError).isFalse
+            assertThat(vm.uiState.value.shouldShowSuccessWithTickets).isFalse
+            assertThat(vm.uiState.value.shouldShowSuccessAndEmpty).isFalse
+            assertThat(vm.uiState.value.shouldShowLoading).isTrue
+            assertThat(vm.uiState.value.shouldShowError).isFalse
         }
 
         softly.assertAll()
@@ -150,12 +150,11 @@ class TicketHistoryViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Error::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isFalse
-            assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isFalse
-            assertThat(vm.uiState.value?.shouldShowLoading).isFalse
-            assertThat(vm.uiState.value?.shouldShowError).isTrue
+            assertThat(vm.uiState.value.shouldShowSuccessWithTickets).isFalse
+            assertThat(vm.uiState.value.shouldShowSuccessAndEmpty).isFalse
+            assertThat(vm.uiState.value.shouldShowLoading).isFalse
+            assertThat(vm.uiState.value.shouldShowError).isTrue
         }
-
         softly.assertAll()
     }
 
