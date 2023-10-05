@@ -1,5 +1,6 @@
 package com.festago.auth.infrastructure;
 
+import static com.festago.common.exception.ErrorCode.NOT_BEARER_TOKEN_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
@@ -43,7 +44,7 @@ class HeaderTokenExtractorTest {
         // when & then
         assertThatThrownBy(() -> headerTokenExtractor.extract(request))
             .isInstanceOf(UnauthorizedException.class)
-            .hasMessage("Bearer 타입의 토큰이 아닙니다.");
+            .hasMessage(NOT_BEARER_TOKEN_TYPE.getMessage());
     }
 
     @Test
