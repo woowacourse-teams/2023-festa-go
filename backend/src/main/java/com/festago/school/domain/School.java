@@ -12,8 +12,11 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.regex.Pattern;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class School extends BaseTimeEntity {
 
     private static final Pattern DOMAIN_REGEX = Pattern.compile("^[^.]+(\\.[^.]+)+$");
@@ -32,9 +35,6 @@ public class School extends BaseTimeEntity {
     @Size(max = 255)
     @Column(unique = true)
     private String name;
-
-    protected School() {
-    }
 
     public School(String domain, String name) {
         this(null, domain, name);
@@ -79,7 +79,7 @@ public class School extends BaseTimeEntity {
             throw new BadRequestException(ErrorCode.INVALID_SCHOOL_DOMAIN);
         }
     }
-    
+
     public String findAbbreviation() {
         int dotIndex = domain.indexOf(DOMAIN_DELIMITER);
         return domain.substring(0, dotIndex);

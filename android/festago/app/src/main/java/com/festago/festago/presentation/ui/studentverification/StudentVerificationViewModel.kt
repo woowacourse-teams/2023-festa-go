@@ -97,6 +97,7 @@ class StudentVerificationViewModel @Inject constructor(
                     setTimer()
                 }
                 .onFailure {
+                    _event.emit(StudentVerificationEvent.SendingEmailFailure)
                     analyticsHelper.logNetworkFailure(
                         KEY_SEND_VERIFICATION_CODE_LOG,
                         it.message.toString(),
@@ -129,7 +130,7 @@ class StudentVerificationViewModel @Inject constructor(
             val state = uiState.value as? StudentVerificationUiState.Success ?: return@launch
 
             if (state.remainTime == MIN_REMAIN_TIME) {
-                _event.emit(StudentVerificationEvent.CodeTimeOut)
+                _event.emit(StudentVerificationEvent.VerificationTimeOut)
                 return@launch
             }
 

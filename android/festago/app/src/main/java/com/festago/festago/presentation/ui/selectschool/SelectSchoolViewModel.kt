@@ -31,9 +31,9 @@ class SelectSchoolViewModel @Inject constructor(
         viewModelScope.launch {
             schoolRepository.loadSchools()
                 .onSuccess { schools ->
-                    if (uiState.value is SelectSchoolUiState.Success) {
-                        val successState = (uiState.value as SelectSchoolUiState.Success)
-                        _uiState.value = successState.copy(schools = schools)
+                    val state = uiState.value
+                    if (state is SelectSchoolUiState.Success) {
+                        _uiState.value = state.copy(schools = schools)
                     } else {
                         _uiState.value = SelectSchoolUiState.Success(schools)
                     }
@@ -46,20 +46,18 @@ class SelectSchoolViewModel @Inject constructor(
     }
 
     fun selectSchool(schoolId: Long) {
-        if (uiState.value is SelectSchoolUiState.Success) {
-            _uiState.value =
-                (uiState.value as SelectSchoolUiState.Success).copy(selectedSchoolId = schoolId)
+        val state = uiState.value
+        if (state is SelectSchoolUiState.Success) {
+            _uiState.value = state.copy(selectedSchoolId = schoolId)
         }
     }
 
     fun showStudentVerification() {
         viewModelScope.launch {
-            if (uiState.value is SelectSchoolUiState.Success) {
-                val success = uiState.value as SelectSchoolUiState.Success
-                success.selectedSchoolId?.let { schoolId ->
-                    _event.emit(
-                        SelectSchoolEvent.ShowStudentVerification(schoolId)
-                    )
+            val state = uiState.value
+            if (state is SelectSchoolUiState.Success) {
+                state.selectedSchoolId?.let { schoolId ->
+                    _event.emit(SelectSchoolEvent.ShowStudentVerification(schoolId))
                 }
             }
         }

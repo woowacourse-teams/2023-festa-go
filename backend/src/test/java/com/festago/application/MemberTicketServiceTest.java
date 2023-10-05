@@ -1,5 +1,8 @@
 package com.festago.application;
 
+import static com.festago.common.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.festago.common.exception.ErrorCode.MEMBER_TICKET_NOT_FOUND;
+import static com.festago.common.exception.ErrorCode.NOT_MEMBER_TICKET_OWNER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,7 +70,7 @@ class MemberTicketServiceTest {
             // when & then
             assertThatThrownBy(() -> memberTicketService.findAll(memberId, PageRequest.ofSize(1)))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 멤버입니다.");
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
         }
     }
 
@@ -85,7 +88,7 @@ class MemberTicketServiceTest {
             // when & then
             assertThatThrownBy(() -> memberTicketService.findCurrent(memberId, Pageable.ofSize(10)))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 멤버입니다.");
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
         }
 
         @Test
@@ -188,7 +191,7 @@ class MemberTicketServiceTest {
             // when & then
             assertThatThrownBy(() -> memberTicketService.findById(memberId, 1L))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 멤버입니다.");
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
         }
 
         @Test
@@ -205,7 +208,7 @@ class MemberTicketServiceTest {
             // when & then
             assertThatThrownBy(() -> memberTicketService.findById(memberId, memberTicketId))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않은 멤버 티켓입니다.");
+                .hasMessage(MEMBER_TICKET_NOT_FOUND.getMessage());
         }
 
         @Test
@@ -230,7 +233,7 @@ class MemberTicketServiceTest {
             // when & then
             assertThatThrownBy(() -> memberTicketService.findById(memberId, otherTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("해당 예매 티켓의 주인이 아닙니다.");
+                .hasMessage(NOT_MEMBER_TICKET_OWNER.getMessage());
         }
 
         @Test

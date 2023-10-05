@@ -19,25 +19,19 @@ import com.festago.stage.repository.StageRepository;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.context.ApplicationEventPublisher;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class FestivalService {
 
     private final FestivalRepository festivalRepository;
     private final StageRepository stageRepository;
     private final SchoolRepository schoolRepository;
     private final ApplicationEventPublisher publisher;
-
-    public FestivalService(FestivalRepository festivalRepository, StageRepository stageRepository,
-                           SchoolRepository schoolRepository, ApplicationEventPublisher publisher) {
-        this.festivalRepository = festivalRepository;
-        this.stageRepository = stageRepository;
-        this.schoolRepository = schoolRepository;
-        this.publisher = publisher;
-    }
 
     public FestivalResponse create(FestivalCreateRequest request) {
         School school = schoolRepository.findById(request.schoolId())

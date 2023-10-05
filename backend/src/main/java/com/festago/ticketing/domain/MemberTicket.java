@@ -16,8 +16,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberTicket extends BaseTimeEntity {
 
     private static final long ENTRY_LIMIT_HOUR = 24;
@@ -47,9 +50,6 @@ public class MemberTicket extends BaseTimeEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     private TicketType ticketType;
-
-    protected MemberTicket() {
-    }
 
     public MemberTicket(Member owner, Stage stage, int number, LocalDateTime entryTime, TicketType ticketType) {
         this(null, owner, stage, number, entryTime, ticketType);

@@ -5,17 +5,17 @@ import com.festago.common.exception.InternalServerException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.regex.Pattern;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VerificationCode {
 
     public static final int LENGTH = 6;
     private static final Pattern POSITIVE_REGEX = Pattern.compile("^\\d+$");
     @Column(name = "code")
     private String value;
-
-    protected VerificationCode() {
-    }
 
     public VerificationCode(String value) {
         validate(value);

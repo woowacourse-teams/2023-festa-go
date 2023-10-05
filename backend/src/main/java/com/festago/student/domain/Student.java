@@ -14,8 +14,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Student extends BaseTimeEntity {
 
     @Id
@@ -33,9 +36,6 @@ public class Student extends BaseTimeEntity {
     @Size(max = 255)
     @NotNull
     private String username;
-
-    protected Student() {
-    }
 
     public Student(Member member, School school, String username) {
         this(null, member, school, username);
