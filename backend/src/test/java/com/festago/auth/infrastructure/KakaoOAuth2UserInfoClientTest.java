@@ -1,5 +1,7 @@
 package com.festago.auth.infrastructure;
 
+import static com.festago.common.exception.ErrorCode.OAUTH2_INVALID_TOKEN;
+import static com.festago.common.exception.ErrorCode.OAUTH2_PROVIDER_NOT_RESPONSE;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -49,7 +51,7 @@ class KakaoOAuth2UserInfoClientTest {
         // when & then
         assertThatThrownBy(() -> kakaoOAuth2UserInfoClient.getUserInfo("accessToken"))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("잘못된 OAuth2 토큰입니다.");
+            .hasMessage(OAUTH2_INVALID_TOKEN.getMessage());
     }
 
     @Test
@@ -62,7 +64,7 @@ class KakaoOAuth2UserInfoClientTest {
         // when & then
         assertThatThrownBy(() -> kakaoOAuth2UserInfoClient.getUserInfo("accessToken"))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("잘못된 OAuth2 토큰입니다.");
+            .hasMessage(OAUTH2_INVALID_TOKEN.getMessage());
     }
 
     @Test
@@ -75,7 +77,7 @@ class KakaoOAuth2UserInfoClientTest {
         // when & then
         assertThatThrownBy(() -> kakaoOAuth2UserInfoClient.getUserInfo("accessToken"))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("OAuth2 제공자 서버에 문제가 발생했습니다.");
+            .hasMessage(OAUTH2_PROVIDER_NOT_RESPONSE.getMessage());
     }
 
     @Test

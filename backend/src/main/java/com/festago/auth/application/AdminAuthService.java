@@ -12,22 +12,19 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.ForbiddenException;
 import com.festago.common.exception.UnauthorizedException;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AdminAuthService {
 
     private static final String ROOT_ADMIN = "admin";
 
     private final AuthProvider authProvider;
     private final AdminRepository adminRepository;
-
-    public AdminAuthService(AuthProvider authProvider, AdminRepository adminRepository) {
-        this.authProvider = authProvider;
-        this.adminRepository = adminRepository;
-    }
 
     @Transactional(readOnly = true)
     public String login(AdminLoginRequest request) {

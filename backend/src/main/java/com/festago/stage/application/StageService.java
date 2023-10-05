@@ -8,20 +8,17 @@ import com.festago.stage.domain.Stage;
 import com.festago.stage.dto.StageCreateRequest;
 import com.festago.stage.dto.StageResponse;
 import com.festago.stage.repository.StageRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class StageService {
 
     private final StageRepository stageRepository;
     private final FestivalRepository festivalRepository;
-
-    public StageService(StageRepository stageRepository, FestivalRepository festivalRepository) {
-        this.stageRepository = stageRepository;
-        this.festivalRepository = festivalRepository;
-    }
 
     public StageResponse create(StageCreateRequest request) {
         Festival festival = findFestivalById(request.festivalId());

@@ -15,11 +15,13 @@ import com.festago.student.dto.StudentSendMailRequest;
 import com.festago.student.dto.StudentVerificateRequest;
 import com.festago.student.repository.StudentCodeRepository;
 import com.festago.student.repository.StudentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class StudentService {
 
     private final MailClient mailClient;
@@ -28,17 +30,6 @@ public class StudentService {
     private final SchoolRepository schoolRepository;
     private final MemberRepository memberRepository;
     private final StudentRepository studentRepository;
-
-    public StudentService(MailClient mailClient, VerificationCodeProvider codeProvider,
-                          StudentCodeRepository studentCodeRepository, SchoolRepository schoolRepository,
-                          MemberRepository memberRepository, StudentRepository studentRepository) {
-        this.mailClient = mailClient;
-        this.codeProvider = codeProvider;
-        this.studentCodeRepository = studentCodeRepository;
-        this.schoolRepository = schoolRepository;
-        this.memberRepository = memberRepository;
-        this.studentRepository = studentRepository;
-    }
 
     public void sendVerificationMail(Long memberId, StudentSendMailRequest request) {
         validateStudent(memberId);
@@ -76,7 +67,8 @@ public class StudentService {
     public void verificate(Long memberId, StudentVerificateRequest request) {
         validateStudent(memberId);
         Member member = findMember(memberId);
-        StudentCode studentCode = studentCodeRepository.findByCodeAndMember(new VerificationCode(request.code()), member)
+        StudentCode studentCode = studentCodeRepository.findByCodeAndMember(new VerificationCode(request.code()),
+                member)
             .orElseThrow(() -> new BadRequestException(ErrorCode.INVALID_STUDENT_VERIFICATION_CODE));
         studentRepository.save(new Student(member, studentCode.getSchool(), studentCode.getUsername()));
         studentCodeRepository.deleteByMember(member);

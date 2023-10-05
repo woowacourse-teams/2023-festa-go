@@ -19,26 +19,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class AdminService {
 
     private final FestivalRepository festivalRepository;
     private final StageRepository stageRepository;
     private final TicketRepository ticketRepository;
     private final SchoolRepository schoolRepository;
-
-    public AdminService(FestivalRepository festivalRepository, StageRepository stageRepository,
-                        TicketRepository ticketRepository,
-                        SchoolRepository schoolRepository) {
-        this.festivalRepository = festivalRepository;
-        this.stageRepository = stageRepository;
-        this.ticketRepository = ticketRepository;
-        this.schoolRepository = schoolRepository;
-    }
 
     @Transactional(readOnly = true)
     public AdminResponse getAdminResponse() {

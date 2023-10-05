@@ -1,5 +1,8 @@
 package com.festago.application;
 
+import static com.festago.common.exception.ErrorCode.MEMBER_TICKET_NOT_FOUND;
+import static com.festago.common.exception.ErrorCode.NOT_ENTRY_TIME;
+import static com.festago.common.exception.ErrorCode.NOT_MEMBER_TICKET_OWNER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
@@ -98,7 +101,7 @@ class EntryServiceTest {
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("입장 가능한 시간이 아닙니다.");
+                .hasMessage(NOT_ENTRY_TIME.getMessage());
         }
 
         @Test
@@ -129,7 +132,7 @@ class EntryServiceTest {
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("입장 가능한 시간이 아닙니다.");
+                .hasMessage(NOT_ENTRY_TIME.getMessage());
         }
 
         @Test
@@ -151,7 +154,7 @@ class EntryServiceTest {
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("해당 예매 티켓의 주인이 아닙니다.");
+                .hasMessage(NOT_MEMBER_TICKET_OWNER.getMessage());
         }
 
         @Test
@@ -164,7 +167,7 @@ class EntryServiceTest {
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(1L, memberTicketId))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않은 멤버 티켓입니다.");
+                .hasMessage(MEMBER_TICKET_NOT_FOUND.getMessage());
         }
 
         @Test

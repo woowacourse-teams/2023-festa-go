@@ -14,8 +14,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Festival extends BaseTimeEntity {
 
     private static final String DEFAULT_THUMBNAIL = "https://picsum.photos/536/354";
@@ -23,7 +26,6 @@ public class Festival extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @NotNull
     @Size(max = 50)
@@ -41,9 +43,6 @@ public class Festival extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private School school;
-
-    protected Festival() {
-    }
 
     public Festival(String name, LocalDate startDate, LocalDate endDate, School school) {
         this(null, name, startDate, endDate, DEFAULT_THUMBNAIL, school);

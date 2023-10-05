@@ -11,6 +11,7 @@ import com.festago.common.exception.UnauthorizedException;
 import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.presentation.auth.AuthenticateContext;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String LOG_FORMAT_INFO = "\n[🔵INFO] - ({} {})\n(id: {}, role: {})\n{}\n {}: {}";
@@ -55,11 +57,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final AuthenticateContext authenticateContext;
     private final Logger errorLogger;
-
-    public GlobalExceptionHandler(AuthenticateContext authenticateContext, Logger errorLogger) {
-        this.authenticateContext = authenticateContext;
-        this.errorLogger = errorLogger;
-    }
 
     @ExceptionHandler(InvalidMediaTypeException.class)
     public ResponseEntity<ErrorResponse> handle(InvalidMediaTypeException e) {

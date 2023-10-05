@@ -10,8 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TicketEntryTime extends BaseTimeEntity implements Comparable<TicketEntryTime> {
 
     private static final int MIN_TOTAL_AMOUNT = 1;
@@ -25,9 +28,6 @@ public class TicketEntryTime extends BaseTimeEntity implements Comparable<Ticket
 
     @Min(value = 0)
     private int amount;
-
-    protected TicketEntryTime() {
-    }
 
     public TicketEntryTime(LocalDateTime entryTime, int amount) {
         this(null, entryTime, amount);

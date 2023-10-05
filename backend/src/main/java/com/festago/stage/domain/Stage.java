@@ -17,8 +17,11 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Stage extends BaseTimeEntity {
 
     @Id
@@ -40,9 +43,6 @@ public class Stage extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "stage", fetch = FetchType.LAZY)
     private List<Ticket> tickets = new ArrayList<>();
-
-    protected Stage() {
-    }
 
     public Stage(LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime, Festival festival) {
         this(null, startTime, lineUp, ticketOpenTime, festival);

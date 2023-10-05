@@ -1,5 +1,6 @@
 package com.festago.domain;
 
+import static com.festago.common.exception.ErrorCode.INVALID_FESTIVAL_DURATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -28,7 +29,7 @@ class FestivalTest {
         // when & then
         assertThatThrownBy(() -> new Festival("테코대학교", today.plusDays(1), today, school))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("축제 시작 일자는 종료일자 이전이어야합니다.");
+            .hasMessage(INVALID_FESTIVAL_DURATION.getMessage());
     }
 
     @Nested

@@ -3,9 +3,11 @@ package com.festago.entry.application;
 import com.festago.entry.domain.EntryCode;
 import com.festago.entry.domain.EntryCodePayload;
 import java.util.Date;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class EntryCodeManager {
 
     private static final int MILLISECOND_FACTOR = 1_000;
@@ -14,11 +16,6 @@ public class EntryCodeManager {
 
     private final EntryCodeProvider entryCodeProvider;
     private final EntryCodeExtractor entryCodeExtractor;
-
-    public EntryCodeManager(EntryCodeProvider entryCodeProvider, EntryCodeExtractor entryCodeExtractor) {
-        this.entryCodeProvider = entryCodeProvider;
-        this.entryCodeExtractor = entryCodeExtractor;
-    }
 
     public EntryCode provide(EntryCodePayload entryCodePayload, long currentTimeMillis) {
         Date expiredAt = new Date(currentTimeMillis + (DEFAULT_PERIOD + DEFAULT_OFFSET) * MILLISECOND_FACTOR);

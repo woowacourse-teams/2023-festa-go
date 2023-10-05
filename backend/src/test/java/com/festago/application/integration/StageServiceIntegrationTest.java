@@ -1,5 +1,6 @@
 package com.festago.application.integration;
 
+import static com.festago.common.exception.ErrorCode.FESTIVAL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.common.exception.NotFoundException;
@@ -37,6 +38,6 @@ class StageServiceIntegrationTest extends ApplicationIntegrationTest {
         // when && then
         assertThatThrownBy(() -> stageService.create(request))
             .isInstanceOf(NotFoundException.class)
-            .hasMessage("존재하지 않는 축제입니다.");
+            .hasMessage(FESTIVAL_NOT_FOUND.getMessage());
     }
 }

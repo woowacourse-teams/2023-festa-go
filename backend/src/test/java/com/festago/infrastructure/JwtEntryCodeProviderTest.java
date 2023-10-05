@@ -1,5 +1,6 @@
 package com.festago.infrastructure;
 
+import static com.festago.common.exception.ErrorCode.INVALID_ENTRY_CODE_EXPIRATION_TIME;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -37,7 +38,7 @@ class JwtEntryCodeProviderTest {
         // when & then
         assertThatThrownBy(() -> entryCodeProvider.provide(entryCodePayload, expiredAt))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("올바르지 않은 입장코드 만료 일자입니다.");
+            .hasMessage(INVALID_ENTRY_CODE_EXPIRATION_TIME.getMessage());
     }
 
     @Test
