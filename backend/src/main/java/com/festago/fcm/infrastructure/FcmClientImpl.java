@@ -10,10 +10,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import java.util.List;
-import java.util.concurrent.Executor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,7 +25,7 @@ public class FcmClientImpl implements FcmClient {
     private static final int BATCH_ALERT_SIZE = 500;
 
     private final FirebaseMessaging firebaseMessaging;
-    private final Executor taskExecutor;
+    private final TaskExecutor taskExecutor;
 
     @Override
     public void sendAll(List<String> tokens, FCMChannel channel, FcmPayload payload) {
