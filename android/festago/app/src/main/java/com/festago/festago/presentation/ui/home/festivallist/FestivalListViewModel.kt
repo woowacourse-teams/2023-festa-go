@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,10 +23,10 @@ class FestivalListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<FestivalListUiState>(FestivalListUiState.Loading)
-    val uiState: StateFlow<FestivalListUiState> = _uiState
+    val uiState: StateFlow<FestivalListUiState> = _uiState.asStateFlow()
 
     private val _event = MutableSharedFlow<FestivalListEvent>()
-    val event: SharedFlow<FestivalListEvent> = _event
+    val event: SharedFlow<FestivalListEvent> = _event.asSharedFlow()
 
     fun loadFestivals() {
         viewModelScope.launch {

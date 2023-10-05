@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,10 +27,10 @@ class MyPageViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<MyPageUiState>(MyPageUiState.Loading)
-    val uiState: StateFlow<MyPageUiState> = _uiState
+    val uiState: StateFlow<MyPageUiState> = _uiState.asStateFlow()
 
     private val _event = MutableSharedFlow<MyPageEvent>()
-    val event: SharedFlow<MyPageEvent> = _event
+    val event: SharedFlow<MyPageEvent> = _event.asSharedFlow()
 
     fun loadUserInfo() {
         if (!authRepository.isSigned) {
