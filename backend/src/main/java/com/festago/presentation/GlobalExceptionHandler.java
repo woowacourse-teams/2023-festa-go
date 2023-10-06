@@ -105,7 +105,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(ErrorResponse.from(ErrorCode.INVALID_REQUEST_ARGUMENT));
+            .body(ErrorResponse.from(ErrorCode.INVALID_REQUEST_ARGUMENT, e));
     }
 
     private void logInfo(FestaGoException e, HttpServletRequest request) {
