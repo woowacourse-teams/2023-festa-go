@@ -33,7 +33,7 @@ class SelectSchoolViewModelTest {
         analyticsHelper = mockk(relaxed = true)
         vm = SelectSchoolViewModel(
             schoolRepository = schoolRepository,
-            analyticsHelper = analyticsHelper
+            analyticsHelper = analyticsHelper,
         )
     }
 
@@ -121,7 +121,6 @@ class SelectSchoolViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(SelectSchoolEvent.ShowStudentVerification::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -129,6 +128,6 @@ class SelectSchoolViewModelTest {
 
     private val fakeSchools = listOf(
         School(id = fakeSchoolId, domain = "scripta", name = "Charley Sullivan"),
-        School(id = 8930, domain = "movet", name = "Juliette Fleming")
+        School(id = 8930, domain = "movet", name = "Juliette Fleming"),
     )
 }

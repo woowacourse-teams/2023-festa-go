@@ -11,4 +11,6 @@ public interface StudentCodeRepository extends JpaRepository<StudentCode, Long> 
     void deleteByMember(Member member);
 
     Optional<StudentCode> findByCodeAndMember(VerificationCode code, Member member);
+
+    Optional<StudentCode> findByMemberId(Long memberId);
 }

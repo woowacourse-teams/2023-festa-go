@@ -30,6 +30,7 @@ public enum ErrorCode {
     DELETE_CONSTRAINT_SCHOOL("학생 또는 축제에 등록된 학교는 삭제할 수 없습니다."),
     DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
 
+
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
     INVALID_AUTH_TOKEN("올바르지 않은 로그인 토큰입니다."),
@@ -48,6 +49,9 @@ public enum ErrorCode {
     FESTIVAL_NOT_FOUND("존재하지 않는 축제입니다."),
     TICKET_NOT_FOUND("존재하지 않는 티켓입니다."),
     SCHOOL_NOT_FOUND("존재하지 않는 학교입니다."),
+
+    // 429
+    TOO_FREQUENT_REQUESTS("너무 잦은 요청입니다. 잠시 후 다시 시도해주세요."),
 
     // 500
     INTERNAL_SERVER_ERROR("서버 내부에 문제가 발생했습니다."),
