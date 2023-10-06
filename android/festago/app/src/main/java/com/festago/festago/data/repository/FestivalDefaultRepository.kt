@@ -1,8 +1,8 @@
 package com.festago.festago.data.repository
 
 import com.festago.festago.data.service.FestivalRetrofitService
+import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runRetrofitWithErrorHandler
-import com.festago.festago.data.util.tryConvert
 import com.festago.festago.model.Festival
 import com.festago.festago.model.Reservation
 import com.festago.festago.repository.FestivalRepository
@@ -13,9 +13,9 @@ class FestivalDefaultRepository @Inject constructor(
 ) : FestivalRepository {
     override suspend fun loadFestivals(): Result<List<Festival>> =
         runRetrofitWithErrorHandler { festivalRetrofitService.getFestivals() }
-            .tryConvert { it.toDomain() }
+            .onSuccessOrCatch { it.toDomain() }
 
     override suspend fun loadFestivalDetail(festivalId: Long): Result<Reservation> =
         runRetrofitWithErrorHandler { festivalRetrofitService.getFestivalDetail(festivalId) }
-            .tryConvert { it.toDomain() }
+            .onSuccessOrCatch { it.toDomain() }
 }

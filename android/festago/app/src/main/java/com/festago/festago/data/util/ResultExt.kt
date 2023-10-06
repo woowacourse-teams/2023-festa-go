@@ -1,6 +1,6 @@
 package com.festago.festago.data.util
 
-suspend fun <T, R> Result<T>.tryConvert(block: suspend (T) -> R): Result<R> {
+suspend fun <T, R> Result<T>.onSuccessOrCatch(block: suspend (T) -> R): Result<R> {
     return try {
         onSuccess { return Result.success(block(it)) }
         onFailure { return Result.failure(it) }
