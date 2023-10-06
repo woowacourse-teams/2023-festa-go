@@ -8,20 +8,17 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import com.festago.staff.domain.Staff;
 import com.festago.staff.repository.StaffRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class StaffAuthService {
 
     private final AuthProvider authProvider;
     private final StaffRepository staffRepository;
-
-    public StaffAuthService(AuthProvider authProvider, StaffRepository staffRepository) {
-        this.authProvider = authProvider;
-        this.staffRepository = staffRepository;
-    }
 
     @Transactional(readOnly = true)
     public StaffLoginResponse login(StaffLoginRequest request) {

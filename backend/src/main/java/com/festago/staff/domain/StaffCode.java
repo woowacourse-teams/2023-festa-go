@@ -5,8 +5,11 @@ import com.festago.common.exception.InternalServerException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StaffCode {
 
     public static final int RANDOM_CODE_LENGTH = 4;
@@ -14,9 +17,6 @@ public class StaffCode {
     @NotNull
     @Column(name = "code")
     private String value;
-
-    protected StaffCode() {
-    }
 
     public StaffCode(String value) {
         checkNotNull(value);

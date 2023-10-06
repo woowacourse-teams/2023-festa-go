@@ -9,23 +9,18 @@ import com.festago.staff.domain.Staff;
 import com.festago.staff.domain.StaffCode;
 import com.festago.staff.dto.StaffResponse;
 import com.festago.staff.repository.StaffRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class StaffService {
 
     private final StaffRepository staffRepository;
     private final FestivalRepository festivalRepository;
     private final StaffCodeProvider codeProvider;
-
-    public StaffService(StaffRepository staffRepository,
-                        FestivalRepository festivalRepository, StaffCodeProvider codeProvider) {
-        this.staffRepository = staffRepository;
-        this.festivalRepository = festivalRepository;
-        this.codeProvider = codeProvider;
-    }
 
     public StaffResponse createStaff(Long festivalId) {
         Festival festival = findFestival(festivalId);

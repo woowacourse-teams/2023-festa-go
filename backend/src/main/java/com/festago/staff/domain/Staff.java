@@ -12,8 +12,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Staff {
 
     @Id
@@ -26,9 +29,6 @@ public class Staff {
 
     @OneToOne(fetch = FetchType.LAZY)
     private Festival festival;
-
-    protected Staff() {
-    }
 
     public Staff(StaffCode code, Festival festival) {
         this(null, code, festival);
