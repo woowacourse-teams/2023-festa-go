@@ -38,7 +38,7 @@ class TicketEntryViewModelTest {
         Dispatchers.resetMain()
     }
 
-    fun `티켓 요쳥 결과는 다음과 같다`(result: Result<Ticket>) {
+    private fun `티켓 요쳥 결과는 다음과 같다`(result: Result<Ticket>) {
         coEvery {
             ticketRepository.loadTicket(any())
         } answers {
@@ -46,7 +46,7 @@ class TicketEntryViewModelTest {
         }
     }
 
-    fun `티켓 코드 요청 결과는 다음과 같다`(result: Result<TicketCode>) {
+    private fun `티켓 코드 요청 결과는 다음과 같다`(result: Result<TicketCode>) {
         coEvery {
             ticketRepository.loadTicketCode(any())
         } answers {
