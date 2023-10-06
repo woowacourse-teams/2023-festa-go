@@ -3,6 +3,6 @@ package com.festago.common.exception;
 public class ValidException extends FestaGoException {
 
     public ValidException(String message) {
-        super(ErrorCode.VALID_EXCEPTION, message);
+        super(ErrorCode.VALIDATION_FAIL, message);
     }
 }

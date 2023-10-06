@@ -1,8 +1,5 @@
 package com.festago.auth.domain;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
-
 public class AuthPayload {
 
     private final Long memberId;
@@ -16,7 +13,7 @@ public class AuthPayload {
 
     private void validate(Role role) {
         if (role == null) {
-            throw new InternalServerException(ErrorCode.INVALID_AUTH_TOKEN_PAYLOAD);
+            throw new IllegalArgumentException("role은 null이 될 수 없습니다.");
         }
     }
 

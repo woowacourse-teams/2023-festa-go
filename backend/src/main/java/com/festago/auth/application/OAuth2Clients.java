@@ -3,7 +3,6 @@ package com.festago.auth.application;
 import com.festago.auth.domain.SocialType;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class OAuth2Clients {
         public OAuth2ClientsBuilder add(OAuth2Client oAuth2Client) {
             SocialType socialType = oAuth2Client.getSocialType();
             if (oAuth2ClientMap.containsKey(socialType)) {
-                throw new InternalServerException(ErrorCode.DUPLICATE_SOCIAL_TYPE);
+                throw new IllegalArgumentException("중복된 OAuth2 제공자 입니다.");
             }
             oAuth2ClientMap.put(socialType, oAuth2Client);
             return this;

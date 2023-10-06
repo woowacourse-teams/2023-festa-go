@@ -1,7 +1,7 @@
 package com.festago.ticketing.domain;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
+import com.festago.common.exception.ValidException;
+import com.festago.common.util.Validator;
 
 public enum EntryState {
     BEFORE_ENTRY(0),
@@ -16,19 +16,13 @@ public enum EntryState {
     }
 
     public static EntryState from(Integer index) {
-        validate(index);
+        Validator.notNull(index, "entryState의 인덱스");
         return switch (index) {
             case 0 -> BEFORE_ENTRY;
             case 1 -> AFTER_ENTRY;
             case 2 -> AWAY;
-            default -> throw new InternalServerException(ErrorCode.INVALID_ENTRY_STATE_INDEX);
+            default -> throw new ValidException("entryState의 인덱스가 올바르지 않습니다. index: " + index);
         };
-    }
-
-    private static void validate(Integer index) {
-        if (index == null) {
-            throw new InternalServerException(ErrorCode.INVALID_ENTRY_STATE_INDEX);
-        }
     }
 
     public int getIndex() {

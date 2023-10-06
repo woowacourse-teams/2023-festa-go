@@ -17,7 +17,38 @@ import org.junit.jupiter.params.provider.ValueSource;
 class ValidatorTest {
 
     @Nested
-    class StringValid {
+    class hasBlank {
+
+        @ParameterizedTest
+        @NullSource
+        void 문자열이_null이면_예외(String input) {
+            // when & then
+            assertThatThrownBy(() -> Validator.hasBlank(input, ""))
+                .isInstanceOf(ValidException.class);
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"", " ", "\t", "\n"})
+        void 문자열이_공백이면_예외(String input) {
+            // when & then
+            assertThatThrownBy(() -> Validator.hasBlank(input, ""))
+                .isInstanceOf(ValidException.class);
+        }
+
+        @Test
+        void 문자열이_공백이_아니면_통과() {
+            // given
+            String input = "1";
+
+            // when & then
+            assertThatNoException()
+                .isThrownBy(() -> Validator.hasBlank(input, ""));
+        }
+    }
+
+
+    @Nested
+    class maxLength {
 
         @Test
         void 문자열의_길이가_10이고_최대_길이가_10이면_통과() {
@@ -54,14 +85,15 @@ class ValidatorTest {
 
         @ParameterizedTest
         @NullSource
-        void 문자열이_null이고_최대_길이가_10이면_통과(String input) {
-            // given
-            int maxLength = 10;
-
+        void 문자열이_null이면_통과(String input) {
             // when & then
             assertThatNoException()
-                .isThrownBy(() -> Validator.maxLength(input, maxLength, ""));
+                .isThrownBy(() -> Validator.maxLength(input, 10, ""));
         }
+    }
+
+    @Nested
+    class minLength {
 
         @Test
         void 문자열의_길이가_10이고_최소_길이가_10이면_통과() {
@@ -92,24 +124,22 @@ class ValidatorTest {
             String input = "1234567890"; // 10
 
             // when & then
-            assertThatThrownBy(() -> Validator.maxLength(input, minLength, ""))
+            assertThatThrownBy(() -> Validator.minLength(input, minLength, ""))
                 .isInstanceOf(IllegalArgumentException.class);
         }
 
         @ParameterizedTest
         @NullSource
-        void 문자열이_null이고_최소_길이가_10이면_통과(String input) {
-            // given
-            int minLength = 10;
-
+        void 문자열이_null이면_통과(String input) {
             // when & then
             assertThatNoException()
-                .isThrownBy(() -> Validator.minLength(input, minLength, ""));
+                .isThrownBy(() -> Validator.minLength(input, 10, ""));
         }
     }
 
+
     @Nested
-    class NullValid {
+    class notNull {
 
         @ParameterizedTest
         @NullSource
@@ -131,7 +161,7 @@ class ValidatorTest {
     }
 
     @Nested
-    class NumberValid {
+    class maxValue {
 
         @Test
         void 값이_100이고_최대_값이_100이면_통과() {
@@ -154,17 +184,10 @@ class ValidatorTest {
             assertThatThrownBy(() -> Validator.maxValue(value, maxValue, ""))
                 .isInstanceOf(ValidException.class);
         }
+    }
 
-        @ParameterizedTest
-        @ValueSource(ints = {0, -1})
-        void 최대_값이_0이하면_IllegalArgumentException(int maxValue) {
-            // given
-            int value = 100;
-
-            // when & then
-            assertThatThrownBy(() -> Validator.maxValue(value, maxValue, ""))
-                .isInstanceOf(IllegalArgumentException.class);
-        }
+    @Nested
+    class minValue {
 
         @Test
         void 값이_100이고_최소_값이_100이면_통과() {
@@ -174,7 +197,7 @@ class ValidatorTest {
 
             // when & then
             assertThatNoException()
-                .isThrownBy(() -> Validator.maxValue(value, minValue, ""));
+                .isThrownBy(() -> Validator.minValue(value, minValue, ""));
         }
 
         @Test
@@ -184,19 +207,30 @@ class ValidatorTest {
             int minValue = 100;
 
             // when & then
-            assertThatNoException()
-                .isThrownBy(() -> Validator.maxValue(value, minValue, ""));
+            assertThatThrownBy(() -> Validator.minValue(value, minValue, ""))
+                .isInstanceOf(ValidException.class);
+        }
+    }
+
+    @Nested
+    class isNegative {
+
+        @Test
+        void 값이_음수이면_예외() {
+            // given
+            int value = -1;
+
+            // when & then
+            assertThatThrownBy(() -> Validator.isNegative(value, ""))
+                .isInstanceOf(ValidException.class);
         }
 
         @ParameterizedTest
-        @ValueSource(ints = {0, -1})
-        void 최소_값이_0이하면_IllegalArgumentException(int minValue) {
-            // given
-            int value = 100;
-
+        @ValueSource(ints = {0, 1})
+        void 값이_음수가_아니면_통과(int value) {
             // when & then
-            assertThatThrownBy(() -> Validator.maxValue(value, minValue, ""))
-                .isInstanceOf(IllegalArgumentException.class);
+            assertThatNoException()
+                .isThrownBy(() -> Validator.isNegative(value, ""));
         }
     }
 }

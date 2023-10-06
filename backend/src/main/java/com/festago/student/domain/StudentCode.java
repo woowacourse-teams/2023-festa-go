@@ -2,8 +2,7 @@ package com.festago.student.domain;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
+import com.festago.common.util.Validator;
 import com.festago.member.domain.Member;
 import com.festago.school.domain.School;
 import jakarta.persistence.Embedded;
@@ -17,12 +16,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.util.StringUtils;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -30,6 +29,7 @@ import org.springframework.util.StringUtils;
 public class StudentCode {
 
     private static final int MIN_REQUEST_TERM_SECONDS = 30;
+    private static final int MAX_USERNAME_LENGTH = 255;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +45,8 @@ public class StudentCode {
     @JoinColumn(unique = true)
     private Member member;
 
+    @NotNull
+    @Size(max = MAX_USERNAME_LENGTH)
     private String username;
 
     @NotNull
@@ -57,7 +59,7 @@ public class StudentCode {
 
     public StudentCode(Long id, VerificationCode code, School school, Member member, String username,
                        LocalDateTime issuedAt) {
-        validate(username);
+        validate(code, school, member, username);
         this.id = id;
         this.code = code;
         this.school = school;
@@ -66,14 +68,28 @@ public class StudentCode {
         this.issuedAt = issuedAt;
     }
 
-    private void validate(String username) {
-        if (!StringUtils.hasText(username)) {
-            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+    private void validate(VerificationCode code, School school, Member member, String username) {
+        validateVerificationCode(code);
+        validateSchool(school);
+        validateMember(member);
+        validateUsername(username);
+    }
 
-        if (username.length() > 255) {
-            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+    private void validateVerificationCode(VerificationCode code) {
+        Validator.notNull(code, "validateVerificationCode");
+    }
+
+    private void validateSchool(School school) {
+        Validator.notNull(school, "school");
+    }
+
+    private void validateMember(Member member) {
+        Validator.notNull(member, "member");
+    }
+
+    private void validateUsername(String username) {
+        Validator.hasBlank(username, "username");
+        Validator.maxLength(username, MAX_USERNAME_LENGTH, "username");
     }
 
     public boolean canReissue(LocalDateTime currentTime) {

@@ -59,19 +59,15 @@ public class Admin extends BaseTimeEntity {
     }
 
     private void validateUsername(String username) {
-        Validator.notNull(username, "username은 null이 될 수 없습니다.");
-        Validator.minLength(username, MIN_USERNAME_LENGTH,
-            () -> "username의 길이는 %d글자 미만일 수 없습니다.".formatted(MIN_USERNAME_LENGTH));
-        Validator.maxLength(username, MAX_USERNAME_LENGTH,
-            () -> "username의 길이는 %d글자를 초과할 수 없습니다.".formatted(MAX_USERNAME_LENGTH));
+        Validator.hasBlank(username, "username");
+        Validator.minLength(username, MIN_USERNAME_LENGTH, "username");
+        Validator.maxLength(username, MAX_USERNAME_LENGTH, "username");
     }
 
     private void validatePassword(String password) {
-        Validator.notNull(password, "password는 null 값이 될 수 없습니다.");
-        Validator.minLength(password, MIN_PASSWORD_LENGTH,
-            () -> "password의 길이는 %d글자 미만일 수 없습니다.".formatted(MIN_PASSWORD_LENGTH));
-        Validator.maxLength(password, MAX_PASSWORD_LENGTH,
-            () -> "password의 길이는 %d글자를 초과할 수 없습니다.".formatted(MAX_PASSWORD_LENGTH));
+        Validator.hasBlank(password, "password");
+        Validator.minLength(password, MIN_PASSWORD_LENGTH, "password");
+        Validator.maxLength(password, MAX_PASSWORD_LENGTH, "password");
     }
 
     public Long getId() {

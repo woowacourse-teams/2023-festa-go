@@ -2,6 +2,7 @@ package com.festago.member.domain;
 
 import com.festago.auth.domain.SocialType;
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.util.Validator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -36,12 +37,15 @@ import org.hibernate.annotations.Where;
 public class Member extends BaseTimeEntity {
 
     private static final String DEFAULT_IMAGE_URL = "https://festa-go.site/images/default-profile.png";
+    private static final int MAX_SOCIAL_ID_LENGTH = 255;
+    private static final int MAX_NICKNAME_LENGTH = 30;
+    private static final int MAX_PROFILE_IMAGE_LENGTH = 255;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = 255)
+    @Size(max = MAX_SOCIAL_ID_LENGTH)
     private String socialId;
 
     @NotNull
@@ -49,11 +53,11 @@ public class Member extends BaseTimeEntity {
     private SocialType socialType;
 
     @NotNull
-    @Size(max = 30)
+    @Size(max = MAX_NICKNAME_LENGTH)
     private String nickname;
 
     @NotNull
-    @Size(max = 255)
+    @Size(max = MAX_PROFILE_IMAGE_LENGTH)
     private String profileImage;
 
     private LocalDateTime deletedAt = null;
@@ -76,31 +80,28 @@ public class Member extends BaseTimeEntity {
     }
 
     private void validate(String socialId, SocialType socialType, String nickname, String profileImage) {
-        checkNotNull(socialId, socialType, nickname);
-        checkLength(socialId, nickname, profileImage);
+        validateSocialId(socialId);
+        validateSocialType(socialType);
+        validateNickname(nickname);
+        validateProfileImage(profileImage);
     }
 
-    private void checkNotNull(String socialId, SocialType socialType, String nickname) {
-        if (socialId == null ||
-            socialType == null ||
-            nickname == null) {
-            throw new IllegalArgumentException("Member 는 허용되지 않은 null 값으로 생성할 수 없습니다.");
-        }
+    private void validateSocialId(String socialId) {
+        Validator.hasBlank(socialId, "socialId");
+        Validator.maxLength(socialId, MAX_SOCIAL_ID_LENGTH, "socialId");
     }
 
-    private void checkLength(String socialId, String nickname, String profileImage) {
-        if (overLength(socialId, 255) ||
-            overLength(nickname, 30) ||
-            overLength(profileImage, 255)) {
-            throw new IllegalArgumentException("Member 의 필드로 허용된 길이를 넘은 column 을 넣을 수 없습니다.");
-        }
+    private void validateSocialType(SocialType socialType) {
+        Validator.notNull(socialType, "socialType");
     }
 
-    private boolean overLength(String target, int maxLength) {
-        if (target == null) {
-            return false;
-        }
-        return target.length() > maxLength;
+    private void validateNickname(String nickname) {
+        Validator.hasBlank(nickname, "nickname");
+        Validator.maxLength(nickname, MAX_NICKNAME_LENGTH, "nickname");
+    }
+
+    private void validateProfileImage(String profileImage) {
+        Validator.maxLength(profileImage, MAX_PROFILE_IMAGE_LENGTH, "profileImage");
     }
 
     public Long getId() {

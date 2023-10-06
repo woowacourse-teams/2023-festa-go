@@ -1,7 +1,5 @@
 package com.festago.entry.infrastructure;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
 import com.festago.entry.application.EntryCodeProvider;
 import com.festago.entry.domain.EntryCodePayload;
 import io.jsonwebtoken.Jwts;
@@ -36,7 +34,7 @@ public class JwtEntryCodeProvider implements EntryCodeProvider {
 
     private void validate(Date expiredAt) {
         if (expiredAt.before(new Date())) {
-            throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_EXPIRATION_TIME);
+            throw new IllegalArgumentException("입장코드 만료일자는 과거일 수 없습니다.");
         }
     }
 }
