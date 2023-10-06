@@ -57,7 +57,7 @@ class SignInViewModelTest {
         vm.signIn("testToken")
 
         // then
-        assertThat(vm.event.getValue() is SignInEvent.SignInSuccess).isTrue
+        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.SignInSuccess::class.java)
     }
 
     @Test
@@ -73,7 +73,7 @@ class SignInViewModelTest {
         vm.signIn("testToken")
 
         // then
-        assertThat(vm.event.getValue() is SignInEvent.SignInFailure).isTrue
+        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)
     }
 
     @Test
@@ -83,7 +83,7 @@ class SignInViewModelTest {
         vm.signInKakao()
 
         // then
-        assertThat(vm.event.getValue() is SignInEvent.ShowSignInPage).isTrue
+        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.ShowSignInPage::class.java)
     }
 
     @Test
@@ -96,6 +96,6 @@ class SignInViewModelTest {
 
         // then
         println(vm.event.getValue())
-        assertThat(vm.event.getValue() is SignInEvent.SignInFailure).isTrue
+        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)
     }
 }
