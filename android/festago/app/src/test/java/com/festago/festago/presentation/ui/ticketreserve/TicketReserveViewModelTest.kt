@@ -86,20 +86,27 @@ class TicketReserveViewModelTest {
         Dispatchers.resetMain()
     }
 
+    private fun `예약 정보 요청 결과가 다음과 같을 때`(result: Result<Reservation>) {
+        coEvery { festivalRepository.loadFestivalDetail(any()) } returns result
+    }
+
+    private fun `인증 여부가 다음과 같을 때`(isSigned: Boolean) {
+        coEvery { authRepository.isSigned } answers { isSigned }
+    }
+
+    private fun `특정 공연의 티켓 타입 요청 결과가 다음과 같을 때`(result: Result<List<ReservationTicket>>) {
+        coEvery { reservationTicketRepository.loadTicketTypes(any()) } returns result
+    }
+
+    private fun `티켓 예약 요청 결과가 다음과 같을 때`(result: Result<ReservedTicket>) {
+        coEvery { ticketRepository.reserveTicket(any()) } returns result
+    }
+
     @Test
     fun `예약 정보를 불러오면 성공 이벤트가 발생하고 리스트를 반환한다`() {
         // given
-        coEvery {
-            festivalRepository.loadFestivalDetail(0)
-        } answers {
-            Result.success(fakeReservation)
-        }
-
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `예약 정보 요청 결과가 다음과 같을 때`(Result.success(fakeReservation))
+        `인증 여부가 다음과 같을 때`(true)
 
         // when
         vm.loadReservation()
@@ -122,7 +129,7 @@ class TicketReserveViewModelTest {
     @Test
     fun `예약 정보를 불러오는 것을 실패하면 에러 이벤트가 발생한다`() {
         // given
-        coEvery { festivalRepository.loadFestivalDetail(0) } returns Result.failure(Exception())
+        `예약 정보 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
 
         // when
         vm.loadReservation(0)
@@ -151,15 +158,8 @@ class TicketReserveViewModelTest {
     @Test
     fun `특정 공연의 티켓 타입을 보여주는 이벤트가 발생하면 해당 공연의 티켓 타입을 보여준다`() = runTest {
         // given
-        coEvery {
-            reservationTicketRepository.loadTicketTypes(1)
-        } answers {
-            Result.success(fakeReservationTickets)
-        }
-
-        coEvery { authRepository.isSigned } answers {
-            true
-        }
+        `특정 공연의 티켓 타입 요청 결과가 다음과 같을 때`(Result.success(fakeReservationTickets))
+        `인증 여부가 다음과 같을 때`(true)
 
         vm.event.test {
             // when
@@ -181,13 +181,8 @@ class TicketReserveViewModelTest {
     @Test
     fun `특정 공연의 티켓 타입을 보여주는 것을 실패하면 에러 이벤트가 발생한다`() {
         // given
-        coEvery { reservationTicketRepository.loadTicketTypes(1) } returns Result.failure(Exception())
-
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `특정 공연의 티켓 타입 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
+        `인증 여부가 다음과 같을 때`(true)
 
         // when
         vm.showTicketTypes(1, LocalDateTime.MIN)
@@ -217,11 +212,7 @@ class TicketReserveViewModelTest {
     @Test
     fun `티켓 유형을 선택하고 예약하는 것을 실패하면 예약 실패 이벤트가 발생한다`() = runTest {
         // given
-        coEvery {
-            ticketRepository.reserveTicket(0)
-        } answers {
-            Result.failure(Exception())
-        }
+        `티켓 예약 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
 
         vm.event.test {
             // when
