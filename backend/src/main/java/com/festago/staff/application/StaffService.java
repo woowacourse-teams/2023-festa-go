@@ -9,6 +9,7 @@ import com.festago.staff.domain.Staff;
 import com.festago.staff.domain.StaffCode;
 import com.festago.staff.dto.StaffResponse;
 import com.festago.staff.repository.StaffRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +36,11 @@ public class StaffService {
     }
 
     private StaffCode createVerificationCode(Festival festival) {
+        List<String> existCodes = staffRepository.findAllCodeByCodeStartsWith(festival.getSchool().findAbbreviation());
         StaffCode code;
         do {
             code = codeProvider.provide(festival);
-        } while (staffRepository.existsByCode(code));
+        } while (existCodes.contains(code.getValue()));
         return code;
     }
 

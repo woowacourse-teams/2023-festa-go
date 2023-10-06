@@ -8,10 +8,10 @@ import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.staff.domain.Staff;
-import com.festago.staff.domain.StaffCode;
 import com.festago.support.FestivalFixture;
 import com.festago.support.SchoolFixture;
 import com.festago.support.StaffFixture;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -63,36 +63,6 @@ class StaffRepositoryTest {
         }
     }
 
-    @Nested
-    class 코드로_존재여부_확인 {
-
-        @Test
-        void 있으면_참() {
-            // given
-            Festival festival = saveFestival();
-            String code = "festa1234";
-            staffRepository.save(StaffFixture.staff().codeValue(code).festival(festival).build());
-
-            // when
-            boolean result = staffRepository.existsByCode(new StaffCode(code));
-
-            // then
-            assertThat(result).isTrue();
-        }
-
-        @Test
-        void 없으면_거짓() {
-            // given
-            String code = "festa1234";
-
-            // when
-            boolean result = staffRepository.existsByCode(new StaffCode(code));
-
-            // then
-            assertThat(result).isFalse();
-        }
-    }
-
     @Test
     void code로_조회() {
         // given
@@ -112,9 +82,35 @@ class StaffRepositoryTest {
         });
     }
 
+    @Test
+    void 코드_프리픽스로_조회() {
+        // given
+        Festival festival1 = saveFestival(1);
+        Festival festival2 = saveFestival(2);
+        Festival festival3 = saveFestival(3);
+        Festival festival4 = saveFestival(4);
+        staffRepository.save(StaffFixture.staff().codeValue("festa1234").festival(festival1).build());
+        staffRepository.save(StaffFixture.staff().codeValue("festa2345").festival(festival2).build());
+        staffRepository.save(StaffFixture.staff().codeValue("festa3456").festival(festival3).build());
+        staffRepository.save(StaffFixture.staff().codeValue("go3456").festival(festival4).build());
+
+        // when
+        List<String> result = staffRepository.findAllCodeByCodeStartsWith("festa");
+
+        // then
+        assertThat(result)
+            .containsExactlyInAnyOrder("festa1234", "festa2345", "festa3456");
+    }
+
     private Festival saveFestival() {
-        School school = schoolRepository.save(SchoolFixture.school().build());
-        Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
-        return festival;
+        return saveFestival(0);
+    }
+
+    private Festival saveFestival(int number) {
+        School school = schoolRepository.save(SchoolFixture.school()
+            .name("페스타고 대학교" + number)
+            .domain("festago" + number + ".com")
+            .build());
+        return festivalRepository.save(FestivalFixture.festival().school(school).build());
     }
 }
