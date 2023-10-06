@@ -36,9 +36,8 @@ class SignInViewModelTest {
         mockkStatic("kotlinx.coroutines.tasks.TasksKt")
 
         authRepository = mockk(relaxed = true)
-        analyticsHelper = mockk(relaxed = true)
         firebaseMessaging = mockk(relaxed = true)
-        vm = SignInViewModel(authRepository, firebaseMessaging, analyticsHelper)
+        vm = SignInViewModel(authRepository, analyticsHelper)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -52,7 +51,7 @@ class SignInViewModelTest {
         // given
         coEvery { firebaseMessaging.token.await() } returns "fakeFcmToken"
 
-        coEvery { authRepository.signIn(any(), any(), any()) } answers { Result.success(Unit) }
+        coEvery { authRepository.signIn(any(), any()) } answers { Result.success(Unit) }
 
         // when
         vm.signIn("testToken")
@@ -67,7 +66,7 @@ class SignInViewModelTest {
         coEvery { firebaseMessaging.token.await() } returns "fakeFcmToken"
 
         coEvery {
-            authRepository.signIn(any(), any(), any())
+            authRepository.signIn(any(), any())
         } answers { Result.failure(Exception()) }
 
         // when
