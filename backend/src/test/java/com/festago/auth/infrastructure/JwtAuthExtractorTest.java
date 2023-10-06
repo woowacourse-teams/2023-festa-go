@@ -2,12 +2,10 @@ package com.festago.auth.infrastructure;
 
 import static com.festago.common.exception.ErrorCode.EXPIRED_AUTH_TOKEN;
 import static com.festago.common.exception.ErrorCode.INVALID_AUTH_TOKEN;
-import static com.festago.common.exception.ErrorCode.INVALID_ROLE_NAME;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.Role;
-import com.festago.common.exception.InternalServerException;
 import com.festago.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -85,8 +83,8 @@ class JwtAuthExtractorTest {
 
         // when & then
         assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
-            .isInstanceOf(InternalServerException.class)
-            .hasMessage(INVALID_ROLE_NAME.getMessage());
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("해당하는 Role이 없습니다.");
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.festago.entry.domain;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-import com.festago.common.exception.InternalServerException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -20,8 +19,8 @@ class EntryCodeTest {
     @ValueSource(strings = {""})
     void 입장_코드의_코드가_null_또는_공백이면_예외(String code) {
         assertThatThrownBy(() -> new EntryCode(code, 30, 10))
-            .isInstanceOf(InternalServerException.class)
-            .hasMessage("올바르지 않은 입장코드입니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("code는 빈 값 또는 null이 될 수 없습니다.");
     }
 
     @ParameterizedTest
@@ -29,16 +28,16 @@ class EntryCodeTest {
     void 입장_코드의_수명이_0_또는_음수이면_예외(long period) {
         // when & then
         assertThatThrownBy(() -> new EntryCode("code", period, 0))
-            .isInstanceOf(InternalServerException.class)
-            .hasMessage("올바르지 않은 입장코드 유효기간입니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("period는 0 또는 음수가 될 수 없습니다.");
     }
 
     @Test
     void 입장_코드의_오프셋이_음수이면_예외() {
         // when & then
         assertThatThrownBy(() -> new EntryCode("code", 30, -1))
-            .isInstanceOf(InternalServerException.class)
-            .hasMessage("올바르지 않은 입장코드 오프셋입니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("offset은 음수가 될 수 없습니다.");
     }
 
     @ParameterizedTest
