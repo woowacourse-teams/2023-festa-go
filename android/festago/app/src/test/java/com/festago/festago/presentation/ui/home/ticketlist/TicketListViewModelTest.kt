@@ -39,12 +39,16 @@ class TicketListViewModelTest {
         Dispatchers.resetMain()
     }
 
+    private fun `현재 티켓 요청 결과가 다음과 같을 때`(result: Result<List<Ticket>>) {
+        coEvery { ticketRepository.loadCurrentTickets() } returns result
+    }
+
     @Test
     fun `티켓을 받아왔을 때 티켓이 있으면 성공이고 티켓도 존재하는 상태이다`() {
         // given
         val tickets = TicketFixture.getMemberTickets((1L..10L).toList())
 
-        coEvery { ticketRepository.loadCurrentTickets() } returns Result.success(tickets)
+        `현재 티켓 요청 결과가 다음과 같을 때`(Result.success(tickets))
 
         // when
         vm.loadCurrentTickets()
@@ -71,7 +75,8 @@ class TicketListViewModelTest {
     fun `티켓을 받아왔을 때 티켓이 없으면 성공이지만 티켓은 없는 상태이다`() {
         // given
         val fakeEmptyTickets = emptyList<Ticket>()
-        coEvery { ticketRepository.loadCurrentTickets() } returns Result.success(fakeEmptyTickets)
+
+        `현재 티켓 요청 결과가 다음과 같을 때`(Result.success(fakeEmptyTickets))
 
         // when
         vm.loadCurrentTickets()
@@ -98,9 +103,7 @@ class TicketListViewModelTest {
     @Test
     fun `티켓 목록 받아오기를 실패하면 에러 상태이다`() {
         // given
-        coEvery { ticketRepository.loadCurrentTickets() } answers {
-            Result.failure(Exception())
-        }
+        `현재 티켓 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
 
         // when
         vm.loadCurrentTickets()
