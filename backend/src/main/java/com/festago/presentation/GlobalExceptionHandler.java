@@ -1,7 +1,6 @@
 package com.festago.presentation;
 
 import com.festago.common.exception.BadRequestException;
-import com.festago.common.exception.DomainValidException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.FestaGoException;
 import com.festago.common.exception.ForbiddenException;
@@ -9,6 +8,7 @@ import com.festago.common.exception.InternalServerException;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.exception.TooManyRequestException;
 import com.festago.common.exception.UnauthorizedException;
+import com.festago.common.exception.ValidException;
 import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.presentation.auth.AuthenticateContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,8 +64,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().build();
     }
 
-    @ExceptionHandler(DomainValidException.class)
-    public ResponseEntity<ErrorResponse> handle(DomainValidException e) {
+    @ExceptionHandler(ValidException.class)
+    public ResponseEntity<ErrorResponse> handle(ValidException e) {
         return ResponseEntity.badRequest().body(ErrorResponse.from(e));
     }
 
