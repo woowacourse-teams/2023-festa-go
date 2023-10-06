@@ -5,15 +5,12 @@ import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TokenRepository
-import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.UserApiClient
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AuthDefaultRepository @Inject constructor(
     private val userRetrofitService: UserRetrofitService,
     private val tokenRepository: TokenRepository,
-    private val firebaseMessaging: FirebaseMessaging,
 ) : AuthRepository {
 
     override val isSigned: Boolean
@@ -23,8 +20,7 @@ class AuthDefaultRepository @Inject constructor(
         get() = tokenRepository.token
 
     override suspend fun signIn(socialType: String, token: String): Result<Unit> {
-        val fcmToken = firebaseMessaging.token.await()
-        return tokenRepository.signIn(socialType, token, fcmToken)
+        return tokenRepository.signIn(socialType, token)
     }
 
     override suspend fun signOut(): Result<Unit> {
