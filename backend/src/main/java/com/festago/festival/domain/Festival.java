@@ -1,8 +1,7 @@
 package com.festago.festival.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.common.exception.BadRequestException;
-import com.festago.common.exception.ErrorCode;
+import com.festago.common.util.Validator;
 import com.festago.school.domain.School;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.springframework.util.Assert;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -64,37 +64,26 @@ public class Festival extends BaseTimeEntity {
     }
 
     private void validate(String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
-        checkNotNull(name, startDate, endDate, thumbnail);
-        checkLength(name, thumbnail);
+        validateName(name);
+        validateThumbnail(thumbnail);
         validateDate(startDate, endDate);
     }
 
-    private void checkNotNull(String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
-        if (name == null ||
-            startDate == null ||
-            endDate == null ||
-            thumbnail == null) {
-            throw new IllegalArgumentException("Festival 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
-        }
+    private void validateName(String name) {
+        Assert.notNull(name, "name은 null 값이 될 수 없습니다.");
+        Validator.maxLength(name, 50, "name은 50글자를 넘을 수 없습니다.");
     }
 
-    private void checkLength(String name, String thumbnail) {
-        if (overLength(name, 50) ||
-            overLength(thumbnail, 255)) {
-            throw new IllegalArgumentException("Festival 의 필드로 허용된 길이를 넘은 column 을 넣을 수 없습니다.");
-        }
-    }
-
-    private boolean overLength(String target, int maxLength) {
-        if (target == null) {
-            return false;
-        }
-        return target.length() > maxLength;
+    private void validateThumbnail(String thumbnail) {
+        Assert.notNull(thumbnail, "thumbnail은 null 값이 될 수 없습니다.");
+        Validator.maxLength(thumbnail, 255, "thumbnail은 50글자를 넘을 수 없습니다.");
     }
 
     private void validateDate(LocalDate startDate, LocalDate endDate) {
+        Assert.notNull(startDate, "startDate는 null 값이 될 수 없습니다.");
+        Assert.notNull(endDate, "endDate는 null 값이 될 수 없습니다.");
         if (startDate.isAfter(endDate)) {
-            throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_DURATION);
+            throw new IllegalArgumentException("축제 시작 일은 종료일 이전이어야 합니다.");
         }
     }
 
@@ -105,6 +94,22 @@ public class Festival extends BaseTimeEntity {
     public boolean isNotInDuration(LocalDateTime time) {
         LocalDate date = time.toLocalDate();
         return date.isBefore(startDate) || date.isAfter(endDate);
+    }
+
+    public void changeName(String name) {
+        validateName(name);
+        this.name = name;
+    }
+
+    public void changeThumbnail(String thumbnail) {
+        validateThumbnail(thumbnail);
+        this.thumbnail = thumbnail;
+    }
+
+    public void changeDate(LocalDate startDate, LocalDate endDate) {
+        validateDate(startDate, endDate);
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public Long getId() {

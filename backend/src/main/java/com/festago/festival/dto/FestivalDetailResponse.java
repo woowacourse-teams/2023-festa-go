@@ -7,6 +7,7 @@ import java.util.List;
 
 public record FestivalDetailResponse(
     Long id,
+    Long schoolId,
     String name,
     LocalDate startDate,
     LocalDate endDate,
@@ -19,6 +20,7 @@ public record FestivalDetailResponse(
             .toList();
         return new FestivalDetailResponse(
             festival.getId(),
+            festival.getSchool().getId(),
             festival.getName(),
             festival.getStartDate(),
             festival.getEndDate(),

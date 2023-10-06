@@ -7,16 +7,16 @@ public enum ErrorCode {
     NOT_ENTRY_TIME("입장 가능한 시간이 아닙니다."),
     EXPIRED_ENTRY_CODE("만료된 입장 코드입니다."),
     INVALID_ENTRY_CODE("올바르지 않은 입장코드입니다."),
-    INVALID_TICKET_OPEN_TIME("티켓은 공연 시작 전에 오픈되어야 합니다."),
+    INVALID_TICKET_OPEN_TIME("티켓 오픈 시간은 공연 시작 이전 이어야 합니다."),
     INVALID_STAGE_START_TIME("공연은 축제 기간 중에만 진행될 수 있습니다."),
     INVALID_MIN_TICKET_AMOUNT("티켓은 적어도 한장 이상 발급해야합니다."),
     LATE_TICKET_ENTRY_TIME("입장 시간은 공연 시간보다 빨라야합니다."),
     EARLY_TICKET_ENTRY_TIME("입장 시간은 공연 시작 12시간 이내여야 합니다."),
     EARLY_TICKET_ENTRY_THAN_OPEN("입장 시간은 티켓 오픈 시간 이후여야합니다."),
     TICKET_SOLD_OUT("매진된 티켓입니다."),
-    INVALID_FESTIVAL_START_DATE("축제 시작 일자는 과거일 수 없습니다."),
-    INVALID_FESTIVAL_DURATION("축제 시작 일자는 종료일자 이전이어야합니다."),
-    INVALID_TICKET_CREATE_TIME("티켓 예매 시작 후 새롭게 티켓을 발급할 수 없습니다."),
+    INVALID_FESTIVAL_DURATION("축제 시작 일은 종료일 이전이어야 합니다."),
+    INVALID_FESTIVAL_START_DATE("축제 시작 일은 과거일 수 없습니다."),
+    INVALID_TICKET_CREATE_TIME("티켓 오픈 시간 이후 새롭게 티켓을 발급할 수 없습니다."),
     OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE("해당 OAuth2 제공자는 지원되지 않습니다."),
     RESERVE_TICKET_OVER_AMOUNT("예매 가능한 수량을 초과했습니다."),
     NEED_STUDENT_VERIFICATION("학생 인증이 필요합니다."),
@@ -25,6 +25,10 @@ public enum ErrorCode {
     DUPLICATE_STUDENT_EMAIL("이미 인증된 이메일입니다."),
     TICKET_CANNOT_RESERVE_STAGE_START("공연의 시작 시간 이후로 예매할 수 없습니다."),
     INVALID_STUDENT_VERIFICATION_CODE("올바르지 않은 학생 인증 코드입니다."),
+    DELETE_CONSTRAINT_FESTIVAL("공연이 등록된 축제는 삭제할 수 없습니다."),
+    DELETE_CONSTRAINT_STAGE("티켓이 등록된 공연은 삭제할 수 없습니다."),
+    DELETE_CONSTRAINT_SCHOOL("학생 또는 축제에 등록된 학교는 삭제할 수 없습니다."),
+    DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
 
 
     // 401
@@ -34,7 +38,6 @@ public enum ErrorCode {
     NEED_AUTH_TOKEN("로그인이 필요한 서비스입니다."),
     INCORRECT_PASSWORD_OR_ACCOUNT("비밀번호가 틀렸거나, 해당 계정이 없습니다."),
     DUPLICATE_ACCOUNT_USERNAME("해당 계정이 존재합니다."),
-    DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
 
     // 403
     NOT_ENOUGH_PERMISSION("해당 권한이 없습니다."),

@@ -58,4 +58,24 @@ class SchoolControllerTest {
         SchoolsResponse actual = objectMapper.readValue(content, SchoolsResponse.class);
         assertThat(actual).isEqualTo(expected);
     }
+
+    @Test
+    void 단일_학교_정보_조회() throws Exception {
+        // given
+        SchoolResponse expected = new SchoolResponse(1L, "teco.ac.kr", "테코대학");
+
+        given(schoolService.findById(expected.id()))
+            .willReturn(expected);
+
+        // when & then
+        String content = mockMvc.perform(get("/schools/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+        SchoolResponse actual = objectMapper.readValue(content, SchoolResponse.class);
+        assertThat(actual).isEqualTo(expected);
+    }
 }

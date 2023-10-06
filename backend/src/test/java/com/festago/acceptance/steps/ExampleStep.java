@@ -31,14 +31,14 @@ public class ExampleStep {
         RestAssured.given()
             .contentType(ContentType.JSON)
             .body(new RootAdminInitializeRequest(password))
-            .post("admin/initialize")
+            .post("admin/api/initialize")
             .then()
             .statusCode(200);
 
         ExtractableResponse<Response> response = RestAssured.given()
             .contentType(ContentType.JSON)
             .body(new AdminLoginRequest("admin", password))
-            .post("admin/login")
+            .post("admin/api/login")
             .then()
             .extract();
 
@@ -54,7 +54,7 @@ public class ExampleStep {
             .contentType(ContentType.JSON)
             .cookie("token", cucumberClient.getToken())
             .body(request)
-            .post("admin/festivals")
+            .post("admin/api/festivals")
             .then()
             .extract()
             .body()
@@ -69,7 +69,7 @@ public class ExampleStep {
             .contentType(ContentType.JSON)
             .cookie("token", cucumberClient.getToken())
             .body(request)
-            .post("admin/schools")
+            .post("admin/api/schools")
             .then()
             .extract()
             .body()
