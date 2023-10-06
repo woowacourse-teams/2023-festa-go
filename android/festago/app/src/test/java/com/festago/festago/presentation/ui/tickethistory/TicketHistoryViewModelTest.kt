@@ -42,16 +42,18 @@ class TicketHistoryViewModelTest {
         Dispatchers.resetMain()
     }
 
+    private fun `티켓 기록 요청 결과가 다음과 같을 때`(result: Result<List<Ticket>>) {
+        coEvery {
+            ticketRepository.loadHistoryTickets(any())
+        } returns result
+    }
+
     @Test
     fun `빈 리스트가 아닌 티켓들을 가져오면 성공 상태이다`() {
         // given
         val ids = listOf(1L, 2L, 3L, 4L, 5L)
 
-        coEvery {
-            ticketRepository.loadHistoryTickets(any())
-        } answers {
-            Result.success(TicketFixture.getMemberTickets(ids))
-        }
+        `티켓 기록 요청 결과가 다음과 같을 때`(Result.success(TicketFixture.getMemberTickets(ids)))
 
         // when
         vm.loadTicketHistories()
@@ -79,11 +81,7 @@ class TicketHistoryViewModelTest {
     @Test
     fun `빈 리스트인 티켓을 받아도 성공 상태이다`() {
         // given
-        coEvery {
-            ticketRepository.loadHistoryTickets(any())
-        } answers {
-            Result.success(emptyList())
-        }
+        `티켓 기록 요청 결과가 다음과 같을 때`(Result.success(listOf()))
 
         // when
         vm.loadTicketHistories()
@@ -136,11 +134,7 @@ class TicketHistoryViewModelTest {
     @Test
     fun `티켓을 받아오기 실패하면 에러 상태이다`() {
         // given
-        coEvery {
-            ticketRepository.loadHistoryTickets(any())
-        } answers {
-            Result.failure(Exception())
-        }
+        `티켓 기록 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
 
         // when
         vm.loadTicketHistories()
