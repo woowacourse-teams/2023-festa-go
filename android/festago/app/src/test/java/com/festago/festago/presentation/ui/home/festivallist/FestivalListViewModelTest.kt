@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.ui.home.festivallist
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.Festival
 import com.festago.festago.repository.FestivalRepository
@@ -11,16 +11,17 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 
 class FestivalListViewModelTest {
+
     private lateinit var vm: FestivalListViewModel
     private lateinit var festivalRepository: FestivalRepository
     private lateinit var analyticsHelper: AnalyticsHelper
@@ -34,9 +35,6 @@ class FestivalListViewModelTest {
             "",
         )
     }
-
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -53,14 +51,18 @@ class FestivalListViewModelTest {
         Dispatchers.resetMain()
     }
 
-    @Test
-    fun `축제 목록 받아오기에 성공하면 성공 상태이고 축제 목록을 반환한다`() {
-        // given
+    private fun `축제 목록 요청 결과가 다음과 같을 때`(result: Result<List<Festival>>) {
         coEvery {
             festivalRepository.loadFestivals()
         } answers {
-            Result.success(fakeFestivals)
+            result
         }
+    }
+
+    @Test
+    fun `축제 목록 받아오기에 성공하면 성공 상태이고 축제 목록을 반환한다`() {
+        // given
+        `축제 목록 요청 결과가 다음과 같을 때`(Result.success(fakeFestivals))
 
         // when
         vm.loadFestivals()
@@ -70,9 +72,9 @@ class FestivalListViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Success::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(true)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(true)
+            assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowError).isEqualTo(false)
 
             // and
             val actual = (vm.uiState.value as FestivalListUiState.Success).festivals
@@ -85,11 +87,7 @@ class FestivalListViewModelTest {
     @Test
     fun `축제 목록 받아오기에 실패하면 에러 상태다`() {
         // given
-        coEvery {
-            festivalRepository.loadFestivals()
-        } answers {
-            Result.failure(Exception())
-        }
+        `축제 목록 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
 
         // when
         vm.loadFestivals()
@@ -99,9 +97,9 @@ class FestivalListViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Error::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+            assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowError).isEqualTo(true)
         }
         softly.assertAll()
     }
@@ -124,21 +122,24 @@ class FestivalListViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Loading::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(true)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(true)
+            assertThat(vm.uiState.value.shouldShowError).isEqualTo(false)
         }
         softly.assertAll()
     }
 
     @Test
-    fun `티켓 예매를 열면 티켓 예매 열기 이벤트가 발생한다`() {
-        // when
-        val fakeFestivalId = 1L
-        vm.showTicketReserve(fakeFestivalId)
+    fun `티켓 예매를 열면 티켓 예매 열기 이벤트가 발생한다`() = runTest {
 
-        // then
-        assertThat(vm.event.getValue()).isInstanceOf(FestivalListEvent.ShowTicketReserve::class.java)
+        vm.event.test {
+            // when
+            val fakeFestivalId = 1L
+            vm.showTicketReserve(fakeFestivalId)
+
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(FestivalListEvent.ShowTicketReserve::class.java)
+        }
     }
 
     private fun Festival.toUiState() = FestivalItemUiState(

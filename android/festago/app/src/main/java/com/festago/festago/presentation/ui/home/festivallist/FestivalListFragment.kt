@@ -10,6 +10,7 @@ import com.festago.festago.R
 import com.festago.festago.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveActivity
+import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,12 +39,16 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
     }
 
     private fun initObserve() {
-        vm.uiState.observe(viewLifecycleOwner) {
-            binding.uiState = it
-            updateUi(it)
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.uiState.collect {
+                binding.uiState = it
+                updateUi(it)
+            }
         }
-        vm.event.observe(viewLifecycleOwner) {
-            handleEvent(it)
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect {
+                handleEvent(it)
+            }
         }
     }
 

@@ -207,7 +207,6 @@ class StudentVerificationViewModelTest {
 
             // then
             assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.VerificationSuccess)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -231,7 +230,6 @@ class StudentVerificationViewModelTest {
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(StudentVerificationEvent.VerificationFailure::class.java)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -252,7 +250,6 @@ class StudentVerificationViewModelTest {
 
             // then
             assertThat(awaitItem()).isEqualTo(StudentVerificationEvent.VerificationTimeOut)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
