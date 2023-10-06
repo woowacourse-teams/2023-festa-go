@@ -1,6 +1,5 @@
 package com.festago.festago.presentation.ui.tickethistory
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.Ticket
 import com.festago.festago.presentation.fixture.TicketFixture
@@ -16,7 +15,6 @@ import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 class TicketHistoryViewModelTest {
@@ -24,9 +22,6 @@ class TicketHistoryViewModelTest {
 
     private lateinit var ticketRepository: TicketRepository
     private lateinit var analyticsHelper: AnalyticsHelper
-
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -129,10 +124,10 @@ class TicketHistoryViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Loading::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isFalse
-            assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isFalse
-            assertThat(vm.uiState.value?.shouldShowLoading).isTrue
-            assertThat(vm.uiState.value?.shouldShowError).isFalse
+            assertThat(vm.uiState.value.shouldShowSuccessWithTickets).isFalse
+            assertThat(vm.uiState.value.shouldShowSuccessAndEmpty).isFalse
+            assertThat(vm.uiState.value.shouldShowLoading).isTrue
+            assertThat(vm.uiState.value.shouldShowError).isFalse
         }
 
         softly.assertAll()
@@ -155,12 +150,11 @@ class TicketHistoryViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Error::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isFalse
-            assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isFalse
-            assertThat(vm.uiState.value?.shouldShowLoading).isFalse
-            assertThat(vm.uiState.value?.shouldShowError).isTrue
+            assertThat(vm.uiState.value.shouldShowSuccessWithTickets).isFalse
+            assertThat(vm.uiState.value.shouldShowSuccessAndEmpty).isFalse
+            assertThat(vm.uiState.value.shouldShowLoading).isFalse
+            assertThat(vm.uiState.value.shouldShowError).isTrue
         }
-
         softly.assertAll()
     }
 

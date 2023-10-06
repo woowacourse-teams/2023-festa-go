@@ -12,6 +12,7 @@ import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragmen
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.signin.SignInActivity
+import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,12 +49,14 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
-        vm.event.observe(this) { event ->
-            when (event) {
-                is HomeEvent.ShowFestivalList -> showFestivalList()
-                is HomeEvent.ShowTicketList -> showTicketList()
-                is HomeEvent.ShowMyPage -> showMyPage()
-                is HomeEvent.ShowSignIn -> showSignIn()
+        repeatOnStarted(this) {
+            vm.event.collect { event ->
+                when (event) {
+                    is HomeEvent.ShowFestivalList -> showFestivalList()
+                    is HomeEvent.ShowTicketList -> showTicketList()
+                    is HomeEvent.ShowMyPage -> showMyPage()
+                    is HomeEvent.ShowSignIn -> showSignIn()
+                }
             }
         }
     }
