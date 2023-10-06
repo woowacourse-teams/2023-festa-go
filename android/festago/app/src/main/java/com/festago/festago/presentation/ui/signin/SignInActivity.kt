@@ -52,7 +52,7 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleEvent(it: SignInEvent) = when (it) {
+    private fun handleEvent(event: SignInEvent) = when (event) {
         SignInEvent.ShowSignInPage -> handleSignInEvent()
         SignInEvent.SignInSuccess -> handleSuccessEvent()
         SignInEvent.SignInFailure -> handleFailureEvent()
