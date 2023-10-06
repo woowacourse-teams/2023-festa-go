@@ -14,10 +14,10 @@ suspend fun <T> runCatchingResponse(
         return Result.failure(
             Throwable(
                 "{" +
-                        "code: ${response.code()}," +
-                        "message: ${response.message()}, " +
-                        "body: ${response.errorBody()?.string()}" +
-                        "}",
+                    "code: ${response.code()}," +
+                    "message: ${response.message()}, " +
+                    "body: ${response.errorBody()?.string()}" +
+                    "}",
             ),
         )
     } catch (e: Exception) {
