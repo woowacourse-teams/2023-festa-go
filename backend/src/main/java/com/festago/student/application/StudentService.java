@@ -3,6 +3,7 @@ package com.festago.student.application;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
+import com.festago.common.exception.TooManyRequestException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.school.domain.School;
@@ -15,6 +16,8 @@ import com.festago.student.dto.StudentSendMailRequest;
 import com.festago.student.dto.StudentVerificateRequest;
 import com.festago.student.repository.StudentCodeRepository;
 import com.festago.student.repository.StudentRepository;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,16 +33,40 @@ public class StudentService {
     private final SchoolRepository schoolRepository;
     private final MemberRepository memberRepository;
     private final StudentRepository studentRepository;
+    private final Clock clock;
 
     public void sendVerificationMail(Long memberId, StudentSendMailRequest request) {
-        validateStudent(memberId);
-        validateDuplicateEmail(request);
         Member member = findMember(memberId);
         School school = findSchool(request.schoolId());
+        validate(memberId, request);
         VerificationCode code = codeProvider.provide();
-        studentCodeRepository.deleteByMember(member);
-        studentCodeRepository.save(new StudentCode(code, school, member, request.username()));
+        saveStudentCode(code, member, school, request.username());
         mailClient.send(new VerificationMailPayload(code, request.username(), school.getDomain()));
+    }
+
+    private Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    private School findSchool(Long schoolId) {
+        return schoolRepository.findById(schoolId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
+    }
+
+    private void validate(Long memberId, StudentSendMailRequest request) {
+        validateFrequentRequest(memberId);
+        validateStudent(memberId);
+        validateDuplicateEmail(request);
+    }
+
+    private void validateFrequentRequest(Long memberId) {
+        studentCodeRepository.findByMemberId(memberId)
+            .ifPresent(code -> {
+                if (!code.canReissue(LocalDateTime.now(clock))) {
+                    throw new TooManyRequestException(ErrorCode.TOO_FREQUENT_REQUESTS);
+                }
+            });
     }
 
     private void validateStudent(Long memberId) {
@@ -54,14 +81,12 @@ public class StudentService {
         }
     }
 
-    private Member findMember(Long memberId) {
-        return memberRepository.findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
-    }
-
-    private School findSchool(Long schoolId) {
-        return schoolRepository.findById(schoolId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
+    private void saveStudentCode(VerificationCode code, Member member, School school, String username) {
+        studentCodeRepository.findByMemberId(member.getId())
+            .ifPresentOrElse(
+                studentCode -> studentCode.reissue(code, school, username),
+                () -> studentCodeRepository.save(new StudentCode(code, school, member, username))
+            );
     }
 
     public void verificate(Long memberId, StudentVerificateRequest request) {

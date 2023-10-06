@@ -79,7 +79,7 @@ class StageTest {
             .festival(festival)
             .build()
         )
-            .isInstanceOf(BadRequestException.class)
+            .isInstanceOf(IllegalArgumentException.class)
             .hasMessage(INVALID_TICKET_OPEN_TIME.getMessage());
     }
 

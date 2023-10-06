@@ -8,12 +8,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.stage.application.StageService;
+import com.festago.stage.dto.StageResponse;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.ticket.application.TicketService;
 import com.festago.ticket.domain.TicketType;
 import com.festago.ticket.dto.StageTicketResponse;
 import com.festago.ticket.dto.StageTicketsResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -37,6 +40,9 @@ class StageControllerTest {
     @MockBean
     TicketService ticketService;
 
+    @MockBean
+    StageService stageService;
+
     @Test
     void 공연의_티켓_정보를_조회() throws Exception {
         // given
@@ -58,6 +64,25 @@ class StageControllerTest {
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);
         StageTicketsResponse actual = objectMapper.readValue(content, StageTicketsResponse.class);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void 공연의_정보를_조회() throws Exception {
+        // given
+        StageResponse expected = new StageResponse(1L, 1L, LocalDateTime.now(), LocalDateTime.now(), "푸우회장");
+        given(stageService.findDetail(anyLong()))
+            .willReturn(expected);
+
+        // when & then
+        String content = mockMvc.perform(get("/stages/{stageId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+        StageResponse actual = objectMapper.readValue(content, StageResponse.class);
         assertThat(actual).isEqualTo(expected);
     }
 }

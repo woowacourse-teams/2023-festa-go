@@ -1,8 +1,7 @@
 package com.festago.school.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
+import com.festago.common.util.Validator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -43,29 +43,28 @@ public class School extends BaseTimeEntity {
     }
 
     private void validate(String domain, String name) {
-        checkNotNull(domain, name);
-        checkLength(domain, name);
+        validateDomain(domain);
+        validateName(name);
     }
 
-    private void checkNotNull(String domain, String name) {
-        if (domain == null ||
-            name == null) {
-            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+    private void validateDomain(String domain) {
+        Assert.notNull(domain, "domain은 null 값이 될 수 없습니다.");
+        Validator.maxLength(domain, 50, "domain은 50글자를 넘을 수 없습니다.");
     }
 
-    private void checkLength(String domain, String name) {
-        if (overLength(domain, 50) ||
-            overLength(name, 255)) {
-            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+    private void validateName(String name) {
+        Assert.notNull(name, "name은 null 값이 될 수 없습니다.");
+        Validator.maxLength(name, 255, "name은 255글자를 넘을 수 없습니다.");
     }
 
-    private boolean overLength(String target, int maxLength) {
-        if (target == null) {
-            return false;
-        }
-        return target.length() > maxLength;
+    public void changeDomain(String domain) {
+        validateDomain(domain);
+        this.domain = domain;
+    }
+
+    public void changeName(String name) {
+        validateName(name);
+        this.name = name;
     }
 
     public Long getId() {
