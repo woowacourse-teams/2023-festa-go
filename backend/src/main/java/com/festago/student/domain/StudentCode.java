@@ -2,7 +2,6 @@ package com.festago.student.domain;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 import com.festago.member.domain.Member;
@@ -28,7 +27,7 @@ import org.springframework.util.StringUtils;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudentCode extends BaseTimeEntity {
+public class StudentCode {
 
     private static final int MIN_REQUEST_TERM_SECONDS = 30;
 
