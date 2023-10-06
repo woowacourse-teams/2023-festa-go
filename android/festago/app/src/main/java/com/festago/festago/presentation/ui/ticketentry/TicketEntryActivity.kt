@@ -61,7 +61,7 @@ class TicketEntryActivity : AppCompatActivity() {
                 }
             }
         }
-        repeatOnStarted {
+        repeatOnStarted(this) {
             TicketEntryService.ticketStateChangeEvent.collect { event ->
                 if (event) {
                     // TODO 티켓 스캔 화면 처리
