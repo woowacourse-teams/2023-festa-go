@@ -2,6 +2,7 @@ package com.festago.entry.domain;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
+import org.springframework.util.StringUtils;
 
 public class EntryCode {
 
@@ -13,13 +14,16 @@ public class EntryCode {
     private final long offset;
 
     public EntryCode(String code, long period, long offset) {
-        validate(period, offset);
+        validate(code, period, offset);
         this.code = code;
         this.period = period;
         this.offset = offset;
     }
 
-    private void validate(long period, long offset) {
+    private void validate(String code, long period, long offset) {
+        if (!StringUtils.hasText(code)) {
+            throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE);
+        }
         if (period <= MINIMUM_PERIOD) {
             throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_PERIOD);
         }
