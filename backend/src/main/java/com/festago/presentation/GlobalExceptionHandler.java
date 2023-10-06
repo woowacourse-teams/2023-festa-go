@@ -6,7 +6,6 @@ import com.festago.common.exception.FestaGoException;
 import com.festago.common.exception.ForbiddenException;
 import com.festago.common.exception.InternalServerException;
 import com.festago.common.exception.NotFoundException;
-import com.festago.common.exception.TooManyRequestException;
 import com.festago.common.exception.UnauthorizedException;
 import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.presentation.auth.AuthenticateContext;
@@ -85,12 +84,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(NotFoundException e, HttpServletRequest request) {
         logInfo(e, request);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.from(e));
-    }
-
-    @ExceptionHandler(TooManyRequestException.class)
-    public ResponseEntity<ErrorResponse> handle(TooManyRequestException e, HttpServletRequest request) {
-        logInfo(e, request);
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ErrorResponse.from(e));
     }
 
     @ExceptionHandler(InternalServerException.class)

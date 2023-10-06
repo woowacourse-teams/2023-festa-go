@@ -20,6 +20,7 @@ import com.festago.ticketing.dto.TicketingRequest;
 import com.festago.ticketing.repository.MemberTicketRepository;
 import java.time.Clock;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,11 @@ class TicketingServiceTest {
 
     @InjectMocks
     TicketingService ticketingService;
+
+    @BeforeEach
+    void setUp() {
+
+    }
 
     @Test
     void 재학생용_티켓인데_학생인증이_되지_않았으면_예외() {

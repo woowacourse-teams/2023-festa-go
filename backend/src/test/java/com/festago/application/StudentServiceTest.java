@@ -1,41 +1,33 @@
-package com.festago.student.application;
+package com.festago.application;
 
 import static com.festago.common.exception.ErrorCode.ALREADY_STUDENT_VERIFIED;
 import static com.festago.common.exception.ErrorCode.DUPLICATE_STUDENT_EMAIL;
 import static com.festago.common.exception.ErrorCode.INVALID_STUDENT_VERIFICATION_CODE;
 import static com.festago.common.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
-import static com.festago.common.exception.ErrorCode.TOO_FREQUENT_REQUESTS;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
-import com.festago.common.exception.TooManyRequestException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
+import com.festago.student.application.MailClient;
+import com.festago.student.application.StudentService;
+import com.festago.student.application.VerificationCodeProvider;
 import com.festago.student.domain.StudentCode;
 import com.festago.student.domain.VerificationCode;
 import com.festago.student.dto.StudentSendMailRequest;
 import com.festago.student.dto.StudentVerificateRequest;
-import com.festago.student.infrastructure.MockMailClient;
-import com.festago.student.infrastructure.RandomVerificationCodeProvider;
 import com.festago.student.repository.StudentCodeRepository;
 import com.festago.student.repository.StudentRepository;
 import com.festago.support.MemberFixture;
-import com.festago.support.SchoolFixture;
-import com.festago.support.SetUpMockito;
-import com.festago.support.StudentCodeFixture;
-import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
@@ -43,19 +35,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
+@ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
 
-    @Spy
-    MailClient mailClient = new MockMailClient();
+    @InjectMocks
+    StudentService studentService;
 
-    @Spy
-    VerificationCodeProvider codeProvider = new RandomVerificationCodeProvider();
+    @Mock
+    MailClient mailClient;
+
+    @Mock
+    VerificationCodeProvider codeProvider;
 
     @Mock
     StudentCodeRepository studentCodeRepository;
@@ -69,108 +63,119 @@ class StudentServiceTest {
     @Mock
     StudentRepository studentRepository;
 
-    @Spy
-    Clock clock = Clock.systemDefaultZone();
-
-    @InjectMocks
-    StudentService studentService;
-
     @Nested
-    class 학생_인증_메일_전송_요청 {
-
-        StudentSendMailRequest request;
-
-        @BeforeEach
-        void setUp() {
-            request = new StudentSendMailRequest("ash", 1L);
-            Member member = MemberFixture.member().id(1L).build();
-            School school = SchoolFixture.school().id(1L).build();
-
-            SetUpMockito
-                .given(memberRepository.findById(anyLong()))
-                .willReturn(Optional.of(member));
-            SetUpMockito
-                .given(schoolRepository.findById(anyLong()))
-                .willReturn(Optional.of(school));
-            SetUpMockito
-                .given(studentCodeRepository.findByMemberId(anyLong()))
-                .willReturn(Optional.empty());
-            SetUpMockito
-                .given(studentRepository.existsByMemberId(anyLong()))
-                .willReturn(false);
-            SetUpMockito
-                .given(studentRepository.existsByUsernameAndSchoolId(anyString(), anyLong()))
-                .willReturn(false);
-        }
+    class 인증_메일_전송 {
 
         @Test
-        void 존재하지_않는_멤버이면_예외() {
+        void 이미_학생인증정보가_존재하면_예외() {
             // given
-            given(memberRepository.findById(anyLong()))
-                .willReturn(Optional.empty());
-
-            // when & then
-            assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
-        }
-
-        @Test
-        void 존재하지_않는_학교면_예외() {
-            // given
-            given(schoolRepository.findById(anyLong()))
-                .willReturn(Optional.empty());
-
-            // when & then
-            assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessage(SCHOOL_NOT_FOUND.getMessage());
-        }
-
-        @Test
-        void 너무_잦은_요청이면_예외() {
-            // given
-            StudentSendMailRequest request = new StudentSendMailRequest("ash", 1L);
-            LocalDateTime currentTime = LocalDateTime.now(clock);
-            LocalDateTime issuedAt = currentTime.minusSeconds(30);
-            StudentCode studentCode = StudentCodeFixture.studentCode().issuedAt(issuedAt).build();
-            given(studentCodeRepository.findByMemberId(anyLong()))
-                .willReturn(Optional.of(studentCode));
-
-            // when
-            assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
-                .isInstanceOf(TooManyRequestException.class)
-                .hasMessage(TOO_FREQUENT_REQUESTS.getMessage());
-        }
-
-        @Test
-        void 이미_존재하는_학생이면_예외() {
-            // given
-            given(studentRepository.existsByMemberId(anyLong()))
+            Long memberId = 1L;
+            Long schoolId = 1L;
+            String username = "user";
+            StudentSendMailRequest request = new StudentSendMailRequest(username, schoolId);
+            given(studentRepository.existsByMemberId(memberId))
                 .willReturn(true);
 
             // when & then
-            assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
+            assertThatThrownBy(() -> studentService.sendVerificationMail(memberId, request))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ALREADY_STUDENT_VERIFIED.getMessage());
         }
 
         @Test
-        void 이미_존재하는_이메일이면_예외() {
+        void 중복되는_이메일이면_예외() {
             // given
-            given(studentRepository.existsByUsernameAndSchoolId(anyString(), anyLong()))
+            Long memberId = 1L;
+            Long schoolId = 1L;
+            String username = "user";
+            StudentSendMailRequest request = new StudentSendMailRequest(username, schoolId);
+
+            given(studentRepository.existsByMemberId(memberId))
+                .willReturn(false);
+            given(studentRepository.existsByUsernameAndSchoolId(username, schoolId))
                 .willReturn(true);
 
             // when & then
-            assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
+            assertThatThrownBy(() -> studentService.sendVerificationMail(memberId, request))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(DUPLICATE_STUDENT_EMAIL.getMessage());
         }
 
         @Test
-        void 인증메일_전송() {
+        void 멤버가_없으면_예외() {
+            // given
+            Long memberId = 1L;
+            Long schoolId = 1L;
+            String username = "user";
+            StudentSendMailRequest request = new StudentSendMailRequest(username, schoolId);
+
+            given(studentRepository.existsByMemberId(memberId))
+                .willReturn(false);
+            given(studentRepository.existsByUsernameAndSchoolId(username, schoolId))
+                .willReturn(false);
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.empty());
+
+            // when & then
+            assertThatThrownBy(() -> studentService.sendVerificationMail(memberId, request))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        void 학교가_없으면_예외() {
+            // given
+            Long memberId = 1L;
+            Long schoolId = 1L;
+            String username = "user";
+            Member member = MemberFixture.member()
+                .id(memberId)
+                .build();
+            StudentSendMailRequest request = new StudentSendMailRequest(username, schoolId);
+
+            given(studentRepository.existsByMemberId(memberId))
+                .willReturn(false);
+            given(studentRepository.existsByUsernameAndSchoolId(username, schoolId))
+                .willReturn(false);
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.empty());
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.of(member));
+            given(schoolRepository.findById(schoolId))
+                .willReturn(Optional.empty());
+
+            // when & then
+            assertThatThrownBy(() -> studentService.sendVerificationMail(memberId, request))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(SCHOOL_NOT_FOUND.getMessage());
+        }
+
+
+        @Test
+        void 성공() {
+            // given
+            Long memberId = 1L;
+            Long schoolId = 1L;
+            String username = "user";
+            Member member = MemberFixture.member()
+                .id(memberId)
+                .build();
+            StudentSendMailRequest request = new StudentSendMailRequest(username, schoolId);
+
+            given(studentRepository.existsByMemberId(memberId))
+                .willReturn(false);
+            given(studentRepository.existsByUsernameAndSchoolId(username, schoolId))
+                .willReturn(false);
+            given(memberRepository.findById(memberId))
+                .willReturn(Optional.of(member));
+            given(schoolRepository.findById(schoolId))
+                .willReturn(Optional.of(new School(schoolId, "festago.ac.kr", "페스타고대학교")));
+            given(codeProvider.provide())
+                .willReturn(new VerificationCode("123456"));
+
+            // when & then
             assertThatNoException()
-                .isThrownBy(() -> studentService.sendVerificationMail(1L, request));
+                .isThrownBy(() -> studentService.sendVerificationMail(memberId, request));
         }
     }
 
