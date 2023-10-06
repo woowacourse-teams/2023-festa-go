@@ -1,7 +1,8 @@
 package com.festago.festival.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.common.exception.ValidException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
 import com.festago.common.util.Validator;
 import com.festago.school.domain.School;
 import jakarta.persistence.Entity;
@@ -83,7 +84,7 @@ public class Festival extends BaseTimeEntity {
         Validator.notNull(startDate, "startDate는 null 값이 될 수 없습니다.");
         Validator.notNull(endDate, "endDate는 null 값이 될 수 없습니다.");
         if (startDate.isAfter(endDate)) {
-            throw new ValidException("축제 시작 일은 종료일 이전이어야 합니다.");
+            throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_DURATION);
         }
     }
 

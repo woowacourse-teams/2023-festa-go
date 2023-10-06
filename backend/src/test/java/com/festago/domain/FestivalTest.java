@@ -4,7 +4,7 @@ import static com.festago.common.exception.ErrorCode.INVALID_FESTIVAL_DURATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.common.exception.ValidException;
+import com.festago.common.exception.BadRequestException;
 import com.festago.festival.domain.Festival;
 import com.festago.school.domain.School;
 import com.festago.support.FestivalFixture;
@@ -29,7 +29,7 @@ class FestivalTest {
 
         // when & then
         assertThatThrownBy(() -> new Festival("테코대학교", tomorrow, today, school))
-            .isInstanceOf(ValidException.class)
+            .isInstanceOf(BadRequestException.class)
             .hasMessage(INVALID_FESTIVAL_DURATION.getMessage());
     }
 
