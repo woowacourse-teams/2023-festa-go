@@ -16,4 +16,3 @@ alter table student_code
 -- StudentCode의 member_id UNIQUE 제약조건 추가
 alter table student_code
     modify column member_id bigint unique;
-정
