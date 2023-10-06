@@ -3,6 +3,7 @@ package com.festago.stage.domain;
 import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.ValidException;
 import com.festago.common.util.Validator;
 import com.festago.festival.domain.Festival;
 import com.festago.ticket.domain.Ticket;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.util.Assert;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -75,14 +75,14 @@ public class Stage extends BaseTimeEntity {
     }
 
     private void validateFestival(Festival festival) {
-        Assert.notNull(festival, "festival은 null 값이 될 수 없습니다.");
+        Validator.notNull(festival, "festival은 null 값이 될 수 없습니다.");
     }
 
     private void validateTime(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
-        Assert.notNull(startTime, "startTime은 null 값이 될 수 없습니다.");
-        Assert.notNull(ticketOpenTime, "ticketOpenTime은 null 값이 될 수 없습니다.");
+        Validator.notNull(startTime, "startTime은 null 값이 될 수 없습니다.");
+        Validator.notNull(ticketOpenTime, "ticketOpenTime은 null 값이 될 수 없습니다.");
         if (ticketOpenTime.isAfter(startTime) || ticketOpenTime.isEqual(startTime)) {
-            throw new IllegalArgumentException("티켓 오픈 시간은 공연 시작 이전 이어야 합니다.");
+            throw new ValidException("티켓 오픈 시간은 공연 시작 이전 이어야 합니다.");
         }
         if (festival.isNotInDuration(startTime)) {
             throw new BadRequestException(ErrorCode.INVALID_STAGE_START_TIME);

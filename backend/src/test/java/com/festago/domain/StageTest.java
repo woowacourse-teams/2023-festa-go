@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ValidException;
 import com.festago.festival.domain.Festival;
 import com.festago.support.FestivalFixture;
 import com.festago.support.StageFixture;
@@ -79,7 +80,7 @@ class StageTest {
             .festival(festival)
             .build()
         )
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(ValidException.class)
             .hasMessage(INVALID_TICKET_OPEN_TIME.getMessage());
     }
 
@@ -100,5 +101,4 @@ class StageTest {
             .festival(festival)
             .build());
     }
-
 }

@@ -11,7 +11,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.util.Assert;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -48,12 +47,12 @@ public class School extends BaseTimeEntity {
     }
 
     private void validateDomain(String domain) {
-        Assert.notNull(domain, "domain은 null 값이 될 수 없습니다.");
+        Validator.notNull(domain, "domain은 null 값이 될 수 없습니다.");
         Validator.maxLength(domain, 50, "domain은 50글자를 넘을 수 없습니다.");
     }
 
     private void validateName(String name) {
-        Assert.notNull(name, "name은 null 값이 될 수 없습니다.");
+        Validator.notNull(name, "name은 null 값이 될 수 없습니다.");
         Validator.maxLength(name, 255, "name은 255글자를 넘을 수 없습니다.");
     }
 
