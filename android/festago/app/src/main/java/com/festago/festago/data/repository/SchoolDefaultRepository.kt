@@ -2,7 +2,7 @@ package com.festago.festago.data.repository
 
 import com.festago.festago.data.service.SchoolRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
-import com.festago.festago.data.util.runRetrofitWithErrorHandler
+import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.model.School
 import com.festago.festago.repository.SchoolRepository
 import javax.inject.Inject
@@ -12,7 +12,7 @@ class SchoolDefaultRepository @Inject constructor(
 ) : SchoolRepository {
 
     override suspend fun loadSchools(): Result<List<School>> =
-        runRetrofitWithErrorHandler { schoolRetrofitService.getSchools() }
+        runCatchingResponse { schoolRetrofitService.getSchools() }
             .onSuccessOrCatch { it.toDomain() }
 
     override suspend fun loadSchoolEmail(schoolId: Long): Result<String> {

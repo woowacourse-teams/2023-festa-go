@@ -22,7 +22,7 @@ fun <T> Response<T>.runCatchingWithErrorHandler(): Result<T> {
     }
 }
 
-suspend fun <T> runRetrofitWithErrorHandler(
+suspend fun <T> runCatchingResponse(
     block: suspend () -> Response<T>,
 ): Result<T> {
     try {
