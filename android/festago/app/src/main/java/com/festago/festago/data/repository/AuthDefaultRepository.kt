@@ -53,15 +53,4 @@ class AuthDefaultRepository @Inject constructor(
         }
         return result
     }
-
-    override suspend fun refreshSignIn(): Result<Unit> =
-        runCatchingResponse {
-            tokenRetrofitService.getOauthToken(
-                OauthRequest(
-                    socialAuthRepository.socialType,
-                    socialAuthRepository.getSocialToken().getOrThrow(),
-                    firebaseMessaging.token.await(),
-                ),
-            )
-        }.onSuccessOrCatch { tokenLocalDataSource.token = it.accessToken }
 }
