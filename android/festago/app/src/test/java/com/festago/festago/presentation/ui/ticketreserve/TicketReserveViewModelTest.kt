@@ -6,9 +6,9 @@ import com.festago.festago.model.Reservation
 import com.festago.festago.model.ReservationStage
 import com.festago.festago.model.ReservationTicket
 import com.festago.festago.model.ReservedTicket
+import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
 import com.festago.festago.repository.ReservationTicketRepository
-import com.festago.festago.repository.SocialAuthRepository
 import com.festago.festago.repository.TicketRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -32,7 +32,7 @@ class TicketReserveViewModelTest {
     private lateinit var reservationTicketRepository: ReservationTicketRepository
     private lateinit var festivalRepository: FestivalRepository
     private lateinit var ticketRepository: TicketRepository
-    private lateinit var socialAuthRepository: SocialAuthRepository
+    private lateinit var authRepository: AuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
     private val fakeReservationTickets = listOf(
@@ -69,13 +69,13 @@ class TicketReserveViewModelTest {
         reservationTicketRepository = mockk()
         festivalRepository = mockk()
         ticketRepository = mockk()
-        socialAuthRepository = mockk()
+        authRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
         vm = TicketReserveViewModel(
             reservationTicketRepository,
             festivalRepository,
             ticketRepository,
-            socialAuthRepository,
+            authRepository,
             analyticsHelper,
         )
     }
@@ -91,7 +91,7 @@ class TicketReserveViewModelTest {
     }
 
     private fun `인증 여부가 다음과 같을 때`(isSigned: Boolean) {
-        coEvery { socialAuthRepository.isSigned } answers { isSigned }
+        coEvery { authRepository.isSigned } answers { isSigned }
     }
 
     private fun `특정 공연의 티켓 타입 요청 결과가 다음과 같을 때`(result: Result<List<ReservationTicket>>) {

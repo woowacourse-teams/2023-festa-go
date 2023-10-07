@@ -5,7 +5,6 @@ import com.festago.festago.data.service.UserRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.presentation.util.loginWithKakao
-import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.SocialAuthRepository
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.TokenManagerProvider
@@ -16,14 +15,11 @@ import javax.inject.Inject
 
 class SocialAuthKakaoRepository @Inject constructor(
     private val userRetrofitService: UserRetrofitService,
-    private val authRepository: AuthRepository,
     @ApplicationContext private val context: Context,
 ) : SocialAuthRepository {
+    override val socialType: String = SOCIAL_TYPE_KAKAO
 
-    override val isSigned: Boolean
-        get() = authRepository.token != null
-
-    override suspend fun signIn(): Result<Unit> = runCatching {
+    override suspend fun getSocialToken(): Result<String> = runCatching {
         val oAuthToken = TokenManagerProvider.instance.manager.getToken()
 
         when {
@@ -41,13 +37,11 @@ class SocialAuthKakaoRepository @Inject constructor(
 
         val accessToken = TokenManagerProvider.instance.manager.getToken()?.accessToken
             ?: throw Exception("Unknown error")
-        authRepository.initToken(SOCIAL_TYPE_KAKAO, accessToken)
+        accessToken
     }
 
     override suspend fun signOut(): Result<Unit> {
-        UserApiClient.instance.logout {
-            authRepository.token = null
-        }
+        UserApiClient.instance.logout {}
         return Result.success(Unit)
     }
 
@@ -55,9 +49,7 @@ class SocialAuthKakaoRepository @Inject constructor(
         runCatchingResponse { userRetrofitService.deleteUserAccount() }
             .onSuccessOrCatch {
                 UserApiClient.instance.unlink { error ->
-                    if (error == null) {
-                        authRepository.token = null
-                    }
+                    if (error != null) throw error
                 }
             }
 

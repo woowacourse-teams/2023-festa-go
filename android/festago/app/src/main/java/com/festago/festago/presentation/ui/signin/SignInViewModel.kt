@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.repository.SocialAuthRepository
+import com.festago.festago.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val socialAuthRepository: SocialAuthRepository,
+    private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
@@ -28,7 +28,7 @@ class SignInViewModel @Inject constructor(
 
     fun signIn() {
         viewModelScope.launch {
-            socialAuthRepository.signIn().onSuccess {
+            authRepository.signIn().onSuccess {
                 _event.emit(SignInEvent.SignInSuccess)
             }.onFailure {
                 _event.emit(SignInEvent.SignInFailure)

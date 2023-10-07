@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.repository.SocialAuthRepository
+import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TicketRepository
 import com.festago.festago.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val ticketRepository: TicketRepository,
-    private val socialAuthRepository: SocialAuthRepository,
+    private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
@@ -33,7 +33,7 @@ class MyPageViewModel @Inject constructor(
     val event: SharedFlow<MyPageEvent> = _event.asSharedFlow()
 
     fun loadUserInfo() {
-        if (!socialAuthRepository.isSigned) {
+        if (!authRepository.isSigned) {
             viewModelScope.launch {
                 _event.emit(MyPageEvent.ShowSignIn)
                 _uiState.value = MyPageUiState.Error
@@ -61,7 +61,7 @@ class MyPageViewModel @Inject constructor(
 
     fun signOut() {
         viewModelScope.launch {
-            socialAuthRepository.signOut()
+            authRepository.signOut()
                 .onSuccess {
                     _event.emit(MyPageEvent.SignOutSuccess)
                     _uiState.value = MyPageUiState.Error
@@ -83,7 +83,7 @@ class MyPageViewModel @Inject constructor(
 
     fun deleteAccount() {
         viewModelScope.launch {
-            socialAuthRepository.deleteAccount()
+            authRepository.deleteAccount()
                 .onSuccess {
                     _event.emit(MyPageEvent.DeleteAccountSuccess)
                     _uiState.value = MyPageUiState.Error

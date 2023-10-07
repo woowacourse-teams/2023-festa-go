@@ -19,10 +19,10 @@ import javax.inject.Singleton
 interface RepositoryModule {
 
     @Binds
-    fun bindsTokenDefaultRepository(tokenRepository: AuthDefaultRepository): AuthRepository
+    fun bindsSocialDefaultRepository(authRepository: AuthDefaultRepository): AuthRepository
 
     @Binds
-    fun bindsAuthDefaultRepository(authRepository: SocialAuthKakaoRepository): SocialAuthRepository
+    fun bindsSocialAuthDefaultRepository(socialAuthRepository: SocialAuthKakaoRepository): SocialAuthRepository
 
     @Binds
     @Singleton

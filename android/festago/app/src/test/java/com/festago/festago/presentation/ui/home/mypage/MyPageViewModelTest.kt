@@ -7,7 +7,7 @@ import com.festago.festago.model.Stage
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCondition
 import com.festago.festago.model.UserProfile
-import com.festago.festago.repository.SocialAuthRepository
+import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TicketRepository
 import com.festago.festago.repository.UserRepository
 import io.mockk.coEvery
@@ -30,7 +30,7 @@ class MyPageViewModelTest {
     private lateinit var vm: MyPageViewModel
     private lateinit var userRepository: UserRepository
     private lateinit var ticketRepository: TicketRepository
-    private lateinit var socialAuthRepository: SocialAuthRepository
+    private lateinit var authRepository: AuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
     private val fakeUserProfile = UserProfile(
@@ -61,9 +61,9 @@ class MyPageViewModelTest {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         userRepository = mockk(relaxed = true)
         ticketRepository = mockk()
-        socialAuthRepository = mockk()
+        authRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
-        vm = MyPageViewModel(userRepository, ticketRepository, socialAuthRepository, analyticsHelper)
+        vm = MyPageViewModel(userRepository, ticketRepository, authRepository, analyticsHelper)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -74,7 +74,7 @@ class MyPageViewModelTest {
 
     private fun `로그인 상태가 다음과 같다`(result: Boolean) {
         coEvery {
-            socialAuthRepository.isSigned
+            authRepository.isSigned
         } answers {
             result
         }
@@ -223,7 +223,7 @@ class MyPageViewModelTest {
     fun `로그아웃에 성공하면 SignOutSuccess 이벤트가 발생하고 에러 상태이다`() = runTest {
         // given
         coEvery {
-            socialAuthRepository.signOut()
+            authRepository.signOut()
         } answers {
             Result.success(Unit)
         }
@@ -261,7 +261,7 @@ class MyPageViewModelTest {
     fun `회원 탈퇴에 성공하면 DeleteAccountSuccess 이벤트가 발생하고 에러상태다`() = runTest {
         // given
         coEvery {
-            socialAuthRepository.deleteAccount()
+            authRepository.deleteAccount()
         } answers {
             Result.success(Unit)
         }

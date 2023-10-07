@@ -1,7 +1,7 @@
 package com.festago.festago.presentation.ui.home
 
 import app.cash.turbine.test
-import com.festago.festago.repository.SocialAuthRepository
+import com.festago.festago.repository.AuthRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -17,14 +17,14 @@ import org.junit.Test
 
 class HomeViewModelTest {
     private lateinit var vm: HomeViewModel
-    private lateinit var socialAuthRepository: SocialAuthRepository
+    private lateinit var authRepository: AuthRepository
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        socialAuthRepository = mockk()
-        vm = HomeViewModel(socialAuthRepository)
+        authRepository = mockk()
+        vm = HomeViewModel(authRepository)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -34,7 +34,7 @@ class HomeViewModelTest {
     }
 
     private fun `사용자 인증 유무가 다음과 같을 때`(isSigned: Boolean) {
-        every { socialAuthRepository.isSigned } returns isSigned
+        every { authRepository.isSigned } returns isSigned
     }
 
     @Test
