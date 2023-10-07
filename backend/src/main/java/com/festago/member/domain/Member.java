@@ -18,6 +18,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.util.StringUtils;
 
 @Entity
 @SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image = '', social_id = null WHERE id=?")
@@ -76,7 +77,7 @@ public class Member extends BaseTimeEntity {
         this.socialId = socialId;
         this.socialType = socialType;
         this.nickname = nickname;
-        this.profileImage = (profileImage != null) ? profileImage : DEFAULT_IMAGE_URL;
+        this.profileImage = (StringUtils.hasText(profileImage)) ? profileImage : DEFAULT_IMAGE_URL;
     }
 
     private void validate(String socialId, SocialType socialType, String nickname, String profileImage) {
