@@ -40,10 +40,22 @@ object ApiModule {
 
     @Provides
     @Singleton
+    fun provideRetrofitConverterFactory(): retrofit2.Converter.Factory {
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+        return json.asConverterFactory("application/json".toMediaType())
+    }
+
+    @Provides
+    @Singleton
     @NormalRetrofitQualifier
-    fun providesNormalRetrofit(@BaseUrlQualifier baseUrl: String): Retrofit = Retrofit.Builder()
+    fun providesNormalRetrofit(
+        @BaseUrlQualifier baseUrl: String,
+        converterFactory: retrofit2.Converter.Factory,
+    ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(converterFactory)
         .build()
 
     @Provides
@@ -51,11 +63,12 @@ object ApiModule {
     @AuthRetrofitQualifier
     fun providesAuthRetrofit(
         @BaseUrlQualifier baseUrl: String,
-        okHttpClient: OkHttpClient
+        okHttpClient: OkHttpClient,
+        converterFactory: retrofit2.Converter.Factory,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(converterFactory)
         .build()
 
     @Provides
