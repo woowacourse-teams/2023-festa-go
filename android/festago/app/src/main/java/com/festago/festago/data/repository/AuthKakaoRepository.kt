@@ -11,7 +11,7 @@ import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class AuthDefaultRepository @Inject constructor(
+class AuthKakaoRepository @Inject constructor(
     private val userRetrofitService: UserRetrofitService,
     private val tokenRepository: TokenRepository,
     @ApplicationContext private val context: Context,

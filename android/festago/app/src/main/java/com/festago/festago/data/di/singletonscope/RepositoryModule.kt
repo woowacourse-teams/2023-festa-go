@@ -1,6 +1,6 @@
 package com.festago.festago.data.di.singletonscope
 
-import com.festago.festago.data.repository.AuthDefaultRepository
+import com.festago.festago.data.repository.AuthKakaoRepository
 import com.festago.festago.data.repository.FestivalDefaultRepository
 import com.festago.festago.data.repository.TicketDefaultRepository
 import com.festago.festago.data.repository.TokenDefaultRepository
@@ -22,7 +22,7 @@ interface RepositoryModule {
     fun bindsTokenDefaultRepository(tokenRepository: TokenDefaultRepository): TokenRepository
 
     @Binds
-    fun bindsAuthDefaultRepository(authRepository: AuthDefaultRepository): AuthRepository
+    fun bindsAuthDefaultRepository(authRepository: AuthKakaoRepository): AuthRepository
 
     @Binds
     @Singleton
