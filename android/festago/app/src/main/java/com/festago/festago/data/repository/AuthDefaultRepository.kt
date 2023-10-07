@@ -48,7 +48,7 @@ class AuthDefaultRepository @Inject constructor(
 
     override suspend fun deleteAccount(): Result<Unit> = runCatchingResponse {
         socialAuthRepository.deleteAccount()
-        tokenRetrofitService.deleteUserAccount()
+        tokenRetrofitService.deleteUserAccount("Bearer ${tokenLocalDataSource.token}")
     }.onSuccessOrCatch {
         tokenLocalDataSource.token = null
     }

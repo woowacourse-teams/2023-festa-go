@@ -5,6 +5,7 @@ import com.festago.festago.data.dto.OauthTokenResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface TokenRetrofitService {
@@ -15,5 +16,7 @@ interface TokenRetrofitService {
     ): Response<OauthTokenResponse>
 
     @DELETE("/auth")
-    suspend fun deleteUserAccount(): Response<Unit>
+    suspend fun deleteUserAccount(
+        @Header("authorization") token: String,
+    ): Response<Unit>
 }
