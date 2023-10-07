@@ -22,7 +22,7 @@ class TokenDefaultRepository @Inject constructor(
             tokenLocalDataSource.token = value
         }
 
-    override suspend fun signIn(socialType: String, token: String): Result<Unit> =
+    override suspend fun initToken(socialType: String, token: String): Result<Unit> =
         runCatchingResponse {
             val fcmToken = firebaseMessaging.token.await()
             tokenRetrofitService.getOauthToken(OauthRequest(socialType, token, fcmToken))

@@ -20,7 +20,7 @@ class AuthDefaultRepository @Inject constructor(
         get() = tokenRepository.token
 
     override suspend fun signIn(socialType: String, token: String): Result<Unit> {
-        return tokenRepository.signIn(socialType, token)
+        return tokenRepository.initToken(socialType, token)
     }
 
     override suspend fun signOut(): Result<Unit> {
