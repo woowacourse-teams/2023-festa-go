@@ -4,9 +4,10 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class HttpAuthInterceptor(private val tokenManager: TokenManager) : Interceptor {
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(request = getNewRequest(chain))
-        if (response.code == 401) {
+        if (isResponseSuccess(response)) {
             response.close()
 
             tokenManager.refreshToken()
@@ -14,6 +15,8 @@ class HttpAuthInterceptor(private val tokenManager: TokenManager) : Interceptor 
         }
         return response
     }
+
+    private fun isResponseSuccess(response: Response) = response.code == RESPONSE_CODE_SUCCESS
 
     private fun getNewRequest(chain: Interceptor.Chain) = chain.request()
         .newBuilder()
@@ -23,5 +26,6 @@ class HttpAuthInterceptor(private val tokenManager: TokenManager) : Interceptor 
     companion object {
         private const val HEADER_AUTHORIZATION = "Authorization"
         private const val AUTHORIZATION_TOKEN_FORMAT = "Bearer %s"
+        private const val RESPONSE_CODE_SUCCESS = 200
     }
 }
