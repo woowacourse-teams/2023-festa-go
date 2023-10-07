@@ -8,7 +8,6 @@ import com.festago.festago.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,12 +20,6 @@ class SignInViewModel @Inject constructor(
     private val _event = MutableSharedFlow<SignInEvent>()
     val event: SharedFlow<SignInEvent> = _event
 
-    private val exceptionHandler: CoroutineExceptionHandler =
-        CoroutineExceptionHandler { _, throwable ->
-            _event.setValue(SignInEvent.SignInFailure)
-            analyticsHelper.logNetworkFailure(KEY_SIGN_IN_LOG, throwable.message.toString())
-        }
-
     fun signInKakao() {
         viewModelScope.launch {
             _event.emit(SignInEvent.ShowSignInPage)
@@ -34,7 +27,7 @@ class SignInViewModel @Inject constructor(
     }
 
     fun signIn(token: String) {
-        viewModelScope.launch(exceptionHandler) {
+        viewModelScope.launch {
             authRepository.signIn(SOCIAL_TYPE_KAKAO, token)
                 .onSuccess {
                     _event.emit(SignInEvent.SignInSuccess)

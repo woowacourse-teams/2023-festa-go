@@ -1,6 +1,7 @@
 package com.festago.festago.presentation.ui.signin
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.repository.AuthRepository
 import io.mockk.coEvery
@@ -9,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
@@ -41,48 +43,59 @@ class SignInViewModelTest {
     }
 
     @Test
-    fun `로그인 성공하면 성공 이벤트가 발생한다`() {
+    fun `로그인 성공하면 성공 이벤트가 발생한다`() = runTest {
         // given
         coEvery { authRepository.signIn(any(), any()) } answers { Result.success(Unit) }
 
-        // when
-        vm.signIn("testToken")
+        vm.event.test {
+            // when
+            vm.signIn("testToken")
 
-        // then
-        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.SignInSuccess::class.java)
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(SignInEvent.SignInSuccess::class.java)
+        }
     }
 
     @Test
-    fun `로그인 실패하면 실패 이벤트가 발생한다`() {
+    fun `로그인 실패하면 실패 이벤트가 발생한다`() = runTest {
         // given
         coEvery {
             authRepository.signIn(any(), any())
         } answers { Result.failure(Exception()) }
 
-        // when
-        vm.signIn("testToken")
+        vm.event.test {
+            // when
+            vm.signIn("testToken")
 
-        // then
-        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)
+        }
     }
 
     @Test
-    fun `로그인을 요청하면 로그인 화면을 보여주는 이벤트가 발생한다`() {
+    fun `로그인을 요청하면 로그인 화면을 보여주는 이벤트가 발생한다`() = runTest {
         // given
-        // when
-        vm.signInKakao()
 
-        // then
-        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.ShowSignInPage::class.java)
+        vm.event.test {
+            // when
+            vm.signInKakao()
+
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(SignInEvent.ShowSignInPage::class.java)
+        }
     }
 
     @Test
-    fun `FCM 토큰을 불러오지 못하면 실패 이벤트가 발생한다`() {
+    fun `FCM 토큰을 불러오지 못하면 실패 이벤트가 발생한다`() = runTest {
         // given
-        // when
-        vm.signIn("testToken")
+        coEvery { authRepository.signIn(any(), any()) } answers { Result.failure(Exception()) }
 
-        // then
-        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)
+        vm.event.test {
+            // when
+            vm.signIn("testToken")
+
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)
+        }
     }
 }
