@@ -86,7 +86,6 @@ class SignInViewModelTest {
         vm.signIn("testToken")
 
         // then
-        println(vm.event.getValue())
         assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)
     }
 }

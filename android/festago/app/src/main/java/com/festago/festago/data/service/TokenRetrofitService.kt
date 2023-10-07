@@ -10,6 +10,6 @@ interface TokenRetrofitService {
 
     @POST("/auth/oauth2")
     suspend fun getOauthToken(
-        @Body oauthRequestLegacy: OauthRequest,
+        @Body oauthRequest: OauthRequest,
     ): Response<OauthTokenResponse>
 }

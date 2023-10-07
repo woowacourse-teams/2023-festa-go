@@ -2,7 +2,6 @@ package com.festago.festago.data.retrofit
 
 import com.festago.festago.repository.TokenRepository
 import com.kakao.sdk.auth.TokenManagerProvider
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class TokenManager @Inject constructor(
@@ -13,12 +12,10 @@ class TokenManager @Inject constructor(
         get() = tokenRepository.token ?: NULL_TOKEN
 
     fun refreshToken() {
-        runBlocking {
-            tokenRepository.refreshToken(
-                socialType = "KAKAO",
-                token = TokenManagerProvider.instance.manager.getToken()?.accessToken ?: NULL_TOKEN,
-            )
-        }
+        tokenRepository.refreshToken(
+            socialType = "KAKAO",
+            token = TokenManagerProvider.instance.manager.getToken()?.accessToken ?: NULL_TOKEN,
+        )
     }
 
     companion object {
