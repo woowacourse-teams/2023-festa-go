@@ -3,7 +3,8 @@ package com.festago.festago.data.repository
 import com.festago.festago.data.datasource.TokenDataSource
 import com.festago.festago.data.dto.OauthRequest
 import com.festago.festago.data.service.TokenRetrofitService
-import com.festago.festago.data.util.runCatchingWithErrorHandler
+import com.festago.festago.data.util.onSuccessOrCatch
+import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.repository.TokenRepository
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -18,23 +19,14 @@ class TokenDefaultRepository @Inject constructor(
             tokenLocalDataSource.token = value
         }
 
-    override suspend fun signIn(socialType: String, token: String): Result<Unit> {
-        tokenRetrofitService.getOauthToken(OauthRequest(socialType, token))
-            .runCatchingWithErrorHandler()
-            .getOrElse { error -> return Result.failure(error) }
-            .let {
-                tokenLocalDataSource.token = it.accessToken
-                return Result.success(Unit)
-            }
-    }
+    override suspend fun signIn(socialType: String, token: String): Result<Unit> =
+        runCatchingResponse {
+            tokenRetrofitService.getOauthToken(OauthRequest(socialType, token))
+        }.onSuccessOrCatch { tokenLocalDataSource.token = it.accessToken }
 
     override fun refreshToken(token: String): Result<Unit> = runBlocking {
-        tokenRetrofitService.getOauthToken(OauthRequest("KAKAO", token))
-            .runCatchingWithErrorHandler()
-            .getOrElse { error -> return@runBlocking Result.failure(error) }
-            .let {
-                tokenLocalDataSource.token = it.accessToken
-                return@runBlocking Result.success(Unit)
-            }
+        runCatchingResponse {
+            tokenRetrofitService.getOauthToken(OauthRequest("KAKAO", token))
+        }.onSuccessOrCatch { tokenLocalDataSource.token = it.accessToken }
     }
 }

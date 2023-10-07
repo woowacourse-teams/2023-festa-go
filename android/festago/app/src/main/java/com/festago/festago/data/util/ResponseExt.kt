@@ -2,18 +2,21 @@ package com.festago.festago.data.util
 
 import retrofit2.Response
 
-fun <T> Response<T>.runCatchingWithErrorHandler(): Result<T> {
+suspend fun <T> runCatchingResponse(
+    block: suspend () -> Response<T>,
+): Result<T> {
     try {
-        if (this.isSuccessful && this.body() != null) {
-            return Result.success(this.body()!!)
+        val response = block()
+        if (response.isSuccessful && response.body() != null) {
+            return Result.success(response.body()!!)
         }
 
         return Result.failure(
             Throwable(
                 "{" +
-                    "code: ${this.code()}," +
-                    "message: ${this.message()}, " +
-                    "body: ${this.errorBody()?.string()}" +
+                    "code: ${response.code()}," +
+                    "message: ${response.message()}, " +
+                    "body: ${response.errorBody()?.string()}" +
                     "}",
             ),
         )
