@@ -1,8 +1,8 @@
 package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.BuildConfig
-import com.festago.festago.data.datasource.TokenDataSource
 import com.festago.festago.data.retrofit.HttpAuthInterceptor
+import com.festago.festago.repository.AuthRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -33,9 +33,9 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(tokenDataSource: TokenDataSource): OkHttpClient = OkHttpClient
+    fun provideOkHttpClient(authRepository: AuthRepository): OkHttpClient = OkHttpClient
         .Builder()
-        .addInterceptor(HttpAuthInterceptor(tokenDataSource))
+        .addInterceptor(HttpAuthInterceptor(authRepository))
         .build()
 
     @Provides

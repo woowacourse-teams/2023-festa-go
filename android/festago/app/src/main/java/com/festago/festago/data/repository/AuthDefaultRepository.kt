@@ -3,7 +3,6 @@ package com.festago.festago.data.repository
 import com.festago.festago.data.datasource.TokenDataSource
 import com.festago.festago.data.dto.OauthRequest
 import com.festago.festago.data.service.TokenRetrofitService
-import com.festago.festago.data.service.UserRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.repository.AuthRepository
@@ -14,7 +13,6 @@ import javax.inject.Inject
 
 class AuthDefaultRepository @Inject constructor(
     private val socialAuthRepository: SocialAuthRepository,
-    private val userRetrofitService: UserRetrofitService,
     private val tokenRetrofitService: TokenRetrofitService,
     private val tokenLocalDataSource: TokenDataSource,
     private val firebaseMessaging: FirebaseMessaging,
@@ -50,7 +48,7 @@ class AuthDefaultRepository @Inject constructor(
 
     override suspend fun deleteAccount(): Result<Unit> = runCatchingResponse {
         socialAuthRepository.deleteAccount()
-        userRetrofitService.deleteUserAccount()
+        tokenRetrofitService.deleteUserAccount()
     }.onSuccessOrCatch {
         tokenLocalDataSource.token = null
     }
