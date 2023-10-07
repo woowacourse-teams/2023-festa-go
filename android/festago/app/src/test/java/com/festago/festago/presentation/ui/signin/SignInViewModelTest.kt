@@ -5,7 +5,6 @@ import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.repository.AuthRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -29,8 +28,6 @@ class SignInViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-
-        mockkStatic("kotlinx.coroutines.tasks.TasksKt")
 
         authRepository = mockk(relaxed = true)
         analyticsHelper = mockk(relaxed = true)
