@@ -8,7 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class TokenLocalDataSource @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
 ) : TokenDataSource {
 
     private val sharedPreference: SharedPreferences by lazy {
@@ -26,8 +26,22 @@ class TokenLocalDataSource @Inject constructor(
             sharedPreference.edit().putString(TOKEN_KEY, value).apply()
         }
 
+    override var socialType: String
+        get() = sharedPreference.getString(SOCIAL_TYPE_KEY, "") ?: ""
+        set(value) {
+            sharedPreference.edit().putString(SOCIAL_TYPE_KEY, value).apply()
+        }
+
+    override var socialToken: String
+        get() = sharedPreference.getString(SOCIAL_TOKEN_KEY, "") ?: ""
+        set(value) {
+            sharedPreference.edit().putString(SOCIAL_TOKEN_KEY, value).apply()
+        }
+
     companion object {
         private const val ENCRYPTED_PREF_FILE = "encrypted_pref_file"
         private const val TOKEN_KEY = "TOKEN_KEY"
+        private const val SOCIAL_TYPE_KEY = "SOCIAL_TYPE_KEY"
+        private const val SOCIAL_TOKEN_KEY = "SOCIAL_TOKEN_KEY"
     }
 }
