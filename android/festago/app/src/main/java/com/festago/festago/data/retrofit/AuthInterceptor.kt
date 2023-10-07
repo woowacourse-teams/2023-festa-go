@@ -5,7 +5,7 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class HttpAuthInterceptor(private val authRepository: AuthRepository) : Interceptor {
+class AuthInterceptor(private val authRepository: AuthRepository) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(request = getNewRequest(chain))
