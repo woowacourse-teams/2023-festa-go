@@ -131,13 +131,14 @@ class TicketReserveActivity : AppCompatActivity() {
                 festivalId = intent.getLongExtra(KEY_FESTIVAL_ID, -1),
                 refresh = true,
             )
+            binding.srlTicketReserve.isRefreshing = false
         }
     }
 
     private fun updateUi(uiState: TicketReserveUiState) = when (uiState) {
         is TicketReserveUiState.Loading,
         is TicketReserveUiState.Error,
-        -> binding.srlTicketReserve.isRefreshing = false
+        -> Unit
 
         is TicketReserveUiState.Success -> updateSuccess(uiState)
     }
@@ -145,7 +146,6 @@ class TicketReserveActivity : AppCompatActivity() {
     private fun updateSuccess(successState: TicketReserveUiState.Success) {
         headerAdapter.submitList(listOf(successState.festival))
         contentsAdapter.submitList(successState.stages)
-        binding.srlTicketReserve.isRefreshing = false
     }
 
     companion object {
