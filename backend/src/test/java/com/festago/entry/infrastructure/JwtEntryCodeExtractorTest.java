@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.common.exception.BadRequestException;
-import com.festago.common.exception.ValidException;
 import com.festago.entry.domain.EntryCodePayload;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -110,8 +109,8 @@ class JwtEntryCodeExtractorTest {
 
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
-            .isInstanceOf(ValidException.class)
-            .hasMessage("entryState의 인덱스은/는 null이 될 수 없습니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("entryState의 인덱스는 null이 될 수 없습니다.");
     }
 
     @Test
