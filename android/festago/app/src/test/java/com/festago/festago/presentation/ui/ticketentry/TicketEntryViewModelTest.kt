@@ -38,7 +38,7 @@ class TicketEntryViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun `티켓 요쳥 결과는 다음과 같다`(result: Result<Ticket>) {
+    private fun `티켓 요쳥 결과는 다음과 같을 때`(result: Result<Ticket>) {
         coEvery {
             ticketRepository.loadTicket(any())
         } answers {
@@ -46,7 +46,7 @@ class TicketEntryViewModelTest {
         }
     }
 
-    private fun `티켓 코드 요청 결과는 다음과 같다`(result: Result<TicketCode>) {
+    private fun `티켓 코드 요청 결과는 다음과 같을 때`(result: Result<TicketCode>) {
         coEvery {
             ticketRepository.loadTicketCode(any())
         } answers {
@@ -57,8 +57,8 @@ class TicketEntryViewModelTest {
     @Test
     fun `티켓 받아오기에 성공하면 성공 상태이고 티켓 코드와 티켓을 가지고 있다`() {
         // given
-        `티켓 요쳥 결과는 다음과 같다`(Result.success(TicketFixture.getMemberTicket()))
-        `티켓 코드 요청 결과는 다음과 같다`(Result.success(getFakeTicketCode()))
+        `티켓 요쳥 결과는 다음과 같을 때`(Result.success(TicketFixture.getMemberTicket()))
+        `티켓 코드 요청 결과는 다음과 같을 때`(Result.success(getFakeTicketCode()))
 
         // when
         vm.loadTicket(1L)
@@ -85,8 +85,8 @@ class TicketEntryViewModelTest {
     @Test
     fun `티켓 받아오기에 실패하면 에러 상태다`() {
         // given
-        `티켓 요쳥 결과는 다음과 같다`(Result.failure(Exception()))
-        `티켓 코드 요청 결과는 다음과 같다`(Result.success(getFakeTicketCode()))
+        `티켓 요쳥 결과는 다음과 같을 때`(Result.failure(Exception()))
+        `티켓 코드 요청 결과는 다음과 같을 때`(Result.success(getFakeTicketCode()))
 
         // when
         vm.loadTicket(1L)
@@ -107,8 +107,8 @@ class TicketEntryViewModelTest {
     @Test
     fun `티켓 코드 받아오기에 실패하면 에러 상태다`() {
         // given
-        `티켓 요쳥 결과는 다음과 같다`(Result.success(TicketFixture.getMemberTicket()))
-        `티켓 코드 요청 결과는 다음과 같다`(Result.failure(Exception()))
+        `티켓 요쳥 결과는 다음과 같을 때`(Result.success(TicketFixture.getMemberTicket()))
+        `티켓 코드 요청 결과는 다음과 같을 때`(Result.failure(Exception()))
 
         // when
         vm.loadTicket(1L)
@@ -129,7 +129,7 @@ class TicketEntryViewModelTest {
     @Test
     fun `티켓만 받아오면 성공해도 로딩 상태다`() = runTest {
         // given
-        `티켓 요쳥 결과는 다음과 같다`(Result.success(TicketFixture.getMemberTicket()))
+        `티켓 요쳥 결과는 다음과 같을 때`(Result.success(TicketFixture.getMemberTicket()))
 
         // when
         vm.loadTicket(1L)
@@ -149,7 +149,7 @@ class TicketEntryViewModelTest {
     @Test
     fun `티켓만 받으면 실패해도 로딩 상태다`() {
         // given
-        `티켓 요쳥 결과는 다음과 같다`(Result.failure(Exception()))
+        `티켓 요쳥 결과는 다음과 같을 때`(Result.failure(Exception()))
 
         // when
         vm.loadTicket(1L)
@@ -169,7 +169,7 @@ class TicketEntryViewModelTest {
     @Test
     fun `티켓코드만 받아오면 결과가 성공해도 로딩 상태다`() {
         // given
-        `티켓 코드 요청 결과는 다음과 같다`(Result.success(getFakeTicketCode()))
+        `티켓 코드 요청 결과는 다음과 같을 때`(Result.success(getFakeTicketCode()))
 
         // when
         vm.loadTicketCode(1L)
@@ -189,7 +189,7 @@ class TicketEntryViewModelTest {
     @Test
     fun `티켓 코드만 받으면 결과에 실패해도 로딩 상태다`() {
         // given
-        `티켓 코드 요청 결과는 다음과 같다`(Result.failure(Exception()))
+        `티켓 코드 요청 결과는 다음과 같을 때`(Result.failure(Exception()))
 
         // when
         vm.loadTicketCode(1L)
