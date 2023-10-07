@@ -2,8 +2,6 @@ package com.festago.festago.data.repository
 
 import android.content.Context
 import com.festago.festago.data.service.UserRetrofitService
-import com.festago.festago.data.util.onSuccessOrCatch
-import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.presentation.util.loginWithKakao
 import com.festago.festago.repository.SocialAuthRepository
 import com.kakao.sdk.auth.AuthApiClient
@@ -45,13 +43,12 @@ class SocialAuthKakaoRepository @Inject constructor(
         return Result.success(Unit)
     }
 
-    override suspend fun deleteAccount(): Result<Unit> =
-        runCatchingResponse { userRetrofitService.deleteUserAccount() }
-            .onSuccessOrCatch {
-                UserApiClient.instance.unlink { error ->
-                    if (error != null) throw error
-                }
-            }
+    override suspend fun deleteAccount(): Result<Unit> {
+        UserApiClient.instance.unlink { error ->
+            if (error != null) throw error
+        }
+        return Result.success(Unit)
+    }
 
     companion object {
         private const val SOCIAL_TYPE_KAKAO = "KAKAO"
