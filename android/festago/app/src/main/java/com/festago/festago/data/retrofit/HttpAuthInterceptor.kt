@@ -12,10 +12,15 @@ class HttpAuthInterceptor(private val authRepository: AuthRepository) : Intercep
         if (!isResponseSuccess(response)) {
             response.close()
 
-            runBlocking { authRepository.signIn() }
+            refreshToken()
             return chain.proceed(request = getNewRequest(chain))
         }
         return response
+    }
+
+    @Synchronized
+    private fun refreshToken() {
+        runBlocking { authRepository.signIn() }
     }
 
     private fun isResponseSuccess(response: Response) = response.code == RESPONSE_CODE_SUCCESS
