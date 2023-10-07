@@ -22,16 +22,16 @@ class TokenDefaultRepository @Inject constructor(
             tokenLocalDataSource.token = value
         }
 
-    override suspend fun initToken(socialType: String, token: String): Result<Unit> =
+    override suspend fun initToken(socialType: String, socialToken: String): Result<Unit> =
         runCatchingResponse {
             val fcmToken = firebaseMessaging.token.await()
-            tokenRetrofitService.getOauthToken(OauthRequest(socialType, token, fcmToken))
+            tokenRetrofitService.getOauthToken(OauthRequest(socialType, socialToken, fcmToken))
         }.onSuccessOrCatch { tokenLocalDataSource.token = it.accessToken }
 
-    override fun refreshToken(socialType: String, token: String): Result<Unit> = runBlocking {
+    override fun refreshToken(socialType: String, socialToken: String): Result<Unit> = runBlocking {
         runCatchingResponse {
             val fcmToken = firebaseMessaging.token.await()
-            tokenRetrofitService.getOauthToken(OauthRequest(socialType, token, fcmToken))
+            tokenRetrofitService.getOauthToken(OauthRequest(socialType, socialToken, fcmToken))
         }.onSuccessOrCatch { tokenLocalDataSource.token = it.accessToken }
     }
 }

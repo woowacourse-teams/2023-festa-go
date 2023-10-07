@@ -14,7 +14,7 @@ class TokenManager @Inject constructor(
     fun refreshToken() {
         tokenRepository.refreshToken(
             socialType = "KAKAO",
-            token = TokenManagerProvider.instance.manager.getToken()?.accessToken ?: NULL_TOKEN,
+            socialToken = TokenManagerProvider.instance.manager.getToken()?.accessToken ?: NULL_TOKEN,
         )
     }
 
