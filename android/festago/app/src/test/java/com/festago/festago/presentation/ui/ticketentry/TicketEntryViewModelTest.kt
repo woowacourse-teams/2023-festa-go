@@ -39,19 +39,11 @@ class TicketEntryViewModelTest {
     }
 
     private fun `티켓 요쳥 결과는 다음과 같을 때`(result: Result<Ticket>) {
-        coEvery {
-            ticketRepository.loadTicket(any())
-        } answers {
-            result
-        }
+        coEvery { ticketRepository.loadTicket(any()) } returns result
     }
 
     private fun `티켓 코드 요청 결과는 다음과 같을 때`(result: Result<TicketCode>) {
-        coEvery {
-            ticketRepository.loadTicketCode(any())
-        } answers {
-            result
-        }
+        coEvery { ticketRepository.loadTicketCode(any()) } returns result
     }
 
     @Test
