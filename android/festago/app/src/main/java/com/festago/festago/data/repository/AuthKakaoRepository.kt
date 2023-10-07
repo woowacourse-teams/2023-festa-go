@@ -7,8 +7,11 @@ import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.presentation.util.loginWithKakao
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TokenRepository
+import com.kakao.sdk.auth.AuthApiClient
+import com.kakao.sdk.auth.TokenManagerProvider
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.util.Date
 import javax.inject.Inject
 
 class AuthKakaoRepository @Inject constructor(
@@ -20,9 +23,25 @@ class AuthKakaoRepository @Inject constructor(
     override val isSigned: Boolean
         get() = tokenRepository.token != null
 
-    override suspend fun signIn(): Result<Unit> {
-        val token = UserApiClient.loginWithKakao(context).accessToken
-        return tokenRepository.initToken(SOCIAL_TYPE_KAKAO, token)
+    override suspend fun signIn(): Result<Unit> = runCatching {
+        val oAuthToken = TokenManagerProvider.instance.manager.getToken()
+
+        when {
+            oAuthToken == null || oAuthToken.refreshTokenExpiresAt < Date() ->
+                UserApiClient.loginWithKakao(context)
+
+            oAuthToken.accessTokenExpiresAt < Date() -> {
+                AuthApiClient.instance.refreshToken { _, throwable ->
+                    if (throwable != null) {
+                        throw throwable
+                    }
+                }
+            }
+        }
+
+        val accessToken = TokenManagerProvider.instance.manager.getToken()?.accessToken
+            ?: throw Exception("Unknown error")
+        tokenRepository.initToken(SOCIAL_TYPE_KAKAO, accessToken)
     }
 
     override suspend fun signOut(): Result<Unit> {
