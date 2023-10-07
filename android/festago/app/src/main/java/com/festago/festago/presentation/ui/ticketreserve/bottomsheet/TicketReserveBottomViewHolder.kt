@@ -3,6 +3,7 @@ package com.festago.festago.presentation.ui.ticketreserve.bottomsheet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveBottomSheetBinding
 
 class TicketReserveBottomViewHolder(
@@ -17,6 +18,16 @@ class TicketReserveBottomViewHolder(
     fun bind(item: TicketReserveBottomItem) {
         binding.item = item
         binding.clLayout.isSelected = item.isSelected
+        binding.tvTicketType.text = item.ticket.ticketType.getString()
+    }
+
+    private fun BottomSheetTicketTypeArg.getString(): String {
+        val resId: Int = when (this) {
+            BottomSheetTicketTypeArg.STUDENT -> R.string.all_ticket_type_student
+            BottomSheetTicketTypeArg.VISITOR -> R.string.all_ticket_type_visitor
+            BottomSheetTicketTypeArg.OTHER -> R.string.all_ticket_type_other
+        }
+        return binding.root.context.getString(resId)
     }
 
     companion object {

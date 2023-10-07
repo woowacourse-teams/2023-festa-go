@@ -3,6 +3,7 @@ package com.festago.festago.presentation.ui.ticketreserve
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
@@ -21,6 +22,7 @@ import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.Show
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.BottomSheetReservationTicketArg
+import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.BottomSheetTicketTypeArg
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,6 +84,7 @@ class TicketReserveActivity : AppCompatActivity() {
         stageStartTime: LocalDateTime,
         reservationTickets: List<ReservationTicket>,
     ) {
+        Log.d("asdf", reservationTickets.toString())
         TicketReserveBottomSheetFragment.newInstance(
             stageStartTime.format(
                 DateTimeFormatter.ofPattern(
@@ -93,7 +96,7 @@ class TicketReserveActivity : AppCompatActivity() {
                 BottomSheetReservationTicketArg(
                     id = it.id,
                     remainAmount = it.remainAmount,
-                    ticketType = it.ticketType,
+                    ticketType = BottomSheetTicketTypeArg.from(it.ticketType),
                     totalAmount = it.totalAmount,
                 )
             },

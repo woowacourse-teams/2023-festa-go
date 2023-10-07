@@ -6,6 +6,7 @@ import com.festago.festago.model.Reservation
 import com.festago.festago.model.ReservationStage
 import com.festago.festago.model.ReservationTicket
 import com.festago.festago.model.ReservedTicket
+import com.festago.festago.model.TicketType
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
 import com.festago.festago.repository.ReservationTicketRepository
@@ -36,8 +37,8 @@ class TicketReserveViewModelTest {
     private lateinit var analyticsHelper: AnalyticsHelper
 
     private val fakeReservationTickets = listOf(
-        ReservationTicket(1, "재학생용", 219, 500),
-        ReservationTicket(1, "외부인용", 212, 300),
+        ReservationTicket(1, TicketType.STUDENT, 219, 500),
+        ReservationTicket(1, TicketType.VISITOR, 212, 300),
     )
     private val fakeReservationStage = ReservationStage(
         id = 1,
