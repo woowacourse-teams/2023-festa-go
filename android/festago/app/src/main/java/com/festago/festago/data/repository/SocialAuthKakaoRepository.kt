@@ -5,8 +5,8 @@ import com.festago.festago.data.service.UserRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.presentation.util.loginWithKakao
+import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.SocialAuthRepository
-import com.festago.festago.repository.TokenRepository
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.TokenManagerProvider
 import com.kakao.sdk.user.UserApiClient
@@ -16,12 +16,12 @@ import javax.inject.Inject
 
 class SocialAuthKakaoRepository @Inject constructor(
     private val userRetrofitService: UserRetrofitService,
-    private val tokenRepository: TokenRepository,
+    private val authRepository: AuthRepository,
     @ApplicationContext private val context: Context,
 ) : SocialAuthRepository {
 
     override val isSigned: Boolean
-        get() = tokenRepository.token != null
+        get() = authRepository.token != null
 
     override suspend fun signIn(): Result<Unit> = runCatching {
         val oAuthToken = TokenManagerProvider.instance.manager.getToken()
@@ -41,12 +41,12 @@ class SocialAuthKakaoRepository @Inject constructor(
 
         val accessToken = TokenManagerProvider.instance.manager.getToken()?.accessToken
             ?: throw Exception("Unknown error")
-        tokenRepository.initToken(SOCIAL_TYPE_KAKAO, accessToken)
+        authRepository.initToken(SOCIAL_TYPE_KAKAO, accessToken)
     }
 
     override suspend fun signOut(): Result<Unit> {
         UserApiClient.instance.logout {
-            tokenRepository.token = null
+            authRepository.token = null
         }
         return Result.success(Unit)
     }
@@ -56,7 +56,7 @@ class SocialAuthKakaoRepository @Inject constructor(
             .onSuccessOrCatch {
                 UserApiClient.instance.unlink { error ->
                     if (error == null) {
-                        tokenRepository.token = null
+                        authRepository.token = null
                     }
                 }
             }

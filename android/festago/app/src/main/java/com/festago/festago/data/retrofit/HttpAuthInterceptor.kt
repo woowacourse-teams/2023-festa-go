@@ -1,18 +1,18 @@
 package com.festago.festago.data.retrofit
 
-import com.festago.festago.repository.TokenRepository
+import com.festago.festago.repository.AuthRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class HttpAuthInterceptor(private val tokenRepository: TokenRepository) : Interceptor {
+class HttpAuthInterceptor(private val authRepository: AuthRepository) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(request = getNewRequest(chain))
         if (isResponseSuccess(response)) {
             response.close()
 
-            runBlocking { tokenRepository.refreshToken() }
+            runBlocking { authRepository.refreshToken() }
             return chain.proceed(request = getNewRequest(chain))
         }
         return response
@@ -22,7 +22,7 @@ class HttpAuthInterceptor(private val tokenRepository: TokenRepository) : Interc
 
     private fun getNewRequest(chain: Interceptor.Chain) = chain.request()
         .newBuilder()
-        .addHeader(HEADER_AUTHORIZATION, AUTHORIZATION_TOKEN_FORMAT.format(tokenRepository.token))
+        .addHeader(HEADER_AUTHORIZATION, AUTHORIZATION_TOKEN_FORMAT.format(authRepository.token))
         .build()
 
     companion object {

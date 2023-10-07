@@ -5,16 +5,16 @@ import com.festago.festago.data.dto.OauthRequest
 import com.festago.festago.data.service.TokenRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
-import com.festago.festago.repository.TokenRepository
+import com.festago.festago.repository.AuthRepository
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class TokenDefaultRepository @Inject constructor(
+class AuthDefaultRepository @Inject constructor(
     private val tokenLocalDataSource: TokenDataSource,
     private val tokenRetrofitService: TokenRetrofitService,
     private val firebaseMessaging: FirebaseMessaging,
-) : TokenRepository {
+) : AuthRepository {
     override var token: String?
         get() = tokenLocalDataSource.token
         set(value) {
