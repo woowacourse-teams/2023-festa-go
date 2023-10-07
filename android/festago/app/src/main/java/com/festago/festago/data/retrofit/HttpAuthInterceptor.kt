@@ -8,7 +8,7 @@ class HttpAuthInterceptor(private val tokenDateSource: TokenDataSource) : Interc
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(request = getNewRequest(chain))
-        if (isResponseSuccess(response)) {
+        if (!isResponseSuccess(response)) {
             response.close()
 
             return chain.proceed(request = getNewRequest(chain))
