@@ -8,6 +8,7 @@ import com.festago.festago.presentation.util.MutableSingleLiveData
 import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,12 +21,18 @@ class SignInViewModel @Inject constructor(
     private val _event = MutableSingleLiveData<SignInEvent>()
     val event: SingleLiveData<SignInEvent> = _event
 
+    private val exceptionHandler: CoroutineExceptionHandler =
+        CoroutineExceptionHandler { _, throwable ->
+            _event.setValue(SignInEvent.SignInFailure)
+            analyticsHelper.logNetworkFailure(KEY_SIGN_IN_LOG, throwable.message.toString())
+        }
+
     fun signInKakao() {
         _event.setValue(SignInEvent.ShowSignInPage)
     }
 
     fun signIn(token: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             authRepository.signIn(SOCIAL_TYPE_KAKAO, token)
                 .onSuccess {
                     _event.setValue(SignInEvent.SignInSuccess)

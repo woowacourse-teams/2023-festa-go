@@ -28,6 +28,7 @@ class SignInViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
+
         authRepository = mockk(relaxed = true)
         analyticsHelper = mockk(relaxed = true)
         vm = SignInViewModel(authRepository, analyticsHelper)
@@ -42,17 +43,13 @@ class SignInViewModelTest {
     @Test
     fun `로그인 성공하면 성공 이벤트가 발생한다`() {
         // given
-        coEvery {
-            authRepository.signIn(any(), any())
-        } answers {
-            Result.success(Unit)
-        }
+        coEvery { authRepository.signIn(any(), any()) } answers { Result.success(Unit) }
 
         // when
         vm.signIn("testToken")
 
         // then
-        assertThat(vm.event.getValue() is SignInEvent.SignInSuccess).isTrue
+        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.SignInSuccess::class.java)
     }
 
     @Test
@@ -60,15 +57,13 @@ class SignInViewModelTest {
         // given
         coEvery {
             authRepository.signIn(any(), any())
-        } answers {
-            Result.failure(Exception())
-        }
+        } answers { Result.failure(Exception()) }
 
         // when
         vm.signIn("testToken")
 
         // then
-        assertThat(vm.event.getValue() is SignInEvent.SignInFailure).isTrue
+        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)
     }
 
     @Test
@@ -78,6 +73,16 @@ class SignInViewModelTest {
         vm.signInKakao()
 
         // then
-        assertThat(vm.event.getValue() is SignInEvent.ShowSignInPage).isTrue
+        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.ShowSignInPage::class.java)
+    }
+
+    @Test
+    fun `FCM 토큰을 불러오지 못하면 실패 이벤트가 발생한다`() {
+        // given
+        // when
+        vm.signIn("testToken")
+
+        // then
+        assertThat(vm.event.getValue()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)
     }
 }
