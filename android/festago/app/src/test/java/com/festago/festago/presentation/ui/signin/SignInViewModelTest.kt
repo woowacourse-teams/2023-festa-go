@@ -38,7 +38,7 @@ class SignInViewModelTest {
     }
 
     private fun `로그인 결과가 다음과 같을 때`(result: Result<Unit>) {
-        coEvery { authRepository.signIn(any(), any()) } returns result
+        coEvery { authRepository.signIn() } returns result
     }
 
     @Test
@@ -48,7 +48,7 @@ class SignInViewModelTest {
 
         vm.event.test {
             // when
-            vm.signIn("testToken")
+            vm.signIn()
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(SignInEvent.SignInSuccess::class.java)
@@ -62,7 +62,7 @@ class SignInViewModelTest {
 
         vm.event.test {
             // when
-            vm.signIn("testToken")
+            vm.signIn()
 
             // then
             assertThat(awaitItem()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)

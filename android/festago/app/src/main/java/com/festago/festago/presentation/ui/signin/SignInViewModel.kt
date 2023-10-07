@@ -26,20 +26,18 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun signIn(token: String) {
+    fun signIn() {
         viewModelScope.launch {
-            authRepository.signIn(SOCIAL_TYPE_KAKAO, token)
-                .onSuccess {
-                    _event.emit(SignInEvent.SignInSuccess)
-                }.onFailure {
-                    _event.emit(SignInEvent.SignInFailure)
-                    analyticsHelper.logNetworkFailure(KEY_SIGN_IN_LOG, it.message.toString())
-                }
+            authRepository.signIn().onSuccess {
+                _event.emit(SignInEvent.SignInSuccess)
+            }.onFailure {
+                _event.emit(SignInEvent.SignInFailure)
+                analyticsHelper.logNetworkFailure(KEY_SIGN_IN_LOG, it.message.toString())
+            }
         }
     }
 
     companion object {
-        private const val SOCIAL_TYPE_KAKAO = "KAKAO"
         private const val KEY_SIGN_IN_LOG = "KEY_SIGN_IN_LOG"
     }
 }

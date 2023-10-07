@@ -1,16 +1,20 @@
 package com.festago.festago.data.repository
 
+import android.content.Context
 import com.festago.festago.data.service.UserRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
+import com.festago.festago.presentation.util.loginWithKakao
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TokenRepository
 import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class AuthDefaultRepository @Inject constructor(
     private val userRetrofitService: UserRetrofitService,
     private val tokenRepository: TokenRepository,
+    @ApplicationContext private val context: Context,
 ) : AuthRepository {
 
     override val isSigned: Boolean
@@ -19,8 +23,9 @@ class AuthDefaultRepository @Inject constructor(
     override val token: String?
         get() = tokenRepository.token
 
-    override suspend fun signIn(socialType: String, token: String): Result<Unit> {
-        return tokenRepository.initToken(socialType, token)
+    override suspend fun signIn(): Result<Unit> {
+        val token = UserApiClient.loginWithKakao(context).accessToken
+        return tokenRepository.initToken(SOCIAL_TYPE_KAKAO, token)
     }
 
     override suspend fun signOut(): Result<Unit> {
@@ -39,4 +44,8 @@ class AuthDefaultRepository @Inject constructor(
                     }
                 }
             }
+
+    companion object {
+        private const val SOCIAL_TYPE_KAKAO = "KAKAO"
+    }
 }
