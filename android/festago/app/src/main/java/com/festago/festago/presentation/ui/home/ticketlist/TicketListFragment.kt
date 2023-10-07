@@ -62,11 +62,10 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
         when (uiState) {
             is TicketListUiState.Loading,
             is TicketListUiState.Error,
-            -> binding.srlTicketList.isRefreshing = false
+            -> Unit
 
             is TicketListUiState.Success -> {
                 adapter.submitList(uiState.tickets)
-                binding.srlTicketList.isRefreshing = false
             }
         }
     }
@@ -106,6 +105,7 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
     private fun initRefresh() {
         binding.srlTicketList.setOnRefreshListener {
             vm.loadCurrentTickets()
+            binding.srlTicketList.isRefreshing = false
         }
     }
 
