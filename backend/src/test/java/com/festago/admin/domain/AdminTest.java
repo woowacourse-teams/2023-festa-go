@@ -53,7 +53,7 @@ class AdminTest {
     }
 
     @Test
-    void password가_20글자_초과하면_예외() {
+    void password가_255글자_초과하면_예외() {
         // given
         String password = "1".repeat(256);
 
