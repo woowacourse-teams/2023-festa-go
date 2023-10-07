@@ -11,7 +11,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    List<Ticket> findAllByStageId(Long stageId);
+    @Query("""
+            SELECT t from Ticket t
+            JOIN FETCH t.ticketAmount
+            WHERE t.stage.id = :stageId
+        """)
+    List<Ticket> findAllByStageIdWithFetch(@Param("stageId") Long stageId);
 
     Optional<Ticket> findByTicketTypeAndStage(TicketType ticketType, Stage stage);
 
