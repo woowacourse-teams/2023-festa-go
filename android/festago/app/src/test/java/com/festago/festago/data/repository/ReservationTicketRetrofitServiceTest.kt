@@ -187,6 +187,7 @@ class ReservationTicketRetrofitServiceTest {
         private fun getFakeFestival(): ReservationFestivalResponse {
             return ReservationFestivalResponse(
                 id = 1,
+                schoolId = 1,
                 name = "테코대학교",
                 startDate = "2023-07-03",
                 endDate = "2023-07-09",
@@ -240,6 +241,7 @@ class ReservationTicketRetrofitServiceTest {
             return """
 {
 	"id": 1,
+    "schoolId": 1,
 	"name": "테코대학교",
 	"startDate": "2023-07-03",
 	"endDate": "2023-07-09",	
