@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.model.ReservationStage
-import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
 import com.festago.festago.repository.ReservationTicketRepository
+import com.festago.festago.repository.SocialAuthRepository
 import com.festago.festago.repository.TicketRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,7 +25,7 @@ class TicketReserveViewModel @Inject constructor(
     private val reservationTicketRepository: ReservationTicketRepository,
     private val festivalRepository: FestivalRepository,
     private val ticketRepository: TicketRepository,
-    private val authRepository: AuthRepository,
+    private val socialAuthRepository: SocialAuthRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<TicketReserveUiState>(TicketReserveUiState.Loading)
@@ -61,7 +61,7 @@ class TicketReserveViewModel @Inject constructor(
 
     fun showTicketTypes(stageId: Int, stageStartTime: LocalDateTime) {
         viewModelScope.launch {
-            if (authRepository.isSigned) {
+            if (socialAuthRepository.isSigned) {
                 reservationTicketRepository.loadTicketTypes(stageId)
                     .onSuccess { tickets ->
                         _event.emit(
@@ -97,7 +97,7 @@ class TicketReserveViewModel @Inject constructor(
         ticketOpenTime = ticketOpenTime,
         reservationTickets = reservationTickets,
         canReserve = LocalDateTime.now().isAfter(ticketOpenTime),
-        isSigned = authRepository.isSigned,
+        isSigned = socialAuthRepository.isSigned,
         onShowStageTickets = ::showTicketTypes,
     )
 

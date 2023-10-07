@@ -5,7 +5,7 @@ import com.festago.festago.data.service.UserRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.presentation.util.loginWithKakao
-import com.festago.festago.repository.AuthRepository
+import com.festago.festago.repository.SocialAuthRepository
 import com.festago.festago.repository.TokenRepository
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.TokenManagerProvider
@@ -14,11 +14,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Date
 import javax.inject.Inject
 
-class AuthKakaoRepository @Inject constructor(
+class SocialAuthKakaoRepository @Inject constructor(
     private val userRetrofitService: UserRetrofitService,
     private val tokenRepository: TokenRepository,
     @ApplicationContext private val context: Context,
-) : AuthRepository {
+) : SocialAuthRepository {
 
     override val isSigned: Boolean
         get() = tokenRepository.token != null

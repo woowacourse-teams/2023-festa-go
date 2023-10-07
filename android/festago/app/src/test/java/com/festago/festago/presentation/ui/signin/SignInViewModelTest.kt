@@ -2,7 +2,7 @@ package com.festago.festago.presentation.ui.signin
 
 import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
-import com.festago.festago.repository.AuthRepository
+import com.festago.festago.repository.SocialAuthRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +18,7 @@ import org.junit.Test
 
 class SignInViewModelTest {
     private lateinit var vm: SignInViewModel
-    private lateinit var authRepository: AuthRepository
+    private lateinit var socialAuthRepository: SocialAuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -26,9 +26,9 @@ class SignInViewModelTest {
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
 
-        authRepository = mockk(relaxed = true)
+        socialAuthRepository = mockk(relaxed = true)
         analyticsHelper = mockk(relaxed = true)
-        vm = SignInViewModel(authRepository, analyticsHelper)
+        vm = SignInViewModel(socialAuthRepository, analyticsHelper)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -38,7 +38,7 @@ class SignInViewModelTest {
     }
 
     private fun `로그인 결과가 다음과 같을 때`(result: Result<Unit>) {
-        coEvery { authRepository.signIn() } returns result
+        coEvery { socialAuthRepository.signIn() } returns result
     }
 
     @Test

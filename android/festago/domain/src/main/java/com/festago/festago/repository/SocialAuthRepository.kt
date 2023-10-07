@@ -1,6 +1,6 @@
 package com.festago.festago.repository
 
-interface AuthRepository {
+interface SocialAuthRepository {
     val isSigned: Boolean
     suspend fun signIn(): Result<Unit>
     suspend fun signOut(): Result<Unit>
