@@ -60,7 +60,6 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
             is MyPageUiState.Success -> handleSuccess(uiState)
         }
-        binding.srlMyPage.isRefreshing = false
     }
 
     private fun handleEvent(event: MyPageEvent) {
@@ -116,6 +115,7 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
         binding.srlMyPage.setOnRefreshListener {
             vm.loadUserInfo()
+            binding.srlMyPage.isRefreshing = false
         }
 
         binding.tvSchoolAuthorization.setOnClickListener {
