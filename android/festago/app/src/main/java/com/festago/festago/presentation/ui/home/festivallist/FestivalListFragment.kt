@@ -59,6 +59,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
         binding.srlFestivalList.setOnRefreshListener {
             vm.loadFestivals()
+            binding.srlFestivalList.isRefreshing = false
         }
     }
 
@@ -66,7 +67,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
         when (uiState) {
             is FestivalListUiState.Loading,
             is FestivalListUiState.Error,
-            -> binding.srlFestivalList.isRefreshing = false
+            -> Unit
 
             is FestivalListUiState.Success -> handleSuccess(uiState)
         }
@@ -74,7 +75,6 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
         adapter.submitList(uiState.festivals)
-        binding.srlFestivalList.isRefreshing = false
     }
 
     private fun handleEvent(event: FestivalListEvent) {
