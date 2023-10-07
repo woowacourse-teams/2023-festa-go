@@ -20,9 +20,6 @@ class AuthDefaultRepository @Inject constructor(
     override val isSigned: Boolean
         get() = tokenRepository.token != null
 
-    override val token: String?
-        get() = tokenRepository.token
-
     override suspend fun signIn(): Result<Unit> {
         val token = UserApiClient.loginWithKakao(context).accessToken
         return tokenRepository.initToken(SOCIAL_TYPE_KAKAO, token)
