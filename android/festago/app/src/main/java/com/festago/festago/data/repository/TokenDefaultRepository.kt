@@ -7,7 +7,6 @@ import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.repository.TokenRepository
 import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -28,10 +27,9 @@ class TokenDefaultRepository @Inject constructor(
             tokenRetrofitService.getOauthToken(OauthRequest(socialType, socialToken, fcmToken))
         }.onSuccessOrCatch { tokenLocalDataSource.token = it.accessToken }
 
-    override fun refreshToken(socialType: String, socialToken: String): Result<Unit> = runBlocking {
+    override suspend fun refreshToken(socialType: String, socialToken: String): Result<Unit> =
         runCatchingResponse {
             val fcmToken = firebaseMessaging.token.await()
             tokenRetrofitService.getOauthToken(OauthRequest(socialType, socialToken, fcmToken))
         }.onSuccessOrCatch { tokenLocalDataSource.token = it.accessToken }
-    }
 }
