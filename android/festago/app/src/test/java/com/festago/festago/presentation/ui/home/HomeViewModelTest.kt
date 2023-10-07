@@ -33,10 +33,14 @@ class HomeViewModelTest {
         Dispatchers.resetMain()
     }
 
+    private fun `사용자 인증 유무가 다음과 같을 때`(isSigned: Boolean) {
+        every { authRepository.isSigned } returns isSigned
+    }
+
     @Test
     fun `축제 목록을 요청했을 때 토큰이 있으면 축제 목록이 보인다`() = runTest {
         // given
-        every { authRepository.isSigned } returns true
+        `사용자 인증 유무가 다음과 같을 때`(true)
 
         // when
         vm.event.test {
@@ -50,7 +54,7 @@ class HomeViewModelTest {
     @Test
     fun `축제 목록을 요청했을 때 토큰이 없어도 축제 목록이 보인다`() = runTest {
         // given
-        every { authRepository.isSigned } returns false
+        `사용자 인증 유무가 다음과 같을 때`(false)
 
         vm.event.test {
             // when
@@ -64,7 +68,7 @@ class HomeViewModelTest {
     @Test
     fun `티켓 목록을 요청했을 때 토큰이 있으면 티켓 목록 보기 이벤트가 발생한다`() = runTest {
         // given
-        every { authRepository.isSigned } returns true
+        `사용자 인증 유무가 다음과 같을 때`(true)
 
         vm.event.test {
             // when
@@ -78,7 +82,7 @@ class HomeViewModelTest {
     @Test
     fun `티켓 목록을 요청했을 때 토큰이 있으면 로그인 보기 이벤트가 발생한다`() = runTest {
         // given
-        every { authRepository.isSigned } returns false
+        `사용자 인증 유무가 다음과 같을 때`(false)
 
         vm.event.test {
             // when
@@ -92,7 +96,7 @@ class HomeViewModelTest {
     @Test
     fun `마이페이지를 요청했을 때 토큰이 있으면 마이페이지 보기 이벤트가 발생한다`() = runTest {
         // given
-        every { authRepository.isSigned } returns true
+        `사용자 인증 유무가 다음과 같을 때`(true)
 
         vm.event.test {
             // when
@@ -106,7 +110,7 @@ class HomeViewModelTest {
     @Test
     fun `마이페이즈를 요청했을 때 토큰이 없으면 로그인 보기 이벤트가 발생한다`() = runTest {
         // given
-        every { authRepository.isSigned } returns false
+        `사용자 인증 유무가 다음과 같을 때`(false)
 
         vm.event.test {
             // when
