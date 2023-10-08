@@ -1,6 +1,7 @@
 package com.festago.festago.data.dto
 
 import com.festago.festago.model.ReservationStage
+import com.festago.festago.model.ReservationTickets
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
@@ -10,7 +11,7 @@ data class ReservationStageResponse(
     val startTime: String,
     val ticketOpenTime: String,
     val lineUp: String,
-    val tickets: ReservationTicketsResponse,
+    val tickets: List<ReservationTicketResponse>,
 ) {
     fun toDomain(): ReservationStage = ReservationStage(
         id = id,
@@ -18,5 +19,9 @@ data class ReservationStageResponse(
         startTime = LocalDateTime.parse(startTime),
         ticketOpenTime = LocalDateTime.parse(ticketOpenTime),
         reservationTickets = tickets.toDomain(),
+    )
+
+    private fun List<ReservationTicketResponse>.toDomain() = ReservationTickets(
+        this.map { it.toDomain() },
     )
 }
