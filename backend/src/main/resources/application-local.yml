@@ -27,6 +27,9 @@ logging:
           jdbc:
             bind: trace
 
+server:
+  shutdown: graceful
+
 festago:
   qr-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
   auth-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
