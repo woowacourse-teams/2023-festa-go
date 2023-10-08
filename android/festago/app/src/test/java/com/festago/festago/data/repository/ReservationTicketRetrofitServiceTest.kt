@@ -198,21 +198,21 @@ class ReservationTicketRetrofitServiceTest {
                         startTime = "2023-07-09T16:00:00",
                         ticketOpenTime = "2023-07-08T14:00:00",
                         lineUp = "르세라핌,아이브,뉴진스",
-                        tickets = ReservationTicketsResponse(
-                            listOf(
-                                ReservationTicketResponse(
-                                    id = 1,
-                                    ticketType = "STUDENT",
-                                    totalAmount = 500,
-                                    remainAmount = 219,
-                                ),
-                                ReservationTicketResponse(
-                                    id = 2,
-                                    ticketType = "VISITOR",
-                                    totalAmount = 300,
-                                    remainAmount = 212,
-                                ),
+                        tickets =
+                        listOf(
+                            ReservationTicketResponse(
+                                id = 1,
+                                ticketType = "STUDENT",
+                                totalAmount = 500,
+                                remainAmount = 219,
                             ),
+                            ReservationTicketResponse(
+                                id = 2,
+                                ticketType = "VISITOR",
+                                totalAmount = 300,
+                                remainAmount = 212,
+                            ),
+
                         ),
                     ),
                     ReservationStageResponse(
@@ -220,20 +220,19 @@ class ReservationTicketRetrofitServiceTest {
                         startTime = "2023-07-09T16:00:00",
                         ticketOpenTime = "2023-07-08T14:00:00",
                         lineUp = "르세라핌,아이브,뉴진스",
-                        tickets = ReservationTicketsResponse(
-                            listOf(
-                                ReservationTicketResponse(
-                                    id = 3,
-                                    ticketType = "STUDENT",
-                                    totalAmount = 500,
-                                    remainAmount = 219,
-                                ),
-                                ReservationTicketResponse(
-                                    id = 4,
-                                    ticketType = "VISITOR",
-                                    totalAmount = 300,
-                                    remainAmount = 212,
-                                ),
+                        tickets =
+                        listOf(
+                            ReservationTicketResponse(
+                                id = 3,
+                                ticketType = "STUDENT",
+                                totalAmount = 500,
+                                remainAmount = 219,
+                            ),
+                            ReservationTicketResponse(
+                                id = 4,
+                                ticketType = "VISITOR",
+                                totalAmount = 300,
+                                remainAmount = 212,
                             ),
                         ),
                     ),
