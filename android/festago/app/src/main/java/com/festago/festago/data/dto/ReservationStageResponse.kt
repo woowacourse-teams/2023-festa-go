@@ -10,13 +10,13 @@ data class ReservationStageResponse(
     val startTime: String,
     val ticketOpenTime: String,
     val lineUp: String,
-    val tickets: List<ReservationTicketResponse>,
+    val tickets: ReservationTicketsResponse,
 ) {
     fun toDomain(): ReservationStage = ReservationStage(
         id = id,
         lineUp = lineUp,
         startTime = LocalDateTime.parse(startTime),
         ticketOpenTime = LocalDateTime.parse(ticketOpenTime),
-        reservationTickets = tickets.map { it.toDomain() },
+        reservationTickets = tickets.toDomain(),
     )
 }
