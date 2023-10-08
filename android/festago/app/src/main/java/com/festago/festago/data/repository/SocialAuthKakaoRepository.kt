@@ -3,10 +3,12 @@ package com.festago.festago.data.repository
 import android.content.Context
 import com.festago.festago.presentation.util.loginWithKakao
 import com.festago.festago.repository.SocialAuthRepository
+import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.TokenManagerProvider
+import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.util.Date
+import java.lang.Thread.sleep
 import javax.inject.Inject
 
 class SocialAuthKakaoRepository @Inject constructor(
@@ -16,21 +18,32 @@ class SocialAuthKakaoRepository @Inject constructor(
     override val socialType: String = SOCIAL_TYPE_KAKAO
 
     override suspend fun getSocialToken(): Result<String> = runCatching {
-        val tokenManger = TokenManagerProvider.instance.manager
-        val oAuthToken = tokenManger.getToken()
+        if (AuthApiClient.instance.hasToken()) {
+            val error = synchronized(this) { accessTokenInfo() }
 
-        when {
-            oAuthToken == null || oAuthToken.refreshTokenExpiresAt < Date() ->
+            if (error is KakaoSdkError && error.isInvalidTokenError()) {
                 UserApiClient.loginWithKakao(context)
-
-            else -> {
-                UserApiClient.instance.accessTokenInfo { _, throwable ->
-                    if (throwable != null) throw throwable
-                }
+            } else if (error != null) {
+                throw error
             }
+        } else {
+            UserApiClient.loginWithKakao(context)
         }
 
-        tokenManger.getToken()?.accessToken ?: throw Exception("Unknown error")
+        TokenManagerProvider.instance.manager.getToken()?.accessToken
+            ?: throw Exception("Unknown error")
+    }
+
+    private fun accessTokenInfo(): Throwable? {
+        var lock = true
+        var error: Throwable? = null
+        UserApiClient.instance.accessTokenInfo { _, throwable ->
+            error = throwable
+            lock = false
+        }
+
+        while (lock) sleep(20)
+        return error
     }
 
     override suspend fun signOut(): Result<Unit> {
