@@ -1,7 +1,6 @@
 package com.festago.festago.presentation.ui.ticketreserve.bottomsheet
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,7 +47,6 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
                 binding.stageStartTime = startTime
             }
             getParcelableArrayListCompat<BottomSheetReservationTicketArg>(KEY_ITEMS)?.let {
-                Log.d("asdf", it.toString())
                 ticketTypeAdapter.submitList(it.map(::TicketReserveBottomItem))
             }
         }

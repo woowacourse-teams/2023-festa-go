@@ -3,7 +3,6 @@ package com.festago.festago.presentation.ui.ticketreserve
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
@@ -84,7 +83,6 @@ class TicketReserveActivity : AppCompatActivity() {
         stageStartTime: LocalDateTime,
         reservationTickets: List<ReservationTicket>,
     ) {
-        Log.d("asdf", reservationTickets.toString())
         TicketReserveBottomSheetFragment.newInstance(
             stageStartTime.format(
                 DateTimeFormatter.ofPattern(
