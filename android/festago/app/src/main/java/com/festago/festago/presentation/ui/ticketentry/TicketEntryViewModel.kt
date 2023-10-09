@@ -66,9 +66,11 @@ class TicketEntryViewModel @Inject constructor(
         }
     }
 
-    private suspend fun setTimer(ticketId: Long, ticketCode: TicketCode) {
-        timer.timerListener = createTimerListener(ticketId)
-        timer.start(ticketCode.period)
+    private fun setTimer(ticketId: Long, ticketCode: TicketCode) {
+        viewModelScope.launch {
+            timer.timerListener = createTimerListener(ticketId)
+            timer.start(ticketCode.period)
+        }
     }
 
     private fun createTimerListener(ticketId: Long): TimerListener = object : TimerListener {
