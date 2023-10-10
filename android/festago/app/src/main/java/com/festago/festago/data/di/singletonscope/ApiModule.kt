@@ -2,7 +2,7 @@ package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.BuildConfig
 import com.festago.festago.data.retrofit.AuthInterceptor
-import com.festago.festago.data.retrofit.TokenManager
+import com.festago.festago.repository.AuthRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -14,6 +14,10 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AuthOkHttpClientQualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
@@ -33,9 +37,10 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(tokenManager: TokenManager): OkHttpClient = OkHttpClient
+    @AuthOkHttpClientQualifier
+    fun provideOkHttpClient(authRepository: AuthRepository): OkHttpClient = OkHttpClient
         .Builder()
-        .addInterceptor(AuthInterceptor(tokenManager))
+        .addInterceptor(AuthInterceptor(authRepository))
         .build()
 
     @Provides
@@ -63,7 +68,7 @@ object ApiModule {
     @AuthRetrofitQualifier
     fun providesAuthRetrofit(
         @BaseUrlQualifier baseUrl: String,
-        okHttpClient: OkHttpClient,
+        @AuthOkHttpClientQualifier okHttpClient: OkHttpClient,
         converterFactory: retrofit2.Converter.Factory,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)

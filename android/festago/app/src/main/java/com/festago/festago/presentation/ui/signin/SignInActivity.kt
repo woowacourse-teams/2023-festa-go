@@ -13,9 +13,7 @@ import com.festago.festago.R
 import com.festago.festago.databinding.ActivitySignInBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.home.HomeActivity
-import com.festago.festago.presentation.util.loginWithKakao
 import com.festago.festago.presentation.util.repeatOnStarted
-import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -74,8 +72,7 @@ class SignInActivity : AppCompatActivity() {
 
     private fun handleSignInEvent() {
         lifecycleScope.launch {
-            val oauthToken = UserApiClient.loginWithKakao(this@SignInActivity)
-            vm.signIn(oauthToken.accessToken)
+            vm.signIn()
         }
     }
 

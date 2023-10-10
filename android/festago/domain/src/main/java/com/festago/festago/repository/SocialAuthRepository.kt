@@ -1,9 +1,8 @@
 package com.festago.festago.repository
 
-interface AuthRepository {
-    var token: String?
-    val isSigned: Boolean
-    suspend fun signIn(): Result<Unit>
+interface SocialAuthRepository {
+    val socialType: String
+    suspend fun getSocialToken(): Result<String>
     suspend fun signOut(): Result<Unit>
     suspend fun deleteAccount(): Result<Unit>
 }
