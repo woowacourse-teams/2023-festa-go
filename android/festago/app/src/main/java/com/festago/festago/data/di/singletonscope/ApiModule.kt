@@ -17,6 +17,10 @@ import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
+annotation class AuthOkHttpClientQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
 annotation class NormalRetrofitQualifier
 
 @Qualifier
@@ -33,6 +37,7 @@ object ApiModule {
 
     @Provides
     @Singleton
+    @AuthOkHttpClientQualifier
     fun provideOkHttpClient(authRepository: AuthRepository): OkHttpClient = OkHttpClient
         .Builder()
         .addInterceptor(AuthInterceptor(authRepository))
@@ -63,7 +68,7 @@ object ApiModule {
     @AuthRetrofitQualifier
     fun providesAuthRetrofit(
         @BaseUrlQualifier baseUrl: String,
-        okHttpClient: OkHttpClient,
+        @AuthOkHttpClientQualifier okHttpClient: OkHttpClient,
         converterFactory: retrofit2.Converter.Factory,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
