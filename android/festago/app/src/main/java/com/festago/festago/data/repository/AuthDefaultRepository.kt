@@ -14,17 +14,17 @@ import javax.inject.Inject
 class AuthDefaultRepository @Inject constructor(
     private val socialAuthRepository: SocialAuthRepository,
     private val tokenRetrofitService: TokenRetrofitService,
-    private val tokenLocalDataSource: TokenDataSource,
+    private val tokenDataSource: TokenDataSource,
     private val firebaseMessaging: FirebaseMessaging,
 ) : AuthRepository {
     override var token: String?
-        get() = tokenLocalDataSource.token
+        get() = tokenDataSource.token
         set(value) {
-            tokenLocalDataSource.token = value
+            tokenDataSource.token = value
         }
 
     override val isSigned: Boolean
-        get() = tokenLocalDataSource.token != null
+        get() = tokenDataSource.token != null
 
     override suspend fun signIn(): Result<Unit> =
         runCatchingResponse {
@@ -36,20 +36,20 @@ class AuthDefaultRepository @Inject constructor(
                     fcmToken,
                 ),
             )
-        }.onSuccessOrCatch { tokenLocalDataSource.token = it.accessToken }
+        }.onSuccessOrCatch { tokenDataSource.token = it.accessToken }
 
     override suspend fun signOut(): Result<Unit> {
         val result = socialAuthRepository.signOut()
         if (result.isSuccess) {
-            tokenLocalDataSource.token = null
+            tokenDataSource.token = null
         }
         return result
     }
 
     override suspend fun deleteAccount(): Result<Unit> = runCatchingResponse {
         socialAuthRepository.deleteAccount()
-        tokenRetrofitService.deleteUserAccount("Bearer ${tokenLocalDataSource.token}")
+        tokenRetrofitService.deleteUserAccount("Bearer ${tokenDataSource.token}")
     }.onSuccessOrCatch {
-        tokenLocalDataSource.token = null
+        tokenDataSource.token = null
     }
 }
