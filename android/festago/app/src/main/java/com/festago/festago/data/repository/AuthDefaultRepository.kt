@@ -39,11 +39,8 @@ class AuthDefaultRepository @Inject constructor(
         }.onSuccessOrCatch { tokenDataSource.token = it.accessToken }
 
     override suspend fun signOut(): Result<Unit> {
-        val result = socialAuthRepository.signOut()
-        if (result.isSuccess) {
-            tokenDataSource.token = null
-        }
-        return result
+        tokenDataSource.token = null
+        return socialAuthRepository.signOut()
     }
 
     override suspend fun deleteAccount(): Result<Unit> = runCatchingResponse {
