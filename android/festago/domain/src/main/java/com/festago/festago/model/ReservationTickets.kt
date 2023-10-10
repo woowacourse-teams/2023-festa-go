@@ -1,6 +1,6 @@
 package com.festago.festago.model
 
-class ReservationTickets(val tickets: List<ReservationTicket>) {
+class ReservationTickets(private val tickets: List<ReservationTicket>) {
 
     fun sortedByTicketTypes(): List<ReservationTicket> {
         val ticketTypes = TicketType.values().toList()

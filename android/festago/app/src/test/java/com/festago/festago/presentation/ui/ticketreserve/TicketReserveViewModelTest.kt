@@ -176,7 +176,7 @@ class TicketReserveViewModelTest {
 
                 // and
                 val actual = (event as? TicketReserveEvent.ShowTicketTypes)?.tickets
-                assertThat(actual).isEqualTo(fakeReservationTickets.tickets)
+                assertThat(actual).isEqualTo(fakeReservationTickets.sortedByTicketTypes())
             }
             softly.assertAll()
         }
