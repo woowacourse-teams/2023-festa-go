@@ -9,7 +9,7 @@ class AuthInterceptor(private val authRepository: AuthRepository) : Interceptor 
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(request = getNewRequest(chain))
-        if (!isResponseSuccess(response)) {
+        if (isCodeUnauthorized(response)) {
             response.close()
 
             refreshToken()
@@ -23,7 +23,7 @@ class AuthInterceptor(private val authRepository: AuthRepository) : Interceptor 
         runBlocking { authRepository.signIn() }
     }
 
-    private fun isResponseSuccess(response: Response) = response.code == RESPONSE_CODE_SUCCESS
+    private fun isCodeUnauthorized(response: Response) = response.code == RESPONSE_CODE_UNAUTHORIZED
 
     private fun getNewRequest(chain: Interceptor.Chain) = chain.request()
         .newBuilder()
@@ -33,6 +33,6 @@ class AuthInterceptor(private val authRepository: AuthRepository) : Interceptor 
     companion object {
         private const val HEADER_AUTHORIZATION = "Authorization"
         private const val AUTHORIZATION_TOKEN_FORMAT = "Bearer %s"
-        private const val RESPONSE_CODE_SUCCESS = 200
+        private const val RESPONSE_CODE_UNAUTHORIZED = 401
     }
 }
