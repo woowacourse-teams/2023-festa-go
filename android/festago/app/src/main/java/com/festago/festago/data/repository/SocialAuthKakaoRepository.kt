@@ -1,15 +1,18 @@
 package com.festago.festago.data.repository
 
 import android.content.Context
-import com.festago.festago.presentation.util.loginWithKakao
 import com.festago.festago.repository.SocialAuthRepository
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.TokenManagerProvider
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class SocialAuthKakaoRepository @Inject constructor(
@@ -23,12 +26,12 @@ class SocialAuthKakaoRepository @Inject constructor(
             val error = accessTokenInfo()
 
             if (error is KakaoSdkError && error.isInvalidTokenError()) {
-                UserApiClient.loginWithKakao(context)
+                loginWithKakao(context)
             } else if (error != null) {
                 throw error
             }
         } else {
-            UserApiClient.loginWithKakao(context)
+            loginWithKakao(context)
         }
 
         TokenManagerProvider.instance.manager.getToken()?.accessToken
@@ -57,6 +60,47 @@ class SocialAuthKakaoRepository @Inject constructor(
             }
         }
         return Result.success(Unit)
+    }
+
+    private suspend fun loginWithKakao(context: Context): OAuthToken {
+        return if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+            try {
+                loginWithKakaoTalk(context)
+            } catch (error: Throwable) {
+                if (error is ClientError && error.reason == ClientErrorCause.Cancelled) throw error
+                loginWithKakaoAccount(context)
+            }
+        } else {
+            loginWithKakaoAccount(context)
+        }
+    }
+
+    private suspend fun loginWithKakaoTalk(context: Context): OAuthToken {
+        return suspendCoroutine<OAuthToken> { continuation ->
+            UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+                if (error != null) {
+                    continuation.resumeWithException(error)
+                } else if (token != null) {
+                    continuation.resume(token)
+                } else {
+                    continuation.resumeWithException(RuntimeException("Failure get kakao access token"))
+                }
+            }
+        }
+    }
+
+    private suspend fun loginWithKakaoAccount(context: Context): OAuthToken {
+        return suspendCoroutine<OAuthToken> { continuation ->
+            UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
+                if (error != null) {
+                    continuation.resumeWithException(error)
+                } else if (token != null) {
+                    continuation.resume(token)
+                } else {
+                    continuation.resumeWithException(RuntimeException("Failure get kakao access token"))
+                }
+            }
+        }
     }
 
     companion object {
