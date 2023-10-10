@@ -88,8 +88,9 @@ public class Member extends BaseTimeEntity {
     }
 
     private void validateSocialId(String socialId) {
-        Validator.hasBlank(socialId, "socialId");
-        Validator.maxLength(socialId, MAX_SOCIAL_ID_LENGTH, "socialId");
+        String fieldName = "socialId";
+        Validator.hasBlank(socialId, fieldName);
+        Validator.maxLength(socialId, MAX_SOCIAL_ID_LENGTH, fieldName);
     }
 
     private void validateSocialType(SocialType socialType) {
@@ -97,8 +98,9 @@ public class Member extends BaseTimeEntity {
     }
 
     private void validateNickname(String nickname) {
-        Validator.hasBlank(nickname, "nickname");
-        Validator.maxLength(nickname, MAX_NICKNAME_LENGTH, "nickname");
+        String fieldName = "nickname";
+        Validator.hasBlank(nickname, fieldName);
+        Validator.maxLength(nickname, MAX_NICKNAME_LENGTH, fieldName);
     }
 
     private void validateProfileImage(String profileImage) {

@@ -50,13 +50,15 @@ public class School extends BaseTimeEntity {
     }
 
     private void validateDomain(String domain) {
-        Validator.hasBlank(domain, "domain");
-        Validator.maxLength(domain, MAX_DOMAIN_LENGTH, "domain");
+        String fieldName = "domain";
+        Validator.hasBlank(domain, fieldName);
+        Validator.maxLength(domain, MAX_DOMAIN_LENGTH, fieldName);
     }
 
     private void validateName(String name) {
-        Validator.hasBlank(name, "name");
-        Validator.maxLength(name, MAX_NAME_LENGTH, "name");
+        String fieldName = "name";
+        Validator.hasBlank(name, fieldName);
+        Validator.maxLength(name, MAX_NAME_LENGTH, fieldName);
     }
 
     public void changeDomain(String domain) {

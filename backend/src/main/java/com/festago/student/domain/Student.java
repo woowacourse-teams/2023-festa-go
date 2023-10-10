@@ -65,8 +65,9 @@ public class Student extends BaseTimeEntity {
     }
 
     private void validateUsername(String username) {
-        Validator.hasBlank(username, "username");
-        Validator.maxLength(username, MAX_USERNAME_LENGTH, "username");
+        String fieldName = "username";
+        Validator.hasBlank(username, fieldName);
+        Validator.maxLength(username, MAX_USERNAME_LENGTH, fieldName);
     }
 
     public Long getId() {
