@@ -52,14 +52,17 @@ class SocialAuthKakaoRepository @Inject constructor(
     }
 
     override suspend fun deleteAccount(): Result<Unit> {
-        synchronized(this) {
+        return suspendCoroutine<Result<Unit>> { continuation ->
             TokenManagerProvider.instance.manager.getToken()?.let {
                 UserApiClient.instance.unlink { error ->
-                    if (error != null) throw error
+                    if (error == null) {
+                        continuation.resume(Result.success(Unit))
+                    } else {
+                        continuation.resumeWithException(error)
+                    }
                 }
-            }
+            } ?: continuation.resume(Result.success(Unit))
         }
-        return Result.success(Unit)
     }
 
     private suspend fun loginWithKakao(context: Context): OAuthToken {
