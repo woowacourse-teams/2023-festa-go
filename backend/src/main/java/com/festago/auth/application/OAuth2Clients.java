@@ -8,7 +8,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class OAuth2Clients {
 
     private final Map<SocialType, OAuth2Client> oAuth2ClientMap;
@@ -43,6 +45,7 @@ public class OAuth2Clients {
         public OAuth2ClientsBuilder add(OAuth2Client oAuth2Client) {
             SocialType socialType = oAuth2Client.getSocialType();
             if (oAuth2ClientMap.containsKey(socialType)) {
+                log.error("OAuth2 제공자는 중복될 수 없습니다.");
                 throw new UnexpectedException("중복된 OAuth2 제공자 입니다.");
             }
             oAuth2ClientMap.put(socialType, oAuth2Client);
