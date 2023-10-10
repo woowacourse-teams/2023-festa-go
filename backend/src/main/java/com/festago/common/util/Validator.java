@@ -1,5 +1,6 @@
 package com.festago.common.util;
 
+import com.festago.common.exception.UnexpectedException;
 import com.festago.common.exception.ValidException;
 
 public final class Validator {
@@ -26,12 +27,12 @@ public final class Validator {
      * @param input     검증할 문자열
      * @param maxLength 검증할 문자열의 최대 길이
      * @param fieldName 예외 메시지에 출력할 필드명
-     * @throws IllegalArgumentException 최대 길이가 0 이하이면
-     * @throws ValidException           input의 길이가 maxLength 초과하면
+     * @throws UnexpectedException 최대 길이가 0 이하이면
+     * @throws ValidException      input의 길이가 maxLength 초과하면
      */
     public static void maxLength(CharSequence input, int maxLength, String fieldName) {
         if (maxLength <= 0) {
-            throw new IllegalArgumentException("최대 길이는 0 이하일 수 없습니다.");
+            throw new UnexpectedException("최대 길이는 0 이하일 수 없습니다.");
         }
         // avoid NPE
         if (input == null) {
@@ -48,12 +49,12 @@ public final class Validator {
      * @param input     검증할 문자열
      * @param minLength 검증할 문자열의 최소 길이
      * @param fieldName 예외 메시지에 출력할 필드명
-     * @throws IllegalArgumentException maxLength가 0 이하이면
-     * @throws ValidException           input의 길이가 minLength 미만이면
+     * @throws UnexpectedException maxLength가 0 이하이면
+     * @throws ValidException      input의 길이가 minLength 미만이면
      */
     public static void minLength(CharSequence input, int minLength, String fieldName) {
         if (minLength <= 0) {
-            throw new IllegalArgumentException("최소 길이는 0 이하일 수 없습니다.");
+            throw new UnexpectedException("최소 길이는 0 이하일 수 없습니다.");
         }
         // avoid NPE
         if (input == null) {

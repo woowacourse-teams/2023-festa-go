@@ -3,6 +3,7 @@ package com.festago.common.util;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.festago.common.exception.UnexpectedException;
 import com.festago.common.exception.ValidException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -74,13 +75,13 @@ class ValidatorTest {
 
         @ParameterizedTest
         @ValueSource(ints = {0, -1})
-        void 최대_길이가_0이하면_IllegalArgumentException(int maxLength) {
+        void 최대_길이가_0이하면_UnexpectedException(int maxLength) {
             // given
             String input = "1234567890"; // 10
 
             // when & then
             assertThatThrownBy(() -> Validator.maxLength(input, maxLength, ""))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(UnexpectedException.class);
         }
 
         @ParameterizedTest
@@ -119,13 +120,13 @@ class ValidatorTest {
 
         @ParameterizedTest
         @ValueSource(ints = {0, -1})
-        void 최소_길이가_0이하면_IllegalArgumentException(int minLength) {
+        void 최소_길이가_0이하면_UnexpectedException(int minLength) {
             // given
             String input = "1234567890"; // 10
 
             // when & then
             assertThatThrownBy(() -> Validator.minLength(input, minLength, ""))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(UnexpectedException.class);
         }
 
         @ParameterizedTest

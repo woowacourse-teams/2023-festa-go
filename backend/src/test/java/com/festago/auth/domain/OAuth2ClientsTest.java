@@ -12,6 +12,7 @@ import com.festago.auth.infrastructure.FestagoOAuth2Client;
 import com.festago.auth.infrastructure.KakaoOAuth2Client;
 import com.festago.auth.infrastructure.KakaoOAuth2UserInfoClient;
 import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.UnexpectedException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class OAuth2ClientsTest {
 
         // when & then
         assertThatThrownBy(() -> builder.add(new FestagoOAuth2Client()))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(UnexpectedException.class)
             .hasMessage("중복된 OAuth2 제공자 입니다.");
     }
 

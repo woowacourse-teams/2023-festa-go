@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.Role;
 import com.festago.common.exception.UnauthorizedException;
+import com.festago.common.exception.UnexpectedException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -83,7 +84,7 @@ class JwtAuthExtractorTest {
 
         // when & then
         assertThatThrownBy(() -> jwtAuthExtractor.extract(token))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(UnexpectedException.class)
             .hasMessage("해당하는 Role이 없습니다.");
     }
 

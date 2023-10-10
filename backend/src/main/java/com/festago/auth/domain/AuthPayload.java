@@ -1,5 +1,7 @@
 package com.festago.auth.domain;
 
+import com.festago.common.exception.UnexpectedException;
+
 public class AuthPayload {
 
     private final Long memberId;
@@ -13,7 +15,7 @@ public class AuthPayload {
 
     private void validate(Role role) {
         if (role == null) {
-            throw new IllegalArgumentException("role은 null이 될 수 없습니다.");
+            throw new UnexpectedException("role은 null이 될 수 없습니다.");
         }
     }
 

@@ -3,6 +3,7 @@ package com.festago.entry.infrastructure;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.festago.common.exception.UnexpectedException;
 import com.festago.entry.application.EntryCodeProvider;
 import com.festago.entry.domain.EntryCodePayload;
 import com.festago.support.MemberTicketFixture;
@@ -34,7 +35,7 @@ class JwtEntryCodeProviderTest {
 
         // when & then
         assertThatThrownBy(() -> entryCodeProvider.provide(entryCodePayload, expiredAt))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(UnexpectedException.class)
             .hasMessage("입장코드 만료일자는 과거일 수 없습니다.");
     }
 

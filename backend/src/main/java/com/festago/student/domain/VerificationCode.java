@@ -1,5 +1,6 @@
 package com.festago.student.domain;
 
+import com.festago.common.exception.UnexpectedException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.regex.Pattern;
@@ -29,19 +30,19 @@ public class VerificationCode {
 
     private void validateBlank(String value) {
         if (!StringUtils.hasText(value)) {
-            throw new IllegalArgumentException("VerificationCode는 null 또는 공백이 될 수 없습니다.");
+            throw new UnexpectedException("VerificationCode는 null 또는 공백이 될 수 없습니다.");
         }
     }
 
     private void validateLength(String value) {
         if (value.length() != LENGTH) {
-            throw new IllegalArgumentException("VerificationCode의 길이는 %d 이어야 합니다.".formatted(LENGTH));
+            throw new UnexpectedException("VerificationCode의 길이는 %d 이어야 합니다.".formatted(LENGTH));
         }
     }
 
     private void validatePositive(String value) {
         if (!POSITIVE_REGEX.matcher(value).matches()) {
-            throw new IllegalArgumentException("VerificationCode는 0~9의 양수 형식이어야 합니다.");
+            throw new UnexpectedException("VerificationCode는 0~9의 양수 형식이어야 합니다.");
         }
     }
 

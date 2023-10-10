@@ -1,5 +1,6 @@
 package com.festago.entry.domain;
 
+import com.festago.common.exception.UnexpectedException;
 import com.festago.ticketing.domain.EntryState;
 import com.festago.ticketing.domain.MemberTicket;
 
@@ -16,10 +17,10 @@ public class EntryCodePayload {
 
     private void validate(Long memberTicketId, EntryState entryState) {
         if (memberTicketId == null) {
-            throw new IllegalArgumentException("memberTicketId는 null이 될 수 없습니다.");
+            throw new UnexpectedException("memberTicketId는 null이 될 수 없습니다.");
         }
         if (entryState == null) {
-            throw new IllegalArgumentException("entryState는 null이 될 수 없습니다.");
+            throw new UnexpectedException("entryState는 null이 될 수 없습니다.");
         }
     }
 

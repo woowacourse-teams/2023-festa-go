@@ -1,5 +1,6 @@
 package com.festago.entry.domain;
 
+import com.festago.common.exception.UnexpectedException;
 import org.springframework.util.StringUtils;
 
 public class EntryCode {
@@ -20,13 +21,13 @@ public class EntryCode {
 
     private void validate(String code, long period, long offset) {
         if (!StringUtils.hasText(code)) {
-            throw new IllegalArgumentException("code는 빈 값 또는 null이 될 수 없습니다.");
+            throw new UnexpectedException("code는 빈 값 또는 null이 될 수 없습니다.");
         }
         if (period <= MINIMUM_PERIOD) {
-            throw new IllegalArgumentException("period는 0 또는 음수가 될 수 없습니다.");
+            throw new UnexpectedException("period는 0 또는 음수가 될 수 없습니다.");
         }
         if (isNegative(offset)) {
-            throw new IllegalArgumentException("offset은 음수가 될 수 없습니다.");
+            throw new UnexpectedException("offset은 음수가 될 수 없습니다.");
         }
     }
 

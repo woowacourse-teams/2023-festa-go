@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.UnexpectedException;
 import com.festago.entry.domain.EntryCodePayload;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -94,7 +95,7 @@ class JwtEntryCodeExtractorTest {
 
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(UnexpectedException.class)
             .hasMessage("memberTicketId는 null이 될 수 없습니다.");
     }
 
@@ -109,7 +110,7 @@ class JwtEntryCodeExtractorTest {
 
         // when & then
         assertThatThrownBy(() -> jwtEntryCodeExtractor.extract(code))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(UnexpectedException.class)
             .hasMessage("entryState의 인덱스는 null이 될 수 없습니다.");
     }
 
