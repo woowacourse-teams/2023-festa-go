@@ -8,8 +8,9 @@ import com.kakao.sdk.auth.TokenManagerProvider
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.lang.Thread.sleep
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class SocialAuthKakaoRepository @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -19,7 +20,7 @@ class SocialAuthKakaoRepository @Inject constructor(
 
     override suspend fun getSocialToken(): Result<String> = runCatching {
         if (AuthApiClient.instance.hasToken()) {
-            val error = synchronized(this) { accessTokenInfo() }
+            val error = accessTokenInfo()
 
             if (error is KakaoSdkError && error.isInvalidTokenError()) {
                 UserApiClient.loginWithKakao(context)
@@ -34,16 +35,12 @@ class SocialAuthKakaoRepository @Inject constructor(
             ?: throw Exception("Unknown error")
     }
 
-    private fun accessTokenInfo(): Throwable? {
-        var lock = true
-        var error: Throwable? = null
-        UserApiClient.instance.accessTokenInfo { _, throwable ->
-            error = throwable
-            lock = false
+    private suspend fun accessTokenInfo(): Throwable? {
+        return suspendCoroutine<Throwable?> { continuation ->
+            UserApiClient.instance.accessTokenInfo { _, throwable ->
+                continuation.resume(throwable)
+            }
         }
-
-        while (lock) sleep(20)
-        return error
     }
 
     override suspend fun signOut(): Result<Unit> {
