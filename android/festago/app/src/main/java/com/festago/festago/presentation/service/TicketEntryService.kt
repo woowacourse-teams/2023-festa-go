@@ -12,6 +12,8 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
+import com.festago.festago.presentation.service.FcmMessageType.ENTRY_ALERT
+import com.festago.festago.presentation.service.FcmMessageType.ENTRY_PROCESS
 
 class TicketEntryService : FirebaseMessagingService() {
 
@@ -19,28 +21,31 @@ class TicketEntryService : FirebaseMessagingService() {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
+
     override fun onCreate() {
         super.onCreate()
         val channel = NotificationChannel(
-            "ENTRY_ALERT", "공연 입장 알림", NotificationManager.IMPORTANCE_DEFAULT
+            ENTRY_ALERT.channelId,
+            getString(R.string.entry_alert_channel_name),
+            NotificationManager.IMPORTANCE_DEFAULT
         )
         notificationManager.createNotificationChannel(channel)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        when (remoteMessage.from) {
-            "ENTRY_ALERT" -> {
+        when (remoteMessage.notification?.channelId) {
+            ENTRY_ALERT.channelId -> {
                 sendNotification(remoteMessage)
             }
 
-            "ENTRY_PROCESS" -> {
+            ENTRY_PROCESS.channelId -> {
                 runBlocking {
                     // TODO: 입장완료 로직인지 확인하는 로직 추가 필요
                     ticketStateChangeEvent.emit(Unit)
                 }
             }
 
-            else -> {}
+            else -> Unit
         }
     }
 
@@ -51,19 +56,20 @@ class TicketEntryService : FirebaseMessagingService() {
         }
         val pendingIntent = PendingIntent.getActivity(
             this,
-            0,
+            START_ACTIVITY_REQUEST_CODE,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val notificationBuilder = NotificationCompat.Builder(this, "ENTRY_ALERT")
-            .setSmallIcon(R.mipmap.ic_festago_logo_round)
-            .setContentTitle(remoteMessage.notification?.title)
-            .setContentText(remoteMessage.notification?.body)
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
+        val notificationBuilder =
+            NotificationCompat.Builder(this, getString(R.string.entry_alert_channel_name))
+                .setSmallIcon(R.mipmap.ic_festago_logo_round)
+                .setContentTitle(remoteMessage.notification?.title)
+                .setContentText(remoteMessage.notification?.body)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
 
-        notificationManager.notify(1, notificationBuilder.build())
+        notificationManager.notify(ENTRY_ALERT.id, notificationBuilder.build())
     }
 
     override fun onNewToken(token: String) {
@@ -71,6 +77,7 @@ class TicketEntryService : FirebaseMessagingService() {
     }
 
     companion object {
+        private const val START_ACTIVITY_REQUEST_CODE = 0
         val ticketStateChangeEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
     }
 }

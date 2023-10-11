@@ -129,4 +129,7 @@
     <string name="select_school_tv_error_message">학교 목록 불러오기에 실패했습니다.</string>
     <string name="select_school_tv_select_school">학교 선택</string>
 
+    <!-- Strings related to fcm -->
+    <string name="entry_alert_channel_name">공연 입장 알림</string>
+
 </resources>
