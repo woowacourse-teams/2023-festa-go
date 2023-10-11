@@ -5,7 +5,9 @@ import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.Reservation
 import com.festago.festago.model.ReservationStage
 import com.festago.festago.model.ReservationTicket
+import com.festago.festago.model.ReservationTickets
 import com.festago.festago.model.ReservedTicket
+import com.festago.festago.model.TicketType
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
 import com.festago.festago.repository.ReservationTicketRepository
@@ -35,9 +37,11 @@ class TicketReserveViewModelTest {
     private lateinit var authRepository: AuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
-    private val fakeReservationTickets = listOf(
-        ReservationTicket(1, "재학생용", 219, 500),
-        ReservationTicket(1, "외부인용", 212, 300),
+    private val fakeReservationTickets = ReservationTickets(
+        listOf(
+            ReservationTicket(1, TicketType.STUDENT, 219, 500),
+            ReservationTicket(1, TicketType.VISITOR, 212, 300),
+        ),
     )
     private val fakeReservationStage = ReservationStage(
         id = 1,
@@ -94,7 +98,7 @@ class TicketReserveViewModelTest {
         coEvery { authRepository.isSigned } answers { isSigned }
     }
 
-    private fun `특정 공연의 티켓 타입 요청 결과가 다음과 같을 때`(result: Result<List<ReservationTicket>>) {
+    private fun `특정 공연의 티켓 타입 요청 결과가 다음과 같을 때`(result: Result<ReservationTickets>) {
         coEvery { reservationTicketRepository.loadTicketTypes(any()) } returns result
     }
 
@@ -172,7 +176,7 @@ class TicketReserveViewModelTest {
 
                 // and
                 val actual = (event as? TicketReserveEvent.ShowTicketTypes)?.tickets
-                assertThat(actual).isEqualTo(fakeReservationTickets)
+                assertThat(actual).isEqualTo(fakeReservationTickets.sortedByTicketTypes())
             }
             softly.assertAll()
         }

@@ -21,6 +21,7 @@ import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.Show
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.BottomSheetReservationTicketArg
+import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.BottomSheetTicketTypeArg
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
@@ -93,7 +94,7 @@ class TicketReserveActivity : AppCompatActivity() {
                 BottomSheetReservationTicketArg(
                     id = it.id,
                     remainAmount = it.remainAmount,
-                    ticketType = it.ticketType,
+                    ticketType = BottomSheetTicketTypeArg.from(it.ticketType),
                     totalAmount = it.totalAmount,
                 )
             },

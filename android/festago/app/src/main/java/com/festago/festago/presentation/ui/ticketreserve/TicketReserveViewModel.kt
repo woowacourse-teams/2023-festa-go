@@ -63,11 +63,11 @@ class TicketReserveViewModel @Inject constructor(
         viewModelScope.launch {
             if (authRepository.isSigned) {
                 reservationTicketRepository.loadTicketTypes(stageId)
-                    .onSuccess { tickets ->
+                    .onSuccess { reservationTickets ->
                         _event.emit(
                             TicketReserveEvent.ShowTicketTypes(
                                 stageStartTime,
-                                tickets,
+                                reservationTickets.sortedByTicketTypes(),
                             ),
                         )
                     }.onFailure {
@@ -95,7 +95,7 @@ class TicketReserveViewModel @Inject constructor(
         lineUp = lineUp,
         startTime = startTime,
         ticketOpenTime = ticketOpenTime,
-        reservationTickets = reservationTickets,
+        reservationTickets = reservationTickets.sortedByTicketTypes(),
         canReserve = LocalDateTime.now().isAfter(ticketOpenTime),
         isSigned = authRepository.isSigned,
         onShowStageTickets = ::showTicketTypes,
