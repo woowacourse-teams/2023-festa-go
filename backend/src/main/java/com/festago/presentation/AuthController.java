@@ -30,9 +30,15 @@ public class AuthController {
     @Operation(description = "소셜 엑세스 토큰을 기반으로 로그인 요청을 보낸다.", summary = "OAuth2 로그인")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
         LoginResponse response = authFacadeService.login(request.socialType(), request.accessToken());
-        memberFCMService.saveMemberFCM(response.accessToken(), request.fcmToken());
+        registerFCM(response, request);
         return ResponseEntity.ok()
             .body(response);
+    }
+
+    private void registerFCM(LoginResponse response, LoginRequest request) {
+        String accessToken = response.accessToken();
+        String fcmToken = request.fcmToken();
+        memberFCMService.saveMemberFCM(response.isNew(), accessToken, fcmToken);
     }
 
     @DeleteMapping
@@ -40,6 +46,7 @@ public class AuthController {
     @Operation(description = "회원 탈퇴 요청을 보낸다.", summary = "유저 회원 탈퇴")
     public ResponseEntity<Void> deleteMember(@Member Long memberId) {
         authFacadeService.deleteMember(memberId);
+        memberFCMService.deleteMemberFCM(memberId);
         return ResponseEntity.ok()
             .build();
     }
