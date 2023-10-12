@@ -43,6 +43,9 @@ class SplashActivity : ComponentActivity() {
                 startActivity(HomeActivity.getIntent(this))
                 finish()
             }
+        }.addOnFailureListener {
+            startActivity(HomeActivity.getIntent(this))
+            finish()
         }
     }
 
