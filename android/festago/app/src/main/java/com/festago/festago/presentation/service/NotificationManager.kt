@@ -1,17 +1,16 @@
 package com.festago.festago.presentation.service
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.festago.festago.R
-import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.service.FcmMessageType.ENTRY_ALERT
+import com.festago.festago.presentation.ui.home.HomeActivity
 
 
-class NotificationManager(context: Context) {
+class NotificationManager(private val context: Context) {
 
     private val notificationManager by lazy {
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -34,19 +33,11 @@ class NotificationManager(context: Context) {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
 
-    init {
-        val channel = NotificationChannel(
-            ENTRY_ALERT.channelId,
-            context.getString(R.string.entry_alert_channel_name),
-            NotificationManager.IMPORTANCE_DEFAULT
-        )
-        notificationManager.createNotificationChannel(channel)
-    }
-
     fun sendEntryAlertNotification(title: String, body: String) {
         entryAlertNotificationBuilder
             .setContentTitle(title)
             .setContentText(body)
+
         notificationManager.notify(ENTRY_ALERT.id, entryAlertNotificationBuilder.build())
     }
 }
