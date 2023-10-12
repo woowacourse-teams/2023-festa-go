@@ -25,8 +25,8 @@ class SplashActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { true }
         checkAppUpdate(splashScreen)
         setContentView(binding.root)
@@ -34,8 +34,7 @@ class SplashActivity : ComponentActivity() {
 
     private fun checkAppUpdate(splashScreen: SplashScreen) {
         val appUpdateManager = AppUpdateManagerFactory.create(this)
-        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
                 splashScreen.setKeepOnScreenCondition { false }
                 requestUpdate()
