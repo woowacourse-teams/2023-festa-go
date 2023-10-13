@@ -186,7 +186,7 @@ class StudentServiceTest {
                 .willReturn(true);
 
             // when & then
-            assertThatThrownBy(() -> studentService.verificate(memberId, request))
+            assertThatThrownBy(() -> studentService.verify(memberId, request))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ALREADY_STUDENT_VERIFIED.getMessage());
         }
@@ -202,7 +202,7 @@ class StudentServiceTest {
                 .willReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> studentService.verificate(memberId, request))
+            assertThatThrownBy(() -> studentService.verify(memberId, request))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(INVALID_STUDENT_VERIFICATION_CODE.getMessage());
         }
@@ -225,7 +225,7 @@ class StudentServiceTest {
 
             // when & then
             assertThatNoException()
-                .isThrownBy(() -> studentService.verificate(memberId, request));
+                .isThrownBy(() -> studentService.verify(memberId, request));
         }
     }
 }

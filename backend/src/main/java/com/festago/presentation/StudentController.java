@@ -33,9 +33,9 @@ public class StudentController {
 
     @PostMapping("/verification")
     @Operation(description = "학교 인증을 수행한다.", summary = "학생 인증 수행")
-    public ResponseEntity<Void> verificate(@Member Long memberId,
-                                           @RequestBody @Valid StudentVerificateRequest request) {
-        studentService.verificate(memberId, request);
+    public ResponseEntity<Void> verify(@Member Long memberId,
+                                       @RequestBody @Valid StudentVerificateRequest request) {
+        studentService.verify(memberId, request);
         return ResponseEntity.ok()
             .build();
     }

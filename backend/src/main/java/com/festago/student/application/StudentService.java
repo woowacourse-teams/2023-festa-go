@@ -89,7 +89,7 @@ public class StudentService {
             );
     }
 
-    public void verificate(Long memberId, StudentVerificateRequest request) {
+    public void verify(Long memberId, StudentVerificateRequest request) {
         validateStudent(memberId);
         Member member = findMember(memberId);
         StudentCode studentCode = studentCodeRepository.findByCodeAndMember(new VerificationCode(request.code()),
