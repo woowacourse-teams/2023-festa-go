@@ -11,7 +11,6 @@ import com.festago.festago.R
 import com.festago.festago.presentation.service.FcmMessageType.ENTRY_ALERT
 import com.festago.festago.presentation.ui.home.HomeActivity
 
-
 class NotificationManager(private val context: Context) {
 
     private val intent = HomeActivity.getIntent(context).apply {
