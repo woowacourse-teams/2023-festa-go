@@ -20,7 +20,7 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
-@Profile({"dev", "prod"})
+@Profile({"prod", "dev"})
 public class FCMNotificationEventListener {
 
     private static final Logger log = LoggerFactory.getLogger(FCMNotificationEventListener.class);
