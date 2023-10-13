@@ -1,16 +1,12 @@
 package com.festago.festago.presentation.ui.home
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.festago.festago.R
 import com.festago.festago.databinding.ActivityHomeBinding
@@ -19,6 +15,7 @@ import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.util.repeatOnStarted
+import com.festago.festago.presentation.util.requestNotificationPermission
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,7 +43,7 @@ class HomeActivity : AppCompatActivity() {
         initBinding()
         initView()
         initObserve()
-        initNotificationPermission()
+        requestNotificationPermission(requestPermissionLauncher)
     }
 
     private fun initBinding() {
@@ -126,19 +123,6 @@ class HomeActivity : AppCompatActivity() {
         }
 
         fragmentTransaction.commit()
-    }
-
-    private fun initNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
     }
 
     companion object {
