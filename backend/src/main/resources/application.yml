@@ -5,3 +5,4 @@ spring:
     import:
       - classpath:/festago-config/backend/application-dev.yml
       - classpath:/festago-config/backend/application-prod.yml
+      - classpath:/festago-config/backend/application-infra.yml
