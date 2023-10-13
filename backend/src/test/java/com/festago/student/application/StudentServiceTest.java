@@ -8,6 +8,7 @@ import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
 import static com.festago.common.exception.ErrorCode.TOO_FREQUENT_REQUESTS;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -20,8 +21,10 @@ import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
+import com.festago.student.domain.Student;
 import com.festago.student.domain.StudentCode;
 import com.festago.student.domain.VerificationCode;
+import com.festago.student.dto.StudentResponse;
 import com.festago.student.dto.StudentSendMailRequest;
 import com.festago.student.dto.StudentVerificateRequest;
 import com.festago.student.infrastructure.MockMailClient;
@@ -32,6 +35,7 @@ import com.festago.support.MemberFixture;
 import com.festago.support.SchoolFixture;
 import com.festago.support.SetUpMockito;
 import com.festago.support.StudentCodeFixture;
+import com.festago.support.StudentFixture;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -226,6 +230,46 @@ class StudentServiceTest {
             // when & then
             assertThatNoException()
                 .isThrownBy(() -> studentService.verify(memberId, request));
+        }
+    }
+
+    @Nested
+    class 멤버_아이디로_인증정보_조회 {
+
+        @Test
+        void 학생_인증된_멤버의_경우() {
+            // given
+            Long memberId = 1L;
+            School school = SchoolFixture.school().id(2L).build();
+            Student student = StudentFixture.student().id(3L).school(school).build();
+            given(studentRepository.findByMemberIdWithFetch(memberId))
+                .willReturn(Optional.of(student));
+
+            // when
+            StudentResponse actual = studentService.findVerification(memberId);
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isVerified()).isTrue();
+                softly.assertThat(actual.school().id()).isEqualTo(school.getId());
+            });
+        }
+
+        @Test
+        void 학생_인증되지_않은_사용자의_경우() {
+            // given
+            Long memberId = 1L;
+            given(studentRepository.findByMemberIdWithFetch(memberId))
+                .willReturn(Optional.empty());
+
+            // when
+            StudentResponse actual = studentService.findVerification(memberId);
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isVerified()).isFalse();
+                softly.assertThat(actual.school()).isNull();
+            });
         }
     }
 }

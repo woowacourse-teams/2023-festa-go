@@ -2,6 +2,7 @@ package com.festago.presentation;
 
 import com.festago.auth.annotation.Member;
 import com.festago.student.application.StudentService;
+import com.festago.student.dto.StudentResponse;
 import com.festago.student.dto.StudentSendMailRequest;
 import com.festago.student.dto.StudentVerificateRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,5 +40,13 @@ public class StudentController {
         studentService.verify(memberId, request);
         return ResponseEntity.ok()
             .build();
+    }
+
+    @GetMapping
+    @Operation(description = "학생 인증 정보를 조회한다.", summary = "학생 인증 정보 조회")
+    public ResponseEntity<StudentResponse> findVerification(@Member Long memberId) {
+        StudentResponse response = studentService.findVerification(memberId);
+        return ResponseEntity.ok()
+            .body(response);
     }
 }

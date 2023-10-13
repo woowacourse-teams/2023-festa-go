@@ -12,12 +12,14 @@ import com.festago.student.domain.Student;
 import com.festago.student.domain.StudentCode;
 import com.festago.student.domain.VerificationCode;
 import com.festago.student.domain.VerificationMailPayload;
+import com.festago.student.dto.StudentResponse;
 import com.festago.student.dto.StudentSendMailRequest;
 import com.festago.student.dto.StudentVerificateRequest;
 import com.festago.student.repository.StudentCodeRepository;
 import com.festago.student.repository.StudentRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,5 +99,12 @@ public class StudentService {
             .orElseThrow(() -> new BadRequestException(ErrorCode.INVALID_STUDENT_VERIFICATION_CODE));
         studentRepository.save(new Student(member, studentCode.getSchool(), studentCode.getUsername()));
         studentCodeRepository.deleteByMember(member);
+    }
+
+    public StudentResponse findVerification(Long memberId) {
+        Optional<Student> student = studentRepository.findByMemberIdWithFetch(memberId);
+        return student
+            .map(value -> StudentResponse.verified(value.getSchool()))
+            .orElseGet(StudentResponse::notVerified);
     }
 }
