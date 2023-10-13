@@ -32,6 +32,7 @@
     <string name="home_bottom_navigation_festival">축제 목록</string>
     <string name="home_bottom_navigation_ticket">티켓 목록</string>
     <string name="home_bottom_navigation_user">마이페이지</string>
+    <string name="home_notification_permission_denied">알림 권한을 거부했습니다 :(</string>
 
     <!-- Strings related to ticket reserve-->
     <string name="ticket_reserve_tv_date_range">%1s ~ %1s</string>

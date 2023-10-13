@@ -33,7 +33,11 @@ class HomeActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
         if (!isGranted) {
-            Toast.makeText(this, "알림 권한을 거부했습니다 :(", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                getString(R.string.home_notification_permission_denied),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
