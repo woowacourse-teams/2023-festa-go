@@ -36,7 +36,6 @@ class TicketEntryService : FirebaseMessagingService() {
     }
 
     companion object {
-        const val START_ACTIVITY_REQUEST_CODE = 0
         val ticketStateChangeEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
     }
 }
