@@ -22,13 +22,13 @@ class FestagoApplication : Application() {
     }
 
     private fun initNotificationChannel() {
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(
             FcmMessageType.ENTRY_ALERT.channelId,
             getString(R.string.entry_alert_channel_name),
             NotificationManager.IMPORTANCE_DEFAULT
         )
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
 }
