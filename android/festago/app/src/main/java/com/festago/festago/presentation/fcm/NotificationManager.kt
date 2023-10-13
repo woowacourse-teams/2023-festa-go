@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.service
+package com.festago.festago.presentation.fcm
 
 import android.app.PendingIntent
 import android.content.Context
@@ -8,7 +8,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.festago.festago.R
-import com.festago.festago.presentation.service.FcmMessageType.ENTRY_ALERT
+import com.festago.festago.presentation.fcm.FcmMessageType.ENTRY_ALERT
 import com.festago.festago.presentation.ui.home.HomeActivity
 
 class NotificationManager(private val context: Context) {

@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.service
+package com.festago.festago.presentation.fcm
 
 enum class FcmMessageType(val id: Int, val channelId: String) {
     ENTRY_ALERT(id = 0, channelId = "ENTRY_ALERT"),

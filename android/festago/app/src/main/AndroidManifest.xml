@@ -64,7 +64,7 @@
             android:exported="false" />
 
         <service
-            android:name=".presentation.service.TicketEntryService"
+            android:name=".presentation.fcm.TicketEntryService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

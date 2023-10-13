@@ -1,7 +1,7 @@
-package com.festago.festago.presentation.service
+package com.festago.festago.presentation.fcm
 
-import com.festago.festago.presentation.service.FcmMessageType.ENTRY_ALERT
-import com.festago.festago.presentation.service.FcmMessageType.ENTRY_PROCESS
+import com.festago.festago.presentation.fcm.FcmMessageType.ENTRY_ALERT
+import com.festago.festago.presentation.fcm.FcmMessageType.ENTRY_PROCESS
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.flow.MutableSharedFlow
