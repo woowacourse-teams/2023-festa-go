@@ -97,7 +97,6 @@ class HomeActivity : AppCompatActivity() {
 
     private fun showSignIn() {
         resultLauncher.launch(SignInActivity.getIntent(this))
-        binding.fabTicket.isSelected = false
     }
 
     private inline fun <reified T : Fragment> changeFragment() {
