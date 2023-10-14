@@ -38,7 +38,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `축제 목록을 요청했을 때 토큰이 있으면 축제 목록이 보이고 로그인 이벤트가 발생하지 않는다`() = runTest {
+    fun `축제 목록을 요청했을 때 토큰이 있으면 축제 목록이 보이고 이벤트가 발생하지 않는다`() = runTest {
         // given
         `사용자 인증 유무가 다음과 같을 때`(true)
 
@@ -55,7 +55,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `축제 목록을 요청했을 때 토큰이 없어도 축제 목록이 보이고 로그인 이벤트가 발생하지 않는다`() = runTest {
+    fun `축제 목록을 요청했을 때 토큰이 없어도 축제 목록이 보이고 이벤트가 발생하지 않는다`() = runTest {
         // given
         `사용자 인증 유무가 다음과 같을 때`(false)
 
@@ -72,7 +72,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `티켓 목록을 요청했을 때 토큰이 있으면 티켓 목록이 보이고 로그인 이벤트가 발생하지 않는다`() = runTest {
+    fun `티켓 목록을 요청했을 때 토큰이 있으면 티켓 목록이 보이고 이벤트가 발생하지 않는다`() = runTest {
         // given
         `사용자 인증 유무가 다음과 같을 때`(true)
 
@@ -106,7 +106,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `마이페이지를 요청했을 때 토큰이 있으면 마이페이지 보기 이벤트가 발생한다`() = runTest {
+    fun `마이페이지를 요청했을 때 토큰이 있으면 마이페이지가 보이고 이벤트가 발생하지 않는다`() = runTest {
         // given
         `사용자 인증 유무가 다음과 같을 때`(true)
 
@@ -123,7 +123,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `마이페이즈를 요청했을 때 토큰이 없으면 로그인 보기 이벤트가 발생한다`() = runTest {
+    fun `마이페이즈를 요청했을 때 토큰이 없으면 로그인 보기 이벤트가 발생하고 선택된 화면은 축제 목록 그대로이다`() = runTest {
         // given
         `사용자 인증 유무가 다음과 같을 때`(false)
 
