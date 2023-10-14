@@ -13,12 +13,7 @@ class TicketEntryService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         when (remoteMessage.notification?.channelId) {
-            ENTRY_ALERT.channelId -> {
-                notificationManager.sendEntryAlertNotification(
-                    remoteMessage.notification?.title ?: "",
-                    remoteMessage.notification?.body ?: ""
-                )
-            }
+            ENTRY_ALERT.channelId -> handleEntryAlert(remoteMessage)
 
             ENTRY_PROCESS.channelId -> {
                 runBlocking {
@@ -28,6 +23,13 @@ class TicketEntryService : FirebaseMessagingService() {
 
             else -> Unit
         }
+    }
+
+    private fun handleEntryAlert(remoteMessage: RemoteMessage) {
+        notificationManager.sendEntryAlertNotification(
+            remoteMessage.notification?.title ?: "",
+            remoteMessage.notification?.body ?: ""
+        )
     }
 
     override fun onNewToken(token: String) {
