@@ -22,7 +22,6 @@ class TicketEntryService : FirebaseMessagingService() {
 
             ENTRY_PROCESS.channelId -> {
                 runBlocking {
-                    // TODO: 입장완료 로직인지 확인하는 로직 추가 필요
                     ticketStateChangeEvent.emit(Unit)
                 }
             }
