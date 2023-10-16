@@ -3,6 +3,8 @@ package com.festago.festago.presentation.ui.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -18,10 +20,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
-    private var _binding: ActivityHomeBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { ActivityHomeBinding.inflate(layoutInflater) }
 
     private val vm: HomeViewModel by viewModels()
+
+    private val resultLauncher: ActivityResultLauncher<Intent> by lazy {
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == SignInActivity.RESULT_NOT_SIGN_IN) {
+                binding.bnvHome.selectedItemId = R.id.item_festival
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +40,12 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initBinding() {
-        _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
     private fun initView() {
         binding.bnvHome.setOnItemSelectedListener {
-            vm.loadHomeItem(getItemType(it.itemId))
+            vm.selectItem(getItemType(it.itemId))
             true
         }
 
@@ -52,10 +60,17 @@ class HomeActivity : AppCompatActivity() {
         repeatOnStarted(this) {
             vm.event.collect { event ->
                 when (event) {
-                    is HomeEvent.ShowFestivalList -> showFestivalList()
-                    is HomeEvent.ShowTicketList -> showTicketList()
-                    is HomeEvent.ShowMyPage -> showMyPage()
                     is HomeEvent.ShowSignIn -> showSignIn()
+                }
+            }
+        }
+
+        repeatOnStarted(this) {
+            vm.selectedItem.collect { homeItemType ->
+                when (homeItemType) {
+                    HomeItemType.FESTIVAL_LIST -> showFestivalList()
+                    HomeItemType.TICKET_LIST -> showTicketList()
+                    HomeItemType.MY_PAGE -> showMyPage()
                 }
             }
         }
@@ -86,7 +101,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showSignIn() {
-        startActivity(SignInActivity.getIntent(this))
+        resultLauncher.launch(SignInActivity.getIntent(this))
     }
 
     private inline fun <reified T : Fragment> changeFragment() {

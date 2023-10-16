@@ -20,12 +20,6 @@ class SignInViewModel @Inject constructor(
     private val _event = MutableSharedFlow<SignInEvent>()
     val event: SharedFlow<SignInEvent> = _event
 
-    fun signInKakao() {
-        viewModelScope.launch {
-            _event.emit(SignInEvent.ShowSignInPage)
-        }
-    }
-
     fun signIn() {
         viewModelScope.launch {
             authRepository.signIn().onSuccess {
