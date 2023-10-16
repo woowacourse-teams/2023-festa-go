@@ -112,10 +112,10 @@ class HomeViewModelTest {
 
         vm.event.test {
             // when
-            vm.selectItem(HomeItemType.TICKET_LIST)
+            vm.selectItem(HomeItemType.MY_PAGE)
 
             // then
-            assertThat(vm.selectedItem.value).isEqualTo(HomeItemType.TICKET_LIST)
+            assertThat(vm.selectedItem.value).isEqualTo(HomeItemType.MY_PAGE)
 
             // and
             expectNoEvents()
