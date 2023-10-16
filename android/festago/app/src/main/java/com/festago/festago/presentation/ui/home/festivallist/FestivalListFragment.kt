@@ -56,13 +56,17 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
     private val Int.dp: Int get() = (this / resources.displayMetrics.density).toInt()
 
     private fun initView() {
-        binding.rvFestivalList.adapter = FestivalListAdapter()
+        adapter = FestivalListAdapter()
+        binding.rvFestivalList.adapter = adapter
 
         binding.rvFestivalList.layoutManager.apply {
             if (this is GridLayoutManager) {
-                val displayMetrics = resources.displayMetrics
-
-                spanCount = (displayMetrics.widthPixels.dp / 160)
+                val spanSize = (resources.displayMetrics.widthPixels.dp / 160)
+                spanCount = when {
+                    spanSize < 2 -> 2
+                    spanSize > 4 -> 4
+                    else -> spanSize
+                }
             }
         }
 
