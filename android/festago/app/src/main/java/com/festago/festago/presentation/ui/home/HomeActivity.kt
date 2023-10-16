@@ -40,7 +40,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initBinding() {
-        _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
@@ -56,11 +55,15 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.fabTicket.setOnClickListener {
-            binding.bnvHome?.selectedItemId = R.id.item_ticket
-            binding.nrHome?.selectedItemId = R.id.item_ticket
+            selectItem(R.id.item_ticket)
         }
 
         changeFragment<FestivalListFragment>()
+    }
+
+    private fun selectItem(itemId: Int) {
+        binding.bnvHome?.selectedItemId = itemId
+        binding.nrHome?.selectedItemId = itemId
     }
 
     private fun initObserve() {
