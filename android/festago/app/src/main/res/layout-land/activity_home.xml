@@ -20,9 +20,9 @@
                 app:itemActiveIndicatorStyle="@color/zxing_transparent"
                 app:itemIconSize="40dp"
                 app:itemIconTint="@drawable/menu_selector_color_inverse"
+                app:itemMinHeight="96dp"
                 app:labelVisibilityMode="unlabeled"
                 app:menu="@menu/menu_bottom_navigation"
-                app:itemMinHeight="96dp"
                 app:menuGravity="center" />
 
             <androidx.fragment.app.FragmentContainerView
@@ -42,6 +42,7 @@
             android:background="@android:color/transparent"
             android:backgroundTint="@drawable/menu_selector_color"
             android:src="@drawable/ic_festago_coupon"
+            app:borderWidth="1dp"
             app:fabSize="mini"
             app:layout_anchor="@id/nrHome"
             app:layout_anchorGravity="center"
