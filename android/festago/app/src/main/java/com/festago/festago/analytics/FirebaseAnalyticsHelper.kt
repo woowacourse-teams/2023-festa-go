@@ -3,15 +3,15 @@ package com.festago.festago.analytics
 import android.content.Context
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-object FirebaseAnalyticsHelper : AnalyticsHelper {
+class FirebaseAnalyticsHelper @Inject constructor(
+    @ApplicationContext context: Context
+) : AnalyticsHelper {
 
-    private const val LOG_NAME = "festago_log"
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-
-    fun init(context: Context) {
-        if (::firebaseAnalytics.isInitialized) return
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context.applicationContext)
+    private val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(context.applicationContext)
     }
 
     override fun logEvent(event: AnalyticsEvent) {
@@ -21,5 +21,9 @@ object FirebaseAnalyticsHelper : AnalyticsHelper {
             }
         }
         firebaseAnalytics.logEvent(LOG_NAME, params)
+    }
+
+    companion object {
+        private const val LOG_NAME = "festago_log"
     }
 }

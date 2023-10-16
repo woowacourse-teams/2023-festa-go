@@ -1,23 +1,32 @@
 package com.festago.application;
 
+import static com.festago.common.exception.ErrorCode.FESTIVAL_NOT_FOUND;
+import static com.festago.common.exception.ErrorCode.INVALID_FESTIVAL_START_DATE;
+import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.domain.Festival;
-import com.festago.domain.FestivalRepository;
-import com.festago.domain.Stage;
-import com.festago.domain.StageRepository;
-import com.festago.dto.FestivalCreateRequest;
-import com.festago.dto.FestivalDetailResponse;
-import com.festago.dto.FestivalDetailStageResponse;
-import com.festago.dto.FestivalResponse;
-import com.festago.dto.FestivalsResponse;
-import com.festago.exception.BadRequestException;
-import com.festago.exception.NotFoundException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.NotFoundException;
+import com.festago.festival.application.FestivalService;
+import com.festago.festival.domain.Festival;
+import com.festago.festival.dto.FestivalCreateRequest;
+import com.festago.festival.dto.FestivalDetailResponse;
+import com.festago.festival.dto.FestivalDetailStageResponse;
+import com.festago.festival.dto.FestivalResponse;
+import com.festago.festival.dto.FestivalsResponse;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
+import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,6 +38,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +51,12 @@ class FestivalServiceTest {
 
     @Mock
     StageRepository stageRepository;
+
+    @Spy
+    Clock clock = Clock.systemDefaultZone();
+
+    @Mock
+    SchoolRepository schoolRepository;
 
     @InjectMocks
     FestivalService festivalService;
@@ -65,16 +81,35 @@ class FestivalServiceTest {
     class 축제_생성 {
 
         @Test
+        void 학교가_없으면_예외() {
+            // given
+            LocalDate today = LocalDate.now();
+            Long schoolId = 1L;
+            FestivalCreateRequest request = new FestivalCreateRequest("테코대학교", today, today, "http://image.png", 1L);
+
+            given(schoolRepository.findById(schoolId))
+                .willReturn(Optional.empty());
+
+            // when & then
+            assertThatThrownBy(() -> festivalService.create(request))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(SCHOOL_NOT_FOUND.getMessage());
+        }
+
+        @Test
         void 축제_생성시_시작일자가_과거이면_예외() {
             // given
             LocalDate today = LocalDate.now();
+            School school = SchoolFixture.school().build();
             FestivalCreateRequest request = new FestivalCreateRequest("테코대학교", today.minusDays(1), today,
-                "http://image.png");
+                "http://image.png", 1L);
+            given(schoolRepository.findById(anyLong()))
+                .willReturn(Optional.of(school));
 
             // when & then
             assertThatThrownBy(() -> festivalService.create(request))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("축제 시작 일자는 과거일 수 없습니다.");
+                .hasMessage(INVALID_FESTIVAL_START_DATE.getMessage());
         }
 
         @Test
@@ -83,9 +118,13 @@ class FestivalServiceTest {
             LocalDate today = LocalDate.now();
             String name = "테코대학교";
             String thumbnail = "http://image.png";
-            FestivalCreateRequest request = new FestivalCreateRequest(name, today, today, thumbnail);
-            Festival festival = new Festival(1L, name, today, today, thumbnail);
-            FestivalResponse expected = new FestivalResponse(1L, name, today, today, thumbnail);
+            Long schoolId = 1L;
+            School school = SchoolFixture.school().id(schoolId).build();
+            FestivalCreateRequest request = new FestivalCreateRequest(name, today, today, thumbnail, schoolId);
+            Festival festival = new Festival(1L, name, today, today, thumbnail, school);
+            FestivalResponse expected = new FestivalResponse(1L, 1L, name, today, today, thumbnail);
+            given(schoolRepository.findById(schoolId))
+                .willReturn(Optional.of(school));
             given(festivalRepository.save(any()))
                 .willReturn(festival);
 
@@ -109,7 +148,7 @@ class FestivalServiceTest {
 
             // when & then
             assertThatThrownBy(() -> festivalService.findDetail(festivalId)).isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 축제입니다.");
+                .hasMessage(FESTIVAL_NOT_FOUND.getMessage());
         }
 
         @Test

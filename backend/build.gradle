@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.0.8'
+    id 'org.springframework.boot' version '3.1.4'
     id 'io.spring.dependency-management' version '1.1.0'
 }
 
@@ -24,6 +24,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
     runtimeOnly 'com.h2database:h2'
@@ -40,8 +41,24 @@ dependencies {
     // Logback Slack Alarm
     implementation "com.github.maricn:logback-slack-appender:1.4.0"
 
-    // Mockito
-    testImplementation 'org.mockito:mockito-inline'
+    // Cucumber
+    testImplementation 'io.cucumber:cucumber-java:7.13.0'
+    testImplementation 'io.cucumber:cucumber-spring:7.13.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.13.0'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.8.2'
+
+    // Flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-admin:8.1.0'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {

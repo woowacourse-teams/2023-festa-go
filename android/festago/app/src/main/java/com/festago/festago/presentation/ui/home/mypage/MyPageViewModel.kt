@@ -1,95 +1,71 @@
 package com.festago.festago.presentation.ui.home.mypage
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.model.TicketUiModel
-import com.festago.festago.presentation.util.MutableSingleLiveData
-import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TicketRepository
 import com.festago.festago.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyPageViewModel(
+@HiltViewModel
+class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val ticketRepository: TicketRepository,
     private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData<MyPageUiState>(MyPageUiState.Loading)
-    val uiState: LiveData<MyPageUiState> = _uiState
+    private val _uiState = MutableStateFlow<MyPageUiState>(MyPageUiState.Loading)
+    val uiState: StateFlow<MyPageUiState> = _uiState.asStateFlow()
 
-    private val _event = MutableSingleLiveData<MyPageEvent>()
-    val event: SingleLiveData<MyPageEvent> = _event
+    private val _event = MutableSharedFlow<MyPageEvent>()
+    val event: SharedFlow<MyPageEvent> = _event.asSharedFlow()
 
     fun loadUserInfo() {
         if (!authRepository.isSigned) {
-            _event.setValue(MyPageEvent.ShowSignIn)
-            _uiState.value = MyPageUiState.Error
+            viewModelScope.launch {
+                _event.emit(MyPageEvent.ShowSignIn)
+                _uiState.value = MyPageUiState.Error
+            }
             return
         }
         viewModelScope.launch {
-            loadUserProfile()
-            loadFirstTicket()
+            val deferredUserProfile = async { userRepository.loadUserProfile() }
+            val deferredHistoryTicket = async { ticketRepository.loadHistoryTickets(size = 1) }
+
+            runCatching {
+                _uiState.value = MyPageUiState.Success(
+                    userProfile = deferredUserProfile.await().getOrThrow(),
+                    ticket = deferredHistoryTicket.await().getOrThrow().firstOrNull(),
+                )
+            }.onFailure {
+                _uiState.value = MyPageUiState.Error
+                analyticsHelper.logNetworkFailure(
+                    key = KEY_LOAD_USER_INFO,
+                    value = it.message.toString(),
+                )
+            }
         }
-    }
-
-    private suspend fun loadUserProfile() {
-        userRepository.loadUserProfile()
-            .onSuccess {
-                when (val current = uiState.value) {
-                    is MyPageUiState.Error,
-                    is MyPageUiState.Loading,
-                    null,
-                    -> _uiState.value = MyPageUiState.Success(userProfile = it.toPresentation())
-
-                    is MyPageUiState.Success ->
-                        _uiState.value = current.copy(userProfile = it.toPresentation())
-                }
-            }.onFailure {
-                _uiState.value = MyPageUiState.Error
-                analyticsHelper.logNetworkFailure(
-                    key = KEY_LOAD_USER_INFO,
-                    value = it.message.toString(),
-                )
-            }
-    }
-
-    private suspend fun loadFirstTicket() {
-        ticketRepository.loadHistoryTickets(size = 1)
-            .onSuccess {
-                val ticket = it.firstOrNull()?.toPresentation() ?: TicketUiModel()
-                when (val current = uiState.value) {
-                    is MyPageUiState.Error, null -> Unit
-
-                    is MyPageUiState.Loading ->
-                        _uiState.value = MyPageUiState.Success(ticket = ticket)
-
-                    is MyPageUiState.Success -> _uiState.value = current.copy(ticket = ticket)
-                }
-            }.onFailure {
-                _uiState.value = MyPageUiState.Error
-                analyticsHelper.logNetworkFailure(
-                    key = KEY_LOAD_USER_INFO,
-                    value = it.message.toString(),
-                )
-            }
     }
 
     fun signOut() {
         viewModelScope.launch {
             authRepository.signOut()
                 .onSuccess {
-                    _event.setValue(MyPageEvent.SignOutSuccess)
+                    _event.emit(MyPageEvent.SignOutSuccess)
                     _uiState.value = MyPageUiState.Error
                 }.onFailure {
-                    _uiState.value = MyPageUiState.Error
                     analyticsHelper.logNetworkFailure(
                         key = KEY_SIGN_OUT,
                         value = it.message.toString(),
@@ -99,17 +75,18 @@ class MyPageViewModel(
     }
 
     fun showConfirmDelete() {
-        _event.setValue(MyPageEvent.ShowConfirmDelete)
+        viewModelScope.launch {
+            _event.emit(MyPageEvent.ShowConfirmDelete)
+        }
     }
 
     fun deleteAccount() {
         viewModelScope.launch {
             authRepository.deleteAccount()
                 .onSuccess {
-                    _event.setValue(MyPageEvent.DeleteAccountSuccess)
+                    _event.emit(MyPageEvent.DeleteAccountSuccess)
                     _uiState.value = MyPageUiState.Error
                 }.onFailure {
-                    _uiState.value = MyPageUiState.Error
                     analyticsHelper.logNetworkFailure(
                         key = KEY_DELETE_ACCOUNT,
                         value = it.message.toString(),
@@ -119,7 +96,9 @@ class MyPageViewModel(
     }
 
     fun showTicketHistory() {
-        _event.setValue(MyPageEvent.ShowTicketHistory)
+        viewModelScope.launch {
+            _event.emit(MyPageEvent.ShowTicketHistory)
+        }
     }
 
     companion object {

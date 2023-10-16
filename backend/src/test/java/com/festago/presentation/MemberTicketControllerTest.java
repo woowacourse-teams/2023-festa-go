@@ -13,19 +13,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.EntryService;
-import com.festago.application.MemberTicketService;
-import com.festago.application.TicketingService;
-import com.festago.domain.EntryState;
-import com.festago.dto.EntryCodeResponse;
-import com.festago.dto.MemberTicketFestivalResponse;
-import com.festago.dto.MemberTicketResponse;
-import com.festago.dto.MemberTicketsResponse;
-import com.festago.dto.StageResponse;
-import com.festago.dto.TicketingRequest;
-import com.festago.dto.TicketingResponse;
+import com.festago.entry.application.EntryService;
+import com.festago.entry.dto.EntryCodeResponse;
+import com.festago.stage.dto.StageResponse;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
+import com.festago.ticketing.application.MemberTicketService;
+import com.festago.ticketing.application.TicketingService;
+import com.festago.ticketing.domain.EntryState;
+import com.festago.ticketing.dto.MemberTicketFestivalResponse;
+import com.festago.ticketing.dto.MemberTicketResponse;
+import com.festago.ticketing.dto.MemberTicketsResponse;
+import com.festago.ticketing.dto.TicketingRequest;
+import com.festago.ticketing.dto.TicketingResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.stream.LongStream;
@@ -92,7 +92,7 @@ class MemberTicketControllerTest {
         Long memberId = 1L;
         String token = "sampleToken";
 
-        StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
+        StageResponse stageResponse = new StageResponse(1L, 1L, LocalDateTime.now(), LocalDateTime.now(), "푸우회장");
         MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
             "https://image.png");
         MemberTicketResponse expected = new MemberTicketResponse(memberTicketId, 1, LocalDateTime.now(),
@@ -121,7 +121,7 @@ class MemberTicketControllerTest {
         Long memberId = 1L;
         String token = "sampleToken";
 
-        StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
+        StageResponse stageResponse = new StageResponse(1L, 1L, LocalDateTime.now(), LocalDateTime.now(), "푸우회장");
         MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
             "https://image.png");
         MemberTicketsResponse expected = LongStream.range(0, 10L)
@@ -153,7 +153,7 @@ class MemberTicketControllerTest {
         Long memberId = 1L;
         String token = "sampleToken";
 
-        StageResponse stageResponse = new StageResponse(1L, LocalDateTime.now());
+        StageResponse stageResponse = new StageResponse(1L, 1L, LocalDateTime.now(), LocalDateTime.now(), "푸우회장");
         MemberTicketFestivalResponse festivalResponse = new MemberTicketFestivalResponse(1L, "테코대학교",
             "https://image.png");
         MemberTicketsResponse expected = LongStream.range(0, 10L)

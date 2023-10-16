@@ -2,7 +2,10 @@ package com.festago.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.domain.Festival;
+import com.festago.festival.domain.Festival;
+import com.festago.festival.dto.FestivalCreateRequest;
+import com.festago.school.domain.School;
+import com.festago.support.SchoolFixture;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -19,10 +22,12 @@ class FestivalCreateRequestTest {
             "name",
             LocalDate.now(),
             LocalDate.now().plusDays(2L),
-            "");
+            "",
+            1L);
+        School school = SchoolFixture.school().build();
 
         // when
-        Festival festival = request.toEntity();
+        Festival festival = request.toEntity(school);
 
         // then
         assertThat(festival.getThumbnail()).isEqualTo("https://picsum.photos/536/354");
@@ -35,10 +40,12 @@ class FestivalCreateRequestTest {
             "name",
             LocalDate.now(),
             LocalDate.now().plusDays(2L),
-            "img");
+            "img",
+            1L);
+        School school = SchoolFixture.school().build();
 
         // when
-        Festival festival = request.toEntity();
+        Festival festival = request.toEntity(school);
 
         // then
         assertThat(festival.getThumbnail()).isEqualTo("img");

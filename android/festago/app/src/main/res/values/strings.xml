@@ -10,6 +10,17 @@
     <string name="all_ticket_state_after_entry">입장완료</string>
     <string name="all_ticket_state_away">외출중</string>
 
+    <!--ticket type-->
+    <string name="all_ticket_type_student">재학생용</string>
+    <string name="all_ticket_type_visitor">방문객용</string>
+    <string name="all_ticket_type_other">기타</string>
+
+    <!-- splash -->
+    <string name="splash_app_update_request_dialog_title">업데이트 알림</string>
+    <string name="splash_app_update_request_dialog_message">새로운 페스타고를 사용하기 위해 업데이트 해주세요.</string>
+    <string name="splash_app_update_denied">업데이트 후 정상 사용가능합니다.</string>
+    <string name="splash_app_default_error_message">페스타고 실행 중 문제가 발생했습니다. 페스타고로 문의해주세요.</string>
+
     <!-- Strings related to main -->
     <string name="main_btn_ticket_disable_time">HH:mm 티켓 활성화</string>
     <string name="main_btn_ticket_enable_time">티켓 제시</string>
@@ -37,13 +48,12 @@
     <string name="ticket_reserve_tv_ticket_count">%1$s(%2$s/%3$s)</string>
     <string name="ticket_reserve_tv_ticket_count_separator">", "</string>
     <string name="ticket_reserve_tv_auth_guide_student">⚠️ 재학생용 티켓예매를 위해 사전에 학교 인증이 필요합니다.</string>
-    <string name="ticket_reserve_tv_error_page">예매 가능한 티켓이 없습니다.</string>
+    <string name="ticket_reserve_tv_error_page">축제 조회에 실패했습니다.</string>
     <string name="ticket_reserve_btn_reserve_ticket">티켓 예매</string>
     <string name="ticket_reserve_tv_ticket_count_format">(%1$s/%2$s)</string>
     <string name="ticket_reserve_tv_btn_reserve_ticket">예매 하기</string>
     <string name="ticket_reserve_tv_btn_reserve_ticket_not_open">MM월 dd일 HH:mm 오픈예정</string>
     <string name="ticket_reserve_tv_signin">로그인 후 예매</string>
-
 
     <!-- Strings related to festival list -->
     <string name="festival_list_tv_date_format">yyyy.MM.dd</string>
@@ -66,6 +76,7 @@
 
     <!-- Strings related to ok dialog -->
     <string name="ok_dialog_btn_ok">확인</string>
+    <string name="ok_dialog_btn_cancel">취소</string>
 
     <!-- Strings related to mypage -->
     <string name="mypage_btn_kakao">카카오로 로그인</string>
@@ -108,5 +119,21 @@
     <string name="confirm_delete_dialog_message">탈퇴 버튼 선택 시, 계정은 삭제되며 복구되지 않습니다.</string>
     <string name="confirm_delete_dialog_yes">탈퇴</string>
     <string name="confirm_delete_dialog_no">취소</string>
+
+    <!-- Strings related to student verification -->
+
+    <string name="student_verification_tie_username">학교 이메일</string>
+    <string name="student_verification_tie_verification_code">인증 코드</string>
+    <string name="student_verification_btn_student_verification">인증 번호 받기</string>
+    <string name="student_verification_btn_student_verification_confirm">인증 번호 확인</string>
+    <string name="student_verification_tv_email_format">\@%s</string>
+    <string name="student_verification_tv_timer_format">mm:ss</string>
+    <string name="student_verification_tv_error">학교 정보 받아오기에 실패했습니다.</string>
+
+    <!-- Strings related to select school -->
+    <string name="select_school_btn_next">다음</string>
+    <string name="select_school_til_select_school">학교 선택</string>
+    <string name="select_school_tv_error_message">학교 목록 불러오기에 실패했습니다.</string>
+    <string name="select_school_tv_select_school">학교 선택</string>
 
 </resources>

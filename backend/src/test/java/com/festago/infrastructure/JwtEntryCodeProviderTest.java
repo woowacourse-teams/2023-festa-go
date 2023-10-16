@@ -1,13 +1,15 @@
 package com.festago.infrastructure;
 
+import static com.festago.common.exception.ErrorCode.INVALID_ENTRY_CODE_EXPIRATION_TIME;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.festago.domain.EntryCodePayload;
-import com.festago.domain.EntryCodeProvider;
-import com.festago.domain.MemberTicket;
-import com.festago.exception.InternalServerException;
+import com.festago.common.exception.InternalServerException;
+import com.festago.entry.application.EntryCodeProvider;
+import com.festago.entry.domain.EntryCodePayload;
+import com.festago.entry.infrastructure.JwtEntryCodeProvider;
 import com.festago.support.MemberTicketFixture;
+import com.festago.ticketing.domain.MemberTicket;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.util.Date;
@@ -27,28 +29,29 @@ class JwtEntryCodeProviderTest {
     void expiredAt이_과거이면_예외() {
         // given
         Date now = new Date();
-        Date expiredAt = new Date(now.getTime() - 1000L);
+        Date expiredAt = new Date(now.getTime() - 1_000);
         MemberTicket memberTicket = MemberTicketFixture.memberTicket()
             .id(1L)
             .build();
-        EntryCodePayload payload = EntryCodePayload.from(memberTicket);
+        EntryCodePayload entryCodePayload = EntryCodePayload.from(memberTicket);
 
         // when & then
-        assertThatThrownBy(() -> entryCodeProvider.provide(payload, expiredAt))
+        assertThatThrownBy(() -> entryCodeProvider.provide(entryCodePayload, expiredAt))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("올바르지 않은 입장코드 만료 일자입니다.");
+            .hasMessage(INVALID_ENTRY_CODE_EXPIRATION_TIME.getMessage());
     }
 
     @Test
     void JWT_토큰을_생성() {
         // given
-        long period = 30000;
+        long period = 30_000;
         MemberTicket memberTicket = MemberTicketFixture.memberTicket().id(1L).build();
         Date now = new Date();
         Date expiredAt = new Date(now.getTime() + period);
+        EntryCodePayload entryCodePayload = EntryCodePayload.from(memberTicket);
 
         // when
-        String code = entryCodeProvider.provide(EntryCodePayload.from(memberTicket), expiredAt);
+        String code = entryCodeProvider.provide(entryCodePayload, expiredAt);
 
         // then
         Claims claims = Jwts.parserBuilder()
@@ -57,12 +60,11 @@ class JwtEntryCodeProviderTest {
             .parseClaimsJws(code)
             .getBody();
 
-        Long actualMemberTicketId = (long) ((int) claims.get("ticketId"));
+        Long actualMemberTicketId = claims.get("ticketId", Long.class);
         Date actualExpiredAt = claims.getExpiration();
 
         assertSoftly(softly -> {
-            softly.assertThat(actualExpiredAt.getTime() - now.getTime() / 1000 * 1000)
-                .isEqualTo(period);
+            softly.assertThat(actualExpiredAt).isEqualToIgnoringMillis(expiredAt);
             softly.assertThat(actualMemberTicketId).isEqualTo(memberTicket.getId());
         });
     }

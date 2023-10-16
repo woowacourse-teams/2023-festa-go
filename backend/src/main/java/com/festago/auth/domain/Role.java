@@ -3,8 +3,8 @@ package com.festago.auth.domain;
 import com.festago.auth.annotation.Admin;
 import com.festago.auth.annotation.Anonymous;
 import com.festago.auth.annotation.Member;
-import com.festago.exception.ErrorCode;
-import com.festago.exception.InternalServerException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.InternalServerException;
 import java.lang.annotation.Annotation;
 
 public enum Role {

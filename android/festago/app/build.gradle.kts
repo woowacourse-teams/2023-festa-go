@@ -9,16 +9,17 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("org.jlleitschuh.gradle.ktlint")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.festago.festago"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.festago.festago"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 3
         versionName = "1.0.1"
 
@@ -63,12 +64,23 @@ kotlin {
     jvmToolchain(17)
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
+    // domain
+    implementation(project(":domain"))
+
     // android
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     // recyclerview
     implementation("androidx.recyclerview:recyclerview:1.3.1-rc01")
@@ -127,6 +139,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.2.1")
 
     // swiperefreshlayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
@@ -137,8 +150,14 @@ dependencies {
     // Encrypted SharedPreference
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
 
-    // domain
-    implementation(project(":domain"))
+    // turbine
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+
+    // inApp Update
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
+
+    // splash
+    implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
 }
 
 fun getSecretKey(propertyKey: String): String {

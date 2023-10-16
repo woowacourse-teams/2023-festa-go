@@ -1,5 +1,8 @@
 package com.festago.auth.application;
 
+import static com.festago.common.exception.ErrorCode.DUPLICATE_ACCOUNT_USERNAME;
+import static com.festago.common.exception.ErrorCode.INCORRECT_PASSWORD_OR_ACCOUNT;
+import static com.festago.common.exception.ErrorCode.NOT_ENOUGH_PERMISSION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
@@ -7,15 +10,14 @@ import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.auth.domain.Admin;
-import com.festago.auth.domain.AdminRepository;
-import com.festago.auth.domain.AuthProvider;
+import com.festago.admin.domain.Admin;
+import com.festago.admin.repository.AdminRepository;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.auth.dto.AdminSignupResponse;
-import com.festago.exception.BadRequestException;
-import com.festago.exception.ForbiddenException;
-import com.festago.exception.UnauthorizedException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ForbiddenException;
+import com.festago.common.exception.UnauthorizedException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -53,7 +55,7 @@ class AdminAuthServiceTest {
             // when & then
             assertThatThrownBy(() -> adminAuthService.login(request))
                 .isInstanceOf(UnauthorizedException.class)
-                .hasMessage("비밀번호가 틀렸거나, 해당 계정이 없습니다.");
+                .hasMessage(INCORRECT_PASSWORD_OR_ACCOUNT.getMessage());
         }
 
         @Test
@@ -67,7 +69,7 @@ class AdminAuthServiceTest {
             // when & then
             assertThatThrownBy(() -> adminAuthService.login(request))
                 .isInstanceOf(UnauthorizedException.class)
-                .hasMessage("비밀번호가 틀렸거나, 해당 계정이 없습니다.");
+                .hasMessage(INCORRECT_PASSWORD_OR_ACCOUNT.getMessage());
         }
 
         @Test
@@ -103,7 +105,7 @@ class AdminAuthServiceTest {
             // when & then
             assertThatThrownBy(() -> adminAuthService.signup(1L, request))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("해당 계정이 존재합니다.");
+                .hasMessage(DUPLICATE_ACCOUNT_USERNAME.getMessage());
         }
 
         @Test
@@ -116,7 +118,7 @@ class AdminAuthServiceTest {
             // when & then
             assertThatThrownBy(() -> adminAuthService.signup(1L, request))
                 .isInstanceOf(ForbiddenException.class)
-                .hasMessage("해당 권한이 없습니다.");
+                .hasMessage(NOT_ENOUGH_PERMISSION.getMessage());
         }
 
         @Test

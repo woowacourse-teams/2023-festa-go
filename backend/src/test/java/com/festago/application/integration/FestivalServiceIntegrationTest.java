@@ -2,22 +2,25 @@ package com.festago.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.application.FestivalService;
-import com.festago.domain.Festival;
-import com.festago.domain.FestivalRepository;
-import com.festago.domain.Stage;
-import com.festago.domain.StageRepository;
-import com.festago.domain.Ticket;
-import com.festago.domain.TicketRepository;
-import com.festago.domain.TicketType;
-import com.festago.dto.FestivalCreateRequest;
-import com.festago.dto.FestivalDetailResponse;
-import com.festago.dto.FestivalDetailStageResponse;
-import com.festago.dto.FestivalDetailTicketResponse;
-import com.festago.dto.FestivalResponse;
+import com.festago.festival.application.FestivalService;
+import com.festago.festival.domain.Festival;
+import com.festago.festival.dto.FestivalCreateRequest;
+import com.festago.festival.dto.FestivalDetailResponse;
+import com.festago.festival.dto.FestivalDetailStageResponse;
+import com.festago.festival.dto.FestivalDetailTicketResponse;
+import com.festago.festival.dto.FestivalResponse;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
+import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
+import com.festago.ticket.domain.Ticket;
+import com.festago.ticket.domain.TicketType;
+import com.festago.ticket.repository.TicketRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,12 +46,17 @@ class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
     @Autowired
     TicketRepository ticketRepository;
 
+    @Autowired
+    SchoolRepository schoolRepository;
+
+
     @Test
     void 축제를_생성한다() {
         // given
+        School school = schoolRepository.save(SchoolFixture.school().build());
         LocalDate today = LocalDate.now();
         FestivalCreateRequest request = new FestivalCreateRequest("테코 대학교 축제", today, today.plusDays(1),
-            "thumbnail.png");
+            "thumbnail.png", school.getId());
 
         // when
         FestivalResponse festivalResponse = festivalService.create(request);
@@ -60,7 +68,8 @@ class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 축제_상세_정보를_조회한다() {
         // given
-        Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+        School school = schoolRepository.save(SchoolFixture.school().build());
+        Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
         Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
         Ticket ticket1 = ticketRepository.save(
             TicketFixture.ticket().stage(stage).ticketType(TicketType.VISITOR).build());

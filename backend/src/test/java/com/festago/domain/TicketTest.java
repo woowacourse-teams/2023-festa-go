@@ -1,14 +1,25 @@
 package com.festago.domain;
 
+import static com.festago.common.exception.ErrorCode.EARLY_TICKET_ENTRY_THAN_OPEN;
+import static com.festago.common.exception.ErrorCode.EARLY_TICKET_ENTRY_TIME;
+import static com.festago.common.exception.ErrorCode.INVALID_TICKET_CREATE_TIME;
+import static com.festago.common.exception.ErrorCode.LATE_TICKET_ENTRY_TIME;
+import static com.festago.common.exception.ErrorCode.TICKET_CANNOT_RESERVE_STAGE_START;
+import static com.festago.common.exception.ErrorCode.TICKET_SOLD_OUT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.festago.exception.BadRequestException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.festival.domain.Festival;
+import com.festago.member.domain.Member;
+import com.festago.stage.domain.Stage;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
+import com.festago.ticket.domain.Ticket;
+import com.festago.ticketing.domain.MemberTicket;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -41,7 +52,7 @@ class TicketTest {
             assertThatThrownBy(
                 () -> ticket.addTicketEntryTime(now.minusMinutes(10), now.minusMinutes(minute), 100))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("입장 시간은 티켓 오픈 시간 이후여야합니다.");
+                .hasMessage(EARLY_TICKET_ENTRY_THAN_OPEN.getMessage());
         }
 
         @ParameterizedTest
@@ -59,7 +70,7 @@ class TicketTest {
             // when & then
             assertThatThrownBy(() -> ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), entryTime, 100))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("입장 시간은 공연 시간보다 빨라야합니다.");
+                .hasMessage(LATE_TICKET_ENTRY_TIME.getMessage());
         }
 
         @Test
@@ -76,7 +87,7 @@ class TicketTest {
             // when & then
             assertThatThrownBy(() -> ticket.addTicketEntryTime(ticketOpenTime.minusMinutes(10), entryTime, 100))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("입장 시간은 공연 시작 12시간 이내여야 합니다.");
+                .hasMessage(EARLY_TICKET_ENTRY_TIME.getMessage());
         }
 
         @Test
@@ -93,7 +104,7 @@ class TicketTest {
             // when & then
             assertThatThrownBy(() -> ticket.addTicketEntryTime(LocalDateTime.now(), startTime.minusHours(3), 100))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("티켓 예매 시작 후 새롭게 티켓을 발급할 수 없습니다.");
+                .hasMessage(INVALID_TICKET_CREATE_TIME.getMessage());
         }
 
         @Test
@@ -146,7 +157,7 @@ class TicketTest {
             // when & then
             assertThatThrownBy(() -> ticket.createMemberTicket(member, 101, now))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("매진된 티켓입니다.");
+                .hasMessage(TICKET_SOLD_OUT.getMessage());
         }
 
         @Test
@@ -174,7 +185,7 @@ class TicketTest {
             // when & then
             assertThatThrownBy(() -> ticket.createMemberTicket(member, 1, now))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("공연의 시작 시간 이후로 예매할 수 없습니다.");
+                .hasMessage(TICKET_CANNOT_RESERVE_STAGE_START.getMessage());
         }
 
         @ParameterizedTest

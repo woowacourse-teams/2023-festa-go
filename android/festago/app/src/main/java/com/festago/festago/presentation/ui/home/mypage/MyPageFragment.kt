@@ -9,17 +9,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentMyPageBinding
-import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.home.HomeActivity
+import com.festago.festago.presentation.ui.selectschool.SelectSchoolActivity
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.ui.tickethistory.TicketHistoryActivity
+import com.festago.festago.presentation.util.repeatOnStarted
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
 
-    private val vm: MyPageViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: MyPageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,23 +41,34 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
     }
 
     private fun initObserve() {
-        vm.uiState.observe(viewLifecycleOwner) { uiState ->
-            binding.uiState = uiState
-            when (uiState) {
-                is MyPageUiState.Loading, is MyPageUiState.Error -> Unit
-
-                is MyPageUiState.Success -> handleSuccess(uiState)
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.uiState.collect { uiState ->
+                handleUiState(uiState)
             }
-            binding.srlMyPage.isRefreshing = false
         }
-        vm.event.observe(viewLifecycleOwner) { event ->
-            when (event) {
-                is MyPageEvent.ShowSignIn -> handleShowSignInEvent()
-                is MyPageEvent.SignOutSuccess -> handleSignOutSuccessEvent()
-                is MyPageEvent.DeleteAccountSuccess -> handleDeleteAccountSuccess()
-                is MyPageEvent.ShowTicketHistory -> handleShowTicketHistory()
-                is MyPageEvent.ShowConfirmDelete -> handleShowConfirmDelete()
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect { event ->
+                handleEvent(event)
             }
+        }
+    }
+
+    private fun handleUiState(uiState: MyPageUiState) {
+        binding.uiState = uiState
+        when (uiState) {
+            is MyPageUiState.Loading, is MyPageUiState.Error -> Unit
+
+            is MyPageUiState.Success -> handleSuccess(uiState)
+        }
+    }
+
+    private fun handleEvent(event: MyPageEvent) {
+        when (event) {
+            is MyPageEvent.ShowSignIn -> handleShowSignInEvent()
+            is MyPageEvent.SignOutSuccess -> handleSignOutSuccessEvent()
+            is MyPageEvent.DeleteAccountSuccess -> handleDeleteAccountSuccess()
+            is MyPageEvent.ShowTicketHistory -> handleShowTicketHistory()
+            is MyPageEvent.ShowConfirmDelete -> handleShowConfirmDelete()
         }
     }
 
@@ -101,6 +115,11 @@ class MyPageFragment : Fragment(R.layout.fragment_my_page) {
 
         binding.srlMyPage.setOnRefreshListener {
             vm.loadUserInfo()
+            binding.srlMyPage.isRefreshing = false
+        }
+
+        binding.tvSchoolAuthorization.setOnClickListener {
+            startActivity(SelectSchoolActivity.getIntent(requireContext()))
         }
     }
 

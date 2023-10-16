@@ -1,6 +1,6 @@
 package com.festago.auth.infrastructure;
 
-import com.festago.auth.domain.TokenExtractor;
+import com.festago.auth.application.TokenExtractor;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Objects;

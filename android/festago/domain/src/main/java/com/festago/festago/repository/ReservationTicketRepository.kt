@@ -1,7 +1,7 @@
 package com.festago.festago.repository
 
-import com.festago.festago.model.ReservationTicket
+import com.festago.festago.model.ReservationTickets
 
 interface ReservationTicketRepository {
-    suspend fun loadTicketTypes(stageId: Int): Result<List<ReservationTicket>>
+    suspend fun loadTicketTypes(stageId: Int): Result<ReservationTickets>
 }

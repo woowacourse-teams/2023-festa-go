@@ -1,31 +1,43 @@
 package com.festago.application;
 
+import static com.festago.common.exception.ErrorCode.MEMBER_TICKET_NOT_FOUND;
+import static com.festago.common.exception.ErrorCode.NOT_ENTRY_TIME;
+import static com.festago.common.exception.ErrorCode.NOT_MEMBER_TICKET_OWNER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-import com.festago.domain.EntryCodeExtractor;
-import com.festago.domain.EntryCodePayload;
-import com.festago.domain.EntryCodeProvider;
-import com.festago.domain.EntryState;
-import com.festago.domain.Festival;
-import com.festago.domain.Member;
-import com.festago.domain.MemberTicket;
-import com.festago.domain.MemberTicketRepository;
-import com.festago.domain.Stage;
-import com.festago.dto.EntryCodeResponse;
-import com.festago.dto.TicketValidationRequest;
-import com.festago.dto.TicketValidationResponse;
-import com.festago.exception.BadRequestException;
-import com.festago.exception.NotFoundException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.NotFoundException;
+import com.festago.entry.application.EntryCodeManager;
+import com.festago.entry.application.EntryService;
+import com.festago.entry.domain.EntryCode;
+import com.festago.entry.domain.EntryCodePayload;
+import com.festago.entry.dto.EntryCodeResponse;
+import com.festago.entry.dto.TicketValidationRequest;
+import com.festago.entry.dto.TicketValidationResponse;
+import com.festago.entry.dto.event.EntryProcessEvent;
+import com.festago.festival.domain.Festival;
+import com.festago.member.domain.Member;
+import com.festago.stage.domain.Stage;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
+import com.festago.support.TimeInstantProvider;
+import com.festago.ticketing.domain.EntryState;
+import com.festago.ticketing.domain.MemberTicket;
+import com.festago.ticketing.repository.MemberTicketRepository;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -34,7 +46,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -42,13 +56,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class EntryServiceTest {
 
     @Mock
-    EntryCodeProvider entryCodeProvider;
-
-    @Mock
-    EntryCodeExtractor entryCodeExtractor;
+    EntryCodeManager entryCodeManager;
 
     @Mock
     MemberTicketRepository memberTicketRepository;
+
+    @Mock
+    ApplicationEventPublisher publisher;
+
+    @Spy
+    Clock clock = Clock.systemDefaultZone();
 
     @InjectMocks
     EntryService entryService;
@@ -59,9 +76,15 @@ class EntryServiceTest {
         @Test
         void 입장_시간_전_요청하면_예외() {
             // given
-            LocalDateTime entryTime = LocalDateTime.now().plusMinutes(30);
+            LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
+            Festival festival = FestivalFixture.festival()
+                .startDate(entryTime.toLocalDate())
+                .endDate(entryTime.toLocalDate())
+                .build();
             Stage stage = StageFixture.stage()
-                .startTime(LocalDateTime.now().plusHours(1))
+                .festival(festival)
+                .startTime(entryTime.plusHours(2))
+                .ticketOpenTime(entryTime.minusHours(1))
                 .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
@@ -70,28 +93,29 @@ class EntryServiceTest {
                 .build();
             Long memberId = memberTicket.getOwner().getId();
             Long memberTicketId = memberTicket.getId();
-
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
+            given(clock.instant())
+                .willReturn(TimeInstantProvider.from(entryTime.minusHours(1)));
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("입장 가능한 시간이 아닙니다.");
+                .hasMessage(NOT_ENTRY_TIME.getMessage());
         }
 
         @Test
         void 입장_시간이_24시간이_넘은_경우_예외() {
             // given
-            LocalDateTime stageStartTime = LocalDateTime.now().minusHours(24);
-            LocalDateTime entryTime = stageStartTime.minusSeconds(10);
+            LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
             Festival festival = FestivalFixture.festival()
-                .startDate(stageStartTime.toLocalDate())
-                .endDate(stageStartTime.toLocalDate())
+                .startDate(entryTime.toLocalDate())
+                .endDate(entryTime.toLocalDate())
                 .build();
             Stage stage = StageFixture.stage()
                 .festival(festival)
-                .startTime(stageStartTime)
+                .startTime(entryTime.plusHours(2))
+                .ticketOpenTime(entryTime.minusHours(1))
                 .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
@@ -100,27 +124,26 @@ class EntryServiceTest {
                 .build();
             Long memberId = memberTicket.getOwner().getId();
             Long memberTicketId = memberTicket.getId();
-
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
+            given(clock.instant())
+                .willReturn(TimeInstantProvider.from((entryTime.plusHours(24))));
 
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("입장 가능한 시간이 아닙니다.");
+                .hasMessage(NOT_ENTRY_TIME.getMessage());
         }
 
         @Test
         void 자신의_티켓이_아니면_예외() {
             // given
-            LocalDateTime entryTime = LocalDateTime.now().minusMinutes(30);
             Long memberId = 1L;
             Member other = MemberFixture.member()
                 .id(2L)
                 .build();
             MemberTicket otherTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
-                .entryTime(entryTime)
                 .owner(other)
                 .build();
             Long memberTicketId = otherTicket.getId();
@@ -131,7 +154,7 @@ class EntryServiceTest {
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(memberId, memberTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("해당 예매 티켓의 주인이 아닙니다.");
+                .hasMessage(NOT_MEMBER_TICKET_OWNER.getMessage());
         }
 
         @Test
@@ -144,31 +167,46 @@ class EntryServiceTest {
             // when & then
             assertThatThrownBy(() -> entryService.createEntryCode(1L, memberTicketId))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않은 멤버 티켓입니다.");
+                .hasMessage(MEMBER_TICKET_NOT_FOUND.getMessage());
         }
 
         @Test
         void 성공() {
             // given
+            LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
+            Instant now = Instant.from(ZonedDateTime.of(entryTime, ZoneId.systemDefault()));
+            Festival festival = FestivalFixture.festival()
+                .startDate(entryTime.toLocalDate())
+                .endDate(entryTime.toLocalDate())
+                .build();
+            Stage stage = StageFixture.stage()
+                .festival(festival)
+                .startTime(entryTime.plusHours(2))
+                .ticketOpenTime(entryTime.minusHours(1))
+                .build();
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
+                .stage(stage)
+                .entryTime(entryTime)
                 .build();
-            String code = "3112321312123";
+            EntryCode entryCode = new EntryCode("1234", 30, 10);
             Long memberId = memberTicket.getOwner().getId();
             Long memberTicketId = memberTicket.getId();
 
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
-            given(entryCodeProvider.provide(any(), any()))
-                .willReturn(code);
+            given(entryCodeManager.provide(any(EntryCodePayload.class), anyLong()))
+                .willReturn(entryCode);
+            given(clock.instant())
+                .willReturn(now);
 
             // when
-            EntryCodeResponse entryCode = entryService.createEntryCode(memberId, memberTicketId);
+            EntryCodeResponse response = entryService.createEntryCode(memberId, memberTicketId);
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(entryCode.code()).isEqualTo(code);
-                softly.assertThat(entryCode.period()).isEqualTo(30);
+                softly.assertThat(response.code()).isEqualTo(entryCode.getCode());
+                softly.assertThat(response.period()).isEqualTo(30);
             });
         }
     }
@@ -183,7 +221,7 @@ class EntryServiceTest {
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
                 .build();
-            given(entryCodeExtractor.extract(anyString()))
+            given(entryCodeManager.extract(anyString()))
                 .willReturn(new EntryCodePayload(1L, EntryState.BEFORE_ENTRY));
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
@@ -205,7 +243,7 @@ class EntryServiceTest {
             MemberTicket memberTicket = MemberTicketFixture.memberTicket()
                 .id(1L)
                 .build();
-            given(entryCodeExtractor.extract(anyString()))
+            given(entryCodeManager.extract(anyString()))
                 .willReturn(new EntryCodePayload(1L, EntryState.AFTER_ENTRY));
             given(memberTicketRepository.findById(anyLong()))
                 .willReturn(Optional.of(memberTicket));
@@ -218,6 +256,7 @@ class EntryServiceTest {
                 softly.assertThat(memberTicket.getEntryState()).isEqualTo(EntryState.BEFORE_ENTRY);
                 softly.assertThat(expect.updatedState()).isEqualTo(EntryState.BEFORE_ENTRY);
             });
+            verify(publisher, times(1)).publishEvent(any(EntryProcessEvent.class));
         }
     }
 }

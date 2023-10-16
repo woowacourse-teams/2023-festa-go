@@ -60,7 +60,6 @@
       <appender-ref ref="FILE-WARN"/>
       <appender-ref ref="FILE-ERROR"/>
       <appender-ref ref="ASYNC_SLACK_ERROR"/>
-      <appender-ref ref="ASYNC_SLACK_WARN"/>
     </root>
   </springProfile>
 

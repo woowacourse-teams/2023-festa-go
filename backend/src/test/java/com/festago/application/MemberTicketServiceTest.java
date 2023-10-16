@@ -1,5 +1,8 @@
 package com.festago.application;
 
+import static com.festago.common.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.festago.common.exception.ErrorCode.MEMBER_TICKET_NOT_FOUND;
+import static com.festago.common.exception.ErrorCode.NOT_MEMBER_TICKET_OWNER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -7,18 +10,20 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.domain.Member;
-import com.festago.domain.MemberRepository;
-import com.festago.domain.MemberTicket;
-import com.festago.domain.MemberTicketRepository;
-import com.festago.domain.Stage;
-import com.festago.dto.MemberTicketResponse;
-import com.festago.dto.MemberTicketsResponse;
-import com.festago.exception.BadRequestException;
-import com.festago.exception.NotFoundException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.NotFoundException;
+import com.festago.member.domain.Member;
+import com.festago.member.repository.MemberRepository;
+import com.festago.stage.domain.Stage;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
 import com.festago.support.StageFixture;
+import com.festago.ticketing.application.MemberTicketService;
+import com.festago.ticketing.domain.MemberTicket;
+import com.festago.ticketing.dto.MemberTicketResponse;
+import com.festago.ticketing.dto.MemberTicketsResponse;
+import com.festago.ticketing.repository.MemberTicketRepository;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +49,9 @@ class MemberTicketServiceTest {
 
     @Mock
     MemberRepository memberRepository;
+
+    @Spy
+    Clock clock = Clock.systemDefaultZone();
 
     @InjectMocks
     MemberTicketService memberTicketService;
@@ -61,7 +70,7 @@ class MemberTicketServiceTest {
             // when & then
             assertThatThrownBy(() -> memberTicketService.findAll(memberId, PageRequest.ofSize(1)))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 멤버입니다.");
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
         }
     }
 
@@ -79,7 +88,7 @@ class MemberTicketServiceTest {
             // when & then
             assertThatThrownBy(() -> memberTicketService.findCurrent(memberId, Pageable.ofSize(10)))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 멤버입니다.");
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
         }
 
         @Test
@@ -182,7 +191,7 @@ class MemberTicketServiceTest {
             // when & then
             assertThatThrownBy(() -> memberTicketService.findById(memberId, 1L))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않는 멤버입니다.");
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
         }
 
         @Test
@@ -199,7 +208,7 @@ class MemberTicketServiceTest {
             // when & then
             assertThatThrownBy(() -> memberTicketService.findById(memberId, memberTicketId))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("존재하지 않은 멤버 티켓입니다.");
+                .hasMessage(MEMBER_TICKET_NOT_FOUND.getMessage());
         }
 
         @Test
@@ -224,7 +233,7 @@ class MemberTicketServiceTest {
             // when & then
             assertThatThrownBy(() -> memberTicketService.findById(memberId, otherTicketId))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("해당 예매 티켓의 주인이 아닙니다.");
+                .hasMessage(NOT_MEMBER_TICKET_OWNER.getMessage());
         }
 
         @Test

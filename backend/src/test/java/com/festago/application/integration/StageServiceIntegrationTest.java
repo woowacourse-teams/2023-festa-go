@@ -1,11 +1,12 @@
 package com.festago.application.integration;
 
+import static com.festago.common.exception.ErrorCode.FESTIVAL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.application.StageService;
-import com.festago.domain.FestivalRepository;
-import com.festago.dto.StageCreateRequest;
-import com.festago.exception.NotFoundException;
+import com.festago.common.exception.NotFoundException;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.stage.application.StageService;
+import com.festago.stage.dto.StageCreateRequest;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -37,6 +38,6 @@ class StageServiceIntegrationTest extends ApplicationIntegrationTest {
         // when && then
         assertThatThrownBy(() -> stageService.create(request))
             .isInstanceOf(NotFoundException.class)
-            .hasMessage("존재하지 않는 축제입니다.");
+            .hasMessage(FESTIVAL_NOT_FOUND.getMessage());
     }
 }

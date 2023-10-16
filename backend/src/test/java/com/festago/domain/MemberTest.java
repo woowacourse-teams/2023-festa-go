@@ -2,6 +2,7 @@ package com.festago.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.festago.member.domain.Member;
 import com.festago.support.MemberFixture;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

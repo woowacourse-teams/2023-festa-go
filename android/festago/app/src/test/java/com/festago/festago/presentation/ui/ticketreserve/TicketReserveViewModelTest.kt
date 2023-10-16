@@ -1,12 +1,13 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.Reservation
 import com.festago.festago.model.ReservationStage
 import com.festago.festago.model.ReservationTicket
+import com.festago.festago.model.ReservationTickets
 import com.festago.festago.model.ReservedTicket
-import com.festago.festago.presentation.mapper.toPresentation
+import com.festago.festago.model.TicketType
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
 import com.festago.festago.repository.ReservationTicketRepository
@@ -17,10 +18,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.assertj.core.api.SoftAssertions
+import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -33,9 +37,11 @@ class TicketReserveViewModelTest {
     private lateinit var authRepository: AuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
-    private val fakeReservationTickets = listOf(
-        ReservationTicket(1, "재학생용", 219, 500),
-        ReservationTicket(1, "외부인용", 212, 300),
+    private val fakeReservationTickets = ReservationTickets(
+        listOf(
+            ReservationTicket(1, TicketType.STUDENT, 219, 500),
+            ReservationTicket(1, TicketType.VISITOR, 212, 300),
+        ),
     )
     private val fakeReservationStage = ReservationStage(
         id = 1,
@@ -60,9 +66,6 @@ class TicketReserveViewModelTest {
         number = 1,
     )
 
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
@@ -81,20 +84,33 @@ class TicketReserveViewModelTest {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
+    private fun `예약 정보 요청 결과가 다음과 같을 때`(result: Result<Reservation>) {
+        coEvery { festivalRepository.loadFestivalDetail(any()) } returns result
+    }
+
+    private fun `인증 여부가 다음과 같을 때`(isSigned: Boolean) {
+        coEvery { authRepository.isSigned } answers { isSigned }
+    }
+
+    private fun `특정 공연의 티켓 타입 요청 결과가 다음과 같을 때`(result: Result<ReservationTickets>) {
+        coEvery { reservationTicketRepository.loadTicketTypes(any()) } returns result
+    }
+
+    private fun `티켓 예약 요청 결과가 다음과 같을 때`(result: Result<ReservedTicket>) {
+        coEvery { ticketRepository.reserveTicket(any()) } returns result
+    }
+
     @Test
     fun `예약 정보를 불러오면 성공 이벤트가 발생하고 리스트를 반환한다`() {
         // given
-        coEvery {
-            festivalRepository.loadFestivalDetail(0)
-        } answers {
-            Result.success(fakeReservation)
-        }
-
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `예약 정보 요청 결과가 다음과 같을 때`(Result.success(fakeReservation))
+        `인증 여부가 다음과 같을 때`(true)
 
         // when
         vm.loadReservation()
@@ -117,7 +133,7 @@ class TicketReserveViewModelTest {
     @Test
     fun `예약 정보를 불러오는 것을 실패하면 에러 이벤트가 발생한다`() {
         // given
-        coEvery { festivalRepository.loadFestivalDetail(0) } returns Result.failure(Exception())
+        `예약 정보 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
 
         // when
         vm.loadReservation(0)
@@ -144,41 +160,33 @@ class TicketReserveViewModelTest {
     }
 
     @Test
-    fun `특정 공연의 티켓 타입을 보여주는 이벤트가 발생하면 해당 공연의 티켓 타입을 보여준다`() {
+    fun `특정 공연의 티켓 타입을 보여주는 이벤트가 발생하면 해당 공연의 티켓 타입을 보여준다`() = runTest {
         // given
-        coEvery {
-            reservationTicketRepository.loadTicketTypes(1)
-        } answers {
-            Result.success(fakeReservationTickets)
+        `특정 공연의 티켓 타입 요청 결과가 다음과 같을 때`(Result.success(fakeReservationTickets))
+        `인증 여부가 다음과 같을 때`(true)
+
+        vm.event.test {
+            // when
+            vm.showTicketTypes(1, LocalDateTime.MIN)
+
+            // then
+            val softly = SoftAssertions().apply {
+                val event = awaitItem()
+                assertThat(event).isExactlyInstanceOf(TicketReserveEvent.ShowTicketTypes::class.java)
+
+                // and
+                val actual = (event as? TicketReserveEvent.ShowTicketTypes)?.tickets
+                assertThat(actual).isEqualTo(fakeReservationTickets.sortedByTicketTypes())
+            }
+            softly.assertAll()
         }
-
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
-
-        // when
-        vm.showTicketTypes(1, LocalDateTime.MIN)
-
-        // then
-        assertThat(vm.event.getValue()).isInstanceOf(TicketReserveEvent.ShowTicketTypes::class.java)
-
-        // and
-        val event = vm.event.getValue() as TicketReserveEvent.ShowTicketTypes
-        assertThat(event.tickets).isEqualTo(fakeReservationTickets.map { it.toPresentation() })
     }
 
     @Test
     fun `특정 공연의 티켓 타입을 보여주는 것을 실패하면 에러 이벤트가 발생한다`() {
         // given
-        coEvery { reservationTicketRepository.loadTicketTypes(1) } returns Result.failure(Exception())
-
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `특정 공연의 티켓 타입 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
+        `인증 여부가 다음과 같을 때`(true)
 
         // when
         vm.showTicketTypes(1, LocalDateTime.MIN)
@@ -188,33 +196,34 @@ class TicketReserveViewModelTest {
     }
 
     @Test
-    fun `티켓 유형을 선택하고 예약하면 예약 성공 이벤트가 발생한다`() {
+    fun `티켓 유형을 선택하고 예약하면 예약 성공 이벤트가 발생한다`() = runTest {
         // given
         coEvery {
             ticketRepository.reserveTicket(any())
         } answers {
             Result.success(fakeReservedTicket)
         }
-        // when
-        vm.reserveTicket(0)
 
-        // then
-        assertThat(vm.event.getValue()).isInstanceOf(TicketReserveEvent.ReserveTicketSuccess::class.java)
+        vm.event.test {
+            // when
+            vm.reserveTicket(0)
+
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(TicketReserveEvent.ReserveTicketSuccess::class.java)
+        }
     }
 
     @Test
-    fun `티켓 유형을 선택하고 예약하는 것을 실패하면 예약 실패 이벤트가 발생한다`() {
+    fun `티켓 유형을 선택하고 예약하는 것을 실패하면 예약 실패 이벤트가 발생한다`() = runTest {
         // given
-        coEvery {
-            ticketRepository.reserveTicket(0)
-        } answers {
-            Result.failure(Exception())
+        `티켓 예약 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
+
+        vm.event.test {
+            // when
+            vm.reserveTicket(0)
+
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(TicketReserveEvent.ReserveTicketFailed::class.java)
         }
-
-        // when
-        vm.reserveTicket(0)
-
-        // then
-        assertThat(vm.event.getValue()).isEqualTo(TicketReserveEvent.ReserveTicketFailed)
     }
 }

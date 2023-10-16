@@ -1,9 +1,11 @@
 package com.festago.domain;
 
+import static com.festago.common.exception.ErrorCode.INVALID_ENTRY_STATE_INDEX;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.exception.InternalServerException;
+import com.festago.common.exception.InternalServerException;
+import com.festago.ticketing.domain.EntryState;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ class EntryStateTest {
         // when & then
         assertThatThrownBy(() -> EntryState.from(index))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("올바르지 않은 입장상태 인덱스입니다.");
+            .hasMessage(INVALID_ENTRY_STATE_INDEX.getMessage());
     }
 
     @Test
@@ -28,7 +30,7 @@ class EntryStateTest {
         // when & then
         assertThatThrownBy(() -> EntryState.from(null))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("올바르지 않은 입장상태 인덱스입니다.");
+            .hasMessage(INVALID_ENTRY_STATE_INDEX.getMessage());
     }
 
     @ParameterizedTest

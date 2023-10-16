@@ -1,10 +1,13 @@
 package com.festago.auth.presentation;
 
+import static com.festago.common.exception.ErrorCode.NOT_ENOUGH_PERMISSION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.auth.domain.Role;
-import com.festago.exception.ForbiddenException;
+import com.festago.common.exception.ForbiddenException;
+import com.festago.presentation.auth.AuthenticateContext;
+import com.festago.presentation.auth.RoleArgumentResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -35,7 +38,7 @@ class RoleArgumentResolverTest {
         // when & then
         assertThatThrownBy(() -> roleArgumentResolver.resolveArgument(null, null, null, null))
             .isInstanceOf(ForbiddenException.class)
-            .hasMessage("해당 권한이 없습니다.");
+            .hasMessage(NOT_ENOUGH_PERMISSION.getMessage());
     }
 
     @Test
@@ -61,7 +64,7 @@ class RoleArgumentResolverTest {
         // when & then
         assertThatThrownBy(() -> roleArgumentResolver.resolveArgument(null, null, null, null))
             .isInstanceOf(ForbiddenException.class)
-            .hasMessage("해당 권한이 없습니다.");
+            .hasMessage(NOT_ENOUGH_PERMISSION.getMessage());
     }
 
     @Test

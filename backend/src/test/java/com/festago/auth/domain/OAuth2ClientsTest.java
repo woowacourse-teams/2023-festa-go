@@ -1,15 +1,19 @@
 package com.festago.auth.domain;
 
+import static com.festago.common.exception.ErrorCode.DUPLICATE_SOCIAL_TYPE;
+import static com.festago.common.exception.ErrorCode.OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-import com.festago.auth.domain.OAuth2Clients.OAuth2ClientsBuilder;
+import com.festago.auth.application.OAuth2Client;
+import com.festago.auth.application.OAuth2Clients;
+import com.festago.auth.application.OAuth2Clients.OAuth2ClientsBuilder;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
 import com.festago.auth.infrastructure.KakaoOAuth2Client;
 import com.festago.auth.infrastructure.KakaoOAuth2UserInfoClient;
-import com.festago.exception.BadRequestException;
-import com.festago.exception.InternalServerException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.InternalServerException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -30,7 +34,7 @@ class OAuth2ClientsTest {
         // when & then
         assertThatThrownBy(() -> builder.add(new FestagoOAuth2Client()))
             .isInstanceOf(InternalServerException.class)
-            .hasMessage("중복된 OAuth2 제공자 입니다.");
+            .hasMessage(DUPLICATE_SOCIAL_TYPE.getMessage());
     }
 
     @Test
@@ -42,7 +46,7 @@ class OAuth2ClientsTest {
         // when & then
         assertThatThrownBy(() -> oAuth2Clients.getClient(SocialType.FESTAGO))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("해당 OAuth2 제공자는 지원되지 않습니다.");
+            .hasMessage(OAUTH2_NOT_SUPPORTED_SOCIAL_TYPE.getMessage());
     }
 
     @Test
