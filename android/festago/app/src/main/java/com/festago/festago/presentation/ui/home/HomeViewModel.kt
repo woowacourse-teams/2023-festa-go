@@ -25,12 +25,12 @@ class HomeViewModel @Inject constructor(private val authRepository: AuthReposito
     fun selectItem(homeItemType: HomeItemType) {
         when (homeItemType) {
             HomeItemType.FESTIVAL_LIST -> _selectedItem.value = homeItemType
-            HomeItemType.TICKET_LIST -> selectItemWhenSignIn(HomeItemType.TICKET_LIST)
-            HomeItemType.MY_PAGE -> selectItemWhenSignIn(HomeItemType.MY_PAGE)
+            HomeItemType.TICKET_LIST -> selectItemOrSignIn(HomeItemType.TICKET_LIST)
+            HomeItemType.MY_PAGE -> selectItemOrSignIn(HomeItemType.MY_PAGE)
         }
     }
 
-    private fun selectItemWhenSignIn(homeItemType: HomeItemType) {
+    private fun selectItemOrSignIn(homeItemType: HomeItemType) {
         viewModelScope.launch {
             if (!authRepository.isSigned) {
                 _event.emit(HomeEvent.ShowSignIn)
