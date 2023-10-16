@@ -15,6 +15,12 @@
     <string name="all_ticket_type_visitor">방문객용</string>
     <string name="all_ticket_type_other">기타</string>
 
+    <!-- splash -->
+    <string name="splash_app_update_request_dialog_title">업데이트 알림</string>
+    <string name="splash_app_update_request_dialog_message">새로운 페스타고를 사용하기 위해 업데이트 해주세요.</string>
+    <string name="splash_app_update_denied">업데이트 후 정상 사용가능합니다.</string>
+    <string name="splash_app_default_error_message">페스타고 실행 중 문제가 발생했습니다. 페스타고로 문의해주세요.</string>
+
     <!-- Strings related to main -->
     <string name="main_btn_ticket_disable_time">HH:mm 티켓 활성화</string>
     <string name="main_btn_ticket_enable_time">티켓 제시</string>
@@ -71,6 +77,7 @@
 
     <!-- Strings related to ok dialog -->
     <string name="ok_dialog_btn_ok">확인</string>
+    <string name="ok_dialog_btn_cancel">취소</string>
 
     <!-- Strings related to mypage -->
     <string name="mypage_btn_kakao">카카오로 로그인</string>

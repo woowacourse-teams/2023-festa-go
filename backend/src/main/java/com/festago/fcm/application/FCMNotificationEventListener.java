@@ -1,7 +1,5 @@
 package com.festago.fcm.application;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
 import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.fcm.domain.FCMChannel;
 import com.festago.fcm.dto.MemberFCMResponse;
@@ -22,7 +20,7 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
-@Profile({"dev", "prod"})
+@Profile({"prod", "dev"})
 public class FCMNotificationEventListener {
 
     private static final Logger log = LoggerFactory.getLogger(FCMNotificationEventListener.class);
@@ -43,8 +41,7 @@ public class FCMNotificationEventListener {
             BatchResponse batchResponse = firebaseMessaging.sendAll(messages);
             checkAllSuccess(batchResponse, event.memberId());
         } catch (FirebaseMessagingException e) {
-            log.error("fail send FCM message", e);
-            throw new InternalServerException(ErrorCode.FAIL_SEND_FCM_MESSAGE);
+            log.warn("fail send FCM message", e);
         }
     }
 
@@ -80,11 +77,11 @@ public class FCMNotificationEventListener {
     }
 
     private void checkAllSuccess(BatchResponse batchResponse, Long memberId) {
-        List<SendResponse> failSend = batchResponse.getResponses().stream()
-            .filter(sendResponse -> !sendResponse.isSuccessful())
-            .toList();
-
-        log.warn("member {} 에 대한 다음 요청들이 실패했습니다. {}", memberId, failSend);
-        throw new InternalServerException(ErrorCode.FAIL_SEND_FCM_MESSAGE);
+        if (batchResponse.getFailureCount() > 0) {
+            List<SendResponse> failSend = batchResponse.getResponses().stream()
+                .filter(sendResponse -> !sendResponse.isSuccessful())
+                .toList();
+            log.warn("member {} 에 대한 다음 요청들이 실패했습니다. {}", memberId, failSend);
+        }
     }
 }

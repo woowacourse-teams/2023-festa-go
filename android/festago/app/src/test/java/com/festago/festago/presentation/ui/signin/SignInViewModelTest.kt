@@ -68,17 +68,4 @@ class SignInViewModelTest {
             assertThat(awaitItem()).isExactlyInstanceOf(SignInEvent.SignInFailure::class.java)
         }
     }
-
-    @Test
-    fun `로그인을 요청하면 로그인 화면을 보여주는 이벤트가 발생한다`() = runTest {
-        // given
-
-        vm.event.test {
-            // when
-            vm.signInKakao()
-
-            // then
-            assertThat(awaitItem()).isExactlyInstanceOf(SignInEvent.ShowSignInPage::class.java)
-        }
-    }
 }

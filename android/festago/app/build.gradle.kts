@@ -14,12 +14,12 @@ plugins {
 
 android {
     namespace = "com.festago.festago"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.festago.festago"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 3
         versionName = "1.0.1"
 
@@ -152,6 +152,12 @@ dependencies {
 
     // turbine
     testImplementation("app.cash.turbine:turbine:1.0.0")
+
+    // inApp Update
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
+
+    // splash
+    implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
 }
 
 fun getSecretKey(propertyKey: String): String {
