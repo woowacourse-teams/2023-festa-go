@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({"prod", "dev"})
+@Profile("prod | dev")
 public class GoogleMailClient implements MailClient {
 
     private final MailSender mailSender;
