@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
@@ -52,9 +53,19 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
         }
     }
 
+    private val Int.dp: Int get() = (this / resources.displayMetrics.density).toInt()
+
     private fun initView() {
-        adapter = FestivalListAdapter()
-        binding.rvFestivalList.adapter = adapter
+        binding.rvFestivalList.adapter = FestivalListAdapter()
+
+        binding.rvFestivalList.layoutManager.apply {
+            if (this is GridLayoutManager) {
+                val displayMetrics = resources.displayMetrics
+
+                spanCount = (displayMetrics.widthPixels.dp / 160)
+            }
+        }
+
         vm.loadFestivals()
 
         binding.srlFestivalList.setOnRefreshListener {
