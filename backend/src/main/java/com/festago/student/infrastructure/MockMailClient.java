@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("!{dev|prod}")
+@Profile({"infra", "test", "local"})
 public class MockMailClient implements MailClient {
 
     @Override
