@@ -26,24 +26,12 @@ class HomeActivity : AppCompatActivity() {
 
     private val vm: HomeViewModel by viewModels()
 
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) { isGranted: Boolean ->
-        if (!isGranted) {
-            Toast.makeText(
-                this,
-                getString(R.string.home_notification_permission_denied),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
         initView()
         initObserve()
-        requestNotificationPermission(requestPermissionLauncher)
+        initNotificationPermission()
     }
 
     private fun initBinding() {
@@ -75,6 +63,21 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initNotificationPermission() {
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (!isGranted) {
+                Toast.makeText(
+                    this,
+                    getString(R.string.home_notification_permission_denied),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        requestNotificationPermission(requestPermissionLauncher)
     }
 
     private fun getItemType(menuItemId: Int): HomeItemType {
