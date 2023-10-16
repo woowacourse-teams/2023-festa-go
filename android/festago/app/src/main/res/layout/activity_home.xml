@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:backgroundTint="?attr/colorSurfaceBright"
             app:backgroundTint="?attr/colorSurface"
             app:contentInsetStart="0dp"
             app:fabAlignmentMode="center">
@@ -32,7 +33,7 @@
                 android:background="#00000000"
                 app:itemActiveIndicatorStyle="@color/zxing_transparent"
                 app:itemIconSize="40dp"
-                app:itemIconTint="@drawable/menu_selector_color"
+                app:itemIconTint="@drawable/menu_selector_color_inverse"
                 app:labelVisibilityMode="unlabeled"
                 app:menu="@menu/menu_bottom_navigation" />
         </com.google.android.material.bottomappbar.BottomAppBar>
@@ -42,12 +43,12 @@
             style="@style/Widget.MaterialComponents.FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
             android:backgroundTint="@drawable/menu_selector_color"
             android:src="@drawable/ic_festago_coupon"
+            app:borderWidth="1dp"
             app:fabCustomSize="72dp"
-            app:tint="@color/white"
             app:layout_anchor="@id/baNavigation"
-            app:maxImageSize="72dp" />
+            app:maxImageSize="72dp"
+            app:tint="@null" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
