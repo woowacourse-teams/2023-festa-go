@@ -32,10 +32,10 @@ class HomeViewModel @Inject constructor(private val authRepository: AuthReposito
 
     private fun selectItemOrSignIn(homeItemType: HomeItemType) {
         viewModelScope.launch {
-            if (!authRepository.isSigned) {
-                _event.emit(HomeEvent.ShowSignIn)
-            } else {
+            if (authRepository.isSigned) {
                 _selectedItem.emit(homeItemType)
+            } else {
+                _event.emit(HomeEvent.ShowSignIn)
             }
         }
     }
