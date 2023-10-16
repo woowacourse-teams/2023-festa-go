@@ -3,13 +3,12 @@ package com.festago.festago.presentation.fcm
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.festago.festago.R
 import com.festago.festago.presentation.fcm.FcmMessageType.ENTRY_ALERT
 import com.festago.festago.presentation.ui.home.HomeActivity
+import com.festago.festago.presentation.util.checkNotificationPermission
 
 class NotificationManager(private val context: Context) {
 
@@ -36,11 +35,7 @@ class NotificationManager(private val context: Context) {
             .setContentTitle(title)
             .setContentText(body)
 
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                android.Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        checkNotificationPermission(context) {
             NotificationManagerCompat.from(context).notify(0, entryAlertNotificationBuilder.build())
         }
     }
