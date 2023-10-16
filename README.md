@@ -9,6 +9,9 @@
 
 페스타고를 통해 티켓을 예매하기 위해 불편한 줄 서기 과정을 거칠 필요 없이 온라인으로 티켓을 예매하고, 복잡한 절차 없이 스마트폰의 QR 코드만으로 입장을 할 수 있습니다.
 
+<img width="773" alt="image" src="https://github.com/woowacourse-teams/2023-festa-go/assets/71129059/6313818c-fc12-4224-acf7-0ec969251bb3">
+
+
 **▷ 🔎 기능 소개 |** [기능 자세히 보기](https://www.notion.so/wooteco-ash/2e5709dd0c2741b5ae4e7f0a967868ef)
 
 **▷ 📲 다운로드 |** [PlayStore](https://play.google.com/store/apps/details?id=com.festago.festago)
@@ -16,7 +19,6 @@
 **▷ 📝 팀블로그 |** [Festago 팀블로그](https://festago.github.io/)
 
 **▷ 📧 연락처 |** team.festago@gmail.com
-
 
 <br>
 
