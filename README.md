@@ -16,4 +16,4 @@
 ## ⛔️ 공연 관람시 주의사항
 > 페스타고 팀의 그라운드 룰을 소개합니다.
 
-<img width="806" alt="image" src="https://github.com/woowacourse-teams/2023-festa-go/assets/71129059/03df1e5e-eb43-4bf8-9017-e71c66eaea2d">
+<img width="787" alt="image" src="https://github.com/woowacourse-teams/2023-festa-go/assets/71129059/85c4d4d0-24fa-4602-9eed-a9a2e4a6482e">
