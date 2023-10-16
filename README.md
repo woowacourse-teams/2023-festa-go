@@ -1,4 +1,4 @@
-# 페스타고, 대학축제를 더욱 즐겁게!
+# 페스타고, 대학 축제를 더욱 즐겁게!
 > 대학 축제 줄서기 및 축제 정보 제공 서비스 "페스타고"
 
 ![](https://github.com/woowacourse-teams/2023-festa-go/assets/71129059/55f0d73b-c032-4c15-9cdf-40a560af948f)
