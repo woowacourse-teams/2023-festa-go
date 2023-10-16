@@ -24,19 +24,23 @@ class HomeActivity : AppCompatActivity() {
 
     private val vm: HomeViewModel by viewModels()
 
-    private val resultLauncher: ActivityResultLauncher<Intent> by lazy {
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == SignInActivity.RESULT_NOT_SIGN_IN) {
-                binding.bnvHome.selectedItemId = R.id.item_festival
-            }
-        }
-    }
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
         initView()
         initObserve()
+        initResultLauncher()
+    }
+
+    private fun initResultLauncher() {
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == SignInActivity.RESULT_NOT_SIGN_IN) {
+                    selectItem(R.id.item_festival)
+                }
+            }
     }
 
     private fun initBinding() {
