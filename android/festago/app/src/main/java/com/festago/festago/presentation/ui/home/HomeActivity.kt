@@ -24,14 +24,19 @@ class HomeActivity : AppCompatActivity() {
 
     private val vm: HomeViewModel by viewModels()
 
-    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private val resultLauncher: ActivityResultLauncher<Intent> by lazy {
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == SignInActivity.RESULT_NOT_SIGN_IN) {
+                binding.bnvHome.selectedItemId = R.id.item_festival
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
         initView()
         initObserve()
-        initActivityResult()
     }
 
     private fun initBinding() {
@@ -117,15 +122,6 @@ class HomeActivity : AppCompatActivity() {
         }
 
         fragmentTransaction.commit()
-    }
-
-    private fun initActivityResult() {
-        resultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == SignInActivity.RESULT_NOT_SIGN_IN) {
-                    binding.bnvHome.selectedItemId = R.id.item_festival
-                }
-            }
     }
 
     companion object {
