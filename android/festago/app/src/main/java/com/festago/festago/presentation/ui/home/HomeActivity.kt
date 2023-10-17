@@ -17,6 +17,7 @@ import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.requestNotificationPermission
+import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,19 +27,25 @@ class HomeActivity : AppCompatActivity() {
 
     private val vm: HomeViewModel by viewModels()
 
-    private val resultLauncher: ActivityResultLauncher<Intent> by lazy {
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == SignInActivity.RESULT_NOT_SIGN_IN) {
-                binding.bnvHome.selectedItemId = R.id.item_festival
-            }
-        }
-    }
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    private val navigationBarView by lazy { binding.nvHome as NavigationBarView }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
         initView()
         initObserve()
+        initResultLauncher()
+    }
+
+    private fun initResultLauncher() {
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == SignInActivity.RESULT_NOT_SIGN_IN) {
+                    navigationBarView.selectedItemId = R.id.item_festival
+                }
+            }
         initNotificationPermission()
     }
 
@@ -47,13 +54,13 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        binding.bnvHome.setOnItemSelectedListener {
+        navigationBarView.setOnItemSelectedListener {
             vm.selectItem(getItemType(it.itemId))
             true
         }
 
         binding.fabTicket.setOnClickListener {
-            binding.bnvHome.selectedItemId = R.id.item_ticket
+            navigationBarView.selectedItemId = R.id.item_ticket
         }
 
         changeFragment<FestivalListFragment>()
@@ -81,13 +88,13 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initNotificationPermission() {
         val requestPermissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
+            ActivityResultContracts.RequestPermission(),
         ) { isGranted: Boolean ->
             if (!isGranted) {
                 Toast.makeText(
                     this,
                     getString(R.string.home_notification_permission_denied),
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_SHORT,
                 ).show()
             }
         }
