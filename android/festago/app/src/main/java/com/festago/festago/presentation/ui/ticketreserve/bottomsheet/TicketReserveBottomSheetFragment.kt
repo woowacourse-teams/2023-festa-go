@@ -23,6 +23,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
     private val ticketTypeAdapter = TicketReserveBottomSheetAdapter { ticketId ->
         binding.selectedTicketTypeId = ticketId
         binding.btnReserveTicket.isEnabled = true
+        binding.tvTicketTypePrompt.visibility = View.INVISIBLE
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
