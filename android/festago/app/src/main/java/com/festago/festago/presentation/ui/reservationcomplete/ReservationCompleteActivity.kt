@@ -5,9 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.festago.festago.databinding.ActivityReservationCompleteBinding
-import com.festago.festago.presentation.model.ReservedTicketUiModel
 import com.festago.festago.presentation.util.getParcelableExtraCompat
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReservationCompleteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReservationCompleteBinding
@@ -24,17 +25,17 @@ class ReservationCompleteActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val reservationComplete =
-            intent.getParcelableExtraCompat<ReservedTicketUiModel>(
+        val reservedTicket =
+            intent.getParcelableExtraCompat<ReservedTicketArg>(
                 KEY_RESERVATION_COMPLETE,
             )
-        binding.reservationComplete = reservationComplete
+        binding.reservedTicket = reservedTicket
     }
 
     companion object {
         private const val KEY_RESERVATION_COMPLETE = "KEY_RESERVATION_COMPLETE"
 
-        fun getIntent(context: Context, reservationComplete: ReservedTicketUiModel): Intent {
+        fun getIntent(context: Context, reservationComplete: ReservedTicketArg): Intent {
             return Intent(context, ReservationCompleteActivity::class.java).apply {
                 putExtra(KEY_RESERVATION_COMPLETE, reservationComplete)
             }

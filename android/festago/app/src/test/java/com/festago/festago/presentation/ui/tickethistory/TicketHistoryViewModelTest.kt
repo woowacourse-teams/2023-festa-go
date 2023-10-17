@@ -1,9 +1,8 @@
 package com.festago.festago.presentation.ui.tickethistory
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.model.Ticket
 import com.festago.festago.presentation.fixture.TicketFixture
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.repository.TicketRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -16,7 +15,6 @@ import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 class TicketHistoryViewModelTest {
@@ -24,9 +22,6 @@ class TicketHistoryViewModelTest {
 
     private lateinit var ticketRepository: TicketRepository
     private lateinit var analyticsHelper: AnalyticsHelper
-
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -47,16 +42,18 @@ class TicketHistoryViewModelTest {
         Dispatchers.resetMain()
     }
 
+    private fun `티켓 기록 요청 결과가 다음과 같을 때`(result: Result<List<Ticket>>) {
+        coEvery {
+            ticketRepository.loadHistoryTickets(any())
+        } returns result
+    }
+
     @Test
     fun `빈 리스트가 아닌 티켓들을 가져오면 성공 상태이다`() {
         // given
         val ids = listOf(1L, 2L, 3L, 4L, 5L)
 
-        coEvery {
-            ticketRepository.loadHistoryTickets(any())
-        } answers {
-            Result.success(TicketFixture.getMemberTickets(ids))
-        }
+        `티켓 기록 요청 결과가 다음과 같을 때`(Result.success(TicketFixture.getMemberTickets(ids)))
 
         // when
         vm.loadTicketHistories()
@@ -68,7 +65,7 @@ class TicketHistoryViewModelTest {
             // and
             val successUiState = vm.uiState.value as TicketHistoryUiState.Success
             assertThat(successUiState.tickets).isEqualTo(
-                TicketFixture.getMemberTickets(ids).toPresentation(),
+                TicketFixture.getMemberTickets(ids).map { it.toUiState() },
             )
 
             // and
@@ -84,11 +81,7 @@ class TicketHistoryViewModelTest {
     @Test
     fun `빈 리스트인 티켓을 받아도 성공 상태이다`() {
         // given
-        coEvery {
-            ticketRepository.loadHistoryTickets(any())
-        } answers {
-            Result.success(emptyList())
-        }
+        `티켓 기록 요청 결과가 다음과 같을 때`(Result.success(listOf()))
 
         // when
         vm.loadTicketHistories()
@@ -129,10 +122,10 @@ class TicketHistoryViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Loading::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isFalse
-            assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isFalse
-            assertThat(vm.uiState.value?.shouldShowLoading).isTrue
-            assertThat(vm.uiState.value?.shouldShowError).isFalse
+            assertThat(vm.uiState.value.shouldShowSuccessWithTickets).isFalse
+            assertThat(vm.uiState.value.shouldShowSuccessAndEmpty).isFalse
+            assertThat(vm.uiState.value.shouldShowLoading).isTrue
+            assertThat(vm.uiState.value.shouldShowError).isFalse
         }
 
         softly.assertAll()
@@ -141,11 +134,7 @@ class TicketHistoryViewModelTest {
     @Test
     fun `티켓을 받아오기 실패하면 에러 상태이다`() {
         // given
-        coEvery {
-            ticketRepository.loadHistoryTickets(any())
-        } answers {
-            Result.failure(Exception())
-        }
+        `티켓 기록 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
 
         // when
         vm.loadTicketHistories()
@@ -155,12 +144,22 @@ class TicketHistoryViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(TicketHistoryUiState.Error::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccessWithTickets).isFalse
-            assertThat(vm.uiState.value?.shouldShowSuccessAndEmpty).isFalse
-            assertThat(vm.uiState.value?.shouldShowLoading).isFalse
-            assertThat(vm.uiState.value?.shouldShowError).isTrue
+            assertThat(vm.uiState.value.shouldShowSuccessWithTickets).isFalse
+            assertThat(vm.uiState.value.shouldShowSuccessAndEmpty).isFalse
+            assertThat(vm.uiState.value.shouldShowLoading).isFalse
+            assertThat(vm.uiState.value.shouldShowError).isTrue
         }
-
         softly.assertAll()
     }
+
+    private fun Ticket.toUiState(): TicketHistoryItemUiState = TicketHistoryItemUiState(
+        id = id,
+        number = number,
+        entryTime = entryTime,
+        reserveAt = reserveAt,
+        stage = stage,
+        festivalId = festivalTicket.id,
+        festivalName = festivalTicket.name,
+        festivalThumbnail = festivalTicket.thumbnail,
+    )
 }

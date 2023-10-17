@@ -1,58 +1,34 @@
 package com.festago.festago
 
 import android.app.Application
-import com.festago.festago.analytics.FirebaseAnalyticsHelper
-import com.festago.festago.di.AnalysisContainer
-import com.festago.festago.di.AuthServiceContainer
-import com.festago.festago.di.LocalDataSourceContainer
-import com.festago.festago.di.NormalServiceContainer
-import com.festago.festago.di.RepositoryContainer
-import com.festago.festago.di.TokenContainer
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import com.festago.festago.presentation.fcm.FcmMessageType
 import com.kakao.sdk.common.KakaoSdk
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class FestagoApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
         initKakaoSdk()
-        initRepositoryContainer()
-        initFirebaseContainer()
+        initNotificationChannel()
     }
 
     private fun initKakaoSdk() {
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
     }
 
-    private fun initRepositoryContainer() {
-        normalServiceContainer = NormalServiceContainer(BuildConfig.BASE_URL)
-
-        tokenContainer = TokenContainer(
-            normalServiceContainer = normalServiceContainer,
-            localDataSourceContainer = LocalDataSourceContainer(applicationContext),
+    private fun initNotificationChannel() {
+        val channel = NotificationChannel(
+            FcmMessageType.ENTRY_ALERT.channelId,
+            getString(R.string.entry_alert_channel_name),
+            NotificationManager.IMPORTANCE_DEFAULT
         )
-
-        authServiceContainer = AuthServiceContainer(
-            baseUrl = BuildConfig.BASE_URL,
-            tokenContainer = tokenContainer,
-        )
-
-        repositoryContainer = RepositoryContainer(
-            authServiceContainer = authServiceContainer,
-            normalServiceContainer = normalServiceContainer,
-            tokenContainer = tokenContainer,
-        )
-    }
-
-    private fun initFirebaseContainer() {
-        FirebaseAnalyticsHelper.init(applicationContext)
-        analysisContainer = AnalysisContainer()
-    }
-
-    companion object DependencyContainer {
-        lateinit var normalServiceContainer: NormalServiceContainer
-        lateinit var authServiceContainer: AuthServiceContainer
-        lateinit var repositoryContainer: RepositoryContainer
-        lateinit var analysisContainer: AnalysisContainer
-        lateinit var tokenContainer: TokenContainer
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }

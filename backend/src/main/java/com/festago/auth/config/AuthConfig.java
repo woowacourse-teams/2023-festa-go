@@ -1,9 +1,9 @@
 package com.festago.auth.config;
 
-import com.festago.auth.domain.AuthExtractor;
-import com.festago.auth.domain.AuthProvider;
-import com.festago.auth.domain.OAuth2Client;
-import com.festago.auth.domain.OAuth2Clients;
+import com.festago.auth.application.AuthExtractor;
+import com.festago.auth.application.AuthProvider;
+import com.festago.auth.application.OAuth2Client;
+import com.festago.auth.application.OAuth2Clients;
 import com.festago.auth.infrastructure.JwtAuthExtractor;
 import com.festago.auth.infrastructure.JwtAuthProvider;
 import java.util.List;

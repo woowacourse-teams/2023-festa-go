@@ -11,7 +11,9 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.festago.festago.databinding.FragmentOkDialogBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment.OnClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OkDialogFragment : DialogFragment() {
 
     private var _binding: FragmentOkDialogBinding? = null

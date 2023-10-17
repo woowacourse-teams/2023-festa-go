@@ -187,6 +187,7 @@ class ReservationTicketRetrofitServiceTest {
         private fun getFakeFestival(): ReservationFestivalResponse {
             return ReservationFestivalResponse(
                 id = 1,
+                schoolId = 1,
                 name = "테코대학교",
                 startDate = "2023-07-03",
                 endDate = "2023-07-09",
@@ -197,7 +198,8 @@ class ReservationTicketRetrofitServiceTest {
                         startTime = "2023-07-09T16:00:00",
                         ticketOpenTime = "2023-07-08T14:00:00",
                         lineUp = "르세라핌,아이브,뉴진스",
-                        tickets = listOf(
+                        tickets =
+                        listOf(
                             ReservationTicketResponse(
                                 id = 1,
                                 ticketType = "STUDENT",
@@ -210,6 +212,7 @@ class ReservationTicketRetrofitServiceTest {
                                 totalAmount = 300,
                                 remainAmount = 212,
                             ),
+
                         ),
                     ),
                     ReservationStageResponse(
@@ -217,7 +220,8 @@ class ReservationTicketRetrofitServiceTest {
                         startTime = "2023-07-09T16:00:00",
                         ticketOpenTime = "2023-07-08T14:00:00",
                         lineUp = "르세라핌,아이브,뉴진스",
-                        tickets = listOf(
+                        tickets =
+                        listOf(
                             ReservationTicketResponse(
                                 id = 3,
                                 ticketType = "STUDENT",
@@ -240,6 +244,7 @@ class ReservationTicketRetrofitServiceTest {
             return """
 {
 	"id": 1,
+    "schoolId": 1,
 	"name": "테코대학교",
 	"startDate": "2023-07-03",
 	"endDate": "2023-07-09",	

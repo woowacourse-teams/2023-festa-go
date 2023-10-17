@@ -1,18 +1,20 @@
 package com.festago.application.integration;
 
+import static com.festago.common.exception.ErrorCode.RESERVE_TICKET_OVER_AMOUNT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
-import com.festago.application.TicketingService;
-import com.festago.domain.Member;
-import com.festago.domain.MemberRepository;
-import com.festago.domain.MemberTicketRepository;
-import com.festago.domain.Stage;
-import com.festago.dto.TicketingRequest;
-import com.festago.exception.BadRequestException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.member.domain.Member;
+import com.festago.member.repository.MemberRepository;
+import com.festago.school.repository.SchoolRepository;
+import com.festago.stage.domain.Stage;
 import com.festago.support.MemberFixture;
+import com.festago.ticketing.application.TicketingService;
+import com.festago.ticketing.dto.TicketingRequest;
+import com.festago.ticketing.repository.MemberTicketRepository;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
@@ -36,6 +38,9 @@ class TicketingServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     TicketingService ticketingService;
+
+    @Autowired
+    SchoolRepository schoolRepository;
 
     @SpyBean
     MemberTicketRepository memberTicketRepository;
@@ -86,6 +91,6 @@ class TicketingServiceIntegrationTest extends ApplicationIntegrationTest {
         // when & then
         assertThatThrownBy(() -> ticketingService.ticketing(memberId, request))
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("예매 가능한 수량을 초과했습니다.");
+            .hasMessage(RESERVE_TICKET_OVER_AMOUNT.getMessage());
     }
 }

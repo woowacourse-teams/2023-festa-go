@@ -2,34 +2,41 @@ package com.festago.presentation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.AdminService;
-import com.festago.application.FestivalService;
-import com.festago.application.StageService;
-import com.festago.application.TicketService;
+import com.festago.admin.application.AdminService;
 import com.festago.auth.application.AdminAuthService;
-import com.festago.auth.domain.AuthExtractor;
+import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.Role;
-import com.festago.domain.TicketType;
-import com.festago.dto.ErrorResponse;
-import com.festago.dto.FestivalCreateRequest;
-import com.festago.dto.FestivalResponse;
-import com.festago.dto.StageCreateRequest;
-import com.festago.dto.StageResponse;
-import com.festago.dto.TicketCreateRequest;
-import com.festago.dto.TicketCreateResponse;
-import com.festago.exception.ErrorCode;
-import com.festago.exception.NotFoundException;
-import com.festago.exception.UnauthorizedException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
+import com.festago.common.exception.dto.ErrorResponse;
+import com.festago.festival.application.FestivalService;
+import com.festago.festival.dto.FestivalCreateRequest;
+import com.festago.festival.dto.FestivalResponse;
+import com.festago.school.application.SchoolService;
+import com.festago.school.dto.SchoolCreateRequest;
+import com.festago.school.dto.SchoolResponse;
+import com.festago.school.dto.SchoolUpdateRequest;
+import com.festago.stage.application.StageService;
+import com.festago.stage.dto.StageCreateRequest;
+import com.festago.stage.dto.StageResponse;
+import com.festago.stage.dto.StageUpdateRequest;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
+import com.festago.ticket.application.TicketService;
+import com.festago.ticket.domain.TicketType;
+import com.festago.ticket.dto.TicketCreateRequest;
+import com.festago.ticket.dto.TicketCreateResponse;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -69,6 +76,9 @@ class AdminControllerTest {
     @MockBean
     AdminAuthService adminAuthService;
 
+    @MockBean
+    SchoolService schoolService;
+
     @SpyBean
     AuthExtractor authExtractor;
 
@@ -89,26 +99,6 @@ class AdminControllerTest {
     }
 
     @Test
-    void 권한이_없어도_로그인_페이지_접속_가능() throws Exception {
-        // when & then
-        mockMvc.perform(get("/admin/login"))
-            .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockAuth
-    void 토큰의_만료기간이_지나면_로그인_페이지로_리다이렉트() throws Exception {
-        // given
-        given(authExtractor.extract(anyString()))
-            .willThrow(new UnauthorizedException(ErrorCode.EXPIRED_AUTH_TOKEN));
-
-        // when & then
-        mockMvc.perform(get("/admin/login")
-                .cookie(new Cookie("token", "token")))
-            .andExpect(status().isOk());
-    }
-
-    @Test
     @WithMockAuth(role = Role.ADMIN)
     void 축제_생성() throws Exception {
         // given
@@ -121,9 +111,11 @@ class AdminControllerTest {
             festivalName,
             LocalDate.parse(startDate),
             LocalDate.parse(endDate),
-            "");
+            "",
+            1L);
 
         FestivalResponse expected = new FestivalResponse(
+            1L,
             1L,
             festivalName,
             LocalDate.parse(startDate),
@@ -134,7 +126,7 @@ class AdminControllerTest {
             .willReturn(expected);
 
         // when && then
-        String content = mockMvc.perform(post("/admin/festivals")
+        String content = mockMvc.perform(post("/admin/api/festivals")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -169,7 +161,7 @@ class AdminControllerTest {
             .willThrow(exception);
 
         // when && then
-        String content = mockMvc.perform(post("/admin/stages")
+        String content = mockMvc.perform(post("/admin/api/stages")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -197,13 +189,14 @@ class AdminControllerTest {
             LocalDateTime.parse(ticketOpenTime),
             festivalId);
 
-        StageResponse expected = new StageResponse(festivalId, LocalDateTime.parse(startTime));
+        StageResponse expected = new StageResponse(festivalId, festivalId, LocalDateTime.parse(startTime),
+            LocalDateTime.parse(ticketOpenTime), lineUp);
 
         given(stageService.create(any()))
             .willReturn(expected);
 
         // when && then
-        String content = mockMvc.perform(post("/admin/stages")
+        String content = mockMvc.perform(post("/admin/api/stages")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -214,6 +207,37 @@ class AdminControllerTest {
             .getContentAsString(StandardCharsets.UTF_8);
         StageResponse actual = objectMapper.readValue(content, StageResponse.class);
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 무대_수정() throws Exception {
+        // given
+        String startTime = "2023-07-27T18:00:00";
+        String ticketOpenTime = "2023-07-26T18:00:00";
+        String lineUp = "글렌, 애쉬, 오리, 푸우";
+
+        StageUpdateRequest request = new StageUpdateRequest(LocalDateTime.parse(startTime),
+            LocalDateTime.parse(ticketOpenTime), lineUp);
+
+        // when & then
+        mockMvc.perform(patch("/admin/api/stages/{id}", 1L)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 무대_삭제() throws Exception {
+        // when & then
+        mockMvc.perform(delete("/admin/api/stages/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -236,7 +260,7 @@ class AdminControllerTest {
             .willThrow(exception);
 
         // when && then
-        String content = mockMvc.perform(post("/admin/tickets")
+        String content = mockMvc.perform(post("/admin/api/tickets")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -271,7 +295,7 @@ class AdminControllerTest {
             .willReturn(expected);
 
         // when && then
-        String content = mockMvc.perform(post("/admin/tickets")
+        String content = mockMvc.perform(post("/admin/api/tickets")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
@@ -282,5 +306,135 @@ class AdminControllerTest {
             .getContentAsString(StandardCharsets.UTF_8);
         TicketCreateResponse actual = objectMapper.readValue(content, TicketCreateResponse.class);
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_생성() throws Exception {
+        // given
+        String domain = "teco.ac.kr";
+        String name = "테코대학교";
+
+        SchoolCreateRequest request = new SchoolCreateRequest(domain, name);
+        SchoolResponse expected = new SchoolResponse(1L, domain, name);
+        given(schoolService.create(any(SchoolCreateRequest.class)))
+            .willReturn(expected);
+
+        // when & then
+        String content = mockMvc.perform(post("/admin/api/schools")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+        SchoolResponse actual = objectMapper.readValue(content, SchoolResponse.class);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_생성_name_null이면_에외() throws Exception {
+        // given
+        SchoolCreateRequest request = new SchoolCreateRequest("teco.ac.kr", null);
+
+        // when & then
+        mockMvc.perform(post("/admin/api/schools")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_생성_domain_null이면_에외() throws Exception {
+        // given
+        SchoolCreateRequest request = new SchoolCreateRequest(null, "테코대학교");
+
+        // when & then
+        mockMvc.perform(post("/admin/api/schools")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_수정() throws Exception {
+        // given
+        SchoolUpdateRequest request = new SchoolUpdateRequest("teco.ac.kr", "테코대학교");
+
+        // when & then
+        mockMvc.perform(patch("/admin/api/schools/{id}", 1L)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_수정_name_null이면_에외() throws Exception {
+        // given
+        SchoolUpdateRequest request = new SchoolUpdateRequest("teco.ac.kr", null);
+
+        // when & then
+        mockMvc.perform(patch("/admin/api/schools/{id}", 1L)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_수정_domain_null이면_에외() throws Exception {
+        // given
+        SchoolUpdateRequest request = new SchoolUpdateRequest(null, "테코대학교");
+
+        // when & then
+        mockMvc.perform(patch("/admin/api/schools/{id}", 1L)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 존재_하지_않는_학교_수정_예외() throws Exception {
+        // given
+        SchoolUpdateRequest request = new SchoolUpdateRequest("teco.ac.kr", "테코대학교");
+
+        willThrow(new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND))
+            .given(schoolService).update(anyLong(), any(SchoolUpdateRequest.class));
+
+        // when & then
+        mockMvc.perform(patch("/admin/api/schools/{id}", 1L)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 학교_삭제() throws Exception {
+        // when & then
+        mockMvc.perform(delete("/admin/api/schools/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("token", "token")))
+            .andDo(print())
+            .andExpect(status().isOk());
     }
 }

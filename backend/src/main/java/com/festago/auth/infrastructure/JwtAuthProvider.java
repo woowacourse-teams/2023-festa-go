@@ -1,7 +1,7 @@
 package com.festago.auth.infrastructure;
 
+import com.festago.auth.application.AuthProvider;
 import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.AuthProvider;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

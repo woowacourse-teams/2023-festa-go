@@ -1,34 +1,30 @@
 package com.festago.auth.application;
 
-import com.festago.auth.domain.Admin;
-import com.festago.auth.domain.AdminRepository;
+import com.festago.admin.domain.Admin;
+import com.festago.admin.repository.AdminRepository;
 import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.AuthProvider;
 import com.festago.auth.domain.Role;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.auth.dto.AdminSignupResponse;
-import com.festago.exception.BadRequestException;
-import com.festago.exception.ErrorCode;
-import com.festago.exception.ForbiddenException;
-import com.festago.exception.UnauthorizedException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.ForbiddenException;
+import com.festago.common.exception.UnauthorizedException;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AdminAuthService {
 
     private static final String ROOT_ADMIN = "admin";
 
     private final AuthProvider authProvider;
     private final AdminRepository adminRepository;
-
-    public AdminAuthService(AuthProvider authProvider, AdminRepository adminRepository) {
-        this.authProvider = authProvider;
-        this.adminRepository = adminRepository;
-    }
 
     @Transactional(readOnly = true)
     public String login(AdminLoginRequest request) {

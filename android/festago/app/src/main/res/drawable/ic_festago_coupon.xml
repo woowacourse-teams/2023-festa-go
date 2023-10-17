@@ -11,6 +11,6 @@
         android:fillType="evenOdd"/>
     <path
         android:pathData="M180,360C279.41,360 360,279.41 360,180C360,80.59 279.41,0 180,0C80.59,0 0,80.59 0,180C0,279.41 80.59,360 180,360Z"
-        android:fillColor="#3A73D2"/>
+        android:fillColor="?attr/colorOnSurface"/>
   </group>
 </vector>

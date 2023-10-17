@@ -8,12 +8,8 @@
         <import type="java.time.format.DateTimeFormatter" />
 
         <variable
-            name="vm"
-            type="com.festago.festago.presentation.ui.home.ticketlist.TicketListViewModel" />
-
-        <variable
             name="ticket"
-            type="com.festago.festago.presentation.model.TicketUiModel" />
+            type="com.festago.festago.presentation.ui.tickethistory.TicketHistoryItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,6 +20,7 @@
             android:id="@+id/cvTicket"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -32,7 +29,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:padding="16dp">
 
                 <ImageView

@@ -6,18 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentFestivalListBinding
-import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveActivity
+import com.festago.festago.presentation.util.repeatOnStarted
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
-    private val vm: FestivalListViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: FestivalListViewModel by viewModels()
 
     private lateinit var adapter: FestivalListAdapter
     override fun onCreateView(
@@ -37,22 +40,41 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
     }
 
     private fun initObserve() {
-        vm.uiState.observe(viewLifecycleOwner) {
-            binding.uiState = it
-            updateUi(it)
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.uiState.collect {
+                binding.uiState = it
+                updateUi(it)
+            }
         }
-        vm.event.observe(viewLifecycleOwner) {
-            handleEvent(it)
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect {
+                handleEvent(it)
+            }
         }
     }
+
+    private val Int.dp: Int get() = (this / resources.displayMetrics.density).toInt()
 
     private fun initView() {
         adapter = FestivalListAdapter()
         binding.rvFestivalList.adapter = adapter
+
+        binding.rvFestivalList.layoutManager.apply {
+            if (this is GridLayoutManager) {
+                val spanSize = (resources.displayMetrics.widthPixels.dp / 160)
+                spanCount = when {
+                    spanSize < 2 -> 2
+                    spanSize > 4 -> 4
+                    else -> spanSize
+                }
+            }
+        }
+
         vm.loadFestivals()
 
         binding.srlFestivalList.setOnRefreshListener {
             vm.loadFestivals()
+            binding.srlFestivalList.isRefreshing = false
         }
     }
 
@@ -60,7 +82,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
         when (uiState) {
             is FestivalListUiState.Loading,
             is FestivalListUiState.Error,
-            -> binding.srlFestivalList.isRefreshing = false
+            -> Unit
 
             is FestivalListUiState.Success -> handleSuccess(uiState)
         }
@@ -68,7 +90,6 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
         adapter.submitList(uiState.festivals)
-        binding.srlFestivalList.isRefreshing = false
     }
 
     private fun handleEvent(event: FestivalListEvent) {

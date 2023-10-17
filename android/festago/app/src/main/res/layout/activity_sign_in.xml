@@ -58,7 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:background="@drawable/bg_mypage_kakao_login"
-            android:onClick="@{() -> vm.signInKakao()}"
+            android:onClick="@{() -> vm.signIn()}"
             android:text="@string/mypage_btn_kakao"
             android:textColor="@color/kakao_label"
             android:textSize="16sp"

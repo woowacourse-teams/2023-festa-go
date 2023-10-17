@@ -1,24 +1,42 @@
 package com.festago.festago.presentation.ui.home
 
 import androidx.lifecycle.ViewModel
-import com.festago.festago.presentation.ui.home.HomeItemType.FESTIVAL_LIST
-import com.festago.festago.presentation.ui.home.HomeItemType.MY_PAGE
-import com.festago.festago.presentation.ui.home.HomeItemType.TICKET_LIST
-import com.festago.festago.presentation.util.MutableSingleLiveData
-import com.festago.festago.presentation.util.SingleLiveData
+import androidx.lifecycle.viewModelScope
 import com.festago.festago.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(private val authRepository: AuthRepository) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
 
-    private val _event = MutableSingleLiveData<HomeEvent>()
-    val event: SingleLiveData<HomeEvent> = _event
+    private val _event = MutableSharedFlow<HomeEvent>()
+    val event: SharedFlow<HomeEvent> = _event.asSharedFlow()
 
-    fun loadHomeItem(homeItemType: HomeItemType) {
-        when {
-            homeItemType == FESTIVAL_LIST -> _event.setValue(HomeEvent.ShowFestivalList)
-            !authRepository.isSigned -> _event.setValue(HomeEvent.ShowSignIn)
-            homeItemType == TICKET_LIST -> _event.setValue(HomeEvent.ShowTicketList)
-            homeItemType == MY_PAGE -> _event.setValue(HomeEvent.ShowMyPage)
+    private val _selectedItem = MutableStateFlow(HomeItemType.FESTIVAL_LIST)
+    val selectedItem: StateFlow<HomeItemType> = _selectedItem.asStateFlow()
+
+    fun selectItem(homeItemType: HomeItemType) {
+        when (homeItemType) {
+            HomeItemType.FESTIVAL_LIST -> _selectedItem.value = homeItemType
+            HomeItemType.TICKET_LIST -> selectItemOrSignIn(HomeItemType.TICKET_LIST)
+            HomeItemType.MY_PAGE -> selectItemOrSignIn(HomeItemType.MY_PAGE)
+        }
+    }
+
+    private fun selectItemOrSignIn(homeItemType: HomeItemType) {
+        viewModelScope.launch {
+            if (authRepository.isSigned) {
+                _selectedItem.emit(homeItemType)
+            } else {
+                _event.emit(HomeEvent.ShowSignIn)
+            }
         }
     }
 }

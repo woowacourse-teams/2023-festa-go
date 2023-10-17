@@ -30,4 +30,15 @@
     </style>
 
     <style name="Theme.Festago" parent="Base.Theme.Festago" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_festago_logo</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+
+        <item name="postSplashScreenTheme">@style/Base.Theme.Festago</item>
+    </style>
 </resources>
+
+

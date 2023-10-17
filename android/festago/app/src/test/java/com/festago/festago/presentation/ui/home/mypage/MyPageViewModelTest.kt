@@ -1,13 +1,12 @@
 package com.festago.festago.presentation.ui.home.mypage
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.MemberTicketFestival
 import com.festago.festago.model.Stage
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCondition
 import com.festago.festago.model.UserProfile
-import com.festago.festago.presentation.mapper.toPresentation
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TicketRepository
 import com.festago.festago.repository.UserRepository
@@ -18,12 +17,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDateTime
 
@@ -56,9 +55,6 @@ class MyPageViewModelTest {
         ),
     )
 
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
@@ -76,42 +72,52 @@ class MyPageViewModelTest {
         Dispatchers.resetMain()
     }
 
-    @Test
-    fun `로그인 되지 않았다면 로그인 이벤트가 발생한다`() {
-        // given
+    private fun `로그인 상태가 다음과 같다`(result: Boolean) {
         coEvery {
             authRepository.isSigned
         } answers {
-            false
+            result
         }
-
-        // when
-        vm.loadUserInfo()
-
-        // then
-        assertThat(vm.event.getValue() is MyPageEvent.ShowSignIn).isTrue
     }
 
-    @Test
-    fun `유저 프로필, 첫번째 티켓 받아오기에 성공하면 성공 상태다`() {
-        // given
+    private fun `유저 프로필 요청의 결과가 다음과 같다`(result: Result<UserProfile>) {
         coEvery {
             userRepository.loadUserProfile()
         } answers {
-            Result.success(fakeUserProfile)
+            result
         }
+    }
 
+    private fun `과거 예매 내역 요청의 결과가 다음과 같다`(result: Result<List<Ticket>>) {
         coEvery {
-            ticketRepository.loadHistoryTickets(1)
+            ticketRepository.loadHistoryTickets(any())
         } answers {
-            Result.success(fakeTickets)
+            result
         }
+    }
 
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
+    @Test
+    fun `로그인 되지 않았다면 로그인 이벤트가 발생한다`() = runTest {
+        // given
+        `로그인 상태가 다음과 같다`(false)
+
+        vm.event.test {
+            // when
+            vm.loadUserInfo()
+
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(MyPageEvent.ShowSignIn::class.java)
         }
+    }
+
+    @Test
+    fun `유저 프로필, 과거 예매 내역 받아오기에 성공하면 성공 상태다`() {
+        // given
+        `유저 프로필 요청의 결과가 다음과 같다`(Result.success(fakeUserProfile))
+
+        `과거 예매 내역 요청의 결과가 다음과 같다`(Result.success(fakeTickets))
+
+        `로그인 상태가 다음과 같다`(true)
 
         // when
         vm.loadUserInfo()
@@ -121,29 +127,25 @@ class MyPageViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(MyPageUiState.Success::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(true)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(true)
+            assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowError).isEqualTo(false)
 
             // and
             val actualUserProfile = (vm.uiState.value as MyPageUiState.Success).userProfile
-            assertThat(actualUserProfile).isEqualTo(fakeUserProfile.toPresentation())
+            assertThat(actualUserProfile).isEqualTo(fakeUserProfile)
 
             // and
             val actualTicket = (vm.uiState.value as MyPageUiState.Success).ticket
-            assertThat(actualTicket).isEqualTo(fakeTickets.first().toPresentation())
+            assertThat(actualTicket).isEqualTo(fakeTickets.first())
         }
         softly.assertAll()
     }
 
     @Test
-    fun `유저 프로필 받아오기에 성공하고, 첫번째 티켓을 받아오는 중이면 성공 상태이고, 티켓은 없다`() {
+    fun `유저 프로필 받아오기에 성공하고, 과거 예매 내역을 받아오는 중이면 로딩 상태이다`() {
         // given
-        coEvery {
-            userRepository.loadUserProfile()
-        } answers {
-            Result.success(fakeUserProfile)
-        }
+        `유저 프로필 요청의 결과가 다음과 같다`(Result.success(fakeUserProfile))
 
         coEvery {
             ticketRepository.loadHistoryTickets(1)
@@ -152,30 +154,19 @@ class MyPageViewModelTest {
             Result.success(fakeTickets)
         }
 
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `로그인 상태가 다음과 같다`(true)
 
         // when
         vm.loadUserInfo()
 
         // then
         val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value).isInstanceOf(MyPageUiState.Success::class.java)
+            assertThat(vm.uiState.value).isInstanceOf(MyPageUiState.Loading::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(true)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(false)
-
-            // and
-            assertThat((vm.uiState.value as MyPageUiState.Success).hasTicket).isFalse
-
-            // and
-            val actualTicket = (vm.uiState.value as MyPageUiState.Success).ticket
-            assertThat(actualTicket).isNotEqualTo(fakeTickets.first().toPresentation())
+            assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(true)
+            assertThat(vm.uiState.value.shouldShowError).isEqualTo(false)
         }
         softly.assertAll()
     }
@@ -183,23 +174,11 @@ class MyPageViewModelTest {
     @Test
     fun `유저 프로필 받아오기 실패하면 에러 상태다`() {
         // given
-        coEvery {
-            userRepository.loadUserProfile()
-        } answers {
-            Result.failure(Exception())
-        }
+        `유저 프로필 요청의 결과가 다음과 같다`(Result.failure(Exception()))
 
-        coEvery {
-            ticketRepository.loadHistoryTickets(1)
-        } answers {
-            Result.success(fakeTickets)
-        }
+        `과거 예매 내역 요청의 결과가 다음과 같다`(Result.success(fakeTickets))
 
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `로그인 상태가 다음과 같다`(true)
 
         // when
         vm.loadUserInfo()
@@ -209,33 +188,21 @@ class MyPageViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(MyPageUiState.Error::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+            assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowError).isEqualTo(true)
         }
         softly.assertAll()
     }
 
     @Test
-    fun `첫번째 티켓 받아오기에 실패하면 에러 상태다`() {
+    fun `과거 예매 내역 받아오기에 실패하면 에러 상태다`() {
         // given
-        coEvery {
-            userRepository.loadUserProfile()
-        } answers {
-            Result.success(fakeUserProfile)
-        }
+        `유저 프로필 요청의 결과가 다음과 같다`(Result.success(fakeUserProfile))
 
-        coEvery {
-            ticketRepository.loadHistoryTickets(1)
-        } answers {
-            Result.failure(Exception())
-        }
+        `과거 예매 내역 요청의 결과가 다음과 같다`(Result.failure(Exception()))
 
-        coEvery {
-            authRepository.isSigned
-        } answers {
-            true
-        }
+        `로그인 상태가 다음과 같다`(true)
 
         // when
         vm.loadUserInfo()
@@ -245,15 +212,15 @@ class MyPageViewModelTest {
             assertThat(vm.uiState.value).isInstanceOf(MyPageUiState.Error::class.java)
 
             // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+            assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
+            assertThat(vm.uiState.value.shouldShowError).isEqualTo(true)
         }
         softly.assertAll()
     }
 
     @Test
-    fun `로그아웃에 성공하면 SignOutSuccess 이벤트가 발생하고 에러 상태이다`() {
+    fun `로그아웃에 성공하면 SignOutSuccess 이벤트가 발생하고 에러 상태이다`() = runTest {
         // given
         coEvery {
             authRepository.signOut()
@@ -261,33 +228,37 @@ class MyPageViewModelTest {
             Result.success(Unit)
         }
 
-        // when
-        vm.signOut()
+        vm.event.test {
+            // when
+            vm.signOut()
 
-        // then
-        val softly = SoftAssertions().apply {
-            assertThat(vm.event.getValue() is MyPageEvent.SignOutSuccess).isTrue
-            assertThat(vm.uiState.value is MyPageUiState.Error).isTrue
+            // then
+            val softly = SoftAssertions().apply {
+                assertThat(awaitItem()).isExactlyInstanceOf(MyPageEvent.SignOutSuccess::class.java)
+                assertThat(vm.uiState.value is MyPageUiState.Error).isTrue
 
-            // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+                // and
+                assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
+                assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
+                assertThat(vm.uiState.value.shouldShowError).isEqualTo(true)
+            }
+            softly.assertAll()
         }
-        softly.assertAll()
     }
 
     @Test
-    fun `회원탈퇴 확인 이벤트가 발생한다`() {
-        // when
-        vm.showConfirmDelete()
+    fun `회원탈퇴 확인 이벤트가 발생한다`() = runTest {
+        vm.event.test {
+            // when
+            vm.showConfirmDelete()
 
-        // then
-        assertThat(vm.event.getValue() is MyPageEvent.ShowConfirmDelete).isTrue
+            // then
+            assertThat(awaitItem()).isExactlyInstanceOf(MyPageEvent.ShowConfirmDelete::class.java)
+        }
     }
 
     @Test
-    fun `회원 탈퇴에 성공하면 DeleteAccountSuccess 이벤트가 발생하고 에러상태다`() {
+    fun `회원 탈퇴에 성공하면 DeleteAccountSuccess 이벤트가 발생하고 에러상태다`() = runTest {
         // given
         coEvery {
             authRepository.deleteAccount()
@@ -295,19 +266,21 @@ class MyPageViewModelTest {
             Result.success(Unit)
         }
 
-        // when
-        vm.deleteAccount()
+        vm.event.test {
+            // when
+            vm.deleteAccount()
 
-        // then
-        val softly = SoftAssertions().apply {
-            assertThat(vm.event.getValue() is MyPageEvent.DeleteAccountSuccess).isTrue
-            assertThat(vm.uiState.value is MyPageUiState.Error).isTrue
+            // then
+            val softly = SoftAssertions().apply {
+                assertThat(awaitItem()).isExactlyInstanceOf(MyPageEvent.DeleteAccountSuccess::class.java)
+                assertThat(vm.uiState.value is MyPageUiState.Error).isTrue
 
-            // and
-            assertThat(vm.uiState.value?.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value?.shouldShowError).isEqualTo(true)
+                // and
+                assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
+                assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
+                assertThat(vm.uiState.value.shouldShowError).isEqualTo(true)
+            }
+            softly.assertAll()
         }
-        softly.assertAll()
     }
 }

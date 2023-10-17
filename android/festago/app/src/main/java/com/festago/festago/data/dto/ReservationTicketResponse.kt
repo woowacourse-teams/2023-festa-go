@@ -1,6 +1,7 @@
 package com.festago.festago.data.dto
 
 import com.festago.festago.model.ReservationTicket
+import com.festago.festago.model.TicketType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,8 +13,16 @@ data class ReservationTicketResponse(
 ) {
     fun toDomain(): ReservationTicket = ReservationTicket(
         id = id,
-        ticketType = ticketType,
+        ticketType = convertToTicketType(ticketType),
         totalAmount = totalAmount,
         remainAmount = remainAmount,
     )
+
+    private fun convertToTicketType(ticketType: String): TicketType {
+        return when (ticketType) {
+            "STUDENT" -> TicketType.STUDENT
+            "VISITOR" -> TicketType.VISITOR
+            else -> TicketType.OTHER
+        }
+    }
 }

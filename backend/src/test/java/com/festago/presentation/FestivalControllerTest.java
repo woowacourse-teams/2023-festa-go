@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.application.FestivalService;
-import com.festago.dto.FestivalDetailResponse;
-import com.festago.dto.FestivalResponse;
-import com.festago.dto.FestivalsResponse;
+import com.festago.festival.application.FestivalService;
+import com.festago.festival.dto.FestivalDetailResponse;
+import com.festago.festival.dto.FestivalResponse;
+import com.festago.festival.dto.FestivalsResponse;
 import com.festago.support.CustomWebMvcTest;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -42,9 +42,9 @@ class FestivalControllerTest {
     @Test
     void 모든_축제를_조회한다() throws Exception {
         // given
-        FestivalResponse festivalResponse1 = new FestivalResponse(1L, "테코대학교", LocalDate.now(),
+        FestivalResponse festivalResponse1 = new FestivalResponse(1L, 1L, "테코대학교", LocalDate.now(),
             LocalDate.now().plusDays(3), "https://image1.png");
-        FestivalResponse festivalResponse2 = new FestivalResponse(2L, "우테대학교", LocalDate.now().minusDays(3),
+        FestivalResponse festivalResponse2 = new FestivalResponse(2L, 2L, "우테대학교", LocalDate.now().minusDays(3),
             LocalDate.now(), "https://image2.png");
         FestivalsResponse expected = new FestivalsResponse(List.of(festivalResponse1, festivalResponse2));
         given(festivalService.findAll())
@@ -65,7 +65,7 @@ class FestivalControllerTest {
     @Test
     void 축제_정보_상세_조회() throws Exception {
         // given
-        FestivalDetailResponse expected = new FestivalDetailResponse(1L, "테코 대학교", LocalDate.now(), LocalDate.now(),
+        FestivalDetailResponse expected = new FestivalDetailResponse(1L, 1L, "테코 대학교", LocalDate.now(), LocalDate.now(),
             "thumbnail.png", Collections.emptyList());
 
         given(festivalService.findDetail(anyLong()))

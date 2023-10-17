@@ -1,17 +1,19 @@
 package com.festago.presentation;
 
-import com.festago.application.EntryService;
-import com.festago.application.MemberTicketService;
-import com.festago.application.TicketingService;
 import com.festago.auth.annotation.Member;
-import com.festago.dto.EntryCodeResponse;
-import com.festago.dto.MemberTicketResponse;
-import com.festago.dto.MemberTicketsResponse;
-import com.festago.dto.TicketingRequest;
-import com.festago.dto.TicketingResponse;
+import com.festago.entry.application.EntryService;
+import com.festago.entry.dto.EntryCodeResponse;
+import com.festago.ticketing.application.MemberTicketService;
+import com.festago.ticketing.application.TicketingService;
+import com.festago.ticketing.dto.MemberTicketResponse;
+import com.festago.ticketing.dto.MemberTicketsResponse;
+import com.festago.ticketing.dto.TicketingRequest;
+import com.festago.ticketing.dto.TicketingResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,18 +30,12 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/member-tickets")
 @Tag(name = "유저 티켓 요청")
+@RequiredArgsConstructor
 public class MemberTicketController {
 
     private final EntryService entryService;
     private final MemberTicketService memberTicketService;
     private final TicketingService ticketingService;
-
-    public MemberTicketController(EntryService entryService, MemberTicketService memberTicketService,
-                                  TicketingService ticketingService) {
-        this.entryService = entryService;
-        this.memberTicketService = memberTicketService;
-        this.ticketingService = ticketingService;
-    }
 
     @PostMapping("/{memberTicketId}/qr")
     @Operation(description = "티켓 제시용 QR 코드를 생성한다.", summary = "티켓 제시용 QR 생성")
@@ -53,7 +49,7 @@ public class MemberTicketController {
     @PostMapping
     @Operation(description = "티켓을 예매한다.", summary = "티켓 예매")
     public ResponseEntity<TicketingResponse> ticketing(@Member Long memberId,
-                                                       @RequestBody TicketingRequest request) {
+                                                       @RequestBody @Valid TicketingRequest request) {
         TicketingResponse response = ticketingService.ticketing(memberId, request);
         return ResponseEntity.ok()
             .body(response);

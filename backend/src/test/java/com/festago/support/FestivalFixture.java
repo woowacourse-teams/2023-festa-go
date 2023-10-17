@@ -1,6 +1,7 @@
 package com.festago.support;
 
-import com.festago.domain.Festival;
+import com.festago.festival.domain.Festival;
+import com.festago.school.domain.School;
 import java.time.LocalDate;
 
 public class FestivalFixture {
@@ -10,6 +11,7 @@ public class FestivalFixture {
     private LocalDate startDate = LocalDate.now();
     private LocalDate endDate = LocalDate.now().plusDays(3L);
     private String thumbnail = "https://picsum.photos/536/354";
+    private School school = SchoolFixture.school().build();
 
     private FestivalFixture() {
     }
@@ -43,7 +45,12 @@ public class FestivalFixture {
         return this;
     }
 
+    public FestivalFixture school(School school) {
+        this.school = school;
+        return this;
+    }
+
     public Festival build() {
-        return new Festival(id, name, startDate, endDate, thumbnail);
+        return new Festival(id, name, startDate, endDate, thumbnail, school);
     }
 }

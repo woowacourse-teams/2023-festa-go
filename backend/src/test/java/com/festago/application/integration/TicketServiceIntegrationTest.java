@@ -1,23 +1,27 @@
 package com.festago.application.integration;
 
+import static com.festago.common.exception.ErrorCode.STAGE_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doReturn;
 
-import com.festago.application.TicketService;
-import com.festago.domain.Festival;
-import com.festago.domain.FestivalRepository;
-import com.festago.domain.Stage;
-import com.festago.domain.StageRepository;
-import com.festago.domain.TicketAmount;
-import com.festago.domain.TicketAmountRepository;
-import com.festago.domain.TicketRepository;
-import com.festago.domain.TicketType;
-import com.festago.dto.TicketCreateRequest;
-import com.festago.dto.TicketCreateResponse;
-import com.festago.exception.NotFoundException;
+import com.festago.common.exception.NotFoundException;
+import com.festago.festival.domain.Festival;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
+import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
+import com.festago.ticket.application.TicketService;
+import com.festago.ticket.domain.TicketAmount;
+import com.festago.ticket.domain.TicketType;
+import com.festago.ticket.dto.TicketCreateRequest;
+import com.festago.ticket.dto.TicketCreateResponse;
+import com.festago.ticket.repository.TicketAmountRepository;
+import com.festago.ticket.repository.TicketRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -46,6 +50,9 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     @Autowired
     TicketAmountRepository ticketAmountRepository;
 
+    @Autowired
+    SchoolRepository schoolRepository;
+
     @SpyBean
     Clock clock;
 
@@ -62,7 +69,7 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         // when && then
         assertThatThrownBy(() -> ticketService.create(request))
             .isInstanceOf(NotFoundException.class)
-            .hasMessage("존재하지 않은 공연입니다.");
+            .hasMessage(STAGE_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -72,7 +79,9 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         doReturn(stageStartTime.minusWeeks(1).toInstant(ZoneOffset.UTC))
             .when(clock)
             .instant();
+        School school = schoolRepository.save(SchoolFixture.school().build());
         Festival festival = festivalRepository.save(FestivalFixture.festival()
+            .school(school)
             .startDate(stageStartTime.toLocalDate())
             .endDate(stageStartTime.toLocalDate())
             .build());
@@ -99,7 +108,9 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         doReturn(stageStartTime.minusWeeks(1).toInstant(ZoneOffset.UTC))
             .when(clock)
             .instant();
+        School school = schoolRepository.save(SchoolFixture.school().build());
         Festival festival = festivalRepository.save(FestivalFixture.festival()
+            .school(school)
             .startDate(stageStartTime.toLocalDate())
             .endDate(stageStartTime.toLocalDate())
             .build());

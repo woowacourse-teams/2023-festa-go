@@ -1,8 +1,10 @@
 package com.festago.domain;
 
+import static com.festago.common.exception.ErrorCode.TICKET_SOLD_OUT;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.exception.BadRequestException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.ticket.domain.TicketAmount;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,6 @@ class TicketAmountTest {
         // then
         assertThatThrownBy(ticketAmount::increaseReservedAmount)
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("매진된 티켓입니다.");
+            .hasMessage(TICKET_SOLD_OUT.getMessage());
     }
 }

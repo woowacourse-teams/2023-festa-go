@@ -1,26 +1,32 @@
 package com.festago.festago.presentation.ui.home.festivallist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.ShowTicketReserve
-import com.festago.festago.presentation.util.MutableSingleLiveData
-import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.FestivalRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FestivalListViewModel(
+@HiltViewModel
+class FestivalListViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
-    private val _uiState = MutableLiveData<FestivalListUiState>(FestivalListUiState.Loading)
-    val uiState: LiveData<FestivalListUiState> = _uiState
 
-    private val _event = MutableSingleLiveData<FestivalListEvent>()
-    val event: SingleLiveData<FestivalListEvent> = _event
+    private val _uiState = MutableStateFlow<FestivalListUiState>(FestivalListUiState.Loading)
+    val uiState: StateFlow<FestivalListUiState> = _uiState.asStateFlow()
+
+    private val _event = MutableSharedFlow<FestivalListEvent>()
+    val event: SharedFlow<FestivalListEvent> = _event.asSharedFlow()
 
     fun loadFestivals() {
         viewModelScope.launch {
@@ -46,7 +52,9 @@ class FestivalListViewModel(
     }
 
     fun showTicketReserve(festivalId: Long) {
-        _event.setValue(ShowTicketReserve(festivalId))
+        viewModelScope.launch {
+            _event.emit(ShowTicketReserve(festivalId))
+        }
     }
 
     companion object {

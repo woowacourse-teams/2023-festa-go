@@ -11,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentTicketListBinding
-import com.festago.festago.presentation.ui.FestagoViewModelFactory
 import com.festago.festago.presentation.ui.ticketentry.TicketEntryActivity
+import com.festago.festago.presentation.util.repeatOnStarted
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
 
     private var _binding: FragmentTicketListBinding? = null
@@ -23,7 +25,7 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-    private val vm: TicketListViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: TicketListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,12 +45,16 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
     }
 
     private fun initObserve() {
-        vm.uiState.observe(viewLifecycleOwner) {
-            binding.uiState = it
-            updateUi(it)
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.uiState.collect {
+                binding.uiState = it
+                updateUi(it)
+            }
         }
-        vm.event.observe(viewLifecycleOwner) { event ->
-            handleEvent(event)
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect { event ->
+                handleEvent(event)
+            }
         }
     }
 
@@ -56,11 +62,10 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
         when (uiState) {
             is TicketListUiState.Loading,
             is TicketListUiState.Error,
-            -> binding.srlTicketList.isRefreshing = false
+            -> Unit
 
             is TicketListUiState.Success -> {
                 adapter.submitList(uiState.tickets)
-                binding.srlTicketList.isRefreshing = false
             }
         }
     }
@@ -100,6 +105,7 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
     private fun initRefresh() {
         binding.srlTicketList.setOnRefreshListener {
             vm.loadCurrentTickets()
+            binding.srlTicketList.isRefreshing = false
         }
     }
 

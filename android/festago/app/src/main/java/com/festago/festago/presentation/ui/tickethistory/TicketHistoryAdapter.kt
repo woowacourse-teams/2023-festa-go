@@ -3,9 +3,8 @@ package com.festago.festago.presentation.ui.tickethistory
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.festago.festago.presentation.model.TicketUiModel
 
-class TicketHistoryAdapter : ListAdapter<TicketUiModel, TicketHistoryViewHolder>(ticketDiffUtil) {
+class TicketHistoryAdapter : ListAdapter<TicketHistoryItemUiState, TicketHistoryViewHolder>(ticketDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketHistoryViewHolder {
         return TicketHistoryViewHolder.from(parent)
@@ -16,11 +15,11 @@ class TicketHistoryAdapter : ListAdapter<TicketUiModel, TicketHistoryViewHolder>
     }
 
     companion object {
-        private val ticketDiffUtil = object : DiffUtil.ItemCallback<TicketUiModel>() {
-            override fun areItemsTheSame(oldItem: TicketUiModel, newItem: TicketUiModel) =
+        private val ticketDiffUtil = object : DiffUtil.ItemCallback<TicketHistoryItemUiState>() {
+            override fun areItemsTheSame(oldItem: TicketHistoryItemUiState, newItem: TicketHistoryItemUiState) =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: TicketUiModel, newItem: TicketUiModel) =
+            override fun areContentsTheSame(oldItem: TicketHistoryItemUiState, newItem: TicketHistoryItemUiState) =
                 oldItem == newItem
         }
     }

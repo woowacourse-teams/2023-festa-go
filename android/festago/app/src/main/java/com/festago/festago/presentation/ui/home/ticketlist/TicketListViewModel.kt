@@ -1,35 +1,39 @@
 package com.festago.festago.presentation.ui.home.ticketlist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
-import com.festago.festago.model.Ticket
-import com.festago.festago.presentation.mapper.toPresentation
-import com.festago.festago.presentation.util.MutableSingleLiveData
-import com.festago.festago.presentation.util.SingleLiveData
 import com.festago.festago.repository.TicketRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import javax.inject.Inject
 
-class TicketListViewModel(
+@HiltViewModel
+class TicketListViewModel @Inject constructor(
     private val ticketRepository: TicketRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData<TicketListUiState>(TicketListUiState.Loading)
-    val uiState: LiveData<TicketListUiState> = _uiState
+    private val _uiState = MutableStateFlow<TicketListUiState>(TicketListUiState.Loading)
+    val uiState: StateFlow<TicketListUiState> = _uiState.asStateFlow()
 
-    private val _event = MutableSingleLiveData<TicketListEvent>()
-    val event: SingleLiveData<TicketListEvent> = _event
+    private val _event = MutableSharedFlow<TicketListEvent>()
+    val event: SharedFlow<TicketListEvent> = _event.asSharedFlow()
 
     fun loadCurrentTickets() {
         viewModelScope.launch {
             ticketRepository.loadCurrentTickets()
                 .onSuccess { tickets ->
-                    _uiState.value = TicketListUiState.Success(tickets.map { it.toUiState() })
+                    _uiState.value = TicketListUiState.Success(
+                        tickets.map { TicketListItemUiState.of(it, ::showTicketEntry) },
+                    )
                 }.onFailure {
                     _uiState.value = TicketListUiState.Error
                     analyticsHelper.logNetworkFailure(KEY_LOAD_TICKETS_LOG, it.message.toString())
@@ -38,22 +42,10 @@ class TicketListViewModel(
     }
 
     fun showTicketEntry(ticketId: Long) {
-        _event.setValue(TicketListEvent.ShowTicketEntry(ticketId))
+        viewModelScope.launch {
+            _event.emit(TicketListEvent.ShowTicketEntry(ticketId))
+        }
     }
-
-    private fun Ticket.toUiState() = TicketListItemUiState(
-        id = id,
-        number = number,
-        entryTime = entryTime,
-        reserveAt = reserveAt,
-        condition = condition.toPresentation(),
-        stage = stage.toPresentation(),
-        festivalId = festivalTicket.id,
-        festivalName = festivalTicket.name,
-        festivalThumbnail = festivalTicket.thumbnail,
-        canEntry = LocalDateTime.now().isAfter(entryTime),
-        onTicketEntry = ::showTicketEntry,
-    )
 
     companion object {
         private const val KEY_LOAD_TICKETS_LOG = "load_tickets"

@@ -7,6 +7,7 @@ import java.time.LocalDate
 @Serializable
 data class FestivalResponse(
     val id: Int,
+    val schoolId: Int,
     val name: String,
     val startDate: String,
     val endDate: String,

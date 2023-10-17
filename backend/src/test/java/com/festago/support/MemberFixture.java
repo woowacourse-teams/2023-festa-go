@@ -1,7 +1,7 @@
 package com.festago.support;
 
 import com.festago.auth.domain.SocialType;
-import com.festago.domain.Member;
+import com.festago.member.domain.Member;
 
 public class MemberFixture {
 

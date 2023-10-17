@@ -1,9 +1,12 @@
 package com.festago.domain;
 
+import static com.festago.common.exception.ErrorCode.INVALID_STAGE_START_TIME;
+import static com.festago.common.exception.ErrorCode.INVALID_TICKET_OPEN_TIME;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.exception.BadRequestException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.festival.domain.Festival;
 import com.festago.support.FestivalFixture;
 import com.festago.support.StageFixture;
 import java.time.LocalDateTime;
@@ -35,7 +38,7 @@ class StageTest {
             .build()
         )
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("공연은 축제 기간 중에만 진행될 수 있습니다.");
+            .hasMessage(INVALID_STAGE_START_TIME.getMessage());
     }
 
     @Test
@@ -56,7 +59,7 @@ class StageTest {
             .build()
         )
             .isInstanceOf(BadRequestException.class)
-            .hasMessage("공연은 축제 기간 중에만 진행될 수 있습니다.");
+            .hasMessage(INVALID_STAGE_START_TIME.getMessage());
     }
 
     @ParameterizedTest
@@ -76,8 +79,8 @@ class StageTest {
             .festival(festival)
             .build()
         )
-            .isInstanceOf(BadRequestException.class)
-            .hasMessage("티켓은 공연 시작 전에 오픈되어야 합니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage(INVALID_TICKET_OPEN_TIME.getMessage());
     }
 
     @Test

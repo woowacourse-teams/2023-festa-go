@@ -1,8 +1,8 @@
 package com.festago.auth.infrastructure;
 
-import com.festago.auth.domain.TokenExtractor;
-import com.festago.exception.ErrorCode;
-import com.festago.exception.UnauthorizedException;
+import com.festago.auth.application.TokenExtractor;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import org.springframework.http.HttpHeaders;

@@ -1,52 +1,34 @@
 package com.festago.auth.application;
 
-import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.domain.AuthProvider;
-import com.festago.auth.domain.OAuth2Client;
-import com.festago.auth.domain.OAuth2Clients;
-import com.festago.auth.domain.Role;
 import com.festago.auth.domain.UserInfo;
-import com.festago.auth.dto.LoginRequest;
-import com.festago.auth.dto.LoginResponse;
-import com.festago.domain.Member;
-import com.festago.domain.MemberRepository;
-import com.festago.exception.ErrorCode;
-import com.festago.exception.NotFoundException;
+import com.festago.auth.dto.LoginMemberDto;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
+import com.festago.member.domain.Member;
+import com.festago.member.repository.MemberRepository;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final OAuth2Clients oAuth2Clients;
-    private final AuthProvider authProvider;
 
-    public AuthService(MemberRepository memberRepository, OAuth2Clients oAuth2Clients,
-                       AuthProvider authProvider) {
-        this.memberRepository = memberRepository;
-        this.oAuth2Clients = oAuth2Clients;
-        this.authProvider = authProvider;
-    }
-
-    public LoginResponse login(LoginRequest request) {
-        UserInfo userInfo = getUserInfo(request);
-        return memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
-            .map(member -> LoginResponse.isExists(getAccessToken(member), member.getNickname()))
-            .orElseGet(() -> {
-                Member member = signUp(userInfo);
-                return LoginResponse.isNew(getAccessToken(member), member.getNickname());
-            });
-    }
-
-    private UserInfo getUserInfo(LoginRequest request) {
-        OAuth2Client oAuth2Client = oAuth2Clients.getClient(request.socialType());
-        return oAuth2Client.getUserInfo(request.accessToken());
-    }
-
-    private String getAccessToken(Member member) {
-        return authProvider.provide(new AuthPayload(member.getId(), Role.MEMBER));
+    public LoginMemberDto login(UserInfo userInfo) {
+        Optional<Member> originMember =
+            memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType());
+        if (originMember.isPresent()) {
+            Member member = originMember.get();
+            return LoginMemberDto.isExists(member);
+        }
+        Member newMember = signUp(userInfo);
+        return LoginMemberDto.isNew(newMember);
     }
 
     private Member signUp(UserInfo userInfo) {
@@ -56,6 +38,12 @@ public class AuthService {
     public void deleteMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+        logDeleteMember(member);
         memberRepository.delete(member);
+    }
+
+    private void logDeleteMember(Member member) {
+        log.info("[DELETE MEMBER] memberId: {} / socialType: {} / socialId: {}",
+            member.getId(), member.getSocialType(), member.getSocialId());
     }
 }

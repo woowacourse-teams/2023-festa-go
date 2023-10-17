@@ -1,48 +1,54 @@
 package com.festago.presentation;
 
-import com.festago.application.AdminService;
-import com.festago.application.FestivalService;
-import com.festago.application.StageService;
-import com.festago.application.TicketService;
+import com.festago.admin.application.AdminService;
+import com.festago.admin.dto.AdminResponse;
 import com.festago.auth.annotation.Admin;
 import com.festago.auth.application.AdminAuthService;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.auth.dto.AdminSignupResponse;
 import com.festago.auth.dto.RootAdminInitializeRequest;
-import com.festago.dto.AdminResponse;
-import com.festago.dto.FestivalCreateRequest;
-import com.festago.dto.FestivalResponse;
-import com.festago.dto.StageCreateRequest;
-import com.festago.dto.StageResponse;
-import com.festago.dto.TicketCreateRequest;
-import com.festago.dto.TicketCreateResponse;
-import com.festago.exception.ErrorCode;
-import com.festago.exception.InternalServerException;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.InternalServerException;
+import com.festago.festival.application.FestivalService;
+import com.festago.festival.dto.FestivalCreateRequest;
+import com.festago.festival.dto.FestivalResponse;
+import com.festago.festival.dto.FestivalUpdateRequest;
+import com.festago.school.application.SchoolService;
+import com.festago.school.dto.SchoolCreateRequest;
+import com.festago.school.dto.SchoolResponse;
+import com.festago.school.dto.SchoolUpdateRequest;
+import com.festago.stage.application.StageService;
+import com.festago.stage.dto.StageCreateRequest;
+import com.festago.stage.dto.StageResponse;
+import com.festago.stage.dto.StageUpdateRequest;
+import com.festago.ticket.application.TicketService;
+import com.festago.ticket.dto.TicketCreateRequest;
+import com.festago.ticket.dto.TicketCreateResponse;
 import io.swagger.v3.oas.annotations.Hidden;
-import com.festago.exception.UnauthorizedException;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.InternalResourceView;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/api")
 @Hidden
+@RequiredArgsConstructor
 public class AdminController {
 
     private final FestivalService festivalService;
@@ -50,52 +56,84 @@ public class AdminController {
     private final TicketService ticketService;
     private final AdminService adminService;
     private final AdminAuthService adminAuthService;
+    private final SchoolService schoolService;
     private final Optional<BuildProperties> properties;
 
-    public AdminController(FestivalService festivalService, StageService stageService, TicketService ticketService,
-                           AdminService adminService, AdminAuthService adminAuthService,
-                           Optional<BuildProperties> buildProperties) {
-        this.festivalService = festivalService;
-        this.stageService = stageService;
-        this.ticketService = ticketService;
-        this.adminService = adminService;
-        this.adminAuthService = adminAuthService;
-        this.properties = buildProperties;
-    }
-
     @PostMapping("/festivals")
-    public ResponseEntity<FestivalResponse> createFestival(@RequestBody FestivalCreateRequest request) {
+    public ResponseEntity<FestivalResponse> createFestival(@RequestBody @Valid FestivalCreateRequest request) {
         FestivalResponse response = festivalService.create(request);
         return ResponseEntity.ok()
             .body(response);
     }
 
+    @PatchMapping("/festivals/{festivalId}")
+    public ResponseEntity<Void> updateFestival(@RequestBody @Valid FestivalUpdateRequest request,
+                                               @PathVariable Long festivalId) {
+        festivalService.update(festivalId, request);
+        return ResponseEntity.ok()
+            .build();
+    }
+
+    @DeleteMapping("/festivals/{festivalId}")
+    public ResponseEntity<Void> deleteFestival(@PathVariable Long festivalId) {
+        festivalService.delete(festivalId);
+        return ResponseEntity.ok()
+            .build();
+    }
+
     @PostMapping("/stages")
-    public ResponseEntity<StageResponse> createStage(@RequestBody StageCreateRequest request) {
+    public ResponseEntity<StageResponse> createStage(@RequestBody @Valid StageCreateRequest request) {
         StageResponse response = stageService.create(request);
         return ResponseEntity.ok()
             .body(response);
     }
 
+    @PatchMapping("/stages/{stageId}")
+    public ResponseEntity<Void> updateStage(@RequestBody @Valid StageUpdateRequest request,
+                                            @PathVariable Long stageId) {
+        stageService.update(stageId, request);
+        return ResponseEntity.ok()
+            .build();
+    }
+
+    @DeleteMapping("/stages/{stageId}")
+    public ResponseEntity<Void> deleteStage(@PathVariable Long stageId) {
+        stageService.delete(stageId);
+        return ResponseEntity.ok()
+            .build();
+    }
+
     @PostMapping("/tickets")
-    public ResponseEntity<TicketCreateResponse> createTicket(@RequestBody TicketCreateRequest request) {
+    public ResponseEntity<TicketCreateResponse> createTicket(@RequestBody @Valid TicketCreateRequest request) {
         TicketCreateResponse response = ticketService.create(request);
         return ResponseEntity.ok()
             .body(response);
     }
 
-    @GetMapping
-    public ModelAndView adminPage() {
-        return new ModelAndView("admin/admin-page");
+    @PostMapping("/schools")
+    public ResponseEntity<SchoolResponse> createSchool(@RequestBody @Valid SchoolCreateRequest request) {
+        SchoolResponse response = schoolService.create(request);
+        return ResponseEntity.ok()
+            .body(response);
     }
 
-    @GetMapping("/login")
-    public ModelAndView loginPage() {
-        return new ModelAndView("admin/login");
+    @PatchMapping("/schools/{schoolId}")
+    public ResponseEntity<Void> updateSchool(@RequestBody @Valid SchoolUpdateRequest request,
+                                             @PathVariable Long schoolId) {
+        schoolService.update(schoolId, request);
+        return ResponseEntity.ok()
+            .build();
+    }
+
+    @DeleteMapping("/schools/{schoolId}")
+    public ResponseEntity<Void> deleteSchool(@PathVariable Long schoolId) {
+        schoolService.delete(schoolId);
+        return ResponseEntity.ok()
+            .build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody AdminLoginRequest request) {
+    public ResponseEntity<Void> login(@RequestBody @Valid AdminLoginRequest request) {
         String token = adminAuthService.login(request);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, getCookie(token))
             .build();
@@ -133,32 +171,23 @@ public class AdminController {
         throw new InternalServerException(ErrorCode.FOR_TEST_ERROR);
     }
 
+    @GetMapping("/info")
+    public ResponseEntity<Void> getInfo() {
+        throw new BadRequestException(ErrorCode.FOR_TEST_ERROR);
+    }
+
     @PostMapping("/initialize")
-    public ResponseEntity<Void> initializeRootAdmin(@RequestBody RootAdminInitializeRequest request) {
+    public ResponseEntity<Void> initializeRootAdmin(@RequestBody @Valid RootAdminInitializeRequest request) {
         adminAuthService.initializeRootAdmin(request.password());
         return ResponseEntity.ok()
             .build();
     }
 
-    @GetMapping("/signup")
-    public ModelAndView signupPage() {
-        return new ModelAndView("admin/signup");
-    }
-
     @PostMapping("/signup")
-    public ResponseEntity<AdminSignupResponse> signupAdminAccount(@RequestBody AdminSignupRequest request,
+    public ResponseEntity<AdminSignupResponse> signupAdminAccount(@RequestBody @Valid AdminSignupRequest request,
                                                                   @Admin Long adminId) {
         AdminSignupResponse response = adminAuthService.signup(adminId, request);
         return ResponseEntity.ok()
             .body(response);
-    }
-
-    @ExceptionHandler(UnauthorizedException.class)
-    public View handle(UnauthorizedException e, HttpServletResponse response) {
-        if (e.getErrorCode() == ErrorCode.EXPIRED_AUTH_TOKEN) {
-            return new RedirectView("/admin/login");
-        }
-        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        return new InternalResourceView("/error/404");
     }
 }

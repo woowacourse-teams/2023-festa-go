@@ -6,12 +6,14 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.festago.festago.databinding.ActivityTicketHistoryBinding
-import com.festago.festago.presentation.ui.FestagoViewModelFactory
+import com.festago.festago.presentation.util.repeatOnStarted
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TicketHistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTicketHistoryBinding
 
-    private val vm: TicketHistoryViewModel by viewModels { FestagoViewModelFactory }
+    private val vm: TicketHistoryViewModel by viewModels()
 
     private var adapter: TicketHistoryAdapter = TicketHistoryAdapter()
 
@@ -29,17 +31,19 @@ class TicketHistoryActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
-        vm.uiState.observe(this) { uiState ->
-            when (uiState) {
-                is TicketHistoryUiState.Loading,
-                is TicketHistoryUiState.Error,
-                -> Unit
+        repeatOnStarted(this) {
+            vm.uiState.collect { uiState ->
+                when (uiState) {
+                    is TicketHistoryUiState.Loading,
+                    is TicketHistoryUiState.Error,
+                    -> Unit
 
-                is TicketHistoryUiState.Success -> {
-                    adapter.submitList(uiState.tickets)
+                    is TicketHistoryUiState.Success -> {
+                        adapter.submitList(uiState.tickets)
+                    }
                 }
+                binding.uiState = uiState
             }
-            binding.uiState = uiState
         }
     }
 
