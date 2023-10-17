@@ -15,6 +15,7 @@ import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.util.repeatOnStarted
+import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,6 +26,8 @@ class HomeActivity : AppCompatActivity() {
     private val vm: HomeViewModel by viewModels()
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    private val navigationBarView by lazy { binding.nvHome as NavigationBarView }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +41,7 @@ class HomeActivity : AppCompatActivity() {
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == SignInActivity.RESULT_NOT_SIGN_IN) {
-                    selectItem(R.id.item_festival)
+                    navigationBarView.selectedItemId = R.id.item_festival
                 }
             }
     }
@@ -48,26 +51,16 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        binding.bnvHome?.setOnItemSelectedListener {
-            vm.selectItem(getItemType(it.itemId))
-            true
-        }
-
-        binding.nrHome?.setOnItemSelectedListener {
+        navigationBarView.setOnItemSelectedListener {
             vm.selectItem(getItemType(it.itemId))
             true
         }
 
         binding.fabTicket.setOnClickListener {
-            selectItem(R.id.item_ticket)
+            navigationBarView.selectedItemId = R.id.item_ticket
         }
 
         changeFragment<FestivalListFragment>()
-    }
-
-    private fun selectItem(itemId: Int) {
-        binding.bnvHome?.selectedItemId = itemId
-        binding.nrHome?.selectedItemId = itemId
     }
 
     private fun initObserve() {

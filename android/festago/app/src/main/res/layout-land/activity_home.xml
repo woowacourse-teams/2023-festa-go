@@ -13,7 +13,7 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.navigationrail.NavigationRailView
-                android:id="@+id/nrHome"
+                android:id="@+id/nvHome"
                 android:layout_width="68dp"
                 android:layout_height="match_parent"
                 android:background="?attr/colorSurfaceBright"
@@ -44,7 +44,7 @@
             android:src="@drawable/ic_festago_coupon"
             app:borderWidth="1dp"
             app:fabSize="mini"
-            app:layout_anchor="@id/nrHome"
+            app:layout_anchor="@id/nvHome"
             app:layout_anchorGravity="center"
             app:maxImageSize="48dp"
             app:menu="@menu/menu_bottom_navigation"

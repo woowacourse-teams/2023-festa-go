@@ -27,7 +27,7 @@
 
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bnvHome"
+                android:id="@+id/nvHome"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:background="#00000000"
