@@ -78,8 +78,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTicketTypes"
             android:layout_width="match_parent"
-            android:layout_height="256dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:paddingBottom="36dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/btnReserveTicket"
             app:layout_constraintTop_toBottomOf="@id/tvTicketTypePrompt"
