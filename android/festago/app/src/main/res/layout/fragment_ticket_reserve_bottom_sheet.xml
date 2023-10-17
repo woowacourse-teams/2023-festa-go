@@ -47,22 +47,42 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
+            android:text="@{stageStartTime}"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="@{stageStartTime}"
             app:layout_constraintEnd_toEndOf="@id/endGuideLine"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="07.03 (목) 17:00" />
 
+
+        <TextView
+            android:id="@+id/tvTicketTypePrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/ticket_reserve_tv_ticket_type_prompt"
+            android:textColor="@color/md_theme_light_primary"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tvDate" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/md_theme_light_outline"
+            app:layout_constraintTop_toBottomOf="@id/tvTicketTypePrompt" />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTicketTypes"
             android:layout_width="match_parent"
-            android:layout_height="256dp"
-            android:layout_marginTop="32dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingBottom="36dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/btnReserveTicket"
-            app:layout_constraintTop_toBottomOf="@id/tvDate"
+            app:layout_constraintTop_toBottomOf="@id/tvTicketTypePrompt"
             tools:itemCount="3"
             tools:listitem="@layout/item_ticket_reserve_bottom_sheet" />
 
