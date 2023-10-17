@@ -36,7 +36,7 @@ public class FCMNotificationEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     public void sendFcmNotification(EntryProcessEvent event) {
-        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()), FCMChannel.NOT_DEFINED.name());
+        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()), FCMChannel.ENTRY_PROCESS.name());
         try {
             BatchResponse batchResponse = firebaseMessaging.sendAll(messages);
             checkAllSuccess(batchResponse, event.memberId());
