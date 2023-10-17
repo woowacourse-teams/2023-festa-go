@@ -11,9 +11,6 @@
 
 <img width="1192" alt="image" src="https://github.com/woowacourse-teams/2023-festa-go/assets/71129059/8e761c81-6066-4f93-89af-b9d2d22eb577">
 
-
-**▷ 🔎 기능 소개 |** [기능 자세히 보기](https://www.notion.so/wooteco-ash/2e5709dd0c2741b5ae4e7f0a967868ef)
-
 **▷ 📲 다운로드 |** [PlayStore](https://play.google.com/store/apps/details?id=com.festago.festago)
 
 **▷ 📝 팀블로그 |** [Festago 팀블로그](https://festago.github.io/)
