@@ -9,7 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.festago.festago.databinding.ActivityTicketEntryBinding
-import com.festago.festago.presentation.service.TicketEntryService
+import com.festago.festago.presentation.fcm.TicketEntryService
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder

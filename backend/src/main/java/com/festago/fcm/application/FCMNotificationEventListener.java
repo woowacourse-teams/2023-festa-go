@@ -20,7 +20,7 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
-@Profile({"prod", "dev"})
+@Profile("prod | dev")
 public class FCMNotificationEventListener {
 
     private static final Logger log = LoggerFactory.getLogger(FCMNotificationEventListener.class);
@@ -36,7 +36,7 @@ public class FCMNotificationEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     public void sendFcmNotification(EntryProcessEvent event) {
-        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()), FCMChannel.NOT_DEFINED.name());
+        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()), FCMChannel.ENTRY_PROCESS.name());
         try {
             BatchResponse batchResponse = firebaseMessaging.sendAll(messages);
             checkAllSuccess(batchResponse, event.memberId());

@@ -38,6 +38,7 @@
     <string name="home_bottom_navigation_festival">축제 목록</string>
     <string name="home_bottom_navigation_ticket">티켓 목록</string>
     <string name="home_bottom_navigation_user">마이페이지</string>
+    <string name="home_notification_permission_denied">알림 권한을 거부했습니다 :(</string>
 
     <!-- Strings related to ticket reserve-->
     <string name="ticket_reserve_tv_date_range">%1s ~ %1s</string>
@@ -135,5 +136,8 @@
     <string name="select_school_til_select_school">학교 선택</string>
     <string name="select_school_tv_error_message">학교 목록 불러오기에 실패했습니다.</string>
     <string name="select_school_tv_select_school">학교 선택</string>
+
+    <!-- Strings related to fcm -->
+    <string name="entry_alert_channel_name">공연 입장 알림</string>
 
 </resources>

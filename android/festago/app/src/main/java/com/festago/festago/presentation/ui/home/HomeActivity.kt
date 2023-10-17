@@ -3,6 +3,9 @@ package com.festago.festago.presentation.ui.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,36 +16,51 @@ import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.util.repeatOnStarted
+import com.festago.festago.presentation.util.requestNotificationPermission
+import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
-    private var _binding: ActivityHomeBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { ActivityHomeBinding.inflate(layoutInflater) }
 
     private val vm: HomeViewModel by viewModels()
+
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    private val navigationBarView by lazy { binding.nvHome as NavigationBarView }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
         initView()
         initObserve()
+        initResultLauncher()
+    }
+
+    private fun initResultLauncher() {
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == SignInActivity.RESULT_NOT_SIGN_IN) {
+                    navigationBarView.selectedItemId = R.id.item_festival
+                }
+            }
+        initNotificationPermission()
     }
 
     private fun initBinding() {
-        _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
     private fun initView() {
-        binding.bnvHome.setOnItemSelectedListener {
-            vm.loadHomeItem(getItemType(it.itemId))
+        navigationBarView.setOnItemSelectedListener {
+            vm.selectItem(getItemType(it.itemId))
             true
         }
 
         binding.fabTicket.setOnClickListener {
-            binding.bnvHome.selectedItemId = R.id.item_ticket
+            navigationBarView.selectedItemId = R.id.item_ticket
         }
 
         changeFragment<FestivalListFragment>()
@@ -52,13 +70,35 @@ class HomeActivity : AppCompatActivity() {
         repeatOnStarted(this) {
             vm.event.collect { event ->
                 when (event) {
-                    is HomeEvent.ShowFestivalList -> showFestivalList()
-                    is HomeEvent.ShowTicketList -> showTicketList()
-                    is HomeEvent.ShowMyPage -> showMyPage()
                     is HomeEvent.ShowSignIn -> showSignIn()
                 }
             }
         }
+
+        repeatOnStarted(this) {
+            vm.selectedItem.collect { homeItemType ->
+                when (homeItemType) {
+                    HomeItemType.FESTIVAL_LIST -> showFestivalList()
+                    HomeItemType.TICKET_LIST -> showTicketList()
+                    HomeItemType.MY_PAGE -> showMyPage()
+                }
+            }
+        }
+    }
+
+    private fun initNotificationPermission() {
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { isGranted: Boolean ->
+            if (!isGranted) {
+                Toast.makeText(
+                    this,
+                    getString(R.string.home_notification_permission_denied),
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+        }
+        requestNotificationPermission(requestPermissionLauncher)
     }
 
     private fun getItemType(menuItemId: Int): HomeItemType {
@@ -86,7 +126,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showSignIn() {
-        startActivity(SignInActivity.getIntent(this))
+        resultLauncher.launch(SignInActivity.getIntent(this))
     }
 
     private inline fun <reified T : Fragment> changeFragment() {

@@ -4,7 +4,7 @@
     <style name="btnFesta">
         <item name="android:textSize">20sp</item>
         <item name="android:letterSpacing">0.01</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
         <item name="android:background">@drawable/btn_festa</item>
         <item name="android:paddingVertical">@dimen/space</item>
     </style>
