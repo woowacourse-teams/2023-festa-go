@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 
 @Configuration
-@Profile({"prod", "dev"})
+@Profile("prod | dev")
 public class FCMConfig {
 
     @Value("${fcm.key.path}")
