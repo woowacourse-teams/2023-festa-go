@@ -16,7 +16,14 @@ class SchoolDefaultRepository @Inject constructor(
             .onSuccessOrCatch { it.toDomain() }
 
     override suspend fun loadSchoolEmail(schoolId: Long): Result<String> {
-        // TODO: API 연동 작업 필요
-        return Result.success("festago.com")
+        return runCatchingResponse { schoolRetrofitService.getSchools() }
+            .onSuccessOrCatch {
+                val school = it.schools.find { school -> school.id.toLong() == schoolId }
+                school?.domain ?: throw IllegalArgumentException(MATCH_SCHOOL_NOT_FOUND)
+            }
+    }
+
+    companion object {
+        private const val MATCH_SCHOOL_NOT_FOUND = "MATCH_SCHOOL_NOT_FOUND"
     }
 }

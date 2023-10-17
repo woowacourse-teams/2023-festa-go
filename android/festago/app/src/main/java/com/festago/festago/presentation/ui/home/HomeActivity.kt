@@ -3,6 +3,7 @@ package com.festago.festago.presentation.ui.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -16,6 +17,7 @@ import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.google.android.material.navigation.NavigationBarView
+import com.festago.festago.presentation.util.requestNotificationPermission
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,6 +46,7 @@ class HomeActivity : AppCompatActivity() {
                     navigationBarView.selectedItemId = R.id.item_festival
                 }
             }
+        initNotificationPermission()
     }
 
     private fun initBinding() {
@@ -81,6 +84,21 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initNotificationPermission() {
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (!isGranted) {
+                Toast.makeText(
+                    this,
+                    getString(R.string.home_notification_permission_denied),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        requestNotificationPermission(requestPermissionLauncher)
     }
 
     private fun getItemType(menuItemId: Int): HomeItemType {
