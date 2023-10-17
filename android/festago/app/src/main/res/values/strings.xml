@@ -55,6 +55,7 @@
     <string name="ticket_reserve_tv_btn_reserve_ticket">예매 하기</string>
     <string name="ticket_reserve_tv_btn_reserve_ticket_not_open">MM월 dd일 HH:mm 오픈예정</string>
     <string name="ticket_reserve_tv_signin">로그인 후 예매</string>
+    <string name="ticket_reserve_tv_ticket_type_prompt">예매 유형을 선택해주세요</string>
 
     <!-- Strings related to festival list -->
     <string name="festival_list_tv_date_format">yyyy.MM.dd</string>

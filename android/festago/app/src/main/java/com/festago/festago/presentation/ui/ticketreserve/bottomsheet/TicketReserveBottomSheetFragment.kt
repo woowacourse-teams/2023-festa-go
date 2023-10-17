@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.festago.festago.databinding.FragmentTicketReserveBottomSheetBinding
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 import com.festago.festago.presentation.util.getParcelableArrayListCompat
@@ -22,6 +23,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
     private val ticketTypeAdapter = TicketReserveBottomSheetAdapter { ticketId ->
         binding.selectedTicketTypeId = ticketId
         binding.btnReserveTicket.isEnabled = true
+        binding.tvTicketTypePrompt.visibility = View.INVISIBLE
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +58,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun initView() {
         binding.rvTicketTypes.adapter = ticketTypeAdapter
+        binding.rvTicketTypes.addItemDecoration(DividerItemDecoration(requireContext(), 1))
         val onReserve: (Int) -> Unit = { id -> vm.reserveTicket(id) }
         binding.onReserve = onReserve
         binding.btnReserveTicket.isEnabled = false
