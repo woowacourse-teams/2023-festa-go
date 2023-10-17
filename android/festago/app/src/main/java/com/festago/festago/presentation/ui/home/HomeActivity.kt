@@ -16,8 +16,8 @@ import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.util.repeatOnStarted
-import com.google.android.material.navigation.NavigationBarView
 import com.festago.festago.presentation.util.requestNotificationPermission
+import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -88,13 +88,13 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initNotificationPermission() {
         val requestPermissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
+            ActivityResultContracts.RequestPermission(),
         ) { isGranted: Boolean ->
             if (!isGranted) {
                 Toast.makeText(
                     this,
                     getString(R.string.home_notification_permission_denied),
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_SHORT,
                 ).show()
             }
         }
