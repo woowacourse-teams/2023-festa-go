@@ -20,6 +20,10 @@
 
 **▷ 📧 연락처 |** team.festago@gmail.com
 
+## Android
+### 프로젝트 아키텍처
+<img width="955" alt="image" src="https://github.com/woowacourse-teams/2023-festa-go/assets/67777523/2fc5e26f-c628-41fe-b2d3-5b74da794fdc">
+
 
 ## 🎉 축제 스태프를 소개합니다
 
