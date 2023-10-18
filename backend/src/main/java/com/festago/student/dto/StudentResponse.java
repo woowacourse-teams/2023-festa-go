@@ -7,6 +7,8 @@ public record StudentResponse(
     StudentSchoolResponse school
 ) {
 
+    private static final StudentResponse NOT_VERIFIED = new StudentResponse(false, null);
+
     public static StudentResponse verified(School school) {
         return new StudentResponse(
             true,
@@ -15,9 +17,6 @@ public record StudentResponse(
     }
 
     public static StudentResponse notVerified() {
-        return new StudentResponse(
-            false,
-            null
-        );
+        return NOT_VERIFIED;
     }
 }
