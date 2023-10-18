@@ -19,7 +19,6 @@ import com.festago.student.repository.StudentCodeRepository;
 import com.festago.student.repository.StudentRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,8 +101,7 @@ public class StudentService {
     }
 
     public StudentResponse findVerification(Long memberId) {
-        Optional<Student> student = studentRepository.findByMemberIdWithFetch(memberId);
-        return student
+        return studentRepository.findByMemberIdWithFetch(memberId)
             .map(value -> StudentResponse.verified(value.getSchool()))
             .orElseGet(StudentResponse::notVerified);
     }
