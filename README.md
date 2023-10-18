@@ -11,13 +11,15 @@
 
 <img width="1192" alt="image" src="https://github.com/woowacourse-teams/2023-festa-go/assets/71129059/8e761c81-6066-4f93-89af-b9d2d22eb577">
 
+<br/>
+<br/>
+
 **▷ 📲 다운로드 |** [PlayStore](https://play.google.com/store/apps/details?id=com.festago.festago)
 
 **▷ 📝 팀블로그 |** [Festago 팀블로그](https://festago.github.io/)
 
 **▷ 📧 연락처 |** team.festago@gmail.com
 
-<br>
 
 ## 🎉 축제 스태프를 소개합니다
 
