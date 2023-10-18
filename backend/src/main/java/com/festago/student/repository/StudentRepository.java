@@ -17,8 +17,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query("""
         SELECT st
-        FROM Student  st
-        LEFT JOIN FETCH st.school sc
+        FROM Student st
+        INNER JOIN FETCH st.school sc
         WHERE st.member.id = :memberId
         """)
     Optional<Student> findByMemberIdWithFetch(@Param("memberId") Long memberId);
