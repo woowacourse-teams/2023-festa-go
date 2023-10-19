@@ -14,7 +14,6 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -60,78 +59,54 @@ class FestivalListViewModelTest {
     }
 
     @Test
-    fun `축제 목록 받아오기에 성공하면 성공 상태이고 축제 목록을 반환한다`() {
-        // given
-        `축제 목록 요청 결과가 다음과 같을 때`(Result.success(fakeFestivals))
-
-        // when
-        vm.loadFestivals()
-
-        // then
-        val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Success::class.java)
-
-            // and
-            assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(true)
-            assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value.shouldShowError).isEqualTo(false)
-
-            // and
-            val actual = (vm.uiState.value as FestivalListUiState.Success).festivals
-            val expected = fakeFestivals.map { it.toUiState() }
-            assertThat(actual).isEqualTo(expected)
-        }
-        softly.assertAll()
-    }
-
-    @Test
-    fun `축제 목록 받아오기에 실패하면 에러 상태다`() {
-        // given
-        `축제 목록 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
-
-        // when
-        vm.loadFestivals()
-
-        // then
-        val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Error::class.java)
-
-            // and
-            assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
-            assertThat(vm.uiState.value.shouldShowError).isEqualTo(true)
-        }
-        softly.assertAll()
-    }
-
-    @Test
-    fun `축제 목록을 받아오는 중이면 로딩 상태다`() {
+    fun `축제 목록 요청 결과가 성공이라면 처음엔 로딩 화면이었다가 축제 목록을 받아온다`() = runTest {
         // given
         coEvery {
             festivalRepository.loadFestivals()
         } coAnswers {
             delay(1000)
-            Result.success(emptyList())
+            Result.success(fakeFestivals)
+        }
+
+        vm.uiState.test {
+            // before
+            assertThat(awaitItem()).isExactlyInstanceOf(FestivalListUiState.Loading::class.java)
+
+            // when
+            vm.loadFestivals()
+
+            // after
+            val nextState = awaitItem() as? FestivalListUiState.Success
+            assertThat(nextState).isNotNull
+            assertThat(nextState?.festivals).isEqualTo(fakeFestivals.toUiState())
+        }
+    }
+
+    @Test
+    fun `축제 목록 요청 결과가 실패이라면 처음엔 로딩 화면이었다가 로딩 실패 화면이 뜬다`() = runTest {
+        // given
+        coEvery {
+            festivalRepository.loadFestivals()
+        } coAnswers {
+            delay(1000)
+            Result.failure(Exception())
         }
 
         // when
-        vm.loadFestivals()
+        vm = FestivalListViewModel(festivalRepository, analyticsHelper)
 
         // then
-        val softly = SoftAssertions().apply {
-            assertThat(vm.uiState.value).isInstanceOf(FestivalListUiState.Loading::class.java)
-
-            // and
-            assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
-            assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(true)
-            assertThat(vm.uiState.value.shouldShowError).isEqualTo(false)
+        vm.uiState.test {
+            // initial
+            assertThat(awaitItem()).isExactlyInstanceOf(FestivalListUiState.Loading::class.java)
+            // next
+            assertThat(awaitItem()).isExactlyInstanceOf(FestivalListUiState.Error::class.java)
         }
-        softly.assertAll()
     }
 
     @Test
     fun `티켓 예매를 열면 티켓 예매 열기 이벤트가 발생한다`() = runTest {
-
+        vm = FestivalListViewModel(festivalRepository, analyticsHelper)
         vm.event.test {
             // when
             val fakeFestivalId = 1L
@@ -142,6 +117,7 @@ class FestivalListViewModelTest {
         }
     }
 
+    private fun List<Festival>.toUiState() = map { it.toUiState() }
     private fun Festival.toUiState() = FestivalItemUiState(
         id = id,
         name = name,
