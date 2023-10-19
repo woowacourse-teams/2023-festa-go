@@ -41,7 +41,7 @@
   <img src="https://img.shields.io/badge/Gradle-0?style=flat-square&logo=gradle&logoColor=white&color=%2302303A">
   <img src="https://img.shields.io/badge/Swagger-0?style=flat-square&logo=Swagger&logoColor=white&color=%2385EA2D">
   <img src="https://img.shields.io/badge/GitHub%20Actions-0?style=flat-square&logo=GitHub%20Actions&logoColor=white&color=%232088FF">
-  <img src="https://img.shields.io/badge/OAuth2-0?style=JUnit5-square&logo=junit5&logoColor=white&color=%2325A162">
+  <img src="https://img.shields.io/badge/JUnit5-0?style=JUnit5-square&logo=junit5&logoColor=white&color=%2325A162">
   <img src="https://img.shields.io/badge/Jenkins-0?style=flat-square&logo=Jenkins&logoColor=white&color=%23D24939">
 </div>
 <br/>
