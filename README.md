@@ -24,6 +24,27 @@
 ### 프로젝트 아키텍처
 <img width="955" alt="image" src="https://github.com/woowacourse-teams/2023-festa-go/assets/67777523/2fc5e26f-c628-41fe-b2d3-5b74da794fdc">
 
+## Backend
+
+
+<div align="center">
+  <h3>기술 스택</h3>
+  <img src="https://img.shields.io/badge/Java17-000000?style=flat-square&logo=java&color=F40D12">
+  <img src="https://img.shields.io/badge/Spring_Boot_3-0?style=flat-square&logo=spring-boot&logoColor=white&color=%236DB33F">
+  <img src="https://img.shields.io/badge/MySQL_8-0?style=flat-square&logo=mysql&logoColor=white&color=4479A1">
+  <img src="https://img.shields.io/badge/Nginx-0?style=flat-square&logo=nginx&logoColor=white&color=009639">
+  <img src="https://img.shields.io/badge/Hibernate-0?style=flat-square&logo=hibernate&logoColor=white&color=%2359666C">
+  <img src="https://img.shields.io/badge/Amazon_EC2-0?style=flat-square&logo=amazon-ec2&logoColor=white&color=%23FF9900">
+  <br/>
+  <img src="https://img.shields.io/badge/Amazon_CloudWatch-0?style=flat-square&logo=amazon-cloudwatch&logoColor=white&color=%23FF4F8B">
+  <img src="https://img.shields.io/badge/OAuth2-0?style=flat-square&logo=oauth2&logoColor=white&color=%23000000">
+  <img src="https://img.shields.io/badge/Gradle-0?style=flat-square&logo=gradle&logoColor=white&color=%2302303A">
+  <img src="https://img.shields.io/badge/Swagger-0?style=flat-square&logo=Swagger&logoColor=white&color=%2385EA2D">
+  <img src="https://img.shields.io/badge/GitHub%20Actions-0?style=flat-square&logo=GitHub%20Actions&logoColor=white&color=%232088FF">
+  <img src="https://img.shields.io/badge/OAuth2-0?style=JUnit5-square&logo=junit5&logoColor=white&color=%2325A162">
+  <img src="https://img.shields.io/badge/Jenkins-0?style=flat-square&logo=Jenkins&logoColor=white&color=%23D24939">
+</div>
+<br/>
 
 ## 🎉 축제 스태프를 소개합니다
 
