@@ -41,7 +41,7 @@ class TicketServiceTest {
             TicketFixture.ticket().id(1L).ticketType(TicketType.STUDENT).stage(stage).build(),
             TicketFixture.ticket().id(2L).ticketType(TicketType.VISITOR).stage(stage).build()
         );
-        given(ticketRepository.findAllByStageId(stageId))
+        given(ticketRepository.findAllByStageIdWithFetch(stageId))
             .willReturn(tickets);
 
         // when
