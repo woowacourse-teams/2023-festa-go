@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.core.os.BundleCompat
 
 @Suppress("DEPRECATION")
 inline fun <reified T : Parcelable> Bundle.getParcelableCompat(key: String): T? {
@@ -23,11 +24,11 @@ inline fun <reified T : Parcelable> Bundle.getParcelableArrayListCompat(key: Str
     }
 }
 
-@Suppress("DEPRECATION")
 inline fun <reified T : Parcelable> Intent.getParcelableExtraCompat(key: String): T? {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getParcelableExtra(key, T::class.java)
-    } else {
-        getParcelableExtra(key) as? T
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val bundle = extras ?: return null
+        return BundleCompat.getParcelable(bundle, key, T::class.java)
     }
+    @Suppress("DEPRECATION")
+    return getParcelableExtra(key) as? T
 }
