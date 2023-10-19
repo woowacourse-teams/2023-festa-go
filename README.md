@@ -25,6 +25,9 @@
 <img width="955" alt="image" src="https://github.com/woowacourse-teams/2023-festa-go/assets/67777523/2fc5e26f-c628-41fe-b2d3-5b74da794fdc">
 
 ## Backend
+### 백엔드 인프라 아키텍처
+![image](https://github.com/woowacourse-teams/2023-festa-go/assets/103228463/f61d118a-983c-480c-a8de-04f1e659bef0)
+
 
 
 <div align="center">
