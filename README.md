@@ -21,12 +21,15 @@
 **▷ 📧 연락처 |** team.festago@gmail.com
 
 ## Android
-### 프로젝트 아키텍처
-<img width="955" src="https://github.com/woowacourse-teams/2023-festa-go/assets/67777523/2fc5e26f-c628-41fe-b2d3-5b74da794fdc">
+<div align="center">
+  <h3>프로젝트 아키텍처</h3>
+  <img width="955" src="https://github.com/woowacourse-teams/2023-festa-go/assets/67777523/2fc5e26f-c628-41fe-b2d3-5b74da794fdc">
+</div>
 
-### 기술 스택
+<div align="center">
+  <h3>기술 스택</h3>
 <img width="500" src="https://github.com/woowacourse-teams/2023-festa-go/assets/67777523/90c3eec2-ada6-4c83-a915-0ab3754ab40c">
-
+</div>
 
 ## Backend
 <div align="center">
