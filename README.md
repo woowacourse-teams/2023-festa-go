@@ -26,8 +26,7 @@
 
 ## Backend
 ### 백엔드 인프라 아키텍처
-![image](https://github.com/woowacourse-teams/2023-festa-go/assets/103228463/f61d118a-983c-480c-a8de-04f1e659bef0)
-
+![image](https://github.com/woowacourse-teams/2023-festa-go/assets/103228463/30adce2c-9e32-4e78-a23e-5fd64f4c982f)
 
 
 <div align="center">
