@@ -1,96 +1,59 @@
 package com.festago.fcm.application;
 
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.festago.entry.dto.event.EntryProcessEvent;
-import com.google.firebase.messaging.BatchResponse;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.SendResponse;
-import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.transaction.annotation.Transactional;
 
+@SpringBootTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@ExtendWith(MockitoExtension.class)
 class FCMNotificationEventListenerTest {
 
-    @Mock
-    FirebaseMessaging firebaseMessaging;
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
 
-    @Mock
-    MemberFCMService memberFCMService;
-
-    @InjectMocks
-    FCMNotificationEventListener FCMNotificationEventListener;
+    @MockBean
+    FCMNotificationEventListener fcmNotificationEventListener;
 
     @Test
-    void 유저의_모든_FCM_요청이_성공() throws FirebaseMessagingException {
+    @Transactional
+    void 이벤트를_발행하고_트랜잭션이_커밋되면_이벤트_수신() {
         // given
-        given(memberFCMService.findAllMemberFCMTokens(anyLong())).willReturn(List.of(
-            "token1",
-            "token2"
-        ));
-        BatchResponse mockBatchResponse = mock(BatchResponse.class);
-        given(mockBatchResponse.getFailureCount())
-            .willReturn(0);
-
-        given(firebaseMessaging.sendAll(anyList())).willReturn(mockBatchResponse);
-        EntryProcessEvent event = new EntryProcessEvent(1L);
+        eventPublisher.publishEvent(new EntryProcessEvent(1L));
 
         // when
-        FCMNotificationEventListener.sendFcmNotification(event);
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
 
         // then
-        verify(mockBatchResponse, times(1))
-            .getFailureCount();
-        verify(mockBatchResponse, never())
-            .getResponses();
+        verify(fcmNotificationEventListener, times(1))
+            .sendFcmNotification(any(EntryProcessEvent.class));
     }
 
     @Test
-    void 유저의_FCM_요청_중_하나라도_실패하면_예외() throws FirebaseMessagingException {
+    @Transactional
+    void 이벤트를_발행하고_트랜잭션이_롤백되면_이벤트_수신_하지않음() {
         // given
-        given(memberFCMService.findAllMemberFCMTokens(anyLong())).willReturn(List.of(
-            "token1",
-            "token2"
-        ));
-
-        BatchResponse mockBatchResponse = mock(BatchResponse.class);
-        SendResponse mockSendResponse = mock(SendResponse.class);
-
-        given(mockSendResponse.isSuccessful())
-            .willReturn(false);
-        given(mockBatchResponse.getFailureCount())
-            .willReturn(1);
-        given(mockBatchResponse.getResponses())
-            .willReturn(List.of(mockSendResponse));
-
-        given(firebaseMessaging.sendAll(anyList())).willReturn(mockBatchResponse);
-
-        EntryProcessEvent event = new EntryProcessEvent(1L);
+        eventPublisher.publishEvent(new EntryProcessEvent(1L));
 
         // when
-        FCMNotificationEventListener.sendFcmNotification(event);
+        TestTransaction.flagForRollback();
+        TestTransaction.end();
 
         // then
-        verify(mockBatchResponse, times(1))
-            .getFailureCount();
-        verify(mockBatchResponse, times(1))
-            .getResponses();
-        verify(mockSendResponse, times(1))
-            .isSuccessful();
+        verify(fcmNotificationEventListener, never())
+            .sendFcmNotification(any(EntryProcessEvent.class));
     }
 }
