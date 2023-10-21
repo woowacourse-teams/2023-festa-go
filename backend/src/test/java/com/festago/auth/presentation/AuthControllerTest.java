@@ -3,8 +3,6 @@ package com.festago.auth.presentation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -16,7 +14,6 @@ import com.festago.auth.domain.Role;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
-import com.festago.fcm.application.MemberFCMService;
 import com.festago.presentation.AuthController;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
@@ -41,9 +38,6 @@ class AuthControllerTest {
 
     @MockBean
     AuthFacadeService authFacadeService;
-
-    @MockBean
-    MemberFCMService memberFCMService;
 
     @Test
     void OAuth2_로그인을_한다() throws Exception {
@@ -90,59 +84,5 @@ class AuthControllerTest {
                 .header("Authorization", "Bearer token")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
-    }
-
-    @Test
-    void 회원가입_시_유저의_FCM_를_저장한다() throws Exception {
-        // given
-        String fcmToken = "fcmToken";
-        String accessToken = "accessToken";
-        boolean isNewMember = true;
-        LoginResponse expected = new LoginResponse(accessToken, "nickname", isNewMember);
-        given(authFacadeService.login(any(), any()))
-            .willReturn(expected);
-        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "code", fcmToken);
-
-        // when & then
-        String response = mockMvc.perform(post("/auth/oauth2")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-            .andExpect(status().isOk())
-            .andDo(print())
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-        LoginResponse actual = objectMapper.readValue(response, LoginResponse.class);
-
-        assertThat(actual).isEqualTo(expected);
-        verify(memberFCMService, times(1))
-            .saveMemberFCM(isNewMember, accessToken, fcmToken);
-    }
-
-    @Test
-    void 로그인_시_유저의_FCM_를_저장한다() throws Exception {
-        // given
-        String fcmToken = "fcmToken";
-        String accessToken = "accessToken";
-        boolean isNewMember = false;
-        LoginResponse expected = new LoginResponse(accessToken, "nickname", isNewMember);
-        given(authFacadeService.login(any(), any()))
-            .willReturn(expected);
-        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "code", fcmToken);
-
-        // when & then
-        String response = mockMvc.perform(post("/auth/oauth2")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-            .andExpect(status().isOk())
-            .andDo(print())
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-        LoginResponse actual = objectMapper.readValue(response, LoginResponse.class);
-
-        assertThat(actual).isEqualTo(expected);
-        verify(memberFCMService, times(1))
-            .saveMemberFCM(isNewMember, accessToken, fcmToken);
     }
 }
