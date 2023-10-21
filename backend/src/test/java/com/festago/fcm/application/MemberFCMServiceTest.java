@@ -42,7 +42,7 @@ class MemberFCMServiceTest {
             new MemberFCM(1L, 1L, "token"),
             new MemberFCM(2L, 1L, "token2")
         );
-        given(memberFCMRepository.findByMemberId(anyLong()))
+        given(memberFCMRepository.findAllByMemberId(anyLong()))
             .willReturn(memberFCMs);
 
         List<String> expect = memberFCMs.stream()
@@ -50,7 +50,7 @@ class MemberFCMServiceTest {
             .toList();
 
         // when
-        List<String> actual = memberFCMService.findMemberFCMTokens(1L);
+        List<String> actual = memberFCMService.findAllMemberFCMTokens(1L);
 
         // then
         assertThat(actual).containsAll(expect);
@@ -98,7 +98,7 @@ class MemberFCMServiceTest {
         Long memberId = 1L;
 
         // when
-        memberFCMService.deleteMemberFCM(memberId);
+        memberFCMService.deleteAllMemberFCM(memberId);
 
         // then
         verify(memberFCMRepository, times(1))

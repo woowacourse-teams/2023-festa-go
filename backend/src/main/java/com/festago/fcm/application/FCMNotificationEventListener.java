@@ -46,7 +46,7 @@ public class FCMNotificationEventListener {
     }
 
     private List<String> getMemberFCMTokens(Long memberId) {
-        return memberFCMService.findMemberFCMTokens(memberId);
+        return memberFCMService.findAllMemberFCMTokens(memberId);
     }
 
     private List<Message> createMessages(List<String> tokens, String channelId) {

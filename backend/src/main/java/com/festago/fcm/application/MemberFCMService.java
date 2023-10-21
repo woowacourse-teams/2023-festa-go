@@ -22,8 +22,8 @@ public class MemberFCMService {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public List<String> findMemberFCMTokens(Long memberId) {
-        List<MemberFCM> memberFCM = memberFCMRepository.findByMemberId(memberId);
+    public List<String> findAllMemberFCMTokens(Long memberId) {
+        List<MemberFCM> memberFCM = memberFCMRepository.findAllByMemberId(memberId);
         if (memberFCM.isEmpty()) {
             log.warn("member {} 의 FCM 토큰이 발급되지 않았습니다.", memberId);
             return Collections.emptyList();
@@ -46,7 +46,7 @@ public class MemberFCMService {
         return !memberFCMRepository.existsByMemberIdAndFcmToken(memberId, fcmToken);
     }
 
-    public void deleteMemberFCM(Long memberId) {
+    public void deleteAllMemberFCM(Long memberId) {
         memberFCMRepository.deleteAllByMemberId(memberId);
     }
 }

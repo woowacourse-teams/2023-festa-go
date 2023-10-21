@@ -39,7 +39,7 @@ class FCMNotificationEventListenerTest {
     @Test
     void 유저의_모든_FCM_요청이_성공() throws FirebaseMessagingException {
         // given
-        given(memberFCMService.findMemberFCMTokens(anyLong())).willReturn(List.of(
+        given(memberFCMService.findAllMemberFCMTokens(anyLong())).willReturn(List.of(
             "token1",
             "token2"
         ));
@@ -63,7 +63,7 @@ class FCMNotificationEventListenerTest {
     @Test
     void 유저의_FCM_요청_중_하나라도_실패하면_예외() throws FirebaseMessagingException {
         // given
-        given(memberFCMService.findMemberFCMTokens(anyLong())).willReturn(List.of(
+        given(memberFCMService.findAllMemberFCMTokens(anyLong())).willReturn(List.of(
             "token1",
             "token2"
         ));

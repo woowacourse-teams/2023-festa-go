@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberFCMRepository extends JpaRepository<MemberFCM, Long> {
 
-    List<MemberFCM> findByMemberId(Long memberId);
+    List<MemberFCM> findAllByMemberId(Long memberId);
 
     boolean existsByMemberIdAndFcmToken(Long memberId, String fcmToken);
 
