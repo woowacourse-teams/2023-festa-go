@@ -22,12 +22,15 @@ public class MemberFCMService {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public MemberFCMsResponse findMemberFCM(Long memberId) {
+    public List<String> findMemberFCMTokens(Long memberId) {
         List<MemberFCM> memberFCM = memberFCMRepository.findByMemberId(memberId);
         if (memberFCM.isEmpty()) {
             log.warn("member {} 의 FCM 토큰이 발급되지 않았습니다.", memberId);
+            return Collections.emptyList();
         }
-        return MemberFCMsResponse.from(memberFCM);
+        return memberFCM.stream()
+            .map(MemberFCM::getFcmToken)
+            .toList();
     }
 
     public void saveMemberFCM(Long memberId, String fcmToken) {
@@ -43,7 +46,6 @@ public class MemberFCMService {
         return !memberFCMRepository.existsByMemberIdAndFcmToken(memberId, fcmToken);
     }
 
-    @Async
     public void deleteMemberFCM(Long memberId) {
         memberFCMRepository.deleteAllByMemberId(memberId);
     }

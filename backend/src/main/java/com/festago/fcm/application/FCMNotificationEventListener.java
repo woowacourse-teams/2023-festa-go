@@ -2,7 +2,6 @@ package com.festago.fcm.application;
 
 import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.fcm.domain.FCMChannel;
-import com.festago.fcm.dto.MemberFCMResponse;
 import com.google.firebase.messaging.AndroidConfig;
 import com.google.firebase.messaging.AndroidNotification;
 import com.google.firebase.messaging.BatchResponse;
@@ -36,7 +35,8 @@ public class FCMNotificationEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     public void sendFcmNotification(EntryProcessEvent event) {
-        List<Message> messages = createMessages(getMemberFCMToken(event.memberId()), FCMChannel.ENTRY_PROCESS.name());
+        List<String> memberFCMTokens = getMemberFCMTokens(event.memberId());
+        List<Message> messages = createMessages(memberFCMTokens, FCMChannel.ENTRY_PROCESS.name());
         try {
             BatchResponse batchResponse = firebaseMessaging.sendAll(messages);
             checkAllSuccess(batchResponse, event.memberId());
@@ -45,10 +45,8 @@ public class FCMNotificationEventListener {
         }
     }
 
-    private List<String> getMemberFCMToken(Long memberId) {
-        return memberFCMService.findMemberFCM(memberId).memberFCMs().stream()
-            .map(MemberFCMResponse::fcmToken)
-            .toList();
+    private List<String> getMemberFCMTokens(Long memberId) {
+        return memberFCMService.findMemberFCMTokens(memberId);
     }
 
     private List<Message> createMessages(List<String> tokens, String channelId) {
