@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="28dp"
-            android:onClick="@{() -> stage.onShowStageTickets.invoke(stage.id, stage.startTime)}"
+            app:onSingleClick="@{() -> stage.onShowStageTickets.invoke(stage.id, stage.startTime)}"
             android:text="@string/ticket_reserve_btn_reserve_ticket"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
