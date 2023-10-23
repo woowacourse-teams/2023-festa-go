@@ -3,20 +3,16 @@ package com.festago.festago.presentation.ui.home.festivallist
 import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.Festival
+import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.FestivalRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 
@@ -36,19 +32,14 @@ class FestivalListViewModelTest {
         )
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         festivalRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
         vm = FestivalListViewModel(festivalRepository, analyticsHelper)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @After
-    fun finish() {
-        Dispatchers.resetMain()
     }
 
     private fun `축제 목록 요청 결과가 다음과 같을 때`(result: Result<List<Festival>>) {
@@ -131,7 +122,6 @@ class FestivalListViewModelTest {
 
     @Test
     fun `티켓 예매를 열면 티켓 예매 열기 이벤트가 발생한다`() = runTest {
-
         vm.event.test {
             // when
             val fakeFestivalId = 1L
