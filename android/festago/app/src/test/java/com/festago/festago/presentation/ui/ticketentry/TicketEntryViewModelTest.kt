@@ -4,38 +4,30 @@ import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCode
 import com.festago.festago.presentation.fixture.TicketFixture
+import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.TicketRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.SoftAssertions
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class TicketEntryViewModelTest {
+
     private lateinit var vm: TicketEntryViewModel
     private lateinit var ticketRepository: TicketRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         ticketRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
         vm = TicketEntryViewModel(ticketRepository, analyticsHelper)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @After
-    fun finish() {
-        Dispatchers.resetMain()
     }
 
     private fun `티켓 요쳥 결과는 다음과 같을 때`(result: Result<Ticket>) {
