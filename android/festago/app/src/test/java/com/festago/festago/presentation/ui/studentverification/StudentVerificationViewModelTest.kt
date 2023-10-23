@@ -3,34 +3,30 @@ package com.festago.festago.presentation.ui.studentverification
 import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.StudentVerificationCode
+import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.SchoolRepository
 import com.festago.festago.repository.StudentVerificationRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions.assertSoftly
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class StudentVerificationViewModelTest {
 
-    private val testDispatcher = UnconfinedTestDispatcher()
     private lateinit var vm: StudentVerificationViewModel
     private lateinit var studentVerificationRepository: StudentVerificationRepository
     private lateinit var schoolRepository: SchoolRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
         studentVerificationRepository = mockk()
         schoolRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
@@ -39,12 +35,6 @@ class StudentVerificationViewModelTest {
             studentVerificationRepository = studentVerificationRepository,
             analyticsHelper = analyticsHelper,
         )
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @After
-    fun finish() {
-        Dispatchers.resetMain()
     }
 
     private fun `이메일 요청 결과가 다음과 같을 때`(result: Result<String>) {
