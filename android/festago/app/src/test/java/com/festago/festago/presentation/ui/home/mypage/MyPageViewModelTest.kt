@@ -7,6 +7,7 @@ import com.festago.festago.model.Stage
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCondition
 import com.festago.festago.model.UserProfile
+import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TicketRepository
 import com.festago.festago.repository.UserRepository
@@ -23,15 +24,20 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDateTime
 
 class MyPageViewModelTest {
+
     private lateinit var vm: MyPageViewModel
     private lateinit var userRepository: UserRepository
     private lateinit var ticketRepository: TicketRepository
     private lateinit var authRepository: AuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     private val fakeUserProfile = UserProfile(
         1L,
