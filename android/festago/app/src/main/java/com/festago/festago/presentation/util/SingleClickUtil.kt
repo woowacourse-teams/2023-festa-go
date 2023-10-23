@@ -22,7 +22,7 @@ class OnSingleClickListener(
 }
 
 @BindingAdapter("onSingleClick")
-fun View.onSingleClick(onSingleClick: (View) -> Unit) {
+fun View.setOnSingleClickListener(onSingleClick: (View) -> Unit) {
     val oneClick = OnSingleClickListener {
         onSingleClick(it)
     }
