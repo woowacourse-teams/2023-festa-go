@@ -8,28 +8,25 @@ import com.festago.festago.model.ReservationTicket
 import com.festago.festago.model.ReservationTickets
 import com.festago.festago.model.ReservedTicket
 import com.festago.festago.model.TicketType
+import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
 import com.festago.festago.repository.ReservationTicketRepository
 import com.festago.festago.repository.TicketRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.assertj.core.api.SoftAssertions
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 class TicketReserveViewModelTest {
+
     private lateinit var vm: TicketReserveViewModel
     private lateinit var reservationTicketRepository: ReservationTicketRepository
     private lateinit var festivalRepository: FestivalRepository
@@ -66,10 +63,11 @@ class TicketReserveViewModelTest {
         number = 1,
     )
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         reservationTicketRepository = mockk()
         festivalRepository = mockk()
         ticketRepository = mockk()
@@ -82,12 +80,6 @@ class TicketReserveViewModelTest {
             authRepository,
             analyticsHelper,
         )
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     private fun `예약 정보 요청 결과가 다음과 같을 때`(result: Result<Reservation>) {
