@@ -93,11 +93,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="28dp"
-            android:onClick="@{() -> onReserve.invoke(selectedTicketTypeId)}"
             android:text="@string/ticket_reserve_tv_btn_reserve_ticket"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:onSingleClick="@{() -> onReserve.invoke(selectedTicketTypeId)}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

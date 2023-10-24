@@ -28,7 +28,6 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val viewModelProvider = ViewModelProvider(requireActivity())
         vm = viewModelProvider[TicketReserveViewModel::class.java]
     }
@@ -39,6 +38,7 @@ class TicketReserveBottomSheetFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentTicketReserveBottomSheetBinding.inflate(inflater)
+        dialog?.setCanceledOnTouchOutside(false)
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
