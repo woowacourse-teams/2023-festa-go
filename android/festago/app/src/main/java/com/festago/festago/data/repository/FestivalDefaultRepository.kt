@@ -2,7 +2,9 @@ package com.festago.festago.data.repository
 
 import com.festago.festago.data.dao.FestivalDao
 import com.festago.festago.data.dao.FestivalEntity
-import com.festago.festago.data.datasource.FestivalRemoteDateSource
+import com.festago.festago.data.service.FestivalRetrofitService
+import com.festago.festago.data.util.onSuccessOrCatch
+import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.model.Festival
 import com.festago.festago.model.Reservation
 import com.festago.festago.repository.FestivalRepository
@@ -15,14 +17,17 @@ import javax.inject.Inject
 
 class FestivalDefaultRepository @Inject constructor(
     private val festivalDao: FestivalDao,
-    private val festivalRemoteDateSource: FestivalRemoteDateSource,
+    private val festivalRetrofitService: FestivalRetrofitService,
 ) : FestivalRepository {
 
     override fun loadFestivals(): Flow<Result<List<Festival>>> {
         CoroutineScope(Dispatchers.IO).launch {
-            festivalRemoteDateSource.loadFestivals().collect {
-                it.onSuccess { festivals -> festivalDao.insertFestivals(festivals.map(FestivalEntity::from)) }
-            }
+            runCatchingResponse { festivalRetrofitService.getFestivals() }
+                .onSuccessOrCatch { festivals ->
+                    festivalDao.insertFestivals(
+                        festivals.toDomain().map(FestivalEntity::from),
+                    )
+                }
         }
         return festivalDao.getFestivals().transform { festivalEntities ->
             emit(Result.success(festivalEntities.map(FestivalEntity::toDomain)))
@@ -30,5 +35,6 @@ class FestivalDefaultRepository @Inject constructor(
     }
 
     override suspend fun loadFestivalDetail(festivalId: Long): Result<Reservation> =
-        festivalRemoteDateSource.loadFestivalDetail(festivalId)
+        runCatchingResponse { festivalRetrofitService.getFestivalDetail(festivalId) }
+            .onSuccessOrCatch { it.toDomain() }
 }
