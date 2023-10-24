@@ -28,7 +28,7 @@ class FestivalDefaultRepository @Inject constructor(
             .onSuccessOrCatch { festivals ->
                 festivals.toDomain().also {
                     CoroutineScope(Dispatchers.IO).launch {
-                        println(festivalDao.insertFestivals(it.toEntity()))
+                        festivalDao.replaceFestivals(it.toEntity())
                     }
                 }
             }

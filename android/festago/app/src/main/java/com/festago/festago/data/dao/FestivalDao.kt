@@ -13,4 +13,12 @@ interface FestivalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFestivals(festivals: List<FestivalEntity>): List<Long>
+
+    @Query("DELETE FROM festivals")
+    fun clearFestivals()
+
+    fun replaceFestivals(festivals: List<FestivalEntity>): List<Long> {
+        clearFestivals()
+        return insertFestivals(festivals)
+    }
 }
