@@ -1,7 +1,8 @@
 package com.festago.festago.data.repository
 
 import com.festago.festago.data.dao.FestivalDao
-import com.festago.festago.data.dao.FestivalEntity
+import com.festago.festago.data.dao.mapper.toDomain
+import com.festago.festago.data.dao.mapper.toEntity
 import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
@@ -24,13 +25,11 @@ class FestivalDefaultRepository @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             runCatchingResponse { festivalRetrofitService.getFestivals() }
                 .onSuccessOrCatch { festivals ->
-                    festivalDao.insertFestivals(
-                        festivals.toDomain().map(FestivalEntity::from),
-                    )
+                    festivalDao.insertFestivals(festivals.toDomain().toEntity())
                 }
         }
         return festivalDao.getFestivals().transform { festivalEntities ->
-            emit(Result.success(festivalEntities.map(FestivalEntity::toDomain)))
+            emit(Result.success(festivalEntities.toDomain()))
         }
     }
 
