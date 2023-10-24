@@ -5,6 +5,8 @@ import com.festago.festago.model.Reservation
 import kotlinx.coroutines.flow.Flow
 
 interface FestivalRepository {
-    fun loadFestivals(): Flow<Result<List<Festival>>>
+    val festivals: Flow<List<Festival>>
+
+    suspend fun loadFestivals(): Result<List<Festival>>
     suspend fun loadFestivalDetail(festivalId: Long): Result<Reservation>
 }

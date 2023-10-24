@@ -28,31 +28,34 @@ class FestivalListViewModel @Inject constructor(
     private val _event = MutableSharedFlow<FestivalListEvent>()
     val event: SharedFlow<FestivalListEvent> = _event.asSharedFlow()
 
+    init {
+        viewModelScope.launch {
+            festivalRepository.festivals.collect {
+                _uiState.value = FestivalListUiState.Success(
+                    festivals = it.map { festival ->
+                        FestivalItemUiState(
+                            id = festival.id,
+                            name = festival.name,
+                            startDate = festival.startDate,
+                            endDate = festival.endDate,
+                            thumbnail = festival.thumbnail,
+                            onFestivalDetail = ::showTicketReserve,
+                        )
+                    },
+                )
+            }
+        }
+    }
+
     fun loadFestivals() {
         viewModelScope.launch {
-            festivalRepository.loadFestivals()
-                .collect {
-                    it.onSuccess {
-                        _uiState.value = FestivalListUiState.Success(
-                            festivals = it.map { festival ->
-                                FestivalItemUiState(
-                                    id = festival.id,
-                                    name = festival.name,
-                                    startDate = festival.startDate,
-                                    endDate = festival.endDate,
-                                    thumbnail = festival.thumbnail,
-                                    onFestivalDetail = ::showTicketReserve,
-                                )
-                            },
-                        )
-                    }.onFailure {
-                        _uiState.value = FestivalListUiState.Error
-                        analyticsHelper.logNetworkFailure(
-                            KEY_LOAD_FESTIVALS_LOG,
-                            it.message.toString(),
-                        )
-                    }
-                }
+            festivalRepository.loadFestivals().onFailure {
+                _uiState.value = FestivalListUiState.Error
+                analyticsHelper.logNetworkFailure(
+                    KEY_LOAD_FESTIVALS_LOG,
+                    it.message.toString(),
+                )
+            }
         }
     }
 

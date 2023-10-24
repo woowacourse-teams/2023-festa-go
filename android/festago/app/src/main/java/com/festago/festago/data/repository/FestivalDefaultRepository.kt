@@ -20,18 +20,18 @@ class FestivalDefaultRepository @Inject constructor(
     private val festivalDao: FestivalDao,
     private val festivalRetrofitService: FestivalRetrofitService,
 ) : FestivalRepository {
+    override val festivals: Flow<List<Festival>>
+        get() = festivalDao.getFestivals().transform { emit(it.toDomain()) }
 
-    override fun loadFestivals(): Flow<Result<List<Festival>>> {
-        CoroutineScope(Dispatchers.IO).launch {
-            runCatchingResponse { festivalRetrofitService.getFestivals() }
-                .onSuccessOrCatch { festivals ->
-                    festivalDao.insertFestivals(festivals.toDomain().toEntity())
+    override suspend fun loadFestivals(): Result<List<Festival>> =
+        runCatchingResponse { festivalRetrofitService.getFestivals() }
+            .onSuccessOrCatch { festivals ->
+                festivals.toDomain().also {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        println(festivalDao.insertFestivals(it.toEntity()))
+                    }
                 }
-        }
-        return festivalDao.getFestivals().transform { festivalEntities ->
-            emit(Result.success(festivalEntities.toDomain()))
-        }
-    }
+            }
 
     override suspend fun loadFestivalDetail(festivalId: Long): Result<Reservation> =
         runCatchingResponse { festivalRetrofitService.getFestivalDetail(festivalId) }

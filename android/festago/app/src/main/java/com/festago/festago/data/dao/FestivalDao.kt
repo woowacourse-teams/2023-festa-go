@@ -11,7 +11,6 @@ interface FestivalDao {
     @Query("SELECT * FROM festivals")
     fun getFestivals(): Flow<List<FestivalEntity>>
 
-    // save festivals
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertFestivals(festivals: List<FestivalEntity>)
+    fun insertFestivals(festivals: List<FestivalEntity>): List<Long>
 }
