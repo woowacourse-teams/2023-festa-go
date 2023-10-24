@@ -31,22 +31,27 @@ class FestivalListViewModel @Inject constructor(
     fun loadFestivals() {
         viewModelScope.launch {
             festivalRepository.loadFestivals()
-                .onSuccess {
-                    _uiState.value = FestivalListUiState.Success(
-                        festivals = it.map { festival ->
-                            FestivalItemUiState(
-                                id = festival.id,
-                                name = festival.name,
-                                startDate = festival.startDate,
-                                endDate = festival.endDate,
-                                thumbnail = festival.thumbnail,
-                                onFestivalDetail = ::showTicketReserve,
-                            )
-                        },
-                    )
-                }.onFailure {
-                    _uiState.value = FestivalListUiState.Error
-                    analyticsHelper.logNetworkFailure(KEY_LOAD_FESTIVALS_LOG, it.message.toString())
+                .collect {
+                    it.onSuccess {
+                        _uiState.value = FestivalListUiState.Success(
+                            festivals = it.map { festival ->
+                                FestivalItemUiState(
+                                    id = festival.id,
+                                    name = festival.name,
+                                    startDate = festival.startDate,
+                                    endDate = festival.endDate,
+                                    thumbnail = festival.thumbnail,
+                                    onFestivalDetail = ::showTicketReserve,
+                                )
+                            },
+                        )
+                    }.onFailure {
+                        _uiState.value = FestivalListUiState.Error
+                        analyticsHelper.logNetworkFailure(
+                            KEY_LOAD_FESTIVALS_LOG,
+                            it.message.toString(),
+                        )
+                    }
                 }
         }
     }

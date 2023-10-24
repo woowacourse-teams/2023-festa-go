@@ -1,10 +1,17 @@
 package com.festago.festago.data.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FestivalDao {
     @Query("SELECT * FROM festivals")
-    fun getFestivals(): List<FestivalEntity>
+    fun getFestivals(): Flow<List<FestivalEntity>>
+
+    // save festivals
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertFestivals(festivals: List<FestivalEntity>)
 }
