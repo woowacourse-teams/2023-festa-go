@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -37,6 +38,7 @@ class HomeActivity : AppCompatActivity() {
         initView()
         initObserve()
         initResultLauncher()
+        initBackPressedDispatcher()
     }
 
     private fun initResultLauncher() {
@@ -129,6 +131,22 @@ class HomeActivity : AppCompatActivity() {
         resultLauncher.launch(SignInActivity.getIntent(this))
     }
 
+    private fun initBackPressedDispatcher() {
+        var backPressedTime = START_BACK_PRESSED_TIME
+        onBackPressedDispatcher.addCallback {
+            if ((System.currentTimeMillis() - backPressedTime) > FINISH_BACK_PRESSED_TIME) {
+                backPressedTime = System.currentTimeMillis()
+                Toast.makeText(
+                    this@HomeActivity,
+                    getString(R.string.home_back_pressed),
+                    Toast.LENGTH_SHORT,
+                ).show()
+            } else {
+                finish()
+            }
+        }
+    }
+
     private inline fun <reified T : Fragment> changeFragment() {
         val tag = T::class.java.name
         val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -150,6 +168,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val START_BACK_PRESSED_TIME = 0L
+        private const val FINISH_BACK_PRESSED_TIME = 3000L
         fun getIntent(context: Context): Intent {
             return Intent(context, HomeActivity::class.java)
         }
