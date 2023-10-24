@@ -7,26 +7,23 @@ import com.festago.festago.model.Stage
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCondition
 import com.festago.festago.model.UserProfile
+import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.TicketRepository
 import com.festago.festago.repository.UserRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDateTime
 
 class MyPageViewModelTest {
+
     private lateinit var vm: MyPageViewModel
     private lateinit var userRepository: UserRepository
     private lateinit var ticketRepository: TicketRepository
@@ -55,21 +52,16 @@ class MyPageViewModelTest {
         ),
     )
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         userRepository = mockk(relaxed = true)
         ticketRepository = mockk()
         authRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
         vm = MyPageViewModel(userRepository, ticketRepository, authRepository, analyticsHelper)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @After
-    fun finish() {
-        Dispatchers.resetMain()
     }
 
     private fun `로그인 상태가 다음과 같다`(result: Boolean) {

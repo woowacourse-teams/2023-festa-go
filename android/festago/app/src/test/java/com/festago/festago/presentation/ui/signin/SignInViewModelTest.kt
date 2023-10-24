@@ -2,39 +2,30 @@ package com.festago.festago.presentation.ui.signin
 
 import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.AuthRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class SignInViewModelTest {
+
     private lateinit var vm: SignInViewModel
     private lateinit var authRepository: AuthRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-
         authRepository = mockk(relaxed = true)
         analyticsHelper = mockk(relaxed = true)
         vm = SignInViewModel(authRepository, analyticsHelper)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @After
-    fun finish() {
-        Dispatchers.resetMain()
     }
 
     private fun `로그인 결과가 다음과 같을 때`(result: Result<Unit>) {
