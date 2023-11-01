@@ -50,9 +50,9 @@ class TicketReserveViewModel @Inject constructor(
                         ),
                         stages = it.reservationStages.toTicketReserveItems(),
                     )
-                }.onFailure { throwable ->
+                }.onFailure { error ->
                     _uiState.value = TicketReserveUiState.Error
-                    throwable.logNetworkFailure(KEY_LOAD_RESERVATION_LOG)
+                    analyticsHelper.logNetworkFailure(KEY_LOAD_RESERVATION_LOG, error.message ?: "")
                 }
         }
     }
@@ -68,9 +68,12 @@ class TicketReserveViewModel @Inject constructor(
                                 reservationTickets.sortedByTicketTypes(),
                             ),
                         )
-                    }.onFailure { throwable ->
+                    }.onFailure { error ->
                         _uiState.value = TicketReserveUiState.Error
-                        throwable.logNetworkFailure(KEY_SHOW_TICKET_TYPES_LOG)
+                        analyticsHelper.logNetworkFailure(
+                            KEY_SHOW_TICKET_TYPES_LOG,
+                            error.message ?: "",
+                        )
                     }
             } else {
                 _event.emit(TicketReserveEvent.ShowSignIn)
@@ -83,12 +86,12 @@ class TicketReserveViewModel @Inject constructor(
             ticketRepository.reserveTicket(ticketId)
                 .onSuccess {
                     _event.emit(TicketReserveEvent.ReserveTicketSuccess(it))
-                }.onFailure { throwable ->
-                    if (throwable is ErrorCode) {
-                        _event.emit(TicketReserveEvent.ReserveTicketFailed(throwable))
+                }.onFailure { error ->
+                    if (error is ErrorCode) {
+                        _event.emit(TicketReserveEvent.ReserveTicketFailed(error))
                     } else {
                         _event.emit(TicketReserveEvent.ReserveTicketFailed(ErrorCode.UNKNOWN()))
-                        throwable.logNetworkFailure(KEY_RESERVE_TICKET)
+                        analyticsHelper.logNetworkFailure(KEY_RESERVE_TICKET, error.message ?: "")
                     }
                 }
         }
@@ -107,10 +110,6 @@ class TicketReserveViewModel @Inject constructor(
 
     private fun List<ReservationStage>.toTicketReserveItems() = map {
         it.toTicketReserveItem()
-    }
-
-    private fun Throwable.logNetworkFailure(key: String) {
-        analyticsHelper.logNetworkFailure(key, message.toString())
     }
 
     companion object {
