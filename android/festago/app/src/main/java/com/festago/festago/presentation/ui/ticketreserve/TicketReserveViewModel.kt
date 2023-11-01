@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
+import com.festago.festago.model.ErrorCode
 import com.festago.festago.model.ReservationStage
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
@@ -49,12 +50,9 @@ class TicketReserveViewModel @Inject constructor(
                         ),
                         stages = it.reservationStages.toTicketReserveItems(),
                     )
-                }.onFailure {
+                }.onFailure { throwable ->
                     _uiState.value = TicketReserveUiState.Error
-                    analyticsHelper.logNetworkFailure(
-                        KEY_LOAD_RESERVATION_LOG,
-                        it.message.toString(),
-                    )
+                    throwable.logNetworkFailure(KEY_LOAD_RESERVATION_LOG)
                 }
         }
     }
@@ -70,8 +68,9 @@ class TicketReserveViewModel @Inject constructor(
                                 reservationTickets.sortedByTicketTypes(),
                             ),
                         )
-                    }.onFailure {
+                    }.onFailure { throwable ->
                         _uiState.value = TicketReserveUiState.Error
+                        throwable.logNetworkFailure(KEY_SHOW_TICKET_TYPES_LOG)
                     }
             } else {
                 _event.emit(TicketReserveEvent.ShowSignIn)
@@ -84,8 +83,13 @@ class TicketReserveViewModel @Inject constructor(
             ticketRepository.reserveTicket(ticketId)
                 .onSuccess {
                     _event.emit(TicketReserveEvent.ReserveTicketSuccess(it))
-                }.onFailure {
-                    _event.emit(TicketReserveEvent.ReserveTicketFailed)
+                }.onFailure { throwable ->
+                    if (throwable is ErrorCode) {
+                        _event.emit(TicketReserveEvent.ReserveTicketFailed(throwable))
+                    } else {
+                        _event.emit(TicketReserveEvent.ReserveTicketFailed(ErrorCode.UNKNOWN()))
+                        throwable.logNetworkFailure(KEY_RESERVE_TICKET)
+                    }
                 }
         }
     }
@@ -105,8 +109,14 @@ class TicketReserveViewModel @Inject constructor(
         it.toTicketReserveItem()
     }
 
+    private fun Throwable.logNetworkFailure(key: String) {
+        analyticsHelper.logNetworkFailure(key, message.toString())
+    }
+
     companion object {
 
         private const val KEY_LOAD_RESERVATION_LOG = "load_reservation"
+        private const val KEY_SHOW_TICKET_TYPES_LOG = "show_ticket_types"
+        private const val KEY_RESERVE_TICKET = "reserve_ticket"
     }
 }
