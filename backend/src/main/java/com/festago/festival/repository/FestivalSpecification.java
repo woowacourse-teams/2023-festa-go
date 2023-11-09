@@ -1,5 +1,6 @@
-package com.festago.festival.domain;
+package com.festago.festival.repository;
 
+import com.festago.festival.domain.Festival;
 import java.time.LocalDate;
 import org.springframework.data.jpa.domain.Specification;
 

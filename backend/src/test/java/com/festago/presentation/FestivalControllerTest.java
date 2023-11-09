@@ -1,6 +1,7 @@
 package com.festago.presentation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -47,7 +48,7 @@ class FestivalControllerTest {
         FestivalResponse festivalResponse2 = new FestivalResponse(2L, 2L, "우테대학교", LocalDate.now().minusDays(3),
             LocalDate.now(), "https://image2.png");
         FestivalsResponse expected = new FestivalsResponse(List.of(festivalResponse1, festivalResponse2));
-        given(festivalService.findAll())
+        given(festivalService.findFestivals(any()))
             .willReturn(expected);
 
         // when & then

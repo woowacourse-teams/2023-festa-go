@@ -18,6 +18,7 @@ import com.festago.festival.dto.FestivalDetailResponse;
 import com.festago.festival.dto.FestivalDetailStageResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.dto.FestivalsResponse;
+import com.festago.festival.repository.FestivalFilter;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
@@ -40,6 +41,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -66,10 +68,10 @@ class FestivalServiceTest {
         // given
         Festival festival1 = FestivalFixture.festival().id(1L).build();
         Festival festival2 = FestivalFixture.festival().id(2L).build();
-        given(festivalRepository.findAll()).willReturn(List.of(festival1, festival2));
+        given(festivalRepository.findAll(any(Specification.class))).willReturn(List.of(festival1, festival2));
 
         // when
-        FestivalsResponse response = festivalService.findAll();
+        FestivalsResponse response = festivalService.findFestivals(FestivalFilter.ALL);
 
         // then
         List<Long> festivalIds = response.festivals().stream().map(FestivalResponse::id).toList();
