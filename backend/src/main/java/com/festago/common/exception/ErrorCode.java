@@ -29,6 +29,7 @@ public enum ErrorCode {
     DELETE_CONSTRAINT_STAGE("티켓이 등록된 공연은 삭제할 수 없습니다."),
     DELETE_CONSTRAINT_SCHOOL("학생 또는 축제에 등록된 학교는 삭제할 수 없습니다."),
     DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
+    INVALID_FESTIVAL_FILTER("유효하지 않은 필터 값입니다."),
 
 
     // 401
