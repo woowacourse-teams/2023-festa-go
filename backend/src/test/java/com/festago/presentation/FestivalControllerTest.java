@@ -13,6 +13,7 @@ import com.festago.festival.application.FestivalService;
 import com.festago.festival.dto.FestivalDetailResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.dto.FestivalsResponse;
+import com.festago.festival.repository.FestivalFilter;
 import com.festago.support.CustomWebMvcTest;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -48,7 +49,7 @@ class FestivalControllerTest {
         FestivalResponse festivalResponse2 = new FestivalResponse(2L, 2L, "우테대학교", LocalDate.now().minusDays(3),
             LocalDate.now(), "https://image2.png");
         FestivalsResponse expected = new FestivalsResponse(List.of(festivalResponse1, festivalResponse2));
-        given(festivalService.findFestivals(any()))
+        given(festivalService.findFestivals(any(FestivalFilter.class)))
             .willReturn(expected);
 
         // when & then
