@@ -15,11 +15,11 @@ import java.util.function.Function;
 import org.springframework.data.jpa.domain.Specification;
 
 public enum FestivalFilter {
-    ALL((currentTime) -> all()),
-    PROGRESS((currentTime) -> afterStartDate(currentTime)
+    ALL(currentTime -> all()),
+    PROGRESS(currentTime -> afterStartDate(currentTime)
         .and(beforeEndDate(currentTime))),
-    PLANNED((currentTime) -> beforeStartDate(currentTime)),
-    END((currentTime) -> afterEndDate(currentTime));
+    PLANNED(currentTime -> beforeStartDate(currentTime)),
+    END(currentTime -> afterEndDate(currentTime));
 
     private final Function<LocalDate, Specification<Festival>> filter;
 
