@@ -2,12 +2,12 @@ package com.festago.festival.repository;
 
 import com.festago.festival.domain.Festival;
 import java.time.LocalDate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FestivalSpecification {
-
-    private FestivalSpecification() {
-    }
 
     public static Specification<Festival> all() {
         return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
