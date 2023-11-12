@@ -22,4 +22,10 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="chipFesta">
+        <item name="android:checkable">true</item>
+        <item name="chipBackgroundColor">@drawable/bg_chip</item>"
+        <item name="android:textColor">@drawable/text_chip</item>
+    </style>
+
 </resources>
