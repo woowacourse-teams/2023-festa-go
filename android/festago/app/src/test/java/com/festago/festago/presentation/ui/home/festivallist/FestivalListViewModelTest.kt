@@ -3,6 +3,7 @@ package com.festago.festago.presentation.ui.home.festivallist
 import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.Festival
+import com.festago.festago.model.FestivalFilter
 import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.FestivalRepository
 import io.mockk.coEvery
@@ -44,19 +45,20 @@ class FestivalListViewModelTest {
 
     private fun `축제 목록 요청 결과가 다음과 같을 때`(result: Result<List<Festival>>) {
         coEvery {
-            festivalRepository.loadFestivals()
+            festivalRepository.loadFestivals(any())
         } answers {
             result
         }
     }
 
     @Test
-    fun `축제 목록 받아오기에 성공하면 성공 상태이고 축제 목록을 반환한다`() {
+    fun `진행 예정인 축제 목록 받아오기에 성공하면 성공 상태이고 축제 목록을 반환하고 축제 필터가 진행 예정 필터로 바뀐다`() {
         // given
         `축제 목록 요청 결과가 다음과 같을 때`(Result.success(fakeFestivals))
+        val beforeFilter = vm.festivalFilter.value
 
         // when
-        vm.loadFestivals()
+        vm.loadFestivals(FestivalFilter.PLANNED)
 
         // then
         val softly = SoftAssertions().apply {
@@ -71,17 +73,22 @@ class FestivalListViewModelTest {
             val actual = (vm.uiState.value as FestivalListUiState.Success).festivals
             val expected = fakeFestivals.map { it.toUiState() }
             assertThat(actual).isEqualTo(expected)
+
+            // and
+            assertThat(vm.festivalFilter.value).isNotEqualTo(beforeFilter)
+            assertThat(vm.festivalFilter.value).isEqualTo(FestivalFilter.PLANNED)
         }
         softly.assertAll()
     }
 
     @Test
-    fun `축제 목록 받아오기에 실패하면 에러 상태다`() {
+    fun `진행 예정 축제 목록 받아오기에 실패하면 에러 상태이고 진행 예정 필터로 바뀐다`() {
         // given
         `축제 목록 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
+        val beforeFilter = vm.festivalFilter.value
 
         // when
-        vm.loadFestivals()
+        vm.loadFestivals(FestivalFilter.PLANNED)
 
         // then
         val softly = SoftAssertions().apply {
@@ -91,6 +98,10 @@ class FestivalListViewModelTest {
             assertThat(vm.uiState.value.shouldShowSuccess).isEqualTo(false)
             assertThat(vm.uiState.value.shouldShowLoading).isEqualTo(false)
             assertThat(vm.uiState.value.shouldShowError).isEqualTo(true)
+
+            // and
+            assertThat(vm.festivalFilter.value).isNotEqualTo(beforeFilter)
+            assertThat(vm.festivalFilter.value).isEqualTo(FestivalFilter.PLANNED)
         }
         softly.assertAll()
     }
@@ -99,14 +110,14 @@ class FestivalListViewModelTest {
     fun `축제 목록을 받아오는 중이면 로딩 상태다`() {
         // given
         coEvery {
-            festivalRepository.loadFestivals()
+            festivalRepository.loadFestivals(any())
         } coAnswers {
             delay(1000)
             Result.success(emptyList())
         }
 
         // when
-        vm.loadFestivals()
+        vm.loadFestivals(FestivalFilter.PLANNED)
 
         // then
         val softly = SoftAssertions().apply {

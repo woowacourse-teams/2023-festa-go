@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
+import com.festago.festago.model.FestivalFilter
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.ShowTicketReserve
 import com.festago.festago.repository.FestivalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,9 +29,13 @@ class FestivalListViewModel @Inject constructor(
     private val _event = MutableSharedFlow<FestivalListEvent>()
     val event: SharedFlow<FestivalListEvent> = _event.asSharedFlow()
 
-    fun loadFestivals() {
+    private val _festivalFilter = MutableStateFlow<FestivalFilter>(FestivalFilter.PROGRESS)
+    val festivalFilter: StateFlow<FestivalFilter> = _festivalFilter.asStateFlow()
+
+    fun loadFestivals(festivalFilter: FestivalFilter) {
         viewModelScope.launch {
-            festivalRepository.loadFestivals()
+            _festivalFilter.value = festivalFilter
+            festivalRepository.loadFestivals(festivalFilter)
                 .onSuccess {
                     _uiState.value = FestivalListUiState.Success(
                         festivals = it.map { festival ->
