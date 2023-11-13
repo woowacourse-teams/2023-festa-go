@@ -30,12 +30,13 @@ class FestivalRepositoryTest {
     @Autowired
     SchoolRepository schoolRepository;
 
+    LocalDate now = LocalDate.parse("2023-06-30");
+
     @BeforeEach
     public void setting() {
         School school = schoolRepository.save(new School("domain", "name"));
-        LocalDate now = LocalDate.now();
-        festivalRepository.save(new Festival(PAST_FESTIVAL, now.minusDays(10L), now.minusDays(8L), school));
-        festivalRepository.save(new Festival(CURRENT_FESTIVAL, now.minusDays(1L), now.plusDays(1L), school));
+        festivalRepository.save(new Festival(PAST_FESTIVAL, now.minusDays(3L), now.minusDays(1L), school));
+        festivalRepository.save(new Festival(CURRENT_FESTIVAL, now, now, school));
         festivalRepository.save(new Festival(FUTURE_FESTIVAL, now.plusDays(1L), now.plusDays(3L), school));
     }
 
@@ -45,7 +46,7 @@ class FestivalRepositoryTest {
         FestivalFilter filter = FestivalFilter.PLANNED;
 
         // when
-        List<Festival> actual = festivalRepository.findAll(filter.getSpecification());
+        List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
 
         // then
         assertSoftly(softAssertions -> {
@@ -60,7 +61,7 @@ class FestivalRepositoryTest {
         FestivalFilter filter = FestivalFilter.PROGRESS;
 
         // when
-        List<Festival> actual = festivalRepository.findAll(filter.getSpecification());
+        List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
 
         // then
         assertSoftly(softAssertions -> {
@@ -75,7 +76,7 @@ class FestivalRepositoryTest {
         FestivalFilter filter = FestivalFilter.END;
 
         // when
-        List<Festival> actual = festivalRepository.findAll(filter.getSpecification());
+        List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
 
         // then
         assertSoftly(softAssertions -> {

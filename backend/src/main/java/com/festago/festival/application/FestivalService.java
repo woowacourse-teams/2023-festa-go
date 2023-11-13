@@ -51,7 +51,7 @@ public class FestivalService {
 
     @Transactional(readOnly = true)
     public FestivalsResponse findFestivals(FestivalFilter festivalFilter) {
-        List<Festival> festivals = festivalRepository.findAll(festivalFilter.getSpecification());
+        List<Festival> festivals = festivalRepository.findAll(festivalFilter.getSpecification(LocalDate.now(clock)));
         return FestivalsResponse.from(festivals);
     }
 

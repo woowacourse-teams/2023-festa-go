@@ -12,19 +12,19 @@ public class FestivalSpecification {
     private static final String START_DATE = "startDate";
     private static final String END_DATE = "endDate";
 
-    public static Specification<Festival> afterStartDate(LocalDate currentTime) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get(START_DATE), currentTime);
+    public static Specification<Festival> progress(LocalDate currentTime) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.and(
+            criteriaBuilder.lessThanOrEqualTo(root.get(START_DATE), currentTime),
+            criteriaBuilder.greaterThanOrEqualTo(root.get(END_DATE), currentTime)
+        );
     }
 
-    public static Specification<Festival> beforeStartDate(LocalDate currentTime) {
+    public static Specification<Festival> planned(LocalDate currentTime) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThan(root.get(START_DATE), currentTime);
     }
 
-    public static Specification<Festival> afterEndDate(LocalDate currentTime) {
+    public static Specification<Festival> end(LocalDate currentTime) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get(END_DATE), currentTime);
     }
 
-    public static Specification<Festival> beforeEndDate(LocalDate currentTime) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThan(root.get(END_DATE), currentTime);
-    }
 }

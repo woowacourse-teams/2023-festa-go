@@ -1,10 +1,5 @@
 package com.festago.festival.repository;
 
-import static com.festago.festival.repository.FestivalSpecification.afterEndDate;
-import static com.festago.festival.repository.FestivalSpecification.afterStartDate;
-import static com.festago.festival.repository.FestivalSpecification.beforeEndDate;
-import static com.festago.festival.repository.FestivalSpecification.beforeStartDate;
-
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.festival.domain.Festival;
@@ -13,10 +8,9 @@ import java.util.function.Function;
 import org.springframework.data.jpa.domain.Specification;
 
 public enum FestivalFilter {
-    PROGRESS(currentTime -> afterStartDate(currentTime)
-        .and(beforeEndDate(currentTime))),
-    PLANNED(currentTime -> beforeStartDate(currentTime)),
-    END(currentTime -> afterEndDate(currentTime));
+    PROGRESS(FestivalSpecification::progress),
+    PLANNED(FestivalSpecification::planned),
+    END(FestivalSpecification::end);
 
     private final Function<LocalDate, Specification<Festival>> filter;
 
@@ -33,7 +27,7 @@ public enum FestivalFilter {
         };
     }
 
-    public Specification<Festival> getSpecification() {
-        return filter.apply(LocalDate.now());
+    public Specification<Festival> getSpecification(LocalDate currentTime) {
+        return filter.apply(currentTime);
     }
 }
