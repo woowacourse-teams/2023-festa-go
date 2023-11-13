@@ -63,7 +63,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
         initFestivalListSpanSize()
         initRefresh()
         initFestivalFilters()
-        vm.loadFestivals(vm.festivalFilter.value)
+        loadFestivalsBy(binding.cgFilterOption.checkedChipId)
     }
 
     private fun initFestivalListSpanSize() {
@@ -81,18 +81,22 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
     private fun initRefresh() {
         binding.srlFestivalList.setOnRefreshListener {
-            vm.loadFestivals(vm.festivalFilter.value)
+            loadFestivalsBy(binding.cgFilterOption.checkedChipId)
             binding.srlFestivalList.isRefreshing = false
         }
     }
 
     private fun initFestivalFilters() {
         binding.cgFilterOption.setOnCheckedStateChangeListener { group, _ ->
-            when (group.checkedChipId) {
-                R.id.chipProgress -> vm.loadFestivals(FestivalFilter.PROGRESS)
-                R.id.chipPlanned -> vm.loadFestivals(FestivalFilter.PLANNED)
-                R.id.chipEnd -> vm.loadFestivals(FestivalFilter.END)
-            }
+            loadFestivalsBy(checkedChipId = group.checkedChipId)
+        }
+    }
+
+    private fun loadFestivalsBy(checkedChipId: Int) {
+        when (checkedChipId) {
+            R.id.chipProgress -> vm.loadFestivals(FestivalFilter.PROGRESS)
+            R.id.chipPlanned -> vm.loadFestivals(FestivalFilter.PLANNED)
+            R.id.chipEnd -> vm.loadFestivals(FestivalFilter.END)
         }
     }
 
