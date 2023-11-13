@@ -40,18 +40,6 @@ class FestivalRepositoryTest {
     }
 
     @Test
-    void 모든_축제_반환() {
-        // given
-        FestivalFilter filter = FestivalFilter.ALL;
-
-        // when
-        List<Festival> actual = festivalRepository.findAll(filter.getSpecification());
-
-        // then
-        assertThat(actual).hasSize(3);
-    }
-
-    @Test
     void 진행_예정_축제_반환() {
         // given
         FestivalFilter filter = FestivalFilter.PLANNED;

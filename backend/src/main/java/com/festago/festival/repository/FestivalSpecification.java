@@ -12,10 +12,6 @@ public class FestivalSpecification {
     private static final String START_DATE = "startDate";
     private static final String END_DATE = "endDate";
 
-    public static Specification<Festival> all() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
-    }
-
     public static Specification<Festival> afterStartDate(LocalDate currentTime) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get(START_DATE), currentTime);
     }

@@ -23,9 +23,9 @@ public class FestivalController {
     private final FestivalService festivalService;
 
     @GetMapping
-    @Operation(description = "축제를 조건별로 조회한다. ALL: 전체, PROGRESS: 진행 중, PLANNED: 진행 예정, END: 종료", summary = "축제 목록 조회")
+    @Operation(description = "축제를 조건별로 조회한다. PROGRESS: 진행 중, PLANNED: 진행 예정, END: 종료, 기본값 -> 진행 중", summary = "축제 목록 조회")
     public ResponseEntity<FestivalsResponse> findFestivals(
-        @RequestParam(defaultValue = "ALL") String festivalFilter) {
+        @RequestParam(defaultValue = "PROGRESS") String festivalFilter) {
         FestivalsResponse response = festivalService.findFestivals(FestivalFilter.from(festivalFilter));
         return ResponseEntity.ok()
             .body(response);
