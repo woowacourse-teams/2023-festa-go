@@ -103,6 +103,7 @@ class FestivalRepositoryTest {
             // then
             assertThat(actual).isEqualTo(List.of(festival1, festival2, festival3));
         }
+
     }
 
     @Nested
@@ -142,6 +143,7 @@ class FestivalRepositoryTest {
             // then
             assertThat(actual).isEqualTo(List.of(festival1, festival2, festival3));
         }
+
     }
 
     @Nested
@@ -181,5 +183,6 @@ class FestivalRepositoryTest {
             // then
             assertThat(actual).isEqualTo(List.of(festival3, festival2, festival1));
         }
+
     }
 }
