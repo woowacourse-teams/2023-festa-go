@@ -11,6 +11,7 @@ import com.festago.festival.dto.FestivalDetailResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.dto.FestivalUpdateRequest;
 import com.festago.festival.dto.FestivalsResponse;
+import com.festago.festival.repository.FestivalFilter;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
@@ -19,8 +20,8 @@ import com.festago.stage.repository.StageRepository;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
-import org.springframework.dao.DataIntegrityViolationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,8 +50,8 @@ public class FestivalService {
     }
 
     @Transactional(readOnly = true)
-    public FestivalsResponse findAll() {
-        List<Festival> festivals = festivalRepository.findAll();
+    public FestivalsResponse findFestivals(FestivalFilter festivalFilter) {
+        List<Festival> festivals = festivalRepository.findAll(festivalFilter.getSpecification(LocalDate.now(clock)));
         return FestivalsResponse.from(festivals);
     }
 
