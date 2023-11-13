@@ -24,8 +24,8 @@
 
     <style name="chipFesta">
         <item name="android:checkable">true</item>
-        <item name="chipBackgroundColor">@drawable/bg_chip</item>"
-        <item name="android:textColor">@drawable/text_chip</item>
+        <item name="chipBackgroundColor">@drawable/bg_chip_festival_list</item>"
+        <item name="android:textColor">@drawable/text_chip_festival_list</item>
     </style>
 
 </resources>
