@@ -4,7 +4,7 @@ sealed interface FestivalListUiState {
     object Loading : FestivalListUiState
 
     data class Success(
-        val festivals: List<FestivalItemUiState>
+        val festivals: List<FestivalItemUiState>,
     ) : FestivalListUiState {
         val hasFestival get() = festivals.isNotEmpty()
     }
