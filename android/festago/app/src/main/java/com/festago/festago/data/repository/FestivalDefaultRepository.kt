@@ -14,8 +14,7 @@ class FestivalDefaultRepository @Inject constructor(
 ) : FestivalRepository {
     override suspend fun loadFestivals(festivalFilter: FestivalFilter): Result<List<Festival>> =
         runCatchingResponse {
-            // TODO: 필터링 API 연동 작업 필요
-            festivalRetrofitService.getFestivals()
+            festivalRetrofitService.getFestivals(festivalFilter.name)
         }.onSuccessOrCatch { it.toDomain() }
 
     override suspend fun loadFestivalDetail(festivalId: Long): Result<Reservation> =
