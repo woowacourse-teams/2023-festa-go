@@ -40,26 +40,6 @@ class FestivalRepositoryTest {
         this.school = schoolRepository.save(new School("domain", "name"));
     }
 
-    @Test
-    void 종료_축제는_종료_시점이_최근인_순서로_반환된다() {
-        // given
-        FestivalFilter filter = FestivalFilter.END;
-        Festival festival1 = festivalRepository.save(
-            new Festival(PAST_FESTIVAL, now.minusDays(3L), now.minusDays(1L), school));
-        Festival festival2 = festivalRepository.save(
-            new Festival(CURRENT_FESTIVAL, now, now, school));
-        Festival festival3 = festivalRepository.save(
-            new Festival(FUTURE_FESTIVAL, now.plusDays(1L), now.plusDays(3L), school));
-
-        LocalDate currentTime = now.plusDays(4L);
-
-        // when
-        List<Festival> actual = festivalRepository.findAll(filter.getSpecification(currentTime));
-
-        // then
-        assertThat(actual).isEqualTo(List.of(festival3, festival2, festival1));
-    }
-
     private void prepareNotOrderedFestivals() {
         festivalRepository.save(new Festival(FUTURE_FESTIVAL, now.plusDays(1L), now.plusDays(3L), school));
         festivalRepository.save(new Festival(CURRENT_FESTIVAL, now, now, school));
@@ -89,21 +69,19 @@ class FestivalRepositoryTest {
         void 은_시작_시점이_빠른_순서로_반환된다() {
             // given
             FestivalFilter filter = FestivalFilter.PLANNED;
-            LocalDate currentTime = LocalDate.parse("2023-10-01");
             Festival festival2 = festivalRepository.save(
-                new Festival("festival2", currentTime.plusDays(2), currentTime.plusDays(10), school));
+                new Festival("festival2", now.plusDays(2), now.plusDays(10), school));
             Festival festival3 = festivalRepository.save(
-                new Festival("festival3", currentTime.plusDays(3), currentTime.plusDays(10), school));
+                new Festival("festival3", now.plusDays(3), now.plusDays(10), school));
             Festival festival1 = festivalRepository.save(
-                new Festival("festival1", currentTime.plusDays(1), currentTime.plusDays(10), school));
+                new Festival("festival1", now.plusDays(1), now.plusDays(10), school));
 
             // when
-            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(currentTime));
+            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
 
             // then
             assertThat(actual).isEqualTo(List.of(festival1, festival2, festival3));
         }
-
     }
 
     @Nested
@@ -129,21 +107,19 @@ class FestivalRepositoryTest {
         void 은_시작_시점이_빠른_순서로_반환된다() {
             // given
             FestivalFilter filter = FestivalFilter.PROGRESS;
-            LocalDate currentTime = LocalDate.parse("2023-10-01");
             Festival festival2 = festivalRepository.save(
-                new Festival("festival2", currentTime.minusDays(2), currentTime.plusDays(10), school));
+                new Festival("festival2", now.minusDays(2), now.plusDays(10), school));
             Festival festival3 = festivalRepository.save(
-                new Festival("festival3", currentTime.minusDays(1), currentTime.plusDays(10), school));
+                new Festival("festival3", now.minusDays(1), now.plusDays(10), school));
             Festival festival1 = festivalRepository.save(
-                new Festival("festival1", currentTime.minusDays(3), currentTime.plusDays(10), school));
+                new Festival("festival1", now.minusDays(3), now.plusDays(10), school));
 
             // when
-            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(currentTime));
+            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
 
             // then
             assertThat(actual).isEqualTo(List.of(festival1, festival2, festival3));
         }
-
     }
 
     @Nested
@@ -166,23 +142,21 @@ class FestivalRepositoryTest {
         }
 
         @Test
-        void 은_시작_시점이_빠른_순서로_반환된다() {
+        void 은_종료_시점이_느린_순서로_반환된다() {
             // given
             FestivalFilter filter = FestivalFilter.END;
-            LocalDate currentTime = LocalDate.parse("2023-10-01");
             Festival festival2 = festivalRepository.save(
-                new Festival("festival2", currentTime.minusDays(10), currentTime.minusDays(2), school));
+                new Festival("festival2", now.minusDays(10), now.minusDays(2), school));
             Festival festival3 = festivalRepository.save(
-                new Festival("festival3", currentTime.minusDays(10), currentTime.minusDays(1), school));
+                new Festival("festival3", now.minusDays(10), now.minusDays(1), school));
             Festival festival1 = festivalRepository.save(
-                new Festival("festival1", currentTime.minusDays(10), currentTime.minusDays(3), school));
+                new Festival("festival1", now.minusDays(10), now.minusDays(3), school));
 
             // when
-            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(currentTime));
+            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
 
             // then
             assertThat(actual).isEqualTo(List.of(festival3, festival2, festival1));
         }
-
     }
 }
