@@ -51,7 +51,7 @@ class TicketRepositoryTest {
         ticketRepository.save(TicketFixture.ticket().stage(otherStage).build());
 
         // when
-        List<Ticket> actual = ticketRepository.findAllByStageId(stage.getId());
+        List<Ticket> actual = ticketRepository.findAllByStageIdWithFetch(stage.getId());
 
         // then
         assertThat(actual).hasSize(2);
