@@ -60,7 +60,6 @@ public class AdminViewController {
 
     @ExceptionHandler(UnauthorizedException.class)
     public View handle(UnauthorizedException e, HttpServletResponse response) {
-
         if (e.getErrorCode() == ErrorCode.EXPIRED_AUTH_TOKEN) {
             return new RedirectView("/admin/login");
         }
