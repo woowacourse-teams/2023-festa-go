@@ -13,7 +13,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("""
             SELECT t from Ticket t
-            JOIN FETCH t.ticketAmount
+            INNER JOIN FETCH t.ticketAmount
             WHERE t.stage.id = :stageId
         """)
     List<Ticket> findAllByStageIdWithFetch(@Param("stageId") Long stageId);
