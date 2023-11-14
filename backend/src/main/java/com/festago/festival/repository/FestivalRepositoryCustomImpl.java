@@ -26,7 +26,8 @@ public class FestivalRepositoryCustomImpl implements FestivalRepositoryCustom {
     }
 
     private List<Festival> plannedFestivals(LocalDate currentTime) {
-        return queryFactory.selectFrom(festival).where(festival.startDate.gt(currentTime))
+        return queryFactory.selectFrom(festival)
+            .where(festival.startDate.gt(currentTime))
             .orderBy(festival.startDate.asc()).fetch();
     }
 
@@ -37,7 +38,8 @@ public class FestivalRepositoryCustomImpl implements FestivalRepositoryCustom {
     }
 
     private List<Festival> endFestivals(LocalDate currentTime) {
-        return queryFactory.selectFrom(festival).where(festival.endDate.lt(currentTime))
+        return queryFactory.selectFrom(festival)
+            .where(festival.endDate.lt(currentTime))
             .orderBy(festival.endDate.desc()).fetch();
     }
 }
