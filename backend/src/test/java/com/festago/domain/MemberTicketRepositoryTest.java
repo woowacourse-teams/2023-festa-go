@@ -15,6 +15,7 @@ import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.MemberFixture;
 import com.festago.support.MemberTicketFixture;
+import com.festago.support.RepositoryTest;
 import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
@@ -28,16 +29,15 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @Import(JpaAuditingConfig.class)
-@DataJpaTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
+@RepositoryTest
 class MemberTicketRepositoryTest {
 
     @Autowired

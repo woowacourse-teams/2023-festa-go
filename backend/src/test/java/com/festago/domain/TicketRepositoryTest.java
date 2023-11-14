@@ -9,6 +9,7 @@ import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
+import com.festago.support.RepositoryTest;
 import com.festago.support.SchoolFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
@@ -20,11 +21,10 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@DataJpaTest
+@RepositoryTest
 class TicketRepositoryTest {
 
     @Autowired
