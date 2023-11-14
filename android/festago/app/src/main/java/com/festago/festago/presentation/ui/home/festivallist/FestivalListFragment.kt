@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentFestivalListBinding
+import com.festago.festago.model.FestivalFilter
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveActivity
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -59,6 +60,15 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
         adapter = FestivalListAdapter()
         binding.rvFestivalList.adapter = adapter
 
+        initFestivalListSpanSize()
+        initRefresh()
+        initFestivalFilters()
+        if (vm.uiState.value is FestivalListUiState.Loading) {
+            loadFestivalsBy(binding.cgFilterOption.checkedChipId)
+        }
+    }
+
+    private fun initFestivalListSpanSize() {
         binding.rvFestivalList.layoutManager.apply {
             if (this is GridLayoutManager) {
                 val spanSize = (resources.displayMetrics.widthPixels.dp / 160)
@@ -69,12 +79,26 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
                 }
             }
         }
+    }
 
-        vm.loadFestivals()
-
+    private fun initRefresh() {
         binding.srlFestivalList.setOnRefreshListener {
-            vm.loadFestivals()
+            loadFestivalsBy(binding.cgFilterOption.checkedChipId)
             binding.srlFestivalList.isRefreshing = false
+        }
+    }
+
+    private fun initFestivalFilters() {
+        binding.cgFilterOption.setOnCheckedStateChangeListener { group, _ ->
+            loadFestivalsBy(checkedChipId = group.checkedChipId)
+        }
+    }
+
+    private fun loadFestivalsBy(checkedChipId: Int) {
+        when (checkedChipId) {
+            R.id.chipProgress -> vm.loadFestivals(FestivalFilter.PROGRESS)
+            R.id.chipPlanned -> vm.loadFestivals(FestivalFilter.PLANNED)
+            R.id.chipEnd -> vm.loadFestivals(FestivalFilter.END)
         }
     }
 
