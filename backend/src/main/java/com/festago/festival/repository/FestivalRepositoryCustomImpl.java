@@ -2,8 +2,6 @@ package com.festago.festival.repository;
 
 import static com.festago.festival.domain.QFestival.festival;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
 import com.festago.festival.domain.Festival;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
@@ -21,7 +19,6 @@ public class FestivalRepositoryCustomImpl implements FestivalRepositoryCustom {
             case PLANNED -> plannedFestivals(currentTime);
             case PROGRESS -> progressFestivals(currentTime);
             case END -> endFestivals(currentTime);
-            default -> throw new InternalServerException(ErrorCode.NOT_DEFINED_FESTIVAL_FESTIVAL);
         };
     }
 

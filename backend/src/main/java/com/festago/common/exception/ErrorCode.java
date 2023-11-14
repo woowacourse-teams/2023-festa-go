@@ -67,8 +67,7 @@ public enum ErrorCode {
     INVALID_ROLE_NAME("해당하는 Role이 없습니다."),
     FOR_TEST_ERROR("테스트용 에러입니다."),
     FAIL_SEND_FCM_MESSAGE("FCM Message 전송에 실패했습니다."),
-    FCM_NOT_FOUND("유효하지 않은 MemberFCM 이 감지 되었습니다."),
-    NOT_DEFINED_FESTIVAL_FESTIVAL("정의되지 않은 축제 필터입니다.");
+    FCM_NOT_FOUND("유효하지 않은 MemberFCM 이 감지 되었습니다.");
 
     private final String message;
 
