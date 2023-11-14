@@ -8,6 +8,7 @@ import com.festago.common.exception.InternalServerException;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.exception.TooManyRequestException;
 import com.festago.common.exception.UnauthorizedException;
+import com.festago.common.exception.UnexpectedException;
 import com.festago.common.exception.ValidException;
 import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.presentation.auth.AuthenticateContext;
@@ -68,6 +69,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ValidException.class)
     public ResponseEntity<ErrorResponse> handle(ValidException e) {
         return ResponseEntity.badRequest().body(ErrorResponse.from(e));
+    }
+
+    @ExceptionHandler(UnexpectedException.class)
+    public ResponseEntity<ErrorResponse> handle(UnexpectedException e) {
+        return ResponseEntity.internalServerError().body(ErrorResponse.from(e));
     }
 
     @ExceptionHandler(BadRequestException.class)
