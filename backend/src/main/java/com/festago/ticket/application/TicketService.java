@@ -46,6 +46,6 @@ public class TicketService {
 
     @Transactional(readOnly = true)
     public StageTicketsResponse findStageTickets(Long stageId) {
-        return StageTicketsResponse.from(ticketRepository.findAllByStageId(stageId));
+        return StageTicketsResponse.from(ticketRepository.findAllByStageIdWithFetch(stageId));
     }
 }
