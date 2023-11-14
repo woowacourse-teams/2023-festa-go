@@ -14,11 +14,14 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.transaction.annotation.Transactional;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@DataJpaTest
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@Transactional
 class FestivalRepositoryTest {
 
     private static final String CURRENT_FESTIVAL = "현재 축제";
@@ -56,7 +59,7 @@ class FestivalRepositoryTest {
             prepareNotOrderedFestivals();
 
             // when
-            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
+            List<Festival> actual = festivalRepository.findFestivalBy(filter, now);
 
             // then
             assertSoftly(softAssertions -> {
@@ -77,7 +80,7 @@ class FestivalRepositoryTest {
                 new Festival("festival1", now.plusDays(1), now.plusDays(10), school));
 
             // when
-            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
+            List<Festival> actual = festivalRepository.findFestivalBy(filter, now);
 
             // then
             assertThat(actual).isEqualTo(List.of(festival1, festival2, festival3));
@@ -94,7 +97,7 @@ class FestivalRepositoryTest {
             prepareNotOrderedFestivals();
 
             // when
-            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
+            List<Festival> actual = festivalRepository.findFestivalBy(filter, now);
 
             // then
             assertSoftly(softAssertions -> {
@@ -115,7 +118,7 @@ class FestivalRepositoryTest {
                 new Festival("festival1", now.minusDays(3), now.plusDays(10), school));
 
             // when
-            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
+            List<Festival> actual = festivalRepository.findFestivalBy(filter, now);
 
             // then
             assertThat(actual).isEqualTo(List.of(festival1, festival2, festival3));
@@ -132,7 +135,7 @@ class FestivalRepositoryTest {
             prepareNotOrderedFestivals();
 
             // when
-            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
+            List<Festival> actual = festivalRepository.findFestivalBy(filter, now);
 
             // then
             assertSoftly(softAssertions -> {
@@ -153,7 +156,7 @@ class FestivalRepositoryTest {
                 new Festival("festival1", now.minusDays(10), now.minusDays(3), school));
 
             // when
-            List<Festival> actual = festivalRepository.findAll(filter.getSpecification(now));
+            List<Festival> actual = festivalRepository.findFestivalBy(filter, now);
 
             // then
             assertThat(actual).isEqualTo(List.of(festival3, festival2, festival1));
