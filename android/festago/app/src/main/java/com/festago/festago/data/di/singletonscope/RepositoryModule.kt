@@ -2,12 +2,12 @@ package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.data.repository.AuthDefaultRepository
 import com.festago.festago.data.repository.FestivalDefaultRepository
+import com.festago.festago.data.repository.SocialAuthKakaoRepository
 import com.festago.festago.data.repository.TicketDefaultRepository
-import com.festago.festago.data.repository.TokenDefaultRepository
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
+import com.festago.festago.repository.SocialAuthRepository
 import com.festago.festago.repository.TicketRepository
-import com.festago.festago.repository.TokenRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -19,10 +19,10 @@ import javax.inject.Singleton
 interface RepositoryModule {
 
     @Binds
-    fun bindsTokenDefaultRepository(tokenRepository: TokenDefaultRepository): TokenRepository
+    fun bindsAuthDefaultRepository(authRepository: AuthDefaultRepository): AuthRepository
 
     @Binds
-    fun bindsAuthDefaultRepository(authRepository: AuthDefaultRepository): AuthRepository
+    fun bindsSocialAuthDefaultRepository(socialAuthRepository: SocialAuthKakaoRepository): SocialAuthRepository
 
     @Binds
     @Singleton

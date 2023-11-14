@@ -3,30 +3,27 @@ package com.festago.festago.presentation.ui.tickethistory
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.model.Ticket
 import com.festago.festago.presentation.fixture.TicketFixture
+import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.TicketRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.SoftAssertions
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class TicketHistoryViewModelTest {
-    private lateinit var vm: TicketHistoryViewModel
 
+    private lateinit var vm: TicketHistoryViewModel
     private lateinit var ticketRepository: TicketRepository
     private lateinit var analyticsHelper: AnalyticsHelper
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         ticketRepository = mockk()
         analyticsHelper = mockk(relaxed = true)
 
@@ -36,10 +33,10 @@ class TicketHistoryViewModelTest {
         )
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @After
-    fun finish() {
-        Dispatchers.resetMain()
+    private fun `티켓 기록 요청 결과가 다음과 같을 때`(result: Result<List<Ticket>>) {
+        coEvery {
+            ticketRepository.loadHistoryTickets(any())
+        } returns result
     }
 
     @Test
@@ -47,11 +44,7 @@ class TicketHistoryViewModelTest {
         // given
         val ids = listOf(1L, 2L, 3L, 4L, 5L)
 
-        coEvery {
-            ticketRepository.loadHistoryTickets(any())
-        } answers {
-            Result.success(TicketFixture.getMemberTickets(ids))
-        }
+        `티켓 기록 요청 결과가 다음과 같을 때`(Result.success(TicketFixture.getMemberTickets(ids)))
 
         // when
         vm.loadTicketHistories()
@@ -79,11 +72,7 @@ class TicketHistoryViewModelTest {
     @Test
     fun `빈 리스트인 티켓을 받아도 성공 상태이다`() {
         // given
-        coEvery {
-            ticketRepository.loadHistoryTickets(any())
-        } answers {
-            Result.success(emptyList())
-        }
+        `티켓 기록 요청 결과가 다음과 같을 때`(Result.success(listOf()))
 
         // when
         vm.loadTicketHistories()
@@ -136,11 +125,7 @@ class TicketHistoryViewModelTest {
     @Test
     fun `티켓을 받아오기 실패하면 에러 상태이다`() {
         // given
-        coEvery {
-            ticketRepository.loadHistoryTickets(any())
-        } answers {
-            Result.failure(Exception())
-        }
+        `티켓 기록 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
 
         // when
         vm.loadTicketHistories()

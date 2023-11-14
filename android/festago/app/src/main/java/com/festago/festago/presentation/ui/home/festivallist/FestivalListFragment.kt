@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.festago.festago.R
 import com.festago.festago.databinding.FragmentFestivalListBinding
+import com.festago.festago.model.FestivalFilter
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveActivity
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -52,13 +54,51 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
         }
     }
 
+    private val Int.dp: Int get() = (this / resources.displayMetrics.density).toInt()
+
     private fun initView() {
         adapter = FestivalListAdapter()
         binding.rvFestivalList.adapter = adapter
-        vm.loadFestivals()
 
+        initFestivalListSpanSize()
+        initRefresh()
+        initFestivalFilters()
+        if (vm.uiState.value is FestivalListUiState.Loading) {
+            loadFestivalsBy(binding.cgFilterOption.checkedChipId)
+        }
+    }
+
+    private fun initFestivalListSpanSize() {
+        binding.rvFestivalList.layoutManager.apply {
+            if (this is GridLayoutManager) {
+                val spanSize = (resources.displayMetrics.widthPixels.dp / 160)
+                spanCount = when {
+                    spanSize < 2 -> 2
+                    spanSize > 4 -> 4
+                    else -> spanSize
+                }
+            }
+        }
+    }
+
+    private fun initRefresh() {
         binding.srlFestivalList.setOnRefreshListener {
-            vm.loadFestivals()
+            loadFestivalsBy(binding.cgFilterOption.checkedChipId)
+            binding.srlFestivalList.isRefreshing = false
+        }
+    }
+
+    private fun initFestivalFilters() {
+        binding.cgFilterOption.setOnCheckedStateChangeListener { group, _ ->
+            loadFestivalsBy(checkedChipId = group.checkedChipId)
+        }
+    }
+
+    private fun loadFestivalsBy(checkedChipId: Int) {
+        when (checkedChipId) {
+            R.id.chipProgress -> vm.loadFestivals(FestivalFilter.PROGRESS)
+            R.id.chipPlanned -> vm.loadFestivals(FestivalFilter.PLANNED)
+            R.id.chipEnd -> vm.loadFestivals(FestivalFilter.END)
         }
     }
 
@@ -66,7 +106,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
         when (uiState) {
             is FestivalListUiState.Loading,
             is FestivalListUiState.Error,
-            -> binding.srlFestivalList.isRefreshing = false
+            -> Unit
 
             is FestivalListUiState.Success -> handleSuccess(uiState)
         }
@@ -74,7 +114,6 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
         adapter.submitList(uiState.festivals)
-        binding.srlFestivalList.isRefreshing = false
     }
 
     private fun handleEvent(event: FestivalListEvent) {

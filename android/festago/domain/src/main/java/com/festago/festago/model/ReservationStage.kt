@@ -7,5 +7,5 @@ data class ReservationStage(
     val lineUp: String,
     val startTime: LocalDateTime,
     val ticketOpenTime: LocalDateTime,
-    val reservationTickets: List<ReservationTicket>,
+    val reservationTickets: ReservationTickets,
 )

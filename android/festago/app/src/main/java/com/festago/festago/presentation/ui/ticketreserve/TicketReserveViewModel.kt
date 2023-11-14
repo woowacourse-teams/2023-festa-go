@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.analytics.AnalyticsHelper
 import com.festago.festago.analytics.logNetworkFailure
+import com.festago.festago.model.ErrorCode
 import com.festago.festago.model.ReservationStage
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
@@ -49,12 +50,9 @@ class TicketReserveViewModel @Inject constructor(
                         ),
                         stages = it.reservationStages.toTicketReserveItems(),
                     )
-                }.onFailure {
+                }.onFailure { error ->
                     _uiState.value = TicketReserveUiState.Error
-                    analyticsHelper.logNetworkFailure(
-                        KEY_LOAD_RESERVATION_LOG,
-                        it.message.toString(),
-                    )
+                    analyticsHelper.logNetworkFailure(KEY_LOAD_RESERVATION_LOG, error.message ?: "")
                 }
         }
     }
@@ -63,15 +61,19 @@ class TicketReserveViewModel @Inject constructor(
         viewModelScope.launch {
             if (authRepository.isSigned) {
                 reservationTicketRepository.loadTicketTypes(stageId)
-                    .onSuccess { tickets ->
+                    .onSuccess { reservationTickets ->
                         _event.emit(
                             TicketReserveEvent.ShowTicketTypes(
                                 stageStartTime,
-                                tickets,
+                                reservationTickets.sortedByTicketTypes(),
                             ),
                         )
-                    }.onFailure {
+                    }.onFailure { error ->
                         _uiState.value = TicketReserveUiState.Error
+                        analyticsHelper.logNetworkFailure(
+                            KEY_SHOW_TICKET_TYPES_LOG,
+                            error.message ?: "",
+                        )
                     }
             } else {
                 _event.emit(TicketReserveEvent.ShowSignIn)
@@ -84,8 +86,13 @@ class TicketReserveViewModel @Inject constructor(
             ticketRepository.reserveTicket(ticketId)
                 .onSuccess {
                     _event.emit(TicketReserveEvent.ReserveTicketSuccess(it))
-                }.onFailure {
-                    _event.emit(TicketReserveEvent.ReserveTicketFailed)
+                }.onFailure { error ->
+                    if (error is ErrorCode) {
+                        _event.emit(TicketReserveEvent.ReserveTicketFailed(error))
+                    } else {
+                        _event.emit(TicketReserveEvent.ReserveTicketFailed(ErrorCode.UNKNOWN()))
+                        analyticsHelper.logNetworkFailure(KEY_RESERVE_TICKET, error.message ?: "")
+                    }
                 }
         }
     }
@@ -95,7 +102,7 @@ class TicketReserveViewModel @Inject constructor(
         lineUp = lineUp,
         startTime = startTime,
         ticketOpenTime = ticketOpenTime,
-        reservationTickets = reservationTickets,
+        reservationTickets = reservationTickets.sortedByTicketTypes(),
         canReserve = LocalDateTime.now().isAfter(ticketOpenTime),
         isSigned = authRepository.isSigned,
         onShowStageTickets = ::showTicketTypes,
@@ -108,5 +115,7 @@ class TicketReserveViewModel @Inject constructor(
     companion object {
 
         private const val KEY_LOAD_RESERVATION_LOG = "load_reservation"
+        private const val KEY_SHOW_TICKET_TYPES_LOG = "show_ticket_types"
+        private const val KEY_RESERVE_TICKET = "reserve_ticket"
     }
 }

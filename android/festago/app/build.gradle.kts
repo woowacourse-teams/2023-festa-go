@@ -14,14 +14,14 @@ plugins {
 
 android {
     namespace = "com.festago.festago"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.festago.festago"
         minSdk = 28
-        targetSdk = 33
-        versionCode = 3
-        versionName = "1.0.1"
+        targetSdk = 34
+        versionCode = 6
+        versionName = "1.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -139,6 +139,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.2.1")
 
     // swiperefreshlayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
@@ -151,6 +152,12 @@ dependencies {
 
     // turbine
     testImplementation("app.cash.turbine:turbine:1.0.0")
+
+    // inApp Update
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
+
+    // splash
+    implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
 }
 
 fun getSecretKey(propertyKey: String): String {

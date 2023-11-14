@@ -12,6 +12,7 @@ import com.festago.student.domain.Student;
 import com.festago.student.domain.StudentCode;
 import com.festago.student.domain.VerificationCode;
 import com.festago.student.domain.VerificationMailPayload;
+import com.festago.student.dto.StudentResponse;
 import com.festago.student.dto.StudentSendMailRequest;
 import com.festago.student.dto.StudentVerificateRequest;
 import com.festago.student.repository.StudentCodeRepository;
@@ -89,7 +90,7 @@ public class StudentService {
             );
     }
 
-    public void verificate(Long memberId, StudentVerificateRequest request) {
+    public void verify(Long memberId, StudentVerificateRequest request) {
         validateStudent(memberId);
         Member member = findMember(memberId);
         StudentCode studentCode = studentCodeRepository.findByCodeAndMember(new VerificationCode(request.code()),
@@ -97,5 +98,11 @@ public class StudentService {
             .orElseThrow(() -> new BadRequestException(ErrorCode.INVALID_STUDENT_VERIFICATION_CODE));
         studentRepository.save(new Student(member, studentCode.getSchool(), studentCode.getUsername()));
         studentCodeRepository.deleteByMember(member);
+    }
+
+    public StudentResponse findVerification(Long memberId) {
+        return studentRepository.findByMemberIdWithFetch(memberId)
+            .map(value -> StudentResponse.verified(value.getSchool()))
+            .orElseGet(StudentResponse::notVerified);
     }
 }

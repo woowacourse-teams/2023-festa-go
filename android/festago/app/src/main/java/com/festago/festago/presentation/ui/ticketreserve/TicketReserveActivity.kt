@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import com.festago.festago.R
 import com.festago.festago.databinding.ActivityTicketReserveBinding
+import com.festago.festago.model.ErrorCode
 import com.festago.festago.model.ReservationTicket
 import com.festago.festago.model.ReservedTicket
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
@@ -21,6 +22,7 @@ import com.festago.festago.presentation.ui.ticketreserve.TicketReserveEvent.Show
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveAdapter
 import com.festago.festago.presentation.ui.ticketreserve.adapter.TicketReserveHeaderAdapter
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.BottomSheetReservationTicketArg
+import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.BottomSheetTicketTypeArg
 import com.festago.festago.presentation.ui.ticketreserve.bottomsheet.TicketReserveBottomSheetFragment
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
@@ -74,7 +76,7 @@ class TicketReserveActivity : AppCompatActivity() {
         )
 
         is ReserveTicketSuccess -> handleReserveTicketSuccess(event.reservedTicket)
-        is ReserveTicketFailed -> handleReserveTicketFailed()
+        is ReserveTicketFailed -> handleReserveTicketFailed(event.errorCode)
         is ShowSignIn -> handleShowSignIn()
     }
 
@@ -93,7 +95,7 @@ class TicketReserveActivity : AppCompatActivity() {
                 BottomSheetReservationTicketArg(
                     id = it.id,
                     remainAmount = it.remainAmount,
-                    ticketType = it.ticketType,
+                    ticketType = BottomSheetTicketTypeArg.from(it.ticketType),
                     totalAmount = it.totalAmount,
                 )
             },
@@ -112,8 +114,14 @@ class TicketReserveActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun handleReserveTicketFailed() {
-        OkDialogFragment.newInstance("예약에 실패하였습니다.")
+    private fun handleReserveTicketFailed(errorCode: ErrorCode) {
+        val message: String = when (errorCode) {
+            is ErrorCode.TICKET_SOLD_OUT -> getString(R.string.ticket_reserve_dialog_sold_out)
+            is ErrorCode.RESERVE_TICKET_OVER_AMOUNT -> getString(R.string.ticket_reserve_dialog_over_amount)
+            is ErrorCode.NEED_STUDENT_VERIFICATION -> getString(R.string.ticket_reserve_dialog_need_student_verification)
+            is ErrorCode.UNKNOWN -> getString(R.string.ticket_reserve_dialog_unknown)
+        }
+        OkDialogFragment.newInstance(message)
             .show(supportFragmentManager, OkDialogFragment::class.java.name)
     }
 
@@ -131,13 +139,14 @@ class TicketReserveActivity : AppCompatActivity() {
                 festivalId = intent.getLongExtra(KEY_FESTIVAL_ID, -1),
                 refresh = true,
             )
+            binding.srlTicketReserve.isRefreshing = false
         }
     }
 
     private fun updateUi(uiState: TicketReserveUiState) = when (uiState) {
         is TicketReserveUiState.Loading,
         is TicketReserveUiState.Error,
-        -> binding.srlTicketReserve.isRefreshing = false
+        -> Unit
 
         is TicketReserveUiState.Success -> updateSuccess(uiState)
     }
@@ -145,7 +154,6 @@ class TicketReserveActivity : AppCompatActivity() {
     private fun updateSuccess(successState: TicketReserveUiState.Success) {
         headerAdapter.submitList(listOf(successState.festival))
         contentsAdapter.submitList(successState.stages)
-        binding.srlTicketReserve.isRefreshing = false
     }
 
     companion object {

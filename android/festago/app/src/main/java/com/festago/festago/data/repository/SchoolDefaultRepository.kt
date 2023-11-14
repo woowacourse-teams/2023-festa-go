@@ -1,24 +1,29 @@
 package com.festago.festago.data.repository
 
 import com.festago.festago.data.service.SchoolRetrofitService
-import com.festago.festago.data.util.runCatchingWithErrorHandler
+import com.festago.festago.data.util.onSuccessOrCatch
+import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.model.School
 import com.festago.festago.repository.SchoolRepository
 import javax.inject.Inject
 
 class SchoolDefaultRepository @Inject constructor(
-    private val schoolRetrofitService: SchoolRetrofitService
+    private val schoolRetrofitService: SchoolRetrofitService,
 ) : SchoolRepository {
 
-    override suspend fun loadSchools(): Result<List<School>> {
-        schoolRetrofitService.getSchools()
-            .runCatchingWithErrorHandler()
-            .getOrElse { error -> return Result.failure(error) }
-            .let { return Result.success(it.toDomain()) }
-    }
+    override suspend fun loadSchools(): Result<List<School>> =
+        runCatchingResponse { schoolRetrofitService.getSchools() }
+            .onSuccessOrCatch { it.toDomain() }
 
     override suspend fun loadSchoolEmail(schoolId: Long): Result<String> {
-        // TODO: API 연동 작업 필요
-        return Result.success("festago.com")
+        return runCatchingResponse { schoolRetrofitService.getSchools() }
+            .onSuccessOrCatch {
+                val school = it.schools.find { school -> school.id.toLong() == schoolId }
+                school?.domain ?: throw IllegalArgumentException(MATCH_SCHOOL_NOT_FOUND)
+            }
+    }
+
+    companion object {
+        private const val MATCH_SCHOOL_NOT_FOUND = "MATCH_SCHOOL_NOT_FOUND"
     }
 }

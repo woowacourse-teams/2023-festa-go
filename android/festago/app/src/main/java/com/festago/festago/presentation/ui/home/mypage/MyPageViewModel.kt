@@ -66,7 +66,6 @@ class MyPageViewModel @Inject constructor(
                     _event.emit(MyPageEvent.SignOutSuccess)
                     _uiState.value = MyPageUiState.Error
                 }.onFailure {
-                    _uiState.value = MyPageUiState.Error
                     analyticsHelper.logNetworkFailure(
                         key = KEY_SIGN_OUT,
                         value = it.message.toString(),
@@ -88,7 +87,6 @@ class MyPageViewModel @Inject constructor(
                     _event.emit(MyPageEvent.DeleteAccountSuccess)
                     _uiState.value = MyPageUiState.Error
                 }.onFailure {
-                    _uiState.value = MyPageUiState.Error
                     analyticsHelper.logNetworkFailure(
                         key = KEY_DELETE_ACCOUNT,
                         value = it.message.toString(),

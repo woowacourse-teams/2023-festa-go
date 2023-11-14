@@ -6,17 +6,15 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.festago.festago.R
 import com.festago.festago.databinding.ActivitySignInBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.home.HomeActivity
-import com.festago.festago.presentation.util.loginWithKakao
-import com.kakao.sdk.user.UserApiClient
+import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SignInActivity : AppCompatActivity() {
@@ -41,14 +39,26 @@ class SignInActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.vm = vm
         initComment()
+        initBackPressed()
+    }
+
+    private fun initBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                setResult(RESULT_NOT_SIGN_IN, intent)
+                finish()
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, callback)
     }
 
     private fun initObserve() {
-        vm.event.observe(this) { event ->
-            when (event) {
-                SignInEvent.ShowSignInPage -> handleSignInEvent()
-                SignInEvent.SignInSuccess -> handleSuccessEvent()
-                SignInEvent.SignInFailure -> handleFailureEvent()
+        repeatOnStarted(this) {
+            vm.event.collect { event ->
+                when (event) {
+                    is SignInEvent.SignInSuccess -> handleSuccessEvent()
+                    is SignInEvent.SignInFailure -> handleFailureEvent()
+                }
             }
         }
     }
@@ -65,13 +75,6 @@ class SignInActivity : AppCompatActivity() {
             )
         }
         binding.tvLoginDescription.text = spannableStringBuilder
-    }
-
-    private fun handleSignInEvent() {
-        lifecycleScope.launch {
-            val oauthToken = UserApiClient.loginWithKakao(this@SignInActivity)
-            vm.signIn(oauthToken.accessToken)
-        }
     }
 
     private fun handleSuccessEvent() {
@@ -100,7 +103,7 @@ class SignInActivity : AppCompatActivity() {
         private const val COLOR_SPAN_END_INDEX = 4
 
         private const val FAILURE_SIGN_IN = "로그인에 실패했습니다."
-
+        const val RESULT_NOT_SIGN_IN = 1
         fun getIntent(context: Context): Intent {
             return Intent(context, SignInActivity::class.java)
         }

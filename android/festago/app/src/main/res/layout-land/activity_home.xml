@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.home.HomeActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.navigationrail.NavigationRailView
+                android:id="@+id/nvHome"
+                android:layout_width="68dp"
+                android:layout_height="match_parent"
+                android:background="?attr/colorSurfaceBright"
+                app:itemActiveIndicatorStyle="@color/zxing_transparent"
+                app:itemIconSize="40dp"
+                app:itemIconTint="@drawable/menu_selector_color_inverse"
+                app:itemMinHeight="96dp"
+                app:labelVisibilityMode="unlabeled"
+                app:menu="@menu/menu_bottom_navigation"
+                app:menuGravity="center" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fcv_home_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabTicket"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@drawable/menu_selector_color"
+            android:src="@drawable/ic_festago_coupon"
+            app:borderWidth="1dp"
+            app:fabSize="mini"
+            app:layout_anchor="@id/nvHome"
+            app:layout_anchorGravity="center"
+            app:maxImageSize="48dp"
+            app:menu="@menu/menu_bottom_navigation"
+            app:tint="@null" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

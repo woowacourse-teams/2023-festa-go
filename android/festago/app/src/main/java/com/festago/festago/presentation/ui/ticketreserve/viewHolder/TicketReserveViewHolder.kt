@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.R
 import com.festago.festago.databinding.ItemTicketReserveBinding
+import com.festago.festago.model.TicketType
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveItemUiState
 import java.time.format.DateTimeFormatter
 
@@ -39,11 +40,20 @@ class TicketReserveViewHolder(
             item.reservationTickets.joinToString(binding.root.context.getString(R.string.ticket_reserve_tv_ticket_count_separator)) {
                 binding.root.context.getString(
                     R.string.ticket_reserve_tv_ticket_count,
-                    it.ticketType,
+                    it.ticketType.getString(),
                     it.remainAmount.toString(),
                     it.totalAmount.toString(),
                 )
             }
+    }
+
+    private fun TicketType.getString(): String {
+        val resId: Int = when (this) {
+            TicketType.STUDENT -> R.string.all_ticket_type_student
+            TicketType.VISITOR -> R.string.all_ticket_type_visitor
+            TicketType.OTHER -> R.string.all_ticket_type_other
+        }
+        return binding.root.context.getString(resId)
     }
 
     companion object {

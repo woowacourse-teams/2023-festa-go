@@ -8,7 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class TokenLocalDataSource @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
 ) : TokenDataSource {
 
     private val sharedPreference: SharedPreferences by lazy {

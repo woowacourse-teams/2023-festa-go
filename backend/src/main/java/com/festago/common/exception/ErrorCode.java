@@ -29,6 +29,8 @@ public enum ErrorCode {
     DELETE_CONSTRAINT_SCHOOL("학생 또는 축제에 등록된 학교는 삭제할 수 없습니다."),
     DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
     VALIDATION_FAIL("검증이 실패하였습니다."),
+    INVALID_FESTIVAL_FILTER("유효하지 않은 축제의 필터 값입니다."),
+
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
