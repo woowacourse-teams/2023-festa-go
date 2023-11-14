@@ -63,7 +63,9 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
         initFestivalListSpanSize()
         initRefresh()
         initFestivalFilters()
-        loadFestivalsBy(binding.cgFilterOption.checkedChipId)
+        if (vm.uiState.value is FestivalListUiState.Loading) {
+            loadFestivalsBy(binding.cgFilterOption.checkedChipId)
+        }
     }
 
     private fun initFestivalListSpanSize() {
