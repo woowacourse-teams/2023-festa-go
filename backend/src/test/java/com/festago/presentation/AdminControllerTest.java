@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.admin.application.AdminService;
 import com.festago.auth.application.AdminAuthService;
 import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.Role;
@@ -69,9 +68,6 @@ class AdminControllerTest {
 
     @MockBean
     TicketService ticketService;
-
-    @MockBean
-    AdminService adminService;
 
     @MockBean
     AdminAuthService adminAuthService;
