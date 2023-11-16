@@ -2,10 +2,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:test;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
   jpa:
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: create
     open-in-view: false
@@ -15,12 +12,6 @@ spring:
 logging:
   file:
     path: ./
-  level:
-    org:
-      hibernate:
-        orm:
-          jdbc:
-            bind: trace
 
 festago:
   qr-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
