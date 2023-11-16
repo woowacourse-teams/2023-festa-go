@@ -1,12 +1,12 @@
 package com.festago.student.domain;
 
-import com.festago.common.exception.UnexpectedException;
+import com.festago.common.exception.ValidException;
+import com.festago.common.util.Validator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.regex.Pattern;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,20 +29,18 @@ public class VerificationCode {
     }
 
     private void validateBlank(String value) {
-        if (!StringUtils.hasText(value)) {
-            throw new UnexpectedException("VerificationCode는 null 또는 공백이 될 수 없습니다.");
-        }
+        Validator.hasBlank(value, "VerificationCode");
     }
 
     private void validateLength(String value) {
         if (value.length() != LENGTH) {
-            throw new UnexpectedException("VerificationCode의 길이는 %d 이어야 합니다.".formatted(LENGTH));
+            throw new ValidException("VerificationCode의 길이는 %d 이어야 합니다.".formatted(LENGTH));
         }
     }
 
     private void validatePositive(String value) {
         if (!POSITIVE_REGEX.matcher(value).matches()) {
-            throw new UnexpectedException("VerificationCode는 0~9의 양수 형식이어야 합니다.");
+            throw new ValidException("VerificationCode는 0~9의 양수 형식이어야 합니다.");
         }
     }
 
