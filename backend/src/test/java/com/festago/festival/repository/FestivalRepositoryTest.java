@@ -6,6 +6,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import com.festago.festival.domain.Festival;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
+import com.festago.support.RepositoryTest;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,14 +15,10 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.transaction.annotation.Transactional;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
-@Transactional
+@RepositoryTest
 class FestivalRepositoryTest {
 
     private static final String CURRENT_FESTIVAL = "현재 축제";
