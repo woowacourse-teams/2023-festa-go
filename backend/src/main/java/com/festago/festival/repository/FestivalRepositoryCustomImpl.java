@@ -14,7 +14,7 @@ public class FestivalRepositoryCustomImpl implements FestivalRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Festival> findFestivalBy(FestivalFilter festivalFilter, LocalDate currentTime) {
+    public List<Festival> findByFilter(FestivalFilter festivalFilter, LocalDate currentTime) {
         return switch (festivalFilter) {
             case PLANNED -> plannedFestivals(currentTime);
             case PROGRESS -> progressFestivals(currentTime);
