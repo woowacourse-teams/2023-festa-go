@@ -20,11 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.util.Assert;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Stage extends BaseTimeEntity {
+
+    private static final int MAX_LINEUP_LENGTH = 255;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +34,7 @@ public class Stage extends BaseTimeEntity {
     @NotNull
     private LocalDateTime startTime;
 
-    @Size(max = 255)
+    @Size(max = MAX_LINEUP_LENGTH)
     private String lineUp;
 
     @NotNull
@@ -71,18 +72,18 @@ public class Stage extends BaseTimeEntity {
     }
 
     private void validateLineUp(String lineUp) {
-        Validator.maxLength(lineUp, 255, "lineUp은 50글자를 넘을 수 없습니다.");
+        Validator.maxLength(lineUp, MAX_LINEUP_LENGTH, "lineUp");
     }
 
     private void validateFestival(Festival festival) {
-        Assert.notNull(festival, "festival은 null 값이 될 수 없습니다.");
+        Validator.notNull(festival, "festival");
     }
 
     private void validateTime(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
-        Assert.notNull(startTime, "startTime은 null 값이 될 수 없습니다.");
-        Assert.notNull(ticketOpenTime, "ticketOpenTime은 null 값이 될 수 없습니다.");
+        Validator.notNull(startTime, "startTime");
+        Validator.notNull(ticketOpenTime, "ticketOpenTime");
         if (ticketOpenTime.isAfter(startTime) || ticketOpenTime.isEqual(startTime)) {
-            throw new IllegalArgumentException("티켓 오픈 시간은 공연 시작 이전 이어야 합니다.");
+            throw new BadRequestException(ErrorCode.INVALID_TICKET_OPEN_TIME);
         }
         if (festival.isNotInDuration(startTime)) {
             throw new BadRequestException(ErrorCode.INVALID_STAGE_START_TIME);

@@ -7,13 +7,17 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;
 import javax.crypto.SecretKey;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JwtAuthExtractor implements AuthExtractor {
 
     private static final String MEMBER_ID_KEY = "memberId";
@@ -42,8 +46,11 @@ public class JwtAuthExtractor implements AuthExtractor {
                 .getBody();
         } catch (ExpiredJwtException e) {
             throw new UnauthorizedException(ErrorCode.EXPIRED_AUTH_TOKEN);
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (SignatureException | IllegalArgumentException | MalformedJwtException | UnsupportedJwtException e) {
             throw new UnauthorizedException(ErrorCode.INVALID_AUTH_TOKEN);
+        } catch (Exception e) {
+            log.error("JWT 토큰 파싱 중에 문제가 발생했습니다.");
+            throw e;
         }
     }
 }

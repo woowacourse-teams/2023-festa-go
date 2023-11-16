@@ -1,8 +1,6 @@
 package com.festago.common.aop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -10,6 +8,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -22,6 +21,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
+@Slf4j
 @Component
 @Aspect
 public class LogRequestBodyAspect {
@@ -86,7 +86,8 @@ public class LogRequestBodyAspect {
             ContentCachingRequestWrapper cachedRequest = (ContentCachingRequestWrapper) request;
             return objectMapper.readTree(cachedRequest.getContentAsByteArray()).toPrettyString();
         } catch (IOException | ClassCastException e) {
-            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
+            log.warn("ObjectMapper에서 직렬화 중에 문제가 발생했습니다.", e);
         }
+        return "[ObjectMapper에서 직렬화 중에 문제가 발생했습니다.]";
     }
 }

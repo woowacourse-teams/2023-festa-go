@@ -3,11 +3,11 @@ package com.festago.auth.application.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.festago.application.integration.ApplicationIntegrationTest;
 import com.festago.auth.application.AuthFacadeService;
 import com.festago.auth.domain.SocialType;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
+import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.MemberFixture;
 import jakarta.persistence.EntityManager;
 import java.util.List;

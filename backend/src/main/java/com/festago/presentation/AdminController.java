@@ -1,7 +1,5 @@
 package com.festago.presentation;
 
-import com.festago.admin.application.AdminService;
-import com.festago.admin.dto.AdminResponse;
 import com.festago.auth.annotation.Admin;
 import com.festago.auth.application.AdminAuthService;
 import com.festago.auth.dto.AdminLoginRequest;
@@ -54,7 +52,6 @@ public class AdminController {
     private final FestivalService festivalService;
     private final StageService stageService;
     private final TicketService ticketService;
-    private final AdminService adminService;
     private final AdminAuthService adminAuthService;
     private final SchoolService schoolService;
     private final Optional<BuildProperties> properties;
@@ -145,13 +142,6 @@ public class AdminController {
             .secure(true)
             .path("/")
             .build().toString();
-    }
-
-    @GetMapping("/data")
-    public ResponseEntity<AdminResponse> adminData() {
-        AdminResponse response = adminService.getAdminResponse();
-        return ResponseEntity.ok()
-            .body(response);
     }
 
     @GetMapping("/version")
