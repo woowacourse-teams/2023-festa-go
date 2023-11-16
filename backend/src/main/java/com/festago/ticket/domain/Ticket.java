@@ -3,6 +3,7 @@ package com.festago.ticket.domain;
 import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
+import com.festago.common.util.Validator;
 import com.festago.member.domain.Member;
 import com.festago.school.domain.School;
 import com.festago.stage.domain.Stage;
@@ -70,7 +71,7 @@ public class Ticket extends BaseTimeEntity {
     }
 
     public Ticket(Long id, Stage stage, TicketType ticketType, Long schoolId) {
-        validate(stage, ticketType);
+        validate(stage, ticketType, schoolId);
         this.id = id;
         this.stage = stage;
         this.ticketType = ticketType;
@@ -78,15 +79,22 @@ public class Ticket extends BaseTimeEntity {
         this.schoolId = schoolId;
     }
 
-    private void validate(Stage stage, TicketType ticketType) {
-        checkNotNull(stage, ticketType);
+    private void validate(Stage stage, TicketType ticketType, Long schoolId) {
+        validateStage(stage);
+        validateTicketType(ticketType);
+        validateSchoolId(schoolId);
     }
 
-    private void checkNotNull(Stage stage, TicketType ticketType) {
-        if (stage == null ||
-            ticketType == null) {
-            throw new IllegalArgumentException("Ticket 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
-        }
+    private void validateStage(Stage stage) {
+        Validator.notNull(stage, "stage");
+    }
+
+    private void validateTicketType(TicketType ticketType) {
+        Validator.notNull(ticketType, "ticketType");
+    }
+
+    private void validateSchoolId(Long schoolId) {
+        Validator.notNull(schoolId, "schoolId");
     }
 
     public void addTicketEntryTime(LocalDateTime currentTime, LocalDateTime entryTime, int amount) {

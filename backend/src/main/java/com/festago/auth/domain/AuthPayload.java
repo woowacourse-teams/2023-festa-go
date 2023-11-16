@@ -1,7 +1,6 @@
 package com.festago.auth.domain;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
+import com.festago.common.exception.UnexpectedException;
 
 public class AuthPayload {
 
@@ -16,7 +15,7 @@ public class AuthPayload {
 
     private void validate(Role role) {
         if (role == null) {
-            throw new InternalServerException(ErrorCode.INVALID_AUTH_TOKEN_PAYLOAD);
+            throw new UnexpectedException("role은 null이 될 수 없습니다.");
         }
     }
 

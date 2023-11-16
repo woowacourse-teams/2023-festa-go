@@ -1,13 +1,14 @@
 package com.festago.student.domain;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
+import com.festago.common.exception.UnexpectedException;
+import com.festago.common.exception.ValidException;
+import org.springframework.util.StringUtils;
 
 public class VerificationMailPayload {
 
-    private VerificationCode code;
-    private String username;
-    private String domain;
+    private final VerificationCode code;
+    private final String username;
+    private final String domain;
 
     public VerificationMailPayload(VerificationCode code, String username, String domain) {
         validate(code, username, domain);
@@ -17,8 +18,14 @@ public class VerificationMailPayload {
     }
 
     private void validate(VerificationCode code, String username, String domain) {
-        if (code == null || username == null || domain == null) {
-            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
+        if (code == null) {
+            throw new UnexpectedException("code는 null이 될 수 없습니다.");
+        }
+        if (!StringUtils.hasText(username)) {
+            throw new ValidException("username은 null 또는 공백이 될 수 없습니다.");
+        }
+        if (!StringUtils.hasText(domain)) {
+            throw new UnexpectedException("domain은 null 또는 공백이 될 수 없습니다.");
         }
     }
 
