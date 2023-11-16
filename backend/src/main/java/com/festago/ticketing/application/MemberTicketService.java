@@ -5,7 +5,6 @@ import static java.util.Comparator.comparing;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
-import com.festago.member.repository.MemberRepository;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.dto.MemberTicketResponse;
 import com.festago.ticketing.dto.MemberTicketsResponse;
@@ -25,30 +24,30 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberTicketService {
 
     private final MemberTicketRepository memberTicketRepository;
-    private final MemberRepository memberRepository;
     private final Clock clock;
 
     @Transactional(readOnly = true)
     public MemberTicketResponse findById(Long memberId, Long memberTicketId) {
-        validateMemberId(memberId);
         MemberTicket memberTicket = memberTicketRepository.findById(memberTicketId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_TICKET_NOT_FOUND));
+        validateOwner(memberTicket, memberId);
+        return MemberTicketResponse.from(memberTicket);
+    }
+
+    private void validateOwner(MemberTicket memberTicket, Long memberId) {
         if (!memberTicket.isOwner(memberId)) {
             throw new BadRequestException(ErrorCode.NOT_MEMBER_TICKET_OWNER);
         }
-        return MemberTicketResponse.from(memberTicket);
     }
 
     @Transactional(readOnly = true)
     public MemberTicketsResponse findAll(Long memberId, Pageable pageable) {
-        validateMemberId(memberId);
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId, pageable);
         return MemberTicketsResponse.from(memberTickets);
     }
 
     @Transactional(readOnly = true)
     public MemberTicketsResponse findCurrent(Long memberId, Pageable pageable) {
-        validateMemberId(memberId);
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId, pageable);
         return MemberTicketsResponse.from(filterCurrentMemberTickets(memberTickets));
     }
@@ -64,10 +63,5 @@ public class MemberTicketService {
 
     private Duration calculateTimeGap(MemberTicket memberTicket, LocalDateTime time) {
         return Duration.between(memberTicket.getEntryTime(), time).abs();
-    }
-
-    private void validateMemberId(Long memberId) {
-        memberRepository.findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 }
