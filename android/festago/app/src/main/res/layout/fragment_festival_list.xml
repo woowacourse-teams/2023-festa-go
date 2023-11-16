@@ -27,57 +27,67 @@
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
-                    app:layout_scrollFlags="scroll|enterAlways">
+                    app:layout_scrollFlags="scroll|snap|enterAlways">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <androidx.appcompat.widget.Toolbar
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="?attr/colorSurface"
+                        app:contentInsetStart="0dp"
                         app:layout_collapseMode="pin">
 
-                        <ImageView
-                            android:id="@+id/imgFestagoLogo"
-                            android:layout_width="160dp"
-                            android:layout_height="45dp"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginTop="12dp"
-                            android:src="@drawable/img_festago_home_logo"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/cgFilterOption"
+                        <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingHorizontal="16dp"
-                            android:paddingTop="12dp"
-                            app:checkedChip="@+id/chipProgress"
-                            app:layout_constraintTop_toBottomOf="@id/imgFestagoLogo"
-                            app:selectionRequired="true"
-                            app:singleSelection="true">
+                            android:orientation="vertical">
 
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/chipProgress"
-                                style="@style/chipFesta"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/festival_list_chip_progress" />
+                            <ImageView
+                                android:id="@+id/imgFestagoLogo"
+                                android:layout_width="160dp"
+                                android:layout_height="45dp"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/img_festago_home_logo"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:importantForAccessibility="no" />
 
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/chipPlanned"
-                                style="@style/chipFesta"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/festival_list_chip_planned" />
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/cgFilterOption"
+                                android:layout_width="392dp"
+                                android:layout_height="64dp"
+                                android:paddingHorizontal="16dp"
+                                android:paddingTop="12dp"
+                                app:checkedChip="@+id/chipProgress"
+                                app:layout_constraintTop_toBottomOf="@id/imgFestagoLogo"
+                                app:selectionRequired="true"
+                                app:singleSelection="true"
+                                tools:layout_editor_absoluteX="3dp">
 
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/chipEnd"
-                                style="@style/chipFesta"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/festival_list_chip_end" />
-                        </com.google.android.material.chip.ChipGroup>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipProgress"
+                                    style="@style/chipFesta"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/festival_list_chip_progress" />
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipPlanned"
+                                    style="@style/chipFesta"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/festival_list_chip_planned" />
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipEnd"
+                                    style="@style/chipFesta"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/festival_list_chip_end" />
+
+                            </com.google.android.material.chip.ChipGroup>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.Toolbar>
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -85,7 +95,6 @@
                 android:id="@+id/srlFestivalList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="12dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -98,6 +107,7 @@
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
                     tools:listitem="@layout/item_festival_list" />
+
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
