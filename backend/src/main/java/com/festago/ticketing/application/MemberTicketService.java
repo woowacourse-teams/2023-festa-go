@@ -1,8 +1,6 @@
 package com.festago.ticketing.application;
 
 import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toList;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
@@ -45,8 +43,7 @@ public class MemberTicketService {
     public MemberTicketsResponse findAll(Long memberId, Pageable pageable) {
         validateMemberId(memberId);
         List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(memberId, pageable);
-        return memberTickets.stream()
-            .collect(collectingAndThen(toList(), MemberTicketsResponse::from));
+        return MemberTicketsResponse.from(memberTickets);
     }
 
     @Transactional(readOnly = true)
