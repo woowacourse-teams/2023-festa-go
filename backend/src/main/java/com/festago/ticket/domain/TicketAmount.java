@@ -3,6 +3,7 @@ package com.festago.ticket.domain;
 import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
+import com.festago.common.util.Validator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -36,13 +37,7 @@ public class TicketAmount extends BaseTimeEntity {
     }
 
     private void validate(Ticket ticket) {
-        checkNotNull(ticket);
-    }
-
-    private void checkNotNull(Ticket ticket) {
-        if (ticket == null) {
-            throw new IllegalArgumentException("TicketAmount 는 허용되지 않은 null 값으로 생성할 수 없습니다.");
-        }
+        Validator.notNull(ticket, "ticket");
     }
 
     public void increaseReservedAmount() {

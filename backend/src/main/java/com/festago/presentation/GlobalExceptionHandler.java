@@ -8,6 +8,8 @@ import com.festago.common.exception.InternalServerException;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.exception.TooManyRequestException;
 import com.festago.common.exception.UnauthorizedException;
+import com.festago.common.exception.UnexpectedException;
+import com.festago.common.exception.ValidException;
 import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.presentation.auth.AuthenticateContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +31,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String LOG_FORMAT_INFO = "\n[🔵INFO] - ({} {})\n(id: {}, role: {})\n{}\n {}: {}";
-    private static final String LOG_FORMAT_WARN = "\n[🟠WARN] - ({} {})\n(id: {}, role: {})\n{}\n {}: {}";
+    private static final String LOG_FORMAT_WARN = "\n[🟠WARN] - ({} {})\n(id: {}, role: {})";
     private static final String LOG_FORMAT_ERROR = "\n[🔴ERROR] - ({} {})\n(id: {}, role: {})";
     // INFO
     /*
@@ -45,6 +47,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         (id: 1, role: MEMBER)
         FOR_TEST_ERROR
          com.festago.exception.InternalServerException: 테스트용 에러입니다.
+          at com.festago.presentation.AdminController.getWarn(AdminController.java:129)
      */
 
     // ERROR
@@ -61,6 +64,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidMediaTypeException.class)
     public ResponseEntity<ErrorResponse> handle(InvalidMediaTypeException e) {
         return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(ValidException.class)
+    public ResponseEntity<ErrorResponse> handle(ValidException e) {
+        return ResponseEntity.badRequest().body(ErrorResponse.from(e));
+    }
+
+    @ExceptionHandler(UnexpectedException.class)
+    public ResponseEntity<ErrorResponse> handle(UnexpectedException e) {
+        return ResponseEntity.internalServerError().body(ErrorResponse.from(e));
     }
 
     @ExceptionHandler(BadRequestException.class)
@@ -124,8 +137,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private void logWarn(FestaGoException e, HttpServletRequest request) {
         if (errorLogger.isWarnEnabled()) {
-            errorLogger.warn(LOG_FORMAT_WARN, request.getMethod(), request.getRequestURI(), authenticateContext.getId(),
-                authenticateContext.getRole(), e.getErrorCode(), e.getClass().getName(), e.getMessage());
+            errorLogger.warn(LOG_FORMAT_WARN, request.getMethod(), request.getRequestURI(),
+                authenticateContext.getId(), authenticateContext.getRole(), e);
         }
     }
 

@@ -3,8 +3,7 @@ package com.festago.auth.domain;
 import com.festago.auth.annotation.Admin;
 import com.festago.auth.annotation.Anonymous;
 import com.festago.auth.annotation.Member;
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
+import com.festago.common.exception.UnexpectedException;
 import java.lang.annotation.Annotation;
 
 public enum Role {
@@ -23,7 +22,7 @@ public enum Role {
         try {
             return valueOf(role);
         } catch (NullPointerException | IllegalArgumentException e) {
-            throw new InternalServerException(ErrorCode.INVALID_ROLE_NAME);
+            throw new UnexpectedException("해당하는 Role이 없습니다.");
         }
     }
 

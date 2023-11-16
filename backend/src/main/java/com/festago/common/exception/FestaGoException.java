@@ -16,6 +16,11 @@ public abstract class FestaGoException extends NestedRuntimeException {
         this.errorCode = errorCode;
     }
 
+    protected FestaGoException(ErrorCode errorCode, String message) {
+        super(message);
+        this.errorCode = errorCode;
+    }
+
     public ErrorCode getErrorCode() {
         return errorCode;
     }

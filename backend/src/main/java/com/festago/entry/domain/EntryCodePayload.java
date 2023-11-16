@@ -1,7 +1,6 @@
 package com.festago.entry.domain;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
+import com.festago.common.exception.UnexpectedException;
 import com.festago.ticketing.domain.EntryState;
 import com.festago.ticketing.domain.MemberTicket;
 
@@ -16,14 +15,17 @@ public class EntryCodePayload {
         this.entryState = entryState;
     }
 
-    public static EntryCodePayload from(MemberTicket memberTicket) {
-        return new EntryCodePayload(memberTicket.getId(), memberTicket.getEntryState());
+    private void validate(Long memberTicketId, EntryState entryState) {
+        if (memberTicketId == null) {
+            throw new UnexpectedException("memberTicketId는 null이 될 수 없습니다.");
+        }
+        if (entryState == null) {
+            throw new UnexpectedException("entryState는 null이 될 수 없습니다.");
+        }
     }
 
-    private void validate(Long memberTicketId, EntryState entryState) {
-        if (memberTicketId == null || entryState == null) {
-            throw new InternalServerException(ErrorCode.INVALID_ENTRY_CODE_PAYLOAD);
-        }
+    public static EntryCodePayload from(MemberTicket memberTicket) {
+        return new EntryCodePayload(memberTicket.getId(), memberTicket.getEntryState());
     }
 
     public Long getMemberTicketId() {
