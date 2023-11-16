@@ -15,59 +15,71 @@
         android:layout_height="match_parent"
         tools:context=".presentation.ui.home.festivallist.FestivalListFragment">
 
-        <ImageView
-            android:id="@+id/imgFestagoLogo"
-            android:layout_width="160dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:src="@drawable/img_festago_home_logo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cgFilterOption"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
-            android:paddingTop="12dp"
-            app:checkedChip="@+id/chipProgress"
-            app:layout_constraintTop_toBottomOf="@id/imgFestagoLogo"
-            app:selectionRequired="true"
-            app:singleSelection="true">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipProgress"
-                style="@style/chipFesta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/festival_list_chip_progress" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipPlanned"
-                style="@style/chipFesta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/festival_list_chip_planned" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipEnd"
-                style="@style/chipFesta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/festival_list_chip_end" />
-        </com.google.android.material.chip.ChipGroup>
-
-        <ProgressBar
-            android:id="@+id/pbLoading"
-            visibility="@{uiState.shouldShowLoading}"
-            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/srlFestivalList"
-            app:layout_constraintTop_toBottomOf="@id/cgFilterOption"
-            tools:visibility="gone" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorSurface"
+                    app:layout_scrollFlags="scroll|enterAlways">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_collapseMode="pin">
+
+                        <ImageView
+                            android:id="@+id/imgFestagoLogo"
+                            android:layout_width="160dp"
+                            android:layout_height="45dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="12dp"
+                            android:src="@drawable/img_festago_home_logo"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/cgFilterOption"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="16dp"
+                            android:paddingTop="12dp"
+                            app:checkedChip="@+id/chipProgress"
+                            app:layout_constraintTop_toBottomOf="@id/imgFestagoLogo"
+                            app:selectionRequired="true"
+                            app:singleSelection="true">
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipProgress"
+                                style="@style/chipFesta"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/festival_list_chip_progress" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipPlanned"
+                                style="@style/chipFesta"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/festival_list_chip_planned" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipEnd"
+                                style="@style/chipFesta"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/festival_list_chip_end" />
+                        </com.google.android.material.chip.ChipGroup>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srlFestivalList"
