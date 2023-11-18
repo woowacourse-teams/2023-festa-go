@@ -11,7 +11,6 @@ import com.festago.school.repository.SchoolRepository;
 import com.festago.student.domain.Student;
 import com.festago.student.domain.StudentCode;
 import com.festago.student.domain.VerificationCode;
-import com.festago.student.domain.VerificationMailPayload;
 import com.festago.student.dto.StudentResponse;
 import com.festago.student.dto.StudentSendMailRequest;
 import com.festago.student.dto.StudentVerificateRequest;
@@ -42,7 +41,15 @@ public class StudentService {
         validate(memberId, request);
         VerificationCode code = codeProvider.provide();
         saveStudentCode(code, member, school, request.username());
-        mailClient.send(new VerificationMailPayload(code, request.username(), school.getDomain()));
+        mailClient.send(mail -> {
+            mail.setTo(request.username() + "@" + school.getDomain());
+            mail.setSubject("[페스타고] 학생 이메일 인증 코드");
+            mail.setText("""
+                페스타고 학생 이메일 인증 코드입니다.
+                Code는 다음과 같습니다.
+                %s
+                """.formatted(code));
+        });
     }
 
     private Member findMember(Long memberId) {

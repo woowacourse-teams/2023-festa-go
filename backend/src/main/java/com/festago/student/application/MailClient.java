@@ -1,8 +1,9 @@
 package com.festago.student.application;
 
-import com.festago.student.domain.VerificationMailPayload;
+import java.util.function.Consumer;
+import org.springframework.mail.SimpleMailMessage;
 
 public interface MailClient {
 
-    void send(VerificationMailPayload payload);
+    void send(Consumer<SimpleMailMessage> mailMessageSupplier);
 }

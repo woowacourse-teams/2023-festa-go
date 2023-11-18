@@ -1,7 +1,7 @@
 package com.festago.student.infrastructure;
 
 import com.festago.student.application.MailClient;
-import com.festago.student.domain.VerificationMailPayload;
+import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.MailSender;
@@ -23,16 +23,10 @@ public class GoogleMailClient implements MailClient {
 
     @Override
     @Async
-    public void send(VerificationMailPayload payload) {
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setFrom(fromEmail);
-        mail.setTo(payload.getUsername() + "@" + payload.getDomain());
-        mail.setSubject("[페스타고] 학생 이메일 인증 코드");
-        mail.setText("""
-            페스타고 학생 이메일 인증 코드입니다.
-            Code는 다음과 같습니다.
-            %s
-            """.formatted(payload.getCode()));
-        mailSender.send(mail);
+    public void send(Consumer<SimpleMailMessage> mailMessageConsumer) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessageConsumer.accept(mailMessage);
+        mailMessage.setFrom(fromEmail);
+        mailSender.send(mailMessage);
     }
 }
