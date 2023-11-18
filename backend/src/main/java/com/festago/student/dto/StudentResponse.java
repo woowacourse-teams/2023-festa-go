@@ -1,6 +1,6 @@
 package com.festago.student.dto;
 
-import com.festago.school.domain.School;
+import com.festago.student.domain.Student;
 
 public record StudentResponse(
     boolean isVerified,
@@ -9,10 +9,10 @@ public record StudentResponse(
 
     private static final StudentResponse NOT_VERIFIED = new StudentResponse(false, null);
 
-    public static StudentResponse verified(School school) {
+    public static StudentResponse verified(Student student) {
         return new StudentResponse(
             true,
-            StudentSchoolResponse.from(school)
+            StudentSchoolResponse.from(student.getSchool())
         );
     }
 

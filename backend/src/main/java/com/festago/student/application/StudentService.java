@@ -98,8 +98,8 @@ public class StudentService {
     public void verify(Long memberId, StudentVerificateRequest request) {
         validateStudent(memberId);
         Member member = findMember(memberId);
-        StudentCode studentCode = studentCodeRepository.findByCodeAndMember(new VerificationCode(request.code()),
-                member)
+        VerificationCode verificationCode = new VerificationCode(request.code());
+        StudentCode studentCode = studentCodeRepository.findByCodeAndMember(verificationCode, member)
             .orElseThrow(() -> new BadRequestException(ErrorCode.INVALID_STUDENT_VERIFICATION_CODE));
         studentRepository.save(new Student(member, studentCode.getSchool(), studentCode.getUsername()));
         studentCodeRepository.deleteByMember(member);
@@ -108,7 +108,7 @@ public class StudentService {
     @Transactional(readOnly = true)
     public StudentResponse findVerification(Long memberId) {
         return studentRepository.findByMemberIdWithFetch(memberId)
-            .map(value -> StudentResponse.verified(value.getSchool()))
+            .map(StudentResponse::verified)
             .orElseGet(StudentResponse::notVerified);
     }
 }
