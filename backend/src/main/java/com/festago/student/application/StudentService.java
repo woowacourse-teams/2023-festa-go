@@ -100,6 +100,7 @@ public class StudentService {
         studentCodeRepository.deleteByMember(member);
     }
 
+    @Transactional(readOnly = true)
     public StudentResponse findVerification(Long memberId) {
         return studentRepository.findByMemberIdWithFetch(memberId)
             .map(value -> StudentResponse.verified(value.getSchool()))
