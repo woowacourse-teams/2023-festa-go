@@ -3,7 +3,6 @@ package com.festago.student.application;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
-import com.festago.common.exception.TooManyRequestException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.school.domain.School;
@@ -36,20 +35,16 @@ public class StudentService {
     private final Clock clock;
 
     public void sendVerificationMail(Long memberId, StudentSendMailRequest request) {
+        StudentCode studentCode = createStudentCore(memberId, request);
+        validate(studentCode);
+        saveStudentCodeOrReissue(studentCode);
+        sendEmail(studentCode);
+    }
+
+    private StudentCode createStudentCore(Long memberId, StudentSendMailRequest request) {
         Member member = findMember(memberId);
         School school = findSchool(request.schoolId());
-        validate(memberId, request);
-        VerificationCode code = codeProvider.provide();
-        saveStudentCode(code, member, school, request.username());
-        mailClient.send(mail -> {
-            mail.setTo(request.username() + "@" + school.getDomain());
-            mail.setSubject("[페스타고] 학생 이메일 인증 코드");
-            mail.setText("""
-                페스타고 학생 이메일 인증 코드입니다.
-                Code는 다음과 같습니다.
-                %s
-                """.formatted(code));
-        });
+        return new StudentCode(codeProvider.provide(), school, member, request.username(), LocalDateTime.now(clock));
     }
 
     private Member findMember(Long memberId) {
@@ -62,19 +57,9 @@ public class StudentService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
     }
 
-    private void validate(Long memberId, StudentSendMailRequest request) {
-        validateFrequentRequest(memberId);
-        validateStudent(memberId);
-        validateDuplicateEmail(request);
-    }
-
-    private void validateFrequentRequest(Long memberId) {
-        studentCodeRepository.findByMemberId(memberId)
-            .ifPresent(code -> {
-                if (!code.canReissue(LocalDateTime.now(clock))) {
-                    throw new TooManyRequestException(ErrorCode.TOO_FREQUENT_REQUESTS);
-                }
-            });
+    private void validate(StudentCode studentCode) {
+        validateStudent(studentCode.getMember().getId());
+        validateDuplicateEmail(studentCode.getUsername(), studentCode.getSchool().getId());
     }
 
     private void validateStudent(Long memberId) {
@@ -83,18 +68,31 @@ public class StudentService {
         }
     }
 
-    private void validateDuplicateEmail(StudentSendMailRequest request) {
-        if (studentRepository.existsByUsernameAndSchoolId(request.username(), request.schoolId())) {
+    private void validateDuplicateEmail(String username, Long schoolId) {
+        if (studentRepository.existsByUsernameAndSchoolId(username, schoolId)) {
             throw new BadRequestException(ErrorCode.DUPLICATE_STUDENT_EMAIL);
         }
     }
 
-    private void saveStudentCode(VerificationCode code, Member member, School school, String username) {
-        studentCodeRepository.findByMemberId(member.getId())
-            .ifPresentOrElse(
-                studentCode -> studentCode.reissue(code, school, username),
-                () -> studentCodeRepository.save(new StudentCode(code, school, member, username))
-            );
+    private void saveStudentCodeOrReissue(StudentCode studentCode) {
+        studentCodeRepository.findByMemberId(studentCode.getMember().getId())
+            .ifPresentOrElse(existsCode -> {
+                existsCode.reissue(studentCode);
+            }, () -> {
+                studentCodeRepository.save(studentCode);
+            });
+    }
+
+    private void sendEmail(StudentCode studentCode) {
+        mailClient.send(mail -> {
+            mail.setTo(studentCode.getEmail());
+            mail.setSubject("[페스타고] 학생 이메일 인증 코드");
+            mail.setText("""
+                페스타고 학생 이메일 인증 코드입니다.
+                Code는 다음과 같습니다.
+                %s
+                """.formatted(studentCode.getCode()));
+        });
     }
 
     public void verify(Long memberId, StudentVerificateRequest request) {

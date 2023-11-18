@@ -2,6 +2,9 @@ package com.festago.student.domain;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.TooManyRequestException;
+import com.festago.common.exception.UnexpectedException;
 import com.festago.common.util.Validator;
 import com.festago.member.domain.Member;
 import com.festago.school.domain.School;
@@ -20,7 +23,6 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -50,11 +52,10 @@ public class StudentCode {
     private String username;
 
     @NotNull
-    @LastModifiedDate
     private LocalDateTime issuedAt;
 
-    public StudentCode(VerificationCode code, School school, Member member, String username) {
-        this(null, code, school, member, username, null);
+    public StudentCode(VerificationCode code, School school, Member member, String username, LocalDateTime issuedAt) {
+        this(null, code, school, member, username, issuedAt);
     }
 
     public StudentCode(Long id, VerificationCode code, School school, Member member, String username,
@@ -93,14 +94,25 @@ public class StudentCode {
         Validator.maxLength(username, MAX_USERNAME_LENGTH, fieldName);
     }
 
-    public boolean canReissue(LocalDateTime currentTime) {
+    public void reissue(StudentCode newStudentCode) {
+        if (newStudentCode.id != null) {
+            throw new UnexpectedException("새로 발급할 인증 코드는 식별자가 없어야 합니다.");
+        }
+        if (!canReissue(newStudentCode.issuedAt)) {
+            throw new TooManyRequestException(ErrorCode.TOO_FREQUENT_REQUESTS);
+        }
+        this.code = newStudentCode.code;
+        this.school = newStudentCode.school;
+        this.username = newStudentCode.username;
+        this.issuedAt = newStudentCode.issuedAt;
+    }
+
+    private boolean canReissue(LocalDateTime currentTime) {
         return SECONDS.between(issuedAt, currentTime) > MIN_REQUEST_TERM_SECONDS;
     }
 
-    public void reissue(VerificationCode code, School school, String username) {
-        this.code = code;
-        this.school = school;
-        this.username = username;
+    public String getEmail() {
+        return username + "@" + school.getDomain();
     }
 
     public Long getId() {
