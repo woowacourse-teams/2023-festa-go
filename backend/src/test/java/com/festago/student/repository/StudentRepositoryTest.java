@@ -8,6 +8,7 @@ import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.student.domain.Student;
 import com.festago.support.MemberFixture;
+import com.festago.support.RepositoryTest;
 import com.festago.support.SchoolFixture;
 import com.festago.support.StudentFixture;
 import java.util.Optional;
@@ -15,11 +16,10 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@DataJpaTest
+@RepositoryTest
 class StudentRepositoryTest {
 
     @Autowired

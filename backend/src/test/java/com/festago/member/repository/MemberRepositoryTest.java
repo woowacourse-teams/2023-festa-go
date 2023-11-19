@@ -5,16 +5,16 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.member.domain.Member;
 import com.festago.support.MemberFixture;
+import com.festago.support.RepositoryTest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@DataJpaTest
+@RepositoryTest
 class MemberRepositoryTest {
 
     @Autowired
