@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-public class SchoolServiceIntegration extends ApplicationIntegrationTest {
+public class SchoolServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     SchoolService schoolService;
