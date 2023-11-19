@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class MockMailClient implements MailClient {
 
     @Override
-    public void send(Consumer<SimpleMailMessage> mailMessageSupplier) {
+    public void send(Consumer<SimpleMailMessage> mailMessageConsumer) {
         // no-op
     }
 }

@@ -5,5 +5,5 @@ import org.springframework.mail.SimpleMailMessage;
 
 public interface MailClient {
 
-    void send(Consumer<SimpleMailMessage> mailMessageSupplier);
+    void send(Consumer<SimpleMailMessage> mailMessageConsumer);
 }
