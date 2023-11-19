@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.school.application.SchoolService;
 import com.festago.school.domain.School;
@@ -56,8 +57,10 @@ public class SchoolServiceIntegrationTest extends ApplicationIntegrationTest {
             School savedSchool = schoolRepository.save(new School("domain.com", "name"));
 
             // when && then
-            assertThatThrownBy(() -> schoolService.create(new SchoolCreateRequest(savedSchool.getDomain(), "otherName")))
-                    .isInstanceOf(BadRequestException.class);
+            assertThatThrownBy(
+                    () -> schoolService.create(new SchoolCreateRequest(savedSchool.getDomain(), "otherName")))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage(ErrorCode.DUPLICATE_SCHOOL.getMessage());
         }
 
         @Test
@@ -67,7 +70,8 @@ public class SchoolServiceIntegrationTest extends ApplicationIntegrationTest {
 
             // when && then
             assertThatThrownBy(() -> schoolService.create(new SchoolCreateRequest("otherDomain.com", savedSchool.getName())))
-                    .isInstanceOf(BadRequestException.class);
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage(ErrorCode.DUPLICATE_SCHOOL.getMessage());
         }
     }
 
@@ -105,7 +109,8 @@ public class SchoolServiceIntegrationTest extends ApplicationIntegrationTest {
     void 단건_조회시_없으면_예외() {
         // when && then
         assertThatThrownBy(() -> schoolService.findById(-1L))
-                .isInstanceOf(NotFoundException.class);
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(ErrorCode.SCHOOL_NOT_FOUND.getMessage());
     }
 
     @Test
