@@ -35,13 +35,13 @@ public class StudentService {
     private final Clock clock;
 
     public void sendVerificationMail(Long memberId, StudentSendMailRequest request) {
-        StudentCode studentCode = createStudentCore(memberId, request);
+        StudentCode studentCode = createStudentCode(memberId, request);
         validate(studentCode);
         saveStudentCodeOrReissue(studentCode);
         sendEmail(studentCode);
     }
 
-    private StudentCode createStudentCore(Long memberId, StudentSendMailRequest request) {
+    private StudentCode createStudentCode(Long memberId, StudentSendMailRequest request) {
         Member member = findMember(memberId);
         School school = findSchool(request.schoolId());
         return new StudentCode(codeProvider.provide(), school, member, request.username(), LocalDateTime.now(clock));
