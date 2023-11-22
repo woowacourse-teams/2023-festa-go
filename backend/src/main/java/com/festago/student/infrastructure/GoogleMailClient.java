@@ -4,6 +4,7 @@ import com.festago.student.application.MailClient;
 import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.mail.MailMessage;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
@@ -23,7 +24,7 @@ public class GoogleMailClient implements MailClient {
 
     @Override
     @Async
-    public void send(Consumer<SimpleMailMessage> mailMessageConsumer) {
+    public void send(Consumer<MailMessage> mailMessageConsumer) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessageConsumer.accept(mailMessage);
         mailMessage.setFrom(fromEmail);
