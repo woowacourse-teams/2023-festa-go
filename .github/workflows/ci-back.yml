@@ -15,22 +15,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 리포지토리 체크아웃
+      - name: repository checkout
         uses: actions/checkout@v3
         with:
           submodules: recursive
           token: ${{ secrets.SUBMODULE_TOKEN }}
 
-      - name: 자바 설치
+      - name: install java 17
         uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: 'zulu'
 
-      - name: gradlew 권한 부여
+      - name: assign grant gradlew
         run: chmod +x gradlew
 
-      - name: Gradle build
+      - name: build with gradle
         run: ./gradlew build
 
       - name: 테스트 결과 PR에 커멘트 등록
