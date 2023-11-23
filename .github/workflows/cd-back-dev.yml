@@ -40,17 +40,16 @@ jobs:
         with:
           host: ${{secrets.FESTAGO_PROD_IP}}
           username: ${{secrets.FESTAGO_PROD_USERNAME}}
-          password: ${{secrets.FESTAGO_PROD_PASSWORD}}
           key: ${{secrets.FESTAGO_SSH_KEY}}
           source: "./backend/build/libs/*.jar"
           target: ${{secrets.FESTAGO_PROD_JAR_DIR}}
+          strip_components: 3
 
       - name: run application use ssh
         uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.FESTAGO_PROD_IP}}
           username: ${{secrets.FESTAGO_PROD_USERNAME}}
-          password: ${{secrets.FESTAGO_PROD_PASSWORD}}
           key: ${{secrets.FESTAGO_SSH_KEY}}
           script_stop: true
           script: ${{secrets.FESTAGO_PROD_DEPLOY_FILE}}
