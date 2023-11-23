@@ -52,4 +52,5 @@ jobs:
           username: ${{secrets.FESTAGO_PROD_USERNAME}}
           key: ${{secrets.FESTAGO_SSH_KEY}}
           script_stop: true
-          script: ${{secrets.FESTAGO_PROD_DEPLOY_FILE}}
+          script: |
+            ${{secrets.FESTAGO_PROD_DEPLOY_FILE}}
