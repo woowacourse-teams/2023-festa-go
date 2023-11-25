@@ -42,7 +42,7 @@ jobs:
           username: ${{secrets.FESTAGO_PROD_USERNAME}}
           key: ${{secrets.FESTAGO_SSH_KEY}}
           source: "./backend/build/libs/*.jar"
-          target: ${{secrets.FESTAGO_PROD_JAR_DIR}}
+          target: $FESTAGO_PROD_JAR_DIR
           strip_components: 3
 
       - name: run application use ssh
@@ -52,5 +52,4 @@ jobs:
           username: ${{secrets.FESTAGO_PROD_USERNAME}}
           key: ${{secrets.FESTAGO_SSH_KEY}}
           script_stop: true
-          script: |
-            ${{secrets.FESTAGO_PROD_DEPLOY_FILE}}
+          script: $FESTAGO_DEV_DEPLOY_COMMAND
