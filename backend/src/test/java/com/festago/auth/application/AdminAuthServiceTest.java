@@ -6,41 +6,42 @@ import static com.festago.common.exception.ErrorCode.NOT_ENOUGH_PERMISSION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.anyLong;
-import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.mock;
 
 import com.festago.admin.domain.Admin;
 import com.festago.admin.repository.AdminRepository;
+import com.festago.admin.repository.MemoryAdminRepository;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
 import com.festago.auth.dto.AdminSignupResponse;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ForbiddenException;
 import com.festago.common.exception.UnauthorizedException;
-import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@ExtendWith(MockitoExtension.class)
 class AdminAuthServiceTest {
 
-    @Mock
-    AuthProvider authProvider;
-
-    @Mock
     AdminRepository adminRepository;
 
-    @InjectMocks
+    AuthProvider authProvider = mock(AuthProvider.class);
+
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     AdminAuthService adminAuthService;
+
+    @BeforeEach
+    void setUp() {
+        adminRepository = new MemoryAdminRepository();
+        adminAuthService = new AdminAuthService(authProvider, adminRepository, passwordEncoder);
+    }
 
     @Nested
     class 로그인 {
@@ -49,8 +50,6 @@ class AdminAuthServiceTest {
         void 계정이_없으면_예외() {
             // given
             AdminLoginRequest request = new AdminLoginRequest("admin", "admin");
-            given(adminRepository.findByUsername(anyString()))
-                .willReturn(Optional.empty());
 
             // when & then
             assertThatThrownBy(() -> adminAuthService.login(request))
@@ -61,10 +60,8 @@ class AdminAuthServiceTest {
         @Test
         void 비밀번호가_틀리면_예외() {
             // given
-            Admin admin = new Admin(1L, "admin", "admin");
+            adminRepository.save(new Admin(1L, "admin", passwordEncoder.encode("admin")));
             AdminLoginRequest request = new AdminLoginRequest("admin", "password");
-            given(adminRepository.findByUsername(anyString()))
-                .willReturn(Optional.of(admin));
 
             // when & then
             assertThatThrownBy(() -> adminAuthService.login(request))
@@ -75,10 +72,8 @@ class AdminAuthServiceTest {
         @Test
         void 성공() {
             // given
-            Admin admin = new Admin(1L, "admin", "admin");
+            adminRepository.save(new Admin(1L, "admin", passwordEncoder.encode("admin")));
             AdminLoginRequest request = new AdminLoginRequest("admin", "admin");
-            given(adminRepository.findByUsername(anyString()))
-                .willReturn(Optional.of(admin));
             given(authProvider.provide(any()))
                 .willReturn("token");
 
@@ -96,11 +91,8 @@ class AdminAuthServiceTest {
         @Test
         void 닉네임이_중복이면_예외() {
             // given
+            adminRepository.save(new Admin(1L, "admin", passwordEncoder.encode("admin")));
             AdminSignupRequest request = new AdminSignupRequest("admin", "admin");
-            given(adminRepository.existsByUsername(anyString()))
-                .willReturn(true);
-            given(adminRepository.findById(anyLong()))
-                .willReturn(Optional.of(new Admin("admin", "admin")));
 
             // when & then
             assertThatThrownBy(() -> adminAuthService.signup(1L, request))
@@ -111,9 +103,8 @@ class AdminAuthServiceTest {
         @Test
         void Root_어드민이_아니면_예외() {
             // given
+            adminRepository.save(new Admin(1L, "glen", passwordEncoder.encode("admin")));
             AdminSignupRequest request = new AdminSignupRequest("newAdmin", "newAdmin");
-            given(adminRepository.findById(anyLong()))
-                .willReturn(Optional.of(new Admin("mewAdmin", "newAdmin")));
 
             // when & then
             assertThatThrownBy(() -> adminAuthService.signup(1L, request))
@@ -124,17 +115,14 @@ class AdminAuthServiceTest {
         @Test
         void 성공() {
             // given
+            adminRepository.save(new Admin(1L, "admin", passwordEncoder.encode("admin")));
             AdminSignupRequest request = new AdminSignupRequest("newAdmin", "newAdmin");
-            given(adminRepository.save(any(Admin.class)))
-                .willReturn(new Admin(1L, "newAdmin", "newAdmin"));
-            given(adminRepository.findById(anyLong()))
-                .willReturn(Optional.of(new Admin(1L, "admin", "admin")));
 
             // when
             AdminSignupResponse response = adminAuthService.signup(1L, request);
 
             // then
-            assertThat(response.username()).isEqualTo("newAdmin");
+            assertThat(adminRepository.existsByUsername(response.username())).isTrue();
         }
     }
 }

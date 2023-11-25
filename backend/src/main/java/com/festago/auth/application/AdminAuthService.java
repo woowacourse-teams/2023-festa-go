@@ -13,6 +13,7 @@ import com.festago.common.exception.ForbiddenException;
 import com.festago.common.exception.UnauthorizedException;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +26,12 @@ public class AdminAuthService {
 
     private final AuthProvider authProvider;
     private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public String login(AdminLoginRequest request) {
         Admin admin = findAdmin(request);
-        validatePassword(admin.getPassword(), request.password());
+        validatePassword(request.password(), admin.getPassword());
         AuthPayload authPayload = getAuthPayload(admin);
         return authProvider.provide(authPayload);
     }
@@ -39,8 +41,8 @@ public class AdminAuthService {
             .orElseThrow(() -> new UnauthorizedException(ErrorCode.INCORRECT_PASSWORD_OR_ACCOUNT));
     }
 
-    private void validatePassword(String password, String comparePassword) {
-        if (!Objects.equals(password, comparePassword)) {
+    private void validatePassword(String rawPassword, String encodedPassword) {
+        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
             throw new UnauthorizedException(ErrorCode.INCORRECT_PASSWORD_OR_ACCOUNT);
         }
     }
@@ -52,13 +54,13 @@ public class AdminAuthService {
     public void initializeRootAdmin(String password) {
         adminRepository.findByUsername(ROOT_ADMIN).ifPresentOrElse(admin -> {
             throw new BadRequestException(ErrorCode.DUPLICATE_ACCOUNT_USERNAME);
-        }, () -> adminRepository.save(new Admin(ROOT_ADMIN, password)));
+        }, () -> adminRepository.save(new Admin(ROOT_ADMIN, passwordEncoder.encode(password))));
     }
 
     public AdminSignupResponse signup(Long adminId, AdminSignupRequest request) {
         validateRootAdmin(adminId);
         String username = request.username();
-        String password = request.password();
+        String password = passwordEncoder.encode(request.password());
         validateExistsUsername(username);
         Admin admin = adminRepository.save(new Admin(username, password));
         return new AdminSignupResponse(admin.getUsername());
