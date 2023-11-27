@@ -23,7 +23,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -33,14 +33,13 @@ class AdminAuthServiceTest {
 
     AuthProvider authProvider = mock(AuthProvider.class);
 
-    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     AdminAuthService adminAuthService;
 
     @BeforeEach
     void setUp() {
         adminRepository = new MemoryAdminRepository();
-        adminAuthService = new AdminAuthService(authProvider, adminRepository, passwordEncoder);
+        adminAuthService = new AdminAuthService(authProvider, adminRepository,
+            PasswordEncoderFactories.createDelegatingPasswordEncoder());
     }
 
     @Nested
@@ -49,7 +48,7 @@ class AdminAuthServiceTest {
         @Test
         void 계정이_없으면_예외() {
             // given
-            AdminLoginRequest request = new AdminLoginRequest("admin", "admin");
+            AdminLoginRequest request = new AdminLoginRequest("admin", "password");
 
             // when & then
             assertThatThrownBy(() -> adminAuthService.login(request))
@@ -60,8 +59,8 @@ class AdminAuthServiceTest {
         @Test
         void 비밀번호가_틀리면_예외() {
             // given
-            adminRepository.save(new Admin(1L, "admin", passwordEncoder.encode("admin")));
-            AdminLoginRequest request = new AdminLoginRequest("admin", "password");
+            adminRepository.save(new Admin("admin", "{noop}password"));
+            AdminLoginRequest request = new AdminLoginRequest("admin", "admin");
 
             // when & then
             assertThatThrownBy(() -> adminAuthService.login(request))
@@ -72,8 +71,8 @@ class AdminAuthServiceTest {
         @Test
         void 성공() {
             // given
-            adminRepository.save(new Admin(1L, "admin", passwordEncoder.encode("admin")));
-            AdminLoginRequest request = new AdminLoginRequest("admin", "admin");
+            adminRepository.save(new Admin("admin", "{noop}password"));
+            AdminLoginRequest request = new AdminLoginRequest("admin", "password");
             given(authProvider.provide(any()))
                 .willReturn("token");
 
@@ -91,11 +90,12 @@ class AdminAuthServiceTest {
         @Test
         void 닉네임이_중복이면_예외() {
             // given
-            adminRepository.save(new Admin(1L, "admin", passwordEncoder.encode("admin")));
-            AdminSignupRequest request = new AdminSignupRequest("admin", "admin");
+            Admin rootAdmin = adminRepository.save(new Admin("admin", "{noop}password"));
+            AdminSignupRequest request = new AdminSignupRequest("admin", "password");
 
             // when & then
-            assertThatThrownBy(() -> adminAuthService.signup(1L, request))
+            Long rootAdminId = rootAdmin.getId();
+            assertThatThrownBy(() -> adminAuthService.signup(rootAdminId, request))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(DUPLICATE_ACCOUNT_USERNAME.getMessage());
         }
@@ -103,11 +103,12 @@ class AdminAuthServiceTest {
         @Test
         void Root_어드민이_아니면_예외() {
             // given
-            adminRepository.save(new Admin(1L, "glen", passwordEncoder.encode("admin")));
-            AdminSignupRequest request = new AdminSignupRequest("newAdmin", "newAdmin");
+            Admin admin = adminRepository.save(new Admin("glen", "{noop}password"));
+            AdminSignupRequest request = new AdminSignupRequest("newAdmin", "password");
 
             // when & then
-            assertThatThrownBy(() -> adminAuthService.signup(1L, request))
+            Long adminId = admin.getId();
+            assertThatThrownBy(() -> adminAuthService.signup(adminId, request))
                 .isInstanceOf(ForbiddenException.class)
                 .hasMessage(NOT_ENOUGH_PERMISSION.getMessage());
         }
@@ -115,11 +116,11 @@ class AdminAuthServiceTest {
         @Test
         void 성공() {
             // given
-            adminRepository.save(new Admin(1L, "admin", passwordEncoder.encode("admin")));
-            AdminSignupRequest request = new AdminSignupRequest("newAdmin", "newAdmin");
+            Admin rootAdmin = adminRepository.save(new Admin("admin", "{noop}password"));
+            AdminSignupRequest request = new AdminSignupRequest("newAdmin", "password");
 
             // when
-            AdminSignupResponse response = adminAuthService.signup(1L, request);
+            AdminSignupResponse response = adminAuthService.signup(rootAdmin.getId(), request);
 
             // then
             assertThat(adminRepository.existsByUsername(response.username())).isTrue();

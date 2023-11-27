@@ -1,31 +1,21 @@
 package com.festago.admin.repository;
 
 import com.festago.admin.domain.Admin;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class MemoryAdminRepository implements AdminRepository {
 
-    private final Map<Long, Admin> memory = new HashMap<>();
-    private final AtomicLong autoIncrement = new AtomicLong(1);
+    private final ConcurrentHashMap<Long, Admin> memory = new ConcurrentHashMap<>();
+    private final AtomicLong autoIncrement = new AtomicLong();
 
     @Override
     public Admin save(Admin admin) {
-        if (admin.getId() != null) {
-            memory.put(admin.getId(), admin);
-            return admin;
-        }
-        while (true) {
-            long id = autoIncrement.get();
-            if (!memory.containsKey(id)) {
-                memory.put(id, admin);
-                return admin;
-            }
-            autoIncrement.incrementAndGet();
-        }
+        long id = autoIncrement.incrementAndGet();
+        memory.put(id, new Admin(id, admin.getUsername(), admin.getPassword()));
+        return memory.get(id);
     }
 
     @Override
