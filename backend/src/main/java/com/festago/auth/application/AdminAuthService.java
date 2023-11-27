@@ -30,25 +30,15 @@ public class AdminAuthService {
 
     @Transactional(readOnly = true)
     public String login(AdminLoginRequest request) {
-        Admin admin = findAdmin(request);
-        validatePassword(request.password(), admin.getPassword());
-        AuthPayload authPayload = getAuthPayload(admin);
+        Admin admin = findAdminWithAuthenticate(request);
+        AuthPayload authPayload = new AuthPayload(admin.getId(), Role.ADMIN);
         return authProvider.provide(authPayload);
     }
 
-    private Admin findAdmin(AdminLoginRequest request) {
+    private Admin findAdminWithAuthenticate(AdminLoginRequest request) {
         return adminRepository.findByUsername(request.username())
+            .filter(admin -> passwordEncoder.matches(request.password(), admin.getPassword()))
             .orElseThrow(() -> new UnauthorizedException(ErrorCode.INCORRECT_PASSWORD_OR_ACCOUNT));
-    }
-
-    private void validatePassword(String rawPassword, String encodedPassword) {
-        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
-            throw new UnauthorizedException(ErrorCode.INCORRECT_PASSWORD_OR_ACCOUNT);
-        }
-    }
-
-    private AuthPayload getAuthPayload(Admin admin) {
-        return new AuthPayload(admin.getId(), Role.ADMIN);
     }
 
     public void initializeRootAdmin(String password) {
