@@ -1,6 +1,8 @@
 package com.festago.ticket.repository;
 
+import static com.festago.stage.domain.QStage.stage;
 import static com.festago.ticket.domain.QTicket.ticket;
+import static com.festago.ticket.domain.QTicketEntryTime.ticketEntryTime;
 
 import com.festago.ticket.domain.Ticket;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,8 +26,8 @@ public class TicketRepositoryCustomImpl implements TicketRepositoryCustom {
     @Override
     public Optional<Ticket> findByIdWithFetch(Long ticketId) {
         return Optional.ofNullable(queryFactory.selectFrom(ticket)
-                .join(ticket.stage).fetchJoin()
-                .join(ticket.ticketEntryTimes).fetchJoin()
+                .innerJoin(ticket.stage, stage).fetchJoin()
+                .innerJoin(ticket.ticketEntryTimes, ticketEntryTime).fetchJoin()
                 .where(ticket.id.eq(ticketId))
                 .fetchOne());
     }

@@ -1,8 +1,10 @@
 package com.festago.stage.repository;
 
 import static com.festago.festival.domain.QFestival.festival;
+import static com.festago.school.domain.QSchool.school;
 import static com.festago.stage.domain.QStage.stage;
 import static com.festago.ticket.domain.QTicket.ticket;
+import static com.festago.ticket.domain.QTicketAmount.ticketAmount;
 
 import com.festago.stage.domain.Stage;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,7 +21,7 @@ public class StageRepositoryCustomImpl implements StageRepositoryCustom {
     public List<Stage> findAllDetailByFestivalId(Long festivalId) {
         return queryFactory.selectFrom(stage)
                 .leftJoin(stage.tickets, ticket).fetchJoin()
-                .leftJoin(ticket.ticketAmount).fetchJoin()
+                .leftJoin(ticket.ticketAmount, ticketAmount).fetchJoin()
                 .where(stage.festival.id.eq(festivalId))
                 .fetch();
     }
@@ -28,7 +30,7 @@ public class StageRepositoryCustomImpl implements StageRepositoryCustom {
     public Optional<Stage> findByIdWithFetch(Long id) {
         return Optional.ofNullable(queryFactory.selectFrom(stage)
                 .leftJoin(stage.festival, festival).fetchJoin()
-                .leftJoin(festival.school).fetchJoin()
+                .leftJoin(festival.school, school).fetchJoin()
                 .where(stage.id.eq(id))
                 .fetchOne());
     }
