@@ -40,8 +40,8 @@ jobs:
       - name: assign grant gradlew
         run: chmod +x gradlew
 
-      - name: build with gradle
-        run: ./gradlew build
+      - name: Test with gradle
+        run: ./gradlew --info test
 
       - name: 테스트 결과 PR에 커멘트 등록
         uses: EnricoMi/publish-unit-test-result-action@v1
