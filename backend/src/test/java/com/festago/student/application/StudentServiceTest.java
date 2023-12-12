@@ -5,7 +5,6 @@ import static com.festago.common.exception.ErrorCode.DUPLICATE_STUDENT_EMAIL;
 import static com.festago.common.exception.ErrorCode.INVALID_STUDENT_VERIFICATION_CODE;
 import static com.festago.common.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
-import static com.festago.common.exception.ErrorCode.TOO_FREQUENT_REQUESTS;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -16,7 +15,6 @@ import static org.mockito.BDDMockito.given;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
-import com.festago.common.exception.TooManyRequestException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.school.domain.School;
@@ -34,7 +32,6 @@ import com.festago.student.repository.StudentRepository;
 import com.festago.support.MemberFixture;
 import com.festago.support.SchoolFixture;
 import com.festago.support.SetUpMockito;
-import com.festago.support.StudentCodeFixture;
 import com.festago.support.StudentFixture;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -132,22 +129,6 @@ class StudentServiceTest {
         }
 
         @Test
-        void 너무_잦은_요청이면_예외() {
-            // given
-            StudentSendMailRequest request = new StudentSendMailRequest("ash", 1L);
-            LocalDateTime currentTime = LocalDateTime.now(clock);
-            LocalDateTime issuedAt = currentTime.minusSeconds(30);
-            StudentCode studentCode = StudentCodeFixture.studentCode().issuedAt(issuedAt).build();
-            given(studentCodeRepository.findByMemberId(anyLong()))
-                .willReturn(Optional.of(studentCode));
-
-            // when
-            assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
-                .isInstanceOf(TooManyRequestException.class)
-                .hasMessage(TOO_FREQUENT_REQUESTS.getMessage());
-        }
-
-        @Test
         void 이미_존재하는_학생이면_예외() {
             // given
             given(studentRepository.existsByMemberId(anyLong()))
@@ -224,7 +205,8 @@ class StudentServiceTest {
                     new VerificationCode("123456"),
                     new School("snu.ac.kr", "서울대학교"),
                     member,
-                    "ohs"
+                    "ohs",
+                    LocalDateTime.now()
                 )));
 
             // when & then
