@@ -3,7 +3,6 @@ package com.festago.ticketing.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.config.JpaAuditingConfig;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.member.domain.Member;
@@ -28,12 +27,10 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-@Import(JpaAuditingConfig.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @RepositoryTest
