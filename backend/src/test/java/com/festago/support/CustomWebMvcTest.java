@@ -15,4 +15,5 @@ import org.springframework.test.context.TestExecutionListeners.MergeMode;
     ResetMockTestExecutionListener.class}, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 public @interface CustomWebMvcTest {
 
+    Class<?>[] value() default {};
 }
