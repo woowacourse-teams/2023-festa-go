@@ -1,11 +1,15 @@
 package com.festago.support;
 
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestExecutionListeners;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
-@ExtendWith(DatabaseClearExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@TestExecutionListeners(value = {
+    ResetMockTestExecutionListener.class,
+    DatabaseClearTestExecutionListener.class
+}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
+@Import({TestTimeConfig.class})
 public abstract class ApplicationIntegrationTest {
 
 }
