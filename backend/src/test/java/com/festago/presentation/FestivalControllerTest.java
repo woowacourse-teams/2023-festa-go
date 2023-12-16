@@ -8,7 +8,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,11 +27,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@CustomWebMvcTest(FestivalController.class)
+@CustomWebMvcTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class FestivalControllerTest {
@@ -43,7 +41,7 @@ class FestivalControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @MockBean
+    @Autowired
     FestivalService festivalService;
 
     @Captor
@@ -64,7 +62,6 @@ class FestivalControllerTest {
         String content = mockMvc.perform(get("/festivals")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andDo(print())
             .andReturn()
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);
@@ -90,7 +87,6 @@ class FestivalControllerTest {
         String content = mockMvc.perform(get("/festivals/{festivalId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andDo(print())
             .andReturn()
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);

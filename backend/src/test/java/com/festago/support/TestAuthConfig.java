@@ -2,6 +2,7 @@ package com.festago.support;
 
 import com.festago.auth.application.AuthExtractor;
 import com.festago.presentation.auth.AuthenticateContext;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -15,6 +16,6 @@ public class TestAuthConfig {
 
     @Bean
     public AuthExtractor authExtractor(AuthenticateContext authenticateContext) {
-        return new MockAuthExtractor(authenticateContext);
+        return Mockito.spy(new MockAuthExtractor(authenticateContext));
     }
 }
