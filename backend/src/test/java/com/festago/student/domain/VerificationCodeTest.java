@@ -3,7 +3,7 @@ package com.festago.student.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.common.exception.UnexpectedException;
+import com.festago.common.exception.ValidException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -18,8 +18,8 @@ class VerificationCodeTest {
     void null_이면_예외() {
         // when & then
         assertThatThrownBy(() -> new VerificationCode(null))
-            .isInstanceOf(UnexpectedException.class)
-            .hasMessage("VerificationCode는 null 또는 공백이 될 수 없습니다.");
+            .isInstanceOf(ValidException.class)
+            .hasMessage("VerificationCode은/는 null 또는 공백이 될 수 없습니다.");
     }
 
     @ParameterizedTest
@@ -27,7 +27,7 @@ class VerificationCodeTest {
     void 길이가_6자리가_아니면_예외(String code) {
         // when & then
         assertThatThrownBy(() -> new VerificationCode(code))
-            .isInstanceOf(UnexpectedException.class)
+            .isInstanceOf(ValidException.class)
             .hasMessage("VerificationCode의 길이는 6 이어야 합니다.");
     }
 
@@ -35,7 +35,7 @@ class VerificationCodeTest {
     void 숫자가_아니면_예외() {
         // when & then
         assertThatThrownBy(() -> new VerificationCode("일이삼사오육"))
-            .isInstanceOf(UnexpectedException.class)
+            .isInstanceOf(ValidException.class)
             .hasMessage("VerificationCode는 0~9의 양수 형식이어야 합니다.");
     }
 
@@ -43,7 +43,7 @@ class VerificationCodeTest {
     void 음수이면_예외() {
         // when & then
         assertThatThrownBy(() -> new VerificationCode("-12345"))
-            .isInstanceOf(UnexpectedException.class)
+            .isInstanceOf(ValidException.class)
             .hasMessage("VerificationCode는 0~9의 양수 형식이어야 합니다.");
     }
 
