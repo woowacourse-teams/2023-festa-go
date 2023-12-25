@@ -30,7 +30,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -54,7 +53,7 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
     @Autowired
     SchoolRepository schoolRepository;
 
-    @SpyBean
+    @Autowired
     Clock clock;
 
     @Test
@@ -78,8 +77,7 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         // given
         LocalDateTime stageStartTime = LocalDateTime.parse("2022-07-26T18:00:00");
         doReturn(stageStartTime.minusWeeks(1).toInstant(ZoneOffset.UTC))
-            .when(clock)
-            .instant();
+            .when(clock).instant();
         School school = schoolRepository.save(SchoolFixture.school().build());
         Festival festival = festivalRepository.save(FestivalFixture.festival()
             .school(school)
@@ -107,8 +105,7 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         // given
         LocalDateTime stageStartTime = LocalDateTime.parse("2022-07-26T18:00:00");
         doReturn(stageStartTime.minusWeeks(1).toInstant(ZoneOffset.UTC))
-            .when(clock)
-            .instant();
+            .when(clock).instant();
         School school = schoolRepository.save(SchoolFixture.school().build());
         Festival festival = festivalRepository.save(FestivalFixture.festival()
             .school(school)

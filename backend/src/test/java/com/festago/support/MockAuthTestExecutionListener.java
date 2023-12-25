@@ -5,9 +5,9 @@ import com.festago.presentation.auth.AuthenticateContext;
 import java.lang.reflect.Method;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestContext;
-import org.springframework.test.context.support.AbstractTestExecutionListener;
+import org.springframework.test.context.TestExecutionListener;
 
-public class MockAuthTestExecutionListener extends AbstractTestExecutionListener {
+public class MockAuthTestExecutionListener implements TestExecutionListener {
 
     @Override
     public void beforeTestMethod(TestContext testContext) throws Exception {
