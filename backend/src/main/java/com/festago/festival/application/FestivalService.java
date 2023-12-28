@@ -6,8 +6,8 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
+import com.festago.festival.dto.DetailFestivalResponse;
 import com.festago.festival.dto.FestivalCreateRequest;
-import com.festago.festival.dto.FestivalDetailResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.dto.FestivalUpdateRequest;
 import com.festago.festival.dto.FestivalsResponse;
@@ -56,12 +56,12 @@ public class FestivalService {
     }
 
     @Transactional(readOnly = true)
-    public FestivalDetailResponse findDetail(Long festivalId) {
+    public DetailFestivalResponse findDetail(Long festivalId) {
         Festival festival = findFestival(festivalId);
         List<Stage> stages = stageRepository.findAllDetailByFestivalId(festivalId).stream()
             .sorted(comparing(Stage::getStartTime))
             .toList();
-        return FestivalDetailResponse.of(festival, stages);
+        return DetailFestivalResponse.of(festival, stages);
     }
 
     private Festival findFestival(Long festivalId) {

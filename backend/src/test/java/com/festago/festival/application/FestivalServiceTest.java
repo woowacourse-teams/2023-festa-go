@@ -12,14 +12,14 @@ import static org.mockito.BDDMockito.given;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
+import com.festago.festival.dto.DetailFestivalResponse;
 import com.festago.festival.dto.FestivalCreateRequest;
-import com.festago.festival.dto.FestivalDetailResponse;
-import com.festago.festival.dto.FestivalDetailStageResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
+import com.festago.stage.dto.DetailStageResponse;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.SchoolFixture;
@@ -146,10 +146,10 @@ class FestivalServiceTest {
             given(stageRepository.findAllDetailByFestivalId(festival.getId())).willReturn(List.of(stage2, stage1));
 
             // when
-            FestivalDetailResponse response = festivalService.findDetail(festivalId);
+            DetailFestivalResponse response = festivalService.findDetail(festivalId);
 
             // then
-            List<Long> stageIds = response.stages().stream().map(FestivalDetailStageResponse::id).toList();
+            List<Long> stageIds = response.stages().stream().map(DetailStageResponse::id).toList();
             assertThat(stageIds).containsExactly(1L, 2L);
         }
     }

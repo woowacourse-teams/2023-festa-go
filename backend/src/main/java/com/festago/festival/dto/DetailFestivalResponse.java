@@ -2,23 +2,24 @@ package com.festago.festival.dto;
 
 import com.festago.festival.domain.Festival;
 import com.festago.stage.domain.Stage;
+import com.festago.stage.dto.DetailStageResponse;
 import java.time.LocalDate;
 import java.util.List;
 
-public record FestivalDetailResponse(
+public record DetailFestivalResponse(
     Long id,
     Long schoolId,
     String name,
     LocalDate startDate,
     LocalDate endDate,
     String thumbnail,
-    List<FestivalDetailStageResponse> stages) {
+    List<DetailStageResponse> stages) {
 
-    public static FestivalDetailResponse of(Festival festival, List<Stage> stages) {
-        List<FestivalDetailStageResponse> stageResponses = stages.stream()
-            .map(FestivalDetailStageResponse::from)
+    public static DetailFestivalResponse of(Festival festival, List<Stage> stages) {
+        List<DetailStageResponse> stageResponses = stages.stream()
+            .map(DetailStageResponse::from)
             .toList();
-        return new FestivalDetailResponse(
+        return new DetailFestivalResponse(
             festival.getId(),
             festival.getSchool().getId(),
             festival.getName(),
