@@ -4,6 +4,8 @@ import static com.festago.common.exception.ErrorCode.NOT_ENOUGH_PERMISSION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.festago.auth.AuthenticateContext;
+import com.festago.auth.RoleArgumentResolver;
 import com.festago.auth.domain.Role;
 import com.festago.common.exception.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;

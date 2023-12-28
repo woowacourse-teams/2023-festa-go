@@ -1,4 +1,4 @@
-package com.festago.presentation;
+package com.festago.festival.presentation;
 
 import com.festago.festival.application.FestivalService;
 import com.festago.festival.dto.FestivalDetailResponse;

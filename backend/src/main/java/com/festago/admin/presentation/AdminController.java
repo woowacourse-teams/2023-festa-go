@@ -1,4 +1,4 @@
-package com.festago.presentation;
+package com.festago.admin.presentation;
 
 import com.festago.auth.annotation.Admin;
 import com.festago.auth.application.AdminAuthService;
