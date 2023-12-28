@@ -45,6 +45,11 @@ public class MemberFCMService {
         saveOriginMemberFCM(accessToken, fcmToken);
     }
 
+    private void saveNewMemberFCM(String accessToken, String fcmToken) {
+        Long memberId = extractMemberId(accessToken);
+        memberFCMRepository.save(new MemberFCM(memberId, fcmToken));
+    }
+
     private void saveOriginMemberFCM(String accessToken, String fcmToken) {
         Long memberId = extractMemberId(accessToken);
         Optional<MemberFCM> memberFCM = memberFCMRepository.findMemberFCMByMemberIdAndFcmToken(memberId, fcmToken);
@@ -56,11 +61,6 @@ public class MemberFCMService {
     private Long extractMemberId(String accessToken) {
         AuthPayload authPayload = authExtractor.extract(accessToken);
         return authPayload.getMemberId();
-    }
-
-    private void saveNewMemberFCM(String accessToken, String fcmToken) {
-        Long memberId = extractMemberId(accessToken);
-        memberFCMRepository.save(new MemberFCM(memberId, fcmToken));
     }
 
     @Async
