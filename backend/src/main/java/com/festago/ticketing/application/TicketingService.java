@@ -39,18 +39,10 @@ public class TicketingService {
         validateAlreadyReserved(member, ticket);
         validateStudent(member, ticket);
         int reserveSequence = getReserveSequence(request.ticketId());
-        MemberTicket memberTicket = ticket.createMemberTicket(member, reserveSequence, LocalDateTime.now(clock));
+        MemberTicket memberTicket = MemberTicket.createMemberTicket(ticket, member, reserveSequence,
+            LocalDateTime.now(clock));
         memberTicketRepository.save(memberTicket);
         return TicketingResponse.from(memberTicket);
-    }
-
-    private void validateStudent(Member member, Ticket ticket) {
-        if (ticket.getTicketType() != TicketType.STUDENT) {
-            return;
-        }
-        if (!studentRepository.existsByMemberAndSchoolId(member, ticket.getSchoolId())) {
-            throw new BadRequestException(ErrorCode.NEED_STUDENT_VERIFICATION);
-        }
     }
 
     private Ticket findTicketById(Long ticketId) {
@@ -66,6 +58,15 @@ public class TicketingService {
     private void validateAlreadyReserved(Member member, Ticket ticket) {
         if (memberTicketRepository.existsByOwnerAndStage(member, ticket.getStage())) {
             throw new BadRequestException(ErrorCode.RESERVE_TICKET_OVER_AMOUNT);
+        }
+    }
+
+    private void validateStudent(Member member, Ticket ticket) {
+        if (ticket.getTicketType() != TicketType.STUDENT) {
+            return;
+        }
+        if (!studentRepository.existsByMemberAndSchoolId(member, ticket.getSchoolId())) {
+            throw new BadRequestException(ErrorCode.NEED_STUDENT_VERIFICATION);
         }
     }
 

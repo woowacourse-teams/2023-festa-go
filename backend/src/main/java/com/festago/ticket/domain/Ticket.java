@@ -4,10 +4,8 @@ import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.util.Validator;
-import com.festago.member.domain.Member;
 import com.festago.school.domain.School;
 import com.festago.stage.domain.Stage;
-import com.festago.ticketing.domain.MemberTicket;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -121,12 +119,9 @@ public class Ticket extends BaseTimeEntity {
         }
     }
 
-    public MemberTicket createMemberTicket(Member member, int reservationSequence, LocalDateTime currentTime) {
-        if (stage.isStart(currentTime)) {
-            throw new BadRequestException(ErrorCode.TICKET_CANNOT_RESERVE_STAGE_START);
-        }
+    public TicketInfo extractTicketInfo(int reservationSequence) {
         LocalDateTime entryTime = calculateEntryTime(reservationSequence);
-        return new MemberTicket(member, stage, reservationSequence, entryTime, ticketType);
+        return new TicketInfo(stage, reservationSequence, entryTime, ticketType);
     }
 
     private LocalDateTime calculateEntryTime(int reservationSequence) {
@@ -138,6 +133,10 @@ public class Ticket extends BaseTimeEntity {
             }
         }
         throw new BadRequestException(ErrorCode.TICKET_SOLD_OUT);
+    }
+
+    public boolean alreadyStart(LocalDateTime currentTime) {
+        return stage.isStart(currentTime);
     }
 
     public Long getId() {
