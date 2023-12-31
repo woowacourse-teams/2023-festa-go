@@ -8,9 +8,11 @@ import com.festago.fcm.domain.MemberFCM;
 import com.festago.fcm.repository.MemberFCMRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
@@ -19,7 +21,8 @@ public class MemberRegisterEventListener {
     private final AuthExtractor authExtractor;
     private final MemberFCMRepository memberFCMRepository;
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Async
     @Transactional
     public void registerNewMember(NewMemberEvent event) {
         if (event.isNew()) {
@@ -47,7 +50,8 @@ public class MemberRegisterEventListener {
         }
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Async
     @Transactional
     public void deleteMember(DeleteMemberEvent event) {
         memberFCMRepository.deleteAllByMemberId(event.memberId());
