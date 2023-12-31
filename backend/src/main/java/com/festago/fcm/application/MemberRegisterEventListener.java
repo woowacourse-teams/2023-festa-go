@@ -3,7 +3,7 @@ package com.festago.fcm.application;
 import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.dto.event.DeleteMemberEvent;
-import com.festago.auth.dto.event.NewMemberEvent;
+import com.festago.auth.dto.event.MemberRegisterEvent;
 import com.festago.fcm.domain.MemberFCM;
 import com.festago.fcm.repository.MemberFCMRepository;
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class MemberRegisterEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     @Transactional
-    public void registerNewMember(NewMemberEvent event) {
+    public void registerNewMember(MemberRegisterEvent event) {
         if (event.isNew()) {
             saveNewMemberFCM(event.accessToken(), event.fcmToken());
             return;

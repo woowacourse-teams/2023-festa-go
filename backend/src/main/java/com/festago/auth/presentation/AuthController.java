@@ -5,7 +5,7 @@ import com.festago.auth.application.AuthFacadeService;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
 import com.festago.auth.dto.event.DeleteMemberEvent;
-import com.festago.auth.dto.event.NewMemberEvent;
+import com.festago.auth.dto.event.MemberRegisterEvent;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +40,7 @@ public class AuthController {
     private void registerFCM(LoginResponse response, LoginRequest request) {
         String accessToken = response.accessToken();
         String fcmToken = request.fcmToken();
-        publisher.publishEvent(new NewMemberEvent(response.isNew(), accessToken, fcmToken));
+        publisher.publishEvent(new MemberRegisterEvent(response.isNew(), accessToken, fcmToken));
     }
 
     @DeleteMapping

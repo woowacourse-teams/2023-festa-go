@@ -1,6 +1,6 @@
 package com.festago.auth.dto.event;
 
-public record NewMemberEvent(
+public record MemberRegisterEvent(
     boolean isNew,
     String accessToken,
     String fcmToken
