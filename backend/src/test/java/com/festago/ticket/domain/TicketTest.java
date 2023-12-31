@@ -4,11 +4,16 @@ import static com.festago.common.exception.ErrorCode.EARLY_TICKET_ENTRY_THAN_OPE
 import static com.festago.common.exception.ErrorCode.EARLY_TICKET_ENTRY_TIME;
 import static com.festago.common.exception.ErrorCode.INVALID_TICKET_CREATE_TIME;
 import static com.festago.common.exception.ErrorCode.LATE_TICKET_ENTRY_TIME;
+import static com.festago.common.exception.ErrorCode.TICKET_SOLD_OUT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.common.exception.BadRequestException;
+import com.festago.festival.domain.Festival;
+import com.festago.member.domain.Member;
 import com.festago.stage.domain.Stage;
+import com.festago.support.FestivalFixture;
+import com.festago.support.MemberFixture;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
 import java.time.LocalDateTime;
@@ -122,94 +127,35 @@ class TicketTest {
     }
 
     @Nested
-    class 예매_티켓_생성 {
+    class 티켓_정보_추출 {
 
-//        @Test
-//        void 최대_수량보다_많으면_예외() {
-//            // given
-//            LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
-//            LocalDateTime now = stageStartTime.minusHours(6);
-//            Festival festival = FestivalFixture.festival()
-//                .startDate(stageStartTime.toLocalDate())
-//                .endDate(stageStartTime.toLocalDate())
-//                .build();
-//            Stage stage = StageFixture.stage()
-//                .startTime(stageStartTime)
-//                .ticketOpenTime(stageStartTime.minusDays(1))
-//                .festival(festival)
-//                .build();
-//            Ticket ticket = TicketFixture.ticket()
-//                .stage(stage)
-//                .build();
-//            Member member = MemberFixture.member()
-//                .id(1L)
-//                .build();
-//
-//            // when & then
-//            assertThatThrownBy(() -> ticket.createMemberTicket(member, 101, now))
-//                .isInstanceOf(BadRequestException.class)
-//                .hasMessage(TICKET_SOLD_OUT.getMessage());
-//        }
+        @Test
+        void 최대_수량보다_많으면_예외() {
+            // given
+            LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
+            LocalDateTime now = stageStartTime.minusHours(6);
+            Festival festival = FestivalFixture.festival()
+                .startDate(stageStartTime.toLocalDate())
+                .endDate(stageStartTime.toLocalDate())
+                .build();
+            Stage stage = StageFixture.stage()
+                .startTime(stageStartTime)
+                .ticketOpenTime(stageStartTime.minusDays(1))
+                .festival(festival)
+                .build();
+            Ticket ticket = TicketFixture.ticket()
+                .stage(stage)
+                .build();
+            Member member = MemberFixture.member()
+                .id(1L)
+                .build();
 
-//        @Test
-//        void 공연의_시간이_지나고_예매하면_예외() {
-//            LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
-//            LocalDateTime now = stageStartTime.plusHours(1);
-//            Festival festival = FestivalFixture.festival()
-//                .startDate(stageStartTime.toLocalDate())
-//                .endDate(stageStartTime.toLocalDate())
-//                .build();
-//            Stage stage = StageFixture.stage()
-//                .startTime(stageStartTime)
-//                .ticketOpenTime(stageStartTime.minusDays(1))
-//                .festival(festival)
-//                .build();
-//            Ticket ticket = TicketFixture.ticket()
-//                .stage(stage)
-//                .build();
-//            Member member = MemberFixture.member()
-//                .id(1L)
-//                .build();
-//
-//            ticket.addTicketEntryTime(LocalDateTime.MIN, stageStartTime.minusHours(1), 100);
-//
-//            // when & then
-//            assertThatThrownBy(() -> ticket.createMemberTicket(member, 1, now))
-//                .isInstanceOf(BadRequestException.class)
-//                .hasMessage(TICKET_CANNOT_RESERVE_STAGE_START.getMessage());
-//        }
+            ReservationSequence overSequence = new ReservationSequence(101);
 
-//        @ParameterizedTest
-//        @ValueSource(ints = {1, 100})
-//        void 성공(int reservationSequence) {
-//            // given
-//            LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
-//            LocalDateTime now = stageStartTime.minusHours(6);
-//            Festival festival = FestivalFixture.festival()
-//                .startDate(stageStartTime.toLocalDate())
-//                .endDate(stageStartTime.toLocalDate())
-//                .build();
-//            Stage stage = StageFixture.stage()
-//                .startTime(stageStartTime)
-//                .ticketOpenTime(stageStartTime.minusDays(1))
-//                .festival(festival)
-//                .build();
-//            Ticket ticket = TicketFixture.ticket()
-//                .stage(stage)
-//                .build();
-//            Member member = MemberFixture.member()
-//                .id(1L)
-//                .build();
-//
-//            ticket.addTicketEntryTime(LocalDateTime.MIN, stageStartTime.minusHours(1), 50);
-//            ticket.addTicketEntryTime(LocalDateTime.MIN, stageStartTime.minusHours(2), 30);
-//            ticket.addTicketEntryTime(LocalDateTime.MIN, stageStartTime.minusHours(3), 20);
-//
-//            // when
-//            MemberTicket memberTicket = ticket.createMemberTicket(member, reservationSequence, now);
-//
-//            // then
-//            assertThat(memberTicket.getOwner()).isEqualTo(member);
-//        }
+            // when & then
+            assertThatThrownBy(() -> ticket.extractTicketInfo(overSequence))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(TICKET_SOLD_OUT.getMessage());
+        }
     }
 }
