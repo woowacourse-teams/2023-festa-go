@@ -6,6 +6,7 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.util.Validator;
 import com.festago.member.domain.Member;
 import com.festago.stage.domain.Stage;
+import com.festago.ticket.domain.ReservationSequence;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketInfo;
 import com.festago.ticket.domain.TicketType;
@@ -72,24 +73,24 @@ public class MemberTicket extends BaseTimeEntity {
         this.ticketType = ticketType;
     }
 
-    public static MemberTicket createMemberTicket(Ticket ticket, Member member, int reservationSequence,
+    public static MemberTicket createMemberTicket(Ticket ticket, Member member, ReservationSequence sequence,
                                                   LocalDateTime currentTime) {
         if (ticket.alreadyStart(currentTime)) {
             throw new BadRequestException(ErrorCode.TICKET_CANNOT_RESERVE_STAGE_START);
         }
 
-        TicketInfo ticketInfo = extractTicketInfo(ticket, reservationSequence);
+        TicketInfo ticketInfo = extractTicketInfo(ticket, sequence);
         return new MemberTicket(
             member,
             ticketInfo.getStage(),
-            ticketInfo.getReservationSequence(),
+            ticketInfo.getSequence().getValue(),
             ticketInfo.getEntryTime(),
             ticketInfo.getTicketType()
         );
     }
 
-    private static TicketInfo extractTicketInfo(Ticket ticket, int reservationSequence) {
-        return ticket.extractTicketInfo(reservationSequence);
+    private static TicketInfo extractTicketInfo(Ticket ticket, ReservationSequence sequence) {
+        return ticket.extractTicketInfo(sequence);
     }
 
     private void validate(Member owner, Stage stage, int number, LocalDateTime entryTime, TicketType ticketType) {

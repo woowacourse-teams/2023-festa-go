@@ -119,16 +119,20 @@ public class Ticket extends BaseTimeEntity {
         }
     }
 
-    public TicketInfo extractTicketInfo(int reservationSequence) {
-        LocalDateTime entryTime = calculateEntryTime(reservationSequence);
-        return new TicketInfo(stage, reservationSequence, entryTime, ticketType);
+    public TicketInfo extractTicketInfo(ReservationSequence sequence) {
+        LocalDateTime entryTime = calculateEntryTime(sequence);
+        return new TicketInfo(stage,
+            sequence,
+            entryTime,
+            ticketType);
     }
 
-    private LocalDateTime calculateEntryTime(int reservationSequence) {
+    private LocalDateTime calculateEntryTime(ReservationSequence sequence) {
         int lastSequence = 0;
+        int sequenceValue = sequence.getValue();
         for (TicketEntryTime ticketEntryTime : ticketEntryTimes) {
             lastSequence += ticketEntryTime.getAmount();
-            if (reservationSequence <= lastSequence) {
+            if (sequenceValue <= lastSequence) {
                 return ticketEntryTime.getEntryTime();
             }
         }
