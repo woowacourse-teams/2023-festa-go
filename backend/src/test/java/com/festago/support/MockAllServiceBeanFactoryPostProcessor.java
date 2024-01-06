@@ -15,10 +15,10 @@ public class MockAllServiceBeanFactoryPostProcessor implements BeanFactoryPostPr
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
         ClassFilter classFilter = ClassFilter.of(clazz -> clazz.isAnnotationPresent(Service.class));
         ReflectionUtils.findAllClassesInPackage("com.festago", classFilter)
             .forEach(clazz -> {
-                BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
                 registry.registerBeanDefinition(clazz.getSimpleName(), new RootBeanDefinition(clazz));
                 beanFactory.registerSingleton(clazz.getSimpleName(), mock(clazz));
             });
