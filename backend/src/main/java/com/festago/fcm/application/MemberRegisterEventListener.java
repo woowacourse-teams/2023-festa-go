@@ -2,7 +2,6 @@ package com.festago.fcm.application;
 
 import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.AuthPayload;
-import com.festago.auth.dto.event.DeleteMemberEvent;
 import com.festago.auth.dto.event.MemberRegisterEvent;
 import com.festago.fcm.domain.MemberFCM;
 import com.festago.fcm.repository.MemberFCMRepository;
@@ -48,12 +47,5 @@ public class MemberRegisterEventListener {
         if (memberFCM.isEmpty()) {
             memberFCMRepository.save(new MemberFCM(memberId, fcmToken));
         }
-    }
-
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    @Async
-    @Transactional
-    public void deleteMember(DeleteMemberEvent event) {
-        memberFCMRepository.deleteAllByMemberId(event.memberId());
     }
 }
