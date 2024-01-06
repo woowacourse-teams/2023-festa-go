@@ -25,7 +25,7 @@ public class MemberRegisterEventListener {
     public void registerNewMember(MemberRegisterEvent event) {
         Long memberId = extractMemberId(event.accessToken());
         String fcmToken = event.fcmToken();
-        memberFCMRepository.findMemberFCMByMemberIdAndFcmToken(memberId, fcmToken)
+        memberFCMRepository.findByMemberIdAndFcmToken(memberId, fcmToken)
             .ifPresentOrElse(
                 ignore -> {
                 },
