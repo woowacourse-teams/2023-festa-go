@@ -119,9 +119,9 @@ public class Ticket extends BaseTimeEntity {
         }
     }
 
-    public TicketInfo extractTicketInfo(ReservationSequence sequence) {
+    public TicketReserveInfo extractTicketInfo(ReservationSequence sequence) {
         LocalDateTime entryTime = calculateEntryTime(sequence);
-        return new TicketInfo(stage,
+        return new TicketReserveInfo(stage,
             sequence,
             entryTime,
             ticketType);
