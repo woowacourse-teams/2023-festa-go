@@ -6,6 +6,7 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.student.repository.StudentRepository;
+import com.festago.ticket.domain.ReservationSequence;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketAmount;
 import com.festago.ticket.domain.TicketType;
@@ -38,19 +39,11 @@ public class TicketingService {
         Member member = findMemberById(memberId);
         validateAlreadyReserved(member, ticket);
         validateStudent(member, ticket);
-        int reserveSequence = getReserveSequence(request.ticketId());
-        MemberTicket memberTicket = ticket.createMemberTicket(member, reserveSequence, LocalDateTime.now(clock));
+        ReservationSequence sequence = getReserveSequence(request.ticketId());
+        MemberTicket memberTicket = MemberTicket.createMemberTicket(ticket, member, sequence,
+            LocalDateTime.now(clock));
         memberTicketRepository.save(memberTicket);
         return TicketingResponse.from(memberTicket);
-    }
-
-    private void validateStudent(Member member, Ticket ticket) {
-        if (ticket.getTicketType() != TicketType.STUDENT) {
-            return;
-        }
-        if (!studentRepository.existsByMemberAndSchoolId(member, ticket.getSchoolId())) {
-            throw new BadRequestException(ErrorCode.NEED_STUDENT_VERIFICATION);
-        }
     }
 
     private Ticket findTicketById(Long ticketId) {
@@ -69,10 +62,19 @@ public class TicketingService {
         }
     }
 
-    private int getReserveSequence(Long ticketId) {
+    private void validateStudent(Member member, Ticket ticket) {
+        if (ticket.getTicketType() != TicketType.STUDENT) {
+            return;
+        }
+        if (!studentRepository.existsByMemberAndSchoolId(member, ticket.getSchoolId())) {
+            throw new BadRequestException(ErrorCode.NEED_STUDENT_VERIFICATION);
+        }
+    }
+
+    private ReservationSequence getReserveSequence(Long ticketId) {
         TicketAmount ticketAmount = findTicketAmountById(ticketId);
         ticketAmount.increaseReservedAmount();
-        return ticketAmount.getReservedAmount();
+        return new ReservationSequence(ticketAmount.getReservedAmount());
     }
 
     private TicketAmount findTicketAmountById(Long ticketId) {

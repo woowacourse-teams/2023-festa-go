@@ -1,4 +1,4 @@
-package com.festago.presentation;
+package com.festago.entry.presentation;
 
 
 import com.festago.entry.application.EntryService;

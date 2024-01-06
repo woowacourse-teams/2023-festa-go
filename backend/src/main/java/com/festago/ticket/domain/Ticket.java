@@ -4,10 +4,8 @@ import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.util.Validator;
-import com.festago.member.domain.Member;
 import com.festago.school.domain.School;
 import com.festago.stage.domain.Stage;
-import com.festago.ticketing.domain.MemberTicket;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -121,23 +119,28 @@ public class Ticket extends BaseTimeEntity {
         }
     }
 
-    public MemberTicket createMemberTicket(Member member, int reservationSequence, LocalDateTime currentTime) {
-        if (stage.isStart(currentTime)) {
-            throw new BadRequestException(ErrorCode.TICKET_CANNOT_RESERVE_STAGE_START);
-        }
-        LocalDateTime entryTime = calculateEntryTime(reservationSequence);
-        return new MemberTicket(member, stage, reservationSequence, entryTime, ticketType);
+    public TicketReserveInfo extractTicketInfo(ReservationSequence sequence) {
+        LocalDateTime entryTime = calculateEntryTime(sequence);
+        return new TicketReserveInfo(stage,
+            sequence,
+            entryTime,
+            ticketType);
     }
 
-    private LocalDateTime calculateEntryTime(int reservationSequence) {
+    private LocalDateTime calculateEntryTime(ReservationSequence sequence) {
         int lastSequence = 0;
+        int sequenceValue = sequence.getValue();
         for (TicketEntryTime ticketEntryTime : ticketEntryTimes) {
             lastSequence += ticketEntryTime.getAmount();
-            if (reservationSequence <= lastSequence) {
+            if (sequenceValue <= lastSequence) {
                 return ticketEntryTime.getEntryTime();
             }
         }
         throw new BadRequestException(ErrorCode.TICKET_SOLD_OUT);
+    }
+
+    public boolean alreadyStart(LocalDateTime currentTime) {
+        return stage.isStart(currentTime);
     }
 
     public Long getId() {

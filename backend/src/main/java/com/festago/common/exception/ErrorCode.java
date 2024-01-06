@@ -60,7 +60,7 @@ public enum ErrorCode {
     FOR_TEST_ERROR("테스트용 에러입니다."),
     FAIL_SEND_FCM_MESSAGE("FCM Message 전송에 실패했습니다."),
     FCM_NOT_FOUND("유효하지 않은 MemberFCM이 감지 되었습니다."),
-    ;
+    TICKET_SEQUENCE_DATA_ERROR("입장 순서 값의 데이터 정합성에 문제가 발생했습니다.");
 
     private final String message;
 

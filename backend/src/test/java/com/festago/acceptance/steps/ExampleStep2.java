@@ -1,7 +1,7 @@
 package com.festago.acceptance.steps;
 
 import com.festago.acceptance.CucumberClient;
-import com.festago.festival.dto.FestivalDetailResponse;
+import com.festago.festival.dto.DetailFestivalResponse;
 import com.festago.festival.dto.FestivalResponse;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
@@ -15,12 +15,12 @@ public class ExampleStep2 {
     @When("축제를 검색하면")
     public void given() {
         FestivalResponse response = (FestivalResponse) cucumberClient.getData("festivalData");
-        FestivalDetailResponse festivalInfo = RestAssured.given()
+        DetailFestivalResponse festivalInfo = RestAssured.given()
             .when()
             .get("festivals/{festivalId}", response.id())
             .then()
             .extract()
-            .as(FestivalDetailResponse.class);
+            .as(DetailFestivalResponse.class);
         cucumberClient.addData("searchResult", festivalInfo);
     }
 }

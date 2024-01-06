@@ -1,4 +1,4 @@
-package com.festago.presentation.auth;
+package com.festago.auth;
 
 import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.application.TokenExtractor;

@@ -9,7 +9,7 @@ public interface MemberFCMRepository extends JpaRepository<MemberFCM, Long> {
 
     List<MemberFCM> findByMemberId(Long memberId);
 
-    Optional<MemberFCM> findMemberFCMByMemberIdAndFcmToken(Long memberId, String fcmToken);
+    Optional<MemberFCM> findByMemberIdAndFcmToken(Long memberId, String fcmToken);
 
     void deleteAllByMemberId(Long memberId);
 }

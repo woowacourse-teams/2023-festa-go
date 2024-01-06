@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.festival.application.FestivalService;
 import com.festago.festival.domain.Festival;
+import com.festago.festival.dto.DetailFestivalResponse;
+import com.festago.festival.dto.DetailFestivalResponse.DetailStageResponse;
+import com.festago.festival.dto.DetailFestivalResponse.DetailStageResponse.DetailTicketResponse;
 import com.festago.festival.dto.FestivalCreateRequest;
-import com.festago.festival.dto.FestivalDetailResponse;
-import com.festago.festival.dto.FestivalDetailStageResponse;
-import com.festago.festival.dto.FestivalDetailTicketResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
@@ -81,15 +81,16 @@ class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
         ticket2.addTicketEntryTime(ticketOpenTime.minusHours(1), LocalDateTime.now().minusMinutes(10), 200);
 
         // when
-        FestivalDetailResponse response = festivalService.findDetail(festival.getId());
+        DetailFestivalResponse response = festivalService.findDetail(festival.getId());
 
         // then
         SoftAssertions.assertSoftly(softly -> {
-            List<FestivalDetailStageResponse> stages = response.stages();
+            List<DetailStageResponse> stages = response.stages();
             softly.assertThat(response.id()).isEqualTo(festival.getId());
-            softly.assertThat(stages.stream().map(FestivalDetailStageResponse::id).toList())
+            softly.assertThat(stages.stream().map(DetailStageResponse::id).toList())
                 .containsExactly(stage.getId());
-            softly.assertThat(stages.get(0).tickets().stream().map(FestivalDetailTicketResponse::id).toList())
+            softly.assertThat(
+                    stages.get(0).tickets().stream().map(DetailTicketResponse::id).toList())
                 .containsExactly(ticket1.getId(), ticket2.getId());
         });
     }

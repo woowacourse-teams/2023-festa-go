@@ -1,5 +1,6 @@
-package com.festago.presentation;
+package com.festago.common.handler;
 
+import com.festago.auth.AuthenticateContext;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.FestaGoException;
@@ -11,7 +12,6 @@ import com.festago.common.exception.UnauthorizedException;
 import com.festago.common.exception.UnexpectedException;
 import com.festago.common.exception.ValidException;
 import com.festago.common.exception.dto.ErrorResponse;
-import com.festago.presentation.auth.AuthenticateContext;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         (id: 1, role: MEMBER)
         FOR_TEST_ERROR
          com.festago.exception.InternalServerException: 테스트용 에러입니다.
-          at com.festago.presentation.AdminController.getWarn(AdminController.java:129)
+          at com.festago.admin.presentation.AdminController.getWarn(AdminController.java:129)
      */
 
     // ERROR
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         [🔴ERROR] - (POST /admin/error)
         (id: 1, role: MEMBER)
          java.lang.IllegalArgumentException: 테스트용 에러입니다.
-          at com.festago.presentation.AdminController.getError(AdminController.java:129)
+          at com.festago.admin.presentation.AdminController.getError(AdminController.java:129)
      */
 
     private final AuthenticateContext authenticateContext;

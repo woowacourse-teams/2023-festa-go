@@ -1,4 +1,4 @@
-package com.festago.presentation;
+package com.festago.school.presentation;
 
 import com.festago.school.application.SchoolService;
 import com.festago.school.dto.SchoolResponse;

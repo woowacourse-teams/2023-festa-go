@@ -15,6 +15,7 @@ import com.festago.auth.domain.Role;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
+import com.festago.auth.dto.event.MemberRegisterEvent;
 import com.festago.fcm.application.MemberFCMService;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -41,6 +43,9 @@ class AuthControllerTest {
 
     @Autowired
     MemberFCMService memberFCMService;
+
+    @Autowired
+    ApplicationEventPublisher publisher;
 
     @Test
     void OAuth2_로그인을_한다() throws Exception {
@@ -110,8 +115,8 @@ class AuthControllerTest {
         LoginResponse actual = objectMapper.readValue(response, LoginResponse.class);
 
         assertThat(actual).isEqualTo(expected);
-        verify(memberFCMService, times(1))
-            .saveMemberFCM(isNewMember, accessToken, fcmToken);
+        verify(publisher, times(1))
+            .publishEvent(any(MemberRegisterEvent.class));
     }
 
     @Test
@@ -136,7 +141,7 @@ class AuthControllerTest {
         LoginResponse actual = objectMapper.readValue(response, LoginResponse.class);
 
         assertThat(actual).isEqualTo(expected);
-        verify(memberFCMService, times(1))
-            .saveMemberFCM(isNewMember, accessToken, fcmToken);
+        verify(publisher, times(1))
+            .publishEvent(any(MemberRegisterEvent.class));
     }
 }

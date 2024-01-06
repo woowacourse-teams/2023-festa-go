@@ -1,4 +1,4 @@
-package com.festago.presentation;
+package com.festago.member.presentation;
 
 import com.festago.auth.annotation.Member;
 import com.festago.member.application.MemberService;

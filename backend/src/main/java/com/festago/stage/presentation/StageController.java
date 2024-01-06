@@ -1,4 +1,4 @@
-package com.festago.presentation;
+package com.festago.stage.presentation;
 
 import com.festago.stage.application.StageService;
 import com.festago.stage.dto.StageResponse;

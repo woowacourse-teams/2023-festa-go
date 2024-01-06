@@ -1,4 +1,4 @@
-package com.festago.presentation.common;
+package com.festago.common.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
