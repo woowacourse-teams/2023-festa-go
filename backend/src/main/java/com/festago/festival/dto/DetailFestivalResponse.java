@@ -1,6 +1,7 @@
 package com.festago.festival.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record DetailFestivalResponse(
@@ -12,4 +13,21 @@ public record DetailFestivalResponse(
     String thumbnail,
     List<DetailStageResponse> stages) {
 
+    public record DetailStageResponse(
+        Long id,
+        LocalDateTime startTime,
+        LocalDateTime ticketOpenTime,
+        String lineUp,
+        List<DetailTicketResponse> tickets
+    ) {
+
+        public record DetailTicketResponse(
+            Long id,
+            String ticketType,
+            Integer totalAmount,
+            Integer remainAmount
+        ) {
+
+        }
+    }
 }

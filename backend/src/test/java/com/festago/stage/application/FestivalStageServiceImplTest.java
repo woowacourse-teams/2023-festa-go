@@ -8,7 +8,7 @@ import static org.mockito.BDDMockito.given;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.DetailFestivalResponse;
-import com.festago.festival.dto.DetailStageResponse;
+import com.festago.festival.dto.DetailFestivalResponse.DetailStageResponse;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;

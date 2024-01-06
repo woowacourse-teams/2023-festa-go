@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.festago.festival.application.FestivalService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.DetailFestivalResponse;
-import com.festago.festival.dto.DetailStageResponse;
-import com.festago.festival.dto.DetailTicketResponse;
+import com.festago.festival.dto.DetailFestivalResponse.DetailStageResponse;
+import com.festago.festival.dto.DetailFestivalResponse.DetailStageResponse.DetailTicketResponse;
 import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.repository.FestivalRepository;
@@ -89,7 +89,8 @@ class FestivalServiceIntegrationTest extends ApplicationIntegrationTest {
             softly.assertThat(response.id()).isEqualTo(festival.getId());
             softly.assertThat(stages.stream().map(DetailStageResponse::id).toList())
                 .containsExactly(stage.getId());
-            softly.assertThat(stages.get(0).tickets().stream().map(DetailTicketResponse::id).toList())
+            softly.assertThat(
+                    stages.get(0).tickets().stream().map(DetailTicketResponse::id).toList())
                 .containsExactly(ticket1.getId(), ticket2.getId());
         });
     }
