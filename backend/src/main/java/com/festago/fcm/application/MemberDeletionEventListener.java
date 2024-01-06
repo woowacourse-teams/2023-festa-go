@@ -1,6 +1,6 @@
 package com.festago.fcm.application;
 
-import com.festago.auth.dto.event.DeleteMemberEvent;
+import com.festago.auth.dto.event.MemberDeleteEvent;
 import com.festago.fcm.repository.MemberFCMRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -18,7 +18,7 @@ public class MemberDeletionEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     @Transactional
-    public void deleteMember(DeleteMemberEvent event) {
+    public void deleteMember(MemberDeleteEvent event) {
         memberFCMRepository.deleteAllByMemberId(event.memberId());
     }
 }

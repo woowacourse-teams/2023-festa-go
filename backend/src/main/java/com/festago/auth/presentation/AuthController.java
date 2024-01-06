@@ -4,7 +4,7 @@ import com.festago.auth.annotation.Member;
 import com.festago.auth.application.AuthFacadeService;
 import com.festago.auth.dto.LoginRequest;
 import com.festago.auth.dto.LoginResponse;
-import com.festago.auth.dto.event.DeleteMemberEvent;
+import com.festago.auth.dto.event.MemberDeleteEvent;
 import com.festago.auth.dto.event.MemberRegisterEvent;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -42,7 +42,7 @@ public class AuthController {
     @Operation(description = "회원 탈퇴 요청을 보낸다.", summary = "유저 회원 탈퇴")
     public ResponseEntity<Void> deleteMember(@Member Long memberId) {
         authFacadeService.deleteMember(memberId);
-        publisher.publishEvent(new DeleteMemberEvent(memberId));
+        publisher.publishEvent(new MemberDeleteEvent(memberId));
         return ResponseEntity.ok()
             .build();
     }
