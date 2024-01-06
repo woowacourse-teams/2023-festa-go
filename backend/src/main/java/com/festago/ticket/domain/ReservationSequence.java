@@ -6,6 +6,7 @@ import com.festago.common.exception.InternalServerException;
 public class ReservationSequence {
 
     private static final int MOST_FAST_SEQUENCE = 1;
+
     private final int value;
 
     public ReservationSequence(int value) {
