@@ -16,7 +16,6 @@ import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketAmount;
-import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,7 @@ public class FestivalStageServiceImpl implements FestivalStageService {
         Festival festival = findFestival(festivalId);
         return stageRepository.findAllDetailByFestivalId(festivalId).stream()
             .sorted(comparing(Stage::getStartTime))
-            .map(this::makeResponse)
+            .map(this::createResponse)
             .collect(collectingAndThen(
                 toList(),
                 stageResponses -> new DetailFestivalResponse(
@@ -55,9 +54,9 @@ public class FestivalStageServiceImpl implements FestivalStageService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
     }
 
-    private DetailStageResponse makeResponse(Stage stage) {
+    private DetailStageResponse createResponse(Stage stage) {
         return stage.getTickets().stream()
-            .map(makeTicketResponse())
+            .map(this::createResponse)
             .collect(collectingAndThen(
                 toList(),
                 ticketResponses -> new DetailStageResponse(
@@ -70,15 +69,13 @@ public class FestivalStageServiceImpl implements FestivalStageService {
             ));
     }
 
-    private Function<Ticket, DetailTicketResponse> makeTicketResponse() {
-        return ticket -> {
-            TicketAmount ticketAmount = ticket.getTicketAmount();
-            return new DetailTicketResponse(
-                ticket.getId(),
-                ticket.getTicketType().name(),
-                ticketAmount.getTotalAmount(),
-                ticketAmount.calculateRemainAmount()
-            );
-        };
+    private DetailTicketResponse createResponse(Ticket ticket) {
+        TicketAmount ticketAmount = ticket.getTicketAmount();
+        return new DetailTicketResponse(
+            ticket.getId(),
+            ticket.getTicketType().name(),
+            ticketAmount.getTotalAmount(),
+            ticketAmount.calculateRemainAmount()
+        );
     }
 }
