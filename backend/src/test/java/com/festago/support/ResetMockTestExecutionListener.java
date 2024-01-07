@@ -1,9 +1,9 @@
 package com.festago.support;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import org.mockito.MockingDetails;
-import org.mockito.Mockito;
+import org.mockito.internal.util.MockUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.TestExecutionListener;
@@ -21,7 +21,7 @@ public class ResetMockTestExecutionListener implements TestExecutionListener {
             applicationContextStartupDate = applicationContext.getStartupDate();
             initMocks(applicationContext);
         }
-        mockCache.forEach(Mockito::reset);
+        mockCache.forEach(MockUtil::resetMock);
     }
 
     private boolean isNewContext(ApplicationContext applicationContext) {
@@ -29,12 +29,9 @@ public class ResetMockTestExecutionListener implements TestExecutionListener {
     }
 
     private void initMocks(ApplicationContext applicationContext) {
-        for (String beanName : applicationContext.getBeanDefinitionNames()) {
-            Object bean = applicationContext.getBean(beanName);
-            MockingDetails mockingDetails = Mockito.mockingDetails(bean);
-            if (mockingDetails.isMock()) {
-                mockCache.add(bean);
-            }
-        }
+        Arrays.stream(applicationContext.getBeanDefinitionNames())
+            .map(applicationContext::getBean)
+            .filter(MockUtil::isMock)
+            .forEach(mockCache::add);
     }
 }
