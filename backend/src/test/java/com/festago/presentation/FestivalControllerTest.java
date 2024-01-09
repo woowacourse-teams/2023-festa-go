@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.festival.application.FestivalService;
-import com.festago.festival.dto.FestivalDetailResponse;
+import com.festago.festival.dto.DetailFestivalResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.dto.FestivalsResponse;
 import com.festago.festival.repository.FestivalFilter;
@@ -77,7 +77,7 @@ class FestivalControllerTest {
     @Test
     void 축제_정보_상세_조회() throws Exception {
         // given
-        FestivalDetailResponse expected = new FestivalDetailResponse(1L, 1L, "테코 대학교", LocalDate.now(), LocalDate.now(),
+        DetailFestivalResponse expected = new DetailFestivalResponse(1L, 1L, "테코 대학교", LocalDate.now(), LocalDate.now(),
             "thumbnail.png", Collections.emptyList());
 
         given(festivalService.findDetail(anyLong()))
@@ -90,7 +90,7 @@ class FestivalControllerTest {
             .andReturn()
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);
-        FestivalDetailResponse actual = objectMapper.readValue(content, FestivalDetailResponse.class);
+        DetailFestivalResponse actual = objectMapper.readValue(content, DetailFestivalResponse.class);
         assertThat(actual).isEqualTo(expected);
     }
 }

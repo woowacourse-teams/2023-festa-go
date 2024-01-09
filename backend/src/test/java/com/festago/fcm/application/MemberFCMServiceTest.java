@@ -65,7 +65,7 @@ class MemberFCMServiceTest {
         Long memberId = 1L;
         given(authExtractor.extract(any()))
             .willReturn(new AuthPayload(memberId, Role.MEMBER));
-        given(memberFCMRepository.findMemberFCMByMemberIdAndFcmToken(memberId, fcmToken))
+        given(memberFCMRepository.findByMemberIdAndFcmToken(memberId, fcmToken))
             .willReturn(Optional.empty());
 
         // when
@@ -85,7 +85,7 @@ class MemberFCMServiceTest {
         Long memberId = 1L;
         given(authExtractor.extract(any()))
             .willReturn(new AuthPayload(memberId, Role.MEMBER));
-        given(memberFCMRepository.findMemberFCMByMemberIdAndFcmToken(memberId, originToken))
+        given(memberFCMRepository.findByMemberIdAndFcmToken(memberId, originToken))
             .willReturn(Optional.of(new MemberFCM(memberId, originToken)));
 
         // when

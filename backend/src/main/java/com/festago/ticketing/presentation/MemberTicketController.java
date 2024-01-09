@@ -1,8 +1,6 @@
-package com.festago.presentation;
+package com.festago.ticketing.presentation;
 
 import com.festago.auth.annotation.Member;
-import com.festago.entry.application.EntryService;
-import com.festago.entry.dto.EntryCodeResponse;
 import com.festago.ticketing.application.MemberTicketService;
 import com.festago.ticketing.application.TicketingService;
 import com.festago.ticketing.dto.MemberTicketResponse;
@@ -33,18 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberTicketController {
 
-    private final EntryService entryService;
     private final MemberTicketService memberTicketService;
     private final TicketingService ticketingService;
-
-    @PostMapping("/{memberTicketId}/qr")
-    @Operation(description = "티켓 제시용 QR 코드를 생성한다.", summary = "티켓 제시용 QR 생성")
-    public ResponseEntity<EntryCodeResponse> createQR(@Member Long memberId,
-                                                      @PathVariable Long memberTicketId) {
-        EntryCodeResponse response = entryService.createEntryCode(memberId, memberTicketId);
-        return ResponseEntity.ok()
-            .body(response);
-    }
 
     @PostMapping
     @Operation(description = "티켓을 예매한다.", summary = "티켓 예매")

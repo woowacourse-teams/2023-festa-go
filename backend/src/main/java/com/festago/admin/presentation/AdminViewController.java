@@ -1,4 +1,4 @@
-package com.festago.presentation;
+package com.festago.admin.presentation;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
