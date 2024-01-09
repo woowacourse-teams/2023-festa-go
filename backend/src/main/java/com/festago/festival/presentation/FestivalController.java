@@ -1,7 +1,7 @@
-package com.festago.presentation;
+package com.festago.festival.presentation;
 
 import com.festago.festival.application.FestivalService;
-import com.festago.festival.dto.FestivalDetailResponse;
+import com.festago.festival.dto.DetailFestivalResponse;
 import com.festago.festival.dto.FestivalsResponse;
 import com.festago.festival.repository.FestivalFilter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,8 +33,8 @@ public class FestivalController {
 
     @GetMapping("/{festivalId}")
     @Operation(description = "해당 Id 의 축제를 조회한다.", summary = "축제 상세 정보 조회")
-    public ResponseEntity<FestivalDetailResponse> findDetail(@PathVariable Long festivalId) {
-        FestivalDetailResponse response = festivalService.findDetail(festivalId);
+    public ResponseEntity<DetailFestivalResponse> findDetail(@PathVariable Long festivalId) {
+        DetailFestivalResponse response = festivalService.findDetail(festivalId);
         return ResponseEntity.ok()
             .body(response);
     }
