@@ -2,7 +2,6 @@ package com.festago.student.application;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.school.domain.School;
@@ -42,19 +41,9 @@ public class StudentService {
     }
 
     private StudentCode createStudentCode(Long memberId, StudentSendMailRequest request) {
-        Member member = findMember(memberId);
-        School school = findSchool(request.schoolId());
+        Member member = memberRepository.getOrThrow(memberId);
+        School school = schoolRepository.getOrThrow(request.schoolId());
         return new StudentCode(codeProvider.provide(), school, member, request.username(), LocalDateTime.now(clock));
-    }
-
-    private Member findMember(Long memberId) {
-        return memberRepository.findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
-    }
-
-    private School findSchool(Long schoolId) {
-        return schoolRepository.findById(schoolId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
     }
 
     private void validate(StudentCode studentCode) {
@@ -97,7 +86,7 @@ public class StudentService {
 
     public void verify(Long memberId, StudentVerificateRequest request) {
         validateStudent(memberId);
-        Member member = findMember(memberId);
+        Member member = memberRepository.getOrThrow(memberId);
         VerificationCode verificationCode = new VerificationCode(request.code());
         StudentCode studentCode = studentCodeRepository.findByCodeAndMember(verificationCode, member)
             .orElseThrow(() -> new BadRequestException(ErrorCode.INVALID_STUDENT_VERIFICATION_CODE));

@@ -2,8 +2,6 @@ package com.festago.auth.application;
 
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import java.util.Optional;
@@ -36,8 +34,7 @@ public class AuthService {
     }
 
     public void deleteMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.getOrThrow(memberId);
         logDeleteMember(member);
         memberRepository.delete(member);
     }

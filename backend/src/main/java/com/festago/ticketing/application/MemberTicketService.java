@@ -4,7 +4,6 @@ import static java.util.Comparator.comparing;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.NotFoundException;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.dto.MemberTicketResponse;
 import com.festago.ticketing.dto.MemberTicketsResponse;
@@ -28,8 +27,7 @@ public class MemberTicketService {
 
     @Transactional(readOnly = true)
     public MemberTicketResponse findById(Long memberId, Long memberTicketId) {
-        MemberTicket memberTicket = memberTicketRepository.findById(memberTicketId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_TICKET_NOT_FOUND));
+        MemberTicket memberTicket = memberTicketRepository.getOrThrow(memberTicketId);
         validateOwner(memberTicket, memberId);
         return MemberTicketResponse.from(memberTicket);
     }

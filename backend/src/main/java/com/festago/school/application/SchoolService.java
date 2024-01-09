@@ -2,7 +2,6 @@ package com.festago.school.application;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.NotFoundException;
 import com.festago.school.domain.School;
 import com.festago.school.dto.SchoolCreateRequest;
 import com.festago.school.dto.SchoolResponse;
@@ -28,12 +27,7 @@ public class SchoolService {
 
     @Transactional(readOnly = true)
     public SchoolResponse findById(Long id) {
-        return SchoolResponse.from(findSchool(id));
-    }
-
-    private School findSchool(Long id) {
-        return schoolRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
+        return SchoolResponse.from(schoolRepository.getOrThrow(id));
     }
 
     public SchoolResponse create(SchoolCreateRequest request) {
@@ -51,7 +45,7 @@ public class SchoolService {
     }
 
     public void update(Long schoolId, SchoolUpdateRequest request) {
-        School school = findSchool(schoolId);
+        School school = schoolRepository.getOrThrow(schoolId);
         school.changeName(request.name());
         school.changeDomain(request.domain());
     }

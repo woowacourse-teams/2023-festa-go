@@ -4,8 +4,6 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.NotFoundException;
 import com.festago.festival.application.FestivalStageService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.DetailFestivalResponse;
@@ -31,7 +29,7 @@ public class FestivalStageServiceImpl implements FestivalStageService {
     @Transactional(readOnly = true)
     @Override
     public DetailFestivalResponse findDetail(Long festivalId) {
-        Festival festival = findFestival(festivalId);
+        Festival festival = festivalRepository.getOrThrow(festivalId);
         return stageRepository.findAllDetailByFestivalId(festivalId).stream()
             .sorted(comparing(Stage::getStartTime))
             .map(this::createResponse)
@@ -47,11 +45,6 @@ public class FestivalStageServiceImpl implements FestivalStageService {
                     stageResponses
                 )
             ));
-    }
-
-    private Festival findFestival(Long festivalId) {
-        return festivalRepository.findById(festivalId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
     }
 
     private DetailStageResponse createResponse(Stage stage) {

@@ -2,7 +2,6 @@ package com.festago.entry.application;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.NotFoundException;
 import com.festago.entry.domain.EntryCode;
 import com.festago.entry.domain.EntryCodePayload;
 import com.festago.entry.dto.EntryCodeResponse;
@@ -29,7 +28,7 @@ public class EntryService {
     private final Clock clock;
 
     public EntryCodeResponse createEntryCode(Long memberId, Long memberTicketId) {
-        MemberTicket memberTicket = findMemberTicket(memberTicketId);
+        MemberTicket memberTicket = memberTicketRepository.getOrThrow(memberTicketId);
         if (!memberTicket.isOwner(memberId)) {
             throw new BadRequestException(ErrorCode.NOT_MEMBER_TICKET_OWNER);
         }
@@ -40,14 +39,10 @@ public class EntryService {
         return EntryCodeResponse.of(entryCode);
     }
 
-    private MemberTicket findMemberTicket(Long memberTicketId) {
-        return memberTicketRepository.findById(memberTicketId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_TICKET_NOT_FOUND));
-    }
-
     public TicketValidationResponse validate(TicketValidationRequest request) {
         EntryCodePayload entryCodePayload = entryCodeManager.extract(request.code());
-        MemberTicket memberTicket = findMemberTicket(entryCodePayload.getMemberTicketId());
+        Long memberTicketId = entryCodePayload.getMemberTicketId();
+        MemberTicket memberTicket = memberTicketRepository.getOrThrow(memberTicketId);
         memberTicket.changeState(entryCodePayload.getEntryState());
         publisher.publishEvent(new EntryProcessEvent(memberTicket.getOwner().getId()));
         return TicketValidationResponse.from(memberTicket);

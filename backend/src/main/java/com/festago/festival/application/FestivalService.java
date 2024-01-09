@@ -2,7 +2,6 @@ package com.festago.festival.application;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.DetailFestivalResponse;
 import com.festago.festival.dto.FestivalCreateRequest;
@@ -32,8 +31,7 @@ public class FestivalService {
     private final Clock clock;
 
     public FestivalResponse create(FestivalCreateRequest request) {
-        School school = schoolRepository.findById(request.schoolId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
+        School school = schoolRepository.getOrThrow(request.schoolId());
         Festival festival = request.toEntity(school);
         validate(festival);
         return FestivalResponse.from(festivalRepository.save(festival));
@@ -56,13 +54,8 @@ public class FestivalService {
         return festivalStageService.findDetail(festivalId);
     }
 
-    private Festival findFestival(Long festivalId) {
-        return festivalRepository.findById(festivalId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
-    }
-
     public void update(Long festivalId, FestivalUpdateRequest request) {
-        Festival festival = findFestival(festivalId);
+        Festival festival = festivalRepository.getOrThrow(festivalId);
         festival.changeName(request.name());
         festival.changeThumbnail(request.thumbnail());
         festival.changeDate(request.startDate(), request.endDate());

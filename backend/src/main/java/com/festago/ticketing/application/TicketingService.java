@@ -36,7 +36,7 @@ public class TicketingService {
 
     public TicketingResponse ticketing(Long memberId, TicketingRequest request) {
         Ticket ticket = findTicketById(request.ticketId());
-        Member member = findMemberById(memberId);
+        Member member = memberRepository.getOrThrow(memberId);
         validateAlreadyReserved(member, ticket);
         validateStudent(member, ticket);
         ReservationSequence sequence = getReserveSequence(request.ticketId());
@@ -49,11 +49,6 @@ public class TicketingService {
     private Ticket findTicketById(Long ticketId) {
         return ticketRepository.findByIdWithFetch(ticketId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.TICKET_NOT_FOUND));
-    }
-
-    private Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     private void validateAlreadyReserved(Member member, Ticket ticket) {
