@@ -3,10 +3,9 @@ package com.festago.ticket.domain;
 import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.member.domain.Member;
+import com.festago.common.util.Validator;
 import com.festago.school.domain.School;
 import com.festago.stage.domain.Stage;
-import com.festago.ticketing.domain.MemberTicket;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -70,7 +69,7 @@ public class Ticket extends BaseTimeEntity {
     }
 
     public Ticket(Long id, Stage stage, TicketType ticketType, Long schoolId) {
-        validate(stage, ticketType);
+        validate(stage, ticketType, schoolId);
         this.id = id;
         this.stage = stage;
         this.ticketType = ticketType;
@@ -78,15 +77,22 @@ public class Ticket extends BaseTimeEntity {
         this.schoolId = schoolId;
     }
 
-    private void validate(Stage stage, TicketType ticketType) {
-        checkNotNull(stage, ticketType);
+    private void validate(Stage stage, TicketType ticketType, Long schoolId) {
+        validateStage(stage);
+        validateTicketType(ticketType);
+        validateSchoolId(schoolId);
     }
 
-    private void checkNotNull(Stage stage, TicketType ticketType) {
-        if (stage == null ||
-            ticketType == null) {
-            throw new IllegalArgumentException("Ticket 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
-        }
+    private void validateStage(Stage stage) {
+        Validator.notNull(stage, "stage");
+    }
+
+    private void validateTicketType(TicketType ticketType) {
+        Validator.notNull(ticketType, "ticketType");
+    }
+
+    private void validateSchoolId(Long schoolId) {
+        Validator.notNull(schoolId, "schoolId");
     }
 
     public void addTicketEntryTime(LocalDateTime currentTime, LocalDateTime entryTime, int amount) {
@@ -113,23 +119,28 @@ public class Ticket extends BaseTimeEntity {
         }
     }
 
-    public MemberTicket createMemberTicket(Member member, int reservationSequence, LocalDateTime currentTime) {
-        if (stage.isStart(currentTime)) {
-            throw new BadRequestException(ErrorCode.TICKET_CANNOT_RESERVE_STAGE_START);
-        }
-        LocalDateTime entryTime = calculateEntryTime(reservationSequence);
-        return new MemberTicket(member, stage, reservationSequence, entryTime, ticketType);
+    public TicketReserveInfo extractTicketInfo(ReservationSequence sequence) {
+        LocalDateTime entryTime = calculateEntryTime(sequence);
+        return new TicketReserveInfo(stage,
+            sequence,
+            entryTime,
+            ticketType);
     }
 
-    private LocalDateTime calculateEntryTime(int reservationSequence) {
+    private LocalDateTime calculateEntryTime(ReservationSequence sequence) {
         int lastSequence = 0;
+        int sequenceValue = sequence.getValue();
         for (TicketEntryTime ticketEntryTime : ticketEntryTimes) {
             lastSequence += ticketEntryTime.getAmount();
-            if (reservationSequence <= lastSequence) {
+            if (sequenceValue <= lastSequence) {
                 return ticketEntryTime.getEntryTime();
             }
         }
         throw new BadRequestException(ErrorCode.TICKET_SOLD_OUT);
+    }
+
+    public boolean alreadyStart(LocalDateTime currentTime) {
+        return stage.isStart(currentTime);
     }
 
     public Long getId() {

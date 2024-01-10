@@ -2,34 +2,32 @@ package com.festago.festago.presentation.ui.ticketreserve
 
 import app.cash.turbine.test
 import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.model.ErrorCode
 import com.festago.festago.model.Reservation
 import com.festago.festago.model.ReservationStage
 import com.festago.festago.model.ReservationTicket
 import com.festago.festago.model.ReservationTickets
 import com.festago.festago.model.ReservedTicket
 import com.festago.festago.model.TicketType
+import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.AuthRepository
 import com.festago.festago.repository.FestivalRepository
 import com.festago.festago.repository.ReservationTicketRepository
 import com.festago.festago.repository.TicketRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.assertj.core.api.SoftAssertions
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 class TicketReserveViewModelTest {
+
     private lateinit var vm: TicketReserveViewModel
     private lateinit var reservationTicketRepository: ReservationTicketRepository
     private lateinit var festivalRepository: FestivalRepository
@@ -66,10 +64,11 @@ class TicketReserveViewModelTest {
         number = 1,
     )
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         reservationTicketRepository = mockk()
         festivalRepository = mockk()
         ticketRepository = mockk()
@@ -82,12 +81,6 @@ class TicketReserveViewModelTest {
             authRepository,
             analyticsHelper,
         )
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     private fun `예약 정보 요청 결과가 다음과 같을 때`(result: Result<Reservation>) {
@@ -196,7 +189,7 @@ class TicketReserveViewModelTest {
     }
 
     @Test
-    fun `티켓 유형을 선택하고 예약하면 예약 성공 이벤트가 발생한다`() = runTest {
+    fun `티켓 유형을 선택하고 예약하면 예매 성공 이벤트가 발생한다`() = runTest {
         // given
         coEvery {
             ticketRepository.reserveTicket(any())
@@ -214,7 +207,61 @@ class TicketReserveViewModelTest {
     }
 
     @Test
-    fun `티켓 유형을 선택하고 예약하는 것을 실패하면 예약 실패 이벤트가 발생한다`() = runTest {
+    fun `학생 인증하지 않아 티켓 예매에 실패하면 예매 실패 이벤트가 발생한다`() = runTest {
+        // given
+        `티켓 예약 요청 결과가 다음과 같을 때`(Result.failure(ErrorCode.NEED_STUDENT_VERIFICATION()))
+
+        vm.event.test {
+            // when
+            vm.reserveTicket(0)
+
+            // then
+            val actual = awaitItem() as? TicketReserveEvent.ReserveTicketFailed
+            assertThat(actual).isNotNull
+
+            // and: 학생 인증 필요 예매 실패 코드를 가진다
+            assertThat(actual?.errorCode).isExactlyInstanceOf(ErrorCode.NEED_STUDENT_VERIFICATION::class.java)
+        }
+    }
+
+    @Test
+    fun `이미 예매한 티켓이라서 티켓 예매에 실패하면 예매 실패 이벤트가 발생한다`() = runTest {
+        // given
+        `티켓 예약 요청 결과가 다음과 같을 때`(Result.failure(ErrorCode.RESERVE_TICKET_OVER_AMOUNT()))
+
+        vm.event.test {
+            // when
+            vm.reserveTicket(0)
+
+            // then
+            val actual = awaitItem() as? TicketReserveEvent.ReserveTicketFailed
+            assertThat(actual).isNotNull
+
+            // and: 보유 가능한 수량 초과 예매 실패 코드를 가진다
+            assertThat(actual?.errorCode).isExactlyInstanceOf(ErrorCode.RESERVE_TICKET_OVER_AMOUNT::class.java)
+        }
+    }
+
+    @Test
+    fun `티켓이 매진되어 티켓 예매에 실패하면 예매 실패 이벤트가 발생한다`() = runTest {
+        // given
+        `티켓 예약 요청 결과가 다음과 같을 때`(Result.failure(ErrorCode.TICKET_SOLD_OUT()))
+
+        vm.event.test {
+            // when
+            vm.reserveTicket(0)
+
+            // then
+            val actual = awaitItem() as? TicketReserveEvent.ReserveTicketFailed
+            assertThat(actual).isNotNull
+
+            // and: 티켓 매진 예매 실패 코드를 가진다
+            assertThat(actual?.errorCode).isExactlyInstanceOf(ErrorCode.TICKET_SOLD_OUT::class.java)
+        }
+    }
+
+    @Test
+    fun `알 수 없는 오류로 티켓 예매에 실패하면 예매 실패 이벤트가 발생한다`() = runTest {
         // given
         `티켓 예약 요청 결과가 다음과 같을 때`(Result.failure(Exception()))
 
@@ -223,7 +270,11 @@ class TicketReserveViewModelTest {
             vm.reserveTicket(0)
 
             // then
-            assertThat(awaitItem()).isExactlyInstanceOf(TicketReserveEvent.ReserveTicketFailed::class.java)
+            val actual = awaitItem() as? TicketReserveEvent.ReserveTicketFailed
+            assertThat(actual).isNotNull
+
+            // and: 알 수 없는 예매 실패 코드를 가진다
+            assertThat(actual?.errorCode).isExactlyInstanceOf(ErrorCode.UNKNOWN::class.java)
         }
     }
 }

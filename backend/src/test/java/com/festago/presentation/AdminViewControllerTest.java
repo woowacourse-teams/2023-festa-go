@@ -16,10 +16,9 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@CustomWebMvcTest(AdminViewController.class)
+@CustomWebMvcTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AdminViewControllerTest {
@@ -27,7 +26,7 @@ class AdminViewControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @SpyBean
+    @Autowired
     AuthExtractor authExtractor;
 
     @Test

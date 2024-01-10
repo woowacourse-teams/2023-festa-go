@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,10 +17,9 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@CustomWebMvcTest(MemberController.class)
+@CustomWebMvcTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class MemberControllerTest {
@@ -32,10 +30,10 @@ class MemberControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @MockBean
+    @Autowired
     MemberService memberService;
 
-    @MockBean
+    @Autowired
     MemberTicketService memberTicketService;
 
     @Test
@@ -51,7 +49,6 @@ class MemberControllerTest {
         String content = mockMvc.perform(get("/members/profile")
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
-            .andDo(print())
             .andReturn()
             .getResponse()
             .getContentAsString(StandardCharsets.UTF_8);

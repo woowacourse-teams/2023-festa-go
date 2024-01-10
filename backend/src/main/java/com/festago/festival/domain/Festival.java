@@ -1,6 +1,8 @@
 package com.festago.festival.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
 import com.festago.common.util.Validator;
 import com.festago.school.domain.School;
 import jakarta.persistence.Entity;
@@ -13,7 +15,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import org.springframework.util.Assert;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -22,13 +23,15 @@ import lombok.NoArgsConstructor;
 public class Festival extends BaseTimeEntity {
 
     private static final String DEFAULT_THUMBNAIL = "https://picsum.photos/536/354";
+    private static final int MAX_NAME_LENGTH = 50;
+    private static final int MAX_THUMBNAIL_LENGTH = 255;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @Size(max = 50)
+    @Size(max = MAX_NAME_LENGTH)
     private String name;
 
     @NotNull
@@ -38,7 +41,7 @@ public class Festival extends BaseTimeEntity {
     private LocalDate endDate;
 
     @NotNull
-    @Size(max = 255)
+    @Size(max = MAX_THUMBNAIL_LENGTH)
     private String thumbnail;
 
     @NotNull
@@ -70,20 +73,22 @@ public class Festival extends BaseTimeEntity {
     }
 
     private void validateName(String name) {
-        Assert.notNull(name, "name은 null 값이 될 수 없습니다.");
-        Validator.maxLength(name, 50, "name은 50글자를 넘을 수 없습니다.");
+        String fieldName = "name";
+        Validator.hasBlank(name, fieldName);
+        Validator.maxLength(name, MAX_NAME_LENGTH, fieldName);
     }
 
     private void validateThumbnail(String thumbnail) {
-        Assert.notNull(thumbnail, "thumbnail은 null 값이 될 수 없습니다.");
-        Validator.maxLength(thumbnail, 255, "thumbnail은 50글자를 넘을 수 없습니다.");
+        String fieldName = "thumbnail";
+        Validator.hasBlank(thumbnail, fieldName);
+        Validator.maxLength(thumbnail, MAX_THUMBNAIL_LENGTH, fieldName);
     }
 
     private void validateDate(LocalDate startDate, LocalDate endDate) {
-        Assert.notNull(startDate, "startDate는 null 값이 될 수 없습니다.");
-        Assert.notNull(endDate, "endDate는 null 값이 될 수 없습니다.");
+        Validator.notNull(startDate, "startDate");
+        Validator.notNull(endDate, "endDate");
         if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("축제 시작 일은 종료일 이전이어야 합니다.");
+            throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_DURATION);
         }
     }
 

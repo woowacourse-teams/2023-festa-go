@@ -11,23 +11,25 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.util.Assert;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class School extends BaseTimeEntity {
+
+    private static final int MAX_DOMAIN_LENGTH = 50;
+    private static final int MAX_NAME_LENGTH = 255;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @Size(max = 50)
+    @Size(max = MAX_DOMAIN_LENGTH)
     @Column(unique = true)
     private String domain;
 
     @NotNull
-    @Size(max = 255)
+    @Size(max = MAX_NAME_LENGTH)
     @Column(unique = true)
     private String name;
 
@@ -48,13 +50,15 @@ public class School extends BaseTimeEntity {
     }
 
     private void validateDomain(String domain) {
-        Assert.notNull(domain, "domain은 null 값이 될 수 없습니다.");
-        Validator.maxLength(domain, 50, "domain은 50글자를 넘을 수 없습니다.");
+        String fieldName = "domain";
+        Validator.hasBlank(domain, fieldName);
+        Validator.maxLength(domain, MAX_DOMAIN_LENGTH, fieldName);
     }
 
     private void validateName(String name) {
-        Assert.notNull(name, "name은 null 값이 될 수 없습니다.");
-        Validator.maxLength(name, 255, "name은 255글자를 넘을 수 없습니다.");
+        String fieldName = "name";
+        Validator.hasBlank(name, fieldName);
+        Validator.maxLength(name, MAX_NAME_LENGTH, fieldName);
     }
 
     public void changeDomain(String domain) {

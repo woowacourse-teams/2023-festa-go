@@ -1,26 +1,23 @@
 package com.festago.festival.application;
 
-import static java.util.Comparator.comparing;
-
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
+import com.festago.festival.dto.DetailFestivalResponse;
 import com.festago.festival.dto.FestivalCreateRequest;
-import com.festago.festival.dto.FestivalDetailResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.dto.FestivalUpdateRequest;
 import com.festago.festival.dto.FestivalsResponse;
+import com.festago.festival.repository.FestivalFilter;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
-import com.festago.stage.domain.Stage;
-import com.festago.stage.repository.StageRepository;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
-import org.springframework.dao.DataIntegrityViolationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class FestivalService {
 
     private final FestivalRepository festivalRepository;
-    private final StageRepository stageRepository;
+    private final FestivalStageService festivalStageService;
     private final SchoolRepository schoolRepository;
     private final Clock clock;
 
@@ -49,18 +46,14 @@ public class FestivalService {
     }
 
     @Transactional(readOnly = true)
-    public FestivalsResponse findAll() {
-        List<Festival> festivals = festivalRepository.findAll();
+    public FestivalsResponse findFestivals(FestivalFilter festivalFilter) {
+        List<Festival> festivals = festivalRepository.findByFilter(festivalFilter, LocalDate.now(clock));
         return FestivalsResponse.from(festivals);
     }
 
     @Transactional(readOnly = true)
-    public FestivalDetailResponse findDetail(Long festivalId) {
-        Festival festival = findFestival(festivalId);
-        List<Stage> stages = stageRepository.findAllDetailByFestivalId(festivalId).stream()
-            .sorted(comparing(Stage::getStartTime))
-            .toList();
-        return FestivalDetailResponse.of(festival, stages);
+    public DetailFestivalResponse findDetail(Long festivalId) {
+        return festivalStageService.findDetail(festivalId);
     }
 
     private Festival findFestival(Long festivalId) {

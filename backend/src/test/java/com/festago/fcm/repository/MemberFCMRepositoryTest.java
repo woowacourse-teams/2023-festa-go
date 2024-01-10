@@ -6,12 +6,12 @@ import com.festago.auth.domain.SocialType;
 import com.festago.fcm.domain.MemberFCM;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
+import com.festago.support.RepositoryTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@DataJpaTest
+@RepositoryTest
 class MemberFCMRepositoryTest {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
+import com.festago.festago.model.ErrorCode
 import com.festago.festago.model.ReservationTicket
 import com.festago.festago.model.ReservedTicket
 import java.time.LocalDateTime
@@ -11,6 +12,6 @@ sealed interface TicketReserveEvent {
     ) : TicketReserveEvent
 
     class ReserveTicketSuccess(val reservedTicket: ReservedTicket) : TicketReserveEvent
-    object ReserveTicketFailed : TicketReserveEvent
+    class ReserveTicketFailed(val errorCode: ErrorCode) : TicketReserveEvent
     object ShowSignIn : TicketReserveEvent
 }

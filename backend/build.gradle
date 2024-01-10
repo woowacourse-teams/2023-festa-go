@@ -27,6 +27,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
+    // Spring Security
+    implementation 'org.springframework.security:spring-security-crypto'
+
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
 
@@ -47,6 +50,12 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.13.0'
     testImplementation 'org.junit.platform:junit-platform-suite:1.8.2'
 
+    // Querydsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
     // Flyway
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
@@ -63,4 +72,17 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// Querydsl 폴더 지정
+def querydslDir = file('build/generated/querydsl')
+
+// querydsl QClass 파일 생성 위치를 지정
+compileJava {
+    options.getGeneratedSourceOutputDirectory().set(querydslDir)
+}
+
+// java source set 에 querydsl QClass 위치 추가
+sourceSets {
+    main.java.srcDirs.add(querydslDir)
 }

@@ -39,6 +39,7 @@
     <string name="home_bottom_navigation_ticket">티켓 목록</string>
     <string name="home_bottom_navigation_user">마이페이지</string>
     <string name="home_notification_permission_denied">알림 권한을 거부했습니다 :(</string>
+    <string name="home_back_pressed">한 번 더 누르면 앱이 종료됩니다</string>
 
     <!-- Strings related to ticket reserve-->
     <string name="ticket_reserve_tv_date_range">%1s ~ %1s</string>
@@ -56,11 +57,16 @@
     <string name="ticket_reserve_tv_btn_reserve_ticket_not_open">MM월 dd일 HH:mm 오픈예정</string>
     <string name="ticket_reserve_tv_signin">로그인 후 예매</string>
     <string name="ticket_reserve_tv_ticket_type_prompt">예매 유형을 선택해주세요</string>
+    <string name="ticket_reserve_dialog_sold_out">공연이 매진되었습니다</string>
+    <string name="ticket_reserve_dialog_over_amount">이미 예매한 공연입니다</string>
+    <string name="ticket_reserve_dialog_need_student_verification">학생 인증이 필요합니다</string>
+    <string name="ticket_reserve_dialog_unknown">알 수 없는 오류가 발생했습니다</string>
 
     <!-- Strings related to festival list -->
     <string name="festival_list_tv_date_format">yyyy.MM.dd</string>
-    <string name="festival_list_chip_ongoing">진행중</string>
-    <string name="festival_list_chip_past">지난축제</string>
+    <string name="festival_list_chip_progress">진행중</string>
+    <string name="festival_list_chip_planned">진행 예정</string>
+    <string name="festival_list_chip_end">지난 축제</string>
     <string name="festival_list_tv_error">축제 조회에 실패했습니다.</string>
     <string name="festival_list_tv_empty">조회된 축제가 없습니다.</string>
     <string name="festival_list_tv_date_range_format">%s - %s</string>

@@ -15,8 +15,6 @@ public record MemberTicketResponse(
     StageResponse stage,
     MemberTicketFestivalResponse festival) {
 
-    private static final MemberTicketResponse EMPTY = new MemberTicketResponse(-1L, null, null, null, null, null, null);
-
     public static MemberTicketResponse from(MemberTicket memberTicket) {
         Stage stage = memberTicket.getStage();
         return new MemberTicketResponse(
@@ -27,9 +25,5 @@ public record MemberTicketResponse(
             memberTicket.getCreatedAt(),
             StageResponse.from(stage),
             MemberTicketFestivalResponse.from(stage.getFestival()));
-    }
-
-    public static MemberTicketResponse empty() {
-        return EMPTY;
     }
 }

@@ -10,6 +10,7 @@ import com.festago.festago.databinding.ActivityStudentVerificationBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.util.repeatOnStarted
+import com.festago.festago.presentation.util.setOnSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -43,7 +44,7 @@ class StudentVerificationActivity : AppCompatActivity() {
     }
 
     private fun initRequestVerificationCodeBtn(schoolId: Long) {
-        binding.btnRequestVerificationCode.setOnClickListener {
+        binding.btnRequestVerificationCode.setOnSingleClickListener {
             vm.sendVerificationCode(binding.tieUserName.text.toString(), schoolId)
         }
     }

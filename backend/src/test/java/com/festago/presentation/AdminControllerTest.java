@@ -9,13 +9,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.admin.application.AdminService;
 import com.festago.auth.application.AdminAuthService;
-import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.Role;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
@@ -45,12 +42,10 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@CustomWebMvcTest(AdminController.class)
+@CustomWebMvcTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AdminControllerTest {
@@ -61,26 +56,20 @@ class AdminControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @MockBean
+    @Autowired
     FestivalService festivalService;
 
-    @MockBean
+    @Autowired
     StageService stageService;
 
-    @MockBean
+    @Autowired
     TicketService ticketService;
 
-    @MockBean
-    AdminService adminService;
-
-    @MockBean
+    @Autowired
     AdminAuthService adminAuthService;
 
-    @MockBean
+    @Autowired
     SchoolService schoolService;
-
-    @SpyBean
-    AuthExtractor authExtractor;
 
     @Test
     @WithMockAuth
@@ -130,7 +119,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()
@@ -165,7 +153,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isNotFound())
             .andReturn()
             .getResponse()
@@ -200,7 +187,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()
@@ -225,7 +211,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isOk());
     }
 
@@ -236,7 +221,6 @@ class AdminControllerTest {
         mockMvc.perform(delete("/admin/api/stages/{id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isOk());
     }
 
@@ -264,7 +248,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isNotFound())
             .andReturn()
             .getResponse()
@@ -299,7 +282,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()
@@ -325,7 +307,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()
@@ -345,7 +326,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isBadRequest());
     }
 
@@ -360,7 +340,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isBadRequest());
     }
 
@@ -375,7 +354,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isOk());
     }
 
@@ -390,7 +368,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isBadRequest());
     }
 
@@ -405,7 +382,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isBadRequest());
     }
 
@@ -423,7 +399,6 @@ class AdminControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isNotFound());
     }
 
@@ -434,7 +409,6 @@ class AdminControllerTest {
         mockMvc.perform(delete("/admin/api/schools/{id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .cookie(new Cookie("token", "token")))
-            .andDo(print())
             .andExpect(status().isOk());
     }
 }

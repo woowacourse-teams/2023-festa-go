@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.festago.acceptance.CucumberClient;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.RootAdminInitializeRequest;
+import com.festago.festival.dto.DetailFestivalResponse;
 import com.festago.festival.dto.FestivalCreateRequest;
-import com.festago.festival.dto.FestivalDetailResponse;
 import com.festago.festival.dto.FestivalResponse;
 import com.festago.festival.dto.FestivalsResponse;
 import com.festago.school.dto.SchoolCreateRequest;
@@ -79,7 +79,7 @@ public class ExampleStep {
 
     @Then("축제가 있다")
     public void then() {
-        FestivalDetailResponse response = (FestivalDetailResponse) cucumberClient.getData("searchResult");
+        DetailFestivalResponse response = (DetailFestivalResponse) cucumberClient.getData("searchResult");
         assertThat(response.name()).isEqualTo("푸우 축제");
     }
 
