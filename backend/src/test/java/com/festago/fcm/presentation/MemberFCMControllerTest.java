@@ -1,4 +1,4 @@
-package com.festago.presentation;
+package com.festago.fcm.presentation;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -10,16 +10,15 @@ import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@DisplayNameGeneration(ReplaceUnderscores.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@CustomWebMvcTest(MemberFCMController.class)
+@CustomWebMvcTest
 class MemberFCMControllerTest {
 
     @Autowired
@@ -28,7 +27,7 @@ class MemberFCMControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @MockBean
+    @Autowired
     MemberFCMService memberFCMService;
 
     @Test
