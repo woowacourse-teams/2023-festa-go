@@ -9,7 +9,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestExecutionListeners.MergeMode;
 
 @WebMvcTest
-@Import({TestAuthConfig.class, ErrorLoggerConfig.class, MockAllServiceConfig.class, MockEventPublisherConfig.class})
+@Import({TestAuthConfig.class, ErrorLoggerConfig.class, MockAllServiceBeanFactoryPostProcessor.class, MockEventPublisherConfig.class})
 @Retention(RetentionPolicy.RUNTIME)
 @TestExecutionListeners(value = {MockAuthTestExecutionListener.class,
     ResetMockTestExecutionListener.class}, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
