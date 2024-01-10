@@ -8,9 +8,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
+import static org.mockito.Mockito.reset;
 
 import com.festago.admin.domain.Admin;
-import com.festago.admin.repository.AdminRepository;
 import com.festago.admin.repository.MemoryAdminRepository;
 import com.festago.auth.dto.AdminLoginRequest;
 import com.festago.auth.dto.AdminSignupRequest;
@@ -29,17 +29,20 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 @SuppressWarnings("NonAsciiCharacters")
 class AdminAuthServiceTest {
 
-    AdminRepository adminRepository;
+    AuthProvider authProvider = mock();
 
-    AuthProvider authProvider = mock(AuthProvider.class);
+    MemoryAdminRepository adminRepository = new MemoryAdminRepository();
 
-    AdminAuthService adminAuthService;
+    AdminAuthService adminAuthService = new AdminAuthService(
+        authProvider,
+        adminRepository,
+        PasswordEncoderFactories.createDelegatingPasswordEncoder()
+    );
 
     @BeforeEach
     void setUp() {
-        adminRepository = new MemoryAdminRepository();
-        adminAuthService = new AdminAuthService(authProvider, adminRepository,
-            PasswordEncoderFactories.createDelegatingPasswordEncoder());
+        adminRepository.clear();
+        reset(authProvider);
     }
 
     @Nested

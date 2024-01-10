@@ -2,13 +2,18 @@ package com.festago.student.repository;
 
 import com.festago.member.domain.Member;
 import com.festago.student.domain.Student;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+import org.springframework.data.repository.Repository;
 
-public interface StudentRepository extends JpaRepository<Student, Long>, StudentRepositoryCustom {
+public interface StudentRepository extends Repository<Student, Long>, StudentRepositoryCustom {
 
     boolean existsByMemberAndSchoolId(Member member, Long schoolId);
 
-    boolean existsByUsernameAndSchoolId(String username, Long id);
+    boolean existsByUsernameAndSchoolId(String username, Long schoolId);
 
-    boolean existsByMemberId(Long id);
+    boolean existsByMemberId(Long memberId);
+
+    Student save(Student student);
+
+    Optional<Student> findById(Long id);
 }

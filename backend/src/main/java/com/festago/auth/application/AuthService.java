@@ -33,6 +33,7 @@ public class AuthService {
         return memberRepository.save(userInfo.toMember());
     }
 
+    // TODO FCM 삭제를 위해 DeleteMemberEvent 발행 고려
     public void deleteMember(Long memberId) {
         Member member = memberRepository.getOrThrow(memberId);
         logDeleteMember(member);

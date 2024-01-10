@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class FestivalService {
 
     private final FestivalRepository festivalRepository;
+    // TODO FestivalStageService를 FestivalController가 의존하게 하는게 좋을듯?
     private final FestivalStageService festivalStageService;
     private final SchoolRepository schoolRepository;
     private final Clock clock;

@@ -4,10 +4,9 @@ import static com.festago.common.exception.ErrorCode.MEMBER_TICKET_NOT_FOUND;
 import static com.festago.common.exception.ErrorCode.NOT_MEMBER_TICKET_OWNER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.spy;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
@@ -17,99 +16,105 @@ import com.festago.support.MemberTicketFixture;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.dto.MemberTicketResponse;
 import com.festago.ticketing.dto.MemberTicketsResponse;
-import com.festago.ticketing.repository.MemberTicketRepository;
+import com.festago.ticketing.repository.MemoryMemberTicketRepository;
 import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@ExtendWith(MockitoExtension.class)
 class MemberTicketServiceTest {
 
-    @Mock
-    MemberTicketRepository memberTicketRepository;
+    Member member;
 
-    @Spy
-    Clock clock = Clock.systemDefaultZone();
+    MemoryMemberTicketRepository memberTicketRepository = new MemoryMemberTicketRepository();
 
-    @InjectMocks
-    MemberTicketService memberTicketService;
+    Clock clock = spy(Clock.systemDefaultZone());
+
+    MemberTicketService memberTicketService = new MemberTicketService(
+        memberTicketRepository,
+        clock
+    );
+
+    @BeforeEach
+    void setUp() {
+        member = MemberFixture.member().id(1L).build();
+        memberTicketRepository.clear();
+        reset(clock);
+    }
+
+    // 눈에 띄기 위해 고의적으로 위에 배치함
+    private MemberTicket createPersistMemberTicket(Member owner) {
+        return createPersistMemberTicket(owner, LocalDateTime.now(clock));
+    }
+
+    private MemberTicket createPersistMemberTicket(Member owner, LocalDateTime entryTime) {
+        MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            .owner(owner)
+            .entryTime(entryTime)
+            .build();
+        memberTicketRepository.save(memberTicket);
+        return memberTicket;
+    }
 
     @Nested
     class 멤버_티켓_아이디로_단건_조회 {
 
-        @Test
-        void 멤버_티켓이_없으면_예외() {
-            // given
-            Long memberId = 1L;
-            Long memberTicketId = 1L;
+        @Nested
+        class 실패 {
 
-            given(memberTicketRepository.findById(memberTicketId))
-                .willReturn(Optional.empty());
+            @Test
+            void 멤버_티켓이_없으면_예외() {
+                // given
+                Long memberId = 1L;
+                Long memberTicketId = 1L;
 
-            // when & then
-            assertThatThrownBy(() -> memberTicketService.findById(memberId, memberTicketId))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessage(MEMBER_TICKET_NOT_FOUND.getMessage());
+                // when & then
+                assertThatThrownBy(() -> memberTicketService.findById(memberId, memberTicketId))
+                    .isInstanceOf(NotFoundException.class)
+                    .hasMessage(MEMBER_TICKET_NOT_FOUND.getMessage());
+            }
+
+            @Test
+            void 사용자가_티켓의_주인이_아니면_예외() {
+                // given
+                Long memberId = member.getId();
+                Member otherMember = MemberFixture.member()
+                    .id(memberId + 1)
+                    .build();
+                MemberTicket otherMemberTicket = createPersistMemberTicket(otherMember);
+                Long otherMemberTicketId = otherMemberTicket.getId();
+
+                // when & then
+                assertThatThrownBy(() -> memberTicketService.findById(memberId, otherMemberTicketId))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage(NOT_MEMBER_TICKET_OWNER.getMessage());
+            }
         }
 
-        @Test
-        void 사용자가_티켓의_주인이_아니면_예외() {
-            // given
-            Long memberId = 1L;
-            Long memberTicketId = 1L;
-            Member other = MemberFixture.member()
-                .id(2L)
-                .build();
+        @Nested
+        class 성공 {
 
-            MemberTicket otherMemberTicket = MemberTicketFixture.memberTicket()
-                .id(memberTicketId)
-                .owner(other)
-                .build();
+            @Test
+            void 티켓의_주인이면_성공() {
+                // given
+                Long memberId = member.getId();
+                MemberTicket memberTicket = createPersistMemberTicket(member);
+                Long memberTicketId = memberTicket.getId();
 
-            given(memberTicketRepository.findById(memberTicketId))
-                .willReturn(Optional.of(otherMemberTicket));
+                // when
+                MemberTicketResponse response = memberTicketService.findById(memberId, memberTicketId);
 
-            // when & then
-            assertThatThrownBy(() -> memberTicketService.findById(memberId, memberTicketId))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessage(NOT_MEMBER_TICKET_OWNER.getMessage());
-        }
-
-        @Test
-        void 성공() {
-            // given
-            Long memberId = 1L;
-            Long memberTicketId = 1L;
-            Member member = MemberFixture.member()
-                .id(memberId)
-                .build();
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-                .id(memberTicketId)
-                .owner(member)
-                .build();
-
-            given(memberTicketRepository.findById(memberTicketId))
-                .willReturn(Optional.of(memberTicket));
-
-            // when
-            MemberTicketResponse response = memberTicketService.findById(memberId, memberTicketId);
-
-            // then
-            assertThat(response.id()).isEqualTo(memberTicketId);
+                // then
+                assertThat(response.id()).isEqualTo(memberTicketId);
+            }
         }
     }
 
@@ -119,7 +124,7 @@ class MemberTicketServiceTest {
         @Test
         void 멤버_티켓이_없으면_빈_리스트() {
             // given
-            Long memberId = 1L;
+            Long memberId = member.getId();
 
             // when
             MemberTicketsResponse response = memberTicketService.findAll(memberId, PageRequest.ofSize(1));
@@ -131,21 +136,18 @@ class MemberTicketServiceTest {
         @Test
         void 성공() {
             // given
-            Long memberId = 1L;
-            MemberTicket first = MemberTicketFixture.memberTicket()
-                .id(1L)
-                .build();
-            MemberTicket second = MemberTicketFixture.memberTicket()
-                .id(2L)
-                .build();
-            given(memberTicketRepository.findAllByOwnerId(eq(memberId), any(Pageable.class)))
-                .willReturn(List.of(first, second));
+            Long memberId = member.getId();
+            MemberTicket firstMemberTicket = createPersistMemberTicket(member);
+            MemberTicket secondMemberTicket = createPersistMemberTicket(member);
 
             // when
             MemberTicketsResponse response = memberTicketService.findAll(memberId, PageRequest.ofSize(1));
 
             // then
-            assertThat(response.memberTickets()).hasSize(2);
+            assertThat(response.memberTickets())
+                .map(MemberTicketResponse::id)
+                .contains(firstMemberTicket.getId(), secondMemberTicket.getId())
+                .hasSize(2);
         }
     }
 
@@ -155,13 +157,11 @@ class MemberTicketServiceTest {
         @Test
         void 입장시간이_24시간_지난_티켓은_조회되지_않는다() {
             // given
-            Long memberId = 1L;
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
-                .entryTime(LocalDateTime.now().minusHours(25))
-                .build();
-
-            given(memberTicketRepository.findAllByOwnerId(anyLong(), any(Pageable.class)))
-                .willReturn(List.of(memberTicket));
+            Long memberId = member.getId();
+            doReturn(Instant.parse("2023-01-10T17:00:00Z"))
+                .when(clock)
+                .instant();
+            createPersistMemberTicket(member, LocalDateTime.now(clock).minusDays(1));
 
             // when
             MemberTicketsResponse response = memberTicketService.findCurrent(memberId, Pageable.ofSize(100));
@@ -171,64 +171,73 @@ class MemberTicketServiceTest {
         }
 
         @Test
-        void 활성화된_티켓이_먼저_조회된다() {
+        void 입장시간이_24시간_이내인_티켓은_조회된다() {
             // given
-            Long memberId = 1L;
-            MemberTicket pendingMemberTicket = MemberTicketFixture.memberTicket()
-                .id(1L)
-                .entryTime(LocalDateTime.now().plusHours(1))
-                .build();
-            MemberTicket activateMemberTicket = MemberTicketFixture.memberTicket()
-                .id(2L)
-                .entryTime(LocalDateTime.now().minusHours(1))
-                .build();
+            Long memberId = member.getId();
+            doReturn(Instant.parse("2023-01-10T17:00:00Z"))
+                .when(clock)
+                .instant();
+            LocalDateTime now = LocalDateTime.now(clock);
 
-            given(memberTicketRepository.findAllByOwnerId(eq(memberId), any(Pageable.class)))
-                .willReturn(List.of(pendingMemberTicket, activateMemberTicket));
+            MemberTicket memberTicket = createPersistMemberTicket(member, now.minusDays(1).plusSeconds(1));
 
             // when
             MemberTicketsResponse response = memberTicketService.findCurrent(memberId, Pageable.ofSize(100));
 
             // then
-            List<Long> memberTicketIds = response.memberTickets().stream()
+            assertThat(response.memberTickets())
                 .map(MemberTicketResponse::id)
-                .toList();
-            assertThat(memberTicketIds).containsExactly(2L, 1L);
+                .contains(memberTicket.getId())
+                .hasSize(1);
+        }
+
+        @Test
+        void 활성화된_티켓이_먼저_조회된다() {
+            // given
+            Long memberId = member.getId();
+            doReturn(Instant.parse("2023-01-10T17:00:00Z"))
+                .when(clock)
+                .instant();
+            LocalDateTime now = LocalDateTime.now(clock);
+
+            MemberTicket pendingMemberTicket = createPersistMemberTicket(member, now.plusSeconds(1));
+            MemberTicket activateMemberTicket = createPersistMemberTicket(member, now.minusSeconds(1));
+
+            // when
+            MemberTicketsResponse response = memberTicketService.findCurrent(memberId, Pageable.ofSize(100));
+
+            // then
+            assertThat(response.memberTickets())
+                .map(MemberTicketResponse::id)
+                .containsExactly(activateMemberTicket.getId(), pendingMemberTicket.getId());
         }
 
         @Test
         void 활성화_및_비활성화_내에서는_현재시간과_가까운순으로_정렬되어_조회된다() {
             // given
-            Long memberId = 1L;
-            MemberTicket pendingMemberTicket1 = MemberTicketFixture.memberTicket()
-                .id(1L)
-                .entryTime(LocalDateTime.now().plusHours(1))
-                .build();
-            MemberTicket pendingMemberTicket2 = MemberTicketFixture.memberTicket()
-                .id(2L)
-                .entryTime(LocalDateTime.now().plusHours(2))
-                .build();
-            MemberTicket activateMemberTicket1 = MemberTicketFixture.memberTicket()
-                .id(3L)
-                .entryTime(LocalDateTime.now().minusHours(2))
-                .build();
-            MemberTicket activateMemberTicket2 = MemberTicketFixture.memberTicket()
-                .id(4L)
-                .entryTime(LocalDateTime.now().minusHours(1))
-                .build();
+            Long memberId = member.getId();
+            doReturn(Instant.parse("2023-01-10T17:00:00Z"))
+                .when(clock)
+                .instant();
+            LocalDateTime now = LocalDateTime.now(clock);
 
-            given(memberTicketRepository.findAllByOwnerId(eq(memberId), any(Pageable.class)))
-                .willReturn(
-                    List.of(pendingMemberTicket1, pendingMemberTicket2, activateMemberTicket1, activateMemberTicket2));
+            MemberTicket firstPendingMemberTicket = createPersistMemberTicket(member, now.plusHours(1));
+            MemberTicket secondPendingMemberTicket = createPersistMemberTicket(member, now.plusHours(2));
+            MemberTicket firstActivateMemberTicket = createPersistMemberTicket(member, now.minusHours(1));
+            MemberTicket secondActivateMemberTicket = createPersistMemberTicket(member, now.minusHours(2));
 
             // when
             MemberTicketsResponse response = memberTicketService.findCurrent(memberId, Pageable.ofSize(100));
 
             // then
-            List<Long> memberTicketIds = response.memberTickets().stream()
+            assertThat(response.memberTickets())
                 .map(MemberTicketResponse::id)
-                .toList();
-            assertThat(memberTicketIds).containsExactly(4L, 3L, 1L, 2L);
+                .containsExactly(
+                    firstActivateMemberTicket.getId(),
+                    secondActivateMemberTicket.getId(),
+                    firstPendingMemberTicket.getId(),
+                    secondPendingMemberTicket.getId()
+                );
         }
     }
 }

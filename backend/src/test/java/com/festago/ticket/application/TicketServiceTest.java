@@ -1,55 +1,69 @@
 package com.festago.ticket.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.spy;
 
 import com.festago.stage.domain.Stage;
+import com.festago.stage.repository.MemoryStageRepository;
 import com.festago.support.StageFixture;
 import com.festago.support.TicketFixture;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketType;
 import com.festago.ticket.dto.StageTicketResponse;
 import com.festago.ticket.dto.StageTicketsResponse;
-import com.festago.ticket.repository.TicketRepository;
-import java.util.List;
+import com.festago.ticket.repository.MemoryTicketAmountRepository;
+import com.festago.ticket.repository.MemoryTicketRepository;
+import java.time.Clock;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@ExtendWith(MockitoExtension.class)
 class TicketServiceTest {
 
-    @Mock
-    TicketRepository ticketRepository;
+    MemoryTicketAmountRepository ticketAmountRepository = new MemoryTicketAmountRepository();
 
-    @InjectMocks
-    TicketService ticketService;
+    MemoryTicketRepository ticketRepository = new MemoryTicketRepository(ticketAmountRepository);
+
+    MemoryStageRepository stageRepository = new MemoryStageRepository();
+
+    Clock clock = spy(Clock.systemDefaultZone());
+
+    TicketService ticketService = new TicketService(
+        ticketRepository,
+        stageRepository,
+        clock
+    );
+
+    @BeforeEach
+    void setUp() {
+        ticketAmountRepository.clear();
+        ticketRepository.count();
+        stageRepository.clear();
+        reset(clock);
+    }
 
     @Test
     void 공연_아이디로_모든_티켓의_정보_조회() {
         // given
-        long stageId = 1L;
-        Stage stage = StageFixture.stage().id(stageId).build();
-        List<Ticket> tickets = List.of(
-            TicketFixture.ticket().id(1L).ticketType(TicketType.STUDENT).stage(stage).build(),
-            TicketFixture.ticket().id(2L).ticketType(TicketType.VISITOR).stage(stage).build()
-        );
-        given(ticketRepository.findAllByStageIdWithFetch(stageId))
-            .willReturn(tickets);
+        Stage stage = StageFixture.stage().build();
+        stageRepository.save(stage);
+
+        Ticket studentTicket = TicketFixture.ticket().ticketType(TicketType.STUDENT).stage(stage).build();
+        ticketRepository.save(studentTicket);
+        Ticket visitorTicket = TicketFixture.ticket().ticketType(TicketType.VISITOR).stage(stage).build();
+        ticketRepository.save(visitorTicket);
 
         // when
-        StageTicketsResponse actual = ticketService.findStageTickets(stageId);
+        StageTicketsResponse actual = ticketService.findStageTickets(stage.getId());
 
         // then
-        List<Long> ticketIds = actual.tickets().stream()
+        assertThat(actual.tickets())
             .map(StageTicketResponse::id)
-            .toList();
-        assertThat(ticketIds).containsExactlyInAnyOrder(1L, 2L);
+            .contains(studentTicket.getId(), visitorTicket.getId())
+            .hasSize(2);
     }
 }

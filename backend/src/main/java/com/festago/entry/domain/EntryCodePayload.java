@@ -4,6 +4,7 @@ import com.festago.common.exception.UnexpectedException;
 import com.festago.ticketing.domain.EntryState;
 import com.festago.ticketing.domain.MemberTicket;
 
+// TODO Record 클래스로 바꿔도 좋을듯
 public class EntryCodePayload {
 
     private final Long memberTicketId;

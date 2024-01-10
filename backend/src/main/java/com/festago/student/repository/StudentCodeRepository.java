@@ -4,9 +4,11 @@ import com.festago.member.domain.Member;
 import com.festago.student.domain.StudentCode;
 import com.festago.student.domain.VerificationCode;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.Repository;
 
-public interface StudentCodeRepository extends JpaRepository<StudentCode, Long> {
+public interface StudentCodeRepository extends Repository<StudentCode, Long> {
+
+    StudentCode save(StudentCode studentCode);
 
     void deleteByMember(Member member);
 

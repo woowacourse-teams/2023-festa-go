@@ -1,21 +1,27 @@
 package com.festago.admin.repository;
 
 import com.festago.admin.domain.Admin;
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import lombok.SneakyThrows;
 
 public class MemoryAdminRepository implements AdminRepository {
 
     private final ConcurrentHashMap<Long, Admin> memory = new ConcurrentHashMap<>();
     private final AtomicLong autoIncrement = new AtomicLong();
 
+    @SneakyThrows
     @Override
     public Admin save(Admin admin) {
-        long id = autoIncrement.incrementAndGet();
-        memory.put(id, new Admin(id, admin.getUsername(), admin.getPassword()));
-        return memory.get(id);
+        Field idField = admin.getClass()
+            .getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(admin, autoIncrement.incrementAndGet());
+        memory.put(admin.getId(), admin);
+        return admin;
     }
 
     @Override
@@ -34,5 +40,9 @@ public class MemoryAdminRepository implements AdminRepository {
     public boolean existsByUsername(String username) {
         return memory.values().stream()
             .anyMatch(admin -> Objects.equals(admin.getUsername(), username));
+    }
+
+    public void clear() {
+        memory.clear();
     }
 }

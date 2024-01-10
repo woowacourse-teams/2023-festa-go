@@ -2,72 +2,75 @@ package com.festago.ticketing.application;
 
 import static com.festago.common.exception.ErrorCode.NEED_STUDENT_VERIFICATION;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.spy;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.member.domain.Member;
-import com.festago.member.repository.MemberRepository;
-import com.festago.stage.domain.Stage;
-import com.festago.student.repository.StudentRepository;
+import com.festago.member.repository.MemoryMemberRepository;
+import com.festago.student.repository.MemoryStudentRepository;
 import com.festago.support.MemberFixture;
 import com.festago.support.TicketFixture;
+import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketType;
-import com.festago.ticket.repository.TicketAmountRepository;
-import com.festago.ticket.repository.TicketRepository;
+import com.festago.ticket.repository.MemoryTicketAmountRepository;
+import com.festago.ticket.repository.MemoryTicketRepository;
 import com.festago.ticketing.dto.TicketingRequest;
-import com.festago.ticketing.repository.MemberTicketRepository;
+import com.festago.ticketing.repository.MemoryMemberTicketRepository;
 import java.time.Clock;
-import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class TicketingServiceTest {
 
-    @Mock
-    MemberTicketRepository memberTicketRepository;
+    MemoryMemberTicketRepository memberTicketRepository = new MemoryMemberTicketRepository();
 
-    @Mock
-    TicketAmountRepository ticketAmountRepository;
+    MemoryTicketAmountRepository ticketAmountRepository = new MemoryTicketAmountRepository();
 
-    @Mock
-    TicketRepository ticketRepository;
+    MemoryTicketRepository ticketRepository = new MemoryTicketRepository(ticketAmountRepository);
 
-    @Mock
-    MemberRepository memberRepository;
+    MemoryMemberRepository memberRepository = new MemoryMemberRepository();
 
-    @Mock
-    StudentRepository studentRepository;
+    MemoryStudentRepository studentRepository = new MemoryStudentRepository();
 
-    @Spy
-    Clock clock = Clock.systemDefaultZone();
+    Clock clock = spy(Clock.systemDefaultZone());
 
-    @InjectMocks
-    TicketingService ticketingService;
+    TicketingService ticketingService = new TicketingService(
+        memberTicketRepository,
+        ticketAmountRepository,
+        ticketRepository,
+        memberRepository,
+        studentRepository,
+        clock
+    );
+
+    @BeforeEach
+    void setUp() {
+        memberTicketRepository.clear();
+        ticketAmountRepository.clear();
+        ticketRepository.clear();
+        memberRepository.clear();
+        studentRepository.clear();
+        reset(clock);
+    }
 
     @Test
     void 재학생용_티켓인데_학생인증이_되지_않았으면_예외() {
         // given
-        TicketingRequest request = new TicketingRequest(1L);
-        given(memberRepository.findById(anyLong()))
-            .willReturn(Optional.of(MemberFixture.member().build()));
-        given(memberTicketRepository.existsByOwnerAndStage(any(Member.class), any(Stage.class)))
-            .willReturn(false);
+        Member member = MemberFixture.member().build();
+        memberRepository.save(member);
 
-        given(ticketRepository.findByIdWithFetch(anyLong()))
-            .willReturn(Optional.of(TicketFixture.ticket().ticketType(TicketType.STUDENT).build()));
-        given(studentRepository.existsByMemberAndSchoolId(any(Member.class), anyLong()))
-            .willReturn(false);
+        Ticket ticket = TicketFixture.ticket()
+            .schoolId(1L)
+            .ticketType(TicketType.STUDENT)
+            .build();
+        ticketRepository.save(ticket);
+
+        TicketingRequest request = new TicketingRequest(ticket.getId());
 
         // when & then
         assertThatThrownBy(() -> ticketingService.ticketing(1L, request))

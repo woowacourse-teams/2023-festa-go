@@ -4,9 +4,13 @@ import com.festago.stage.domain.Stage;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketType;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.Repository;
 
-public interface TicketRepository extends JpaRepository<Ticket, Long>, TicketRepositoryCustom {
+public interface TicketRepository extends Repository<Ticket, Long>, TicketRepositoryCustom {
 
     Optional<Ticket> findByTicketTypeAndStage(TicketType ticketType, Stage stage);
+
+    Ticket save(Ticket ticket);
+
+    long count();
 }

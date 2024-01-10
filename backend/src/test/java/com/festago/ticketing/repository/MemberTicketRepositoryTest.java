@@ -115,7 +115,9 @@ class MemberTicketRepositoryTest {
             for (int i = 0; i < 20; i++) {
                 memberTickets.add(MemberTicketFixture.memberTicket().stage(stage).owner(member).build());
             }
-            memberTicketRepository.saveAll(memberTickets);
+            for (MemberTicket memberTicket : memberTickets) {
+                memberTicketRepository.save(memberTicket);
+            }
 
             Pageable pageable = PageRequest.of(0, 100, Sort.by("entryTime").descending());
 

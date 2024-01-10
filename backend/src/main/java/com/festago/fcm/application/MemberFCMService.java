@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MemberFCMService {
 
+    // TODO @Slf4j 어노테이션 사용하면 어떨까요
     private static final Logger log = LoggerFactory.getLogger(MemberFCMService.class);
 
     private final MemberFCMRepository memberFCMRepository;
@@ -36,6 +37,10 @@ public class MemberFCMService {
         return MemberFCMsResponse.from(memberFCM);
     }
 
+    // TODO 사용하지 않는 메서드 같음
+    // 비즈니스 파라미터의 isNewMember가 애매한 것 같음.
+    // 다른 회원이 같은 FCM 토큰을 저장하면??
+    // existsByFcmToken으로 Validation 고려해도 좋을듯 ex) 이미 사용중인 토큰입니다.
     @Async
     public void saveMemberFCM(boolean isNewMember, String accessToken, String fcmToken) {
         if (isNewMember) {
@@ -63,6 +68,7 @@ public class MemberFCMService {
         return authPayload.getMemberId();
     }
 
+    // TODO 사용하지 않는 메서드 같음
     @Async
     public void deleteMemberFCM(Long memberId) {
         memberFCMRepository.deleteAllByMemberId(memberId);

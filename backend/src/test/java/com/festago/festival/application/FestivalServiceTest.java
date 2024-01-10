@@ -4,52 +4,55 @@ import static com.festago.common.exception.ErrorCode.INVALID_FESTIVAL_START_DATE
 import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.spy;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
-import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.FestivalResponse;
-import com.festago.festival.repository.FestivalRepository;
+import com.festago.festival.repository.MemoryFestivalRepository;
 import com.festago.school.domain.School;
-import com.festago.school.repository.SchoolRepository;
-import com.festago.stage.repository.StageRepository;
+import com.festago.school.repository.MemorySchoolRepository;
+import com.festago.stage.application.FestivalStageServiceImpl;
+import com.festago.stage.repository.MemoryStageRepository;
 import com.festago.support.SchoolFixture;
 import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@ExtendWith(MockitoExtension.class)
 class FestivalServiceTest {
 
-    @Mock
-    FestivalRepository festivalRepository;
+    MemoryFestivalRepository festivalRepository = new MemoryFestivalRepository();
 
-    @Mock
-    StageRepository stageRepository;
+    MemoryStageRepository stageRepository = new MemoryStageRepository();
 
-    @Spy
-    Clock clock = Clock.systemDefaultZone();
+    MemorySchoolRepository schoolRepository = new MemorySchoolRepository();
 
-    @Mock
-    SchoolRepository schoolRepository;
+    Clock clock = spy(Clock.systemDefaultZone());
 
-    @InjectMocks
-    FestivalService festivalService;
+    FestivalService festivalService = new FestivalService(
+        festivalRepository,
+        new FestivalStageServiceImpl(stageRepository, festivalRepository),
+        schoolRepository,
+        clock
+    );
+
+    @BeforeEach
+    void setUp() {
+        festivalRepository.clear();
+        stageRepository.clear();
+        schoolRepository.clear();
+        reset(clock);
+    }
 
     @Nested
     class 축제_생성 {
@@ -57,12 +60,18 @@ class FestivalServiceTest {
         @Test
         void 학교가_없으면_예외() {
             // given
-            LocalDate today = LocalDate.now();
-            Long schoolId = 1L;
-            FestivalCreateRequest request = new FestivalCreateRequest("테코대학교", today, today, "http://image.png", 1L);
+            doReturn(Instant.parse("2023-01-10T16:00:00Z"))
+                .when(clock)
+                .instant();
+            LocalDate today = LocalDate.now(clock);
 
-            given(schoolRepository.findById(schoolId))
-                .willReturn(Optional.empty());
+            FestivalCreateRequest request = new FestivalCreateRequest(
+                "테코대학교",
+                today,
+                today,
+                "http://image.png",
+                1L
+            );
 
             // when & then
             assertThatThrownBy(() -> festivalService.create(request))
@@ -73,12 +82,21 @@ class FestivalServiceTest {
         @Test
         void 축제_생성시_시작일자가_과거이면_예외() {
             // given
-            LocalDate today = LocalDate.now();
+            doReturn(Instant.parse("2023-01-10T16:00:00Z"))
+                .when(clock)
+                .instant();
+            LocalDate today = LocalDate.now(clock);
+
             School school = SchoolFixture.school().build();
-            FestivalCreateRequest request = new FestivalCreateRequest("테코대학교", today.minusDays(1), today,
-                "http://image.png", 1L);
-            given(schoolRepository.findById(anyLong()))
-                .willReturn(Optional.of(school));
+            schoolRepository.save(school);
+
+            FestivalCreateRequest request = new FestivalCreateRequest(
+                "테코대학교",
+                today.minusDays(1),
+                today,
+                "http://image.png",
+                school.getId()
+            );
 
             // when & then
             assertThatThrownBy(() -> festivalService.create(request))
@@ -87,27 +105,29 @@ class FestivalServiceTest {
         }
 
         @Test
-        void 성공() {
+        void 성공하면_축제가_저장된다() {
             // given
-            LocalDate today = LocalDate.now();
-            String name = "테코대학교";
-            String thumbnail = "http://image.png";
-            Long schoolId = 1L;
-            School school = SchoolFixture.school().id(schoolId).build();
-            FestivalCreateRequest request = new FestivalCreateRequest(name, today, today, thumbnail, schoolId);
-            Festival festival = new Festival(1L, name, today, today, thumbnail, school);
-            FestivalResponse expected = new FestivalResponse(1L, 1L, name, today, today, thumbnail);
-            given(schoolRepository.findById(schoolId))
-                .willReturn(Optional.of(school));
-            given(festivalRepository.save(any()))
-                .willReturn(festival);
+            doReturn(Instant.parse("2023-01-10T16:00:00Z"))
+                .when(clock)
+                .instant();
+            LocalDate today = LocalDate.now(clock);
+
+            School school = SchoolFixture.school().build();
+            schoolRepository.save(school);
+
+            FestivalCreateRequest request = new FestivalCreateRequest(
+                "테코대학교",
+                today,
+                today,
+                "http://image.png",
+                school.getId()
+            );
 
             // when
             FestivalResponse actual = festivalService.create(request);
 
             // then
-            assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
+            assertThat(festivalRepository.findById(actual.id())).isPresent();
         }
     }
 }
