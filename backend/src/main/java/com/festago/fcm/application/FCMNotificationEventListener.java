@@ -10,8 +10,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.SendResponse;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -20,9 +19,8 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @Profile("prod | dev")
+@Slf4j
 public class FCMNotificationEventListener {
-
-    private static final Logger log = LoggerFactory.getLogger(FCMNotificationEventListener.class);
 
     private final FirebaseMessaging firebaseMessaging;
     private final MemberFCMService memberFCMService;
