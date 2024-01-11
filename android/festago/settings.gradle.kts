@@ -17,3 +17,4 @@ rootProject.name = "festago"
 include(":app")
 include(":domain")
 include(":data")
+include(":presentation")
