@@ -1,9 +1,10 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("kotlin-kapt")
-    kotlin("plugin.serialization") version "1.8.22"
     id("org.jlleitschuh.gradle.ktlint")
     id("com.google.dagger.hilt.android")
 }
@@ -16,6 +17,8 @@ android {
         minSdk = 28
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        resValue("string", "kakao_redirection_scheme", getSecretKey("kakao_redirection_scheme"))
     }
 
     buildTypes {
@@ -115,4 +118,8 @@ dependencies {
 
     // splash
     implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
+}
+
+fun getSecretKey(propertyKey: String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
