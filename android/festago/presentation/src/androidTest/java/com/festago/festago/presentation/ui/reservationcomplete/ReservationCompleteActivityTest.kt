@@ -6,7 +6,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.festago.festago.R
+import com.festago.festago.presentation.R
 import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDateTime
