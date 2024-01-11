@@ -12,7 +12,7 @@ class MockWeb {
 
     init {
         val thread = Thread {
-            mockWebServer.dispatcher = dispatcher
+            mockWebServer.dispatcher = com.festago.festago.data.MockWeb.Companion.dispatcher
             mockWebServer.url("/")
             url = mockWebServer.url("").toString()
         }
@@ -30,7 +30,7 @@ class MockWeb {
                         when {
                             path.startsWith("/member-tickets") -> MockResponse()
                                 .setResponseCode(201)
-                                .setBody(getQrCode())
+                                .setBody(com.festago.festago.data.MockWeb.Companion.getQrCode())
 
                             else -> MockResponse().setResponseCode(404)
                         }
@@ -43,21 +43,25 @@ class MockWeb {
                                 MockResponse()
                                     .setHeader("Content-Type", "application/json")
                                     .setResponseCode(200)
-                                    .setBody(getTicket(ticketId))
+                                    .setBody(
+                                        com.festago.festago.data.MockWeb.Companion.getTicket(
+                                            ticketId
+                                        )
+                                    )
                             }
 
                             path.startsWith("/member-tickets") -> {
                                 MockResponse()
                                     .setHeader("Content-Type", "application/json")
                                     .setResponseCode(200)
-                                    .setBody(getTickets())
+                                    .setBody(com.festago.festago.data.MockWeb.Companion.getTickets())
                             }
 
                             path.startsWith("/festivals") -> {
                                 MockResponse()
                                     .setHeader("Content-Type", "application/json")
                                     .setResponseCode(200)
-                                    .setBody(getFestivals())
+                                    .setBody(com.festago.festago.data.MockWeb.Companion.getFestivals())
                             }
 
                             else -> MockResponse().setResponseCode(404)

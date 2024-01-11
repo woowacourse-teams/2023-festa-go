@@ -70,7 +70,7 @@ kapt {
 
 dependencies {
     implementation(project(":common"))
-    // domain
+    implementation(project(":data"))
     implementation(project(":domain"))
 
     // android
@@ -92,15 +92,8 @@ dependencies {
     // glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
 
-    // okhttp3
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
-
     // retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-
-    // kotlin-serialization
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
     // junit4
     testImplementation("junit:junit:4.13.2")
@@ -115,9 +108,6 @@ dependencies {
 
     // mock
     testImplementation("io.mockk:mockk-android:1.13.5")
-
-    // okhttp3-mockwebserver
-    implementation("com.squareup.okhttp3:mockwebserver:4.11.0")
 
     // espresso
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -144,9 +134,6 @@ dependencies {
 
     // kakao login
     implementation("com.kakao.sdk:v2-user:2.12.0")
-
-    // Encrypted SharedPreference
-    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
 
     // turbine
     testImplementation("app.cash.turbine:turbine:1.0.0")

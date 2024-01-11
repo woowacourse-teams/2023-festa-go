@@ -1,6 +1,6 @@
 package com.festago.festago.data.di.singletonscope
 
-import com.festago.festago.BuildConfig
+import com.festago.festago.data.BuildConfig
 import com.festago.festago.data.retrofit.AuthInterceptor
 import com.festago.festago.repository.AuthRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory

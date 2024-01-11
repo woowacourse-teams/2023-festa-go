@@ -1,4 +1,4 @@
-package com.festago.festago.data.repository
+package com.festago.festago.commom.data.repository
 
 import com.festago.festago.data.dto.ReservationFestivalResponse
 import com.festago.festago.data.dto.ReservationStageResponse
