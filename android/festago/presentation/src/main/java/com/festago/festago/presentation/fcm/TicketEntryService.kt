@@ -9,7 +9,11 @@ import kotlinx.coroutines.runBlocking
 
 class TicketEntryService : FirebaseMessagingService() {
 
-    private val notificationManager by lazy { NotificationManager(this) }
+    private val notificationManager by lazy {
+        com.festago.festago.presentation.fcm.NotificationManager(
+            this
+        )
+    }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         when (remoteMessage.notification?.channelId) {

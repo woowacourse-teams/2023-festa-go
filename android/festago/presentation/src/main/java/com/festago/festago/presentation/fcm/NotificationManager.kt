@@ -18,7 +18,7 @@ class NotificationManager(private val context: Context) {
 
     private val pendingIntent = PendingIntent.getActivity(
         context,
-        HOME_REQUEST_CODE,
+        com.festago.festago.presentation.fcm.NotificationManager.Companion.HOME_REQUEST_CODE,
         intent,
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
