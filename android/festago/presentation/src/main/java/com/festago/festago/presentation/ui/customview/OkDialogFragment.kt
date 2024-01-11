@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import com.festago.festago.databinding.FragmentOkDialogBinding
+import com.festago.festago.presentation.databinding.FragmentOkDialogBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment.OnClickListener
 import dagger.hilt.android.AndroidEntryPoint
 

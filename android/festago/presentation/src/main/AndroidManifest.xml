@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application>
         <activity
-            android:name=".presentation.ui.splash.SplashActivity"
-            android:exported="true"
-            android:theme="@style/Theme.App.Starting">
+            android:name=".ui.splash.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -13,25 +13,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ui.selectschool.SelectSchoolActivity"
+            android:name=".ui.selectschool.SelectSchoolActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.studentverification.StudentVerificationActivity"
+            android:name=".ui.studentverification.StudentVerificationActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.signin.SignInActivity"
+            android:name=".ui.signin.SignInActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.reservationcomplete.ReservationCompleteActivity"
+            android:name=".ui.reservationcomplete.ReservationCompleteActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.home.HomeActivity"
+            android:name=".ui.home.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.ticketreserve.TicketReserveActivity"
+            android:name=".ui.ticketreserve.TicketReserveActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.ticketentry.TicketEntryActivity"
+            android:name=".ui.ticketentry.TicketEntryActivity"
             android:exported="false" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
@@ -49,11 +49,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ui.tickethistory.TicketHistoryActivity"
+            android:name=".ui.tickethistory.TicketHistoryActivity"
             android:exported="false" />
 
         <service
-            android:name=".presentation.fcm.TicketEntryService"
+            android:name=".fcm.TicketEntryService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

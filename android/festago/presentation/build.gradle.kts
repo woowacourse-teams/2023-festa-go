@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.festago.festago"
+    namespace = "com.festago.festago.presentation"
     compileSdk = 34
 
     defaultConfig {

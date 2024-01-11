@@ -9,8 +9,8 @@ import android.text.style.ForegroundColorSpan
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.festago.festago.R
-import com.festago.festago.databinding.ActivitySignInBinding
+import com.festago.festago.presentation.R
+import com.festago.festago.presentation.databinding.ActivitySignInBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.util.repeatOnStarted

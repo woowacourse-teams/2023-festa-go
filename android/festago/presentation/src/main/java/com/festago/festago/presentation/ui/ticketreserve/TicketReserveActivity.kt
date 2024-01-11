@@ -6,11 +6,11 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
-import com.festago.festago.R
-import com.festago.festago.databinding.ActivityTicketReserveBinding
 import com.festago.festago.model.ErrorCode
 import com.festago.festago.model.ReservationTicket
 import com.festago.festago.model.ReservedTicket
+import com.festago.festago.presentation.R
+import com.festago.festago.presentation.databinding.ActivityTicketReserveBinding
 import com.festago.festago.presentation.ui.customview.OkDialogFragment
 import com.festago.festago.presentation.ui.reservationcomplete.ReservationCompleteActivity
 import com.festago.festago.presentation.ui.reservationcomplete.ReservedTicketArg

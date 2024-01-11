@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.festago.festago.R
-import com.festago.festago.databinding.FragmentMyPageBinding
+import com.festago.festago.presentation.R
+import com.festago.festago.presentation.databinding.FragmentMyPageBinding
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.ui.selectschool.SelectSchoolActivity
 import com.festago.festago.presentation.ui.signin.SignInActivity

@@ -9,8 +9,8 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.festago.festago.R
-import com.festago.festago.databinding.ActivitySplashBinding
+import com.festago.festago.presentation.R
+import com.festago.festago.presentation.databinding.ActivitySplashBinding
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory

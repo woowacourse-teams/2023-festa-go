@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.festago.festago.R
-import com.festago.festago.databinding.FragmentFestivalListBinding
 import com.festago.festago.model.FestivalFilter
+import com.festago.festago.presentation.R
+import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveActivity
 import com.festago.festago.presentation.util.repeatOnStarted

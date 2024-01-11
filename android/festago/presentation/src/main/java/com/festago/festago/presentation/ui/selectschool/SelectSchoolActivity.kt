@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.festago.festago.R
-import com.festago.festago.databinding.ActivitySelectSchoolBinding
+import com.festago.festago.presentation.R
+import com.festago.festago.presentation.databinding.ActivitySelectSchoolBinding
 import com.festago.festago.presentation.ui.studentverification.StudentVerificationActivity
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint

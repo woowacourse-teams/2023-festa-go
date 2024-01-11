@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.festago.festago.databinding.FragmentTicketReserveBottomSheetBinding
+import com.festago.festago.presentation.databinding.FragmentTicketReserveBottomSheetBinding
 import com.festago.festago.presentation.ui.ticketreserve.TicketReserveViewModel
 import com.festago.festago.presentation.util.getParcelableArrayListCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

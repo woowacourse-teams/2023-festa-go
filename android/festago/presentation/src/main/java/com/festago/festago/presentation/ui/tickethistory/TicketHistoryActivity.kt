@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.festago.festago.databinding.ActivityTicketHistoryBinding
+import com.festago.festago.presentation.databinding.ActivityTicketHistoryBinding
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 

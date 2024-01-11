@@ -9,8 +9,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.festago.festago.R
-import com.festago.festago.databinding.FragmentTicketListBinding
+import com.festago.festago.presentation.R
+import com.festago.festago.presentation.databinding.FragmentTicketListBinding
 import com.festago.festago.presentation.ui.ticketentry.TicketEntryActivity
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint

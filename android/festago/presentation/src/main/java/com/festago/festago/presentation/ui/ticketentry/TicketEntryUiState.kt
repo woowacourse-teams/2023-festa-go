@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.ui.ticketentry
 
-import com.festago.festago.R
+import com.festago.festago.presentation.R
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCode
 import com.festago.festago.model.TicketCondition.AFTER_ENTRY

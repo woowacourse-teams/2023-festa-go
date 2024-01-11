@@ -3,8 +3,8 @@ package com.festago.festago.presentation.ui.ticketreserve.bottomsheet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.festago.festago.R
-import com.festago.festago.databinding.ItemTicketReserveBottomSheetBinding
+import com.festago.festago.presentation.R
+import com.festago.festago.presentation.databinding.ItemTicketReserveBottomSheetBinding
 
 class TicketReserveBottomViewHolder(
     private val binding: ItemTicketReserveBottomSheetBinding,

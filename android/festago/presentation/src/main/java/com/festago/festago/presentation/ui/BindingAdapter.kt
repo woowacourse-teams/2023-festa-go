@@ -6,7 +6,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.doOnLayout
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.festago.festago.R
+import com.festago.festago.presentation.R
 
 @BindingAdapter("visibility")
 fun View.setVisibility(isVisible: Boolean) {

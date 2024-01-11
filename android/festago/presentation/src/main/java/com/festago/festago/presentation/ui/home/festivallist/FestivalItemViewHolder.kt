@@ -3,7 +3,7 @@ package com.festago.festago.presentation.ui.home.festivallist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.festago.festago.databinding.ItemFestivalListBinding
+import com.festago.festago.presentation.databinding.ItemFestivalListBinding
 
 class FestivalItemViewHolder(
     private val binding: ItemFestivalListBinding,

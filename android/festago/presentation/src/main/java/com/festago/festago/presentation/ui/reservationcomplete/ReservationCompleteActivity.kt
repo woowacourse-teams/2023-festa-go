@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.festago.festago.databinding.ActivityReservationCompleteBinding
+import com.festago.festago.presentation.databinding.ActivityReservationCompleteBinding
 import com.festago.festago.presentation.util.getParcelableExtraCompat
 import dagger.hilt.android.AndroidEntryPoint
 

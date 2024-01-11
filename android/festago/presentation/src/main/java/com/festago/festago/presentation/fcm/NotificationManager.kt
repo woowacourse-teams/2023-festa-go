@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.festago.festago.R
+import com.festago.festago.presentation.R
 import com.festago.festago.presentation.fcm.FcmMessageType.ENTRY_ALERT
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.util.checkNotificationPermission
@@ -18,7 +18,7 @@ class NotificationManager(private val context: Context) {
 
     private val pendingIntent = PendingIntent.getActivity(
         context,
-        com.festago.festago.presentation.fcm.NotificationManager.Companion.HOME_REQUEST_CODE,
+        HOME_REQUEST_CODE,
         intent,
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )

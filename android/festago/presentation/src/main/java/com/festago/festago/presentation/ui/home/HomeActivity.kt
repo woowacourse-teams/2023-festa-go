@@ -10,8 +10,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.festago.festago.R
-import com.festago.festago.databinding.ActivityHomeBinding
+import com.festago.festago.presentation.R
+import com.festago.festago.presentation.databinding.ActivityHomeBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment

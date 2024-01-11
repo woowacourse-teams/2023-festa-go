@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
-import com.festago.festago.R
-import com.festago.festago.databinding.ItemTicketListBinding
 import com.festago.festago.model.TicketCondition
+import com.festago.festago.presentation.R
+import com.festago.festago.presentation.databinding.ItemTicketListBinding
 import java.time.format.DateTimeFormatter
 
 class TicketListItemViewHolder(
