@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.ui.tickethistory
 
-import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.model.Ticket
 import com.festago.festago.presentation.fixture.TicketFixture
 import com.festago.festago.presentation.rule.MainDispatcherRule

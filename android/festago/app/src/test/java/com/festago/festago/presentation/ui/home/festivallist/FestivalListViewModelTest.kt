@@ -1,7 +1,7 @@
 package com.festago.festago.presentation.ui.home.festivallist
 
 import app.cash.turbine.test
-import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.model.Festival
 import com.festago.festago.model.FestivalFilter
 import com.festago.festago.presentation.rule.MainDispatcherRule

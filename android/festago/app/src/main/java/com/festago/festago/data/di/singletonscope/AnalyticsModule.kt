@@ -1,7 +1,7 @@
 package com.festago.festago.data.di.singletonscope
 
-import com.festago.festago.analytics.AnalyticsHelper
-import com.festago.festago.analytics.FirebaseAnalyticsHelper
+import com.festago.festago.common.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.FirebaseAnalyticsHelper
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

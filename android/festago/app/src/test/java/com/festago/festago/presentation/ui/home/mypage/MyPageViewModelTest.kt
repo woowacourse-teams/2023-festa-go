@@ -1,7 +1,7 @@
 package com.festago.festago.presentation.ui.home.mypage
 
 import app.cash.turbine.test
-import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.model.MemberTicketFestival
 import com.festago.festago.model.Stage
 import com.festago.festago.model.Ticket

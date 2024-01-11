@@ -1,4 +1,4 @@
-package com.festago.festago.analytics
+package com.festago.festago.common.analytics
 
 import android.content.Context
 import android.os.Bundle

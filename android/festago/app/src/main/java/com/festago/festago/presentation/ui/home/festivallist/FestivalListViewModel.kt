@@ -2,8 +2,8 @@ package com.festago.festago.presentation.ui.home.festivallist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.festago.festago.analytics.AnalyticsHelper
-import com.festago.festago.analytics.logNetworkFailure
+import com.festago.festago.common.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.logNetworkFailure
 import com.festago.festago.model.FestivalFilter
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListEvent.ShowTicketReserve
 import com.festago.festago.repository.FestivalRepository

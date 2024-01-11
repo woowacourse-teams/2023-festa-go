@@ -1,7 +1,7 @@
 package com.festago.festago.presentation.ui.ticketreserve
 
 import app.cash.turbine.test
-import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.model.ErrorCode
 import com.festago.festago.model.Reservation
 import com.festago.festago.model.ReservationStage

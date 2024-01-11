@@ -1,7 +1,7 @@
 package com.festago.festago.presentation.ui.signin
 
 import app.cash.turbine.test
-import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.presentation.rule.MainDispatcherRule
 import com.festago.festago.repository.AuthRepository
 import io.mockk.coEvery

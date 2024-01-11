@@ -1,4 +1,4 @@
-package com.festago.festago.analytics
+package com.festago.festago.common.analytics
 
 fun AnalyticsHelper.logNetworkFailure(key: String, value: String) {
     logEvent(

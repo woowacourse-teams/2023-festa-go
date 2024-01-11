@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.ui.ticketentry
 
-import com.festago.festago.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCode
 import com.festago.festago.presentation.fixture.TicketFixture
