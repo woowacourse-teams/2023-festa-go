@@ -25,7 +25,7 @@ public class AdminAuthController {
 
     private final AdminAuthService adminAuthService;
 
-    @PostMapping("/admin/login")
+    @PostMapping("/login")
     @Hidden
     public ResponseEntity<Void> login(@RequestBody @Valid AdminLoginRequest request) {
         String token = adminAuthService.login(request);
@@ -41,7 +41,7 @@ public class AdminAuthController {
             .build().toString();
     }
 
-    @PostMapping("/admin/signup")
+    @PostMapping("/signup")
     @Hidden
     public ResponseEntity<AdminSignupResponse> signupAdminAccount(@RequestBody @Valid AdminSignupRequest request,
                                                                   @Admin Long adminId) {
@@ -50,7 +50,7 @@ public class AdminAuthController {
             .body(response);
     }
 
-    @PostMapping("/admin/initialize")
+    @PostMapping("/initialize")
     @Hidden
     public ResponseEntity<Void> initializeRootAdmin(@RequestBody @Valid RootAdminInitializeRequest request) {
         adminAuthService.initializeRootAdmin(request.password());
