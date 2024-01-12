@@ -14,4 +14,6 @@ plugins {
     id("com.google.firebase.crashlytics") version "2.9.7" apply false
 
     id("com.google.dagger.hilt.android") version "2.44" apply false
+
+    id("com.savvasdalkitsis.module-dependency-graph") version "0.10" apply true
 }

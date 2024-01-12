@@ -1,11 +1,11 @@
 package com.festago.festago.presentation.ui.ticketentry
 
-import com.festago.festago.presentation.R
 import com.festago.festago.model.Ticket
 import com.festago.festago.model.TicketCode
 import com.festago.festago.model.TicketCondition.AFTER_ENTRY
 import com.festago.festago.model.TicketCondition.AWAY
 import com.festago.festago.model.TicketCondition.BEFORE_ENTRY
+import com.festago.festago.presentation.R
 
 sealed interface TicketEntryUiState {
     object Loading : TicketEntryUiState

@@ -76,7 +76,6 @@ dependencies {
 
     // kakao login
     implementation("com.kakao.sdk:v2-user:2.12.0")
-
 }
 
 fun getSecretKey(propertyKey: String): String {
