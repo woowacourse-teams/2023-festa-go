@@ -7,11 +7,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.festago.festago.presentation.R
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+@HiltAndroidTest
 class ReservationCompleteActivityTest {
     private val reservationComplete = ReservedTicketArg(1L, 123, LocalDateTime.now())
 

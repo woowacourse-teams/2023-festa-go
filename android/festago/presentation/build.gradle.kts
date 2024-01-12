@@ -44,6 +44,12 @@ android {
     }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
 dependencies {
     implementation(project(":common"))
     implementation(project(":domain"))
@@ -57,6 +63,8 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+    // hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+    implementation("com.google.dagger:hilt-android-testing:2.44")
 
     // recyclerview
     implementation("androidx.recyclerview:recyclerview:1.3.1-rc01")

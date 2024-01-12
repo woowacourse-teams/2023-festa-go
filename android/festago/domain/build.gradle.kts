@@ -12,6 +12,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
 }
 
+kotlin.jvmToolchain(17)
+
 tasks {
     compileKotlin {
         kotlinOptions.jvmTarget = "17"

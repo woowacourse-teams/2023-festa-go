@@ -40,14 +40,16 @@ android {
     }
 }
 
+kotlin.jvmToolchain(17)
+
 dependencies {
     implementation(project(":common"))
     implementation(project(":domain"))
 
     // hilt
-    implementation("com.google.dagger:hilt-android:2.44")
+    implementation("com.google.dagger:hilt-android:2.50")
     implementation("com.google.firebase:firebase-messaging-ktx:23.4.0")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
 
     // okhttp3
     implementation("com.squareup.okhttp3:okhttp:4.11.0")

@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    kotlin("kapt")
 }
 
 android {
@@ -30,6 +30,8 @@ android {
         jvmTarget = "17"
     }
 }
+
+kotlin.jvmToolchain(17)
 
 dependencies {
     // hilt

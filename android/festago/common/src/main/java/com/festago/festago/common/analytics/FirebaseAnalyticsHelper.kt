@@ -7,7 +7,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class FirebaseAnalyticsHelper @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
 ) : AnalyticsHelper {
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
