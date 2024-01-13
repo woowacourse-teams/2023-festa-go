@@ -43,7 +43,6 @@ android {
 kotlin.jvmToolchain(17)
 
 dependencies {
-    implementation(project(":common"))
     implementation(project(":domain"))
 
     // hilt

@@ -1,4 +1,4 @@
-package com.festago.festago.data.di.singletonscope
+package com.festago.festago.common.analytics.di
 
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.FirebaseAnalyticsHelper
@@ -14,6 +14,6 @@ interface AnalyticsModule {
     @Binds
     @Singleton
     fun bindsFirebaseAnalyticsHelper(
-        analyticsHelper: FirebaseAnalyticsHelper
+        analyticsHelper: FirebaseAnalyticsHelper,
     ): AnalyticsHelper
 }
