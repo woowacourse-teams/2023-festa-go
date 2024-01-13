@@ -10,9 +10,7 @@ import kotlinx.coroutines.runBlocking
 class TicketEntryService : FirebaseMessagingService() {
 
     private val notificationManager by lazy {
-        com.festago.festago.presentation.fcm.NotificationManager(
-            this
-        )
+        NotificationManager(this)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -32,7 +30,7 @@ class TicketEntryService : FirebaseMessagingService() {
     private fun handleEntryAlert(remoteMessage: RemoteMessage) {
         notificationManager.sendEntryAlertNotification(
             remoteMessage.notification?.title ?: "",
-            remoteMessage.notification?.body ?: ""
+            remoteMessage.notification?.body ?: "",
         )
     }
 
