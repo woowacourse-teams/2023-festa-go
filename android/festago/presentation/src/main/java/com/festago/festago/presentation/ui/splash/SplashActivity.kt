@@ -4,17 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.festago.festago.presentation.BuildConfig
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivitySplashBinding
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.AndroidEntryPoint
 
 @SuppressLint("CustomSplashScreen")
@@ -29,8 +32,14 @@ class SplashActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { true }
+        initKakaoSdk()
         checkAppUpdate(splashScreen)
         setContentView(binding.root)
+    }
+
+    private fun initKakaoSdk() {
+        Log.d("SplashActivity", "initKakaoSdk: ${BuildConfig.KAKAO_NATIVE_APP_KEY}")
+        KakaoSdk.init(this.applicationContext, BuildConfig.KAKAO_NATIVE_APP_KEY)
     }
 
     private fun checkAppUpdate(splashScreen: SplashScreen) {

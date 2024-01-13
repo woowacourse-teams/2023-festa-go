@@ -18,6 +18,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", getSecretKey("kakao_native_app_key"))
         resValue("string", "kakao_redirection_scheme", getSecretKey("kakao_redirection_scheme"))
     }
 

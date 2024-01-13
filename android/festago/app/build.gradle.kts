@@ -1,5 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -22,8 +20,6 @@ android {
         versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", getSecretKey("kakao_native_app_key"))
     }
 
     buildFeatures {
@@ -71,11 +67,4 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
-
-    // kakao login
-    implementation("com.kakao.sdk:v2-user:2.12.0")
-}
-
-fun getSecretKey(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
