@@ -7,10 +7,12 @@ import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.Role;
 import com.festago.auth.infrastructure.CookieTokenExtractor;
 import com.festago.auth.infrastructure.HeaderTokenExtractor;
+import com.festago.common.interceptor.HttpMethodDelegateInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -30,10 +32,16 @@ public class LoginConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(adminAuthInterceptor())
+        registry.addInterceptor(HttpMethodDelegateInterceptor.builder()
+                .allowMethod(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT, HttpMethod.PATCH)
+                .interceptor(adminAuthInterceptor())
+                .build())
             .addPathPatterns("/admin/**", "/js/admin/**")
             .excludePathPatterns("/admin/login", "/admin/api/login", "/admin/api/initialize");
-        registry.addInterceptor(memberAuthInterceptor())
+        registry.addInterceptor(HttpMethodDelegateInterceptor.builder()
+                .allowMethod(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT, HttpMethod.PATCH)
+                .interceptor(memberAuthInterceptor())
+                .build())
             .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**", "/students/**")
             .excludePathPatterns("/auth/oauth2");
     }
