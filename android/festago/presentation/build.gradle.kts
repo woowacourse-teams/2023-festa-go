@@ -54,6 +54,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
 dependencies {
     implementation(project(":common"))
     implementation(project(":domain"))
+    implementation(project(":presentation-interface"))
 
     // android
     implementation("androidx.core:core-ktx:1.10.1")

@@ -13,7 +13,9 @@ import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentTicketListBinding
 import com.festago.festago.presentation.ui.ticketentry.TicketEntryActivity
 import com.festago.festago.presentation.util.repeatOnStarted
+import com.festago.festago.presentation.ui.ticketentry.GetTicketEntryActivityIntentInterface
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
@@ -76,9 +78,12 @@ class TicketListFragment : Fragment(R.layout.fragment_ticket_list) {
         }
     }
 
+    @Inject
+    lateinit var getTicketEntryActivityIntent: GetTicketEntryActivityIntentInterface
+
     private fun showTicketEntry(event: TicketListEvent.ShowTicketEntry) {
         resultLauncher.launch(
-            TicketEntryActivity.getIntent(
+            getTicketEntryActivityIntent(
                 context = requireContext(),
                 ticketId = event.ticketId,
             ),

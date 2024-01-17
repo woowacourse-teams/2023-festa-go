@@ -109,9 +109,11 @@ class TicketEntryActivity : AppCompatActivity() {
         private const val KEY_TICKET_ID = "KEY_TICKET_ID"
         const val RESULT_OK = 1
 
-        fun getIntent(context: Context, ticketId: Long): Intent {
-            return Intent(context, TicketEntryActivity::class.java).apply {
-                putExtra(KEY_TICKET_ID, ticketId)
+        object GetTicketEntryActivityIntent : GetTicketEntryActivityIntentInterface {
+            override fun invoke(context: Context, ticketId: Long): Intent {
+                return Intent(context, TicketEntryActivity::class.java).apply {
+                    putExtra(KEY_TICKET_ID, ticketId)
+                }
             }
         }
     }
