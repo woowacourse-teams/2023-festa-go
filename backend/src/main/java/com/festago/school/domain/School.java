@@ -4,6 +4,8 @@ import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.util.Validator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,15 +35,19 @@ public class School extends BaseTimeEntity {
     @Column(unique = true)
     private String name;
 
-    public School(String domain, String name) {
-        this(null, domain, name);
+    @Enumerated(EnumType.STRING)
+    private SchoolRegion region;
+
+    public School(String domain, String name, SchoolRegion region) {
+        this(null, domain, name, region);
     }
 
-    public School(Long id, String domain, String name) {
+    public School(Long id, String domain, String name, SchoolRegion region) {
         validate(domain, name);
         this.id = id;
         this.domain = domain;
         this.name = name;
+        this.region = region;
     }
 
     private void validate(String domain, String name) {
