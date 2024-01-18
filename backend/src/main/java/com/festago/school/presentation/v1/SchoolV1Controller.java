@@ -1,10 +1,11 @@
 package com.festago.school.presentation.v1;
 
+import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.application.SchoolV1QueryService;
 import com.festago.school.presentation.v1.dto.SchoolV1Response;
-import com.festago.school.presentation.v1.dto.SchoolsV1Response;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +23,13 @@ public class SchoolV1Controller {
     private final SchoolV1QueryService schoolQueryService;
 
     @GetMapping
-    public ResponseEntity<SchoolsV1Response> findAllSchools(
-        @RequestParam(required = false) String searchFilter,
-        @RequestParam(required = false) String searchKeyword,
+    public ResponseEntity<Page<SchoolV1Response>> findAllSchools(
+        @RequestParam(defaultValue = "") String searchFilter,
+        @RequestParam(defaultValue = "") String searchKeyword,
         Pageable pageable
     ) {
         return ResponseEntity.ok()
-            .body(schoolQueryService.findAll(searchFilter, searchKeyword, pageable));
+            .body(schoolQueryService.findAll(new SearchCondition(searchFilter, searchKeyword, pageable)));
     }
 
     @GetMapping("/{schoolId}")
