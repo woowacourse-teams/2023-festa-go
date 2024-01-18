@@ -212,7 +212,7 @@ class ReservationTicketRetrofitServiceTest {
                                 remainAmount = 212,
                             ),
 
-                            ),
+                        ),
                     ),
                     ReservationStageResponse(
                         id = 2,
