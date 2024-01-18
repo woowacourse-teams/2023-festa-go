@@ -15,8 +15,9 @@ public class ArtistCommandService {
 
     private final ArtistRepository artistRepository;
 
-    public void save(ArtistCreateRequest request) {
-        artistRepository.save(new Artist(request.name(), request.profileImage()));
+    public Long save(ArtistCreateRequest request) {
+        return artistRepository.save(new Artist(request.name(), request.profileImage()))
+                .getId();
     }
 
     public void update(ArtistUpdateRequest request, Long artistId) {
