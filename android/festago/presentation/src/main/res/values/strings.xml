@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">페스타고</string>
 
+    <!-- Strings related to home -->
+    <string name="home_bottom_nav_festival">축제 목록</string>
+    <string name="home_bottom_nav_ticket">티켓 목록</string>
+    <string name="home_bottom_nav_bookmark">북마크</string>
+    <string name="home_bottom_nav_my_page">마이페이지</string>
+    <string name="home_back_pressed">한 번 더 누르면 앱이 종료됩니다</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -5,25 +5,25 @@
         android:enabled="true"
         android:icon="@drawable/ic_bottom_nav_home"
         android:iconTint="@color/black"
-        android:title="축제 목록"/>
+        android:title="@string/home_bottom_nav_festival" />
     <item
         android:id="@+id/item_ticket"
         android:enabled="true"
         android:icon="@drawable/ic_bottom_nav_ticket"
         android:iconTint="@color/black"
-        android:title="티켓"/>
+        android:title="@string/home_bottom_nav_ticket" />
 
     <item
         android:id="@+id/item_bookmark"
         android:enabled="true"
         android:icon="@drawable/ic_bottom_nav_bookmark"
         android:iconTint="@color/black"
-        android:title="북마크"/>
+        android:title="@string/home_bottom_nav_bookmark" />
 
     <item
-        android:id="@+id/item_mypage"
+        android:id="@+id/item_my_page"
         android:enabled="true"
         android:icon="@drawable/ic_bottom_nav_my_page"
         android:iconTint="@color/black"
-        android:title="마이페이지"/>
+        android:title="@string/home_bottom_nav_my_page" />
 </menu>
