@@ -61,8 +61,8 @@ kapt {
 }
 
 dependencies {
-    implementation(project(":data"))
-    implementation(project(":presentation"))
+    implementation(project(":data-legacy"))
+    implementation(project(":presentation-legacy"))
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.44")
