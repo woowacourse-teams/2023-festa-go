@@ -16,4 +16,4 @@ logging:
 festago:
   qr-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
   auth-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
-  cors-allow-urls: http://localhost:3000
+  cors-allow-origins: http://localhost:3000
