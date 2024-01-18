@@ -3,7 +3,6 @@ package com.festago.festago.presentation.ui.home
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivityHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 

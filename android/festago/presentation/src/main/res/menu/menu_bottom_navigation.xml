@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_festival"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_home"
+        android:iconTint="@color/black"
+        android:title="축제 목록"/>
+    <item
+        android:id="@+id/item_ticket"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_ticket"
+        android:iconTint="@color/black"
+        android:title="티켓"/>
+
+    <item
+        android:id="@+id/item_bookmark"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_bookmark"
+        android:iconTint="@color/black"
+        android:title="북마크"/>
+
+    <item
+        android:id="@+id/item_mypage"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_my_page"
+        android:iconTint="@color/black"
+        android:title="마이페이지"/>
+</menu>

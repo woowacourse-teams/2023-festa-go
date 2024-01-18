@@ -14,12 +14,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="48dp" />
-        
+
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nvHome"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="#00000000"/>
-        
-        
+            android:background="#00000000"
+            app:itemIconTint="@drawable/menu_selector_color"
+            app:labelVisibilityMode="unlabeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_bottom_navigation" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
