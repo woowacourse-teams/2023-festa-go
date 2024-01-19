@@ -57,7 +57,8 @@
             android:text="@{@string/festival_list_tv_date_range_format(item.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),item.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
             app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalName"
             app:layout_constraintEnd_toEndOf="@+id/ivPopularFestivalImage"
-            tools:text="2023.07.03 - 2023.07.09" />
+            tools:text="2023.07.03 - 2023.07.09"
+            app:layout_constraintStart_toStartOf="@+id/ivPopularFestivalImage" />
 
         <TextView
             android:id="@+id/tvPopularFestivalArtistsName"
