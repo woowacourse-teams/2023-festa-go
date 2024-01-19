@@ -1,14 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.home.festivallist.FestivalListFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/home_bottom_nav_festival" />
+        tools:context=".ui.home.festivallist.FestivalListFragment">
 
-</FrameLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpPopularFestivalBackground"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="-8dp"
+            app:layout_constraintBottom_toBottomOf="@id/into_tab_layout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvPopularFestivalTitle"
+            style="@style/H3Bold18Lh20"
+            android:textColor="@color/background_gray_01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="@string/festival_list_tv_popular_festival_title"
+            app:layout_constraintTop_toTopOf="@id/vpPopularFestivalBackground" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/into_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:tabBackground="@drawable/selector_tab_page"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"
+            app:tabPaddingStart="8dp"
+            app:tabPaddingEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@id/vpPopularFestivalForeground" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpPopularFestivalForeground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
