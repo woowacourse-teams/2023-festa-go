@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalItemUiState" />
+    </data>
+
+    <ImageView
+        android:id="@+id/ivPopularFestivalImage"
+        blurRadius="@{25}"
+        blurSampling="@{3}"
+        app:tint="#40000000"
+        android:tintMode="src_atop"
+        imageUrl="@{item.imageUrl}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1:1"
+        tools:src="@drawable/ic_launcher_background" />
+</layout>
