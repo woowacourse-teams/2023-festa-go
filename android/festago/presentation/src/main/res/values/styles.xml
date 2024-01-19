@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="H2Bold20Lh24">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+    </style>
+
+    <style name="H1Bold20Lh20">
+        <item name="android:fontFamily">@font/pretendard_medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+    </style>
+
+    <style name="H3Bold18Lh20">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+    </style>
+
+    <style name="H4Bold16Lh20">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+    </style>
+
+    <style name="B1Medium16Lh20">
+        <item name="android:fontFamily">@font/pretendard_medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+    </style>
+
+    <style name="H5Bold14Lh16">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+    </style>
+
+    <style name="B3Medium14Lh14">
+        <item name="android:fontFamily">@font/pretendard_medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+    </style>
+
+    <style name="B2Medium14Lh20">
+        <item name="android:fontFamily">@font/pretendard_medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineSpacingExtra">6sp</item>
+    </style>
+
+    <style name="B4Medium12Lh14">
+        <item name="android:fontFamily">@font/pretendard_medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+    </style>
+</resources>
