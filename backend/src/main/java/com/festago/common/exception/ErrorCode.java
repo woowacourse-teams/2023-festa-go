@@ -30,6 +30,7 @@ public enum ErrorCode {
     DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
     VALIDATION_FAIL("검증이 실패하였습니다."),
     INVALID_FESTIVAL_FILTER("유효하지 않은 축제의 필터 값입니다."),
+    INVALID_FESTIVAL_LIST_INDEX("페스티벌 아이디와 시작은 둘다 보내거나 보내지 않아야합니다"),
 
 
     // 401
