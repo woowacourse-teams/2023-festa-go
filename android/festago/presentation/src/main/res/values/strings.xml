@@ -9,4 +9,7 @@
     <string name="home_back_pressed">한 번 더 누르면 앱이 종료됩니다</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="festival_list_tv_popular_festival_title">요즘 뜨는 축제</string>
+    <string name="festival_list_tv_date_range_format">%s - %s</string>
+    <string name="festival_list_tv_date_format">yy.MM.dd</string>
 </resources>
