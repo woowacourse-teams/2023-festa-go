@@ -8,13 +8,11 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeActivity">
 
-
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fcvHomeContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="48dp" />
-
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nvHome"
@@ -22,11 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="#00000000"
-            app:itemIconTint="@drawable/menu_selector_color"
+            app:itemIconTint="@drawable/selector_menu_color"
             app:labelVisibilityMode="unlabeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_bottom_navigation" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
