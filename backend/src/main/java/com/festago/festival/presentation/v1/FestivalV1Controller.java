@@ -2,20 +2,15 @@ package com.festago.festival.presentation.v1;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.dto.ErrorResponse;
-import com.festago.festival.dto.v1.FestivalIndexRequest;
+import com.festago.festival.dto.v1.FestivalListRequest;
 import com.festago.festival.dto.v1.FestivalV1ListResponse;
-import com.festago.festival.repository.FestivalFilter;
-import com.festago.school.domain.SchoolRegion;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,15 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class FestivalV1Controller {
 
-    private final Logger errorLogger;
-
     @GetMapping
     public ResponseEntity<FestivalV1ListResponse> findFestivals(
-        @RequestParam(value = "location", defaultValue = "기타") SchoolRegion region,
-        @RequestParam(value = "filter", defaultValue = "PROGRESS") FestivalFilter filter,
-        @RequestParam(value = "limit", defaultValue = "10") FestivalPageLimit limit,
-        @ModelAttribute FestivalIndexRequest festivalIndexRequest
-    ) {
+        FestivalListRequest festivalListRequest) {
         return ResponseEntity.ok(new FestivalV1ListResponse());
     }
 

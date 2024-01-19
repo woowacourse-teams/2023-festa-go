@@ -31,6 +31,9 @@ public enum ErrorCode {
     VALIDATION_FAIL("검증이 실패하였습니다."),
     INVALID_FESTIVAL_FILTER("유효하지 않은 축제의 필터 값입니다."),
     INVALID_FESTIVAL_LIST_INDEX("페스티벌 아이디와 시작은 둘다 보내거나 보내지 않아야합니다"),
+    INVALID_REGION("유효하지 않은 지역입니다."),
+    INVALID_LOCAL_DATE("유효하지 않은 ISO LocalDate 형식입니다."),
+    INVALID_PAGE_SIZE("유효하지 않은 페이지 크기입니다."),
 
 
     // 401
