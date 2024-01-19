@@ -3,10 +3,10 @@ package com.festago.festago.presentation.ui.home.festivallist.popularfestival.ba
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalItemUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 
 class PopularFestivalBackgroundAdapter :
-    ListAdapter<PopularFestivalItemUiState, PopularFestivalBackgroundViewHolder>(diffUtil) {
+    ListAdapter<FestivalItemUiState, PopularFestivalBackgroundViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -20,17 +20,17 @@ class PopularFestivalBackgroundAdapter :
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<PopularFestivalItemUiState>() {
+        val diffUtil = object : DiffUtil.ItemCallback<FestivalItemUiState>() {
             override fun areItemsTheSame(
-                oldItem: PopularFestivalItemUiState,
-                newItem: PopularFestivalItemUiState,
+                oldItem: FestivalItemUiState,
+                newItem: FestivalItemUiState,
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: PopularFestivalItemUiState,
-                newItem: PopularFestivalItemUiState,
+                oldItem: FestivalItemUiState,
+                newItem: FestivalItemUiState,
             ): Boolean {
                 return oldItem == newItem
             }

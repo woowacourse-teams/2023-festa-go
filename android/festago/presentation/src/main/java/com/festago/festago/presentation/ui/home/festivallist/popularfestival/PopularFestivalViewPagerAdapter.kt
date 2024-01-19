@@ -5,7 +5,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.ui.home.festivallist.popularfestival.background.PopularFestivalBackgroundAdapter
 import com.festago.festago.presentation.ui.home.festivallist.popularfestival.foreground.PopularFestivalForegroundAdapter
-import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalItemUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 
 class PopularFestivalViewPagerAdapter(
     context: Context,
@@ -56,7 +56,7 @@ class PopularFestivalViewPagerAdapter(
         backgroundViewPager.offscreenPageLimit = limit
     }
 
-    fun submitList(popularFestivals: List<PopularFestivalItemUiState>) {
+    fun submitList(popularFestivals: List<FestivalItemUiState>) {
         setViewPagersOffscreenLimit(popularFestivals.size)
         foregroundAdapter.submitList(popularFestivals)
         backgroundAdapter.submitList(popularFestivals)
