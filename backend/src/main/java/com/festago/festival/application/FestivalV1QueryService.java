@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FestivalV1QueryService {
 
@@ -29,7 +29,6 @@ public class FestivalV1QueryService {
     private final FestivalInfoConverter infoConverter;
     private final Clock clock;
 
-    @Transactional(readOnly = true)
     public FestivalV1ListResponse findFestivals(FestivalV1lListRequest request) {
         LocalDate now = LocalDate.now(clock);
         if (request.getLocation() == SchoolRegion.기타) {
