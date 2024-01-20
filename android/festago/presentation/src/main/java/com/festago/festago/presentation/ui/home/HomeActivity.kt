@@ -44,10 +44,10 @@ class HomeActivity : AppCompatActivity() {
 
     private fun selectView(menuItemId: Int) {
         return when (menuItemId) {
-            R.id.item_festival -> showFestivalList()
-            R.id.item_ticket -> showTicketList()
-            R.id.item_bookmark -> showBookmarkList()
-            R.id.item_my_page -> showMyPage()
+            R.id.itemFestival -> showFestivalList()
+            R.id.itemTicket -> showTicketList()
+            R.id.itemBookmark -> showBookmarkList()
+            R.id.itemMyPage -> showMyPage()
             else -> throw IllegalArgumentException("menu item id not found")
         }
     }

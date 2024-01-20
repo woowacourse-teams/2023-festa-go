@@ -58,7 +58,7 @@ class FestivalListFragment : Fragment() {
         )
 
         TabLayoutMediator(
-            binding.intoTabLayout,
+            binding.tlDotIndicator,
             binding.vpPopularFestivalForeground,
         ) { tab, position -> }.attach()
     }

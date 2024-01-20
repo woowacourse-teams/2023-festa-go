@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginBottom="-8dp"
-                app:layout_constraintBottom_toBottomOf="@id/into_tab_layout"
+                app:layout_constraintBottom_toBottomOf="@id/tlDotIndicator"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -87,7 +87,7 @@
                 app:layout_constraintTop_toTopOf="@id/vpPopularFestivalBackground" />
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/into_tab_layout"
+                android:id="@+id/tlDotIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
