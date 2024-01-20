@@ -53,7 +53,6 @@ class FestivalListFragment : Fragment() {
 
     private fun initViewPager() {
         popularFestivalViewPager = PopularFestivalViewPagerAdapter(
-            context = requireContext(),
             foregroundViewPager = binding.vpPopularFestivalForeground,
             backgroundViewPager = binding.vpPopularFestivalBackground,
         )
