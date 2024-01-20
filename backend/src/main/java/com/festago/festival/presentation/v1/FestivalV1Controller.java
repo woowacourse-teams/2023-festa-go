@@ -2,7 +2,8 @@ package com.festago.festival.presentation.v1;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.dto.ErrorResponse;
-import com.festago.festival.dto.v1.FestivalListRequest;
+import com.festago.festival.application.FestivalV1QueryService;
+import com.festago.festival.dto.v1.FestivaV1lListRequest;
 import com.festago.festival.dto.v1.FestivalV1ListResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class FestivalV1Controller {
 
+    private final FestivalV1QueryService festivalV1QueryService;
+
     @GetMapping
     public ResponseEntity<FestivalV1ListResponse> findFestivals(
-        FestivalListRequest festivalListRequest) {
-        return ResponseEntity.ok(new FestivalV1ListResponse());
+        FestivaV1lListRequest festivalListRequest) {
+        return ResponseEntity.ok(festivalV1QueryService.findFestivals(festivalListRequest));
     }
 
     // TODO : Converter에서 BadReqeustException 발생하면 Exception으로 예외 처리되기에 임시로 배치하였음.
