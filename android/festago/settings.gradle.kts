@@ -14,9 +14,18 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "festago"
+// app
 include(":app")
-include(":domain")
-include(":data-legacy")
-include(":presentation-legacy")
+
+// common
 include(":common")
+
+// domain
+include(":domain")
+
+// presentation
+include(":presentation-legacy")
 include(":presentation")
+
+// dat
+include(":data-legacy")
