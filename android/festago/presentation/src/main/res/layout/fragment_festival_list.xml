@@ -16,9 +16,56 @@
         tools:context=".ui.home.festivallist.FestivalListFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            visibility="@{uiState.shouldShowLoading}"
+            android:id="@+id/containerAppBarFestivalList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/ivFestagoLogo"
+                android:src="@drawable/img_festival_list_festago_logo"
+                android:layout_width="92dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginVertical="8dp"
+                android:importantForAccessibility="no"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivSearch"
+                android:src="@drawable/ic_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toStartOf="@id/ivAlarm"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivAlarm"
+                android:src="@drawable/ic_bell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            visibility="@{uiState.shouldShowSuccess}"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerAppBarFestivalList">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vpPopularFestivalBackground"
