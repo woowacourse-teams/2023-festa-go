@@ -5,13 +5,15 @@ import com.festago.school.domain.School;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
+@Repository
 @RequiredArgsConstructor
 public class FestivalRepositoryCustomImpl implements FestivalRepositoryCustom {
 
-    private final OldFestivalRepositoryCustomImpl oldFestivalRepositoryCustom;
+    private final OldFestivalRepository oldFestivalRepositoryCustom;
 
-    private final V1FestivalRepositoryCustomImpl v1FestivalRepositoryCustom;
+    private final V1FestivalRepository v1FestivalRepositoryCustom;
 
     @Override
     public List<Festival> findByFilter(FestivalFilter filter, LocalDate currentTime) {

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class V1FestivalRepositoryCustomImpl {
+public class V1FestivalRepository {
 
     private static final int INDEX_OFFSET = 1;
     private static final int CHECK_LAST_FESTIVAL = 1;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class OldFestivalRepositoryCustomImpl {
+public class OldFestivalRepository {
 
     private final JPAQueryFactory queryFactory;
 
