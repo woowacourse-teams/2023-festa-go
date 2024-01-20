@@ -2,8 +2,8 @@ package com.festago.festival.application;
 
 import com.festago.festival.domain.FestivalInfo;
 import com.festago.festival.domain.FestivalInfoConverter;
-import com.festago.festival.dto.v1.FestivaV1lListRequest;
 import com.festago.festival.dto.v1.FestivalV1ListResponse;
+import com.festago.festival.dto.v1.FestivalV1lListRequest;
 import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalPage;
 import com.festago.festival.repository.FestivalPageable;
@@ -30,7 +30,7 @@ public class FestivalV1QueryService {
     private final Clock clock;
 
     @Transactional(readOnly = true)
-    public FestivalV1ListResponse findFestivals(FestivaV1lListRequest request) {
+    public FestivalV1ListResponse findFestivals(FestivalV1lListRequest request) {
         LocalDate now = LocalDate.now(clock);
         if (request.getLocation() == SchoolRegion.기타) {
             return makeResponse(festivalRepository.findBy(request.getFilter(), makePageable(request), now));
@@ -47,7 +47,7 @@ public class FestivalV1QueryService {
             infoConverter);
     }
 
-    private FestivalPageable makePageable(FestivaV1lListRequest request) {
+    private FestivalPageable makePageable(FestivalV1lListRequest request) {
         if (request.getLastStartDate().isPresent() && request.getLastFestivalId().isPresent()) {
             return new FestivalPageable(request.getLastStartDate().get(), request.getLastFestivalId().get(),
                 request.getLimit());
@@ -55,7 +55,7 @@ public class FestivalV1QueryService {
         return new FestivalPageable(null, null, request.getLimit());
     }
 
-    private FestivalPage findTargetRegionFestival(FestivaV1lListRequest request, List<School> targetRegionSchools,
+    private FestivalPage findTargetRegionFestival(FestivalV1lListRequest request, List<School> targetRegionSchools,
                                                   LocalDate now) {
         return festivalRepository.findBy(request.getFilter(), targetRegionSchools, makePageable(request), now);
     }

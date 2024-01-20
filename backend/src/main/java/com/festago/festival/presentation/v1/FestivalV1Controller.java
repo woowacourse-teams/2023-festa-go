@@ -3,8 +3,8 @@ package com.festago.festival.presentation.v1;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.festival.application.FestivalV1QueryService;
-import com.festago.festival.dto.v1.FestivaV1lListRequest;
 import com.festago.festival.dto.v1.FestivalV1ListResponse;
+import com.festago.festival.dto.v1.FestivalV1lListRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class FestivalV1Controller {
 
     @GetMapping
     public ResponseEntity<FestivalV1ListResponse> findFestivals(
-        FestivaV1lListRequest festivalListRequest) {
+        FestivalV1lListRequest festivalListRequest) {
         return ResponseEntity.ok(festivalV1QueryService.findFestivals(festivalListRequest));
     }
 

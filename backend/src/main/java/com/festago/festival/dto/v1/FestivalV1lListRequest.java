@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
-public class FestivaV1lListRequest {
+public class FestivalV1lListRequest {
 
     private static final int MIN_PAGE_SIZE = 1;
     private static final int MAX_PAGE_SIZE = 20;
@@ -20,8 +20,8 @@ public class FestivaV1lListRequest {
     private final Long lastFestivalId;
     private final LocalDate lastStartDate;
 
-    public FestivaV1lListRequest(String location, String filter, Integer limit, Long lastFestivalId,
-                                 String lastStartDate) {
+    public FestivalV1lListRequest(String location, String filter, Integer limit, Long lastFestivalId,
+                                  String lastStartDate) {
         validate(location, filter, limit, lastFestivalId, lastStartDate);
         this.location = convertToRegion(location);
         this.filter = converToFilter(filter);

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 public class V1FestivalRepository {
 
     private static final int INDEX_OFFSET = 1;
-    private static final int CHECK_LAST_FESTIVAL = 1;
 
     private final JPAQueryFactory queryFactory;
 
@@ -33,37 +32,12 @@ public class V1FestivalRepository {
     }
 
     private FestivalPage plannedFestivals(FestivalPageable page, LocalDate currentTime) {
-        if (page.getLastFestivalId().isPresent() && page.getLastFestivalId().isPresent()) {
-            return pagedPlannedFestival(page, currentTime);
-        }
-        int limitSize = page.getLimit();
-        List<Festival> plannedFestivals = findNPlannedQuery(currentTime, limitSize + CHECK_LAST_FESTIVAL);
-        return determinePage(plannedFestivals, limitSize);
-    }
-
-    private FestivalPage pagedPlannedFestival(FestivalPageable page, LocalDate currentTime) {
-        List<Festival> allPlannedFestival = queryFactory.selectFrom(festival)
+        List<Festival> allPlannedFestivals = queryFactory.selectFrom(festival)
             .leftJoin(festival.school).fetchJoin()
             .where(festival.startDate.gt(currentTime))
-            .orderBy(festival.startDate.asc(), festival.id.asc())
+            .orderBy(festival.startDate.asc())
             .fetch();
-        return pagingFestival(page, allPlannedFestival);
-    }
-
-    private FestivalPage determinePage(List<Festival> remainSameDateFestivals, int limitSize) {
-        if (remainSameDateFestivals.size() == limitSize + CHECK_LAST_FESTIVAL) {
-            return new FestivalPage(false, remainSameDateFestivals);
-        }
-        return new FestivalPage(true, remainSameDateFestivals);
-    }
-
-    private List<Festival> findNPlannedQuery(LocalDate startDate, int limit) {
-        return queryFactory.selectFrom(festival)
-            .leftJoin(festival.school).fetchJoin()
-            .where(festival.startDate.gt(startDate))
-            .orderBy(festival.startDate.asc(), festival.id.asc())
-            .limit(limit)
-            .fetch();
+        return pagingFestival(page, allPlannedFestivals);
     }
 
     private FestivalPage pagingFestival(FestivalPageable page, List<Festival> allFestivals) {
@@ -73,7 +47,7 @@ public class V1FestivalRepository {
         int festivalSize = allFestivals.size();
         int limit = page.getLimit();
         int returnFestivalSize = Math.min(festivalSize, limit);
-        return makePage(limit, allFestivals.subList(0, returnFestivalSize));
+        return makePage(festivalSize - returnFestivalSize, allFestivals.subList(0, returnFestivalSize));
     }
 
     private FestivalPage pagedFestival(FestivalPageable page, List<Festival> allFestivals) {
@@ -86,8 +60,9 @@ public class V1FestivalRepository {
             int remainFestivalSize = allFestivalSize - festivalOrder;
             int limit = page.getLimit();
             int returnFestivalSize = Math.min(remainFestivalSize, limit);
-            return makePage(limit,
-                allFestivals.subList(targetFestivalIndex + INDEX_OFFSET, targetFestivalIndex + returnFestivalSize));
+            int startIndex = targetFestivalIndex + INDEX_OFFSET;
+            return makePage(remainFestivalSize - returnFestivalSize,
+                allFestivals.subList(startIndex, startIndex + returnFestivalSize));
         }
         return new FestivalPage(true, Collections.emptyList());
     }
@@ -99,11 +74,11 @@ public class V1FestivalRepository {
             .orElseThrow(() -> new BadRequestException(ErrorCode.FESTIVAL_NOT_FOUND));
     }
 
-    private FestivalPage makePage(int limit, List<Festival> festivals) {
-        if (festivals.size() < limit) {
-            return new FestivalPage(true, festivals);
+    private FestivalPage makePage(int remainFestivalSize, List<Festival> festivals) {
+        if (remainFestivalSize > 0) {
+            return new FestivalPage(false, festivals);
         }
-        return new FestivalPage(false, festivals);
+        return new FestivalPage(true, festivals);
     }
 
     private FestivalPage progressFestivals(FestivalPageable page, LocalDate currentTime) {
@@ -139,7 +114,7 @@ public class V1FestivalRepository {
             .leftJoin(festival.school).fetchJoin()
             .where(festival.startDate.gt(currentTime)
                 .and(festival.school.id.in(schoolIds)))
-            .orderBy(festival.startDate.asc(), festival.id.asc())
+            .orderBy(festival.startDate.asc())
             .fetch();
         return pagingFestival(page, allPlannedFestivals);
     }
