@@ -16,7 +16,7 @@ public interface ArtistRepository extends Repository<Artist, Long> {
 
     Artist save(Artist artist);
 
-    Long delete(Artist artist);
+    Long deleteById(Long artistId);
 
     Optional<Artist> findById(Long id);
 

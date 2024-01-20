@@ -57,4 +57,16 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
                 .ignoringFields("id")
                 .isEqualTo(request);
     }
+
+    @Test
+    void 아티스트를_삭제한다() {
+        // given
+        Long artistId = artistRepository.save(new Artist("고윤하", "www.naver.com")).getId();
+
+        // when
+        artistCommandService.delete(artistId);
+
+        // then
+        assertThat(artistRepository.findById(artistId)).isEmpty();
+    }
 }

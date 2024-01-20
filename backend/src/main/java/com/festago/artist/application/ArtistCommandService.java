@@ -24,4 +24,8 @@ public class ArtistCommandService {
         Artist artist = artistRepository.getOrThrow(artistId);
         artist.update(request.name(), request.profileImage());
     }
+
+    public void delete(Long artistId) {
+        artistRepository.deleteById(artistId);
+    }
 }

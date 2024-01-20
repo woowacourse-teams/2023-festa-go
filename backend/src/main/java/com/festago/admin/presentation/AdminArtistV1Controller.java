@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,12 @@ public class AdminArtistV1Controller {
     public ResponseEntity<Void> update(@RequestBody @Valid ArtistUpdateRequest request,
                                        @PathVariable Long artistId) {
         artistCommandService.update(request, artistId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{artistId}")
+    public ResponseEntity<Void> delete(@PathVariable Long artistId) {
+        artistCommandService.delete(artistId);
         return ResponseEntity.ok().build();
     }
 

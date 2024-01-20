@@ -2,6 +2,7 @@ package com.festago.admin.presentation;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -77,6 +78,17 @@ class AdminArtistV1ControllerTest {
         mockMvc.perform(put(API_URL + "/1")
                         .cookie(COOKIE)
                         .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockAuth(role = Role.ADMIN)
+    void 아티스트_삭제_성공시_200_응답() throws Exception {
+        // when & then
+        mockMvc.perform(delete(API_URL + "/1")
+                        .cookie(COOKIE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
