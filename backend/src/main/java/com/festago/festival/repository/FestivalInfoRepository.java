@@ -7,5 +7,7 @@ import org.springframework.data.repository.Repository;
 
 public interface FestivalInfoRepository extends Repository<FestivalInfo, Long> {
 
+    FestivalInfo save(FestivalInfo festivalInfo);
+
     List<FestivalInfo> findAllByFestivalIn(List<Festival> festivals);
 }

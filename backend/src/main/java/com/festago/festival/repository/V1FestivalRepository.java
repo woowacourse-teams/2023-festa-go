@@ -67,6 +67,16 @@ public class V1FestivalRepository {
     }
 
     private FestivalPage pagingFestival(FestivalPageable page, List<Festival> allFestivals) {
+        if (page.getLastFestivalId().isPresent() && page.getLastFestivalId().isPresent()) {
+            return pagedFestival(page, allFestivals);
+        }
+        int festivalSize = allFestivals.size();
+        int limit = page.getLimit();
+        int returnFestivalSize = Math.min(festivalSize, limit);
+        return makePage(limit, allFestivals.subList(0, returnFestivalSize));
+    }
+
+    private FestivalPage pagedFestival(FestivalPageable page, List<Festival> allFestivals) {
         Long lastFestivalId = page.getLastFestivalId().get();
         Festival lastFestival = findLastFestival(allFestivals, lastFestivalId);
         int targetFestivalIndex = allFestivals.indexOf(lastFestival);
@@ -77,7 +87,7 @@ public class V1FestivalRepository {
             int limit = page.getLimit();
             int returnFestivalSize = Math.min(remainFestivalSize, limit);
             return makePage(limit,
-                allFestivals.subList(targetFestivalIndex, targetFestivalIndex + returnFestivalSize));
+                allFestivals.subList(targetFestivalIndex + INDEX_OFFSET, targetFestivalIndex + returnFestivalSize));
         }
         return new FestivalPage(true, Collections.emptyList());
     }
