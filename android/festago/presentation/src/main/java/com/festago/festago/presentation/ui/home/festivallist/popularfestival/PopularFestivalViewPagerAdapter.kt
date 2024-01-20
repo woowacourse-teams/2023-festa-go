@@ -32,13 +32,13 @@ class PopularFestivalViewPagerAdapter(
             context.resources.getDimensionPixelOffset(R.dimen.offsetBetweenPages).toFloat(),
         )
 
-        foregroundViewPager.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
+        val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 backgroundViewPager.setCurrentItem(position, false)
             }
-        })
+        }
+        foregroundViewPager.registerOnPageChangeCallback(onPageChangeCallback)
     }
 
     private fun narrowSpaceViewPager(
