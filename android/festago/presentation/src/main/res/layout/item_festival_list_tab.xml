@@ -23,12 +23,12 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="진행 중" />
+                android:text="@string/festival_list_ti_current_festival" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="진행 예정" />
+                android:text="@string/festival_list_ti_upcoming_festival" />
 
         </com.google.android.material.tabs.TabLayout>
 

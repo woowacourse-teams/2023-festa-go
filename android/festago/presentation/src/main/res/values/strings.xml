@@ -13,4 +13,6 @@
     <string name="festival_list_tv_date_range_format">%s - %s</string>
     <string name="festival_list_tv_date_format">yy.MM.dd</string>
     <string name="festival_list_iv_image">festival image</string>
+    <string name="festival_list_ti_current_festival">진행 중</string>
+    <string name="festival_list_ti_upcoming_festival">진행 예정</string>
 </resources>
