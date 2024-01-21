@@ -12,9 +12,8 @@ import com.festago.festago.presentation.databinding.ItemFestivalListFestivalBind
 import com.festago.festago.presentation.ui.home.festivallist.festival.artistlist.ArtistAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 
-class FestivalViewHolder(
-    private val binding: ItemFestivalListFestivalBinding,
-) : RecyclerView.ViewHolder(binding.root) {
+class FestivalListFestivalViewHolder(private val binding: ItemFestivalListFestivalBinding) :
+    FestivalListViewHolder(binding) {
     private val artistAdapter = ArtistAdapter()
 
     init {
@@ -48,13 +47,13 @@ class FestivalViewHolder(
     }
 
     companion object {
-        fun of(parent: ViewGroup): FestivalViewHolder {
+        fun of(parent: ViewGroup): FestivalListFestivalViewHolder {
             val binding = ItemFestivalListFestivalBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return FestivalViewHolder(binding)
+            return FestivalListFestivalViewHolder(binding)
         }
     }
 }

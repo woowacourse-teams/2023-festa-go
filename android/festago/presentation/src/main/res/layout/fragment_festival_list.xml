@@ -60,63 +60,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvList"
             visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/containerAppBarFestivalList">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/vpPopularFestivalBackground"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginBottom="-8dp"
-                app:layout_constraintBottom_toBottomOf="@id/tlDotIndicator"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvPopularFestivalTitle"
-                style="@style/H3Bold18Lh20"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:text="@string/festival_list_tv_popular_festival_title"
-                android:textColor="@color/background_gray_01"
-                app:layout_constraintTop_toTopOf="@id/vpPopularFestivalBackground" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tlDotIndicator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                app:layout_constraintTop_toBottomOf="@id/vpPopularFestivalForeground"
-                app:tabBackground="@drawable/selector_tab_page"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"
-                app:tabPaddingEnd="8dp"
-                app:tabPaddingStart="8dp" />
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/vpPopularFestivalForeground"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalTitle" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvFestivalList"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginHorizontal="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vpPopularFestivalBackground"
-                tools:listitem="@layout/item_festival_list_festival" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/containerAppBarFestivalList"
+            app:layout_constraintVertical_weight="1"
+            tools:listitem="@layout/item_festival_list_popular" />
 
         <ProgressBar
             android:id="@+id/pbLoading"

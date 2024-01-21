@@ -7,20 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
-import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalAdapter
-import com.festago.festago.presentation.ui.home.festivallist.popularfestival.PopularFestivalViewPagerAdapter
+import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.util.repeatOnStarted
-import com.google.android.material.tabs.TabLayoutMediator
 
 class FestivalListFragment : Fragment() {
 
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var popularFestivalViewPager: PopularFestivalViewPagerAdapter
-
-    private lateinit var festivalAdapter: FestivalAdapter
+    private lateinit var festivalListAdapter: FestivalListAdapter
 
     private val vm: FestivalListViewModel by viewModels()
 
@@ -55,18 +51,8 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initViewPager() {
-        popularFestivalViewPager = PopularFestivalViewPagerAdapter(
-            foregroundViewPager = binding.vpPopularFestivalForeground,
-            backgroundViewPager = binding.vpPopularFestivalBackground,
-        )
-
-        festivalAdapter = FestivalAdapter()
-        binding.rvFestivalList.adapter = festivalAdapter
-
-        TabLayoutMediator(
-            binding.tlDotIndicator,
-            binding.vpPopularFestivalForeground,
-        ) { tab, position -> }.attach()
+        festivalListAdapter = FestivalListAdapter()
+        binding.rvList.adapter = festivalListAdapter
     }
 
     private fun updateUi(uiState: FestivalListUiState) {
@@ -80,8 +66,7 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
-        popularFestivalViewPager.submitList(uiState.festivals)
-        festivalAdapter.submitList(uiState.festivals)
+        festivalListAdapter.submitList(listOf(uiState) + uiState.festivals)
     }
 
     override fun onDestroyView() {

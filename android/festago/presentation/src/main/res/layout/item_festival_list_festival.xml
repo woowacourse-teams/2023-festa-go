@@ -15,6 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="132dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_festival_list_festival"
         tools:layout_height="132dp"
@@ -61,9 +62,9 @@
             android:layout_height="66dp"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            app:layout_constraintHorizontal_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="@id/tvFestivalSchedule"
             app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule"
             tools:listitem="@layout/item_festival_list_artist" />
