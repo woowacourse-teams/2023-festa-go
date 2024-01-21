@@ -44,6 +44,7 @@ public class SchoolCommandService {
         School school = schoolRepository.getOrThrow(schoolId);
         school.changeName(command.name());
         school.changeDomain(command.domain());
-        school.changeRegion(command.region());
+        // TODO School 도메인 이슈에서 주석 해제할 것!
+        // school.changeRegion(command.region());
     }
 }
