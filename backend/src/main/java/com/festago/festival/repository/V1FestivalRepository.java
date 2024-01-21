@@ -35,7 +35,7 @@ public class V1FestivalRepository {
         List<Festival> allPlannedFestivals = queryFactory.selectFrom(festival)
             .leftJoin(festival.school).fetchJoin()
             .where(festival.startDate.gt(currentTime))
-            .orderBy(festival.startDate.asc())
+            .orderBy(festival.startDate.asc(), festival.id.asc())
             .fetch();
         return pagingFestival(page, allPlannedFestivals);
     }
@@ -88,7 +88,7 @@ public class V1FestivalRepository {
 
     private List<Festival> findSortedProgressFestivals(LocalDate currentTime) {
         return progressQuery(currentTime)
-            .orderBy(festival.startDate.desc())
+            .orderBy(festival.startDate.desc(), festival.id.asc())
             .fetch();
     }
 
@@ -114,7 +114,7 @@ public class V1FestivalRepository {
             .leftJoin(festival.school).fetchJoin()
             .where(festival.startDate.gt(currentTime)
                 .and(festival.school.id.in(schoolIds)))
-            .orderBy(festival.startDate.asc())
+            .orderBy(festival.startDate.asc(), festival.id.asc())
             .fetch();
         return pagingFestival(page, allPlannedFestivals);
     }
@@ -128,7 +128,7 @@ public class V1FestivalRepository {
         List<Long> schoolIds = extractSchoolId(schools);
         return progressQuery(currentTime)
             .where(festival.school.id.in(schoolIds))
-            .orderBy(festival.startDate.desc())
+            .orderBy(festival.startDate.desc(), festival.id.asc())
             .fetch();
     }
 
