@@ -60,6 +60,6 @@ class PopularFestivalViewPagerAdapter(
 
     companion object {
         private const val PAGE_LIMIT = 3
-        private const val OFFSET_BETWEEN_PAGES = 80.0f
+        private const val OFFSET_BETWEEN_PAGES = 63.0f
     }
 }
