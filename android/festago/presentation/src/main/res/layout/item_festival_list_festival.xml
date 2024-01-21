@@ -15,7 +15,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_gray_02"
+        android:background="@drawable/bg_festival_list_festival"
+
         tools:layout_height="132dp"
         tools:layout_width="328dp">
 
@@ -53,15 +54,16 @@
             app:layout_constraintTop_toBottomOf="@+id/tvFestivalName"
             tools:text="2021.10.10 ~ 2021.10.12" />
 
-        <View
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFestivalArtists"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/background_gray_03"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="66dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tvFestivalSchedule"
-            app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule" />
+            app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule"
+            tools:listitem="@layout/item_festival_list_artist" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
