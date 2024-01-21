@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
+import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalAdapter
 import com.festago.festago.presentation.ui.home.festivallist.popularfestival.PopularFestivalViewPagerAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -18,6 +19,8 @@ class FestivalListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var popularFestivalViewPager: PopularFestivalViewPagerAdapter
+
+    private lateinit var festivalAdapter: FestivalAdapter
 
     private val vm: FestivalListViewModel by viewModels()
 
@@ -57,6 +60,9 @@ class FestivalListFragment : Fragment() {
             backgroundViewPager = binding.vpPopularFestivalBackground,
         )
 
+        festivalAdapter = FestivalAdapter()
+        binding.rvFestivalList.adapter = festivalAdapter
+
         TabLayoutMediator(
             binding.tlDotIndicator,
             binding.vpPopularFestivalForeground,
@@ -75,6 +81,7 @@ class FestivalListFragment : Fragment() {
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
         popularFestivalViewPager.submitList(uiState.festivals)
+        festivalAdapter.submitList(uiState.festivals)
     }
 
     override fun onDestroyView() {

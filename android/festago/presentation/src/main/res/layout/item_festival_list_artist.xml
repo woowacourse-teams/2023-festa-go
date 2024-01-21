@@ -5,19 +5,15 @@
 
     <data>
 
-        <import type="java.time.format.DateTimeFormatter" />
-
         <variable
             name="artist"
             type="com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_gray_02"
-        tools:layout_height="66dp"
-        tools:layout_width="66dp">
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:background="@color/background_gray_02">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvFestivalImage"
@@ -38,6 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/festival_list_iv_image"
+                android:scaleType="centerCrop"
                 tools:src="@drawable/ic_launcher_background" />
         </androidx.cardview.widget.CardView>
 
@@ -46,6 +43,7 @@
             style="@style/B4Medium12Lh14"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:text="@{artist.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/cvFestivalImage"
             app:layout_constraintStart_toStartOf="@id/cvFestivalImage"
