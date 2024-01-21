@@ -12,4 +12,5 @@
     <string name="festival_list_tv_popular_festival_title">요즘 뜨는 축제</string>
     <string name="festival_list_tv_date_range_format">%s - %s</string>
     <string name="festival_list_tv_date_format">yy.MM.dd</string>
+    <string name="festival_list_iv_image">festival image</string>
 </resources>
