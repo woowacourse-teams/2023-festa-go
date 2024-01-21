@@ -6,24 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
-import com.festago.festago.model.FestivalFilter
-import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
-import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
-import com.festago.festago.presentation.ui.ticketreserve.TicketReserveActivity
+import com.festago.festago.presentation.ui.home.festivallist.popularfestival.PopularFestivalViewPagerAdapter
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.util.repeatOnStarted
-import dagger.hilt.android.AndroidEntryPoint
+import com.google.android.material.tabs.TabLayoutMediator
 
-@AndroidEntryPoint
-class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
+class FestivalListFragment : Fragment() {
 
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var popularFestivalViewPager: PopularFestivalViewPagerAdapter
+
     private val vm: FestivalListViewModel by viewModels()
 
-    private lateinit var adapter: FestivalListAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,59 +44,23 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
                 updateUi(it)
             }
         }
-        repeatOnStarted(viewLifecycleOwner) {
-            vm.event.collect {
-                handleEvent(it)
-            }
-        }
     }
-
-    private val Int.dp: Int get() = (this / resources.displayMetrics.density).toInt()
 
     private fun initView() {
-        adapter = FestivalListAdapter()
-        binding.rvFestivalList.adapter = adapter
-
-        initFestivalListSpanSize()
-        initRefresh()
-        initFestivalFilters()
-        if (vm.uiState.value is FestivalListUiState.Loading) {
-            loadFestivalsBy(binding.cgFilterOption.checkedChipId)
-        }
+        initViewPager()
+        vm.loadPopularFestival()
     }
 
-    private fun initFestivalListSpanSize() {
-        binding.rvFestivalList.layoutManager.apply {
-            if (this is GridLayoutManager) {
-                val spanSize = (resources.displayMetrics.widthPixels.dp / 160)
-                spanCount = when {
-                    spanSize < 2 -> 2
-                    spanSize > 4 -> 4
-                    else -> spanSize
-                }
-            }
-        }
-    }
+    private fun initViewPager() {
+        popularFestivalViewPager = PopularFestivalViewPagerAdapter(
+            foregroundViewPager = binding.vpPopularFestivalForeground,
+            backgroundViewPager = binding.vpPopularFestivalBackground,
+        )
 
-    private fun initRefresh() {
-        binding.srlFestivalList.setOnRefreshListener {
-            loadFestivalsBy(binding.cgFilterOption.checkedChipId)
-            binding.srlFestivalList.isRefreshing = false
-        }
-    }
-
-    private fun initFestivalFilters() {
-        binding.cgFilterOption.setOnCheckedStateChangeListener { group, _ ->
-            loadFestivalsBy(checkedChipId = group.checkedChipId)
-        }
-    }
-
-    private fun loadFestivalsBy(checkedChipId: Int) {
-        when (checkedChipId) {
-            R.id.chipProgress -> vm.loadFestivals(FestivalFilter.PROGRESS)
-            R.id.chipPlanned -> vm.loadFestivals(FestivalFilter.PLANNED)
-            R.id.chipEnd -> vm.loadFestivals(FestivalFilter.END)
-        }
+        TabLayoutMediator(
+            binding.tlDotIndicator,
+            binding.vpPopularFestivalForeground,
+        ) { tab, position -> }.attach()
     }
 
     private fun updateUi(uiState: FestivalListUiState) {
@@ -113,22 +74,7 @@ class FestivalListFragment : Fragment(R.layout.fragment_festival_list) {
     }
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
-        adapter.submitList(uiState.festivals)
-    }
-
-    private fun handleEvent(event: FestivalListEvent) {
-        when (event) {
-            is FestivalListEvent.ShowTicketReserve -> {
-                removeTicketListFragment()
-                startActivity(TicketReserveActivity.getIntent(requireContext(), event.festivalId))
-            }
-        }
-    }
-
-    private fun removeTicketListFragment() {
-        parentFragmentManager.findFragmentByTag(TicketListFragment::class.java.name)?.let {
-            parentFragmentManager.beginTransaction().remove(it).commit()
-        }
+        popularFestivalViewPager.submitList(uiState.festivals)
     }
 
     override fun onDestroyView() {

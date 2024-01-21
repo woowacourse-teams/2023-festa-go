@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <variable
+            name="item"
+            type="com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@color/contents_gray_07">
+
+        <ImageView
+            android:id="@+id/ivPopularFestivalImage"
+            imageUrl="@{item.imageUrl}"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:outlineProvider="bounds"
+            android:layout_marginTop="24dp"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            android:elevation="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            tools:src="@drawable/ic_launcher_background" />
+
+
+        <TextView
+            android:id="@+id/tvPopularFestivalName"
+            style="@style/H3Bold18Lh20"
+            android:textColor="@color/background_gray_01"
+            android:layout_width="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:lineSpacingExtra="0dp"
+            android:text="@{item.schoolUiState.name+'\n'+ item.name }"
+            app:layout_constraintTop_toBottomOf="@id/ivPopularFestivalImage"
+            app:layout_constraintEnd_toEndOf="@+id/ivPopularFestivalImage"
+            app:layout_constraintStart_toStartOf="@+id/ivPopularFestivalImage"
+            tools:text="대학교 \n 축제 이름" />
+
+
+        <TextView
+            android:id="@+id/tvFestivalSchedule"
+            style="@style/B2Medium14Lh20"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/background_gray_01"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:layout_marginTop="8dp"
+            android:text="@{@string/festival_list_tv_date_range_format(item.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),item.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
+            app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalName"
+            app:layout_constraintEnd_toEndOf="@+id/ivPopularFestivalImage"
+            tools:text="2023.07.03 - 2023.07.09"
+            app:layout_constraintStart_toStartOf="@+id/ivPopularFestivalImage" />
+
+        <TextView
+            android:id="@+id/tvPopularFestivalArtistsName"
+            style="@style/B2Medium14Lh20"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/background_gray_01"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:lines="2"
+            app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule"
+            app:layout_constraintEnd_toEndOf="@+id/ivPopularFestivalImage"
+            app:layout_constraintStart_toStartOf="@+id/ivPopularFestivalImage"
+            tools:text="르세라핌, 아이브, 뉴진스, \n다이나믹 듀오" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item_festival"
+        android:id="@+id/itemFestival"
         android:enabled="true"
-        android:icon="@drawable/ic_bottom_navigation_festival"
-        android:iconTint="@color/md_theme_light_secondary"
-        android:title="@string/home_bottom_navigation_festival" />
+        android:icon="@drawable/ic_bottom_nav_home"
+        android:iconTint="@color/contents_gray_07"
+        android:title="@string/home_bottom_nav_festival" />
     <item
-        android:id="@+id/item_ticket"
+        android:id="@+id/itemTicket"
         android:enabled="true"
-        android:visible="false"
-        android:title="" />
+        android:icon="@drawable/ic_bottom_nav_ticket"
+        android:iconTint="@color/contents_gray_07"
+        android:title="@string/home_bottom_nav_ticket" />
 
     <item
-        android:id="@+id/blank"
-        android:enabled="false"
-        android:visible="true"
-        android:title="" />
+        android:id="@+id/itemBookmark"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_bookmark"
+        android:iconTint="@color/contents_gray_07"
+        android:title="@string/home_bottom_nav_bookmark" />
 
     <item
-        android:id="@+id/item_mypage"
+        android:id="@+id/itemMyPage"
         android:enabled="true"
-        android:icon="@drawable/ic_bottom_navigation_user"
-        android:iconTint="@color/white"
-        android:title="@string/home_bottom_navigation_user" />
+        android:icon="@drawable/ic_bottom_nav_my_page"
+        android:iconTint="@color/contents_gray_07"
+        android:title="@string/home_bottom_nav_my_page" />
 </menu>

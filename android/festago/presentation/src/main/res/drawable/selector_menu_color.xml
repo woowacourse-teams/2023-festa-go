@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--디자인 없어서 임의로 색깔 지정 변경 필요-->
+    <item android:color="#0000FF" android:state_selected="true" />
+    <item android:color="#0000FF" android:state_checked="true" />
+    <item android:color="@color/contents_gray_07" android:state_checked="false" />
+</selector>

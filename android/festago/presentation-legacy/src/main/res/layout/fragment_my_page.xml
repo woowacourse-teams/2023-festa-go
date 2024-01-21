@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageViewModel" />
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState" />
+
+        <variable
+            name="successState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState.Success" />
+
+        <import type="java.time.format.DateTimeFormatter" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srlMyPage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupUserProfile"
+                    visibility="@{uiState.shouldShowSuccess}"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="sivProfile, tvNickname, tvAccountTitle, tvSchoolAuthorization, tvLogout, tvWithdrawal, tvReserveListTitle, cvMemberTicket" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineStart"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="20dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineEnd"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="20dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="20dp" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/sivProfile"
+                    imageUrl="@{successState.userProfile.profileImage}"
+                    android:layout_width="52dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                    app:layout_constraintTop_toBottomOf="@id/guidelineTop"
+                    app:shapeAppearanceOverlay="@style/roundedImageView"
+                    tools:src="@drawable/btn_circle_primary" />
+
+                <TextView
+                    android:id="@+id/tvNickname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@{successState.userProfile.nickName}"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/sivProfile"
+                    app:layout_constraintStart_toEndOf="@id/sivProfile"
+                    app:layout_constraintTop_toTopOf="@id/sivProfile"
+                    tools:text="홍길동" />
+
+                <TextView
+                    android:id="@+id/tvAccountTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/my_page_tv_account_title"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                    app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                    app:layout_constraintTop_toBottomOf="@id/sivProfile" />
+
+                <TextView
+                    android:id="@+id/tvSchoolAuthorization"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/my_page_tv_school_authorization"
+                    app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                    app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountTitle" />
+
+                <TextView
+                    android:id="@+id/tvLogout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> vm.signOut()}"
+                    android:paddingVertical="8dp"
+                    android:text="@string/my_page_tv_logout"
+                    app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                    app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                    app:layout_constraintTop_toBottomOf="@id/tvSchoolAuthorization" />
+
+                <TextView
+                    android:id="@+id/tvWithdrawal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> vm.showConfirmDelete()}"
+                    android:paddingVertical="8dp"
+                    android:text="@string/my_page_tv_withdrawal"
+                    app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                    app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                    app:layout_constraintTop_toBottomOf="@id/tvLogout" />
+
+                <TextView
+                    android:id="@+id/tvReserveListTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/my_page_tv_reserve_list_title"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                    app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                    app:layout_constraintTop_toBottomOf="@id/tvWithdrawal" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvMemberTicket"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:onClick="@{() -> vm.showTicketHistory()}"
+                    app:cardCornerRadius="12dp"
+                    app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+                    app:layout_constraintStart_toEndOf="@id/guidelineStart"
+                    app:layout_constraintTop_toBottomOf="@id/tvReserveListTitle">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        visibility="@{!successState.hasTicket}"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="@string/my_page_no_ticket" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clTicketHistory"
+                        visibility="@{successState.hasTicket}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp">
+
+                        <ImageView
+                            android:id="@+id/ivStageThumbnail"
+                            imageUrl="@{successState.ticket.festivalTicket.thumbnail}"
+                            android:layout_width="120dp"
+                            android:layout_height="0dp"
+                            android:importantForAccessibility="no"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:src="@mipmap/ic_festago_logo" />
+
+                        <TextView
+                            android:id="@+id/tvStageTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:ellipsize="end"
+                            android:gravity="end"
+                            android:maxLines="1"
+                            android:text="@{successState.ticket.festivalTicket.name}"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/ivStageThumbnail"
+                            app:layout_constraintTop_toTopOf="@id/ivStageThumbnail"
+                            tools:text="테코 대학교 무슨 축제 Day 1" />
+
+                        <TextView
+                            android:id="@+id/tvTicketNumberPrefix"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/ticket_history_tv_ticket_number_prefix"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toEndOf="@id/tvStageTitle"
+                            app:layout_constraintTop_toBottomOf="@id/tvStageTitle" />
+
+                        <TextView
+                            android:id="@+id/tvTicketNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@{@string/ticket_history_tv_ticket_number_format(successState.ticket.number)}"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toEndOf="@id/tvTicketNumberPrefix"
+                            app:layout_constraintTop_toBottomOf="@id/tvTicketNumberPrefix"
+                            tools:text="103번" />
+
+                        <View
+                            android:id="@+id/viewLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="16dp"
+                            android:background="@color/md_theme_light_outline"
+                            app:layout_constraintTop_toBottomOf="@id/ivStageThumbnail"
+                            tools:layout_editor_absoluteX="16dp" />
+
+                        <TextView
+                            android:id="@+id/tvTicketingTimePrefix"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="@string/ticket_history_tv_ticket_ticketing_time_prefix"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="@id/ivStageThumbnail"
+                            app:layout_constraintTop_toBottomOf="@id/viewLine" />
+
+                        <TextView
+                            android:id="@+id/tvTicketingTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{successState.ticket.reserveAt.format(DateTimeFormatter.ofPattern(`yyyy.MM.dd HH:mm`))}"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tvTicketingTimePrefix"
+                            tools:text="2023.07.03 18:00" />
+
+                        <TextView
+                            android:id="@+id/tvStartTimePrefix"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/ticket_history_tv_ticket_start_time_prefix"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="@id/tvTicketingTimePrefix"
+                            app:layout_constraintTop_toBottomOf="@id/tvTicketingTimePrefix" />
+
+                        <TextView
+                            android:id="@+id/tvStartTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{successState.ticket.stage.startTime.format(DateTimeFormatter.ofPattern(`yyyy.MM.dd HH:mm`))}"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tvStartTimePrefix"
+                            tools:text="2023.07.03 18:00" />
+
+                        <TextView
+                            android:id="@+id/tvEntryTimePrefix"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/ticket_history_tv_ticket_entry_time_prefix"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="@id/tvStartTimePrefix"
+                            app:layout_constraintTop_toBottomOf="@id/tvStartTime" />
+
+                        <TextView
+                            android:id="@+id/tvEntryTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{successState.ticket.entryTime.format(DateTimeFormatter.ofPattern(`yyyy.MM.dd HH:mm`))}"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="@id/tvStartTime"
+                            app:layout_constraintTop_toTopOf="@id/tvEntryTimePrefix"
+                            tools:text="2023.07.03 18:00" />
+
+                        <TextView
+                            visibility="@{successState.hasTicket}"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/my_page_tv_more"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvEntryTime" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <ProgressBar
+                    visibility="@{uiState.shouldShowLoading}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    visibility="@{uiState.shouldShowError}"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="@string/my_page_tv_error"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</layout>

@@ -35,7 +35,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
@@ -52,6 +51,9 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
 }
 
 dependencies {
+    implementation(project(":common"))
+    implementation(project(":domain"))
+
     implementation(project(":common"))
     implementation(project(":domain"))
 
@@ -75,6 +77,9 @@ dependencies {
 
     // glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
+
+    // glide blur
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
 
     // retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

@@ -1,94 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.ticketlist.TicketListFragment">
 
-    <data>
-
-        <variable
-            name="uiState"
-            type="com.festago.festago.presentation.ui.home.ticketlist.TicketListUiState" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.ticketlist.TicketListFragment">
+        android:text="@string/home_bottom_nav_ticket" />
 
-        <TextView
-            android:id="@+id/tvTicketList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/ticket_list_tv_ticket_list"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imgNoTicket"
-            visibility="@{uiState.shouldShowSuccessAndEmpty}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:importantForAccessibility="no"
-            android:src="@drawable/img_ticket"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvTicketList"
-            tools:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tvNoTicket"
-            visibility="@{uiState.shouldShowSuccessAndEmpty}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/ticket_list_tv_no_ticket"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgNoTicket" />
-
-        <ProgressBar
-            android:id="@+id/pbLoading"
-            visibility="@{uiState.shouldShowLoading}"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTicketList"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/srlTicketList"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTicketList">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTicketList"
-                visibility="@{uiState.shouldShowSuccessWithTickets}"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_ticket_list" />
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <TextView
-            android:id="@+id/tvErrorOrEmpty"
-            visibility="@{uiState.shouldShowError}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/ticket_list_tv_error"
-            tools:visibility="gone" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</FrameLayout>

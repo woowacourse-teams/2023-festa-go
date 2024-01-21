@@ -3,52 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.home.HomeActivity">
+        tools:context=".ui.home.HomeActivity">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fcv_home_container"
+            android:id="@+id/fcvHomeContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="68dp" />
+            android:paddingBottom="48dp" />
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/baNavigation"
-            style="@style/Widget.MaterialComponents.BottomAppBar"
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nvHome"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:backgroundTint="?attr/colorSurfaceBright"
-            app:backgroundTint="?attr/colorSurface"
-            app:contentInsetStart="0dp"
-            app:fabAlignmentMode="center">
+            android:layout_height="48dp"
+            android:background="#00000000"
+            app:itemIconTint="@drawable/selector_menu_color"
+            app:labelVisibilityMode="unlabeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_bottom_navigation" />
 
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/nvHome"
-                android:layout_width="match_parent"
-                android:layout_height="68dp"
-                android:background="#00000000"
-                app:itemActiveIndicatorStyle="@color/zxing_transparent"
-                app:itemIconSize="40dp"
-                app:itemIconTint="@drawable/menu_selector_color_inverse"
-                app:labelVisibilityMode="unlabeled"
-                app:menu="@menu/menu_bottom_navigation" />
-        </com.google.android.material.bottomappbar.BottomAppBar>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabTicket"
-            style="@style/Widget.MaterialComponents.FloatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@drawable/menu_selector_color"
-            android:src="@drawable/ic_festago_coupon"
-            app:borderWidth="1dp"
-            app:fabCustomSize="72dp"
-            app:layout_anchor="@id/baNavigation"
-            app:maxImageSize="72dp"
-            app:tint="@null" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
