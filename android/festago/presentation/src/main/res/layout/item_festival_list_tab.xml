@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tlFestivalListTab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            app:tabGravity="fill"
+            app:tabIndicatorFullWidth="true"
+            app:tabTextAppearance="@style/H1Bold20Lh20">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="진행 중" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="진행 예정" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </LinearLayout>
+</layout>

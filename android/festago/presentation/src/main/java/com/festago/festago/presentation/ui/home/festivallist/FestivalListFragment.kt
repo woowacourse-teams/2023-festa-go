@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.util.repeatOnStarted
 
 class FestivalListFragment : Fragment() {
@@ -66,7 +68,18 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
-        festivalListAdapter.submitList(listOf(uiState) + uiState.festivals)
+        festivalListAdapter.submitList(
+            listOf(
+                uiState,
+                FestivalTabUiState(
+                    {
+                        Toast.makeText(requireContext(), "Clicked $it", Toast.LENGTH_SHORT).show()
+                        /* TODO: Handle tab click */
+                        vm.loadPopularFestival()
+                    },
+                ),
+            ) + uiState.festivals,
+        )
     }
 
     override fun onDestroyView() {
