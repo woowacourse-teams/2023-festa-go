@@ -31,8 +31,8 @@ public class FestivalInfo {
         this.artistInfo = artistInfo;
     }
 
-    public static FestivalInfo of(Festival festival, List<Artist> artists, FestivalInfoConverter converter) {
-        return new FestivalInfo(festival.getId(), converter.convert(artists));
+    public static FestivalInfo of(Festival festival, List<Artist> artists, FestivalInfoSerializer serializer) {
+        return new FestivalInfo(festival.getId(), serializer.serialize(artists));
     }
 
     public Long getId() {

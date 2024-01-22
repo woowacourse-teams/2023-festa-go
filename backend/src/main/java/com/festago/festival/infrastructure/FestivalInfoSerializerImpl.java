@@ -6,19 +6,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.artist.domain.Artist;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
-import com.festago.festival.domain.FestivalInfoConverter;
+import com.festago.festival.domain.FestivalInfoSerializer;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class FestivalInfoConverterImpl implements FestivalInfoConverter {
+public class FestivalInfoSerializerImpl implements FestivalInfoSerializer {
 
     private final ObjectMapper objectMapper;
 
     @Override
-    public String convert(List<Artist> artists) throws InternalServerException {
+    public String serialize(List<Artist> artists) throws InternalServerException {
         try {
             return objectMapper.writeValueAsString(artists);
         } catch (JsonProcessingException e) {
@@ -27,7 +27,7 @@ public class FestivalInfoConverterImpl implements FestivalInfoConverter {
     }
 
     @Override
-    public List<Artist> convert(String value) {
+    public List<Artist> deserialize(String value) {
         try {
             return objectMapper.readValue(value, new TypeReference<>() {
             });

@@ -9,7 +9,7 @@ import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.application.FestivalV1QueryService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.domain.FestivalInfo;
-import com.festago.festival.domain.FestivalInfoConverter;
+import com.festago.festival.domain.FestivalInfoSerializer;
 import com.festago.festival.dto.v1.FestivalV1ListResponse;
 import com.festago.festival.dto.v1.FestivalV1Response;
 import com.festago.festival.dto.v1.FestivalV1lListRequest;
@@ -44,7 +44,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
     @Autowired
     ArtistRepository artistRepository;
     @Autowired
-    FestivalInfoConverter festivalInfoConverter;
+    FestivalInfoSerializer festivalInfoSerializer;
     @Autowired
     FestivalV1QueryService festivalV1QueryService;
     @Autowired
@@ -86,14 +86,14 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
 
         List<Artist> artists = List.of(artist1, artist2, artist3);
 
-        festivalInfoRepository.save(FestivalInfo.of(progressFestival1, artists, festivalInfoConverter));
-        festivalInfoRepository.save(FestivalInfo.of(progressFestival2, artists, festivalInfoConverter));
-        festivalInfoRepository.save(FestivalInfo.of(progressFestival3, artists, festivalInfoConverter));
-        festivalInfoRepository.save(FestivalInfo.of(progressFestival4, artists, festivalInfoConverter));
-        festivalInfoRepository.save(FestivalInfo.of(progressFestival5, artists, festivalInfoConverter));
-        festivalInfoRepository.save(FestivalInfo.of(plannedFestival1, artists, festivalInfoConverter));
-        festivalInfoRepository.save(FestivalInfo.of(plannedFestival2, artists, festivalInfoConverter));
-        festivalInfoRepository.save(FestivalInfo.of(plannedFestival3, artists, festivalInfoConverter));
+        festivalInfoRepository.save(FestivalInfo.of(progressFestival1, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalInfo.of(progressFestival2, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalInfo.of(progressFestival3, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalInfo.of(progressFestival4, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalInfo.of(progressFestival5, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalInfo.of(plannedFestival1, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalInfo.of(plannedFestival2, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalInfo.of(plannedFestival3, artists, festivalInfoSerializer));
     }
 
     @Nested

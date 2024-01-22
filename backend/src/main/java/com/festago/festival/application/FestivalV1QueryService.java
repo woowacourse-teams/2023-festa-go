@@ -2,7 +2,7 @@ package com.festago.festival.application;
 
 import com.festago.festival.domain.Festival;
 import com.festago.festival.domain.FestivalInfo;
-import com.festago.festival.domain.FestivalInfoConverter;
+import com.festago.festival.domain.FestivalInfoSerializer;
 import com.festago.festival.dto.v1.FestivalV1ListResponse;
 import com.festago.festival.dto.v1.FestivalV1lListRequest;
 import com.festago.festival.repository.FestivalInfoRepository;
@@ -27,7 +27,7 @@ public class FestivalV1QueryService {
     private final SchoolRepository schoolRepository;
     private final FestivalInfoRepository festivalInfoRepository;
     private final FestivalRepository festivalRepository;
-    private final FestivalInfoConverter infoConverter;
+    private final FestivalInfoSerializer infoSerializer;
     private final Clock clock;
 
     public FestivalV1ListResponse findFestivals(FestivalV1lListRequest request) {
@@ -47,7 +47,7 @@ public class FestivalV1QueryService {
         return FestivalV1ListResponse.of(festivalPage.isLastPage(),
             festivalPage.getFestivals(),
             festivalInfos,
-            infoConverter);
+            infoSerializer);
     }
 
     private FestivalPageable makePageable(FestivalV1lListRequest request) {

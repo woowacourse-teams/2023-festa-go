@@ -27,7 +27,7 @@ public class FestivalV1Controller {
         return ResponseEntity.ok(festivalV1QueryService.findFestivals(festivalListRequest));
     }
 
-    // TODO : Converter에서 BadReqeustException 발생하면 Exception으로 예외 처리되기에 임시로 배치하였음.
+    // TODO : Serializer에서 BadReqeustException 발생하면 Exception으로 예외 처리되기에 임시로 배치하였음.
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handle(BadRequestException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.from(e));
