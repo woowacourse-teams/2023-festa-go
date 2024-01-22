@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ItemFestivalListFestivalBinding
 import com.festago.festago.presentation.ui.home.festivallist.festival.artistlist.ArtistAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
+import java.time.LocalDate
 
 class FestivalListFestivalViewHolder(private val binding: ItemFestivalListFestivalBinding) :
     FestivalListViewHolder(binding) {
@@ -24,6 +26,31 @@ class FestivalListFestivalViewHolder(private val binding: ItemFestivalListFestiv
     fun bind(item: FestivalItemUiState) {
         binding.item = item
         artistAdapter.submitList(item.artists)
+        bindDDayView(item)
+    }
+
+    private fun bindDDayView(item: FestivalItemUiState) {
+        val context = binding.root.context
+        when {
+            LocalDate.now() > item.endDate -> {
+                binding.tvFestivalDDay.text = context.getString(R.string.festival_list_tv_dday_end)
+                binding.tvFestivalDDay.setBackgroundColor(context.getColor(android.R.color.darker_gray))
+            }
+
+            LocalDate.now() >= item.startDate -> {
+                binding.tvFestivalDDay.text =
+                    context.getString(R.string.festival_list_tv_dday_in_progress)
+                binding.tvFestivalDDay.setBackgroundColor(0xffff1273.toInt())
+            }
+
+            else -> {
+                binding.tvFestivalDDay.text = context.getString(
+                    R.string.festival_list_tv_dday_format,
+                    item.startDate.compareTo(LocalDate.now()).toString(),
+                )
+                binding.tvFestivalDDay.setBackgroundColor(context.getColor(android.R.color.black))
+            }
+        }
     }
 
     private class ArtistItemDecoration(val context: Context) : ItemDecoration() {

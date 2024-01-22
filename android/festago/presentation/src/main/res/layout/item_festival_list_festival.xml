@@ -21,6 +21,7 @@
         tools:layout_height="132dp"
         tools:layout_width="328dp">
 
+
         <ImageView
             android:id="@+id/ivFestivalImage"
             imageUrl="@{item.imageUrl}"
@@ -33,6 +34,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/tvFestivalDDay"
+            style="@style/H5Bold14Lh16"
+            android:layout_width="56dp"
+            android:layout_height="24dp"
+            android:background="#FFFA1273"
+            android:gravity="center"
+            android:textColor="@color/background_gray_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="D-1" />
 
         <TextView
             android:id="@+id/tvFestivalName"
