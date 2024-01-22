@@ -1,5 +1,6 @@
 package com.festago.festival.application;
 
+import com.festago.festival.domain.Festival;
 import com.festago.festival.domain.FestivalInfo;
 import com.festago.festival.domain.FestivalInfoConverter;
 import com.festago.festival.dto.v1.FestivalV1ListResponse;
@@ -39,7 +40,10 @@ public class FestivalV1QueryService {
     }
 
     private FestivalV1ListResponse makeResponse(FestivalPage festivalPage) {
-        List<FestivalInfo> festivalInfos = festivalInfoRepository.findAllByFestivalIn(festivalPage.getFestivals());
+        List<Long> festivalIds = festivalPage.getFestivals().stream()
+            .map(Festival::getId)
+            .toList();
+        List<FestivalInfo> festivalInfos = festivalInfoRepository.findAllByFestivalIdIn(festivalIds);
         return FestivalV1ListResponse.of(festivalPage.isLastPage(),
             festivalPage.getFestivals(),
             festivalInfos,

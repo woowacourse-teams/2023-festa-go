@@ -29,7 +29,7 @@ public record FestivalV1ListResponse(
         List<FestivalInfo> festivalInfos,
         FestivalInfoConverter infoConverter) {
         FestivalInfo info = festivalInfos.stream()
-            .filter(festivalInfo -> festivalInfo.getId().equals(festival.getId()))
+            .filter(festivalInfo -> festivalInfo.getFestivalId().equals(festival.getId()))
             .findAny()
             .orElseThrow(() -> new InternalServerException(ErrorCode.FESTIVAL_INFO_ERROR));
         return new FestivalV1Response(

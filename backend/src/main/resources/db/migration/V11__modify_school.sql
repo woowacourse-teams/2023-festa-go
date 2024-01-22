@@ -6,17 +6,12 @@ alter table school
 
 create table if not exists festival_info
 (
-    festival_id       bigint  not null,
+    id              bigint not null auto_increment,
+    festival_id     bigint  not null,
     created_at      datetime(6),
     updated_at      datetime(6),
     artist_info     text not null,
-    primary key (festival_id)
+    primary key (id)
 ) engine innodb
   default charset = utf8mb4
   collate = utf8mb4_0900_ai_ci;
-
-
-alter table festival_info
-    add constraint fk_festival_info__festival
-        foreign key (festival_id)
-            references festival (id);
