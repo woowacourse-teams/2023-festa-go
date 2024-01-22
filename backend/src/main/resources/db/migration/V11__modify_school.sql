@@ -9,7 +9,7 @@ create table if not exists festival_info
     festival_id       bigint  not null,
     created_at      datetime(6),
     updated_at      datetime(6),
-    artist_info     varchar(500) not null,
+    artist_info     text not null,
     primary key (festival_id)
 ) engine innodb
   default charset = utf8mb4

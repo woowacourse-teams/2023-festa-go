@@ -1,6 +1,7 @@
 package com.festago.festival.domain;
 
 import com.festago.artist.domain.Artist;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -25,6 +26,7 @@ public class FestivalInfo {
     private Festival festival;
 
     @NotNull
+    @Column(columnDefinition = "TEXT")
     private String artistInfo;
 
     private FestivalInfo(Festival festival, String artistInfo) {
