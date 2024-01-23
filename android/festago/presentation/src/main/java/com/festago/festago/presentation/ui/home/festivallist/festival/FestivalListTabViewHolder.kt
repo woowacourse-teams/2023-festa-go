@@ -23,15 +23,16 @@ class FestivalListTabViewHolder(val binding: ItemFestivalListTabBinding) :
     }
 
     fun bind(festivalTabUiState: FestivalTabUiState) {
-        binding.tlFestivalListTab.addOnTabSelectedListener(object :
-            TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                festivalTabUiState.onClick(tab.position)
-            }
+        binding.tlFestivalListTab.addOnTabSelectedListener(
+            object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    festivalTabUiState.onClick(tab.position)
+                }
 
-            override fun onTabUnselected(tab: TabLayout.Tab) = Unit
-            override fun onTabReselected(tab: TabLayout.Tab) = Unit
-        })
+                override fun onTabUnselected(tab: TabLayout.Tab) = Unit
+                override fun onTabReselected(tab: TabLayout.Tab) = Unit
+            },
+        )
     }
 
     companion object {
