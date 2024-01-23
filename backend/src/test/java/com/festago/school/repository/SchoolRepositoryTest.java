@@ -19,7 +19,7 @@ class SchoolRepositoryTest {
     SchoolRepository schoolRepository;
 
     @Test
-    void 지역으로_학교를_검새한다() {
+    void 지역으로_학교를_검색한다() {
         // given
         School expectSchool = schoolRepository.save(new School("domain", "name", SchoolRegion.서울));
         schoolRepository.save(new School("domain2", "name2", SchoolRegion.부산));

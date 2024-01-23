@@ -26,7 +26,7 @@ class FestivalV1ControllerTest {
     MockMvc mockMvc;
 
     @Nested
-    class 페스티벌_아이디와_마지막_축제_시작일 {
+    class 축제의_식별자와_마지막_축제_시작일 {
 
         @Test
         void 은_들다_보내면_성공한다() throws Exception {
