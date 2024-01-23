@@ -1,6 +1,7 @@
 package com.festago.festago.presentation.ui.home.festivallist.festival
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Rect
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -61,16 +62,15 @@ class FestivalListFestivalViewHolder(private val binding: ItemFestivalListFestiv
             state: RecyclerView.State,
         ) {
             super.getItemOffsets(outRect, view, parent, state)
-            outRect.right = 8.dpToPx(context)
+            outRect.right = 8.dpToPx
         }
 
-        private fun Int.dpToPx(context: Context): Int {
-            return TypedValue.applyDimension(
+        private val Int.dpToPx: Int
+            get() = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 this.toFloat(),
-                context.resources.displayMetrics,
+                Resources.getSystem().displayMetrics,
             ).toInt()
-        }
     }
 
     companion object {
