@@ -1,6 +1,5 @@
 package com.festago.festago.presentation.ui.home.festivallist.festival
 
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.Rect
 import android.util.TypedValue
@@ -21,7 +20,7 @@ class FestivalListFestivalViewHolder(private val binding: ItemFestivalListFestiv
 
     init {
         binding.rvFestivalArtists.adapter = artistAdapter
-        binding.rvFestivalArtists.addItemDecoration(ArtistItemDecoration(binding.root.context))
+        binding.rvFestivalArtists.addItemDecoration(ArtistItemDecoration())
     }
 
     fun bind(item: FestivalItemUiState) {
@@ -54,7 +53,7 @@ class FestivalListFestivalViewHolder(private val binding: ItemFestivalListFestiv
         }
     }
 
-    private class ArtistItemDecoration(val context: Context) : ItemDecoration() {
+    private class ArtistItemDecoration : ItemDecoration() {
         override fun getItemOffsets(
             outRect: Rect,
             view: View,
