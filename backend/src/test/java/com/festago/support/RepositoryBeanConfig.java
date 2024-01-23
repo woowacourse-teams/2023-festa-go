@@ -1,7 +1,7 @@
 package com.festago.support;
 
+import com.festago.festival.repository.FestivalV1QueryDslRepository;
 import com.festago.festival.repository.OldFestivalRepository;
-import com.festago.festival.repository.V1FestivalRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -19,7 +19,7 @@ public class RepositoryBeanConfig {
     }
 
     @Bean
-    public V1FestivalRepository v1FestivalRepository() {
-        return new V1FestivalRepository(jpaQueryFactory);
+    public FestivalV1QueryDslRepository v1FestivalRepository() {
+        return new FestivalV1QueryDslRepository(jpaQueryFactory);
     }
 }

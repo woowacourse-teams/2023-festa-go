@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class V1FestivalRepository {
+public class FestivalV1QueryDslRepository {
 
     private static final int INDEX_OFFSET = 1;
 
