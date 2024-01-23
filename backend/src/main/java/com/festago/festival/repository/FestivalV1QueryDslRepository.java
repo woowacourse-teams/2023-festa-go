@@ -41,7 +41,7 @@ public class FestivalV1QueryDslRepository {
     }
 
     private FestivalPage pagingFestival(FestivalPageable page, List<Festival> allFestivals) {
-        if (page.getLastFestivalId().isPresent() && page.getLastFestivalId().isPresent()) {
+        if (page.getLastFestivalId().isPresent() && page.getLastStartDate().isPresent()) {
             return pagedFestival(page, allFestivals);
         }
         int festivalSize = allFestivals.size();
