@@ -38,18 +38,24 @@ class FestivalListAdapter : ListAdapter<Any, FestivalListViewHolder>(diffUtil) {
 
     companion object {
         private val diffUtil = object : DiffUtil.ItemCallback<Any>() {
-            override fun areItemsTheSame(
-                oldItem: Any,
-                newItem: Any,
-            ): Boolean {
-                return oldItem == newItem
+            override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean = when {
+                oldItem is FestivalListUiState && newItem is FestivalListUiState -> true
+                oldItem is FestivalItemUiState && newItem is FestivalItemUiState -> oldItem.id == newItem.id
+                oldItem is FestivalTabUiState && newItem is FestivalTabUiState -> true
+                else -> false
             }
 
-            override fun areContentsTheSame(
-                oldItem: Any,
-                newItem: Any,
-            ): Boolean {
-                return false
+            override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean = when {
+                oldItem is FestivalListUiState && newItem is FestivalListUiState
+                -> oldItem as FestivalListUiState == newItem
+
+                oldItem is FestivalItemUiState && newItem is FestivalItemUiState
+                -> oldItem as FestivalItemUiState == newItem
+
+                oldItem is FestivalTabUiState && newItem is FestivalTabUiState
+                -> oldItem as FestivalTabUiState == newItem
+
+                else -> false
             }
         }
     }
