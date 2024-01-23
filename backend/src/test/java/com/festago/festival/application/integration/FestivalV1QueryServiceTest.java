@@ -10,9 +10,9 @@ import com.festago.festival.application.FestivalV1QueryService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.domain.FestivalInfo;
 import com.festago.festival.domain.FestivalInfoSerializer;
+import com.festago.festival.dto.v1.FestivalV1ListRequest;
 import com.festago.festival.dto.v1.FestivalV1ListResponse;
 import com.festago.festival.dto.v1.FestivalV1Response;
-import com.festago.festival.dto.v1.FestivalV1lListRequest;
 import com.festago.festival.repository.FestivalFilter;
 import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalRepository;
@@ -102,7 +102,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 마지막_페이지_없이_검색하면_진행_중인_모든_축제를_반환한다() {
             // given
-            FestivalV1lListRequest request = new FestivalV1lListRequest(null, null, null, null, null);
+            FestivalV1ListRequest request = new FestivalV1ListRequest(null, null, null, null, null);
 
             // when
             FestivalV1ListResponse actual = festivalV1QueryService.findFestivals(request);
@@ -117,12 +117,12 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 마지막_페이지가_아닌지_반환받을_수_있다() {
             // given
-            FestivalV1lListRequest firstRequest = new FestivalV1lListRequest(null, null, 1, null, null);
+            FestivalV1ListRequest firstRequest = new FestivalV1ListRequest(null, null, 1, null, null);
             FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(firstRequest);
 
             Long lastFestivalId = firstResponse.festivals().get(0).id();
             LocalDate lastStartDate = firstResponse.festivals().get(0).startDate();
-            FestivalV1lListRequest secondRequest = new FestivalV1lListRequest(null, null, 4, lastFestivalId,
+            FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(null, null, 4, lastFestivalId,
                 lastStartDate.toString());
 
             // when
@@ -138,7 +138,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_에정_필터를_적용할_수_있다() {
             // given
-            FestivalV1lListRequest request = new FestivalV1lListRequest(null, FestivalFilter.PLANNED.name(), 10, null,
+            FestivalV1ListRequest request = new FestivalV1ListRequest(null, FestivalFilter.PLANNED.name(), 10, null,
                 null);
 
             // when
@@ -155,7 +155,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 같은_날짜에_진행_예정인_축제가_있으면_축제_아이디가_빠른_순으로_반환된다() {
             // given
-            FestivalV1lListRequest request = new FestivalV1lListRequest(null, FestivalFilter.PLANNED.name(), 10, null,
+            FestivalV1ListRequest request = new FestivalV1ListRequest(null, FestivalFilter.PLANNED.name(), 10, null,
                 null);
 
             // when
@@ -176,19 +176,19 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_예정은_날짜가_시작_날짜가_빠른_순으로_반환된다() {
             // given
-            FestivalV1lListRequest fistRequest = new FestivalV1lListRequest(SchoolRegion.대구.name(),
+            FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 null, null);
             FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
 
             FestivalV1Response firstFestival = firstResponse.festivals().get(0);
-            FestivalV1lListRequest secondRequest = new FestivalV1lListRequest(SchoolRegion.대구.name(),
+            FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 firstFestival.id(), firstFestival.startDate().toString());
             FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
 
             FestivalV1Response secondFestival = secondResponse.festivals().get(0);
-            FestivalV1lListRequest thirdRequest = new FestivalV1lListRequest(SchoolRegion.대구.name(),
+            FestivalV1ListRequest thirdRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 secondFestival.id(), secondFestival.startDate().toString());
             FestivalV1ListResponse thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
@@ -206,22 +206,22 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_중인_축제는_시작_날짜가_느린_순으로_반환된다() {
             // given
-            FestivalV1lListRequest fistRequest = new FestivalV1lListRequest(null, FestivalFilter.PROGRESS.name(), 1,
+            FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 1,
                 null, null);
             FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
             FestivalV1Response firstFestival = firstResponse.festivals().get(0);
 
-            FestivalV1lListRequest secondRequest = new FestivalV1lListRequest(null, FestivalFilter.PROGRESS.name(), 1,
+            FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 1,
                 firstFestival.id(), firstFestival.startDate().toString());
             FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
             FestivalV1Response secondFestival = secondResponse.festivals().get(0);
 
-            FestivalV1lListRequest thirdRequest = new FestivalV1lListRequest(null, FestivalFilter.PROGRESS.name(), 1,
+            FestivalV1ListRequest thirdRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 1,
                 secondFestival.id(), secondFestival.startDate().toString());
             FestivalV1ListResponse thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
             FestivalV1Response thirdFestival = thirdResponse.festivals().get(0);
 
-            FestivalV1lListRequest fourthRequest = new FestivalV1lListRequest(null, FestivalFilter.PROGRESS.name(), 1,
+            FestivalV1ListRequest fourthRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 1,
                 thirdFestival.id(), thirdFestival.startDate().toString());
             FestivalV1ListResponse fourthResponse = festivalV1QueryService.findFestivals(fourthRequest);
             FestivalV1Response fourthFestival = fourthResponse.festivals().get(0);
@@ -237,12 +237,12 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_중인_축제에_같은_날짜가_있으면_id가_작은_것_부터_보낸다() {
             // given
-            FestivalV1lListRequest fistRequest = new FestivalV1lListRequest(null, FestivalFilter.PROGRESS.name(), 4,
+            FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 4,
                 null, null);
             FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
             FestivalV1Response firstLastFestival = firstResponse.festivals().get(3);
 
-            FestivalV1lListRequest secondRequest = new FestivalV1lListRequest(null, FestivalFilter.PROGRESS.name(), 1,
+            FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 1,
                 firstLastFestival.id(), firstLastFestival.startDate().toString());
             FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
             FestivalV1Response secondLastFestival = secondResponse.festivals().get(0);
@@ -262,9 +262,9 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 지역을_선택할_수_있다() {
             // given
-            FestivalV1lListRequest firstRequest = new FestivalV1lListRequest(SchoolRegion.대구.name(),
+            FestivalV1ListRequest firstRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 10, null, null);
-            FestivalV1lListRequest secondRequest = new FestivalV1lListRequest(SchoolRegion.서울.name(),
+            FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PLANNED.name(), 10, null, null);
 
             // when
@@ -283,7 +283,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 같은_날짜에_진행_예정인_축제가_있으면_축제_아이디가_빠른_순으로_반환된다() {
             // given
-            FestivalV1lListRequest request = new FestivalV1lListRequest(SchoolRegion.대구.name(),
+            FestivalV1ListRequest request = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 10,
                 null,
                 null);
@@ -307,19 +307,19 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_예정은_날짜가_시작_날짜가_빠른_순으로_반환된다() {
             // given
-            FestivalV1lListRequest fistRequest = new FestivalV1lListRequest(SchoolRegion.대구.name(),
+            FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 null, null);
             FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
 
             FestivalV1Response firstFestival = firstResponse.festivals().get(0);
-            FestivalV1lListRequest secondRequest = new FestivalV1lListRequest(SchoolRegion.대구.name(),
+            FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 firstFestival.id(), firstFestival.startDate().toString());
             FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
 
             FestivalV1Response secondFestival = secondResponse.festivals().get(0);
-            FestivalV1lListRequest thirdRequest = new FestivalV1lListRequest(SchoolRegion.대구.name(),
+            FestivalV1ListRequest thirdRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 secondFestival.id(), secondFestival.startDate().toString());
             FestivalV1ListResponse thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
@@ -337,25 +337,25 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_중인_축제는_시작_날짜가_느린_순으로_반환된다() {
             // given
-            FestivalV1lListRequest fistRequest = new FestivalV1lListRequest(SchoolRegion.서울.name(),
+            FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 1,
                 null, null);
             FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
             FestivalV1Response firstFestival = firstResponse.festivals().get(0);
 
-            FestivalV1lListRequest secondRequest = new FestivalV1lListRequest(SchoolRegion.서울.name(),
+            FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 1,
                 firstFestival.id(), firstFestival.startDate().toString());
             FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
             FestivalV1Response secondFestival = secondResponse.festivals().get(0);
 
-            FestivalV1lListRequest thirdRequest = new FestivalV1lListRequest(SchoolRegion.서울.name(),
+            FestivalV1ListRequest thirdRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 1,
                 secondFestival.id(), secondFestival.startDate().toString());
             FestivalV1ListResponse thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
             FestivalV1Response thirdFestival = thirdResponse.festivals().get(0);
 
-            FestivalV1lListRequest fourthRequest = new FestivalV1lListRequest(SchoolRegion.서울.name(),
+            FestivalV1ListRequest fourthRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 1,
                 thirdFestival.id(), thirdFestival.startDate().toString());
             FestivalV1ListResponse fourthResponse = festivalV1QueryService.findFestivals(fourthRequest);
@@ -372,13 +372,13 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_중인_축제에_같은_날짜가_있으면_id가_작은_것_부터_보낸다() {
             // given
-            FestivalV1lListRequest fistRequest = new FestivalV1lListRequest(SchoolRegion.서울.name(),
+            FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 4,
                 null, null);
             FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
             FestivalV1Response firstLastFestival = firstResponse.festivals().get(3);
 
-            FestivalV1lListRequest secondRequest = new FestivalV1lListRequest(SchoolRegion.서울.name(),
+            FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 1,
                 firstLastFestival.id(), firstLastFestival.startDate().toString());
             FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
