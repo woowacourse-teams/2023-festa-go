@@ -67,7 +67,7 @@
             android:text="@{@string/festival_list_tv_date_range_format(item.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),item.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
             app:layout_constraintStart_toStartOf="@+id/tvFestivalName"
             app:layout_constraintTop_toBottomOf="@+id/tvFestivalName"
-            tools:text="2021.10.10 ~ 2021.10.12" />
+            tools:text="21.10.10 ~ 21.10.12" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFestivalArtists"
