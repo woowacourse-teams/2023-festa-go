@@ -115,6 +115,34 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
                 .hasMessage(ErrorCode.DUPLICATE_SCHOOL_NAME.getMessage());
         }
 
+        @Test
+        void 수정할_이름이_수정할_학교의_이름과_같으면_이름은_수정되지_않는다() {
+            // given
+            Long schoolId = school.getId();
+            SchoolUpdateCommand command = new SchoolUpdateCommand(school.getName(), "teco.ac.kr", SchoolRegion.서울);
+
+            // when
+            schoolCommandService.updateSchool(schoolId, command);
+
+            // then
+            School updatedSchool = schoolRepository.getOrThrow(schoolId);
+            assertThat(updatedSchool.getName()).isEqualTo(school.getName());
+        }
+
+        @Test
+        void 수정할_도메인이_수정할_학교의_도메인과_같으면_도메인은_수정되지_않는다() {
+            // given
+            Long schoolId = school.getId();
+            SchoolUpdateCommand command = new SchoolUpdateCommand("테코대학교", school.getDomain(), SchoolRegion.서울);
+
+            // when
+            schoolCommandService.updateSchool(schoolId, command);
+
+            // then
+            School updatedSchool = schoolRepository.getOrThrow(schoolId);
+            assertThat(updatedSchool.getDomain()).isEqualTo(school.getDomain());
+        }
+
         /**
          * 여기서 통합 테스트의 단점이 드러난다. 변경된 School은 위의 변수로 선언한 School과 같은 인스턴스이다. 하지만 updateSchool() 메서드로 변경된 School은 변수로 선언된
          * School과 다르다. 따라서 변경을 확인하려면 SchoolRepository에서 영속된 School을 찾아야한다.
