@@ -130,8 +130,8 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
             // then
             School updatedSchool = schoolRepository.getOrThrow(schoolId);
             assertSoftly(softly -> {
-                assertThat(updatedSchool.getName()).isEqualTo("테코대학교");
-                assertThat(updatedSchool.getDomain()).isEqualTo("teco.ac.kr");
+                softly.assertThat(updatedSchool.getName()).isEqualTo("테코대학교");
+                softly.assertThat(updatedSchool.getDomain()).isEqualTo("teco.ac.kr");
                 // TODO School 도메인 이슈에서 주석 해제할 것!
                 // assertThat(updatedSchool.getRegion()).isEqualTo(SchoolRegion.서울);
             });
