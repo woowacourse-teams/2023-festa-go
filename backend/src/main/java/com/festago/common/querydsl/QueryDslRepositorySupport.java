@@ -7,8 +7,8 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,16 +57,11 @@ public abstract class QueryDslRepositorySupport {
         return queryFactory.selectFrom(from);
     }
 
-    protected <T, X extends Throwable> T fetchOneOrThrow(
-        Function<JPAQueryFactory, JPAQuery<T>> queryFunction,
-        Supplier<? extends X> exceptionSupplier
-    ) throws X {
+    protected <T> Optional<T> fetchOne(
+        Function<JPAQueryFactory, JPAQuery<T>> queryFunction
+    ) {
         JPAQuery<T> query = queryFunction.apply(queryFactory);
-        T result = query.fetchOne();
-        if (result == null) {
-            throw exceptionSupplier.get();
-        }
-        return result;
+        return Optional.ofNullable(query.fetchOne());
     }
 
     protected <T> Page<T> applyPagination(Pageable pageable,

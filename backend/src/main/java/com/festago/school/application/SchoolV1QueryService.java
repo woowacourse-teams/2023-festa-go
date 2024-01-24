@@ -1,5 +1,7 @@
 package com.festago.school.application;
 
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.presentation.v1.dto.SchoolV1Response;
 import com.festago.school.repository.SchoolV1QueryDslRepository;
@@ -20,6 +22,7 @@ public class SchoolV1QueryService {
     }
 
     public SchoolV1Response findById(Long schoolId) {
-        return schoolQueryDslRepository.findById(schoolId);
+        return schoolQueryDslRepository.findById(schoolId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
     }
 }

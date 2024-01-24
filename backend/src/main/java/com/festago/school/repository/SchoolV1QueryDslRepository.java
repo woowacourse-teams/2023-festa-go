@@ -2,14 +2,13 @@ package com.festago.school.repository;
 
 import static com.festago.school.domain.QSchool.school;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.NotFoundException;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.domain.School;
 import com.festago.school.presentation.v1.dto.QSchoolV1Response;
 import com.festago.school.presentation.v1.dto.SchoolV1Response;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -81,8 +80,8 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         return null;
     }
 
-    public SchoolV1Response findById(Long schoolId) {
-        return fetchOneOrThrow(queryFactory -> queryFactory.select(
+    public Optional<SchoolV1Response> findById(Long schoolId) {
+        return fetchOne(queryFactory -> queryFactory.select(
                 new QSchoolV1Response(
                     school.id,
                     school.domain,
@@ -90,6 +89,6 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
                     school.region
                 ))
             .from(school)
-            .where(school.id.eq(schoolId)), () -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
+            .where(school.id.eq(schoolId)));
     }
 }
