@@ -21,7 +21,7 @@ public class CucumberClient {
         dataStorage.put(key, value);
     }
 
-    public void addAuthToken(String token) {
+    public void setToken(String token) {
         this.token = token;
     }
 

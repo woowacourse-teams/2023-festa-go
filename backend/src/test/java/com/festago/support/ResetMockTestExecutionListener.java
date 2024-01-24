@@ -30,6 +30,7 @@ public class ResetMockTestExecutionListener implements TestExecutionListener {
 
     private void initMocks(ApplicationContext applicationContext) {
         Arrays.stream(applicationContext.getBeanDefinitionNames())
+            .filter(applicationContext::isSingleton)
             .map(applicationContext::getBean)
             .filter(MockUtil::isMock)
             .forEach(mockCache::add);

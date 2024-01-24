@@ -3,6 +3,7 @@ package com.festago.school.repository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.school.domain.School;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SchoolRepository extends JpaRepository<School, Long> {
@@ -21,4 +22,6 @@ public interface SchoolRepository extends JpaRepository<School, Long> {
     boolean existsByDomain(String domain);
 
     boolean existsByName(String name);
+
+    Optional<School> findByName(String name);
 }
