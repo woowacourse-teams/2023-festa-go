@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,12 +65,13 @@ public abstract class QueryDslRepositorySupport {
         return Optional.ofNullable(query.fetchOne());
     }
 
-    protected <T> Page<T> applyPagination(Pageable pageable,
-                                          Function<JPAQueryFactory, JPAQuery<T>> contentQueryFunction,
-                                          Function<JPAQueryFactory, JPAQuery<Long>> countQueryFunction
+    protected <T> Page<T> applyPagination(
+        Pageable pageable,
+        Function<JPAQueryFactory, JPAQuery<T>> contentQueryFunction,
+        Function<JPAQueryFactory, JPAQuery<Long>> countQueryFunction
     ) {
-        var contentQuery = contentQueryFunction.apply(queryFactory);
-        var content = querydsl.applyPagination(pageable, contentQuery).fetch();
+        JPAQuery<T> contentQuery = contentQueryFunction.apply(queryFactory);
+        List<T> content = querydsl.applyPagination(pageable, contentQuery).fetch();
         JPAQuery<Long> countQuery = countQueryFunction.apply(queryFactory);
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
