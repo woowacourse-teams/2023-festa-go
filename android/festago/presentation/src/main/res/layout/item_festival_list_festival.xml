@@ -5,7 +5,11 @@
 
     <data>
 
+        <import type="java.time.LocalDate" />
+
         <import type="java.time.format.DateTimeFormatter" />
+
+        <import type="android.view.View" />
 
         <variable
             name="item"
@@ -41,11 +45,27 @@
             android:layout_width="56dp"
             android:layout_height="24dp"
             android:background="#FFFA1273"
+            android:visibility="@{LocalDate.now().compareTo(item.endDate) &lt;= 0 ? View.VISIBLE : View.GONE}"
             android:gravity="center"
             android:textColor="@color/background_gray_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="D-1" />
+
+        <TextView
+            android:id="@+id/tvFestivalDDayEnd"
+            style="@style/H5Bold14Lh16"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#40000000"
+            android:gravity="center"
+            android:text="@string/festival_list_tv_dday_end"
+            android:textColor="@color/background_gray_01"
+            android:visibility="@{LocalDate.now().compareTo(item.endDate) > 0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/ivFestivalImage"
+            app:layout_constraintEnd_toEndOf="@id/ivFestivalImage"
+            app:layout_constraintStart_toStartOf="@id/ivFestivalImage"
+            app:layout_constraintTop_toTopOf="@id/ivFestivalImage" />
 
         <TextView
             android:id="@+id/tvFestivalName"

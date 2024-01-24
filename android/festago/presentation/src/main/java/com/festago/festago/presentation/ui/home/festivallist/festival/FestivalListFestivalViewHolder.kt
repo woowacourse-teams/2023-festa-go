@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.festago.festago.presentation.R
@@ -31,24 +32,34 @@ class FestivalListFestivalViewHolder(private val binding: ItemFestivalListFestiv
 
     private fun bindDDayView(item: FestivalItemUiState) {
         val context = binding.root.context
+
+        val dDayView = binding.tvFestivalDDay
         when {
-            LocalDate.now() > item.endDate -> {
-                binding.tvFestivalDDay.text = context.getString(R.string.festival_list_tv_dday_end)
-                binding.tvFestivalDDay.setBackgroundColor(context.getColor(android.R.color.darker_gray))
-            }
+            LocalDate.now() > item.endDate -> Unit
 
             LocalDate.now() >= item.startDate -> {
-                binding.tvFestivalDDay.text =
-                    context.getString(R.string.festival_list_tv_dday_in_progress)
-                binding.tvFestivalDDay.setBackgroundColor(0xffff1273.toInt())
+                dDayView.text = context.getString(R.string.festival_list_tv_dday_in_progress)
+                dDayView.setTextColor(context.getColor(R.color.secondary_pink_01))
+                dDayView.background = AppCompatResources.getDrawable(
+                    context,
+                    R.drawable.bg_festival_list_dday_in_progress,
+                )
             }
 
-            else -> {
-                binding.tvFestivalDDay.text = context.getString(
+            LocalDate.now() == item.startDate.minusDays(1) -> {
+                dDayView.text = context.getString(
                     R.string.festival_list_tv_dday_format,
                     item.startDate.compareTo(LocalDate.now()).toString(),
                 )
-                binding.tvFestivalDDay.setBackgroundColor(context.getColor(android.R.color.black))
+                dDayView.setBackgroundColor(0xffff1273.toInt())
+            }
+
+            else -> binding.tvFestivalDDay.apply {
+                dDayView.text = context.getString(
+                    R.string.festival_list_tv_dday_format,
+                    item.startDate.compareTo(LocalDate.now()).toString(),
+                )
+                dDayView.setBackgroundColor(context.getColor(android.R.color.black))
             }
         }
     }
