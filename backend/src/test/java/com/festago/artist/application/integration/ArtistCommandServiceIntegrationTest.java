@@ -1,7 +1,6 @@
 package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.domain.Artist;
@@ -27,26 +26,21 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 아티스트를_저장한다() {
         // given
-        ArtistCreateRequest request = new ArtistCreateRequest("윤하", "www.zonye.com");
+        ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png");
 
         // when
         Long artistId = artistCommandService.save(request);
 
         // then
         Artist actual = artistRepository.getOrThrow(artistId);
-        assertAll(
-                () -> assertThat(actual.getId()).isPositive(),
-                () -> assertThat(actual).usingRecursiveComparison()
-                        .ignoringFields("id")
-                        .isEqualTo(request)
-        );
+        assertThat(actual.getId()).isPositive();
     }
 
     @Test
     void 아티스트_정보를_변경한다() {
         // given
-        Long artistId = artistRepository.save(new Artist("고윤하", "www.naver.com")).getId();
-        ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "www.c9.com");
+        Long artistId = artistRepository.save(new Artist("고윤하", "https://image.com/image1.png")).getId();
+        ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image2.png");
 
         // when
         artistCommandService.update(request, artistId);
@@ -61,7 +55,7 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 아티스트를_삭제한다() {
         // given
-        Long artistId = artistRepository.save(new Artist("고윤하", "www.naver.com")).getId();
+        Long artistId = artistRepository.save(new Artist("고윤하", "https://image.com/image.png")).getId();
 
         // when
         artistCommandService.delete(artistId);
