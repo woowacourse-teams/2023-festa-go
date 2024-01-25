@@ -47,7 +47,7 @@ public class AdminArtistV1Controller {
     @DeleteMapping("/{artistId}")
     public ResponseEntity<Void> delete(@PathVariable Long artistId) {
         artistCommandService.delete(artistId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{artistId}")

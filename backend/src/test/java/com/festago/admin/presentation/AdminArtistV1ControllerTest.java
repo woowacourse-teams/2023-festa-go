@@ -91,7 +91,7 @@ class AdminArtistV1ControllerTest {
                         .cookie(COOKIE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
