@@ -1,23 +1,28 @@
 package com.festago.festago.presentation.ui.home.festivallist
 
+import android.content.res.Resources
+import android.graphics.Rect
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
-import com.festago.festago.presentation.ui.home.festivallist.popularfestival.PopularFestivalViewPagerAdapter
+import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.util.repeatOnStarted
-import com.google.android.material.tabs.TabLayoutMediator
 
 class FestivalListFragment : Fragment() {
 
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var popularFestivalViewPager: PopularFestivalViewPagerAdapter
+    private lateinit var festivalListAdapter: FestivalListAdapter
 
     private val vm: FestivalListViewModel by viewModels()
 
@@ -49,18 +54,35 @@ class FestivalListFragment : Fragment() {
     private fun initView() {
         initViewPager()
         vm.loadPopularFestival()
+        initRecyclerView()
     }
 
     private fun initViewPager() {
-        popularFestivalViewPager = PopularFestivalViewPagerAdapter(
-            foregroundViewPager = binding.vpPopularFestivalForeground,
-            backgroundViewPager = binding.vpPopularFestivalBackground,
-        )
+        festivalListAdapter = FestivalListAdapter()
+        binding.rvList.adapter = festivalListAdapter
+    }
 
-        TabLayoutMediator(
-            binding.tlDotIndicator,
-            binding.vpPopularFestivalForeground,
-        ) { tab, position -> }.attach()
+    private fun initRecyclerView() {
+        binding.rvList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State,
+            ) {
+                super.getItemOffsets(outRect, view, parent, state)
+                if (parent.getChildAdapterPosition(view) == state.itemCount - 1) {
+                    outRect.bottom = 32.dpToPx
+                }
+            }
+
+            private val Int.dpToPx: Int
+                get() = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    this.toFloat(),
+                    Resources.getSystem().displayMetrics,
+                ).toInt()
+        })
     }
 
     private fun updateUi(uiState: FestivalListUiState) {
@@ -74,7 +96,18 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
-        popularFestivalViewPager.submitList(uiState.festivals)
+        festivalListAdapter.submitList(
+            listOf(
+                uiState,
+                FestivalTabUiState(
+                    {
+                        Toast.makeText(requireContext(), "Clicked $it", Toast.LENGTH_SHORT).show()
+                        /* TODO: Handle tab click */
+                        vm.loadPopularFestival()
+                    },
+                ),
+            ) + uiState.festivals,
+        )
     }
 
     override fun onDestroyView() {

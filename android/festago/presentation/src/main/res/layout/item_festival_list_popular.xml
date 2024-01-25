@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        visibility="@{uiState.shouldShowSuccess}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpPopularFestivalBackground"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="-8dp"
+            app:layout_constraintBottom_toBottomOf="@id/tlDotIndicator"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvPopularFestivalTitle"
+            style="@style/H3Bold18Lh20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="@string/festival_list_tv_popular_festival_title"
+            android:textColor="@color/background_gray_01"
+            app:layout_constraintTop_toTopOf="@id/vpPopularFestivalBackground" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tlDotIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@id/vpPopularFestivalForeground"
+            app:tabBackground="@drawable/selector_tab_page"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"
+            app:tabPaddingEnd="8dp"
+            app:tabPaddingStart="8dp" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpPopularFestivalForeground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

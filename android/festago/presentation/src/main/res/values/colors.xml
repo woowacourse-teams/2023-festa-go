@@ -7,4 +7,9 @@
     <color name="contents_gray_05">#b0b0b0</color>
     <color name="contents_gray_06">#5d5d5d</color>
     <color name="contents_gray_07">#0c0c0c</color>
+
+    <color name="primary_blue_01">#e8f6ff</color>
+    <color name="primary_blue_07">#043bff</color>
+
+    <color name="secondary_pink_01">#fa1273</color>
 </resources>
