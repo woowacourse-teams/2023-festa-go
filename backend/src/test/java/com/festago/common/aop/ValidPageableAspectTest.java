@@ -30,7 +30,7 @@ class ValidPageableAspectTest {
     }
 
     @Test
-    void size가_masSize를_초과하면_400_응답이_반환된다() throws Exception {
+    void size가_maxSize를_초과하면_400_응답이_반환된다() throws Exception {
         mockMvc.perform(get("/test")
                 .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("size", "11"))
