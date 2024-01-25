@@ -1,4 +1,4 @@
-package com.festago.artist.dto;
+package com.festago.admin.dto;
 
 import com.festago.artist.domain.Artist;
 

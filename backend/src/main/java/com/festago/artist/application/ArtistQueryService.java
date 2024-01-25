@@ -1,7 +1,7 @@
 package com.festago.artist.application;
 
+import com.festago.admin.dto.ArtistResponse;
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistResponse;
 import com.festago.artist.repository.ArtistRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

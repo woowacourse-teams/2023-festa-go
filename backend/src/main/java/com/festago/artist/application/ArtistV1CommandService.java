@@ -1,8 +1,8 @@
 package com.festago.artist.application;
 
+import com.festago.admin.dto.ArtistV1CreateRequest;
+import com.festago.admin.dto.ArtistV1UpdateRequest;
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistV1CreateRequest;
-import com.festago.artist.dto.ArtistV1UpdateRequest;
 import com.festago.artist.repository.ArtistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

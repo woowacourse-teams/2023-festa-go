@@ -2,10 +2,10 @@ package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.festago.admin.dto.ArtistV1CreateRequest;
+import com.festago.admin.dto.ArtistV1UpdateRequest;
 import com.festago.artist.application.ArtistV1CommandService;
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistV1CreateRequest;
-import com.festago.artist.dto.ArtistV1UpdateRequest;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import org.junit.jupiter.api.DisplayNameGeneration;

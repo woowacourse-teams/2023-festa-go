@@ -1,10 +1,10 @@
-package com.festago.admin.presentation;
+package com.festago.admin.presentation.v1;
 
+import com.festago.admin.dto.ArtistResponse;
+import com.festago.admin.dto.ArtistV1CreateRequest;
+import com.festago.admin.dto.ArtistV1UpdateRequest;
 import com.festago.artist.application.ArtistQueryService;
 import com.festago.artist.application.ArtistV1CommandService;
-import com.festago.artist.dto.ArtistResponse;
-import com.festago.artist.dto.ArtistV1CreateRequest;
-import com.festago.artist.dto.ArtistV1UpdateRequest;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
 import java.net.URI;

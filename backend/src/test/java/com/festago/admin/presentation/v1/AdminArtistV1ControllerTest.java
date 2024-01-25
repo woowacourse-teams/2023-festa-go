@@ -1,4 +1,4 @@
-package com.festago.admin.presentation;
+package com.festago.admin.presentation.v1;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -12,11 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.admin.dto.ArtistResponse;
+import com.festago.admin.dto.ArtistV1CreateRequest;
+import com.festago.admin.dto.ArtistV1UpdateRequest;
 import com.festago.artist.application.ArtistQueryService;
 import com.festago.artist.application.ArtistV1CommandService;
-import com.festago.artist.dto.ArtistResponse;
-import com.festago.artist.dto.ArtistV1CreateRequest;
-import com.festago.artist.dto.ArtistV1UpdateRequest;
 import com.festago.auth.domain.Role;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;

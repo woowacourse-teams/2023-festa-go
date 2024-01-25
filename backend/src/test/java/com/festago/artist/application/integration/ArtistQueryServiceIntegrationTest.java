@@ -2,9 +2,9 @@ package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.festago.admin.dto.ArtistResponse;
 import com.festago.artist.application.ArtistQueryService;
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistResponse;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import java.util.List;
