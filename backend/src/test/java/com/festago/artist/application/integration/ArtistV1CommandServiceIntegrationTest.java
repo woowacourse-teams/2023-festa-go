@@ -2,10 +2,10 @@ package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.artist.application.ArtistCommandService;
+import com.festago.artist.application.ArtistV1CommandService;
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistCreateRequest;
-import com.festago.artist.dto.ArtistUpdateRequest;
+import com.festago.artist.dto.ArtistV1CreateRequest;
+import com.festago.artist.dto.ArtistV1UpdateRequest;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -15,10 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
+class ArtistV1CommandServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
-    ArtistCommandService artistCommandService;
+    ArtistV1CommandService artistV1CommandService;
 
     @Autowired
     ArtistRepository artistRepository;
@@ -26,10 +26,10 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 아티스트를_저장한다() {
         // given
-        ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png");
+        ArtistV1CreateRequest request = new ArtistV1CreateRequest("윤서연", "https://image.com/image.png");
 
         // when
-        Long artistId = artistCommandService.save(request);
+        Long artistId = artistV1CommandService.save(request);
 
         // then
         Artist actual = artistRepository.getOrThrow(artistId);
@@ -40,10 +40,10 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     void 아티스트_정보를_변경한다() {
         // given
         Long artistId = artistRepository.save(new Artist("고윤하", "https://image.com/image1.png")).getId();
-        ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image2.png");
+        ArtistV1UpdateRequest request = new ArtistV1UpdateRequest("윤하", "https://image.com/image2.png");
 
         // when
-        artistCommandService.update(request, artistId);
+        artistV1CommandService.update(request, artistId);
 
         // then
         Artist actual = artistRepository.getOrThrow(artistId);
@@ -58,7 +58,7 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
         Long artistId = artistRepository.save(new Artist("고윤하", "https://image.com/image.png")).getId();
 
         // when
-        artistCommandService.delete(artistId);
+        artistV1CommandService.delete(artistId);
 
         // then
         assertThat(artistRepository.findById(artistId)).isEmpty();

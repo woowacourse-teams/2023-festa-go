@@ -12,11 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.application.ArtistQueryService;
-import com.festago.artist.dto.ArtistCreateRequest;
+import com.festago.artist.application.ArtistV1CommandService;
 import com.festago.artist.dto.ArtistResponse;
-import com.festago.artist.dto.ArtistUpdateRequest;
+import com.festago.artist.dto.ArtistV1CreateRequest;
+import com.festago.artist.dto.ArtistV1UpdateRequest;
 import com.festago.auth.domain.Role;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
@@ -47,7 +47,7 @@ class AdminArtistV1ControllerTest {
     ArtistQueryService artistQueryService;
 
     @Autowired
-    ArtistCommandService artistCommandService;
+    ArtistV1CommandService artistV1CommandService;
 
     private static final Cookie COOKIE = new Cookie("token", "token");
 
@@ -64,8 +64,8 @@ class AdminArtistV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_201_응답과_Location_헤더에_식별자가_반환된다() throws Exception {
                 // given
-                ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png");
-                given(artistCommandService.save(any(ArtistCreateRequest.class)))
+                ArtistV1CreateRequest request = new ArtistV1CreateRequest("윤서연", "https://image.com/image.png");
+                given(artistV1CommandService.save(any(ArtistV1CreateRequest.class)))
                         .willReturn(1L);
 
                 // when & then
@@ -93,7 +93,7 @@ class AdminArtistV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_200_응답이_반환된다() throws Exception {
                 // given
-                ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image.png");
+                ArtistV1UpdateRequest request = new ArtistV1UpdateRequest("윤하", "https://image.com/image.png");
 
                 // when & then
                 mockMvc.perform(put(uri, 1L)
