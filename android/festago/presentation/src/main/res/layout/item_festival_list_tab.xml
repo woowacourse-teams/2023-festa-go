@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tlFestivalListTab"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/contents_gray_07"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/contents_gray_07"
+            app:tabTextAppearance="@style/H1Bold20Lh20"
+            app:tabTextColor="@color/contents_gray_04">
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </LinearLayout>
+</layout>

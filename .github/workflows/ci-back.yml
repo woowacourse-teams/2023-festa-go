@@ -5,7 +5,9 @@ on:
     branches:
       - dev
       - main
-    paths: 'backend/**'
+      - feat/**
+    paths:
+      - backend/**
 
 defaults:
   run:
