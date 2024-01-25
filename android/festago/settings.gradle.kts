@@ -21,7 +21,7 @@ include(":app")
 include(":common")
 
 // domain
-include(":domain")
+include(":domain-legacy")
 
 // presentation
 include(":presentation-legacy")
@@ -29,3 +29,5 @@ include(":presentation")
 
 // dat
 include(":data-legacy")
+include(":data")
+include(":domain")

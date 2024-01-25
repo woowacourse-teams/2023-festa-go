@@ -43,7 +43,7 @@ android {
 kotlin.jvmToolchain(17)
 
 dependencies {
-    implementation(project(":domain-legacy"))
+    implementation(project(":domain"))
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.50")

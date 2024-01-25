@@ -52,10 +52,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
 
 dependencies {
     implementation(project(":common"))
-    implementation(project(":domain"))
+    implementation(project(":domain-legacy"))
 
     implementation(project(":common"))
-    implementation(project(":domain"))
+    implementation(project(":domain-legacy"))
 
     // android
     implementation("androidx.core:core-ktx:1.10.1")
