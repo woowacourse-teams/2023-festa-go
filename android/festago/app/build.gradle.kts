@@ -61,7 +61,7 @@ kapt {
 }
 
 dependencies {
-    implementation(project(":data-legacy"))
+    implementation(project(":data"))
     implementation(project(":presentation"))
 
     // hilt
