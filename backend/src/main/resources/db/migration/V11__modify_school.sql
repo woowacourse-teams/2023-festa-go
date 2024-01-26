@@ -4,7 +4,7 @@ alter table school
 alter table school
     add constraint UNIQUE_NAME unique (name);
 
-create table if not exists festival_info
+create table if not exists festival_query_info
 (
     id              bigint not null auto_increment,
     festival_id     bigint  not null,

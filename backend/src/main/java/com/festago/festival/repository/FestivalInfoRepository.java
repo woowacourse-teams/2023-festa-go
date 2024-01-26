@@ -1,13 +1,13 @@
 package com.festago.festival.repository;
 
-import com.festago.festival.domain.FestivalInfo;
+import com.festago.festival.domain.FestivalQueryInfo;
 import java.util.List;
 import org.springframework.data.repository.Repository;
 
-public interface FestivalInfoRepository extends Repository<FestivalInfo, Long> {
+public interface FestivalInfoRepository extends Repository<FestivalQueryInfo, Long> {
 
-    FestivalInfo save(FestivalInfo festivalInfo);
+    FestivalQueryInfo save(FestivalQueryInfo festivalQueryInfo);
 
-    List<FestivalInfo> findAllByFestivalIdIn(List<Long> festivalIds);
+    List<FestivalQueryInfo> findAllByFestivalIdIn(List<Long> festivalIds);
 }
 

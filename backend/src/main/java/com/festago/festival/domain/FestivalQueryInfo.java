@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FestivalInfo {
+public class FestivalQueryInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +26,13 @@ public class FestivalInfo {
     @Column(columnDefinition = "TEXT")
     private String artistInfo;
 
-    private FestivalInfo(Long festivalId, String artistInfo) {
+    private FestivalQueryInfo(Long festivalId, String artistInfo) {
         this.festivalId = festivalId;
         this.artistInfo = artistInfo;
     }
 
-    public static FestivalInfo of(Festival festival, List<Artist> artists, FestivalInfoSerializer serializer) {
-        return new FestivalInfo(festival.getId(), serializer.serialize(artists));
+    public static FestivalQueryInfo of(Festival festival, List<Artist> artists, FestivalInfoSerializer serializer) {
+        return new FestivalQueryInfo(festival.getId(), serializer.serialize(artists));
     }
 
     public Long getId() {
