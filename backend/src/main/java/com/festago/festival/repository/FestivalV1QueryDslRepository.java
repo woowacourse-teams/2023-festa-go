@@ -16,7 +16,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -41,7 +40,7 @@ public class FestivalV1QueryDslRepository {
             .limit(page.getPageSize() + NEXT_PAGE_DATA)
             .fetch();
 
-        return new SliceImpl<>(content, PageRequest.of(1, 1), hasNext(content, page.getPageSize()));
+        return new SliceImpl<>(content, page, hasNext(content, page.getPageSize()));
     }
 
     private JPAQuery<FestivalV1Response> selectResponse() {
