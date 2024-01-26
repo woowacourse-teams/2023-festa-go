@@ -6,6 +6,4 @@ import java.util.List;
 public interface FestivalInfoSerializer {
 
     String serialize(List<Artist> artists);
-
-    List<Artist> deserialize(String value);
 }

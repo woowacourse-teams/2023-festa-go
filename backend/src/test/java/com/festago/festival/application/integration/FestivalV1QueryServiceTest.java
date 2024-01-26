@@ -3,6 +3,7 @@ package com.festago.festival.application.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
@@ -280,7 +281,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         }
 
         @Test
-        void 같은_날짜에_진행_예정인_축제가_있으면_축제_아이디가_빠른_순으로_반환된다() {
+        void 같은_날짜에_진행_예정인_축제가_있으면_축제_아이디가_빠른_순으로_반환된다() throws JsonProcessingException {
             // given
             FestivalV1ListRequest request = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 10,
@@ -289,9 +290,8 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
 
             // when
             Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
-            System.out.println(response.isLast());
-            System.out.println(response);
 
+            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response));
             // then
             assertSoftly(softAssertions -> {
                 assertThat(response.isLast()).isTrue();

@@ -16,6 +16,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -32,24 +33,39 @@ public class FestivalV1QueryDslRepository {
     public Slice<FestivalV1Response> findBy(FestivalSearchCondition searchCondition) {
         FestivalFilter filter = searchCondition.filter();
         Pageable page = searchCondition.page();
-        List<FestivalV1Response> content = selectResponse().where(
+        List<FestivalV1Response> content = selectResponse()
+            .where(
                 dynamicWhere(filter, searchCondition.currentTime(), searchCondition.lastFestivalId(),
-                    searchCondition.lastStartDate(), searchCondition.region())).orderBy(dynamicOrderBy(filter))
-            .limit(page.getPageSize() + NEXT_PAGE_DATA).fetch();
+                    searchCondition.lastStartDate(), searchCondition.region()))
+            .orderBy(dynamicOrderBy(filter))
+            .limit(page.getPageSize() + NEXT_PAGE_DATA)
+            .fetch();
 
-        return new SliceImpl<>(content, page, hasNext(content, page.getPageSize()));
+        return new SliceImpl<>(content, PageRequest.of(1, 1), hasNext(content, page.getPageSize()));
     }
 
     private JPAQuery<FestivalV1Response> selectResponse() {
-        return queryFactory.select(
-                new QFestivalV1Response(festival.id, festival.name, festival.startDate, festival.endDate,
-                    festival.thumbnail, new QSchoolV1Response(school.id, school.name, school.region),
-                    festivalQueryInfo.artistInfo)).from(festival).innerJoin(school).on(school.id.eq(festival.school.id))
+        return queryFactory.select(new QFestivalV1Response(
+                festival.id,
+                festival.name,
+                festival.startDate,
+                festival.endDate,
+                festival.thumbnail,
+                new QSchoolV1Response(
+                    school.id,
+                    school.name,
+                    school.region
+                ),
+                festivalQueryInfo.artistInfo)
+            )
+            .from(festival)
+            .innerJoin(school).on(school.id.eq(festival.school.id))
             .innerJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id));
     }
 
     private BooleanExpression dynamicWhere(FestivalFilter filter, LocalDate currentTime, Long lastFestivalId,
-                                           LocalDate lastStartDate, SchoolRegion region) {
+                                           LocalDate lastStartDate,
+                                           SchoolRegion region) {
         if (hasCursor(lastStartDate, lastFestivalId)) {
             return cursorBasedWhere(filter, currentTime, lastFestivalId, lastStartDate, region);
         }
@@ -78,9 +94,11 @@ public class FestivalV1QueryDslRepository {
                                                LocalDate lastStartDate, SchoolRegion region) {
         BooleanExpression filterResult = switch (filter) {
             case PLANNED -> festival.startDate.gt(lastStartDate)
-                .or(festival.startDate.eq(lastStartDate).and(festival.id.gt(lastFestivalId)));
+                .or(festival.startDate.eq(lastStartDate)
+                    .and(festival.id.gt(lastFestivalId)));
             case PROGRESS -> festival.startDate.lt(lastStartDate)
-                .or(festival.startDate.eq(lastStartDate).and(festival.id.gt(lastFestivalId)))
+                .or(festival.startDate.eq(lastStartDate)
+                    .and(festival.id.gt(lastFestivalId)))
                 .and(festival.endDate.goe(currentTime));
             case END -> festival.endDate.lt(currentTime);
         };
