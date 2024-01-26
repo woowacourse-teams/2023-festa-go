@@ -1,10 +1,12 @@
 package com.festago.festival.repository;
 
 import com.festago.festival.domain.Festival;
-import com.festago.school.domain.School;
+import com.festago.festival.dto.FestivalV1Response;
+import com.festago.school.domain.SchoolRegion;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,13 +23,9 @@ public class FestivalRepositoryCustomImpl implements FestivalRepositoryCustom {
     }
 
     @Override
-    public FestivalPage findBy(FestivalFilter filter, FestivalPageable page, LocalDate currentTime) {
-        return festivalV1QueryDslRepositoryCustom.findBy(filter, page, currentTime);
+    public Slice<FestivalV1Response> findBy(FestivalFilter filter, SchoolRegion region, FestivalPageable page,
+                                            LocalDate currentTime) {
+        return festivalV1QueryDslRepositoryCustom.findBy(filter, region, page, currentTime);
     }
 
-    @Override
-    public FestivalPage findBy(FestivalFilter filter, List<School> schools, FestivalPageable page,
-                               LocalDate currentTime) {
-        return festivalV1QueryDslRepositoryCustom.findBy(filter, schools, page, currentTime);
-    }
 }

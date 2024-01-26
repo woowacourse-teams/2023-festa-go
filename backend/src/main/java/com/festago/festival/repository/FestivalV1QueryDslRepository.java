@@ -2,139 +2,113 @@ package com.festago.festival.repository;
 
 
 import static com.festago.festival.domain.QFestival.festival;
+import static com.festago.festival.domain.QFestivalInfo.festivalInfo;
+import static com.festago.school.domain.QSchool.school;
 
-import com.festago.common.exception.BadRequestException;
-import com.festago.common.exception.ErrorCode;
-import com.festago.festival.domain.Festival;
-import com.festago.school.domain.School;
+import com.festago.festival.dto.FestivalV1Response;
+import com.festago.festival.dto.QFestivalV1Response;
+import com.festago.festival.dto.QSchoolV1Response;
+import com.festago.school.domain.SchoolRegion;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
 public class FestivalV1QueryDslRepository {
 
-    private static final int INDEX_OFFSET = 1;
+    private static final long NEXT_PAGE_DATA = 1;
 
     private final JPAQueryFactory queryFactory;
 
-    public FestivalPage findBy(FestivalFilter filter, FestivalPageable page, LocalDate currentTime) {
+    public Slice<FestivalV1Response> findBy(FestivalFilter filter, SchoolRegion region, FestivalPageable page,
+                                            LocalDate currentTime) {
+        List<FestivalV1Response> content = selectResponse()
+            .where(dynamicWhere(filter, currentTime, page.getLastFestivalId(), page.getLastStartDate(), region))
+            .orderBy(dynamicOrderBy(filter))
+            .limit(page.getLimit() + NEXT_PAGE_DATA)
+            .fetch();
+
+        return new SliceImpl<>(content, PageRequest.of(1, 1), hasNext(content, page.getLimit()));
+    }
+
+    private JPAQuery<FestivalV1Response> selectResponse() {
+        return queryFactory.select(new QFestivalV1Response(
+                festival.id,
+                festival.name,
+                festival.startDate,
+                festival.endDate,
+                festival.thumbnail,
+                new QSchoolV1Response(
+                    school.id,
+                    school.name,
+                    school.region
+                ),
+                festivalInfo.artistInfo)
+            )
+            .from(festival)
+            .innerJoin(school).on(school.id.eq(festival.school.id))
+            .innerJoin(festivalInfo).on(festivalInfo.festivalId.eq(festival.id));
+    }
+
+    private BooleanExpression dynamicWhere(FestivalFilter filter, LocalDate currentTime, Long lastFestivalId,
+                                           LocalDate lastStartDate,
+                                           SchoolRegion region) {
+        if (hasCursor(lastStartDate, lastFestivalId)) {
+            return cursorBasedWhere(filter, currentTime, lastFestivalId, lastStartDate, region);
+        }
+
+        BooleanExpression filterResult = switch (filter) {
+            case PLANNED -> festival.startDate.gt(currentTime);
+            case PROGRESS -> festival.startDate.loe(currentTime).and(festival.endDate.goe(currentTime));
+            case END -> festival.endDate.lt(currentTime);
+        };
+        return addRegion(filterResult, region);
+    }
+
+    private OrderSpecifier<LocalDate>[] dynamicOrderBy(FestivalFilter filter) {
         return switch (filter) {
-            case PLANNED -> plannedFestivals(page, currentTime);
-            case PROGRESS -> progressFestivals(page, currentTime);
-            case END -> throw new UnsupportedOperationException();
+            case PLANNED -> new OrderSpecifier[]{festival.startDate.asc(), festival.id.asc()};
+            case PROGRESS -> new OrderSpecifier[]{festival.startDate.desc(), festival.id.asc()};
+            case END -> new OrderSpecifier[]{festival.endDate.desc()};
         };
     }
 
-    private FestivalPage plannedFestivals(FestivalPageable page, LocalDate currentTime) {
-        List<Festival> allPlannedFestivals = queryFactory.selectFrom(festival)
-            .leftJoin(festival.school).fetchJoin()
-            .where(festival.startDate.gt(currentTime))
-            .orderBy(festival.startDate.asc(), festival.id.asc())
-            .fetch();
-        return pagingFestival(page, allPlannedFestivals);
+    private boolean hasNext(List<FestivalV1Response> content, Integer limit) {
+        return content.size() > limit;
     }
 
-    private FestivalPage pagingFestival(FestivalPageable page, List<Festival> allFestivals) {
-        if (page.getLastFestivalId().isPresent() && page.getLastStartDate().isPresent()) {
-            return pagedFestival(page, allFestivals);
-        }
-        int festivalSize = allFestivals.size();
-        int limit = page.getLimit();
-        int returnFestivalSize = Math.min(festivalSize, limit);
-        return makePage(festivalSize - returnFestivalSize, allFestivals.subList(0, returnFestivalSize));
-    }
-
-    private FestivalPage pagedFestival(FestivalPageable page, List<Festival> allFestivals) {
-        Long lastFestivalId = page.getLastFestivalId().get();
-        Festival lastFestival = findLastFestival(allFestivals, lastFestivalId);
-        int targetFestivalIndex = allFestivals.indexOf(lastFestival);
-        int allFestivalSize = allFestivals.size();
-        int festivalOrder = targetFestivalIndex + INDEX_OFFSET;
-        if (allFestivalSize > festivalOrder) {
-            int remainFestivalSize = allFestivalSize - festivalOrder;
-            int limit = page.getLimit();
-            int returnFestivalSize = Math.min(remainFestivalSize, limit);
-            int startIndex = targetFestivalIndex + INDEX_OFFSET;
-            return makePage(remainFestivalSize - returnFestivalSize,
-                allFestivals.subList(startIndex, startIndex + returnFestivalSize));
-        }
-        return new FestivalPage(true, Collections.emptyList());
-    }
-
-    private Festival findLastFestival(List<Festival> festivals, Long lastFestivalId) {
-        return festivals.stream()
-            .filter(festival -> festival.getId().equals(lastFestivalId))
-            .findAny()
-            .orElseThrow(() -> new BadRequestException(ErrorCode.FESTIVAL_NOT_FOUND));
-    }
-
-    private FestivalPage makePage(int remainFestivalSize, List<Festival> festivals) {
-        if (remainFestivalSize > 0) {
-            return new FestivalPage(false, festivals);
-        }
-        return new FestivalPage(true, festivals);
-    }
-
-    private FestivalPage progressFestivals(FestivalPageable page, LocalDate currentTime) {
-        List<Festival> allProgressFestival = findSortedProgressFestivals(currentTime);
-        return pagingFestival(page, allProgressFestival);
-    }
-
-    private List<Festival> findSortedProgressFestivals(LocalDate currentTime) {
-        return progressQuery(currentTime)
-            .orderBy(festival.startDate.desc(), festival.id.asc())
-            .fetch();
-    }
-
-    private JPAQuery<Festival> progressQuery(LocalDate currentTime) {
-        return queryFactory.selectFrom(festival)
-            .leftJoin(festival.school).fetchJoin()
-            .where(festival.startDate.loe(currentTime)
-                .and(festival.endDate.goe(currentTime)));
-    }
-
-    public FestivalPage findBy(FestivalFilter filter, List<School> schools, FestivalPageable page,
-                               LocalDate currentTime) {
-        return switch (filter) {
-            case PLANNED -> plannedFestivals(page, schools, currentTime);
-            case PROGRESS -> progressFestivals(page, schools, currentTime);
-            case END -> throw new UnsupportedOperationException();
+    private BooleanExpression cursorBasedWhere(FestivalFilter filter, LocalDate currentTime, Long lastFestivalId,
+                                               LocalDate lastStartDate, SchoolRegion region) {
+        BooleanExpression filterResult = switch (filter) {
+            case PLANNED -> festival.startDate.gt(lastStartDate)
+                .or(festival.startDate.eq(lastStartDate)
+                    .and(festival.id.gt(lastFestivalId)));
+            case PROGRESS -> festival.startDate.lt(lastStartDate)
+                .or(festival.startDate.eq(lastStartDate)
+                    .and(festival.id.gt(lastFestivalId)))
+                .and(festival.endDate.goe(currentTime));
+            case END -> festival.endDate.lt(currentTime);
         };
+        return addRegion(filterResult, region);
     }
 
-    private FestivalPage plannedFestivals(FestivalPageable page, List<School> schools, LocalDate currentTime) {
-        List<Long> schoolIds = extractSchoolId(schools);
-        List<Festival> allPlannedFestivals = queryFactory.selectFrom(festival)
-            .leftJoin(festival.school).fetchJoin()
-            .where(festival.startDate.gt(currentTime)
-                .and(festival.school.id.in(schoolIds)))
-            .orderBy(festival.startDate.asc(), festival.id.asc())
-            .fetch();
-        return pagingFestival(page, allPlannedFestivals);
+    private BooleanExpression addRegion(BooleanExpression filterResult, SchoolRegion region) {
+        if (region == null || region == SchoolRegion.기타) {
+            return filterResult;
+        }
+        return filterResult.and(school.region.eq(region));
     }
 
-    private FestivalPage progressFestivals(FestivalPageable page, List<School> schools, LocalDate currentTime) {
-        List<Festival> allProgressFestivals = findSortedProgressFestivals(schools, currentTime);
-        return pagingFestival(page, allProgressFestivals);
-    }
-
-    private List<Festival> findSortedProgressFestivals(List<School> schools, LocalDate currentTime) {
-        List<Long> schoolIds = extractSchoolId(schools);
-        return progressQuery(currentTime)
-            .where(festival.school.id.in(schoolIds))
-            .orderBy(festival.startDate.desc(), festival.id.asc())
-            .fetch();
-    }
-
-    private List<Long> extractSchoolId(List<School> schools) {
-        return schools.stream()
-            .map(School::getId)
-            .toList();
+    private boolean hasCursor(LocalDate lastStartDate, Long lastFestivalId) {
+        return lastStartDate != null && lastFestivalId != null;
     }
 }

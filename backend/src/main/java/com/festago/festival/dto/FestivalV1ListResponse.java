@@ -1,5 +1,6 @@
 package com.festago.festival.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import java.util.List;
 
 public record FestivalV1ListResponse(
@@ -7,4 +8,7 @@ public record FestivalV1ListResponse(
     List<FestivalV1Response> festivals
 ) {
 
+    @QueryProjection
+    public FestivalV1ListResponse {
+    }
 }

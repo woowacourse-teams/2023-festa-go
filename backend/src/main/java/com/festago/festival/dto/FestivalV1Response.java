@@ -2,7 +2,6 @@ package com.festago.festival.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDate;
-import java.util.List;
 
 public record FestivalV1Response(
     Long id,
@@ -11,7 +10,7 @@ public record FestivalV1Response(
     LocalDate endDate,
     String imageUrl,
     SchoolV1Response school,
-    List<ArtistV1Response> artists
+    String artists
 ) {
 
     @QueryProjection

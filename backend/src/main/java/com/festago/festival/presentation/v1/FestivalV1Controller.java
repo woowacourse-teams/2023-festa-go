@@ -4,9 +4,10 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.festival.application.FestivalV1QueryService;
 import com.festago.festival.dto.FestivalV1ListRequest;
-import com.festago.festival.dto.FestivalV1ListResponse;
+import com.festago.festival.dto.FestivalV1Response;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +23,7 @@ public class FestivalV1Controller {
     private final FestivalV1QueryService festivalV1QueryService;
 
     @GetMapping
-    public ResponseEntity<FestivalV1ListResponse> findFestivals(
+    public ResponseEntity<Slice<FestivalV1Response>> findFestivals(
         FestivalV1ListRequest festivalListRequest) {
         return ResponseEntity.ok(festivalV1QueryService.findFestivals(festivalListRequest));
     }

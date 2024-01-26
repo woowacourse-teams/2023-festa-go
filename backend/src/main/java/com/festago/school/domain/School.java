@@ -88,4 +88,8 @@ public class School extends BaseTimeEntity {
     public String getName() {
         return name;
     }
+
+    public SchoolRegion getRegion() {
+        return region;
+    }
 }

@@ -11,7 +11,6 @@ import com.festago.festival.domain.Festival;
 import com.festago.festival.domain.FestivalInfo;
 import com.festago.festival.domain.FestivalInfoSerializer;
 import com.festago.festival.dto.FestivalV1ListRequest;
-import com.festago.festival.dto.FestivalV1ListResponse;
 import com.festago.festival.dto.FestivalV1Response;
 import com.festago.festival.repository.FestivalFilter;
 import com.festago.festival.repository.FestivalInfoRepository;
@@ -28,6 +27,7 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -105,12 +105,12 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1ListRequest request = new FestivalV1ListRequest(null, null, null, null, null);
 
             // when
-            FestivalV1ListResponse actual = festivalV1QueryService.findFestivals(request);
+            Slice<FestivalV1Response> actual = festivalV1QueryService.findFestivals(request);
 
             // then
             assertSoftly(softAssertions -> {
-                assertThat(actual.isLastPage()).isTrue();
-                assertThat(actual.festivals()).hasSize(5);
+                assertThat(actual.isLast()).isTrue();
+                assertThat(actual.getContent()).hasSize(5);
             });
         }
 
@@ -118,20 +118,20 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         void 마지막_페이지가_아닌지_반환받을_수_있다() {
             // given
             FestivalV1ListRequest firstRequest = new FestivalV1ListRequest(null, null, 1, null, null);
-            FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(firstRequest);
+            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(firstRequest);
 
-            Long lastFestivalId = firstResponse.festivals().get(0).id();
-            LocalDate lastStartDate = firstResponse.festivals().get(0).startDate();
+            Long lastFestivalId = firstResponse.getContent().get(0).id();
+            LocalDate lastStartDate = firstResponse.getContent().get(0).startDate();
             FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(null, null, 4, lastFestivalId,
                 lastStartDate.toString());
 
             // when
-            FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
 
             // then
             assertSoftly(softAssertions -> {
-                assertThat(firstResponse.isLastPage()).isFalse();
-                assertThat(secondResponse.isLastPage()).isTrue();
+                assertThat(firstResponse.isLast()).isFalse();
+                assertThat(secondResponse.isLast()).isTrue();
             });
         }
 
@@ -142,13 +142,13 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
                 null);
 
             // when
-            FestivalV1ListResponse response = festivalV1QueryService.findFestivals(request);
+            Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
 
             // then
             assertSoftly(softAssertions -> {
-                assertThat(response.isLastPage()).isTrue();
-                assertThat(response.festivals()).hasSize(3);
-                assertThat(response.festivals().get(0).id()).isEqualTo(firstPlannedFestivalId);
+                assertThat(response.isLast()).isTrue();
+                assertThat(response.getContent()).hasSize(3);
+                assertThat(response.getContent().get(0).id()).isEqualTo(firstPlannedFestivalId);
             });
         }
 
@@ -159,17 +159,16 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
                 null);
 
             // when
-            FestivalV1ListResponse response = festivalV1QueryService.findFestivals(request);
-            System.out.println(response.isLastPage());
-            System.out.println(response);
+            Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
 
             // then
             assertSoftly(softAssertions -> {
-                assertThat(response.isLastPage()).isTrue();
-                assertThat(response.festivals()).hasSize(3);
+                assertThat(response.isLast()).isTrue();
+                assertThat(response.getContent()).hasSize(3);
                 assertThat(
-                    response.festivals().get(1).startDate().isEqual(response.festivals().get(2).startDate())).isTrue();
-                assertThat(response.festivals().get(1).id()).isLessThan(response.festivals().get(2).id());
+                    response.getContent().get(1).startDate()
+                        .isEqual(response.getContent().get(2).startDate())).isTrue();
+                assertThat(response.getContent().get(1).id()).isLessThan(response.getContent().get(2).id());
             });
         }
 
@@ -179,21 +178,21 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 null, null);
-            FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
+            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
 
-            FestivalV1Response firstFestival = firstResponse.festivals().get(0);
+            FestivalV1Response firstFestival = firstResponse.getContent().get(0);
             FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 firstFestival.id(), firstFestival.startDate().toString());
-            FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
 
-            FestivalV1Response secondFestival = secondResponse.festivals().get(0);
+            FestivalV1Response secondFestival = secondResponse.getContent().get(0);
             FestivalV1ListRequest thirdRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 secondFestival.id(), secondFestival.startDate().toString());
-            FestivalV1ListResponse thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
+            Slice<FestivalV1Response> thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
 
-            FestivalV1Response thirdFestival = thirdResponse.festivals().get(0);
+            FestivalV1Response thirdFestival = thirdResponse.getContent().get(0);
 
             // when && then
             assertSoftly(softAssertions -> {
@@ -208,23 +207,23 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             // given
             FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 1,
                 null, null);
-            FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
-            FestivalV1Response firstFestival = firstResponse.festivals().get(0);
+            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
+            FestivalV1Response firstFestival = firstResponse.getContent().get(0);
 
             FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 1,
                 firstFestival.id(), firstFestival.startDate().toString());
-            FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
-            FestivalV1Response secondFestival = secondResponse.festivals().get(0);
+            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            FestivalV1Response secondFestival = secondResponse.getContent().get(0);
 
             FestivalV1ListRequest thirdRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 1,
                 secondFestival.id(), secondFestival.startDate().toString());
-            FestivalV1ListResponse thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
-            FestivalV1Response thirdFestival = thirdResponse.festivals().get(0);
+            Slice<FestivalV1Response> thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
+            FestivalV1Response thirdFestival = thirdResponse.getContent().get(0);
 
             FestivalV1ListRequest fourthRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 1,
                 thirdFestival.id(), thirdFestival.startDate().toString());
-            FestivalV1ListResponse fourthResponse = festivalV1QueryService.findFestivals(fourthRequest);
-            FestivalV1Response fourthFestival = fourthResponse.festivals().get(0);
+            Slice<FestivalV1Response> fourthResponse = festivalV1QueryService.findFestivals(fourthRequest);
+            FestivalV1Response fourthFestival = fourthResponse.getContent().get(0);
 
             // when && then
             assertSoftly(softAssertions -> {
@@ -239,19 +238,19 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             // given
             FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 4,
                 null, null);
-            FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
-            FestivalV1Response firstLastFestival = firstResponse.festivals().get(3);
+            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
+            FestivalV1Response firstLastFestival = firstResponse.getContent().get(3);
 
             FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(null, FestivalFilter.PROGRESS.name(), 1,
                 firstLastFestival.id(), firstLastFestival.startDate().toString());
-            FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
-            FestivalV1Response secondLastFestival = secondResponse.festivals().get(0);
+            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            FestivalV1Response secondLastFestival = secondResponse.getContent().get(0);
 
             // when && then
             assertSoftly(softAssertions -> {
                 assertThat(firstLastFestival.startDate()).isEqualTo(secondLastFestival.startDate());
                 assertThat(firstLastFestival.id()).isLessThan(secondLastFestival.id());
-                assertThat(secondResponse.isLastPage()).isTrue();
+                assertThat(secondResponse.isLast()).isTrue();
             });
         }
     }
@@ -268,15 +267,15 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
                 FestivalFilter.PLANNED.name(), 10, null, null);
 
             // when
-            FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(firstRequest);
-            FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(firstRequest);
+            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
 
             // then
             assertSoftly(softAssertions -> {
-                assertThat(firstResponse.isLastPage()).isTrue();
-                assertThat(firstResponse.festivals()).hasSize(3);
-                assertThat(secondResponse.isLastPage()).isTrue();
-                assertThat(secondResponse.festivals()).hasSize(0);
+                assertThat(firstResponse.isLast()).isTrue();
+                assertThat(firstResponse.getContent()).hasSize(3);
+                assertThat(secondResponse.isLast()).isTrue();
+                assertThat(secondResponse.getContent()).hasSize(0);
             });
         }
 
@@ -289,18 +288,18 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
                 null);
 
             // when
-            FestivalV1ListResponse response = festivalV1QueryService.findFestivals(request);
-            System.out.println(response.isLastPage());
+            Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
+            System.out.println(response.isLast());
             System.out.println(response);
 
             // then
             assertSoftly(softAssertions -> {
-                assertThat(response.isLastPage()).isTrue();
-                assertThat(response.festivals()).hasSize(3);
+                assertThat(response.isLast()).isTrue();
+                assertThat(response.getContent()).hasSize(3);
                 assertThat(
-                    response.festivals().get(1).startDate()
-                        .isEqual(response.festivals().get(2).startDate())).isTrue();
-                assertThat(response.festivals().get(1).id()).isLessThan(response.festivals().get(2).id());
+                    response.getContent().get(1).startDate()
+                        .isEqual(response.getContent().get(2).startDate())).isTrue();
+                assertThat(response.getContent().get(1).id()).isLessThan(response.getContent().get(2).id());
             });
         }
 
@@ -310,21 +309,21 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 null, null);
-            FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
+            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
 
-            FestivalV1Response firstFestival = firstResponse.festivals().get(0);
+            FestivalV1Response firstFestival = firstResponse.getContent().get(0);
             FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 firstFestival.id(), firstFestival.startDate().toString());
-            FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
 
-            FestivalV1Response secondFestival = secondResponse.festivals().get(0);
+            FestivalV1Response secondFestival = secondResponse.getContent().get(0);
             FestivalV1ListRequest thirdRequest = new FestivalV1ListRequest(SchoolRegion.대구.name(),
                 FestivalFilter.PLANNED.name(), 1,
                 secondFestival.id(), secondFestival.startDate().toString());
-            FestivalV1ListResponse thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
+            Slice<FestivalV1Response> thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
 
-            FestivalV1Response thirdFestival = thirdResponse.festivals().get(0);
+            FestivalV1Response thirdFestival = thirdResponse.getContent().get(0);
 
             // when && then
             assertSoftly(softAssertions -> {
@@ -340,26 +339,26 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 1,
                 null, null);
-            FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
-            FestivalV1Response firstFestival = firstResponse.festivals().get(0);
+            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
+            FestivalV1Response firstFestival = firstResponse.getContent().get(0);
 
             FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 1,
                 firstFestival.id(), firstFestival.startDate().toString());
-            FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
-            FestivalV1Response secondFestival = secondResponse.festivals().get(0);
+            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            FestivalV1Response secondFestival = secondResponse.getContent().get(0);
 
             FestivalV1ListRequest thirdRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 1,
                 secondFestival.id(), secondFestival.startDate().toString());
-            FestivalV1ListResponse thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
-            FestivalV1Response thirdFestival = thirdResponse.festivals().get(0);
+            Slice<FestivalV1Response> thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
+            FestivalV1Response thirdFestival = thirdResponse.getContent().get(0);
 
             FestivalV1ListRequest fourthRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 1,
                 thirdFestival.id(), thirdFestival.startDate().toString());
-            FestivalV1ListResponse fourthResponse = festivalV1QueryService.findFestivals(fourthRequest);
-            FestivalV1Response fourthFestival = fourthResponse.festivals().get(0);
+            Slice<FestivalV1Response> fourthResponse = festivalV1QueryService.findFestivals(fourthRequest);
+            FestivalV1Response fourthFestival = fourthResponse.getContent().get(0);
 
             // when && then
             assertSoftly(softAssertions -> {
@@ -375,20 +374,20 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1ListRequest fistRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 4,
                 null, null);
-            FestivalV1ListResponse firstResponse = festivalV1QueryService.findFestivals(fistRequest);
-            FestivalV1Response firstLastFestival = firstResponse.festivals().get(3);
+            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
+            FestivalV1Response firstLastFestival = firstResponse.getContent().get(3);
 
             FestivalV1ListRequest secondRequest = new FestivalV1ListRequest(SchoolRegion.서울.name(),
                 FestivalFilter.PROGRESS.name(), 1,
                 firstLastFestival.id(), firstLastFestival.startDate().toString());
-            FestivalV1ListResponse secondResponse = festivalV1QueryService.findFestivals(secondRequest);
-            FestivalV1Response secondLastFestival = secondResponse.festivals().get(0);
+            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            FestivalV1Response secondLastFestival = secondResponse.getContent().get(0);
 
             // when && then
             assertSoftly(softAssertions -> {
                 assertThat(firstLastFestival.startDate()).isEqualTo(secondLastFestival.startDate());
                 assertThat(firstLastFestival.id() < secondLastFestival.id()).isTrue();
-                assertThat(secondResponse.isLastPage()).isTrue();
+                assertThat(secondResponse.isLast()).isTrue();
             });
         }
     }

@@ -2,7 +2,6 @@ package com.festago.festival.repository;
 
 import com.festago.common.util.Validator;
 import java.time.LocalDate;
-import java.util.Optional;
 
 public class FestivalPageable {
 
@@ -21,12 +20,12 @@ public class FestivalPageable {
         Validator.notNull(limit, "Pagination의 크기는 null일 수 없습니다.");
     }
 
-    public Optional<LocalDate> getLastStartDate() {
-        return Optional.ofNullable(lastStartDate);
+    public LocalDate getLastStartDate() {
+        return lastStartDate;
     }
 
-    public Optional<Long> getLastFestivalId() {
-        return Optional.ofNullable(lastFestivalId);
+    public Long getLastFestivalId() {
+        return lastFestivalId;
     }
 
     public Integer getLimit() {
