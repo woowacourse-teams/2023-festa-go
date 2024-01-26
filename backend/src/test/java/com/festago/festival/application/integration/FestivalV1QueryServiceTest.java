@@ -291,7 +291,6 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             // when
             Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
 
-            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response));
             // then
             assertSoftly(softAssertions -> {
                 assertThat(response.isLast()).isTrue();
