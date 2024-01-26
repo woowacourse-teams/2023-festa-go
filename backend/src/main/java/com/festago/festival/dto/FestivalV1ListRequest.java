@@ -24,7 +24,7 @@ public class FestivalV1ListRequest {
                                  String lastStartDate) {
         validate(location, filter, limit, lastFestivalId, lastStartDate);
         this.location = convertToRegion(location);
-        this.filter = converToFilter(filter);
+        this.filter = convertToFilter(filter);
         this.limit = limit == null ? DEFAULT_PAGE_SIZE : limit;
         this.lastFestivalId = lastFestivalId;
         this.lastStartDate = convertLocalDate(lastStartDate);
@@ -61,7 +61,7 @@ public class FestivalV1ListRequest {
         return SchoolRegion.from(location);
     }
 
-    private FestivalFilter converToFilter(String filter) {
+    private FestivalFilter convertToFilter(String filter) {
         if (filter == null) {
             return FestivalFilter.PROGRESS;
         }
