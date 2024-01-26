@@ -19,9 +19,10 @@ public class FestivalInfoSerializerImpl implements FestivalInfoSerializer {
     @Override
     public String serialize(List<Artist> artists) throws InternalServerException {
         try {
-            return objectMapper.writeValueAsString(artists);
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(artists);
         } catch (JsonProcessingException e) {
             throw new InternalServerException(ErrorCode.FESTIVAL_INFO_CONVERT_ERROR);
         }
     }
+
 }
