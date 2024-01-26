@@ -78,16 +78,8 @@ public class FestivalV1QueryDslRepository {
         return addRegion(filterResult, region);
     }
 
-    private OrderSpecifier<LocalDate>[] dynamicOrderBy(FestivalFilter filter) {
-        return switch (filter) {
-            case PLANNED -> new OrderSpecifier[]{festival.startDate.asc(), festival.id.asc()};
-            case PROGRESS -> new OrderSpecifier[]{festival.startDate.desc(), festival.id.asc()};
-            case END -> new OrderSpecifier[]{festival.endDate.desc()};
-        };
-    }
-
-    private boolean hasNext(List<FestivalV1Response> content, Integer limit) {
-        return content.size() > limit;
+    private boolean hasCursor(LocalDate lastStartDate, Long lastFestivalId) {
+        return lastStartDate != null && lastFestivalId != null;
     }
 
     private BooleanExpression cursorBasedWhere(FestivalFilter filter, LocalDate currentTime, Long lastFestivalId,
@@ -112,7 +104,15 @@ public class FestivalV1QueryDslRepository {
         return filterResult.and(school.region.eq(region));
     }
 
-    private boolean hasCursor(LocalDate lastStartDate, Long lastFestivalId) {
-        return lastStartDate != null && lastFestivalId != null;
+    private OrderSpecifier<LocalDate>[] dynamicOrderBy(FestivalFilter filter) {
+        return switch (filter) {
+            case PLANNED -> new OrderSpecifier[]{festival.startDate.asc(), festival.id.asc()};
+            case PROGRESS -> new OrderSpecifier[]{festival.startDate.desc(), festival.id.asc()};
+            case END -> new OrderSpecifier[]{festival.endDate.desc()};
+        };
+    }
+
+    private boolean hasNext(List<FestivalV1Response> content, Integer limit) {
+        return content.size() > limit;
     }
 }
