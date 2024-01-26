@@ -1,4 +1,4 @@
-package com.festago.festival.dto.v1;
+package com.festago.festival.dto;
 
 import java.time.LocalDate;
 import java.util.List;
