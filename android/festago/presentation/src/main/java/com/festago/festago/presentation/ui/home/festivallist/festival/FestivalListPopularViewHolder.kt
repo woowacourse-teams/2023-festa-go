@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import com.festago.festago.presentation.databinding.ItemFestivalListPopularBinding
 import com.festago.festago.presentation.ui.home.festivallist.popularfestival.PopularFestivalViewPagerAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
-import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.google.android.material.tabs.TabLayoutMediator
 
 class FestivalListPopularViewHolder(val binding: ItemFestivalListPopularBinding) :
@@ -25,10 +24,6 @@ class FestivalListPopularViewHolder(val binding: ItemFestivalListPopularBinding)
 
     fun bind(festivals: List<FestivalItemUiState>) {
         popularFestivalViewPager.submitList(festivals)
-        binding.uiState = FestivalListUiState.Success(
-            popularFestivals = festivals,
-            festivals = festivals,
-        )
     }
 
     companion object {

@@ -21,7 +21,7 @@ class FestivalListAdapter : ListAdapter<Any, FestivalListViewHolder>(diffUtil) {
     override fun onBindViewHolder(holder: FestivalListViewHolder, position: Int) {
         val item = getItem(position)
         return when (holder) {
-            is FestivalListPopularViewHolder -> holder.bind((item as FestivalListUiState.Success).festivals)
+            is FestivalListPopularViewHolder -> holder.bind((item as FestivalListUiState.Success).popularFestivals)
             is FestivalListFestivalViewHolder -> holder.bind(item as FestivalItemUiState)
             is FestivalListTabViewHolder -> holder.bind(item as FestivalTabUiState)
         }
