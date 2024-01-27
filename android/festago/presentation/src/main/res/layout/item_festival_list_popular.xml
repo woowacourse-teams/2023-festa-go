@@ -2,15 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="uiState"
-            type="com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        visibility="@{uiState.shouldShowSuccess}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -20,7 +12,7 @@
             android:layout_height="0dp"
             android:layout_marginBottom="-8dp"
             app:layout_constraintBottom_toBottomOf="@id/tlDotIndicator"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvPopularFestivalTitle"

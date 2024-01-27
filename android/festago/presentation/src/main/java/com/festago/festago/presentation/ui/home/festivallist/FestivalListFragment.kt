@@ -16,7 +16,9 @@ import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalLi
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.util.repeatOnStarted
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FestivalListFragment : Fragment() {
 
     private var _binding: FragmentFestivalListBinding? = null
@@ -53,7 +55,7 @@ class FestivalListFragment : Fragment() {
 
     private fun initView() {
         initViewPager()
-        vm.loadPopularFestival()
+        vm.loadFestivals()
         initRecyclerView()
     }
 
@@ -103,7 +105,7 @@ class FestivalListFragment : Fragment() {
                     {
                         Toast.makeText(requireContext(), "Clicked $it", Toast.LENGTH_SHORT).show()
                         /* TODO: Handle tab click */
-                        vm.loadPopularFestival()
+                        vm.loadFestivals()
                     },
                 ),
             ) + uiState.festivals,
