@@ -30,6 +30,7 @@ public enum ErrorCode {
     DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
     VALIDATION_FAIL("검증이 실패하였습니다."),
     INVALID_FESTIVAL_FILTER("유효하지 않은 축제의 필터 값입니다."),
+    INVALID_REGION("유효하지 않은 지역입니다."),
 
 
     // 401
@@ -60,8 +61,9 @@ public enum ErrorCode {
     OAUTH2_PROVIDER_NOT_RESPONSE("OAuth2 제공자 서버에 문제가 발생했습니다."),
     FOR_TEST_ERROR("테스트용 에러입니다."),
     FAIL_SEND_FCM_MESSAGE("FCM Message 전송에 실패했습니다."),
-    FCM_NOT_FOUND("유효하지 않은 MemberFCM이 감지 되었습니다."),
-    TICKET_SEQUENCE_DATA_ERROR("입장 순서 값의 데이터 정합성에 문제가 발생했습니다.");
+    TICKET_SEQUENCE_DATA_ERROR("입장 순서 값의 데이터 정합성에 문제가 발생했습니다."),
+    FESTIVAL_INFO_CONVERT_ERROR("FestivalInfo 를 만들 수 없습니다"),
+    ;
 
     private final String message;
 
