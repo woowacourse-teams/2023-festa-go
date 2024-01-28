@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @DataJpaTest(showSql = false)
-@Import({QuerydslConfig.class, JpaAuditingConfig.class})
+@Import({QuerydslConfig.class, JpaAuditingConfig.class, RepositoryBeanConfig.class})
 public @interface RepositoryTest {
 
 }

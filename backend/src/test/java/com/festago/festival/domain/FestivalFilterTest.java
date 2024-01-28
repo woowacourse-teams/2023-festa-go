@@ -41,14 +41,5 @@ class FestivalFilterTest {
         // then
         assertThat(filter).isEqualTo(FestivalFilter.PLANNED);
     }
-
-    @ValueSource(strings = {"end", "End", "END"})
-    @ParameterizedTest
-    void END_반환(String value) {
-        // given && when
-        FestivalFilter filter = FestivalFilter.from(value);
-
-        // then
-        assertThat(filter).isEqualTo(FestivalFilter.END);
-    }
+    
 }
