@@ -1,6 +1,6 @@
 package com.festago.artist.application;
 
-import com.festago.admin.dto.ArtistResponse;
+import com.festago.admin.dto.ArtistV1Response;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import java.util.List;
@@ -11,18 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ArtistQueryService {
+public class ArtistV1QueryService {
 
     private final ArtistRepository artistRepository;
 
-    public ArtistResponse findById(Long artistId) {
+    public ArtistV1Response findById(Long artistId) {
         Artist artist = artistRepository.getOrThrow(artistId);
-        return ArtistResponse.from(artist);
+        return ArtistV1Response.from(artist);
     }
 
-    public List<ArtistResponse> findAll() {
+    public List<ArtistV1Response> findAll() {
         return artistRepository.findAll().stream()
-                .map(ArtistResponse::from)
+                .map(ArtistV1Response::from)
                 .toList();
     }
 }

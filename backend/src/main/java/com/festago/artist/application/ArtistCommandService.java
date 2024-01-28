@@ -1,7 +1,7 @@
 package com.festago.artist.application;
 
-import com.festago.admin.dto.ArtistV1CreateRequest;
-import com.festago.admin.dto.ArtistV1UpdateRequest;
+import com.festago.admin.dto.ArtistCreateRequest;
+import com.festago.admin.dto.ArtistUpdateRequest;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,16 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ArtistV1CommandService {
+public class ArtistCommandService {
 
     private final ArtistRepository artistRepository;
 
-    public Long save(ArtistV1CreateRequest request) {
+    public Long save(ArtistCreateRequest request) {
         return artistRepository.save(new Artist(request.name(), request.profileImage()))
                 .getId();
     }
 
-    public void update(ArtistV1UpdateRequest request, Long artistId) {
+    public void update(ArtistUpdateRequest request, Long artistId) {
         Artist artist = artistRepository.getOrThrow(artistId);
         artist.update(request.name(), request.profileImage());
     }

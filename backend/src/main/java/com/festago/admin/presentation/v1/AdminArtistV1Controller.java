@@ -1,10 +1,10 @@
 package com.festago.admin.presentation.v1;
 
-import com.festago.admin.dto.ArtistResponse;
-import com.festago.admin.dto.ArtistV1CreateRequest;
-import com.festago.admin.dto.ArtistV1UpdateRequest;
-import com.festago.artist.application.ArtistQueryService;
-import com.festago.artist.application.ArtistV1CommandService;
+import com.festago.admin.dto.ArtistCreateRequest;
+import com.festago.admin.dto.ArtistUpdateRequest;
+import com.festago.admin.dto.ArtistV1Response;
+import com.festago.artist.application.ArtistCommandService;
+import com.festago.artist.application.ArtistV1QueryService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -27,38 +27,38 @@ import org.springframework.web.bind.annotation.RestController;
 @Hidden
 public class AdminArtistV1Controller {
 
-    private final ArtistV1CommandService artistV1CommandService;
-    private final ArtistQueryService artistQueryService;
+    private final ArtistCommandService artistCommandService;
+    private final ArtistV1QueryService artistV1QueryService;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody @Valid ArtistV1CreateRequest request) {
-        Long artistId = artistV1CommandService.save(request);
+    public ResponseEntity<Void> create(@RequestBody @Valid ArtistCreateRequest request) {
+        Long artistId = artistCommandService.save(request);
         return ResponseEntity.created(URI.create("/admin/api/v1/artists/" + artistId))
                 .build();
     }
 
     @PutMapping("/{artistId}")
-    public ResponseEntity<Void> update(@RequestBody @Valid ArtistV1UpdateRequest request,
+    public ResponseEntity<Void> update(@RequestBody @Valid ArtistUpdateRequest request,
                                        @PathVariable Long artistId) {
-        artistV1CommandService.update(request, artistId);
+        artistCommandService.update(request, artistId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{artistId}")
     public ResponseEntity<Void> delete(@PathVariable Long artistId) {
-        artistV1CommandService.delete(artistId);
+        artistCommandService.delete(artistId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{artistId}")
-    public ResponseEntity<ArtistResponse> findById(@PathVariable Long artistId) {
-        ArtistResponse response = artistQueryService.findById(artistId);
+    public ResponseEntity<ArtistV1Response> findById(@PathVariable Long artistId) {
+        ArtistV1Response response = artistV1QueryService.findById(artistId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<ArtistResponse>> findAll() {
-        List<ArtistResponse> response = artistQueryService.findAll();
+    public ResponseEntity<List<ArtistV1Response>> findAll() {
+        List<ArtistV1Response> response = artistV1QueryService.findAll();
         return ResponseEntity.ok(response);
     }
 }

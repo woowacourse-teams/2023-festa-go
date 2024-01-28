@@ -2,8 +2,8 @@ package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.admin.dto.ArtistResponse;
-import com.festago.artist.application.ArtistQueryService;
+import com.festago.admin.dto.ArtistV1Response;
+import com.festago.artist.application.ArtistV1QueryService;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.support.ApplicationIntegrationTest;
@@ -15,10 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistQueryServiceIntegrationTest extends ApplicationIntegrationTest {
+class ArtistV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
-    ArtistQueryService artistQueryService;
+    ArtistV1QueryService artistV1QueryService;
 
     @Autowired
     ArtistRepository artistRepository;
@@ -29,7 +29,7 @@ class ArtistQueryServiceIntegrationTest extends ApplicationIntegrationTest {
         Artist expected = artistRepository.save(new Artist("윤하", "www.naver.com"));
 
         // when
-        ArtistResponse actual = artistQueryService.findById(expected.getId());
+        ArtistV1Response actual = artistV1QueryService.findById(expected.getId());
 
         // then
         assertThat(actual).usingRecursiveComparison()
@@ -46,7 +46,7 @@ class ArtistQueryServiceIntegrationTest extends ApplicationIntegrationTest {
         );
 
         // when
-        List<ArtistResponse> actual = artistQueryService.findAll();
+        List<ArtistV1Response> actual = artistV1QueryService.findAll();
 
         // then
         assertThat(actual).usingRecursiveComparison()
