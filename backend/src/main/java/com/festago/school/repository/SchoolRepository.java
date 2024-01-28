@@ -3,6 +3,8 @@ package com.festago.school.repository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.school.domain.School;
+import com.festago.school.domain.SchoolRegion;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,6 +20,8 @@ public interface SchoolRepository extends JpaRepository<School, Long> {
      */
     @Deprecated(forRemoval = true)
     boolean existsByDomainOrName(String domain, String name);
+
+    List<School> findAllByRegion(SchoolRegion schoolRegion);
 
     boolean existsByDomain(String domain);
 
