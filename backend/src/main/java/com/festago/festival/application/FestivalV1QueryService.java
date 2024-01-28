@@ -1,9 +1,11 @@
 package com.festago.festival.application;
 
-import com.festago.festival.dto.FestivalV1ListRequest;
+import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
+import com.festago.festival.repository.FestivalFilter;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.festival.repository.FestivalSearchCondition;
+import com.festago.school.domain.SchoolRegion;
 import java.time.Clock;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -20,29 +22,34 @@ public class FestivalV1QueryService {
     private final FestivalRepository festivalRepository;
     private final Clock clock;
 
-    public Slice<FestivalV1Response> findFestivals(FestivalV1ListRequest request) {
+    public Slice<FestivalV1Response> findFestivals(FestivalV1QueryRequest request) {
         return festivalRepository.findBy(makeSearchCondition(request));
     }
 
-    private FestivalSearchCondition makeSearchCondition(FestivalV1ListRequest request) {
+    private FestivalSearchCondition makeSearchCondition(FestivalV1QueryRequest request) {
         LocalDate now = LocalDate.now(clock);
-        if (request.getLastFestivalId().isPresent() && request.getLastStartDate().isPresent()) {
-            return new FestivalSearchCondition(
-                request.getFilter(),
-                request.getLocation(),
-                request.getLastStartDate().get(),
-                request.getLastFestivalId().get(),
-                PageRequest.ofSize(request.getLimit()),
-                now
-            );
-        }
         return new FestivalSearchCondition(
-            request.getFilter(),
-            request.getLocation(),
-            null,
-            null,
-            PageRequest.ofSize(request.getLimit()),
+            getOrDefaultFilter(request.filter()),
+            getOrDefaultRegion(request.location()),
+            request.lastStartDate(),
+            request.lastFestivalId(),
+            PageRequest.ofSize(request.limit()),
             now
         );
     }
+
+    private FestivalFilter getOrDefaultFilter(FestivalFilter filter) {
+        if (filter == null) {
+            return FestivalFilter.PROGRESS;
+        }
+        return filter;
+    }
+
+    private SchoolRegion getOrDefaultRegion(SchoolRegion region) {
+        if (region == null) {
+            return SchoolRegion.기타;
+        }
+        return region;
+    }
 }
+

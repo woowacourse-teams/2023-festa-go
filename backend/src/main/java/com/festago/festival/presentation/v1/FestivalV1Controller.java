@@ -1,8 +1,10 @@
 package com.festago.festival.presentation.v1;
 
+import com.festago.common.exception.ValidException;
 import com.festago.festival.application.FestivalV1QueryService;
-import com.festago.festival.dto.FestivalV1ListRequest;
+import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,30 @@ public class FestivalV1Controller {
 
     @GetMapping
     public ResponseEntity<Slice<FestivalV1Response>> findFestivals(
-        FestivalV1ListRequest festivalListRequest) {
+        FestivalV1QueryRequest festivalListRequest) {
+        validate(festivalListRequest.lastFestivalId(), festivalListRequest.lastStartDate(),
+            festivalListRequest.limit());
         return ResponseEntity.ok(festivalV1QueryService.findFestivals(festivalListRequest));
+    }
+
+    private void validate(Long lastFestivalId, LocalDate lastStartDate, Integer limit) {
+        validateCursor(lastFestivalId, lastStartDate);
+        validateLimit(limit);
+    }
+
+    private void validateCursor(Long lastFestivalId, LocalDate lastStartDate) {
+        if (lastFestivalId == null && lastStartDate == null) {
+            return;
+        }
+        if (lastFestivalId != null && lastStartDate != null) {
+            return;
+        }
+        throw new ValidException("festivalId, lastStartDate 두 값 모두 요청하거나 요청하지 않아야합니다.");
+    }
+
+    private void validateLimit(Integer limit) {
+        if (limit > 20 || limit < 1) {
+            throw new ValidException("페이지 갯수의 제한을 벗어납니다.");
+        }
     }
 }

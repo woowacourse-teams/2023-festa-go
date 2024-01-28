@@ -15,7 +15,6 @@ import com.festago.common.exception.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.beans.BeanInstantiationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -65,17 +64,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidMediaTypeException.class)
     public ResponseEntity<ErrorResponse> handle(InvalidMediaTypeException e) {
         return ResponseEntity.badRequest().build();
-    }
-
-    @ExceptionHandler(BeanInstantiationException.class)
-    public ResponseEntity<ErrorResponse> handle(BeanInstantiationException e, HttpServletRequest request) {
-        if (e.getCause() instanceof ValidException validException) {
-            return handle(validException);
-        }
-        if (e.getCause() instanceof BadRequestException badRequestException) {
-            return handle(badRequestException, request);
-        }
-        throw e;
     }
 
     @ExceptionHandler(ValidException.class)
