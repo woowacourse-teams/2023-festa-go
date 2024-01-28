@@ -38,4 +38,9 @@ public class Artist {
     public String getProfileImage() {
         return profileImage;
     }
+
+    public void update(String name, String profileImage) {
+        this.name = name;
+        this.profileImage = profileImage;
+    }
 }
