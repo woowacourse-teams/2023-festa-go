@@ -1,7 +1,6 @@
 package com.festago.festival.dto;
 
-import com.festago.common.exception.BadRequestException;
-import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.ValidException;
 import com.festago.festival.repository.FestivalFilter;
 import com.festago.school.domain.SchoolRegion;
 import java.time.LocalDate;
@@ -37,7 +36,7 @@ public class FestivalV1ListRequest {
         if (lastFestivalId != null && lastStartDate != null) {
             return;
         }
-        throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_LIST_INDEX);
+        throw new ValidException("festivalId, lastStartDate 두 값 모두 요청하거나 요청하지 않아야합니다.");
     }
 
     private void validate(String location, String filter, Integer limit, Long lastFestivalId, String lastStartDate) {
@@ -50,7 +49,7 @@ public class FestivalV1ListRequest {
             return;
         }
         if (limit < MIN_PAGE_SIZE || limit > MAX_PAGE_SIZE) {
-            throw new BadRequestException(ErrorCode.INVALID_PAGE_SIZE);
+            throw new ValidException("유효하지 않은 Page 사이즈 입니다.");
         }
     }
 
@@ -75,7 +74,7 @@ public class FestivalV1ListRequest {
         try {
             return LocalDate.parse(lastStartDate);
         } catch (DateTimeParseException e) {
-            throw new BadRequestException(ErrorCode.INVALID_LOCAL_DATE);
+            throw new ValidException("유효하지 않은 날짜 타입 요청입니다.");
         }
     }
 
