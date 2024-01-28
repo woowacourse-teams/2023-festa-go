@@ -116,6 +116,18 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         }
 
         @Test
+        void 원하는_갯수의_데이터를_받을_수_있다() {
+            // given
+            FestivalV1ListRequest request = new FestivalV1ListRequest(null, null, 2, null, null);
+
+            // when
+            Slice<FestivalV1Response> actual = festivalV1QueryService.findFestivals(request);
+
+            // then
+            assertThat(actual.getContent()).hasSize(2);
+        }
+
+        @Test
         void 마지막_페이지가_아닌지_반환받을_수_있다() {
             // given
             FestivalV1ListRequest firstRequest = new FestivalV1ListRequest(null, null, 1, null, null);
@@ -278,6 +290,19 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
                 assertThat(secondResponse.isLast()).isTrue();
                 assertThat(secondResponse.getContent()).hasSize(0);
             });
+        }
+
+        @Test
+        void 원하는_갯수의_데이터를_받을_수_있다() {
+            // given
+            FestivalV1ListRequest request = new FestivalV1ListRequest(SchoolRegion.대구.name(),
+                FestivalFilter.PLANNED.name(), 2, null, null);
+
+            // when
+            Slice<FestivalV1Response> actual = festivalV1QueryService.findFestivals(request);
+
+            // then
+            assertThat(actual.getContent()).hasSize(2);
         }
 
         @Test

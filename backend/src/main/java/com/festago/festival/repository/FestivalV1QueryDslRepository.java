@@ -40,7 +40,7 @@ public class FestivalV1QueryDslRepository {
             .limit(page.getPageSize() + NEXT_PAGE_DATA)
             .fetch();
 
-        return new SliceImpl<>(content, page, hasNext(content, page.getPageSize()));
+        return new SliceImpl<>(removeNextPageData(content, page), page, haveNextPageContent(content, page));
     }
 
     private JPAQuery<FestivalV1Response> selectResponse() {
@@ -111,7 +111,14 @@ public class FestivalV1QueryDslRepository {
         };
     }
 
-    private boolean hasNext(List<FestivalV1Response> content, Integer limit) {
-        return content.size() > limit;
+    private List<FestivalV1Response> removeNextPageData(List<FestivalV1Response> content, Pageable page) {
+        if (haveNextPageContent(content, page)) {
+            return content.subList(0, page.getPageSize());
+        }
+        return content;
+    }
+
+    private boolean haveNextPageContent(List<FestivalV1Response> content, Pageable page) {
+        return content.size() > page.getPageSize();
     }
 }
