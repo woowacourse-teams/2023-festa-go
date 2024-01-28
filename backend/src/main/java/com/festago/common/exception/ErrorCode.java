@@ -26,10 +26,14 @@ public enum ErrorCode {
     INVALID_STUDENT_VERIFICATION_CODE("올바르지 않은 학생 인증 코드입니다."),
     DELETE_CONSTRAINT_FESTIVAL("공연이 등록된 축제는 삭제할 수 없습니다."),
     DELETE_CONSTRAINT_STAGE("티켓이 등록된 공연은 삭제할 수 없습니다."),
-    DELETE_CONSTRAINT_SCHOOL("학생 또는 축제에 등록된 학교는 삭제할 수 없습니다."),
-    DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
+    DELETE_CONSTRAINT_SCHOOL("학생 또는 축제에 등록된 학교는 삭제할 수 없습니다."), // @deprecate
+    DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."), // @deprecate
     VALIDATION_FAIL("검증이 실패하였습니다."),
     INVALID_FESTIVAL_FILTER("유효하지 않은 축제의 필터 값입니다."),
+    SCHOOL_DELETE_CONSTRAINT_EXISTS_STUDENT("학생이 등록된 학교는 삭제할 수 없습니다."),
+    SCHOOL_DELETE_CONSTRAINT_EXISTS_FESTIVAL("축제가 등록된 학교는 삭제할 수 없습니다."),
+    DUPLICATE_SCHOOL_NAME("이미 존재하는 학교의 이름입니다."),
+    DUPLICATE_SCHOOL_DOMAIN("이미 존재하는 학교의 도메인입니다."),
     INVALID_REGION("유효하지 않은 지역입니다."),
 
 

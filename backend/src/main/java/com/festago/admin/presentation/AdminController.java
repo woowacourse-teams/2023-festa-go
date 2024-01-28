@@ -98,6 +98,10 @@ public class AdminController {
             .body(response);
     }
 
+    /**
+     * @deprecated API 버저닝이 적용되면 해당 메서드 삭제
+     */
+    @Deprecated(forRemoval = true)
     @PostMapping("/schools")
     public ResponseEntity<SchoolResponse> createSchool(@RequestBody @Valid SchoolCreateRequest request) {
         SchoolResponse response = schoolService.create(request);
@@ -105,6 +109,10 @@ public class AdminController {
             .body(response);
     }
 
+    /**
+     * @deprecated API 버저닝이 적용되면 해당 메서드 삭제
+     */
+    @Deprecated(forRemoval = true)
     @PatchMapping("/schools/{schoolId}")
     public ResponseEntity<Void> updateSchool(@RequestBody @Valid SchoolUpdateRequest request,
                                              @PathVariable Long schoolId) {
@@ -113,6 +121,10 @@ public class AdminController {
             .build();
     }
 
+    /**
+     * @deprecated API 버저닝이 적용되면 해당 메서드 삭제
+     */
+    @Deprecated(forRemoval = true)
     @DeleteMapping("/schools/{schoolId}")
     public ResponseEntity<Void> deleteSchool(@PathVariable Long schoolId) {
         schoolService.delete(schoolId);
