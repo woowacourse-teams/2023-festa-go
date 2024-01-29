@@ -49,7 +49,7 @@ public class FestivalStepDefinitions {
         assertThat(festivals).hasSize(number);
     }
 
-    private static List<FestivalResponse> getFestivalsByStatus(String status) {
+    private List<FestivalResponse> getFestivalsByStatus(String status) {
         return RestAssured.given()
             .contentType(ContentType.JSON)
             .queryParam("festivalFilter", status)
