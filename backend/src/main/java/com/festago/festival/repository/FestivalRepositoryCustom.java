@@ -11,4 +11,6 @@ public interface FestivalRepositoryCustom {
     List<Festival> findByFilter(FestivalFilter filter, LocalDate currentTime);
 
     Slice<FestivalV1Response> findBy(FestivalSearchCondition hello);
+
+    List<FestivalV1Response> findPopularFestival();
 }

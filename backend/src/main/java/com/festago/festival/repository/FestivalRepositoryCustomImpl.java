@@ -25,4 +25,9 @@ public class FestivalRepositoryCustomImpl implements FestivalRepositoryCustom {
     public Slice<FestivalV1Response> findBy(FestivalSearchCondition searchCondition) {
         return festivalV1QueryDslRepositoryCustom.findBy(searchCondition);
     }
+
+    @Override
+    public List<FestivalV1Response> findPopularFestival() {
+        return festivalV1QueryDslRepositoryCustom.findPopularFestival();
+    }
 }
