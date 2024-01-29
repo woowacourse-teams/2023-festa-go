@@ -1,6 +1,5 @@
 package com.festago.festival.application.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.artist.domain.Artist;
@@ -93,9 +92,9 @@ class PopularFestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         PopularFestivalsV1Response actual = popularQueryService.findPopularFestivals();
 
         // then
-        assertSoftly(softAssertions -> {
-            assertThat(actual.title()).isEqualTo("요즘 뜨는 축제");
-            assertThat(actual.content()).hasSize(7);
+        assertSoftly(softly -> {
+            softly.assertThat(actual.title()).isEqualTo("요즘 뜨는 축제");
+            softly.assertThat(actual.content()).hasSize(7);
         });
     }
 
