@@ -164,12 +164,12 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             var request = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, null, null);
 
             // when
-            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(4), request);
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(4), request);
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(actual.isLast()).isFalse();
-                softly.assertThat(actual.getContent()).hasSize(4);
+                softly.assertThat(response.isLast()).isFalse();
+                softly.assertThat(response.getContent()).hasSize(4);
             });
         }
 
@@ -248,12 +248,12 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             var request = new FestivalV1QueryRequest(SchoolRegion.서울, FestivalFilter.PROGRESS, null, null);
 
             // when
-            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(actual.isLast()).isTrue();
-                softly.assertThat(actual.getContent()).hasSize(2);
+                softly.assertThat(response.isLast()).isTrue();
+                softly.assertThat(response.getContent()).hasSize(2);
             });
         }
 
@@ -263,12 +263,12 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             var request = new FestivalV1QueryRequest(SchoolRegion.대구, FestivalFilter.PROGRESS, null, null);
 
             // when
-            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(actual.isLast()).isTrue();
-                softly.assertThat(actual.getContent()).hasSize(1);
+                softly.assertThat(response.isLast()).isTrue();
+                softly.assertThat(response.getContent()).hasSize(1);
             });
         }
 
@@ -278,12 +278,12 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             var request = new FestivalV1QueryRequest(SchoolRegion.부산, FestivalFilter.PROGRESS, null, null);
 
             // when
-            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(actual.isLast()).isTrue();
-                softly.assertThat(actual.getContent()).hasSize(2);
+                softly.assertThat(response.isLast()).isTrue();
+                softly.assertThat(response.getContent()).hasSize(2);
             });
         }
 
@@ -293,12 +293,12 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             var request = new FestivalV1QueryRequest(SchoolRegion.서울, FestivalFilter.PLANNED, null, null);
 
             // when
-            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(actual.isLast()).isTrue();
-                softly.assertThat(actual.getContent()).isEmpty();
+                softly.assertThat(response.isLast()).isTrue();
+                softly.assertThat(response.getContent()).isEmpty();
             });
         }
 
@@ -308,12 +308,12 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             var request = new FestivalV1QueryRequest(SchoolRegion.부산, FestivalFilter.PLANNED, null, null);
 
             // when
-            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(actual.isLast()).isTrue();
-                softly.assertThat(actual.getContent()).hasSize(1);
+                softly.assertThat(response.isLast()).isTrue();
+                softly.assertThat(response.getContent()).hasSize(1);
             });
         }
 
@@ -323,12 +323,12 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             var request = new FestivalV1QueryRequest(SchoolRegion.대구, FestivalFilter.PLANNED, null, null);
 
             // when
-            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(actual.isLast()).isTrue();
-                softly.assertThat(actual.getContent()).hasSize(2);
+                softly.assertThat(response.isLast()).isTrue();
+                softly.assertThat(response.getContent()).hasSize(2);
             });
         }
 
