@@ -6,7 +6,9 @@ import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,10 +23,12 @@ public class FestivalV1Controller {
 
     @GetMapping
     public ResponseEntity<Slice<FestivalV1Response>> findFestivals(
-        FestivalV1QueryRequest festivalListRequest) {
-        validate(festivalListRequest.lastFestivalId(), festivalListRequest.lastStartDate(),
-            festivalListRequest.limit());
-        return ResponseEntity.ok(festivalV1QueryService.findFestivals(festivalListRequest));
+        @PageableDefault(size = 10) Pageable pageable,
+        FestivalV1QueryRequest request
+    ) {
+        validate(request.lastFestivalId(), request.lastStartDate(), pageable.getPageSize());
+        var response = festivalV1QueryService.findFestivals(pageable, request);
+        return ResponseEntity.ok(response);
     }
 
     private void validate(Long lastFestivalId, LocalDate lastStartDate, Integer limit) {

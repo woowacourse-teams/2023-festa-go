@@ -2,8 +2,8 @@ package com.festago.festival.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.BDDMockito.given;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
@@ -20,15 +20,21 @@ import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
+import com.festago.support.TimeInstantProvider;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -50,369 +56,318 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
     FestivalV1QueryService festivalV1QueryService;
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    Clock clock;
 
-    private long firstPlannedFestivalId = 0;
+    LocalDate now = LocalDate.parse("2023-07-10");
 
+    // 진행중
+    Festival 서울대학교_8일_12일_축제;
+    Festival 서울대학교_6일_12일_축제;
+    Festival 대구대학교_9일_12일_축제;
+    Festival 부산대학교_6일_13일_축제;
+    Festival 부산대학교_6일_12일_축제;
+
+    // 진행 예정
+    Festival 대구대학교_13일_14일_축제;
+    Festival 대구대학교_12일_14일_축제;
+    Festival 부산대학교_12일_14일_축제;
+
+    /**
+     * 현재 시간 <p> 2023년 7월 10일 <p>
+     * <p>
+     * 식별자는 순서대로 오름차순<p>
+     * <p>
+     * 진행 중 축제 5개 <p> 서울대학교 8~12일 <p> 서울대학교 6~12일 <p> 대구대학교 9~12일 <p> 부산대학교 6~13일 <p> 부산대학교 6~12일 <p>
+     * <p>
+     * 진행 예정 축제 3개 <p> 대구대학교 13~14일 <p> 대구대학교 12~14일 <p> 부산대학교 12~14일
+     */
     @BeforeEach
     void setting() {
-        LocalDate now = LocalDate.now();
+        given(clock.instant())
+            .willReturn(TimeInstantProvider.from(now));
 
-        School school1 = schoolRepository.save(new School("domain1", "school1", SchoolRegion.서울));
-        School school2 = schoolRepository.save(new School("domain2", "school2", SchoolRegion.서울));
-        School school3 = schoolRepository.save(new School("domain3", "school3", SchoolRegion.대구));
+        School 서울대학교 = schoolRepository.save(new School("teco.ac.kr", "서울대학교", SchoolRegion.서울));
+        School 부산대학교 = schoolRepository.save(new School("feta.ac.kr", "부산대학교", SchoolRegion.부산));
+        School 대구대학교 = schoolRepository.save(new School("wote.ac.kr", "대구대학교", SchoolRegion.대구));
 
-        Festival progressFestival1 = festivalRepository.save(
-            new Festival("festival1", now.minusDays(4), now.plusDays(2), school1));
-        Festival progressFestival2 = festivalRepository.save(
-            new Festival("festival2", now.minusDays(4), now.plusDays(3), school2));
-        Festival plannedFestival1 = festivalRepository.save(
-            new Festival("festival3", now.plusDays(3), now.plusDays(4), school3));
+        서울대학교_8일_12일_축제 = festivalRepository.save(
+            new Festival("서울대학교_8일_12일_축제", now.minusDays(2), now.plusDays(2), 서울대학교));
+        서울대학교_6일_12일_축제 = festivalRepository.save(
+            new Festival("서울대학교_6일_12일_축제", now.minusDays(4), now.plusDays(2), 서울대학교));
+        대구대학교_9일_12일_축제 = festivalRepository.save(
+            new Festival("대구대학교_9일_12일_축제", now.minusDays(1), now.plusDays(2), 대구대학교));
+        부산대학교_6일_13일_축제 = festivalRepository.save(
+            new Festival("부산대학교_6일_13일_축제", now.minusDays(4), now.plusDays(3), 부산대학교));
+        부산대학교_6일_12일_축제 = festivalRepository.save(
+            new Festival("부산대학교_6일_12일_축제", now.minusDays(4), now.plusDays(2), 부산대학교));
 
-        Festival progressFestival3 = festivalRepository.save(
-            new Festival("festival1", now.minusDays(3), now.plusDays(2), school1));
-        Festival progressFestival4 = festivalRepository.save(
-            new Festival("festival1", now.minusDays(2), now.plusDays(2), school1));
-        Festival progressFestival5 = festivalRepository.save(
-            new Festival("festival1", now.minusDays(1), now.plusDays(2), school1));
+        대구대학교_13일_14일_축제 = festivalRepository.save(
+            new Festival("대구대학교_13일_14일_축제", now.plusDays(3), now.plusDays(4), 대구대학교));
+        부산대학교_12일_14일_축제 = festivalRepository.save(
+            new Festival("부산대학교_12일_14일_축제", now.plusDays(2), now.plusDays(4), 부산대학교));
+        대구대학교_12일_14일_축제 = festivalRepository.save(
+            new Festival("대구대학교_12일_14일_축제", now.plusDays(2), now.plusDays(4), 대구대학교));
 
-        Festival plannedFestival2 = festivalRepository.save(
-            new Festival("festival3", now.plusDays(3), now.plusDays(4), school3));
-        Festival plannedFestival3 = festivalRepository.save(
-            new Festival("festival3", now.plusDays(2), now.plusDays(4), school3));
-        firstPlannedFestivalId = plannedFestival3.getId();
+        Artist 뉴진스 = artistRepository.save(new Artist("뉴진스", "https://image.com/image.png"));
+        Artist 에픽하이 = artistRepository.save(new Artist("에픽하이", "https://image.com/image.png"));
+        Artist 소녀시대 = artistRepository.save(new Artist("소녀시대", "https://image.com/image.png"));
 
-        Artist artist1 = artistRepository.save(new Artist("name1", "image1"));
-        Artist artist2 = artistRepository.save(new Artist("name2", "image2"));
-        Artist artist3 = artistRepository.save(new Artist("name3", "image3"));
+        List<Artist> artists = List.of(뉴진스, 에픽하이, 소녀시대);
 
-        List<Artist> artists = List.of(artist1, artist2, artist3);
-
-        festivalInfoRepository.save(FestivalQueryInfo.of(progressFestival1, artists, festivalInfoSerializer));
-        festivalInfoRepository.save(FestivalQueryInfo.of(progressFestival2, artists, festivalInfoSerializer));
-        festivalInfoRepository.save(FestivalQueryInfo.of(progressFestival3, artists, festivalInfoSerializer));
-        festivalInfoRepository.save(FestivalQueryInfo.of(progressFestival4, artists, festivalInfoSerializer));
-        festivalInfoRepository.save(FestivalQueryInfo.of(progressFestival5, artists, festivalInfoSerializer));
-        festivalInfoRepository.save(FestivalQueryInfo.of(plannedFestival1, artists, festivalInfoSerializer));
-        festivalInfoRepository.save(FestivalQueryInfo.of(plannedFestival2, artists, festivalInfoSerializer));
-        festivalInfoRepository.save(FestivalQueryInfo.of(plannedFestival3, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(부산대학교_6일_13일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(부산대학교_12일_14일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(서울대학교_6일_12일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(부산대학교_6일_12일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(서울대학교_8일_12일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(대구대학교_9일_12일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(대구대학교_12일_14일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(대구대학교_13일_14일_축제, artists, festivalInfoSerializer));
     }
 
     @Nested
-    class 지역_없는_검색에서 {
+    class 지역_필터_미적용 {
 
         @Test
-        void 마지막_페이지_없이_검색하면_진행_중인_모든_축제를_반환한다() {
+        void 진행_중_축제는_5개_이다() {
             // given
-            FestivalV1QueryRequest request = new FestivalV1QueryRequest(null, null, null, null, null);
+            var request = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, null, null);
 
             // when
-            Slice<FestivalV1Response> actual = festivalV1QueryService.findFestivals(request);
+            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
-            assertSoftly(softAssertions -> {
-                assertThat(actual.isLast()).isTrue();
-                assertThat(actual.getContent()).hasSize(5);
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isLast()).isTrue();
+                softly.assertThat(actual.getContent()).hasSize(5);
             });
         }
 
         @Test
-        void 원하는_갯수의_데이터를_받을_수_있다() {
+        void 진행_예정_축제는_3개_이다() {
             // given
-            FestivalV1QueryRequest request = new FestivalV1QueryRequest(null, null, 2, null, null);
+            var request = new FestivalV1QueryRequest(null, FestivalFilter.PLANNED, null, null);
 
             // when
-            Slice<FestivalV1Response> actual = festivalV1QueryService.findFestivals(request);
+            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
-            assertThat(actual.getContent()).hasSize(2);
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isLast()).isTrue();
+                softly.assertThat(actual.getContent()).hasSize(3);
+            });
         }
 
         @Test
-        void 마지막_페이지가_아닌지_반환받을_수_있다() {
+        void 원하는_갯수의_축제를_조회하면_마지막_페이지_여부를_알_수_있다() {
             // given
-            FestivalV1QueryRequest firstRequest = new FestivalV1QueryRequest(null, null, 1, null, null);
-            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(firstRequest);
-
-            Long lastFestivalId = firstResponse.getContent().get(0).id();
-            LocalDate lastStartDate = firstResponse.getContent().get(0).startDate();
-            FestivalV1QueryRequest secondRequest = new FestivalV1QueryRequest(null, null, 4, lastFestivalId,
-                lastStartDate);
+            var request = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, null, null);
 
             // when
-            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(4), request);
 
             // then
-            assertSoftly(softAssertions -> {
-                assertThat(firstResponse.isLast()).isFalse();
-                assertThat(secondResponse.isLast()).isTrue();
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isLast()).isFalse();
+                softly.assertThat(actual.getContent()).hasSize(4);
             });
         }
 
         @Test
-        void 진행_에정_필터를_적용할_수_있다() {
+        void 진행_예정_축제는_시작_날짜가_빠른_순으로_정렬되고_시작_날짜가_같으면_식별자의_오름차순으로_정렬되어_반환된다() {
             // given
-            FestivalV1QueryRequest request = new FestivalV1QueryRequest(null, FestivalFilter.PLANNED, 10, null,
-                null);
+            var request = new FestivalV1QueryRequest(null, FestivalFilter.PLANNED, null, null);
 
             // when
-            Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
-            assertSoftly(softAssertions -> {
-                assertThat(response.isLast()).isTrue();
-                assertThat(response.getContent()).hasSize(3);
-                assertThat(response.getContent().get(0).id()).isEqualTo(firstPlannedFestivalId);
-            });
+            assertThat(response.getContent())
+                .map(FestivalV1Response::id)
+                .containsExactly(
+                    부산대학교_12일_14일_축제.getId(),
+                    대구대학교_12일_14일_축제.getId(),
+                    대구대학교_13일_14일_축제.getId()
+                );
         }
 
         @Test
-        void 같은_날짜에_진행_예정인_축제가_있으면_축제_아이디가_빠른_순으로_반환된다() {
+        void 진행_중_축제는_시작_날짜가_느린_순으로_정렬되고_시작_날짜가_같으면_식별자의_오름차순으로_정렬되어_반환된다() {
             // given
-            FestivalV1QueryRequest request = new FestivalV1QueryRequest(null, FestivalFilter.PLANNED, 10, null,
-                null);
+            var request = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, null, null);
 
             // when
-            Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
-            assertSoftly(softAssertions -> {
-                assertThat(response.isLast()).isTrue();
-                assertThat(response.getContent()).hasSize(3);
-                assertThat(
-                    response.getContent().get(1).startDate()
-                        .isEqual(response.getContent().get(2).startDate())).isTrue();
-                assertThat(response.getContent().get(1).id()).isLessThan(response.getContent().get(2).id());
-            });
-        }
-
-        @Test
-        void 진행_예정은_날짜가_시작_날짜가_빠른_순으로_반환된다() {
-            // given
-            FestivalV1QueryRequest fistRequest = new FestivalV1QueryRequest(SchoolRegion.대구,
-                FestivalFilter.PLANNED, 1,
-                null, null);
-            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
-
-            FestivalV1Response firstFestival = firstResponse.getContent().get(0);
-            FestivalV1QueryRequest secondRequest = new FestivalV1QueryRequest(SchoolRegion.대구,
-                FestivalFilter.PLANNED, 1,
-                firstFestival.id(), firstFestival.startDate());
-            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
-
-            FestivalV1Response secondFestival = secondResponse.getContent().get(0);
-            FestivalV1QueryRequest thirdRequest = new FestivalV1QueryRequest(SchoolRegion.대구,
-                FestivalFilter.PLANNED, 1,
-                secondFestival.id(), secondFestival.startDate());
-            Slice<FestivalV1Response> thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
-
-            FestivalV1Response thirdFestival = thirdResponse.getContent().get(0);
-
-            // when && then
-            assertSoftly(softAssertions -> {
-                assertThat(firstFestival.startDate()).isBeforeOrEqualTo(secondFestival.startDate());
-                assertThat(secondFestival.startDate()).isBeforeOrEqualTo(thirdFestival.startDate());
-                assertThat(secondFestival.id()).isLessThan(thirdFestival.id());
-            });
-        }
-
-        @Test
-        void 진행_중인_축제는_시작_날짜가_느린_순으로_반환된다() {
-            // given
-            FestivalV1QueryRequest fistRequest = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, 1,
-                null, null);
-            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
-            FestivalV1Response firstFestival = firstResponse.getContent().get(0);
-
-            FestivalV1QueryRequest secondRequest = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, 1,
-                firstFestival.id(), firstFestival.startDate());
-            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
-            FestivalV1Response secondFestival = secondResponse.getContent().get(0);
-
-            FestivalV1QueryRequest thirdRequest = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, 1,
-                secondFestival.id(), secondFestival.startDate());
-            Slice<FestivalV1Response> thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
-            FestivalV1Response thirdFestival = thirdResponse.getContent().get(0);
-
-            FestivalV1QueryRequest fourthRequest = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, 1,
-                thirdFestival.id(), thirdFestival.startDate());
-            Slice<FestivalV1Response> fourthResponse = festivalV1QueryService.findFestivals(fourthRequest);
-            FestivalV1Response fourthFestival = fourthResponse.getContent().get(0);
-
-            // when && then
-            assertSoftly(softAssertions -> {
-                assertThat(firstFestival.startDate()).isAfter(secondFestival.startDate());
-                assertThat(secondFestival.startDate()).isAfter(thirdFestival.startDate());
-                assertThat(thirdFestival.startDate()).isAfter(fourthFestival.startDate());
-            });
-        }
-
-        @Test
-        void 진행_중인_축제에_같은_날짜가_있으면_id가_작은_것_부터_보낸다() {
-            // given
-            FestivalV1QueryRequest fistRequest = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, 4,
-                null, null);
-            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
-            FestivalV1Response firstLastFestival = firstResponse.getContent().get(3);
-
-            FestivalV1QueryRequest secondRequest = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, 1,
-                firstLastFestival.id(), firstLastFestival.startDate());
-            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
-            FestivalV1Response secondLastFestival = secondResponse.getContent().get(0);
-
-            // when && then
-            assertSoftly(softAssertions -> {
-                assertThat(firstLastFestival.startDate()).isEqualTo(secondLastFestival.startDate());
-                assertThat(firstLastFestival.id()).isLessThan(secondLastFestival.id());
-                assertThat(secondResponse.isLast()).isTrue();
-            });
+            assertThat(response.getContent())
+                .map(FestivalV1Response::id)
+                .containsExactly(
+                    대구대학교_9일_12일_축제.getId(),
+                    서울대학교_8일_12일_축제.getId(),
+                    서울대학교_6일_12일_축제.getId(),
+                    부산대학교_6일_13일_축제.getId(),
+                    부산대학교_6일_12일_축제.getId()
+                );
         }
     }
 
     @Nested
-    class 지역_검색_에서 {
+    class 지역_필터_적용 {
 
         @Test
-        void 지역을_선택할_수_있다() {
+        void 지역이_서울인_진행_중_축제는_2개_이다() {
             // given
-            FestivalV1QueryRequest firstRequest = new FestivalV1QueryRequest(SchoolRegion.대구,
-                FestivalFilter.PLANNED, 10, null, null);
-            FestivalV1QueryRequest secondRequest = new FestivalV1QueryRequest(SchoolRegion.서울,
-                FestivalFilter.PLANNED, 10, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.서울, FestivalFilter.PROGRESS, null, null);
 
             // when
-            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(firstRequest);
-            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
-            assertSoftly(softAssertions -> {
-                assertThat(firstResponse.isLast()).isTrue();
-                assertThat(firstResponse.getContent()).hasSize(3);
-                assertThat(secondResponse.isLast()).isTrue();
-                assertThat(secondResponse.getContent()).hasSize(0);
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isLast()).isTrue();
+                softly.assertThat(actual.getContent()).hasSize(2);
             });
         }
 
         @Test
-        void 원하는_갯수의_데이터를_받을_수_있다() {
+        void 지역이_대구인_진행_중_축제는_1개_이다() {
             // given
-            FestivalV1QueryRequest request = new FestivalV1QueryRequest(SchoolRegion.대구,
-                FestivalFilter.PLANNED, 2, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.대구, FestivalFilter.PROGRESS, null, null);
 
             // when
-            Slice<FestivalV1Response> actual = festivalV1QueryService.findFestivals(request);
+            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
-            assertThat(actual.getContent()).hasSize(2);
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isLast()).isTrue();
+                softly.assertThat(actual.getContent()).hasSize(1);
+            });
         }
 
         @Test
-        void 같은_날짜에_진행_예정인_축제가_있으면_축제_아이디가_빠른_순으로_반환된다() throws JsonProcessingException {
+        void 지역이_부산인_진행_중_축제는_2개_이다() {
             // given
-            FestivalV1QueryRequest request = new FestivalV1QueryRequest(SchoolRegion.대구,
-                FestivalFilter.PLANNED, 10,
-                null,
-                null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.부산, FestivalFilter.PROGRESS, null, null);
 
             // when
-            Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
+            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
             // then
-            assertSoftly(softAssertions -> {
-                assertThat(response.isLast()).isTrue();
-                assertThat(response.getContent()).hasSize(3);
-                assertThat(
-                    response.getContent().get(1).startDate()
-                        .isEqual(response.getContent().get(2).startDate())).isTrue();
-                assertThat(response.getContent().get(1).id()).isLessThan(response.getContent().get(2).id());
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isLast()).isTrue();
+                softly.assertThat(actual.getContent()).hasSize(2);
             });
         }
 
         @Test
-        void 진행_예정은_날짜가_시작_날짜가_빠른_순으로_반환된다() {
+        void 지역이_서울인_진행_예정_축제는_0개_이다() {
             // given
-            FestivalV1QueryRequest fistRequest = new FestivalV1QueryRequest(SchoolRegion.대구,
-                FestivalFilter.PLANNED, 1,
-                null, null);
-            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
+            var request = new FestivalV1QueryRequest(SchoolRegion.서울, FestivalFilter.PLANNED, null, null);
 
-            FestivalV1Response firstFestival = firstResponse.getContent().get(0);
-            FestivalV1QueryRequest secondRequest = new FestivalV1QueryRequest(SchoolRegion.대구,
-                FestivalFilter.PLANNED, 1,
-                firstFestival.id(), firstFestival.startDate());
-            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
+            // when
+            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
-            FestivalV1Response secondFestival = secondResponse.getContent().get(0);
-            FestivalV1QueryRequest thirdRequest = new FestivalV1QueryRequest(SchoolRegion.대구,
-                FestivalFilter.PLANNED, 1,
-                secondFestival.id(), secondFestival.startDate());
-            Slice<FestivalV1Response> thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
-
-            FestivalV1Response thirdFestival = thirdResponse.getContent().get(0);
-
-            // when && then
-            assertSoftly(softAssertions -> {
-                assertThat(firstFestival.startDate()).isBeforeOrEqualTo(secondFestival.startDate());
-                assertThat(secondFestival.startDate()).isBeforeOrEqualTo(thirdFestival.startDate());
-                assertThat(secondFestival.id() < thirdFestival.id()).isTrue();
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isLast()).isTrue();
+                softly.assertThat(actual.getContent()).isEmpty();
             });
         }
 
         @Test
-        void 진행_중인_축제는_시작_날짜가_느린_순으로_반환된다() {
+        void 지역이_부산인_진행_예정_축제는_1개_이다() {
             // given
-            FestivalV1QueryRequest fistRequest = new FestivalV1QueryRequest(SchoolRegion.서울,
-                FestivalFilter.PROGRESS, 1,
-                null, null);
-            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
-            FestivalV1Response firstFestival = firstResponse.getContent().get(0);
+            var request = new FestivalV1QueryRequest(SchoolRegion.부산, FestivalFilter.PLANNED, null, null);
 
-            FestivalV1QueryRequest secondRequest = new FestivalV1QueryRequest(SchoolRegion.서울,
-                FestivalFilter.PROGRESS, 1,
-                firstFestival.id(), firstFestival.startDate());
-            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
-            FestivalV1Response secondFestival = secondResponse.getContent().get(0);
+            // when
+            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
-            FestivalV1QueryRequest thirdRequest = new FestivalV1QueryRequest(SchoolRegion.서울,
-                FestivalFilter.PROGRESS, 1,
-                secondFestival.id(), secondFestival.startDate());
-            Slice<FestivalV1Response> thirdResponse = festivalV1QueryService.findFestivals(thirdRequest);
-            FestivalV1Response thirdFestival = thirdResponse.getContent().get(0);
-
-            FestivalV1QueryRequest fourthRequest = new FestivalV1QueryRequest(SchoolRegion.서울,
-                FestivalFilter.PROGRESS, 1,
-                thirdFestival.id(), thirdFestival.startDate());
-            Slice<FestivalV1Response> fourthResponse = festivalV1QueryService.findFestivals(fourthRequest);
-            FestivalV1Response fourthFestival = fourthResponse.getContent().get(0);
-
-            // when && then
-            assertSoftly(softAssertions -> {
-                assertThat(firstFestival.startDate()).isAfter(secondFestival.startDate());
-                assertThat(secondFestival.startDate()).isAfter(thirdFestival.startDate());
-                assertThat(thirdFestival.startDate()).isAfter(fourthFestival.startDate());
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isLast()).isTrue();
+                softly.assertThat(actual.getContent()).hasSize(1);
             });
         }
 
         @Test
-        void 진행_중인_축제에_같은_날짜가_있으면_id가_작은_것_부터_보낸다() {
+        void 지역이_대구인_진행_예정_축제는_2개_이다() {
             // given
-            FestivalV1QueryRequest fistRequest = new FestivalV1QueryRequest(SchoolRegion.서울,
-                FestivalFilter.PROGRESS, 4,
-                null, null);
-            Slice<FestivalV1Response> firstResponse = festivalV1QueryService.findFestivals(fistRequest);
-            FestivalV1Response firstLastFestival = firstResponse.getContent().get(3);
+            var request = new FestivalV1QueryRequest(SchoolRegion.대구, FestivalFilter.PLANNED, null, null);
 
-            FestivalV1QueryRequest secondRequest = new FestivalV1QueryRequest(SchoolRegion.서울,
-                FestivalFilter.PROGRESS, 1,
-                firstLastFestival.id(), firstLastFestival.startDate());
-            Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
-            FestivalV1Response secondLastFestival = secondResponse.getContent().get(0);
+            // when
+            var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
 
-            // when && then
-            assertSoftly(softAssertions -> {
-                assertThat(firstLastFestival.startDate()).isEqualTo(secondLastFestival.startDate());
-                assertThat(firstLastFestival.id() < secondLastFestival.id()).isTrue();
-                assertThat(secondResponse.isLast()).isTrue();
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isLast()).isTrue();
+                softly.assertThat(actual.getContent()).hasSize(2);
             });
+        }
+
+        @ParameterizedTest
+        @MethodSource("지역별_진행_예정_축제_이름")
+        void 진행_예정_축제는_시작_날짜가_빠른_순으로_정렬되고_시작_날짜가_같으면_식별자의_오름차순으로_정렬되어_반환된다(
+            SchoolRegion region,
+            List<String> festivalNames
+        ) {
+            // given
+            var request = new FestivalV1QueryRequest(region, FestivalFilter.PLANNED, null, null);
+
+            // when
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
+
+            // then
+            assertThat(response.getContent())
+                .map(FestivalV1Response::name)
+                .containsExactlyElementsOf(festivalNames);
+        }
+
+        private static Stream<Arguments> 지역별_진행_예정_축제_이름() {
+            return Stream.of(
+                Arguments.of(SchoolRegion.서울, List.of()),
+                Arguments.of(SchoolRegion.대구, List.of(
+                    "대구대학교_12일_14일_축제",
+                    "대구대학교_13일_14일_축제"
+                )),
+                Arguments.of(SchoolRegion.부산, List.of(
+                    "부산대학교_12일_14일_축제"
+                ))
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("지역별_진행_중_축제_이름")
+        void 진행_중_축제는_시작_날짜가_느린_순으로_정렬되고_시작_날짜가_같으면_식별자의_오름차순으로_정렬되어_반환된다(
+            SchoolRegion region,
+            List<String> festivalNames
+        ) {
+            // given
+            var request = new FestivalV1QueryRequest(region, FestivalFilter.PROGRESS, null, null);
+
+            // when
+            var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
+
+            // then
+            assertThat(response.getContent())
+                .map(FestivalV1Response::name)
+                .containsExactlyElementsOf(festivalNames);
+        }
+
+        private static Stream<Arguments> 지역별_진행_중_축제_이름() {
+            return Stream.of(
+                Arguments.of(SchoolRegion.서울, List.of(
+                    "서울대학교_8일_12일_축제",
+                    "서울대학교_6일_12일_축제"
+                )),
+                Arguments.of(SchoolRegion.대구, List.of(
+                    "대구대학교_9일_12일_축제"
+                )),
+                Arguments.of(SchoolRegion.부산, List.of(
+                    "부산대학교_6일_13일_축제",
+                    "부산대학교_6일_12일_축제"
+                ))
+            );
         }
     }
 }
