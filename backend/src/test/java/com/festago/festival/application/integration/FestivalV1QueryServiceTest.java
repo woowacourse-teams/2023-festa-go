@@ -210,6 +210,33 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
                     부산대학교_6일_12일_축제.getId()
                 );
         }
+
+        @Test
+        void 커서_기반_페이징이_적용되어야_한다() {
+            // given
+            var firstRequest = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, null, null);
+            var firstResponse = festivalV1QueryService.findFestivals(Pageable.ofSize(2), firstRequest);
+            var lastElement = firstResponse.getContent().get(1);
+            var secondRequest = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, lastElement.id(),
+                lastElement.startDate());
+
+            // when
+            var secondResponse = festivalV1QueryService.findFestivals(Pageable.ofSize(5), secondRequest);
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(firstResponse.hasNext()).isTrue();
+                softly.assertThat(firstResponse.getSize()).isEqualTo(2);
+                softly.assertThat(secondResponse.hasNext()).isFalse();
+                softly.assertThat(secondResponse.getContent())
+                    .map(FestivalV1Response::id)
+                    .containsExactly(
+                        서울대학교_6일_12일_축제.getId(),
+                        부산대학교_6일_13일_축제.getId(),
+                        부산대학교_6일_12일_축제.getId()
+                    );
+            });
+        }
     }
 
     @Nested
