@@ -2,7 +2,7 @@ package com.festago.festival.application;
 
 import com.festago.festival.dto.FestivalV1Response;
 import com.festago.festival.dto.PopularFestivalsV1Response;
-import com.festago.festival.repository.FestivalRepository;
+import com.festago.festival.repository.FestivalV1QueryDslRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PopularFestivalV1QueryService {
 
-    private final FestivalRepository festivalRepository;
+    private final FestivalV1QueryDslRepository festivalRepository;
 
     public PopularFestivalsV1Response findPopularFestivals() {
         List<FestivalV1Response> popularFestivals = festivalRepository.findPopularFestival();
