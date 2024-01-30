@@ -24,7 +24,7 @@ public class SchoolV1Controller {
     private final SchoolV1QueryService schoolQueryService;
 
     @GetMapping
-    @ValidPageable(maxSize = 20)
+    @ValidPageable(maxSize = 50)
     public ResponseEntity<Page<SchoolV1Response>> findAllSchools(
         @RequestParam(defaultValue = "") String searchFilter,
         @RequestParam(defaultValue = "") String searchKeyword,
