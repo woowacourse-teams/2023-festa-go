@@ -143,10 +143,6 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
             assertThat(updatedSchool.getDomain()).isEqualTo(school.getDomain());
         }
 
-        /**
-         * 여기서 통합 테스트의 단점이 드러난다. 변경된 School은 위의 변수로 선언한 School과 같은 인스턴스이다. 하지만 updateSchool() 메서드로 변경된 School은 변수로 선언된
-         * School과 다르다. 따라서 변경을 확인하려면 SchoolRepository에서 영속된 School을 찾아야한다.
-         */
         @Test
         void 예외가_발생하지_않으면_학교가_수정된다() {
             // given
@@ -160,8 +156,7 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
             assertSoftly(softly -> {
                 softly.assertThat(updatedSchool.getName()).isEqualTo("테코대학교");
                 softly.assertThat(updatedSchool.getDomain()).isEqualTo("teco.ac.kr");
-                // TODO School 도메인 이슈에서 주석 해제할 것!
-                // assertThat(updatedSchool.getRegion()).isEqualTo(SchoolRegion.서울);
+                softly.assertThat(updatedSchool.getRegion()).isEqualTo(SchoolRegion.서울);
             });
         }
     }
