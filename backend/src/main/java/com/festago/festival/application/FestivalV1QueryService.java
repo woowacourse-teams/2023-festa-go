@@ -3,8 +3,8 @@ package com.festago.festival.application;
 import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
 import com.festago.festival.repository.FestivalFilter;
+import com.festago.festival.repository.FestivalRepository;
 import com.festago.festival.repository.FestivalSearchCondition;
-import com.festago.festival.repository.FestivalV1QueryDslRepository;
 import com.festago.school.domain.SchoolRegion;
 import java.time.Clock;
 import java.time.LocalDate;
@@ -22,34 +22,14 @@ public class FestivalV1QueryService {
     private final FestivalV1QueryDslRepository festivalV1QueryDslRepository;
     private final Clock clock;
 
-    public Slice<FestivalV1Response> findFestivals(FestivalV1QueryRequest request) {
-        return festivalV1QueryDslRepository.findBy(makeSearchCondition(request));
-    }
-
-    private FestivalSearchCondition makeSearchCondition(FestivalV1QueryRequest request) {
-        LocalDate now = LocalDate.now(clock);
-        return new FestivalSearchCondition(
-            getOrDefaultFilter(request.filter()),
-            getOrDefaultRegion(request.location()),
+    public Slice<FestivalV1Response> findFestivals(Pageable pageable, FestivalV1QueryRequest request) {
+        return festivalV1QueryDslRepository.f(new FestivalSearchCondition(
+            request.filter(),
+            request.location(),
             request.lastStartDate(),
             request.lastFestivalId(),
-            PageRequest.ofSize(request.limit()),
-            now
-        );
-    }
-
-    private FestivalFilter getOrDefaultFilter(FestivalFilter filter) {
-        if (filter == null) {
-            return FestivalFilter.PROGRESS;
-        }
-        return filter;
-    }
-
-    private SchoolRegion getOrDefaultRegion(SchoolRegion region) {
-        if (region == null) {
-            return SchoolRegion.기타;
-        }
-        return region;
-    }
+            pageable,
+            LocalDate.now(clock)
+        ));
 }
 

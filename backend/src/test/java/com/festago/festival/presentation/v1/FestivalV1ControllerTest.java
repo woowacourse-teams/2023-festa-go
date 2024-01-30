@@ -20,7 +20,7 @@ class FestivalV1ControllerTest {
 
     private static final String LAST_FESTIVAL_ID = "lastFestivalId";
     private static final String LAST_START_DATE = "lastStartDate";
-    private static final String LIMIT = "limit";
+    private static final String SIZE = "size";
 
     @Autowired
     MockMvc mockMvc;
@@ -57,12 +57,22 @@ class FestivalV1ControllerTest {
     class 축제_페이지_갯수는 {
 
         @ParameterizedTest
-        @ValueSource(longs = {0, 21})
-        void 최소_1과_20값_사이가_아닐_경우_실패한다(long value) throws Exception {
+        @ValueSource(longs = {21})
+        void _21_이상이면_실패한다(long value) throws Exception {
             // given && when && then
             mockMvc.perform(get("/api/v1/festivals")
-                    .param(LIMIT, String.valueOf(value)))
+                    .param(SIZE, String.valueOf(value)))
                 .andExpect(status().isBadRequest());
+        }
+
+        // PageableDefault 때문에 default 값으로 설정됨
+        @ParameterizedTest
+        @ValueSource(longs = {-1, 0})
+        void 음수_또는_0이면_성공한다(long value) throws Exception {
+            // given && when && then
+            mockMvc.perform(get("/api/v1/festivals")
+                    .param(SIZE, String.valueOf(value)))
+                .andExpect(status().isOk());
         }
 
         @ParameterizedTest
@@ -70,7 +80,7 @@ class FestivalV1ControllerTest {
         void 최소_1과_최대_20_사이면_성공한다(long value) throws Exception {
             // given && when && then
             mockMvc.perform(get("/api/v1/festivals")
-                    .param(LIMIT, String.valueOf(value)))
+                    .param(SIZE, String.valueOf(value)))
                 .andExpect(status().isOk());
         }
     }
