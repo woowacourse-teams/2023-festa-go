@@ -109,9 +109,9 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             Slice<FestivalV1Response> actual = festivalV1QueryService.findFestivals(request);
 
             // then
-            assertSoftly(softly -> {
-                softly.assertThat(actual.isLast()).isTrue();
-                softly.assertThat(actual.getContent()).hasSize(5);
+            assertSoftly(softAssertions -> {
+                assertThat(actual.isLast()).isTrue();
+                assertThat(actual.getContent()).hasSize(5);
             });
         }
 
@@ -142,9 +142,9 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
 
             // then
-            assertSoftly(softly -> {
-                softly.assertThat(firstResponse.isLast()).isFalse();
-                softly.assertThat(secondResponse.isLast()).isTrue();
+            assertSoftly(softAssertions -> {
+                assertThat(firstResponse.isLast()).isFalse();
+                assertThat(secondResponse.isLast()).isTrue();
             });
         }
 
@@ -158,10 +158,10 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
 
             // then
-            assertSoftly(softly -> {
-                softly.assertThat(response.isLast()).isTrue();
-                softly.assertThat(response.getContent()).hasSize(3);
-                softly.assertThat(response.getContent().get(0).id()).isEqualTo(firstPlannedFestivalId);
+            assertSoftly(softAssertions -> {
+                assertThat(response.isLast()).isTrue();
+                assertThat(response.getContent()).hasSize(3);
+                assertThat(response.getContent().get(0).id()).isEqualTo(firstPlannedFestivalId);
             });
         }
 
@@ -175,13 +175,13 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
 
             // then
-            assertSoftly(softly -> {
-                softly.assertThat(response.isLast()).isTrue();
-                softly.assertThat(response.getContent()).hasSize(3);
-                softly.assertThat(
+            assertSoftly(softAssertions -> {
+                assertThat(response.isLast()).isTrue();
+                assertThat(response.getContent()).hasSize(3);
+                assertThat(
                     response.getContent().get(1).startDate()
                         .isEqual(response.getContent().get(2).startDate())).isTrue();
-                softly.assertThat(response.getContent().get(1).id()).isLessThan(response.getContent().get(2).id());
+                assertThat(response.getContent().get(1).id()).isLessThan(response.getContent().get(2).id());
             });
         }
 
@@ -208,10 +208,10 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1Response thirdFestival = thirdResponse.getContent().get(0);
 
             // when && then
-            assertSoftly(softly -> {
-                softly.assertThat(firstFestival.startDate()).isBeforeOrEqualTo(secondFestival.startDate());
-                softly.assertThat(secondFestival.startDate()).isBeforeOrEqualTo(thirdFestival.startDate());
-                softly.assertThat(secondFestival.id()).isLessThan(thirdFestival.id());
+            assertSoftly(softAssertions -> {
+                assertThat(firstFestival.startDate()).isBeforeOrEqualTo(secondFestival.startDate());
+                assertThat(secondFestival.startDate()).isBeforeOrEqualTo(thirdFestival.startDate());
+                assertThat(secondFestival.id()).isLessThan(thirdFestival.id());
             });
         }
 
@@ -239,10 +239,10 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1Response fourthFestival = fourthResponse.getContent().get(0);
 
             // when && then
-            assertSoftly(softly -> {
-                softly.assertThat(firstFestival.startDate()).isAfter(secondFestival.startDate());
-                softly.assertThat(secondFestival.startDate()).isAfter(thirdFestival.startDate());
-                softly.assertThat(thirdFestival.startDate()).isAfter(fourthFestival.startDate());
+            assertSoftly(softAssertions -> {
+                assertThat(firstFestival.startDate()).isAfter(secondFestival.startDate());
+                assertThat(secondFestival.startDate()).isAfter(thirdFestival.startDate());
+                assertThat(thirdFestival.startDate()).isAfter(fourthFestival.startDate());
             });
         }
 
@@ -260,10 +260,10 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1Response secondLastFestival = secondResponse.getContent().get(0);
 
             // when && then
-            assertSoftly(softly -> {
-                softly.assertThat(firstLastFestival.startDate()).isEqualTo(secondLastFestival.startDate());
-                softly.assertThat(firstLastFestival.id()).isLessThan(secondLastFestival.id());
-                softly.assertThat(secondResponse.isLast()).isTrue();
+            assertSoftly(softAssertions -> {
+                assertThat(firstLastFestival.startDate()).isEqualTo(secondLastFestival.startDate());
+                assertThat(firstLastFestival.id()).isLessThan(secondLastFestival.id());
+                assertThat(secondResponse.isLast()).isTrue();
             });
         }
     }
@@ -284,11 +284,11 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             Slice<FestivalV1Response> secondResponse = festivalV1QueryService.findFestivals(secondRequest);
 
             // then
-            assertSoftly(softly -> {
-                softly.assertThat(firstResponse.isLast()).isTrue();
-                softly.assertThat(firstResponse.getContent()).hasSize(3);
-                softly.assertThat(secondResponse.isLast()).isTrue();
-                softly.assertThat(secondResponse.getContent()).hasSize(0);
+            assertSoftly(softAssertions -> {
+                assertThat(firstResponse.isLast()).isTrue();
+                assertThat(firstResponse.getContent()).hasSize(3);
+                assertThat(secondResponse.isLast()).isTrue();
+                assertThat(secondResponse.getContent()).hasSize(0);
             });
         }
 
@@ -317,13 +317,13 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             Slice<FestivalV1Response> response = festivalV1QueryService.findFestivals(request);
 
             // then
-            assertSoftly(softly -> {
-                softly.assertThat(response.isLast()).isTrue();
-                softly.assertThat(response.getContent()).hasSize(3);
-                softly.assertThat(
+            assertSoftly(softAssertions -> {
+                assertThat(response.isLast()).isTrue();
+                assertThat(response.getContent()).hasSize(3);
+                assertThat(
                     response.getContent().get(1).startDate()
                         .isEqual(response.getContent().get(2).startDate())).isTrue();
-                softly.assertThat(response.getContent().get(1).id()).isLessThan(response.getContent().get(2).id());
+                assertThat(response.getContent().get(1).id()).isLessThan(response.getContent().get(2).id());
             });
         }
 
@@ -350,10 +350,10 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1Response thirdFestival = thirdResponse.getContent().get(0);
 
             // when && then
-            assertSoftly(softly -> {
-                softly.assertThat(firstFestival.startDate()).isBeforeOrEqualTo(secondFestival.startDate());
-                softly.assertThat(secondFestival.startDate()).isBeforeOrEqualTo(thirdFestival.startDate());
-                softly.assertThat(secondFestival.id() < thirdFestival.id()).isTrue();
+            assertSoftly(softAssertions -> {
+                assertThat(firstFestival.startDate()).isBeforeOrEqualTo(secondFestival.startDate());
+                assertThat(secondFestival.startDate()).isBeforeOrEqualTo(thirdFestival.startDate());
+                assertThat(secondFestival.id() < thirdFestival.id()).isTrue();
             });
         }
 
@@ -385,10 +385,10 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1Response fourthFestival = fourthResponse.getContent().get(0);
 
             // when && then
-            assertSoftly(softly -> {
-                softly.assertThat(firstFestival.startDate()).isAfter(secondFestival.startDate());
-                softly.assertThat(secondFestival.startDate()).isAfter(thirdFestival.startDate());
-                softly.assertThat(thirdFestival.startDate()).isAfter(fourthFestival.startDate());
+            assertSoftly(softAssertions -> {
+                assertThat(firstFestival.startDate()).isAfter(secondFestival.startDate());
+                assertThat(secondFestival.startDate()).isAfter(thirdFestival.startDate());
+                assertThat(thirdFestival.startDate()).isAfter(fourthFestival.startDate());
             });
         }
 
@@ -408,10 +408,10 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
             FestivalV1Response secondLastFestival = secondResponse.getContent().get(0);
 
             // when && then
-            assertSoftly(softly -> {
-                softly.assertThat(firstLastFestival.startDate()).isEqualTo(secondLastFestival.startDate());
-                softly.assertThat(firstLastFestival.id() < secondLastFestival.id()).isTrue();
-                softly.assertThat(secondResponse.isLast()).isTrue();
+            assertSoftly(softAssertions -> {
+                assertThat(firstLastFestival.startDate()).isEqualTo(secondLastFestival.startDate());
+                assertThat(firstLastFestival.id() < secondLastFestival.id()).isTrue();
+                assertThat(secondResponse.isLast()).isTrue();
             });
         }
     }

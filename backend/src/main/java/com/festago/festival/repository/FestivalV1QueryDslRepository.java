@@ -52,7 +52,8 @@ public class FestivalV1QueryDslRepository {
                 festival.thumbnail,
                 new QSchoolV1Response(
                     school.id,
-                    school.name
+                    school.name,
+                    school.region
                 ),
                 festivalQueryInfo.artistInfo)
             )
@@ -119,11 +120,5 @@ public class FestivalV1QueryDslRepository {
 
     private boolean haveNextPageContent(List<FestivalV1Response> content, Pageable page) {
         return content.size() > page.getPageSize();
-    }
-
-    public List<FestivalV1Response> findPopularFestival() {
-        return selectResponse()
-            .limit(7)
-            .fetch();
     }
 }
