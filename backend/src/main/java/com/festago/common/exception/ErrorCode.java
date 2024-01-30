@@ -35,7 +35,8 @@ public enum ErrorCode {
     DUPLICATE_SCHOOL_NAME("이미 존재하는 학교의 이름입니다."),
     DUPLICATE_SCHOOL_DOMAIN("이미 존재하는 학교의 도메인입니다."),
     INVALID_REGION("유효하지 않은 지역입니다."),
-
+    INVALID_PAGING_MAX_SIZE("최대 size 값을 초과했습니다."),
+    INVALID_NUMBER_FORMAT_PAGING_SIZE("size는 1 이상의 정수 형식이어야 합니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),

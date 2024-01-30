@@ -1,5 +1,6 @@
 package com.festago.school.presentation.v1;
 
+import com.festago.common.aop.ValidPageable;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.application.SchoolV1QueryService;
 import com.festago.school.presentation.v1.dto.SchoolV1Response;
@@ -23,6 +24,7 @@ public class SchoolV1Controller {
     private final SchoolV1QueryService schoolQueryService;
 
     @GetMapping
+    @ValidPageable(maxSize = 20)
     public ResponseEntity<Page<SchoolV1Response>> findAllSchools(
         @RequestParam(defaultValue = "") String searchFilter,
         @RequestParam(defaultValue = "") String searchKeyword,
