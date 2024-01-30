@@ -4,6 +4,8 @@ import com.festago.common.exception.ValidException;
 import com.festago.festival.application.FestivalV1QueryService;
 import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,12 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/festivals")
+@Tag(name = "축제 정보 요청 V1")
 @RequiredArgsConstructor
 public class FestivalV1Controller {
 
     private final FestivalV1QueryService festivalV1QueryService;
 
     @GetMapping
+    @Operation(description = "축제 목록를 조건별로 조회한다. PROGRESS: 진행 중, PLANNED: 진행 예정, END: 종료, 기본값 -> 진행 중, limit의 크기는 0 < limit < 21 이며 기본 값 10이다.", summary = "축제 목록 조회")
     public ResponseEntity<Slice<FestivalV1Response>> findFestivals(
         @PageableDefault(size = 10) Pageable pageable,
         FestivalV1QueryRequest request
