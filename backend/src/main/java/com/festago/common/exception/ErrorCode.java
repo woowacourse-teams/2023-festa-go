@@ -36,7 +36,6 @@ public enum ErrorCode {
     DUPLICATE_SCHOOL_DOMAIN("이미 존재하는 학교의 도메인입니다."),
     INVALID_REGION("유효하지 않은 지역입니다."),
 
-
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
     INVALID_AUTH_TOKEN("올바르지 않은 로그인 토큰입니다."),

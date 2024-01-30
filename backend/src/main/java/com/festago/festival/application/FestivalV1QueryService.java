@@ -3,8 +3,8 @@ package com.festago.festival.application;
 import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
 import com.festago.festival.repository.FestivalFilter;
-import com.festago.festival.repository.FestivalRepository;
 import com.festago.festival.repository.FestivalSearchCondition;
+import com.festago.festival.repository.FestivalV1QueryDslRepository;
 import com.festago.school.domain.SchoolRegion;
 import java.time.Clock;
 import java.time.LocalDate;
@@ -19,11 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class FestivalV1QueryService {
 
-    private final FestivalRepository festivalRepository;
+    private final FestivalV1QueryDslRepository festivalV1QueryDslRepository;
     private final Clock clock;
 
     public Slice<FestivalV1Response> findFestivals(FestivalV1QueryRequest request) {
-        return festivalRepository.findBy(makeSearchCondition(request));
+        return festivalV1QueryDslRepository.findBy(makeSearchCondition(request));
     }
 
     private FestivalSearchCondition makeSearchCondition(FestivalV1QueryRequest request) {
