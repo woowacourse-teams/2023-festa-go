@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface FestivalRepositoryCustom {
 
-    List<Festival> findByFilter(FestivalFilter festivalFilter, LocalDate currentTime);
+    List<Festival> findByFilter(FestivalFilter filter, LocalDate currentTime);
 }

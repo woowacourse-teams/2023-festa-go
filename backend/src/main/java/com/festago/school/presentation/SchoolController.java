@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @deprecated API 버저닝이 적용되면 해당 클래스 삭제
+ */
+@Deprecated(forRemoval = true)
 @RestController
 @RequestMapping("/schools")
 @Tag(name = "학교 정보 요청")

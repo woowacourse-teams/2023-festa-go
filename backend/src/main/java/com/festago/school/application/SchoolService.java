@@ -4,6 +4,7 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.school.domain.School;
+import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateRequest;
 import com.festago.school.dto.SchoolResponse;
 import com.festago.school.dto.SchoolUpdateRequest;
@@ -40,7 +41,7 @@ public class SchoolService {
         validateSchool(request);
         String domain = request.domain();
         String name = request.name();
-        School school = schoolRepository.save(new School(domain, name));
+        School school = schoolRepository.save(new School(domain, name, SchoolRegion.서울));
         return SchoolResponse.from(school);
     }
 

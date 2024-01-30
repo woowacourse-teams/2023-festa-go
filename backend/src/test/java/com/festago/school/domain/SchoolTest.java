@@ -21,7 +21,7 @@ class SchoolTest {
         String domain = "1".repeat(51);
 
         // when & then
-        assertThatThrownBy(() -> new School(domain, "테코대학교"))
+        assertThatThrownBy(() -> new School(domain, "테코대학교", SchoolRegion.서울))
             .isInstanceOf(ValidException.class);
     }
 
@@ -30,7 +30,7 @@ class SchoolTest {
     @ValueSource(strings = {"", " ", "\t", "\n"})
     void 학교의_도메인이_null_또는_공백이면_예외(String domain) {
         // when & then
-        assertThatThrownBy(() -> new School(domain, "테코대학교"))
+        assertThatThrownBy(() -> new School(domain, "테코대학교", SchoolRegion.서울))
             .isInstanceOf(ValidException.class);
     }
 
@@ -40,7 +40,7 @@ class SchoolTest {
         String name = "1".repeat(256);
 
         // when & then
-        assertThatThrownBy(() -> new School("teco.ac.kr", name))
+        assertThatThrownBy(() -> new School("teco.ac.kr", name, SchoolRegion.서울))
             .isInstanceOf(ValidException.class);
     }
 
@@ -49,14 +49,14 @@ class SchoolTest {
     @ValueSource(strings = {"", " ", "\t", "\n"})
     void 학교의_이름이_null_또는_공백이면_예외(String name) {
         // when & then
-        assertThatThrownBy(() -> new School("teco.ac.kr", name))
+        assertThatThrownBy(() -> new School("teco.ac.kr", name, SchoolRegion.서울))
             .isInstanceOf(ValidException.class);
     }
 
     @Test
     void 학교의_도메인을_수정할때_255자를_넘으면_예외() {
         // given
-        School school = new School("teco.ac.kr", "테코대학교");
+        School school = new School("teco.ac.kr", "테코대학교", SchoolRegion.서울);
 
         // when & then
         String domain = "1".repeat(256);
@@ -69,7 +69,7 @@ class SchoolTest {
     @ValueSource(strings = {"", " ", "\t", "\n"})
     void 학교의_도메인을_수정할때_null_또는_공백이면_예외(String domain) {
         // given
-        School school = new School("teco.ac.kr", "테코대학교");
+        School school = new School("teco.ac.kr", "테코대학교", SchoolRegion.서울);
 
         // when & then
         assertThatThrownBy(() -> school.changeDomain(domain))
@@ -79,7 +79,7 @@ class SchoolTest {
     @Test
     void 학교의_이름을_수정할때_255자를_넘으면_예외() {
         // given
-        School school = new School("teco.ac.kr", "테코대학교");
+        School school = new School("teco.ac.kr", "테코대학교", SchoolRegion.서울);
 
         // when & then
         String name = "1".repeat(256);
@@ -92,7 +92,7 @@ class SchoolTest {
     @ValueSource(strings = {"", " ", "\t", "\n"})
     void 학교의_이름을_수정할때_null_또는_공백이면_예외(String name) {
         // given
-        School school = new School("teco.ac.kr", "테코대학교");
+        School school = new School("teco.ac.kr", "테코대학교", SchoolRegion.서울);
 
         // when & then
         assertThatThrownBy(() -> school.changeName(name))
@@ -102,7 +102,7 @@ class SchoolTest {
     @Test
     void 학교_생성_성공() {
         // given
-        School school = new School("teco.ac.kr", "테코대학교");
+        School school = new School("teco.ac.kr", "테코대학교", SchoolRegion.서울);
 
         // when & then
         assertThat(school.getName()).isEqualTo("테코대학교");
@@ -116,7 +116,7 @@ class SchoolTest {
         String domain = "1".repeat(length);
 
         // when
-        School school = new School(domain, "테코대학교");
+        School school = new School(domain, "테코대학교", SchoolRegion.서울);
 
         // then
         assertThat(school.getDomain()).isEqualTo(domain);
@@ -129,7 +129,7 @@ class SchoolTest {
         String name = "1".repeat(length);
 
         // when
-        School school = new School("teco.ac.kr", name);
+        School school = new School("teco.ac.kr", name, SchoolRegion.서울);
 
         // then
         assertThat(school.getName()).isEqualTo(name);

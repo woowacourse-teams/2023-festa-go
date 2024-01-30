@@ -1,6 +1,7 @@
 package com.festago.support;
 
 import com.festago.school.domain.School;
+import com.festago.school.domain.SchoolRegion;
 
 public class SchoolFixture {
 
@@ -9,6 +10,8 @@ public class SchoolFixture {
     private String domain = "festago.com";
 
     private String name = "페스타고 대학교";
+
+    private SchoolRegion region = SchoolRegion.서울;
 
     private SchoolFixture() {
     }
@@ -33,7 +36,6 @@ public class SchoolFixture {
     }
 
     public School build() {
-        return new School(id, domain, name);
+        return new School(id, domain, name, region);
     }
-
 }

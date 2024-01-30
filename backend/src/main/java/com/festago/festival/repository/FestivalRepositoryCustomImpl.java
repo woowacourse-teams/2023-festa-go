@@ -7,15 +7,17 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
+@Repository
 @RequiredArgsConstructor
 public class FestivalRepositoryCustomImpl implements FestivalRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Festival> findByFilter(FestivalFilter festivalFilter, LocalDate currentTime) {
-        return switch (festivalFilter) {
+    public List<Festival> findByFilter(FestivalFilter filter, LocalDate currentTime) {
+        return switch (filter) {
             case PLANNED -> plannedFestivals(currentTime);
             case PROGRESS -> progressFestivals(currentTime);
             case END -> endFestivals(currentTime);
