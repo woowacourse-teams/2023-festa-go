@@ -41,4 +41,9 @@ public class FestivalRepositoryCustomImpl implements FestivalRepositoryCustom {
             .where(festival.endDate.lt(currentTime))
             .orderBy(festival.endDate.desc()).fetch();
     }
+
+    @Override
+    public List<FestivalV1Response> findPopularFestival() {
+        return festivalV1QueryDslRepositoryCustom.findPopularFestival();
+    }
 }
