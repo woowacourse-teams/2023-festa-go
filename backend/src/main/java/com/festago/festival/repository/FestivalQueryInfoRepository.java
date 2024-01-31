@@ -9,5 +9,7 @@ public interface FestivalQueryInfoRepository extends Repository<FestivalQueryInf
     FestivalQueryInfo save(FestivalQueryInfo festivalQueryInfo);
 
     Optional<FestivalQueryInfo> findByFestivalId(Long festivalId);
+
+    void deleteByFestivalId(Long festivalId);
 }
 

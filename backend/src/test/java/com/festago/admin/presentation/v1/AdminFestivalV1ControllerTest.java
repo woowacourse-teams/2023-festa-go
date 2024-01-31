@@ -2,6 +2,7 @@ package com.festago.admin.presentation.v1;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -130,6 +131,42 @@ class AdminFestivalV1ControllerTest {
             void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
                 // when & then
                 mockMvc.perform(patch(uri, 1L)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    class 축제_삭제 {
+
+        final String uri = "/admin/api/v1/festivals/{festivalId}";
+
+        @Nested
+        @DisplayName("DELETE " + uri)
+        class 올바른_주소로 {
+
+            @Test
+            @WithMockAuth(role = Role.ADMIN)
+            void 요청을_보내면_204_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(delete(uri, 1L)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNoContent());
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(delete(uri, 1L))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(delete(uri, 1L)
                         .cookie(TOKEN_COOKIE))
                     .andExpect(status().isNotFound());
             }

@@ -6,11 +6,13 @@ import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.command.FestivalCreateCommand;
 import com.festago.festival.dto.command.FestivalUpdateCommand;
 import com.festago.festival.dto.event.FestivalCreatedEvent;
+import com.festago.festival.dto.event.FestivalDeletedEvent;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
 import java.time.Clock;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class FestivalCommandService {
     private final FestivalRepository festivalRepository;
     private final SchoolRepository schoolRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final List<FestivalDeleteValidator> festivalDeleteValidators;
     private final Clock clock;
 
     public Long createFestival(FestivalCreateCommand command) {
@@ -49,5 +52,11 @@ public class FestivalCommandService {
         festival.changeName(command.name());
         festival.changeThumbnail(command.thumbnail());
         festival.changeDate(command.startDate(), command.endDate());
+    }
+
+    public void deleteFestival(Long festivalId) {
+        festivalDeleteValidators.forEach(validator -> validator.validate(festivalId));
+        festivalRepository.deleteById(festivalId);
+        eventPublisher.publishEvent(new FestivalDeletedEvent(festivalId));
     }
 }

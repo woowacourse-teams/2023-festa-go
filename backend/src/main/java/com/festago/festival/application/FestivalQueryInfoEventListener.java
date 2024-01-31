@@ -2,6 +2,7 @@ package com.festago.festival.application;
 
 import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.dto.event.FestivalCreatedEvent;
+import com.festago.festival.dto.event.FestivalDeletedEvent;
 import com.festago.festival.repository.FestivalQueryInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -20,8 +21,17 @@ public class FestivalQueryInfoEventListener {
      */
     @EventListener
     @Transactional(propagation = Propagation.SUPPORTS)
-    public void festivalCreateEventHandler(FestivalCreatedEvent event) {
+    public void festivalCreatedEventHandler(FestivalCreatedEvent event) {
         FestivalQueryInfo festivalQueryInfo = FestivalQueryInfo.create(event.festivalId());
         festivalQueryInfoRepository.save(festivalQueryInfo);
+    }
+
+    /**
+     * 삭제의 경우 동기적으로 처리될 필요가 없음 <br/> 하지만 일관성을 위해 동기적으로 처리함
+     */
+    @EventListener
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void festivalDeletedEventHandler(FestivalDeletedEvent event) {
+        festivalQueryInfoRepository.deleteByFestivalId(event.festivalId());
     }
 }
