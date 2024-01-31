@@ -21,6 +21,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @deprecated 새로운 Festival CRUD 기능이 안정되면 삭제
+ */
+@Deprecated(forRemoval = true)
 @Service
 @Transactional
 @RequiredArgsConstructor
