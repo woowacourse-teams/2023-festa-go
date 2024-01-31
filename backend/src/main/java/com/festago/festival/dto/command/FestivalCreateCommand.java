@@ -1,5 +1,7 @@
 package com.festago.festival.dto.command;
 
+import com.festago.festival.domain.Festival;
+import com.festago.school.domain.School;
 import java.time.LocalDate;
 
 public record FestivalCreateCommand(
@@ -10,4 +12,7 @@ public record FestivalCreateCommand(
     Long schoolId
 ) {
 
+    public Festival toEntity(School school) {
+        return new Festival(name, startDate, endDate, thumbnail, school);
+    }
 }

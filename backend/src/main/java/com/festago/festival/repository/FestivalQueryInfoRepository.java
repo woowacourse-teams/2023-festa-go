@@ -8,6 +8,6 @@ public interface FestivalQueryInfoRepository extends Repository<FestivalQueryInf
 
     FestivalQueryInfo save(FestivalQueryInfo festivalQueryInfo);
 
-    Optional<FestivalQueryInfo> findByFestivalId();
+    Optional<FestivalQueryInfo> findByFestivalId(Long festivalId);
 }
 
