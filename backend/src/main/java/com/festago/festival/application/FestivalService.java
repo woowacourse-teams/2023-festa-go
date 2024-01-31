@@ -40,7 +40,7 @@ public class FestivalService {
     }
 
     private void validate(Festival festival) {
-        if (!festival.canCreate(LocalDate.now(clock))) {
+        if (festival.isBeforeStartDate(LocalDate.now(clock))) {
             throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_START_DATE);
         }
     }
