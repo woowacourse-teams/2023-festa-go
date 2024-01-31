@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.admin.dto.FestivalV1UpdateRequest;
 import com.festago.auth.domain.Role;
-import com.festago.festival.application.FestivalCommandService;
+import com.festago.festival.application.command.FestivalCommandFacadeService;
 import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.command.FestivalCreateCommand;
 import com.festago.support.CustomWebMvcTest;
@@ -42,7 +42,7 @@ class AdminFestivalV1ControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    FestivalCommandService festivalCommandService;
+    FestivalCommandFacadeService festivalCommandFacadeService;
 
     @Nested
     class 축제_생성 {
@@ -63,7 +63,7 @@ class AdminFestivalV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_201_응답과_Location_헤더에_식별자가_반환된다() throws Exception {
                 // given
-                given(festivalCommandService.createFestival(any(FestivalCreateCommand.class)))
+                given(festivalCommandFacadeService.createFestival(any(FestivalCreateCommand.class)))
                     .willReturn(1L);
 
                 // when & then

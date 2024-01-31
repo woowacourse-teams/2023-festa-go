@@ -2,7 +2,7 @@ package com.festago.admin.presentation.v1;
 
 import com.festago.admin.dto.FestivalV1CreateRequest;
 import com.festago.admin.dto.FestivalV1UpdateRequest;
-import com.festago.festival.application.FestivalCommandService;
+import com.festago.festival.application.command.FestivalCommandFacadeService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Hidden
 public class AdminFestivalV1Controller {
 
-    private final FestivalCommandService festivalCommandService;
+    private final FestivalCommandFacadeService festivalCommandFacadeService;
 
     @PostMapping
     public ResponseEntity<Void> createFestival(
         @RequestBody @Valid FestivalV1CreateRequest request
     ) {
-        Long festivalId = festivalCommandService.createFestival(request.toCommand());
+        Long festivalId = festivalCommandFacadeService.createFestival(request.toCommand());
         return ResponseEntity.created(URI.create("/admin/api/v1/festivals/" + festivalId))
             .build();
     }
@@ -38,7 +38,7 @@ public class AdminFestivalV1Controller {
         @PathVariable Long festivalId,
         @RequestBody @Valid FestivalV1UpdateRequest request
     ) {
-        festivalCommandService.updateFestival(festivalId, request.toCommand());
+        festivalCommandFacadeService.updateFestival(festivalId, request.toCommand());
         return ResponseEntity.ok()
             .build();
     }
@@ -47,7 +47,7 @@ public class AdminFestivalV1Controller {
     public ResponseEntity<Void> deleteFestival(
         @PathVariable Long festivalId
     ) {
-        festivalCommandService.deleteFestival(festivalId);
+        festivalCommandFacadeService.deleteFestival(festivalId);
         return ResponseEntity.noContent()
             .build();
     }
