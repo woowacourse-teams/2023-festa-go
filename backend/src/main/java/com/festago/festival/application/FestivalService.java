@@ -56,13 +56,8 @@ public class FestivalService {
         return festivalStageService.findDetail(festivalId);
     }
 
-    private Festival findFestival(Long festivalId) {
-        return festivalRepository.findById(festivalId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
-    }
-
     public void update(Long festivalId, FestivalUpdateRequest request) {
-        Festival festival = findFestival(festivalId);
+        Festival festival = festivalRepository.getOrThrow(festivalId);
         festival.changeName(request.name());
         festival.changeThumbnail(request.thumbnail());
         festival.changeDate(request.startDate(), request.endDate());
