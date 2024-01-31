@@ -2,11 +2,13 @@ package com.festago.admin.presentation.v1;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.admin.dto.FestivalV1UpdateRequest;
 import com.festago.auth.domain.Role;
 import com.festago.festival.application.FestivalCommandService;
 import com.festago.festival.dto.FestivalCreateRequest;
@@ -50,10 +52,11 @@ class AdminFestivalV1ControllerTest {
         @DisplayName("POST " + uri)
         class 올바른_주소로 {
 
+            String name = "테코대학교 축제";
             LocalDate startDate = LocalDate.parse("2024-01-31");
             LocalDate endDate = LocalDate.parse("2024-02-01");
             String thumbnail = "https://image.com/image.png";
-            FestivalCreateRequest request = new FestivalCreateRequest("테코대학교 축제", startDate, endDate, thumbnail, 1L);
+            FestivalCreateRequest request = new FestivalCreateRequest(name, startDate, endDate, thumbnail, 1L);
 
             @Test
             @WithMockAuth(role = Role.ADMIN)
@@ -83,6 +86,50 @@ class AdminFestivalV1ControllerTest {
             void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
                 // when & then
                 mockMvc.perform(post(uri)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    class 축제_수정 {
+
+        final String uri = "/admin/api/v1/festivals/{festivalId}";
+
+        @Nested
+        @DisplayName("PATCH " + uri)
+        class 올바른_주소로 {
+
+            String name = "테코대학교 축제";
+            LocalDate startDate = LocalDate.parse("2024-01-31");
+            LocalDate endDate = LocalDate.parse("2024-02-01");
+            String thumbnail = "https://image.com/image.png";
+            FestivalV1UpdateRequest request = new FestivalV1UpdateRequest(name, startDate, endDate, thumbnail);
+
+            @Test
+            @WithMockAuth(role = Role.ADMIN)
+            void 요청을_보내면_200_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(patch(uri, 1L)
+                        .cookie(TOKEN_COOKIE)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(patch(uri, 1L))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(patch(uri, 1L)
                         .cookie(TOKEN_COOKIE))
                     .andExpect(status().isNotFound());
             }
