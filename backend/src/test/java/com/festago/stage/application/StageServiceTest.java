@@ -13,7 +13,6 @@ import com.festago.stage.dto.StageResponse;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.FestivalFixture;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -47,8 +46,8 @@ class StageServiceTest {
             LocalDateTime.now().minusDays(1),
             1L
         );
-        given(festivalRepository.findById(anyLong()))
-            .willReturn(Optional.of(festival));
+        given(festivalRepository.getOrThrow(anyLong()))
+            .willReturn(festival);
         given(stageRepository.save(any(Stage.class)))
             .willAnswer(invocation -> invocation.getArgument(0));
 
