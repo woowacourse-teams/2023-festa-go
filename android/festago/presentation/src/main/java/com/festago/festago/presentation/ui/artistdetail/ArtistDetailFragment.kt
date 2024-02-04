@@ -1,5 +1,6 @@
 package com.festago.festago.presentation.ui.artistdetail
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,8 @@ class ArtistDetailFragment : Fragment() {
 
     private val vm: ArtistDetailViewModel by viewModels()
 
+    private val adapter = ArtistDetailAdapter()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,7 +33,18 @@ class ArtistDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
         initObserve()
+    }
+
+    private fun initView() {
+        binding.rvToDoList.adapter = adapter
+
+        this.activity?.window?.apply {
+            this.statusBarColor = Color.TRANSPARENT
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+        }
     }
 
     private fun initObserve() {
@@ -46,9 +60,8 @@ class ArtistDetailFragment : Fragment() {
         is ArtistDetailUiState.Error -> Unit
 
         is ArtistDetailUiState.Success -> {
-            binding.rvToDoList.adapter = ArtistDetailAdapter().apply {
-                submitList(uiState.stages)
-            }
+            binding.uiState = uiState
+            adapter.submitList(uiState.stages)
         }
     }
 }

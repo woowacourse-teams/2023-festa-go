@@ -12,4 +12,6 @@
     <color name="primary_blue_07">#043bff</color>
 
     <color name="secondary_pink_01">#fa1273</color>
+
+    <color name="transparent">#00000000</color>
 </resources>
