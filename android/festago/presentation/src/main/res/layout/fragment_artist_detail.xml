@@ -75,20 +75,29 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:text="@{uiState.artist.artistName}"
-                        app:layout_constraintBottom_toBottomOf="@id/cgArtistMedia"
+                        app:layout_constraintBottom_toBottomOf="@id/hsvArtistMedia"
                         app:layout_constraintStart_toEndOf="@id/cardView"
                         app:layout_constraintTop_toBottomOf="@id/ivBackgroundImage"
                         tools:text="뉴진스" />
 
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/cgArtistMedia"
+                    <HorizontalScrollView
+                        android:id="@+id/hsvArtistMedia"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="8dp"
+                        android:scrollbars="none"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/tvArtistName"
-                        app:layout_constraintTop_toBottomOf="@id/tvArtistName"/>
+                        app:layout_constraintTop_toBottomOf="@id/tvArtistName"
+                        app:singleLine="true">
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/cgArtistMedia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:singleLine="true" />
+                    </HorizontalScrollView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.Toolbar
