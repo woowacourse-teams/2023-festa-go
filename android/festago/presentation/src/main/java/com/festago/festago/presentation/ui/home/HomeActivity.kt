@@ -60,7 +60,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun showArtistDetail(artistId: Long) {
         supportFragmentManager.commit {
-            replace(
+            add(
                 R.id.fcvHomeContainer,
                 ArtistDetailFragment.newInstance(artistId) { showArtistDetail(it) },
             )
@@ -82,23 +82,23 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private inline fun <reified T : Fragment> changeFragment() {
+        if (supportFragmentManager.fragmentFactory !is HomeFragmentFactory) {
+            supportFragmentManager.fragmentFactory = HomeFragmentFactory(
+                onArtistClick = { artistId -> showArtistDetail(artistId) },
+            )
+        }
+
         val tag = T::class.java.name
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 
         supportFragmentManager.fragments.forEach { fragment ->
             fragmentTransaction.hide(fragment)
         }
-        supportFragmentManager.fragmentFactory = HomeFragmentFactory(
-            onArtistClick = { artistId -> showArtistDetail(artistId) },
-        )
 
         var targetFragment = supportFragmentManager.findFragmentByTag(tag)
 
         if (targetFragment == null) {
-            targetFragment = supportFragmentManager.fragmentFactory.instantiate(
-                classLoader,
-                T::class.java.name,
-            )
+            targetFragment = supportFragmentManager.fragmentFactory.instantiate(classLoader, tag)
             fragmentTransaction.add(R.id.fcvHomeContainer, targetFragment, tag)
         } else {
             fragmentTransaction.show(targetFragment)
