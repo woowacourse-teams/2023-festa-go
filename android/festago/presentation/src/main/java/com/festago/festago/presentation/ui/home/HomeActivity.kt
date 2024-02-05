@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivityHomeBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
 import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragment
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
@@ -18,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
-
     private val binding by lazy { ActivityHomeBinding.inflate(layoutInflater) }
 
     private val vm: HomeViewModel by viewModels()
@@ -56,6 +56,13 @@ class HomeActivity : AppCompatActivity() {
         changeFragment<FestivalListFragment>()
     }
 
+    private fun showArtistDetail(artistId: Long) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fcvHomeContainer, ArtistDetailFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
     private fun showTicketList() {
         changeFragment<TicketListFragment>()
     }
@@ -79,8 +86,15 @@ class HomeActivity : AppCompatActivity() {
         var targetFragment = supportFragmentManager.findFragmentByTag(tag)
 
         if (targetFragment == null) {
-            targetFragment = T::class.java.newInstance()
-            fragmentTransaction.add(R.id.fcvHomeContainer, targetFragment, tag)
+            targetFragment =
+                if (T::class.java == FestivalListFragment::class.java) {
+                    FestivalListFragment.newInstance(
+                        onArtistClick = { artistId -> showArtistDetail(artistId) },
+                    )
+                } else {
+                    T::class.java.newInstance()
+                }
+            fragmentTransaction.add(R.id.fcvHomeContainer, targetFragment!!, tag)
         } else {
             fragmentTransaction.show(targetFragment)
         }
@@ -107,6 +121,7 @@ class HomeActivity : AppCompatActivity() {
     companion object {
         private const val START_BACK_PRESSED_TIME = 0L
         private const val FINISH_BACK_PRESSED_TIME = 3000L
+
         fun getIntent(context: Context): Intent {
             return Intent(context, HomeActivity::class.java)
         }

@@ -19,14 +19,15 @@ import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FestivalListFragment : Fragment() {
-
+class FestivalListFragment() : Fragment() {
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var festivalListAdapter: FestivalListAdapter
 
     private val vm: FestivalListViewModel by viewModels()
+
+    lateinit var onArtistClick: (Long) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +61,9 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initViewPager() {
-        festivalListAdapter = FestivalListAdapter()
+        festivalListAdapter = FestivalListAdapter(
+            onArtistClick = onArtistClick,
+        )
         binding.rvList.adapter = festivalListAdapter
     }
 
@@ -101,13 +104,11 @@ class FestivalListFragment : Fragment() {
         festivalListAdapter.submitList(
             listOf(
                 uiState,
-                FestivalTabUiState(
-                    {
-                        Toast.makeText(requireContext(), "Clicked $it", Toast.LENGTH_SHORT).show()
-                        /* TODO: Handle tab click */
-                        vm.loadFestivals()
-                    },
-                ),
+                FestivalTabUiState {
+                    Toast.makeText(requireContext(), "Clicked $it", Toast.LENGTH_SHORT).show()
+                    // TODO: Handle tab click
+                    vm.loadFestivals()
+                },
             ) + uiState.festivals,
         )
     }
@@ -115,5 +116,13 @@ class FestivalListFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    companion object {
+        fun newInstance(
+            onArtistClick: (Long) -> Unit,
+        ): FestivalListFragment = FestivalListFragment().apply {
+            this.onArtistClick = onArtistClick
+        }
     }
 }
