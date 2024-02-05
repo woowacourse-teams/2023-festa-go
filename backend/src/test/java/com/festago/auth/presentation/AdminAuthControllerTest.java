@@ -31,6 +31,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @SuppressWarnings("NonAsciiCharacters")
 class AdminAuthControllerTest {
 
+    private static final String AUTH_TOKEN_KEY = "token";
+
     @Autowired
     MockMvc mockMvc;
 
@@ -55,7 +57,11 @@ class AdminAuthControllerTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(cookie().exists("token"));
+                .andExpect(cookie().exists(AUTH_TOKEN_KEY))
+                .andExpect(cookie().path(AUTH_TOKEN_KEY, "/"))
+                .andExpect(cookie().secure(AUTH_TOKEN_KEY, true))
+                .andExpect(cookie().httpOnly(AUTH_TOKEN_KEY, true))
+                .andExpect(cookie().sameSite(AUTH_TOKEN_KEY, "None"));
         }
     }
 
