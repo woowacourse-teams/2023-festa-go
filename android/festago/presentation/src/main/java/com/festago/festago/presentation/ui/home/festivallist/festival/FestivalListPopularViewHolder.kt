@@ -13,7 +13,11 @@ class FestivalListPopularViewHolder(val binding: ItemFestivalListPopularBinding)
         PopularFestivalViewPagerAdapter(
             foregroundViewPager = binding.vpPopularFestivalForeground,
             backgroundViewPager = binding.vpPopularFestivalBackground,
-        )
+        ) { item ->
+            binding.item = item
+            binding.tvPopularFestivalArtistsName.text =
+                item.artists.joinToString(ARTIST_NAME_JOIN_SEPARATOR) { it.name }
+        }
 
     init {
         TabLayoutMediator(
@@ -27,6 +31,8 @@ class FestivalListPopularViewHolder(val binding: ItemFestivalListPopularBinding)
     }
 
     companion object {
+        private const val ARTIST_NAME_JOIN_SEPARATOR = ", "
+
         fun of(parent: ViewGroup): FestivalListPopularViewHolder {
             val binding = ItemFestivalListPopularBinding.inflate(
                 LayoutInflater.from(parent.context),

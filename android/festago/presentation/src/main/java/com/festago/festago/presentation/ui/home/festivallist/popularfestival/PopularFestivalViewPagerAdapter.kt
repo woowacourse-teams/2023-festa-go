@@ -10,8 +10,10 @@ import kotlin.math.abs
 class PopularFestivalViewPagerAdapter(
     foregroundViewPager: ViewPager2,
     backgroundViewPager: ViewPager2,
+    private val onPopularFestivalSelected: (FestivalItemUiState) -> Unit,
 ) {
 
+    private val popularFestivals = mutableListOf<FestivalItemUiState>()
     private val foregroundAdapter: PopularFestivalForegroundAdapter =
         PopularFestivalForegroundAdapter()
     private val backgroundAdapter: PopularFestivalBackgroundAdapter =
@@ -63,9 +65,11 @@ class PopularFestivalViewPagerAdapter(
         viewPager.offscreenPageLimit = limit
     }
 
-    fun submitList(popularFestivals: List<FestivalItemUiState>) {
-        foregroundAdapter.submitList(popularFestivals)
-        backgroundAdapter.submitList(popularFestivals)
+    fun submitList(festivals: List<FestivalItemUiState>) {
+        popularFestivals.clear()
+        popularFestivals.addAll(festivals)
+        foregroundAdapter.submitList(festivals)
+        backgroundAdapter.submitList(festivals)
     }
 
     companion object {
