@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <variable
+            name="item"
+            type="com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,23 +35,72 @@
             android:textColor="@color/background_gray_01"
             app:layout_constraintTop_toTopOf="@id/vpPopularFestivalBackground" />
 
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpPopularFestivalForeground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalTitle" />
+
+        <TextView
+            android:id="@+id/tvPopularFestivalName"
+            style="@style/H3Bold18Lh20"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:maxLines="2"
+            android:text="@{item.schoolUiState.name+'\n'+ item.name }"
+            android:textColor="@color/background_gray_01"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vpPopularFestivalForeground"
+            tools:text="대학교 \n 축제 이름" />
+
+        <TextView
+            android:id="@+id/tvFestivalSchedule"
+            style="@style/B2Medium14Lh20"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@{@string/festival_list_tv_date_range_format(item.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),item.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
+            android:textColor="@color/background_gray_01"
+            app:layout_constraintEnd_toEndOf="@+id/tvPopularFestivalName"
+            app:layout_constraintStart_toStartOf="@+id/tvPopularFestivalName"
+            app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalName"
+            tools:text="2023.07.03 - 2023.07.09" />
+
+        <TextView
+            android:id="@+id/tvPopularFestivalArtistsName"
+            style="@style/B2Medium14Lh20"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:lines="2"
+            android:textColor="@color/background_gray_01"
+            app:layout_constraintEnd_toEndOf="@+id/tvFestivalSchedule"
+            app:layout_constraintStart_toStartOf="@+id/tvFestivalSchedule"
+            app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule"
+            tools:text="르세라핌, 아이브, 뉴진스, \n다이나믹 듀오" />
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tlDotIndicator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            app:layout_constraintTop_toBottomOf="@id/vpPopularFestivalForeground"
+            app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalArtistsName"
             app:tabBackground="@drawable/selector_tab_page"
             app:tabGravity="center"
             app:tabIndicatorHeight="0dp"
             app:tabPaddingEnd="8dp"
             app:tabPaddingStart="8dp" />
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vpPopularFestivalForeground"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

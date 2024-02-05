@@ -5,6 +5,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.festago.festago.presentation.ui.home.festivallist.popularfestival.background.PopularFestivalBackgroundAdapter
 import com.festago.festago.presentation.ui.home.festivallist.popularfestival.foreground.PopularFestivalForegroundAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
+import kotlin.math.abs
 
 class PopularFestivalViewPagerAdapter(
     foregroundViewPager: ViewPager2,
@@ -32,6 +33,7 @@ class PopularFestivalViewPagerAdapter(
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 target.setCurrentItem(position, false)
+                onPopularFestivalSelected(popularFestivals[position])
             }
         }
         viewpager.registerOnPageChangeCallback(onPageChangeCallback)
@@ -39,8 +41,16 @@ class PopularFestivalViewPagerAdapter(
 
     private fun narrowSpaceViewPager(viewPager: ViewPager2) {
         viewPager.setPageTransformer { page, position ->
-            val offset = position * -(2 * dpToPx(OFFSET_BETWEEN_PAGES))
+            val offsetBetweenPages =
+                Resources.getSystem().configuration.screenWidthDp - IMAGE_SIZE - INTERVAL_IMAGE + (IMAGE_SIZE - (IMAGE_SIZE * RATE_SELECT_BY_UNSELECT)) * 0.5f
+            val offset = position * -dpToPx(offsetBetweenPages)
             page.translationX = offset
+
+            if (position <= ALREADY_LOAD_POSITION_CONDITION) {
+                val scaleFactor = RATE_SELECT_BY_UNSELECT.coerceAtLeast(1 - abs(position))
+                page.scaleY = scaleFactor
+                page.scaleX = scaleFactor
+            }
         }
     }
 
@@ -59,7 +69,10 @@ class PopularFestivalViewPagerAdapter(
     }
 
     companion object {
-        private const val PAGE_LIMIT = 3
-        private const val OFFSET_BETWEEN_PAGES = 63.0f
+        private const val ALREADY_LOAD_POSITION_CONDITION = 2
+        private const val RATE_SELECT_BY_UNSELECT = 0.81f
+        private const val PAGE_LIMIT = 4
+        private const val IMAGE_SIZE = 220.0f
+        private const val INTERVAL_IMAGE = 24.0f
     }
 }
