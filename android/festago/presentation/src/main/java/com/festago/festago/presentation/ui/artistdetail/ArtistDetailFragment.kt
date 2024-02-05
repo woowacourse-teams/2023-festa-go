@@ -22,15 +22,16 @@ import com.festago.festago.presentation.util.repeatOnStarted
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
-class ArtistDetailFragment : Fragment() {
+class ArtistDetailFragment(
+    onArtistClick: (Long) -> Unit,
+) : Fragment() {
     private var _binding: FragmentArtistDetailBinding? = null
     private val binding get() = _binding!!
 
     private val vm: ArtistDetailViewModel by viewModels()
 
-    private val adapter = ArtistDetailAdapter()
+    private val adapter = ArtistDetailAdapter(onArtistClick)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,11 +44,14 @@ class ArtistDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
+        val id = requireArguments().getLong(KEY_ID)
+        initView(id)
         initObserve()
     }
 
-    private fun initView() {
+    private fun initView(id: Long) {
+        vm.loadArtistDetail(id)
+
         binding.rvToDoList.adapter = adapter
 
         this.activity?.window?.apply {
@@ -126,5 +130,22 @@ class ArtistDetailFragment : Fragment() {
                 }
             }).preload()
     }
-}
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+
+    companion object {
+        private const val KEY_ID = "ID"
+
+        fun newInstance(
+            id: Long,
+            onArtistClick: (Long) -> Unit,
+        ) = ArtistDetailFragment(onArtistClick).apply {
+            arguments = Bundle().apply {
+                putLong(KEY_ID, id)
+            }
+        }
+    }
+}

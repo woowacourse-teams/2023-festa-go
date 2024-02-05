@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.ui.artistdetail.uistate.StageUiState
 
-class ArtistDetailAdapter : ListAdapter<Any, ArtistDetailViewHolder>(diffUtil) {
+class ArtistDetailAdapter(
+    private val onArtistClick: (Long) -> Unit,
+) : ListAdapter<Any, ArtistDetailViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistDetailViewHolder {
         return when (viewType) {
-            1 -> ArtistDetailFestivalViewHolder.of(parent)
+            1 -> ArtistDetailFestivalViewHolder.of(parent, onArtistClick)
             else -> throw IllegalArgumentException("Invalid viewType")
         }
     }

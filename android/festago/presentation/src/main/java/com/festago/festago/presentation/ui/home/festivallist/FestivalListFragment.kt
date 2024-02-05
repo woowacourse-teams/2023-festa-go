@@ -19,15 +19,15 @@ import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FestivalListFragment() : Fragment() {
+class FestivalListFragment(
+    private val onArtistClick: (Long) -> Unit,
+) : Fragment() {
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var festivalListAdapter: FestivalListAdapter
 
     private val vm: FestivalListViewModel by viewModels()
-
-    lateinit var onArtistClick: (Long) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -116,13 +116,5 @@ class FestivalListFragment() : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    companion object {
-        fun newInstance(
-            onArtistClick: (Long) -> Unit,
-        ): FestivalListFragment = FestivalListFragment().apply {
-            this.onArtistClick = onArtistClick
-        }
     }
 }

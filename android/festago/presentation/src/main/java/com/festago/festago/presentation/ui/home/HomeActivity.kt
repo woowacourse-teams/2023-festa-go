@@ -8,6 +8,8 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivityHomeBinding
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
@@ -57,10 +59,14 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showArtistDetail(artistId: Long) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fcvHomeContainer, ArtistDetailFragment())
-            .addToBackStack(null)
-            .commit()
+        supportFragmentManager.commit {
+            replace(
+                R.id.fcvHomeContainer,
+                ArtistDetailFragment.newInstance(artistId) { showArtistDetail(it) },
+            )
+            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
+            addToBackStack(null)
+        }
     }
 
     private fun showTicketList() {
@@ -82,19 +88,18 @@ class HomeActivity : AppCompatActivity() {
         supportFragmentManager.fragments.forEach { fragment ->
             fragmentTransaction.hide(fragment)
         }
+        supportFragmentManager.fragmentFactory = HomeFragmentFactory(
+            onArtistClick = { artistId -> showArtistDetail(artistId) },
+        )
 
         var targetFragment = supportFragmentManager.findFragmentByTag(tag)
 
         if (targetFragment == null) {
-            targetFragment =
-                if (T::class.java == FestivalListFragment::class.java) {
-                    FestivalListFragment.newInstance(
-                        onArtistClick = { artistId -> showArtistDetail(artistId) },
-                    )
-                } else {
-                    T::class.java.newInstance()
-                }
-            fragmentTransaction.add(R.id.fcvHomeContainer, targetFragment!!, tag)
+            targetFragment = supportFragmentManager.fragmentFactory.instantiate(
+                classLoader,
+                T::class.java.name,
+            )
+            fragmentTransaction.add(R.id.fcvHomeContainer, targetFragment, tag)
         } else {
             fragmentTransaction.show(targetFragment)
         }

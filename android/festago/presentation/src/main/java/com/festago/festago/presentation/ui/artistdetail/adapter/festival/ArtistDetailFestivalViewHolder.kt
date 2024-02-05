@@ -15,9 +15,12 @@ import com.festago.festago.presentation.ui.artistdetail.adapter.artistlist.Artis
 import com.festago.festago.presentation.ui.artistdetail.uistate.StageUiState
 import java.time.LocalDate
 
-class ArtistDetailFestivalViewHolder(private val binding: ItemArtistDetailFestivalBinding) :
+class ArtistDetailFestivalViewHolder(
+    private val binding: ItemArtistDetailFestivalBinding,
+    onArtistClick: (Long) -> Unit,
+) :
     ArtistDetailViewHolder(binding) {
-    private val artistAdapter = ArtistAdapter()
+    private val artistAdapter = ArtistAdapter(onArtistClick)
 
     init {
         binding.rvFestivalArtists.adapter = artistAdapter
@@ -84,13 +87,13 @@ class ArtistDetailFestivalViewHolder(private val binding: ItemArtistDetailFestiv
     }
 
     companion object {
-        fun of(parent: ViewGroup): ArtistDetailFestivalViewHolder {
+        fun of(parent: ViewGroup, onArtistClick: (Long) -> Unit): ArtistDetailFestivalViewHolder {
             val binding = ItemArtistDetailFestivalBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return ArtistDetailFestivalViewHolder(binding)
+            return ArtistDetailFestivalViewHolder(binding, onArtistClick)
         }
     }
 }

@@ -2,38 +2,38 @@ package com.festago.festago.presentation.ui.artistdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.festago.festago.domain.model.artist.ArtistDetail
 import com.festago.festago.domain.model.artist.Stages
 import com.festago.festago.domain.repository.ArtistRepository
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.StageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ArtistDetailViewModel @Inject constructor(
-    artistRepository: ArtistRepository,
+    private val artistRepository: ArtistRepository,
 ) : ViewModel() {
-    val uiState: StateFlow<ArtistDetailUiState> =
-        combine<ArtistDetail, Stages, ArtistDetailUiState>(
-            flow { emit(artistRepository.loadArtistDetail().getOrThrow()) },
-            flow { emit(artistRepository.loadArtistStages(20).getOrThrow()) },
-        ) { artist, stages ->
-            ArtistDetailUiState.Success(artist, stages.toUiState())
+    val _uiState: MutableStateFlow<ArtistDetailUiState> =
+        MutableStateFlow(ArtistDetailUiState.Loading)
+    val uiState: StateFlow<ArtistDetailUiState> = _uiState.asStateFlow()
+
+    fun loadArtistDetail(id: Long) {
+        viewModelScope.launch {
+            runCatching {
+                _uiState.value = ArtistDetailUiState.Success(
+                    artistRepository.loadArtistDetail(id).getOrThrow(),
+                    artistRepository.loadArtistStages(id, 20).getOrThrow().toUiState(),
+                )
+            }.onFailure {
+                _uiState.value = ArtistDetailUiState.Error
+            }
         }
-            .catch { emit(ArtistDetailUiState.Error) }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Lazily,
-                initialValue = ArtistDetailUiState.Loading,
-            )
+    }
 
     private fun Stages.toUiState() = this.stage.map {
         StageUiState(
@@ -48,4 +48,3 @@ class ArtistDetailViewModel @Inject constructor(
         )
     }
 }
-
