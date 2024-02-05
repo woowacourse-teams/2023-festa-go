@@ -75,12 +75,22 @@ class ArtistDetailFragment : Fragment() {
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
         binding.uiState = uiState
         adapter.submitList(uiState.stages)
-        uiState.artist.artistMedia.forEach {
+        uiState.artist.artistMedia.forEach { media ->
             binding.cgArtistMedia.addView(
                 (layoutInflater.inflate(R.layout.chip_media, binding.cgArtistMedia, false) as Chip)
                     .apply {
-                        syncIcon(it.logoUrl)
-                        text = it.name
+                        syncIcon(media.logoUrl)
+                        text = media.name
+                        setOnClickListener {
+                            // TODO: 유지보수하기 쉽게 변경
+                            val intent =
+                                requireContext().packageManager.getLaunchIntentForPackage("com.android.chrome")
+                            if (intent != null) {
+                                intent.data = android.net.Uri.parse(media.url)
+                                startActivity(intent)
+                            }
+                        }
+
                     }
             )
         }
