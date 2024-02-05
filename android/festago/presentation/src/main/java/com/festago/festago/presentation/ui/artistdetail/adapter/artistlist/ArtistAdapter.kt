@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistUiState
 
 class ArtistAdapter : ListAdapter<ArtistUiState, ArtistViewHolder>(diffUtil) {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
         return ArtistViewHolder.of(parent)
     }
@@ -16,13 +15,21 @@ class ArtistAdapter : ListAdapter<ArtistUiState, ArtistViewHolder>(diffUtil) {
     }
 
     companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<ArtistUiState>() {
-            override fun areItemsTheSame(oldItem: ArtistUiState, newItem: ArtistUiState): Boolean {
-                return oldItem.id == newItem.id
-            }
+        private val diffUtil by lazy {
+            object : DiffUtil.ItemCallback<ArtistUiState>() {
+                override fun areItemsTheSame(
+                    oldItem: ArtistUiState,
+                    newItem: ArtistUiState,
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
 
-            override fun areContentsTheSame(oldItem: ArtistUiState, newItem: ArtistUiState): Boolean {
-                return oldItem == newItem
+                override fun areContentsTheSame(
+                    oldItem: ArtistUiState,
+                    newItem: ArtistUiState,
+                ): Boolean {
+                    return oldItem == newItem
+                }
             }
         }
     }

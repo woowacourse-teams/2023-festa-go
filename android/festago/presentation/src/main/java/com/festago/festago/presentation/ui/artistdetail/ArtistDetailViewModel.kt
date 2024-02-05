@@ -19,12 +19,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ArtistDetailViewModel @Inject constructor(
-    artistRepository: ArtistRepository
+    artistRepository: ArtistRepository,
 ) : ViewModel() {
     val uiState: StateFlow<ArtistDetailUiState> =
         combine<ArtistDetail, Stages, ArtistDetailUiState>(
             flow { emit(artistRepository.loadArtistDetail().getOrThrow()) },
-            flow { emit(artistRepository.loadArtistStages(20).getOrThrow()) }
+            flow { emit(artistRepository.loadArtistStages(20).getOrThrow()) },
         ) { artist, stages ->
             ArtistDetailUiState.Success(artist, stages.toUiState())
         }
@@ -32,7 +32,7 @@ class ArtistDetailViewModel @Inject constructor(
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.Lazily,
-                initialValue = ArtistDetailUiState.Loading
+                initialValue = ArtistDetailUiState.Loading,
             )
 
     private fun Stages.toUiState() = this.stage.map {

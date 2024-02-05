@@ -1,16 +1,11 @@
-package com.festago.festago.presentation.ui.artistdetail.festival
+package com.festago.festago.presentation.ui.artistdetail.adapter.festival
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.StageUiState
-import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
-import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
-import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 
 class ArtistDetailAdapter : ListAdapter<Any, ArtistDetailViewHolder>(diffUtil) {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistDetailViewHolder {
         return when (viewType) {
             1 -> ArtistDetailFestivalViewHolder.of(parent)

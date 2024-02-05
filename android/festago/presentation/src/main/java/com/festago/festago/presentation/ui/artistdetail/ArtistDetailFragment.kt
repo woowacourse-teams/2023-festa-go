@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentArtistDetailBinding
-import com.festago.festago.presentation.ui.artistdetail.festival.ArtistDetailAdapter
+import com.festago.festago.presentation.ui.artistdetail.adapter.festival.ArtistDetailAdapter
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.google.android.material.chip.Chip
@@ -35,7 +35,7 @@ class ArtistDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentArtistDetailBinding.inflate(inflater)
         return binding.root
@@ -53,7 +53,6 @@ class ArtistDetailFragment : Fragment() {
         this.activity?.window?.apply {
             this.statusBarColor = Color.TRANSPARENT
             decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-
         }
     }
 
@@ -67,7 +66,8 @@ class ArtistDetailFragment : Fragment() {
 
     private fun updateUi(uiState: ArtistDetailUiState) = when (uiState) {
         is ArtistDetailUiState.Loading,
-        is ArtistDetailUiState.Error -> Unit
+        is ArtistDetailUiState.Error,
+        -> Unit
 
         is ArtistDetailUiState.Success -> handleSuccess(uiState)
     }
@@ -90,8 +90,7 @@ class ArtistDetailFragment : Fragment() {
                                 startActivity(intent)
                             }
                         }
-
-                    }
+                    },
             )
         }
     }
@@ -104,13 +103,13 @@ class ArtistDetailFragment : Fragment() {
                     e: GlideException?,
                     model: Any,
                     target: Target<Drawable>,
-                    isFirstResource: Boolean
+                    isFirstResource: Boolean,
                 ): Boolean {
                     chipIcon =
                         ResourcesCompat.getDrawable(
                             resources,
                             R.drawable.ic_launcher_background,
-                            null
+                            null,
                         )
                     return false
                 }
@@ -120,7 +119,7 @@ class ArtistDetailFragment : Fragment() {
                     model: Any?,
                     target: Target<Drawable>,
                     dataSource: DataSource,
-                    isFirstResource: Boolean
+                    isFirstResource: Boolean,
                 ): Boolean {
                     chipIcon = resource
                     return false
