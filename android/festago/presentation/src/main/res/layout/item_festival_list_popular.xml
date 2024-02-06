@@ -35,19 +35,12 @@
             android:textColor="@color/background_gray_01"
             app:layout_constraintTop_toTopOf="@id/vpPopularFestivalBackground" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vpPopularFestivalForeground"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalTitle" />
-
         <TextView
             android:id="@+id/tvPopularFestivalName"
             style="@style/H3Bold18Lh20"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="248dp"
             android:ellipsize="end"
             android:gravity="center"
             android:lineSpacingExtra="0dp"
@@ -56,7 +49,7 @@
             android:textColor="@color/background_gray_01"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vpPopularFestivalForeground"
+            app:layout_constraintTop_toTopOf="@id/vpPopularFestivalForeground"
             tools:text="대학교 \n 축제 이름" />
 
         <TextView
@@ -89,6 +82,14 @@
             app:layout_constraintStart_toStartOf="@+id/tvFestivalSchedule"
             app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule"
             tools:text="르세라핌, 아이브, 뉴진스, \n다이나믹 듀오" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpPopularFestivalForeground"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/tlDotIndicator"
+            app:layout_constraintTop_toBottomOf="@id/tvPopularFestivalTitle" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tlDotIndicator"

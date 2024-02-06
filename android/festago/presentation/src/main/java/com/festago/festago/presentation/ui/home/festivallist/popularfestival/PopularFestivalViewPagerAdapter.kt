@@ -47,6 +47,8 @@ class PopularFestivalViewPagerAdapter(
                 Resources.getSystem().configuration.screenWidthDp - IMAGE_SIZE - INTERVAL_IMAGE + (IMAGE_SIZE - (IMAGE_SIZE * RATE_SELECT_BY_UNSELECT)) * 0.5f
             val offset = position * -dpToPx(offsetBetweenPages)
             page.translationX = offset
+            page.pivotX = page.pivotX
+            page.pivotY = MIDDLE_IMAGE_PIVOT
 
             if (position <= ALREADY_LOAD_POSITION_CONDITION) {
                 val scaleFactor = RATE_SELECT_BY_UNSELECT.coerceAtLeast(1 - abs(position))
@@ -78,5 +80,6 @@ class PopularFestivalViewPagerAdapter(
         private const val PAGE_LIMIT = 4
         private const val IMAGE_SIZE = 220.0f
         private const val INTERVAL_IMAGE = 24.0f
+        private const val MIDDLE_IMAGE_PIVOT = 360.0f
     }
 }
