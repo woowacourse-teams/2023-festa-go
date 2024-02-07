@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
 import com.festago.festago.domain.model.festival.Festival
+import com.festago.festago.domain.model.festival.FestivalFilter
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
@@ -30,7 +31,7 @@ class FestivalListViewModel @Inject constructor(
     fun loadFestivals() {
         viewModelScope.launch {
             val deferredPopularFestivals = async { festivalRepository.loadPopularFestivals() }
-            val deferredFestivals = async { festivalRepository.loadFestivals() }
+            val deferredFestivals = async { festivalRepository.loadFestivals(festivalFilter = FestivalFilter.PROGRESS) }
 
             runCatching {
                 val festivalsPage = deferredFestivals.await().getOrThrow()
