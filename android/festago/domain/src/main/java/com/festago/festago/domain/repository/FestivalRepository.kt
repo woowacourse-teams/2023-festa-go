@@ -13,6 +13,6 @@ interface FestivalRepository {
         festivalFilter: FestivalFilter? = null,
         lastFestivalId: Long? = null,
         lastStartDate: LocalDate? = null,
-        limit: Int? = null,
+        size: Int? = null,
     ): Result<FestivalsPage>
 }
