@@ -48,6 +48,16 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_weight="1" />
 
+                    <View
+                        android:id="@+id/tvFestivalDDayEnd"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="#40000000"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivBackgroundImage"
+                        app:layout_constraintEnd_toEndOf="@id/ivBackgroundImage"
+                        app:layout_constraintStart_toStartOf="@id/ivBackgroundImage"
+                        app:layout_constraintTop_toTopOf="@id/ivBackgroundImage" />
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardView"
                         android:layout_width="80dp"
@@ -114,7 +124,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_arrow_back_ios_new_24" />
+                        android:src="@drawable/ic_arrow_back_ios_new_24"
+                        android:tintMode="src_atop"
+                        app:tint="@color/background_gray_01" />
 
                 </androidx.appcompat.widget.Toolbar>
 
