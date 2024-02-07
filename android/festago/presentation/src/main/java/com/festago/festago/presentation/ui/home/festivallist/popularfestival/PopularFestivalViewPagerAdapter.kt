@@ -1,6 +1,7 @@
 package com.festago.festago.presentation.ui.home.festivallist.popularfestival
 
 import android.content.res.Resources
+import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.festago.festago.presentation.ui.home.festivallist.popularfestival.background.PopularFestivalBackgroundAdapter
 import com.festago.festago.presentation.ui.home.festivallist.popularfestival.foreground.PopularFestivalForegroundAdapter
@@ -43,24 +44,40 @@ class PopularFestivalViewPagerAdapter(
 
     private fun narrowSpaceViewPager(viewPager: ViewPager2) {
         viewPager.setPageTransformer { page, position ->
-            val offsetBetweenPages =
-                Resources.getSystem().configuration.screenWidthDp - IMAGE_SIZE - INTERVAL_IMAGE + (IMAGE_SIZE - (IMAGE_SIZE * RATE_SELECT_BY_UNSELECT)) * 0.5f
-            val offset = position * -dpToPx(offsetBetweenPages)
-            page.translationX = offset
-            page.pivotX = page.pivotX
-            page.pivotY = MIDDLE_IMAGE_PIVOT
-
-            if (position <= ALREADY_LOAD_POSITION_CONDITION) {
-                val scaleFactor = RATE_SELECT_BY_UNSELECT.coerceAtLeast(1 - abs(position))
-                page.scaleY = scaleFactor
-                page.scaleX = scaleFactor
-            }
+            translateOffsetBetweenPages(position, page)
+            reduceUnselectedPagesScale(page, position)
         }
+    }
+
+    private fun translateOffsetBetweenPages(position: Float, page: View) {
+        val screenWidth = Resources.getSystem().configuration.screenWidthDp
+        val offsetBetweenPages = screenWidth - IMAGE_SIZE - INTERVAL_IMAGE
+        val reducedDifference = IMAGE_SIZE - (IMAGE_SIZE * RATE_SELECT_BY_UNSELECT)
+        val offset = position * -dpToPx(offsetBetweenPages + reducedDifference * 0.5f)
+        page.translationX = offset
     }
 
     private fun dpToPx(dp: Float): Int {
         val density = Resources.getSystem().displayMetrics.density
         return (dp * density).toInt()
+    }
+
+    private fun reduceUnselectedPagesScale(page: View, position: Float) {
+        page.movePivotTo(x = page.pivotX, y = MIDDLE_IMAGE_PIVOT)
+        if (position <= ALREADY_LOAD_POSITION_CONDITION) {
+            page.reduceScaleBy(position = position, rate = RATE_SELECT_BY_UNSELECT)
+        }
+    }
+
+    private fun View.movePivotTo(x: Float, y: Float) {
+        pivotX = x
+        pivotY = y
+    }
+
+    private fun View.reduceScaleBy(position: Float, rate: Float) {
+        val scaleFactor = rate.coerceAtLeast(1 - abs(position))
+        scaleY = scaleFactor
+        scaleX = scaleFactor
     }
 
     private fun setOffscreenPagesLimit(viewPager: ViewPager2, limit: Int) {
