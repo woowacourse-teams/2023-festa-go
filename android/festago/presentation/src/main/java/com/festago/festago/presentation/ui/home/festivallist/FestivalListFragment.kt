@@ -54,18 +54,26 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initView() {
-        initViewPager()
         vm.loadFestivals()
+        initViewPager()
         initRecyclerView()
+        initRefresh()
+    }
+
+    private fun initRefresh() {
+        binding.srlFestivalList.setOnRefreshListener {
+            vm.loadFestivals()
+            binding.srlFestivalList.isRefreshing = false
+        }
     }
 
     private fun initViewPager() {
         festivalListAdapter = FestivalListAdapter()
-        binding.rvList.adapter = festivalListAdapter
+        binding.rvFestivalList.adapter = festivalListAdapter
     }
 
     private fun initRecyclerView() {
-        binding.rvList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+        binding.rvFestivalList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
                 view: View,
