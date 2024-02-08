@@ -47,16 +47,21 @@ public class SocialMedia extends BaseTimeEntity {
 
     private String url;
 
-    public SocialMedia(SocialMediaType type, String name, String logoUrl, String url) {
-        this(null, type, name, logoUrl, url);
-    }
-
-    public SocialMedia(Long id, SocialMediaType mediaType, String name, String logoUrl, String url) {
+    public SocialMedia(Long id, Long ownerId, OwnerType ownerType, SocialMediaType mediaType, String name,
+                       String logoUrl,
+                       String url) {
         this.id = id;
+        this.ownerId = ownerId;
+        this.ownerType = ownerType;
         this.mediaType = mediaType;
         this.name = name;
         this.logoUrl = logoUrl;
         this.url = url;
+    }
+
+    public SocialMedia(Long ownerId, OwnerType ownerType, SocialMediaType mediaType, String name, String logoUrl,
+                       String url) {
+        this(null, ownerId, ownerType, mediaType, name, logoUrl, url);
     }
 
     public Long getId() {
