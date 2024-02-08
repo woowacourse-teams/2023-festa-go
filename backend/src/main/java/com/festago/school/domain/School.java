@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class School extends BaseTimeEntity {
 
+    private static final String DEFAULT_URL = "https://picsum.photos/536/354";
     private static final int MAX_DOMAIN_LENGTH = 50;
     private static final int MAX_NAME_LENGTH = 255;
 
@@ -35,19 +36,29 @@ public class School extends BaseTimeEntity {
     @Column(unique = true)
     private String name;
 
+    private String logoUrl;
+
+    private String backgroundUrl;
+
     @Enumerated(EnumType.STRING)
     private SchoolRegion region;
 
-    public School(String domain, String name, SchoolRegion region) {
-        this(null, domain, name, region);
-    }
-
-    public School(Long id, String domain, String name, SchoolRegion region) {
+    public School(Long id, String domain, String name, String logoUrl, String backgroundUrl, SchoolRegion region) {
         validate(domain, name);
         this.id = id;
         this.domain = domain;
         this.name = name;
+        this.logoUrl = logoUrl;
+        this.backgroundUrl = backgroundUrl;
         this.region = region;
+    }
+
+    public School(String domain, String name, SchoolRegion region) {
+        this(null, domain, name, DEFAULT_URL, DEFAULT_URL, region);
+    }
+
+    public School(Long id, String domain, String name, SchoolRegion region) {
+        this(id, domain, name, DEFAULT_URL, DEFAULT_URL, region);
     }
 
     private void validate(String domain, String name) {
@@ -87,6 +98,14 @@ public class School extends BaseTimeEntity {
 
     public String getName() {
         return name;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public String getBackgroundUrl() {
+        return backgroundUrl;
     }
 
     public SchoolRegion getRegion() {
