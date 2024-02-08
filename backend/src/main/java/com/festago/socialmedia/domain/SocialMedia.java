@@ -1,6 +1,7 @@
 package com.festago.socialmedia.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,11 +30,15 @@ public class SocialMedia extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "owner_id")
     private Long ownerId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "owner_type")
     private OwnerType ownerType;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "media_type")
     private SocialMediaType mediaType;
 
     private String name;
