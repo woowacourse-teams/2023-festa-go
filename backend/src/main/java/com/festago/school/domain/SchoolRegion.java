@@ -7,7 +7,7 @@ public enum SchoolRegion {
     서울,
     부산,
     대구,
-    기타;
+    ANY;
 
     public static SchoolRegion from(String regionName) {
         try {

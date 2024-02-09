@@ -1,14 +1,18 @@
 package com.festago.festival.presentation.v1;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.festago.support.CustomWebMvcTest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,70 +22,76 @@ import org.springframework.test.web.servlet.MockMvc;
 @SuppressWarnings("NonAsciiCharacters")
 class FestivalV1ControllerTest {
 
-    private static final String LAST_FESTIVAL_ID = "lastFestivalId";
-    private static final String LAST_START_DATE = "lastStartDate";
-    private static final String SIZE = "size";
+    private static final String LAST_FESTIVAL_ID_KEY = "lastFestivalId";
+    private static final String LAST_START_DATE_KEY = "lastStartDate";
+    private static final String SIZE_KEY = "size";
 
     @Autowired
     MockMvc mockMvc;
 
     @Nested
-    class 축제의_식별자와_마지막_축제_시작일 {
+    class 축제_목록_커서_기반_페이징_조회 {
 
-        @Test
-        void 은_들다_보내면_성공한다() throws Exception {
-            // given && when && then
-            mockMvc.perform(get("/api/v1/festivals")
-                    .param(LAST_FESTIVAL_ID, "1")
-                    .param(LAST_START_DATE, "1999-10-01"))
-                .andExpect(status().isOk());
-        }
+        final String uri = "/api/v1/festivals";
 
-        @Test
-        void 은_들다_안_보내면_성공한다() throws Exception {
-            // given && when && then
-            mockMvc.perform(get("/api/v1/festivals"))
-                .andExpect(status().isOk());
-        }
+        @Nested
+        @DisplayName("GET " + uri)
+        class 올바른_주소로 {
 
-        @Test
-        void 은_하나만_보내면_실패한다() throws Exception {
-            // given && when && then
-            mockMvc.perform(get("/api/v1/festivals")
-                    .param(LAST_FESTIVAL_ID, "1"))
-                .andExpect(status().isBadRequest());
-        }
-    }
+            @Test
+            void 쿼리_파라미터에_festivalId와_lastStartDate를_모두_보내면_200_응답이_반환된다() throws Exception {
+                mockMvc.perform(get(uri)
+                        .param(LAST_FESTIVAL_ID_KEY, "1")
+                        .param(LAST_START_DATE_KEY, "1999-10-01"))
+                    .andExpect(status().isOk());
+            }
 
-    @Nested
-    class 축제_페이지_갯수는 {
+            @Test
+            void 쿼리_파라미터에_festivalId와_lastStartDate를_보내지_않아도_200_응답이_반환된다() throws Exception {
+                mockMvc.perform(get(uri))
+                    .andExpect(status().isOk());
+            }
 
-        @ParameterizedTest
-        @ValueSource(longs = {21})
-        void _21_이상이면_실패한다(long value) throws Exception {
-            // given && when && then
-            mockMvc.perform(get("/api/v1/festivals")
-                    .param(SIZE, String.valueOf(value)))
-                .andExpect(status().isBadRequest());
-        }
+            @CsvSource(value = {"1,''", "'',2077-06-30"})
+            @ParameterizedTest
+            void 쿼리_파라미터에_festivalId_또는_lastStartDate_중_하나만_보내면_400_응답이_반환된다(
+                String festivalId, String lastStartDate
+            ) throws Exception {
+                mockMvc.perform(get(uri)
+                        .param(LAST_FESTIVAL_ID_KEY, festivalId)
+                        .param(LAST_START_DATE_KEY, lastStartDate))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("festivalId, lastStartDate 두 값 모두 요청하거나 요청하지 않아야합니다."));
+            }
 
-        // PageableDefault 때문에 default 값으로 설정됨
-        @ParameterizedTest
-        @ValueSource(longs = {-1, 0})
-        void 음수_또는_0이면_성공한다(long value) throws Exception {
-            // given && when && then
-            mockMvc.perform(get("/api/v1/festivals")
-                    .param(SIZE, String.valueOf(value)))
-                .andExpect(status().isOk());
-        }
+            @ParameterizedTest
+            @ValueSource(strings = {"21"})
+            void 쿼리_파라미터에_size가_20을_초과하면_400_응답이_반환된다(String size) throws Exception {
+                mockMvc.perform(get(uri)
+                        .param(SIZE_KEY, size))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("페이지 갯수의 제한을 벗어납니다."));
+            }
 
-        @ParameterizedTest
-        @ValueSource(longs = {1, 20})
-        void 최소_1과_최대_20_사이면_성공한다(long value) throws Exception {
-            // given && when && then
-            mockMvc.perform(get("/api/v1/festivals")
-                    .param(SIZE, String.valueOf(value)))
-                .andExpect(status().isOk());
+            // PageableDefault 때문에 default 값으로 설정됨
+            @ParameterizedTest
+            @ValueSource(strings = {"-1", "0"})
+            void 쿼리_파라미터에_size가_0_또는_음수여도_200_응답이_반환된다(String size) throws Exception {
+                // given && when && then
+                mockMvc.perform(get(uri)
+                        .param(SIZE_KEY, size))
+                    .andExpect(status().isOk());
+            }
+
+            @ParameterizedTest
+            @ValueSource(strings = {"1", "20"})
+            void 쿼리_파라미터에_size가_1_에서_20_사이면_200_응답이_반환된다(String size) throws Exception {
+                // given && when && then
+                mockMvc.perform(get(uri)
+                        .param(SIZE_KEY, size))
+                    .andExpect(status().isOk());
+            }
         }
     }
 }
