@@ -1,7 +1,6 @@
 package com.festago.festival.presentation.v1;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,19 +68,8 @@ class FestivalV1ControllerTest {
             void 쿼리_파라미터에_size가_20을_초과하면_400_응답이_반환된다(String size) throws Exception {
                 mockMvc.perform(get(uri)
                         .param(SIZE_KEY, size))
-                    .andDo(print())
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("페이지 갯수의 제한을 벗어납니다."));
-            }
-
-            // PageableDefault 때문에 default 값으로 설정됨
-            @ParameterizedTest
-            @ValueSource(strings = {"-1", "0"})
-            void 쿼리_파라미터에_size가_0_또는_음수여도_200_응답이_반환된다(String size) throws Exception {
-                // given && when && then
-                mockMvc.perform(get(uri)
-                        .param(SIZE_KEY, size))
-                    .andExpect(status().isOk());
+                    .andExpect(jsonPath("$.message").value("최대 size 값을 초과했습니다."));
             }
 
             @ParameterizedTest
