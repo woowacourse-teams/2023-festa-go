@@ -31,13 +31,13 @@ public class FestivalV1Controller {
     @Operation(description = "축제 목록를 조건별로 조회한다. PROGRESS: 진행 중, PLANNED: 진행 예정, END: 종료, 기본값 -> 진행 중, limit의 크기는 0 < limit < 21 이며 기본 값 10이다.", summary = "축제 목록 조회")
     public ResponseEntity<Slice<FestivalV1Response>> findFestivals(
         @PageableDefault(size = 10) Pageable pageable,
-        @RequestParam(defaultValue = "ANY") SchoolRegion location,
+        @RequestParam(defaultValue = "ANY") SchoolRegion region,
         @RequestParam(defaultValue = "PROGRESS") FestivalFilter filter,
         @RequestParam(required = false) Long lastFestivalId,
         @RequestParam(required = false) LocalDate lastStartDate
     ) {
         validate(lastFestivalId, lastStartDate, pageable.getPageSize());
-        var request = new FestivalV1QueryRequest(location, filter, lastFestivalId, lastStartDate);
+        var request = new FestivalV1QueryRequest(region, filter, lastFestivalId, lastStartDate);
         var response = festivalV1QueryService.findFestivals(pageable, request);
         return ResponseEntity.ok(response);
     }
