@@ -57,11 +57,6 @@ class ArtistDetailFragment(
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-
-        this.activity?.window?.apply {
-            this.statusBarColor = Color.TRANSPARENT
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        }
     }
 
     private fun initObserve() {

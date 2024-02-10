@@ -21,8 +21,8 @@ import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragmen
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
+import com.festago.festago.presentation.util.setStatusBarMode
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Thread.sleep
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
@@ -35,6 +35,7 @@ class HomeActivity : AppCompatActivity() {
         initBinding()
         initView()
         initBackPressedDispatcher()
+        initBackStackListener()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         binding.root.setOnApplyWindowInsetsCompatListener { view, windowInsets ->
@@ -60,6 +61,17 @@ class HomeActivity : AppCompatActivity() {
             true
         }
         changeFragment<FestivalListFragment>()
+    }
+
+    private fun initBackStackListener() {
+        supportFragmentManager.addOnBackStackChangedListener {
+            val fragment = supportFragmentManager.findFragmentById(R.id.fcvHomeContainer)
+            if (fragment is ArtistDetailFragment) {
+                setStatusBarMode(isLight = false, backgroundColor = Color.TRANSPARENT)
+            } else {
+                setStatusBarMode(isLight = true, backgroundColor = Color.TRANSPARENT)
+            }
+        }
     }
 
     private fun selectView(menuItemId: Int) {
