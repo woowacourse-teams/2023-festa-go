@@ -2,6 +2,7 @@ package com.festago.festival.presentation.v1;
 
 import com.festago.common.exception.ValidException;
 import com.festago.festival.application.FestivalV1QueryService;
+import com.festago.festival.dto.FestivalDetailV1Response;
 import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,5 +56,13 @@ public class FestivalV1Controller {
         if (limit > 20 || limit < 1) {
             throw new ValidException("페이지 갯수의 제한을 벗어납니다.");
         }
+    }
+
+    @GetMapping("/{festivalId}")
+    public ResponseEntity<FestivalDetailV1Response> findFestivalDetail(
+        @PathVariable Long festivalId
+    ) {
+        var response = festivalV1QueryService.findFestivalDetail(festivalId);
+        return ResponseEntity.ok(response);
     }
 }
