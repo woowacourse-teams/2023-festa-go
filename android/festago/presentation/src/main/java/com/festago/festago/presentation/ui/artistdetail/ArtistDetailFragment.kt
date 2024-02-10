@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -22,15 +24,20 @@ import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ArtistDetailFragment(
-    onArtistClick: (Long) -> Unit,
-) : Fragment() {
+class ArtistDetailFragment : Fragment() {
     private var _binding: FragmentArtistDetailBinding? = null
     private val binding get() = _binding!!
 
     private val vm: ArtistDetailViewModel by viewModels()
 
-    private val adapter = ArtistDetailAdapter(onArtistClick)
+    private val adapter = ArtistDetailAdapter { artistId ->
+        // TODO: Navigation으로 변경
+        requireActivity().supportFragmentManager.commit {
+            add(R.id.fcvHomeContainer, newInstance(artistId))
+            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
+            addToBackStack(null)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -139,8 +146,7 @@ class ArtistDetailFragment(
 
         fun newInstance(
             id: Long,
-            onArtistClick: (Long) -> Unit,
-        ) = ArtistDetailFragment(onArtistClick).apply {
+        ) = ArtistDetailFragment().apply {
             arguments = Bundle().apply {
                 putLong(KEY_ID, id)
             }

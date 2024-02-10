@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivityHomeBinding
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
@@ -88,17 +86,6 @@ class HomeActivity : AppCompatActivity() {
         changeFragment<FestivalListFragment>()
     }
 
-    private fun showArtistDetail(artistId: Long) {
-        supportFragmentManager.commit {
-            add(
-                R.id.fcvHomeContainer,
-                ArtistDetailFragment.newInstance(artistId) { showArtistDetail(it) },
-            )
-            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
-            addToBackStack(null)
-        }
-    }
-
     private fun showTicketList() {
         changeFragment<TicketListFragment>()
     }
@@ -112,12 +99,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private inline fun <reified T : Fragment> changeFragment() {
-        if (supportFragmentManager.fragmentFactory !is HomeFragmentFactory) {
-            supportFragmentManager.fragmentFactory = HomeFragmentFactory(
-                onArtistClick = { artistId -> showArtistDetail(artistId) },
-            )
-        }
-
         val tag = T::class.java.name
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 

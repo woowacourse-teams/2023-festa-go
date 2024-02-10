@@ -7,16 +7,16 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsetsController
 import android.widget.Toast
-import androidx.core.view.OnApplyWindowInsetsListener
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
@@ -25,9 +25,7 @@ import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListene
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FestivalListFragment(
-    private val onArtistClick: (Long) -> Unit,
-) : Fragment() {
+class FestivalListFragment : Fragment() {
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
@@ -73,7 +71,14 @@ class FestivalListFragment(
 
     private fun initViewPager() {
         festivalListAdapter = FestivalListAdapter(
-            onArtistClick = onArtistClick,
+            // TODO: Navigation으로 변경
+            onArtistClick = { artistId ->
+                requireActivity().supportFragmentManager.commit {
+                    add(R.id.fcvHomeContainer, ArtistDetailFragment.newInstance(artistId))
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
+                    addToBackStack(null)
+                }
+            },
         )
         binding.rvList.adapter = festivalListAdapter
     }
