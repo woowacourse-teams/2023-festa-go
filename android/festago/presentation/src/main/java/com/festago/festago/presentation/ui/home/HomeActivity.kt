@@ -2,11 +2,14 @@ package com.festago.festago.presentation.ui.home
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
@@ -17,7 +20,9 @@ import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmen
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
+import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Thread.sleep
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
@@ -30,6 +35,19 @@ class HomeActivity : AppCompatActivity() {
         initBinding()
         initView()
         initBackPressedDispatcher()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        binding.root.setOnApplyWindowInsetsCompatListener { view, windowInsets ->
+            val navigationInsets = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            view.setPadding(0, 0, 0, navigationInsets.bottom)
+            window.navigationBarColor = Color.TRANSPARENT
+            window.statusBarColor = Color.TRANSPARENT
+            windowInsets
+        }
+
+        binding.nvHome.setOnApplyWindowInsetsCompatListener { _, windowInsets ->
+            windowInsets
+        }
     }
 
     private fun initBinding() {
