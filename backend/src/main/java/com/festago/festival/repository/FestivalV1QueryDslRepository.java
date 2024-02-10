@@ -24,7 +24,6 @@ import org.springframework.stereotype.Repository;
 public class FestivalV1QueryDslRepository extends QueryDslRepositorySupport {
 
     private static final long NEXT_PAGE_TEMPORARY_COUNT = 1;
-    private static final int POPULAR_FESTIVAL_LIMIT_COUNT = 7;
 
     public FestivalV1QueryDslRepository() {
         super(Festival.class);
@@ -151,11 +150,5 @@ public class FestivalV1QueryDslRepository extends QueryDslRepositorySupport {
 
     private void removeTemporaryContent(List<FestivalV1Response> content) {
         content.remove(content.size() - 1);
-    }
-
-    public List<FestivalV1Response> findPopularFestival() {
-        return getSelectQuery()
-            .limit(POPULAR_FESTIVAL_LIMIT_COUNT)
-            .fetch();
     }
 }
