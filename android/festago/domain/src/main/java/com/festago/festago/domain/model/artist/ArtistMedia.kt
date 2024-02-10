@@ -4,5 +4,5 @@ data class ArtistMedia(
     val logoUrl: String,
     val name: String,
     val type: String,
-    val url: String
+    val url: String,
 )
