@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Transactional
-class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
+class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     FestivalInfoRepository festivalInfoRepository;
