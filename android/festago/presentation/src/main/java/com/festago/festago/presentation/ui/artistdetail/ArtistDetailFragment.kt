@@ -1,6 +1,5 @@
 package com.festago.festago.presentation.ui.artistdetail
 
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
