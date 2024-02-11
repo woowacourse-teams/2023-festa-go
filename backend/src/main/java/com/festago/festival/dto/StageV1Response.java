@@ -1,12 +1,13 @@
 package com.festago.festival.dto;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonRawValue;
+import java.time.LocalDateTime;
 
 public record StageV1Response(
     Long id,
-    LocalDate startDate,
-    List<ArtistV1Response> artists
+    LocalDateTime startDate,
+    @JsonRawValue
+    String artists
 ) {
 
 }
