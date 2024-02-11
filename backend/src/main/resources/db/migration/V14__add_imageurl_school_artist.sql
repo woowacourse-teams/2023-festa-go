@@ -1,9 +1,9 @@
 alter table school
-    add column logoUrl varchar(255);
+    add column logo_url varchar(255);
 
 alter table school
-    add column backgroundUrl varchar(255);
+    add column background_url varchar(255);
 
 alter table artist
-    add column backgroundUrl varchar(255);
+    add column background_image_url varchar(255);
 
