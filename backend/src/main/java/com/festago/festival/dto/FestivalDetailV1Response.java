@@ -1,7 +1,7 @@
 package com.festago.festival.dto;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 public record FestivalDetailV1Response(
     Long id,
@@ -10,8 +10,8 @@ public record FestivalDetailV1Response(
     LocalDate startDate,
     LocalDate endDate,
     String imageUrl,
-    List<SocialMediaV1Response> socialMedias,
-    List<StageV1Response> stages
+    Set<SocialMediaV1Response> socialMedias,
+    Set<StageV1Response> stages
 ) {
 
 }

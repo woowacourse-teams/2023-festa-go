@@ -1,6 +1,5 @@
 package com.festago.festival.application;
 
-import com.festago.festival.dto.FestivalDetailV1Response;
 import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
 import com.festago.festival.repository.FestivalSearchCondition;
@@ -30,10 +29,6 @@ public class FestivalV1QueryService {
             pageable,
             LocalDate.now(clock)
         ));
-    }
-
-    public FestivalDetailV1Response findFestivalDetail(Long festivalId) {
-        return null;
     }
 }
 

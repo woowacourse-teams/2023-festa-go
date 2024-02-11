@@ -7,8 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.festival.application.FestivalV1QueryService;
-import com.festago.festival.dto.ArtistV1Response;
+import com.festago.festival.application.FestivalDetailV1QueryService;
 import com.festago.festival.dto.FestivalDetailV1Response;
 import com.festago.festival.dto.SchoolV1Response;
 import com.festago.festival.dto.SocialMediaV1Response;
@@ -17,7 +16,8 @@ import com.festago.socialmedia.domain.SocialMediaType;
 import com.festago.support.CustomWebMvcTest;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -42,7 +42,7 @@ class FestivalV1ControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    FestivalV1QueryService festivalV1QueryService;
+    FestivalDetailV1QueryService festivalDetailV1QueryService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -129,7 +129,7 @@ class FestivalV1ControllerTest {
                     LocalDate.parse("2077-06-30"),
                     LocalDate.parse("2077-06-30"),
                     "https://image.com/schoolImage.png",
-                    List.of(
+                    Set.of(
                         new SocialMediaV1Response(
                             SocialMediaType.INSTAGRAM,
                             "총학 인스타",
@@ -137,23 +137,16 @@ class FestivalV1ControllerTest {
                             "https://www.instagram.com/example_university"
                         )
                     ),
-                    List.of(
+                    Set.of(
                         new StageV1Response(
                             1L,
-                            LocalDate.parse("2077-06-30"),
-                            List.of(
-                                new ArtistV1Response(
-                                    1L,
-                                    "뉴진스",
-                                    "https://image.com/뉴진스.png"
-                                )
-                            )
+                            LocalDateTime.parse("2077-06-30T00:00:00"),
+                            "[]"
                         )
                     )
                 );
-                given(festivalV1QueryService.findFestivalDetail(anyLong()))
+                given(festivalDetailV1QueryService.findFestivalDetail(anyLong()))
                     .willReturn(expect);
-
                 // when & then
                 String content = mockMvc.perform(get(uri, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
