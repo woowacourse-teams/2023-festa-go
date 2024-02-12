@@ -1,4 +1,4 @@
-package com.festago.festival.application;
+package com.festago.festival.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -6,6 +6,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
+import com.festago.festival.application.FestivalDetailV1QueryService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.SocialMediaV1Response;
 import com.festago.festival.dto.StageV1Response;
