@@ -11,10 +11,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
+import com.festago.festago.presentation.ui.home.schooldetail.SchoolDetailFragment
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,6 +59,9 @@ class FestivalListFragment : Fragment() {
         initViewPager()
         vm.loadFestivals()
         initRecyclerView()
+        binding.ivSearch.setOnClickListener {// 임시 연결
+            showSchoolDetail()
+        }
     }
 
     private fun initViewPager() {
@@ -110,6 +115,13 @@ class FestivalListFragment : Fragment() {
                 ),
             ) + uiState.festivals,
         )
+    }
+
+    private fun showSchoolDetail() {
+        activity?.supportFragmentManager!!.beginTransaction()
+            .replace(R.id.fcvHomeContainer, SchoolDetailFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.home.schooldetail.SchoolDetailUiState" />
+
+        <variable
+            name="successUiState"
+            type="com.festago.festago.presentation.ui.home.schooldetail.SchoolDetailUiState.Success" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_gray_01"
+            tools:context=".ui.home.festivallist.FestivalListFragment">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSchoolInfo"
+                visibility="@{uiState.shouldShowSuccess}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivSchoolBackground"
+                    imageUrl="@{successUiState.schoolInfo.backgroundUrl}"
+                    android:layout_width="match_parent"
+                    android:layout_height="136dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_launcher_background" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvSchoolLogo"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="-40dp"
+                    app:cardCornerRadius="1000dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivSchoolBackground">
+
+                    <ImageView
+                        android:id="@+id/ivSchoolLogoImage"
+                        imageUrl="@{successUiState.schoolInfo.logoUrl}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        tools:src="@drawable/ic_launcher_foreground" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tvSchoolName"
+                    style="@style/H2Bold20Lh24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{successUiState.schoolInfo.schoolName}"
+                    android:textColor="@color/contents_gray_07"
+                    app:layout_constraintStart_toEndOf="@id/cvSchoolLogo"
+                    app:layout_constraintTop_toBottomOf="@id/ivSchoolBackground"
+                    tools:text="서울대학교" />
+
+                <LinearLayout
+                    android:id="@+id/llSocialMedia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tvSchoolName"
+                    app:layout_constraintTop_toBottomOf="@id/tvSchoolName" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFestivalList"
+                visibility="@{uiState.shouldShowSuccess}"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/clSchoolInfo"
+                tools:layout_editor_absoluteX="45dp"
+                tools:listitem="@layout/item_festival_list_festival" />
+
+            <ProgressBar
+                android:id="@+id/pbLoading"
+                visibility="@{uiState.shouldShowLoading}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

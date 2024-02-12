@@ -1,14 +1,14 @@
 package com.festago.festago.presentation.ui.home.schooldetail
 
-import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.model.school.SchoolInfo
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 
 sealed interface SchoolDetailUiState {
     object Loading : SchoolDetailUiState
 
     data class Success(
         val schoolInfo: SchoolInfo,
-        val festivals: List<Festival>,
+        val festivals: List<FestivalItemUiState>,
         val isLast: Boolean,
     ) : SchoolDetailUiState
 
