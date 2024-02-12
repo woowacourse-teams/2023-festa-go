@@ -3,20 +3,19 @@ package com.festago.festago.presentation.ui.home.schooldetail
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListFestivalViewHolder
-import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
+import com.festago.festago.presentation.ui.home.schooldetail.uistate.FestivalItemUiState
 
 class SchoolFestivalListAdapter :
-    ListAdapter<FestivalItemUiState, FestivalListFestivalViewHolder>(diffUtil) {
+    ListAdapter<FestivalItemUiState, SchoolDetailFestivalViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): FestivalListFestivalViewHolder {
-        return FestivalListFestivalViewHolder.of(parent)
+    ): SchoolDetailFestivalViewHolder {
+        return SchoolDetailFestivalViewHolder.of(parent)
     }
 
-    override fun onBindViewHolder(holder: FestivalListFestivalViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SchoolDetailFestivalViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

@@ -1,7 +1,7 @@
 package com.festago.festago.presentation.ui.home.schooldetail
 
 import com.festago.festago.domain.model.school.SchoolInfo
-import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
+import com.festago.festago.presentation.ui.home.schooldetail.uistate.FestivalItemUiState
 
 sealed interface SchoolDetailUiState {
     object Loading : SchoolDetailUiState
