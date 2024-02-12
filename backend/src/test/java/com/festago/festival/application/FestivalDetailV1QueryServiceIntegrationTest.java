@@ -1,5 +1,6 @@
 package com.festago.festival.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -54,19 +55,28 @@ class FestivalDetailV1QueryServiceIntegrationTest extends ApplicationIntegration
 
     LocalDate now = LocalDate.parse("2077-06-30");
 
+    /**
+     * 축제에는 1,2,3 일차로 이뤄진 공연이 있고, 각 공연에는 아티스트 정보가 포함되어 있다. 또한, 테코대학교의 소셜미디어는 인스타그램, 페이스북이 등록되어 있다.
+     */
     Festival 축제;
+    Festival 공연_없는_축제;
 
     @BeforeEach
     void setUp() {
         School 테코대학교 = schoolRepository.save(new School("teco.ac.kr", "테코대학교", SchoolRegion.서울));
+
         축제 = festivalRepository.save(
             new Festival("테코대학교 축제", now, now.plusDays(2), "https://school.com/image.com", 테코대학교));
+        공연_없는_축제 = festivalRepository.save(
+            new Festival("테코대학교 공연 없는 축제", now, now, "https://school.com/image.com", 테코대학교)
+        );
+
         Stage 첫째날_공연 = stageRepository.save(
-            new Stage(now.atTime(18, 0), "뉴진스", now.minusWeeks(1).atStartOfDay(), 축제));
+            new Stage(now.atTime(18, 0), now.minusWeeks(1).atStartOfDay(), 축제));
         Stage 둘째날_공연 = stageRepository.save(
-            new Stage(now.plusDays(1).atTime(18, 0), "에픽하이", now.minusWeeks(1).atStartOfDay(), 축제));
+            new Stage(now.plusDays(1).atTime(18, 0), now.minusWeeks(1).atStartOfDay(), 축제));
         Stage 셋째날_공연 = stageRepository.save(
-            new Stage(now.plusDays(2).atTime(18, 0), "소녀시대", now.minusWeeks(1).atStartOfDay(), 축제));
+            new Stage(now.plusDays(2).atTime(18, 0), now.minusWeeks(1).atStartOfDay(), 축제));
 
         StageQueryInfo 첫째날_공연_QueryInfo = StageQueryInfo.create(첫째날_공연.getId());
         첫째날_공연_QueryInfo.updateArtist("뉴진스");
@@ -88,10 +98,16 @@ class FestivalDetailV1QueryServiceIntegrationTest extends ApplicationIntegration
                 "https://logo.com/facebook.png", "https://facebook.com/테코대학교_총학생회"));
     }
 
+    /**
+     * 결국 응답의 형식을 테스트하고 있다. 너무 많은 Repository 의존이 발생하고 있기도 하고, 이럴거면 서비스 레이어 통합 테스트말고, 컨트롤러 레이어 통합 테스트 혹은 인수 테스트로 수행하는 것이
+     * 어떨까?
+     */
     @Test
-    void 축제의_식별자로_축제의_상세_조회를_할_수_있다() throws Exception {
-        // when & then
+    void 축제의_식별자로_축제의_상세_조회를_할_수_있다() {
+        // when
         var response = festivalDetailV1QueryService.findFestivalDetail(축제.getId());
+
+        // then
         assertSoftly(softly -> {
             softly.assertThat(response.name()).isEqualTo("테코대학교 축제");
             softly.assertThat(response.startDate()).isEqualTo("2077-06-30");
@@ -105,6 +121,15 @@ class FestivalDetailV1QueryServiceIntegrationTest extends ApplicationIntegration
                 .map(StageV1Response::artists)
                 .containsExactlyInAnyOrder("뉴진스", "에픽하이", "소녀시대");
         });
+    }
+
+    @Test
+    void 축제에_공연이_없으면_응답의_공연에는_비어있는_컬렉션이_반환된다() {
+        // when
+        var response = festivalDetailV1QueryService.findFestivalDetail(공연_없는_축제.getId());
+
+        // then
+        assertThat(response.stages()).isEmpty();
     }
 
     @Test
