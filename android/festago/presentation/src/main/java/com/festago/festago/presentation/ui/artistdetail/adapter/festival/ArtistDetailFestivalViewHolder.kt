@@ -45,22 +45,24 @@ class ArtistDetailFestivalViewHolder(
                 dDayView.setTextColor(context.getColor(R.color.secondary_pink_01))
                 dDayView.background = AppCompatResources.getDrawable(
                     context,
-                    R.drawable.bg_festival_list_dday_in_progress,
+                    R.drawable.bg_artist_detail_dday_in_progress,
                 )
             }
 
             LocalDate.now() == item.startDate.minusDays(1) -> {
                 dDayView.text = context.getString(
-                    R.string.festival_list_tv_dday_format,
+                    R.string.artist_detail_tv_dday_format,
                     item.startDate.compareTo(LocalDate.now()).toString(),
                 )
                 dDayView.setBackgroundColor(0xffff1273.toInt())
             }
 
             else -> binding.tvFestivalDDay.apply {
+                println("startDate: ${item.startDate}")
+                println(item.startDate.compareTo(LocalDate.now()).toString())
                 dDayView.text = context.getString(
-                    R.string.festival_list_tv_dday_format,
-                    item.startDate.compareTo(LocalDate.now()).toString(),
+                    R.string.artist_detail_tv_dday_format,
+                    (LocalDate.now().toEpochDay() - item.startDate.toEpochDay()).toString(),
                 )
                 dDayView.setBackgroundColor(context.getColor(android.R.color.black))
             }
