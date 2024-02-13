@@ -8,6 +8,7 @@ import static com.festago.stage.domain.QStageQueryInfo.stageQueryInfo;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.sortedSet;
 
+import com.festago.common.exception.UnexpectedException;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.FestivalDetailV1Response;
@@ -65,6 +66,10 @@ public class FestivalDetailV1QueryDslRepository extends QueryDslRepositorySuppor
             );
         if (response.isEmpty()) {
             return Optional.empty();
+        }
+        // PK로 조회하기에 발생할 일이 없는 예외지만, 혹시 모를 상황을 방지하기 위함
+        if (response.size() >= 2) {
+            throw new UnexpectedException("축제 상세 조회에서 2개 이상의 축제가 조회되었습니다.");
         }
         return Optional.of(response.get(0));
     }
