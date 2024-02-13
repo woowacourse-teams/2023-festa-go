@@ -7,7 +7,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -54,7 +53,6 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initView() {
-        vm.loadFestivals()
         initViewPager()
         initRecyclerView()
         initRefresh()
@@ -62,7 +60,7 @@ class FestivalListFragment : Fragment() {
 
     private fun initRefresh() {
         binding.srlFestivalList.setOnRefreshListener {
-            vm.loadFestivals()
+            vm.loadFestivals(festivalFilterUiState = null)
             binding.srlFestivalList.isRefreshing = false
         }
     }
@@ -109,13 +107,14 @@ class FestivalListFragment : Fragment() {
         festivalListAdapter.submitList(
             listOf(
                 uiState,
-                FestivalTabUiState(
-                    {
-                        Toast.makeText(requireContext(), "Clicked $it", Toast.LENGTH_SHORT).show()
-                        /* TODO: Handle tab click */
-                        vm.loadFestivals()
-                    },
-                ),
+                FestivalTabUiState {
+                    val festivalFilter = when (it) {
+                        0 -> FestivalFilterUiState.PLANNED
+                        1 -> FestivalFilterUiState.PROGRESS
+                        else -> FestivalFilterUiState.PLANNED
+                    }
+                    vm.loadFestivals(festivalFilter)
+                },
             ) + uiState.festivals,
         )
     }
