@@ -1,13 +1,15 @@
 package com.festago.festago.data.repository
 
+import android.util.Log
 import com.festago.festago.domain.model.festival.FestivalFilter
 import com.festago.festago.domain.model.festival.FestivalLocation
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.festival.PopularFestivals
 import com.festago.festago.domain.repository.FestivalRepository
 import java.time.LocalDate
+import javax.inject.Inject
 
-class FakeFestivalRepository : FestivalRepository {
+class FakeFestivalRepository @Inject constructor() : FestivalRepository {
 
     override suspend fun loadPopularFestivals(): Result<PopularFestivals> {
         return Result.success(PopularFestivals("인기 축제 목록", FakeFestivals.popularFestivals))
@@ -21,7 +23,7 @@ class FakeFestivalRepository : FestivalRepository {
         size: Int?,
     ): Result<FestivalsPage> {
         if (festivalFilter == FestivalFilter.PROGRESS) {
-            return Result.success(FestivalsPage(false, FakeFestivals.festivalList))
+            return Result.success(FestivalsPage(false, FakeFestivals.festivalList + FakeFestivals.festivalList + FakeFestivals.festivalList))
         }
         return Result.success(FestivalsPage(false, FakeFestivals.popularFestivals))
     }
