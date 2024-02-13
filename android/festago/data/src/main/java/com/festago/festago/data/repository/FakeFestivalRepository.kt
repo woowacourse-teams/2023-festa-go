@@ -22,8 +22,8 @@ class FakeFestivalRepository @Inject constructor() : FestivalRepository {
         size: Int?,
     ): Result<FestivalsPage> {
         if (festivalFilter == FestivalFilter.PROGRESS) {
-            return Result.success(FestivalsPage(false, FakeFestivals.festivalList + FakeFestivals.festivalList + FakeFestivals.festivalList))
+            return Result.success(FestivalsPage(false, FakeFestivals.progressFestivals))
         }
-        return Result.success(FestivalsPage(false, FakeFestivals.popularFestivals))
+        return Result.success(FestivalsPage(false, FakeFestivals.plannedFestivals))
     }
 }
