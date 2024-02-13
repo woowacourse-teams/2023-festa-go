@@ -141,7 +141,7 @@ class FestivalV1ControllerTest {
                         new StageV1Response(
                             1L,
                             LocalDateTime.parse("2077-06-30T00:00:00"),
-                            "[]"
+                            null // @JsonRawValue 때문에 직렬화된 JSON을 다시 역직렬화 할 때 문제가 발생함
                         )
                     )
                 );
@@ -159,6 +159,7 @@ class FestivalV1ControllerTest {
                 // jsonPath를 사용하여 json 명세가 정확한지(오타, 누락) 명시적으로 검사가 필요할까??
                 // 많은 andExpect(jsonPath("$.id").value(1L)) 절이 호출되어 보기에 불편하지만
                 // 코드 리뷰시 DTO 내부를 헤집을 필요 없이, 테스트 코드만 보고 JSON 명세를 확인 가능한게 장점인듯
+                // 또한, @JsonRawValue를 사용하여 역직렬화된 JSON을 다시 직렬화하는 것이 불가능함.
                 var actual = objectMapper.readValue(content, FestivalDetailV1Response.class);
                 assertThat(actual).isEqualTo(expect);
             }

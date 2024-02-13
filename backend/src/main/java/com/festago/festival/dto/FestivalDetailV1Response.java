@@ -2,7 +2,7 @@ package com.festago.festival.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.Set;
 
 public record FestivalDetailV1Response(
     Long id,
@@ -11,8 +11,8 @@ public record FestivalDetailV1Response(
     LocalDate startDate,
     LocalDate endDate,
     String imageUrl,
-    Collection<SocialMediaV1Response> socialMedias,
-    Collection<StageV1Response> stages
+    Set<SocialMediaV1Response> socialMedias,
+    Set<StageV1Response> stages
 ) {
 
     @QueryProjection
