@@ -1,6 +1,5 @@
 package com.festago.festago.data.service
 
-import com.festago.festago.data.dto.festival.FestivalResponse
 import com.festago.festago.data.dto.festival.FestivalsResponse
 import com.festago.festago.data.dto.festival.PopularFestivalsResponse
 import retrofit2.Response
