@@ -15,9 +15,5 @@ interface RepositoryModule {
 
     @Binds
     @Singleton
-    fun bindsFestivalDefaultRepository(festivalRepository: FestivalDefaultRepository): FestivalRepository
-
-    @Binds
-    @Singleton
     fun bindsFakeFestivalRepository(festivalRepository: FakeFestivalRepository): FestivalRepository
 }
