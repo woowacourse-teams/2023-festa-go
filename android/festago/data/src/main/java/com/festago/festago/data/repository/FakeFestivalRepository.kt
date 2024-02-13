@@ -1,0 +1,28 @@
+package com.festago.festago.data.repository
+
+import com.festago.festago.domain.model.festival.FestivalFilter
+import com.festago.festago.domain.model.festival.FestivalLocation
+import com.festago.festago.domain.model.festival.FestivalsPage
+import com.festago.festago.domain.model.festival.PopularFestivals
+import com.festago.festago.domain.repository.FestivalRepository
+import java.time.LocalDate
+
+class FakeFestivalRepository : FestivalRepository {
+
+    override suspend fun loadPopularFestivals(): Result<PopularFestivals> {
+        return Result.success(PopularFestivals("인기 축제 목록", FakeFestivals.popularFestivals))
+    }
+
+    override suspend fun loadFestivals(
+        festivalLocation: FestivalLocation?,
+        festivalFilter: FestivalFilter?,
+        lastFestivalId: Long?,
+        lastStartDate: LocalDate?,
+        size: Int?,
+    ): Result<FestivalsPage> {
+        if (festivalFilter == FestivalFilter.PROGRESS) {
+            return Result.success(FestivalsPage(false, FakeFestivals.festivalList))
+        }
+        return Result.success(FestivalsPage(false, FakeFestivals.popularFestivals))
+    }
+}
