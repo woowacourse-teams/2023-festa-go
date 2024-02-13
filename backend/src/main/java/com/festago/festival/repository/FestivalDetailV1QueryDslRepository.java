@@ -31,6 +31,10 @@ public class FestivalDetailV1QueryDslRepository extends QueryDslRepositorySuppor
         super(Festival.class);
     }
 
+    /**
+     * 축제에 3개의 공연과 2개의 소셜미디어가 있을 때 조회되는 row 수는 다음과 같다. <br/> 1(축제) * 3(공연) * 2(소셜미디어) = 6 row <br/> 따라서 중복된 row가 생기게
+     * 되는데, 이를 해결하기 위해 set을 사용했고, 항상 일관되게 정렬된 데이터를 조회하기 위해 sortedSet을 사용했음 <br/>
+     */
     public Optional<FestivalDetailV1Response> findFestivalDetail(Long festivalId) {
         List<FestivalDetailV1Response> response = selectFrom(festival)
             .innerJoin(school).on(school.id.eq(festival.school.id))
