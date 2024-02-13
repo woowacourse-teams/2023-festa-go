@@ -4,6 +4,7 @@ sealed interface FestivalListUiState {
     object Loading : FestivalListUiState
 
     data class Success(
+        val popularFestivalsTitle: String,
         val popularFestivals: List<FestivalItemUiState>,
         val festivals: List<FestivalItemUiState>,
         val isLastPage: Boolean,
