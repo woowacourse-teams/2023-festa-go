@@ -23,6 +23,7 @@ class FestivalListTabViewHolder(val binding: ItemFestivalListTabBinding) :
     }
 
     fun bind(festivalTabUiState: FestivalTabUiState) {
+        binding.tlFestivalListTab.clearOnTabSelectedListeners()
         binding.tlFestivalListTab.addOnTabSelectedListener(
             object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
