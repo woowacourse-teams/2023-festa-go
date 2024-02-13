@@ -5,6 +5,7 @@ import com.festago.admin.presentation.v1.dto.SchoolV1UpdateRequest;
 import com.festago.school.application.SchoolCommandService;
 import com.festago.school.application.SchoolDeleteService;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class AdminSchoolV1Controller {
 
     @PostMapping
     public ResponseEntity<Void> createSchool(
-        @RequestBody SchoolV1CreateRequest request
+        @RequestBody @Valid SchoolV1CreateRequest request
     ) {
         Long schoolId = schoolCommandService.createSchool(request.toCommand());
         return ResponseEntity.created(URI.create("/api/v1/schools/" + schoolId))
@@ -37,7 +38,7 @@ public class AdminSchoolV1Controller {
     @PatchMapping("/{schoolId}")
     public ResponseEntity<Void> updateSchool(
         @PathVariable Long schoolId,
-        @RequestBody SchoolV1UpdateRequest request
+        @RequestBody @Valid SchoolV1UpdateRequest request
     ) {
         schoolCommandService.updateSchool(schoolId, request.toCommand());
         return ResponseEntity.ok()

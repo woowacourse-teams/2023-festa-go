@@ -1,16 +1,20 @@
 package com.festago.festago.presentation.ui.home.festivallist.popularfestival
 
 import android.content.res.Resources
+import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.festago.festago.presentation.ui.home.festivallist.popularfestival.background.PopularFestivalBackgroundAdapter
 import com.festago.festago.presentation.ui.home.festivallist.popularfestival.foreground.PopularFestivalForegroundAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
+import kotlin.math.abs
 
 class PopularFestivalViewPagerAdapter(
     foregroundViewPager: ViewPager2,
     backgroundViewPager: ViewPager2,
+    private val onPopularFestivalSelected: (FestivalItemUiState) -> Unit,
 ) {
 
+    private val popularFestivals = mutableListOf<FestivalItemUiState>()
     private val foregroundAdapter: PopularFestivalForegroundAdapter =
         PopularFestivalForegroundAdapter()
     private val backgroundAdapter: PopularFestivalBackgroundAdapter =
@@ -32,6 +36,7 @@ class PopularFestivalViewPagerAdapter(
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 target.setCurrentItem(position, false)
+                onPopularFestivalSelected(popularFestivals[position])
             }
         }
         viewpager.registerOnPageChangeCallback(onPageChangeCallback)
@@ -39,9 +44,17 @@ class PopularFestivalViewPagerAdapter(
 
     private fun narrowSpaceViewPager(viewPager: ViewPager2) {
         viewPager.setPageTransformer { page, position ->
-            val offset = position * -(2 * dpToPx(OFFSET_BETWEEN_PAGES))
-            page.translationX = offset
+            translateOffsetBetweenPages(position, page)
+            reduceUnselectedPagesScale(page, position)
         }
+    }
+
+    private fun translateOffsetBetweenPages(position: Float, page: View) {
+        val screenWidth = Resources.getSystem().configuration.screenWidthDp
+        val offsetBetweenPages = screenWidth - IMAGE_SIZE - INTERVAL_IMAGE
+        val reducedDifference = IMAGE_SIZE - (IMAGE_SIZE * RATE_SELECT_BY_UNSELECT)
+        val offset = position * -dpToPx(offsetBetweenPages + reducedDifference * 0.5f)
+        page.translationX = offset
     }
 
     private fun dpToPx(dp: Float): Int {
@@ -49,17 +62,41 @@ class PopularFestivalViewPagerAdapter(
         return (dp * density).toInt()
     }
 
+    private fun reduceUnselectedPagesScale(page: View, position: Float) {
+        page.movePivotTo(x = page.pivotX, y = MIDDLE_IMAGE_PIVOT)
+        if (position <= ALREADY_LOAD_POSITION_CONDITION) {
+            page.reduceScaleBy(position = position, rate = RATE_SELECT_BY_UNSELECT)
+        }
+    }
+
+    private fun View.movePivotTo(x: Float, y: Float) {
+        pivotX = x
+        pivotY = y
+    }
+
+    private fun View.reduceScaleBy(position: Float, rate: Float) {
+        val scaleFactor = rate.coerceAtLeast(1 - abs(position))
+        scaleY = scaleFactor
+        scaleX = scaleFactor
+    }
+
     private fun setOffscreenPagesLimit(viewPager: ViewPager2, limit: Int) {
         viewPager.offscreenPageLimit = limit
     }
 
-    fun submitList(popularFestivals: List<FestivalItemUiState>) {
-        foregroundAdapter.submitList(popularFestivals)
-        backgroundAdapter.submitList(popularFestivals)
+    fun submitList(festivals: List<FestivalItemUiState>) {
+        popularFestivals.clear()
+        popularFestivals.addAll(festivals)
+        foregroundAdapter.submitList(festivals)
+        backgroundAdapter.submitList(festivals)
     }
 
     companion object {
-        private const val PAGE_LIMIT = 3
-        private const val OFFSET_BETWEEN_PAGES = 63.0f
+        private const val ALREADY_LOAD_POSITION_CONDITION = 2
+        private const val RATE_SELECT_BY_UNSELECT = 0.81f
+        private const val PAGE_LIMIT = 4
+        private const val IMAGE_SIZE = 220.0f
+        private const val INTERVAL_IMAGE = 24.0f
+        private const val MIDDLE_IMAGE_PIVOT = 360.0f
     }
 }
