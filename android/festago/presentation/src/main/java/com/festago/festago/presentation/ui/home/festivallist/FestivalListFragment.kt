@@ -53,6 +53,7 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initView() {
+        vm.loadFestivals(festivalFilterUiState = null)
         initViewPager()
         initRecyclerView()
         initRefresh()
@@ -106,12 +107,12 @@ class FestivalListFragment : Fragment() {
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
         festivalListAdapter.submitList(
             listOf(
-                uiState,
+                uiState.popularFestivals,
                 FestivalTabUiState {
                     val festivalFilter = when (it) {
-                        0 -> FestivalFilterUiState.PLANNED
-                        1 -> FestivalFilterUiState.PROGRESS
-                        else -> FestivalFilterUiState.PLANNED
+                        0 -> FestivalFilterUiState.PROGRESS
+                        1 -> FestivalFilterUiState.PLANNED
+                        else -> FestivalFilterUiState.PROGRESS
                     }
                     vm.loadFestivals(festivalFilter)
                 },
