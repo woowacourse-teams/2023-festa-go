@@ -15,4 +15,3 @@ sealed interface FestivalListUiState {
     val shouldShowLoading get() = this is Loading
     val shouldShowError get() = this is Error
 }
-

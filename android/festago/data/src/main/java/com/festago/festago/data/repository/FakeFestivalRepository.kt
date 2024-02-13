@@ -1,6 +1,5 @@
 package com.festago.festago.data.repository
 
-import android.util.Log
 import com.festago.festago.domain.model.festival.FestivalFilter
 import com.festago.festago.domain.model.festival.FestivalLocation
 import com.festago.festago.domain.model.festival.FestivalsPage
