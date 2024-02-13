@@ -1,6 +1,5 @@
 package com.festago.festival.application.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -61,15 +60,20 @@ class FestivalDetailV1QueryServiceIntegrationTest extends ApplicationIntegration
      */
     Festival 축제;
     Festival 공연_없는_축제;
+    Festival 소셜미디어_없는_축제;
 
     @BeforeEach
     void setUp() {
         School 테코대학교 = schoolRepository.save(new School("teco.ac.kr", "테코대학교", SchoolRegion.서울));
+        School 소셜미디어_없는_학교 = schoolRepository.save(new School("wote.ac.kr", "우테대학교", SchoolRegion.서울));
 
         축제 = festivalRepository.save(
             new Festival("테코대학교 축제", now, now.plusDays(2), "https://school.com/image.com", 테코대학교));
         공연_없는_축제 = festivalRepository.save(
             new Festival("테코대학교 공연 없는 축제", now, now, "https://school.com/image.com", 테코대학교)
+        );
+        소셜미디어_없는_축제 = festivalRepository.save(
+            new Festival("우테대학교 소셜미디어 없는 축제", now, now, "https://school.com/image.com", 소셜미디어_없는_학교)
         );
 
         Stage 첫째날_공연 = stageRepository.save(
@@ -78,6 +82,8 @@ class FestivalDetailV1QueryServiceIntegrationTest extends ApplicationIntegration
             new Stage(now.plusDays(1).atTime(18, 0), now.minusWeeks(1).atStartOfDay(), 축제));
         Stage 셋째날_공연 = stageRepository.save(
             new Stage(now.plusDays(2).atTime(18, 0), now.minusWeeks(1).atStartOfDay(), 축제));
+        Stage 소셜미디어_없는_축제_공연 = stageRepository.save(
+            new Stage(now.atTime(18, 0), now.minusWeeks(1).atStartOfDay(), 소셜미디어_없는_축제));
 
         StageQueryInfo 첫째날_공연_QueryInfo = StageQueryInfo.create(첫째날_공연.getId());
         첫째날_공연_QueryInfo.updateArtist("뉴진스");
@@ -90,6 +96,10 @@ class FestivalDetailV1QueryServiceIntegrationTest extends ApplicationIntegration
         StageQueryInfo 셋째날_공연_QueryInfo = StageQueryInfo.create(셋째날_공연.getId());
         셋째날_공연_QueryInfo.updateArtist("소녀시대");
         stageQueryInfoRepository.save(셋째날_공연_QueryInfo);
+
+        StageQueryInfo 소셜미디어_없는_축제_공연_QueryInfo = StageQueryInfo.create(소셜미디어_없는_축제_공연.getId());
+        소셜미디어_없는_축제_공연_QueryInfo.updateArtist("SG워너비");
+        stageQueryInfoRepository.save(소셜미디어_없는_축제_공연_QueryInfo);
 
         socialMediaRepository.save(
             new SocialMedia(테코대학교.getId(), OwnerType.SCHOOL, SocialMediaType.INSTAGRAM, "총학생회 인스타그램",
@@ -130,7 +140,28 @@ class FestivalDetailV1QueryServiceIntegrationTest extends ApplicationIntegration
         var response = festivalDetailV1QueryService.findFestivalDetail(공연_없는_축제.getId());
 
         // then
-        assertThat(response.stages()).isEmpty();
+        assertSoftly(softly -> {
+            softly.assertThat(response.name()).isEqualTo("테코대학교 공연 없는 축제");
+            softly.assertThat(response.stages()).isEmpty();
+            softly.assertThat(response.socialMedias())
+                .map(SocialMediaV1Response::name)
+                .containsExactlyInAnyOrder("총학생회 인스타그램", "총학생회 페이스북");
+        });
+    }
+
+    @Test
+    void 축제에_속한_학교에_소셜미디어가_없으면_소셜미디어에는_비어있는_컬렉션이_반환된다() {
+        // when
+        var response = festivalDetailV1QueryService.findFestivalDetail(소셜미디어_없는_축제.getId());
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(response.name()).isEqualTo("우테대학교 소셜미디어 없는 축제");
+            softly.assertThat(response.socialMedias()).isEmpty();
+            softly.assertThat(response.stages())
+                .map(StageV1Response::artists)
+                .containsExactlyInAnyOrder("SG워너비");
+        });
     }
 
     @Test
