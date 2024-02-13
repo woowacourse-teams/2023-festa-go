@@ -10,6 +10,7 @@ import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.SchoolUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -45,8 +46,10 @@ class FestivalListViewModel @Inject constructor(
                 val popularFestivals = deferredPopularFestivals.await().getOrThrow()
 
                 _uiState.value = FestivalListUiState.Success(
-                    popularFestivalsTitle = popularFestivals.title,
-                    popularFestivals = popularFestivals.festivals.map { it.toUiState() },
+                    PopularFestivalUiState(
+                        title = popularFestivals.title,
+                        popularFestivals = popularFestivals.festivals.map { it.toUiState() },
+                    ),
                     festivals = festivalsPage.festivals.map { it.toUiState() },
                     isLastPage = festivalsPage.isLastPage,
                 )
