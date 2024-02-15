@@ -96,7 +96,7 @@ public class FestivalV1QueryDslRepository {
     }
 
     private BooleanExpression addRegion(BooleanExpression filterResult, SchoolRegion region) {
-        if (region == null || region == SchoolRegion.기타) {
+        if (region == null || region == SchoolRegion.ANY) {
             return filterResult;
         }
         return filterResult.and(school.region.eq(region));
