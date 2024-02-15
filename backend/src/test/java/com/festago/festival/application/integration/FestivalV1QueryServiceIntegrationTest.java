@@ -134,7 +134,7 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 진행_중_축제는_5개_이다() {
             // given
-            var request = new FestivalV1QueryRequest(SchoolRegion.기타, FestivalFilter.PROGRESS, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PROGRESS, null, null);
 
             // when
             var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
@@ -149,7 +149,7 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 진행_예정_축제는_3개_이다() {
             // given
-            var request = new FestivalV1QueryRequest(SchoolRegion.기타, FestivalFilter.PLANNED, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PLANNED, null, null);
 
             // when
             var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
@@ -164,7 +164,7 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 원하는_갯수의_축제를_조회하면_마지막_페이지_여부를_알_수_있다() {
             // given
-            var request = new FestivalV1QueryRequest(SchoolRegion.기타, FestivalFilter.PROGRESS, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PROGRESS, null, null);
 
             // when
             var response = festivalV1QueryService.findFestivals(Pageable.ofSize(4), request);
@@ -179,7 +179,7 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 진행_예정_축제는_시작_날짜가_빠른_순으로_정렬되고_시작_날짜가_같으면_식별자의_오름차순으로_정렬되어_반환된다() {
             // given
-            var request = new FestivalV1QueryRequest(SchoolRegion.기타, FestivalFilter.PLANNED, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PLANNED, null, null);
 
             // when
             var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
@@ -197,7 +197,7 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 진행_중_축제는_시작_날짜가_느린_순으로_정렬되고_시작_날짜가_같으면_식별자의_오름차순으로_정렬되어_반환된다() {
             // given
-            var request = new FestivalV1QueryRequest(SchoolRegion.기타, FestivalFilter.PROGRESS, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PROGRESS, null, null);
 
             // when
             var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
@@ -217,10 +217,10 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 커서_기반_페이징이_적용되어야_한다() {
             // given
-            var firstRequest = new FestivalV1QueryRequest(SchoolRegion.기타, FestivalFilter.PROGRESS, null, null);
+            var firstRequest = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PROGRESS, null, null);
             var firstResponse = festivalV1QueryService.findFestivals(Pageable.ofSize(2), firstRequest);
             var lastElement = firstResponse.getContent().get(1);
-            var secondRequest = new FestivalV1QueryRequest(SchoolRegion.기타, FestivalFilter.PROGRESS, lastElement.id(),
+            var secondRequest = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PROGRESS, lastElement.id(),
                 lastElement.startDate());
 
             // when
