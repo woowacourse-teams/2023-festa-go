@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public record StageV1Response(
     Long id,
-    LocalDateTime startDate,
+    LocalDateTime startDateTime,
     @JsonRawValue
     String artists
 ) {
