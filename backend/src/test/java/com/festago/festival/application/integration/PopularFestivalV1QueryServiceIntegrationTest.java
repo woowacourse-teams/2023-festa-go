@@ -89,6 +89,7 @@ class PopularFestivalV1QueryServiceIntegrationTest extends ApplicationIntegratio
         // then
         assertThat(expect)
             .map(FestivalV1Response::id)
+            .hasSize(7)
             .containsExactly(
                 여덟번째로_저장된_축제.getId(),
                 일곱번째로_저장된_축제.getId(),
