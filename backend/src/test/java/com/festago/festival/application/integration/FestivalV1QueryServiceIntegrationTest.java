@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.given;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.application.FestivalV1QueryService;
@@ -43,19 +42,23 @@ import org.springframework.transaction.annotation.Transactional;
 class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
+    FestivalV1QueryService festivalV1QueryService;
+
+    @Autowired
     FestivalInfoRepository festivalInfoRepository;
+
     @Autowired
     FestivalRepository festivalRepository;
+
     @Autowired
     SchoolRepository schoolRepository;
+
     @Autowired
     ArtistRepository artistRepository;
+
     @Autowired
     FestivalInfoSerializer festivalInfoSerializer;
-    @Autowired
-    FestivalV1QueryService festivalV1QueryService;
-    @Autowired
-    ObjectMapper objectMapper;
+
     @Autowired
     Clock clock;
 
