@@ -122,7 +122,7 @@ public class FestivalV1QueryDslRepository extends QueryDslRepositorySupport {
     }
 
     private BooleanExpression applyRegion(BooleanExpression booleanExpression, SchoolRegion region) {
-        if (region == SchoolRegion.기타) {
+        if (region == SchoolRegion.ANY) {
             return booleanExpression;
         }
         return booleanExpression.and(school.region.eq(region));

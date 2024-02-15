@@ -43,16 +43,17 @@ public class School extends BaseTimeEntity {
     }
 
     public School(Long id, String domain, String name, SchoolRegion region) {
-        validate(domain, name);
+        validate(domain, name, region);
         this.id = id;
         this.domain = domain;
         this.name = name;
         this.region = region;
     }
 
-    private void validate(String domain, String name) {
+    private void validate(String domain, String name, SchoolRegion region) {
         validateDomain(domain);
         validateName(name);
+        validateRegion(region);
     }
 
     private void validateDomain(String domain) {
@@ -67,6 +68,10 @@ public class School extends BaseTimeEntity {
         Validator.maxLength(name, MAX_NAME_LENGTH, fieldName);
     }
 
+    private void validateRegion(SchoolRegion region) {
+        Validator.notNull(region, "region");
+    }
+
     public void changeDomain(String domain) {
         validateDomain(domain);
         this.domain = domain;
@@ -75,6 +80,11 @@ public class School extends BaseTimeEntity {
     public void changeName(String name) {
         validateName(name);
         this.name = name;
+    }
+
+    public void changeRegion(SchoolRegion region) {
+        validateRegion(region);
+        this.region = region;
     }
 
     public Long getId() {
