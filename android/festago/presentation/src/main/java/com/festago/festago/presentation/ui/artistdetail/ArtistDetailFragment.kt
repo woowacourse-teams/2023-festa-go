@@ -1,6 +1,8 @@
 package com.festago.festago.presentation.ui.artistdetail
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -89,19 +91,16 @@ class ArtistDetailFragment : Fragment() {
                 (layoutInflater.inflate(R.layout.chip_media, binding.cgArtistMedia, false) as Chip)
                     .apply {
                         syncIcon(media.logoUrl)
-                        text = media.name
-                        setOnClickListener {
-                            // TODO: 유지보수하기 쉽게 변경
-                            val intent =
-                                requireContext().packageManager.getLaunchIntentForPackage("com.android.chrome")
-                            if (intent != null) {
-                                intent.data = android.net.Uri.parse(media.url)
-                                startActivity(intent)
-                            }
-                        }
+                        setOnClickListener { startBrowser(media.url) }
                     },
             )
         }
+    }
+
+    private fun startBrowser(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        startActivity(intent)
     }
 
     private fun Chip.syncIcon(url: String) {
