@@ -35,21 +35,17 @@ import org.springframework.test.web.servlet.MockMvc;
 @CustomWebMvcTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AdminArtistV1ControllerTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    ArtistV1QueryService artistV1QueryService;
-
-    @Autowired
-    ArtistCommandService artistCommandService;
+class AdminArtistDetailV1ControllerTest {
 
     private static final Cookie COOKIE = new Cookie("token", "token");
+    @Autowired
+    MockMvc mockMvc;
+    @Autowired
+    ObjectMapper objectMapper;
+    @Autowired
+    ArtistV1QueryService artistV1QueryService;
+    @Autowired
+    ArtistCommandService artistCommandService;
 
     @Nested
     class 아티스트_생성 {
@@ -66,16 +62,16 @@ class AdminArtistV1ControllerTest {
                 // given
                 ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png");
                 given(artistCommandService.save(any(ArtistCreateRequest.class)))
-                        .willReturn(1L);
+                    .willReturn(1L);
 
                 // when & then
                 mockMvc.perform(post(uri)
-                                .cookie(COOKIE)
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andDo(print())
-                        .andExpect(status().isCreated())
-                        .andExpect(header().string(HttpHeaders.LOCATION, uri + "/1"));
+                        .cookie(COOKIE)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isCreated())
+                    .andExpect(header().string(HttpHeaders.LOCATION, uri + "/1"));
             }
         }
     }
@@ -97,11 +93,11 @@ class AdminArtistV1ControllerTest {
 
                 // when & then
                 mockMvc.perform(put(uri, 1L)
-                                .cookie(COOKIE)
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andDo(print())
-                        .andExpect(status().isOk());
+                        .cookie(COOKIE)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isOk());
             }
         }
     }
@@ -120,10 +116,10 @@ class AdminArtistV1ControllerTest {
             void 요청을_보내면_204_응답이_반환된다() throws Exception {
                 // when & then
                 mockMvc.perform(delete(uri, 1L)
-                                .cookie(COOKIE)
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andDo(print())
-                        .andExpect(status().isNoContent());
+                        .cookie(COOKIE)
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isNoContent());
             }
         }
     }
@@ -143,15 +139,15 @@ class AdminArtistV1ControllerTest {
                 // given
                 ArtistV1Response expected = new ArtistV1Response(1L, "윤하", "https://image.com/image.png");
                 given(artistV1QueryService.findById(expected.id()))
-                        .willReturn(expected);
+                    .willReturn(expected);
 
                 // when & then
-                mockMvc.perform(get(uri , 1L)
-                                .cookie(COOKIE)
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andDo(print())
-                        .andExpect(status().isOk())
-                        .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+                mockMvc.perform(get(uri, 1L)
+                        .cookie(COOKIE)
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(expected)));
             }
         }
     }
@@ -170,19 +166,19 @@ class AdminArtistV1ControllerTest {
             void 요청을_보내면_200_응답과_body가_반환된다() throws Exception {
                 // given
                 List<ArtistV1Response> expected = List.of(
-                        new ArtistV1Response(1L, "윤하", "https://image.com/image1.png"),
-                        new ArtistV1Response(2L, "고윤하", "https://image.com/image2.png")
+                    new ArtistV1Response(1L, "윤하", "https://image.com/image1.png"),
+                    new ArtistV1Response(2L, "고윤하", "https://image.com/image2.png")
                 );
                 given(artistV1QueryService.findAll())
-                        .willReturn(expected);
+                    .willReturn(expected);
 
                 // when & then
                 mockMvc.perform(get(uri)
-                                .cookie(COOKIE)
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andDo(print())
-                        .andExpect(status().isOk())
-                        .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+                        .cookie(COOKIE)
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(expected)));
             }
         }
     }
