@@ -15,9 +15,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 @Repository
-public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
+public class AdminSchoolV1QueryDslRepository extends QueryDslRepositorySupport {
 
-    protected SchoolV1QueryDslRepository() {
+    protected AdminSchoolV1QueryDslRepository() {
         super(School.class);
     }
 

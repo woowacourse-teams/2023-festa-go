@@ -7,7 +7,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.querydsl.SearchCondition;
-import com.festago.school.application.SchoolV1QueryService;
+import com.festago.school.application.AdminSchoolV1QueryService;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.presentation.v1.dto.SchoolV1Response;
@@ -26,10 +26,10 @@ import org.springframework.data.domain.Sort;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
+class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
-    SchoolV1QueryService schoolV1QueryService;
+    AdminSchoolV1QueryService adminSchoolV1QueryService;
 
     @Autowired
     SchoolRepository schoolRepository;
@@ -55,7 +55,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             SearchCondition searchCondition = new SearchCondition("", "", pageable);
 
             // when
-            Page<SchoolV1Response> response = schoolV1QueryService.findAll(searchCondition);
+            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
                 .map(SchoolV1Response::name)
@@ -69,7 +69,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             SearchCondition searchCondition = new SearchCondition("id", 글렌대학교.getId().toString(), pageable);
 
             // when
-            Page<SchoolV1Response> response = schoolV1QueryService.findAll(searchCondition);
+            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
                 .map(SchoolV1Response::name)
@@ -83,7 +83,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             SearchCondition searchCondition = new SearchCondition("region", "서울", pageable);
 
             // when
-            Page<SchoolV1Response> response = schoolV1QueryService.findAll(searchCondition);
+            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
                 .map(SchoolV1Response::name)
@@ -97,7 +97,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             SearchCondition searchCondition = new SearchCondition("domain", "wote", pageable);
 
             // when
-            Page<SchoolV1Response> response = schoolV1QueryService.findAll(searchCondition);
+            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
                 .map(SchoolV1Response::name)
@@ -111,7 +111,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             SearchCondition searchCondition = new SearchCondition("name", "글렌", pageable);
 
             // when
-            Page<SchoolV1Response> response = schoolV1QueryService.findAll(searchCondition);
+            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
                 .map(SchoolV1Response::name)
@@ -125,7 +125,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             SearchCondition searchCondition = new SearchCondition("", "글렌", pageable);
 
             // when
-            Page<SchoolV1Response> response = schoolV1QueryService.findAll(searchCondition);
+            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
                 .hasSize(3);
@@ -138,7 +138,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             SearchCondition searchCondition = new SearchCondition("id", "", pageable);
 
             // when
-            Page<SchoolV1Response> response = schoolV1QueryService.findAll(searchCondition);
+            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
                 .hasSize(3);
@@ -151,7 +151,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             SearchCondition searchCondition = new SearchCondition("", "", pageable);
 
             // when
-            Page<SchoolV1Response> response = schoolV1QueryService.findAll(searchCondition);
+            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             // then
             assertSoftly(softly -> {
@@ -171,7 +171,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             Long 테코대학교_식별자 = 테코대학교.getId();
 
             // when
-            SchoolV1Response response = schoolV1QueryService.findById(테코대학교_식별자);
+            SchoolV1Response response = adminSchoolV1QueryService.findById(테코대학교_식별자);
 
             // then
             assertThat(response.name()).isEqualTo("테코대학교");
@@ -183,7 +183,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             Long invalidId = 4885L;
 
             // when
-            assertThatThrownBy(() -> schoolV1QueryService.findById(invalidId))
+            assertThatThrownBy(() -> adminSchoolV1QueryService.findById(invalidId))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(ErrorCode.SCHOOL_NOT_FOUND.getMessage());
         }
