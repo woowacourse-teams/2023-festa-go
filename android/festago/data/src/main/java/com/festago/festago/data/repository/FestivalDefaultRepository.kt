@@ -21,7 +21,6 @@ class FestivalDefaultRepository @Inject constructor(
         // runCatchingResponse {
         //     festivalRetrofitService.getPopularFestivals()
         // }.onSuccessOrCatch { it.map { festival -> festival.toDomain() } }
-        delay(5000)
         return Result.success(popularFestivals)
     }
 
@@ -43,7 +42,6 @@ class FestivalDefaultRepository @Inject constructor(
         //     )
         // }.onSuccessOrCatch { it.toDomain() }
 
-        delay(3000)
         return Result.success(
             FestivalsPage(
                 isLastPage = true,

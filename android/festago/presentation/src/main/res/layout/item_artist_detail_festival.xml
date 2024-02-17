@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="132dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/bg_festival_list_festival"
         tools:layout_height="132dp"
         tools:layout_width="328dp">

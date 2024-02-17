@@ -1,28 +1,21 @@
 package com.festago.festago.presentation.ui.artistdetail
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentArtistDetailBinding
+import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.artistdetail.adapter.festival.ArtistDetailAdapter
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
-import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,6 +58,10 @@ class ArtistDetailFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+
+        binding.cvBookmark.setOnClickListener {
+            binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
+        }
     }
 
     private fun initObserve() {
@@ -86,14 +83,15 @@ class ArtistDetailFragment : Fragment() {
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
         binding.uiState = uiState
         adapter.submitList(uiState.stages)
-        uiState.artist.artistMedia.forEach { media ->
-            binding.cgArtistMedia.addView(
-                (layoutInflater.inflate(R.layout.chip_media, binding.cgArtistMedia, false) as Chip)
-                    .apply {
-                        syncIcon(media.logoUrl)
-                        setOnClickListener { startBrowser(media.url) }
-                    },
-            )
+
+        binding.llcArtistMedia.removeAllViews()
+
+        uiState.artist.artistMedia.map { media ->
+            with(ItemMediaBinding.inflate(layoutInflater, binding.llcArtistMedia, false)) {
+                imageUrl = media.logoUrl
+                ivImage.setOnClickListener { startBrowser(media.url) }
+                binding.llcArtistMedia.addView(ivImage)
+            }
         }
     }
 
@@ -101,38 +99,6 @@ class ArtistDetailFragment : Fragment() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(url)
         startActivity(intent)
-    }
-
-    private fun Chip.syncIcon(url: String) {
-        Glide.with(this)
-            .load(url)
-            .addListener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any,
-                    target: Target<Drawable>,
-                    isFirstResource: Boolean,
-                ): Boolean {
-                    chipIcon =
-                        ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.ic_launcher_background,
-                            null,
-                        )
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any?,
-                    target: Target<Drawable>,
-                    dataSource: DataSource,
-                    isFirstResource: Boolean,
-                ): Boolean {
-                    chipIcon = resource
-                    return false
-                }
-            }).preload()
     }
 
     override fun onDestroyView() {
