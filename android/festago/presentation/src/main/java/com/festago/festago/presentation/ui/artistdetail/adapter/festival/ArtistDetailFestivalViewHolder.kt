@@ -37,6 +37,7 @@ class ArtistDetailFestivalViewHolder(
         val context = binding.root.context
 
         val dDayView = binding.tvFestivalDDay
+
         when {
             LocalDate.now() > item.endDate -> Unit
 
@@ -54,16 +55,16 @@ class ArtistDetailFestivalViewHolder(
                     R.string.artist_detail_tv_dday_format,
                     item.startDate.compareTo(LocalDate.now()).toString(),
                 )
+                dDayView.setTextColor(context.getColor(android.R.color.white))
                 dDayView.setBackgroundColor(0xffff1273.toInt())
             }
 
-            else -> binding.tvFestivalDDay.apply {
-                println("startDate: ${item.startDate}")
-                println(item.startDate.compareTo(LocalDate.now()).toString())
+            else -> {
                 dDayView.text = context.getString(
                     R.string.artist_detail_tv_dday_format,
                     (LocalDate.now().toEpochDay() - item.startDate.toEpochDay()).toString(),
                 )
+                dDayView.setTextColor(context.getColor(android.R.color.white))
                 dDayView.setBackgroundColor(context.getColor(android.R.color.black))
             }
         }
