@@ -15,6 +15,12 @@ object FakeSchool {
                 name = "구글대학교 인스타",
                 logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png",
                 url = "https://www.instagram.com/",
+            ),
+            SocialMedia(
+                type = "INSTAGRAM",
+                name = "구글대학교 X",
+                logoUrl = "https://about.x.com/content/dam/about-twitter/x/brand-toolkit/logo-black.png.twimg.1920.png",
+                url = "https://twitter.com/?lang=en",
             )
         )
     )
