@@ -3,8 +3,9 @@ package com.festago.festago.data.repository
 import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.artist.ArtistDetail
 import com.festago.festago.domain.model.artist.ArtistMedia
-import com.festago.festago.domain.model.artist.Stage
 import com.festago.festago.domain.model.artist.Stages
+import com.festago.festago.domain.model.festival.Festival
+import com.festago.festago.domain.model.school.School
 import com.festago.festago.domain.repository.ArtistRepository
 import java.time.LocalDate
 import javax.inject.Inject
@@ -54,12 +55,17 @@ class FakeArtistRepository @Inject constructor() : ArtistRepository {
                 false,
                 (0..10).flatMap {
                     listOf(
-                        Stage(
+                        Festival(
                             1,
                             "예시 페스티벌 1",
                             LocalDate.parse("2024-05-01"),
                             LocalDate.parse("2024-05-03"),
                             "https://source.unsplash.com/random/300×${300 + index++}",
+                            School(
+                                1,
+                                "예시 학교",
+                                "https://source.unsplash.com/random/300×${300 + index++}",
+                            ),
                             listOf(
                                 Artist(
                                     101,
@@ -73,12 +79,17 @@ class FakeArtistRepository @Inject constructor() : ArtistRepository {
                                 ),
                             ),
                         ),
-                        Stage(
+                        Festival(
                             2,
                             "예시 페스티벌 2",
                             LocalDate.parse("2024-06-10"),
                             LocalDate.parse("2024-06-12"),
                             "https://source.unsplash.com/random/300×${300 + index++}",
+                            School(
+                                1,
+                                "예시 학교",
+                                "https://source.unsplash.com/random/300×${300 + index++}",
+                            ),
                             listOf(
                                 Artist(
                                     101,
