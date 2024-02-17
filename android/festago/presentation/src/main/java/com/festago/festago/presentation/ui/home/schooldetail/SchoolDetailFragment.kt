@@ -66,6 +66,12 @@ class SchoolDetailFragment : Fragment() {
         binding.successUiState = uiState
         binding.ivSchoolBackground.setColorFilter(Color.parseColor("#66000000"))
         adapter.submitList(uiState.festivals)
+        binding.llcSchoolSocialMedia.removeAllViews()
+        uiState.schoolInfo.socialMedia.forEach { sm ->
+            binding.llcSchoolSocialMedia.addView(
+                SocialMediaView(requireActivity(), null, sm.logoUrl, sm.url)
+            )
+        }
     }
 
     override fun onDestroyView() {
