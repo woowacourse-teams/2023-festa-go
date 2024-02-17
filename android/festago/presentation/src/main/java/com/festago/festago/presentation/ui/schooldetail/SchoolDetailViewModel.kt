@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.home.schooldetail
+package com.festago.festago.presentation.ui.schooldetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,9 +6,10 @@ import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
 import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.repository.SchoolRepository
-import com.festago.festago.presentation.ui.home.schooldetail.uistate.ArtistUiState
-import com.festago.festago.presentation.ui.home.schooldetail.uistate.FestivalItemUiState
-import com.festago.festago.presentation.ui.home.schooldetail.uistate.SchoolUiState
+import com.festago.festago.presentation.ui.schooldetail.uistate.ArtistUiState
+import com.festago.festago.presentation.ui.schooldetail.uistate.FestivalItemUiState
+import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
+import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,10 +1,10 @@
-package com.festago.festago.presentation.ui.home.schooldetail
+package com.festago.festago.presentation.ui.schooldetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.databinding.ItemSchoolDetailArtistBinding
-import com.festago.festago.presentation.ui.home.schooldetail.uistate.ArtistUiState
+import com.festago.festago.presentation.ui.schooldetail.uistate.ArtistUiState
 
 class ArtistViewHolder(
     private val binding: ItemSchoolDetailArtistBinding,

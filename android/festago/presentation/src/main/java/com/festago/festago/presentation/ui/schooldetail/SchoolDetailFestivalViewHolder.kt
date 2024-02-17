@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.home.schooldetail
+package com.festago.festago.presentation.ui.schooldetail
 
 import android.content.res.Resources
 import android.graphics.Rect
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ItemSchoolDetailFestivalBinding
-import com.festago.festago.presentation.ui.home.schooldetail.uistate.FestivalItemUiState
+import com.festago.festago.presentation.ui.schooldetail.uistate.FestivalItemUiState
 import java.time.LocalDate
 
 class SchoolDetailFestivalViewHolder(

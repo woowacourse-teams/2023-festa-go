@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.home.schooldetail
+package com.festago.festago.presentation.ui.schooldetail
 
 import android.content.Context
 import android.content.Intent

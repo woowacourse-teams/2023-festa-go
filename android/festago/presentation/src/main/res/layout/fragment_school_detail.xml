@@ -7,11 +7,11 @@
 
         <variable
             name="uiState"
-            type="com.festago.festago.presentation.ui.home.schooldetail.SchoolDetailUiState" />
+            type="com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState" />
 
         <variable
             name="successUiState"
-            type="com.festago.festago.presentation.ui.home.schooldetail.SchoolDetailUiState.Success" />
+            type="com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState.Success" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

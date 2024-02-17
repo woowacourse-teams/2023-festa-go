@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.home.schooldetail
+package com.festago.festago.presentation.ui.schooldetail
 
 import android.graphics.Color
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
+import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 

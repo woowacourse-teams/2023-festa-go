@@ -7,7 +7,7 @@
 
         <variable
             name="artist"
-            type="com.festago.festago.presentation.ui.home.schooldetail.uistate.ArtistUiState" />
+            type="com.festago.festago.presentation.ui.schooldetail.uistate.ArtistUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

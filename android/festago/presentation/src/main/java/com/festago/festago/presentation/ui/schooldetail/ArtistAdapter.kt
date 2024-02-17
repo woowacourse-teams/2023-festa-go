@@ -1,9 +1,9 @@
-package com.festago.festago.presentation.ui.home.schooldetail
+package com.festago.festago.presentation.ui.schooldetail
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.festago.festago.presentation.ui.home.schooldetail.uistate.ArtistUiState
+import com.festago.festago.presentation.ui.schooldetail.uistate.ArtistUiState
 
 class ArtistAdapter : ListAdapter<ArtistUiState, ArtistViewHolder>(diffUtil) {
 

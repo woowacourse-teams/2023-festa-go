@@ -16,7 +16,7 @@ import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
-import com.festago.festago.presentation.ui.home.schooldetail.SchoolDetailFragment
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 

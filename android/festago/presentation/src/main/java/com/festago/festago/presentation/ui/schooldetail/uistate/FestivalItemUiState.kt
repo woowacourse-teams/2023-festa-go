@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.home.schooldetail.uistate
+package com.festago.festago.presentation.ui.schooldetail.uistate
 
 import java.time.LocalDate
 
