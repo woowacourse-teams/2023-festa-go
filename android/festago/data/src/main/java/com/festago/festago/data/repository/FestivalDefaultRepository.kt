@@ -8,14 +8,12 @@ import com.festago.festago.domain.model.festival.FestivalFilter
 import com.festago.festago.domain.model.festival.FestivalLocation
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.repository.FestivalRepository
-import kotlinx.coroutines.delay
 import java.time.LocalDate
 import javax.inject.Inject
 
 class FestivalDefaultRepository @Inject constructor(
     private val festivalRetrofitService: FestivalRetrofitService,
 ) : FestivalRepository {
-
     override suspend fun loadPopularFestivals(): Result<List<Festival>> {
         // TODO: 서버 배포 후 API 연동 필요
         // runCatchingResponse {
