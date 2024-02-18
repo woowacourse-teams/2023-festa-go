@@ -8,12 +8,12 @@ import javax.inject.Inject
 class SchoolDefaultRepository @Inject constructor(
     // TODO: Service 연결
 ) : SchoolRepository {
-    override suspend fun loadSchoolInfo(): Result<SchoolInfo> {
+    override suspend fun loadSchoolInfo(schoolId: Long): Result<SchoolInfo> {
         // TODO: API 연동
         return Result.success(FakeSchool.googleSchool)
     }
 
-    override suspend fun loadSchoolFestivals(): Result<FestivalsPage> {
+    override suspend fun loadSchoolFestivals(schoolId: Long): Result<FestivalsPage> {
         // TODO: API 연동
         return Result.success(
             FestivalsPage(

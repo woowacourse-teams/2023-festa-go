@@ -33,9 +33,9 @@ class SchoolDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val schoolId = requireArguments().getLong(SCHOOL_ID_KEY)
+        initView(schoolId)
         initObserve()
-        initView()
     }
 
     private fun initObserve() {
@@ -47,10 +47,10 @@ class SchoolDetailFragment : Fragment() {
         }
     }
 
-    private fun initView() {
+    private fun initView(schoolId: Long) {
         adapter = SchoolFestivalListAdapter()
         binding.rvFestivalList.adapter = adapter
-        vm.loadSchoolDetail()
+        vm.loadSchoolDetail(schoolId)
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -81,5 +81,15 @@ class SchoolDetailFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val SCHOOL_ID_KEY = "SCHOOL_ID_KEY"
+
+        fun newInstance(id: Long) = SchoolDetailFragment().apply {
+            arguments = Bundle().apply {
+                putLong(SCHOOL_ID_KEY, id)
+            }
+        }
     }
 }

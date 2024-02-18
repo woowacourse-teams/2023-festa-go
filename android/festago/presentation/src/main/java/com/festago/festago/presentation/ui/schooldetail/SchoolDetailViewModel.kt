@@ -27,10 +27,10 @@ class SchoolDetailViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<SchoolDetailUiState>(SchoolDetailUiState.Loading)
     val uiState: StateFlow<SchoolDetailUiState> = _uiState.asStateFlow()
 
-    fun loadSchoolDetail() {
+    fun loadSchoolDetail(schoolId: Long) {
         viewModelScope.launch {
-            val deferredSchoolInfo = async { schoolRepository.loadSchoolInfo() }
-            val deferredFestivalPage = async { schoolRepository.loadSchoolFestivals() }
+            val deferredSchoolInfo = async { schoolRepository.loadSchoolInfo(schoolId) }
+            val deferredFestivalPage = async { schoolRepository.loadSchoolFestivals(schoolId) }
 
             runCatching {
                 val schoolInfo = deferredSchoolInfo.await().getOrThrow()
