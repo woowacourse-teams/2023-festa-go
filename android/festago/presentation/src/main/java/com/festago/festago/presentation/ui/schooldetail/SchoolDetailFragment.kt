@@ -51,6 +51,9 @@ class SchoolDetailFragment : Fragment() {
         adapter = SchoolFestivalListAdapter()
         binding.rvFestivalList.adapter = adapter
         vm.loadSchoolDetail()
+        binding.ivBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun updateUi(uiState: SchoolDetailUiState) {

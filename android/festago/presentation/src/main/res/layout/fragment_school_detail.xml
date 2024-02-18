@@ -50,6 +50,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/ic_launcher_background" />
 
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="@id/ivSchoolBackground"
+                app:layout_constraintStart_toStartOf="@id/ivSchoolBackground"
+                app:layout_constraintTop_toTopOf="@id/ivSchoolBackground" />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvSchoolLogo"
                 android:layout_width="80dp"
