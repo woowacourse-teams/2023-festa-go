@@ -124,7 +124,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
 
         // when
         List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(
-            school.getId(), today, null, null, true);
+            school.getId(), today, null, null, true, 10);
 
         // then
         assertThat(actual).hasSize(1);
@@ -142,7 +142,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
         saveFestival(today.minusDays(3), today.minusDays(1), school);
         // when
         List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(
-            school.getId(), today, null, null, false);
+            school.getId(), today, null, null, false, 10);
 
         // then
         assertThat(actual).hasSize(2);
@@ -159,7 +159,8 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
         Festival recentFestival = saveFestival(today, today.plusDays(1), school);
 
         // when
-        List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today, null, null, false);
+        List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today, null, null, false,
+            10);
 
         // then
         assertThat(actual.get(0).id()).isEqualTo(recentFestival.getId());
@@ -176,10 +177,52 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
         Festival recentFestival = saveFestival(today.minusDays(3), today.minusDays(1), school);
 
         // when
-        List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today, null, null, true);
+        List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today, null, null, true, 10);
 
         // then
         assertThat(actual.get(0).id()).isEqualTo(recentFestival.getId());
+    }
+
+    @Test
+    void 페이징하여_현재_축제를_조회한다() {
+        // given
+        LocalDate today = LocalDate.now();
+        School school = schoolRepository.save(SchoolFixture.school().build());
+
+        saveFestival(today, today.plusDays(3), school);
+        Festival nextPageFirstReadFestival = saveFestival(today.plusDays(1), today.plusDays(1), school);
+        Festival lastReadFestival = saveFestival(today, today.plusDays(1), school);
+        saveFestival(today.plusDays(1), today.plusDays(1), school);
+        saveFestival(today.plusDays(2), today.plusDays(2), school);
+
+        // when
+        List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today,
+            lastReadFestival.getId(), lastReadFestival.getStartDate(), false, 2);
+
+        // then
+        assertThat(actual).hasSize(2);
+        assertThat(actual.get(0).id()).isEqualTo(nextPageFirstReadFestival.getId());
+    }
+
+    @Test
+    void 페이징하여_과거_축제를_조회한다() {
+        // given
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(2);
+        School school = schoolRepository.save(SchoolFixture.school().build());
+
+        saveFestival(yesterday.minusDays(2), yesterday, school);
+        Festival nextPageFirstReadFestival = saveFestival(yesterday.minusDays(3), yesterday, school);
+        Festival lastReadFestival = saveFestival(yesterday.minusDays(2), yesterday, school);
+        saveFestival(yesterday.minusDays(4), yesterday, school);
+
+        // when
+        List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today,
+            lastReadFestival.getId(), lastReadFestival.getStartDate(), true, 2);
+
+        // then
+        assertThat(actual).hasSize(2);
+        assertThat(actual.get(0).id()).isEqualTo(nextPageFirstReadFestival.getId());
     }
 
     private Festival saveFestival(LocalDate startDate, LocalDate endDate, School school) {

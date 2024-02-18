@@ -62,7 +62,7 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
     public List<SchoolFestivalResponse> findCurrentFestivalBySchoolId(Long schoolId, LocalDate today, int size,
                                                                       Long lastFestivalId, LocalDate lastStartDate,
                                                                       boolean isPast) {
-        return select(new QSchoolFestivalResponse(festival.id,
+        List<SchoolFestivalResponse> result = select(new QSchoolFestivalResponse(festival.id,
             festival.name,
             festival.startDate,
             festival.endDate,
@@ -70,16 +70,18 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
             festivalQueryInfo.artistInfo)
         )
             .from(festival)
-            .where(school.id.eq(schoolId), addPagingOption(lastFestivalId, lastStartDate),
-                addPhaseOption(isPast, today))
+            .where(festival.school.id.eq(schoolId),
+                addPhaseOption(isPast, today),
+                addPagingOption(lastFestivalId, lastStartDate, isPast))
             .leftJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
             .orderBy(addOrderOption(isPast))
             .limit(size + 1)
             .fetch();
-    }
+        if (result.size() > size) {
+            result.remove(result.size() - 1);
+        }
 
-    private BooleanExpression addPagingOption(Long lastFestivalId, LocalDate lastStartDate) {
-        return null;
+        return result;
     }
 
     private BooleanExpression addPhaseOption(boolean isPast, LocalDate today) {
@@ -87,7 +89,26 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
             return festival.endDate.lt(today);
         }
 
-        return festival.startDate.goe(today);
+        return festival.endDate.goe(today);
+    }
+
+    private BooleanExpression addPagingOption(Long lastFestivalId, LocalDate lastStartDate, boolean isPast) {
+        if (isNotFirstPage(lastFestivalId, lastStartDate)) {
+            if (isPast) {
+                return festival.startDate.lt(lastStartDate)
+                    .or(festival.startDate.eq(lastStartDate)
+                        .and(festival.id.gt(lastFestivalId)));
+            }
+            return festival.startDate.gt(lastStartDate)
+                .or(festival.startDate.eq(lastStartDate)
+                    .and(festival.id.gt(lastFestivalId)));
+        }
+
+        return null;
+    }
+
+    private boolean isNotFirstPage(Long lastFestivalId, LocalDate lastStartDate) {
+        return lastFestivalId != null && lastStartDate != null;
     }
 
     private OrderSpecifier<LocalDate>[] addOrderOption(boolean isPast) {

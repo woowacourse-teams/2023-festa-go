@@ -21,7 +21,7 @@ public class SchoolV1QueryService {
     }
 
     public List<SchoolFestivalResponse> findAll(Long schoolId, LocalDate today, Long lastFestivalId,
-                                                LocalDate lastStartDate, Boolean isPast) {
-        return schoolV1QueryDslRepository.findCurrentFestivalBySchoolId(schoolId, today, 3, lastFestivalId, lastStartDate, isPast);
+                                                LocalDate lastStartDate, Boolean isPast, int size) {
+        return schoolV1QueryDslRepository.findCurrentFestivalBySchoolId(schoolId, today, size, lastFestivalId, lastStartDate, isPast);
     }
 }
