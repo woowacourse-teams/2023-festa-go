@@ -59,7 +59,7 @@ public class SchoolV1ControllerTest {
                             "https://image.com/youtube.png", "www.knu-instagram.com")
                     )
                 );
-                given(schoolV1QueryService.findById(expected.id()))
+                given(schoolV1QueryService.findDetailById(expected.id()))
                     .willReturn(expected);
 
                 // when & then

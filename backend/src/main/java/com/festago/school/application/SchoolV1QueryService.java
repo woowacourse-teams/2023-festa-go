@@ -16,12 +16,12 @@ public class SchoolV1QueryService {
 
     private final SchoolV1QueryDslRepository schoolV1QueryDslRepository;
 
-    public SchoolDetailV1Response findById(Long schoolId) {
-        return schoolV1QueryDslRepository.findById(schoolId);
+    public SchoolDetailV1Response findDetailById(Long schoolId) {
+        return schoolV1QueryDslRepository.findDetailById(schoolId);
     }
 
-    public List<SchoolFestivalResponse> findAll(Long schoolId, LocalDate today, Long lastFestivalId,
-                                                LocalDate lastStartDate, Boolean isPast, int size) {
-        return schoolV1QueryDslRepository.findCurrentFestivalBySchoolId(schoolId, today, size, lastFestivalId, lastStartDate, isPast);
+    public List<SchoolFestivalResponse> findFestivalsBySchoolId(Long schoolId, LocalDate today, Long lastFestivalId,
+                                                                LocalDate lastStartDate, Boolean isPast, int size) {
+        return schoolV1QueryDslRepository.findFestivalsBySchoolId(schoolId, today, size, lastFestivalId, lastStartDate, isPast);
     }
 }

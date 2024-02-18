@@ -31,7 +31,7 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         super(School.class);
     }
 
-    public SchoolDetailV1Response findById(Long schoolId) {
+    public SchoolDetailV1Response findDetailById(Long schoolId) {
         List<SchoolDetailV1Response> response = selectFrom(school)
             .where(school.id.eq(schoolId))
             .leftJoin(socialMedia).on(socialMedia.ownerId.eq(schoolId)
@@ -59,9 +59,9 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         return response.get(0);
     }
 
-    public List<SchoolFestivalResponse> findCurrentFestivalBySchoolId(Long schoolId, LocalDate today, int size,
-                                                                      Long lastFestivalId, LocalDate lastStartDate,
-                                                                      boolean isPast) {
+    public List<SchoolFestivalResponse> findFestivalsBySchoolId(Long schoolId, LocalDate today, int size,
+                                                                Long lastFestivalId, LocalDate lastStartDate,
+                                                                boolean isPast) {
         List<SchoolFestivalResponse> result = select(new QSchoolFestivalResponse(festival.id,
             festival.name,
             festival.startDate,

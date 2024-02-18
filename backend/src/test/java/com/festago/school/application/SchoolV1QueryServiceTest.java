@@ -49,7 +49,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 해당하는_학교가_존재하지_않으면_예외() {
             // when && then
-            assertThatThrownBy(() -> schoolV1QueryService.findById(-1L))
+            assertThatThrownBy(() -> schoolV1QueryService.findDetailById(-1L))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("존재하지 않는 학교입니다.");
         }
@@ -60,7 +60,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             School school = schoolRepository.save(SchoolFixture.school().build());
 
             // when
-            SchoolDetailV1Response actual = schoolV1QueryService.findById(school.getId());
+            SchoolDetailV1Response actual = schoolV1QueryService.findDetailById(school.getId());
 
             // then
             assertSoftly(softly -> {
@@ -77,7 +77,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             saveSocialMedia(school.getId(), OwnerType.ARTIST, SocialMediaType.YOUTUBE);
 
             // when
-            SchoolDetailV1Response actual = schoolV1QueryService.findById(school.getId());
+            SchoolDetailV1Response actual = schoolV1QueryService.findDetailById(school.getId());
 
             // then
             assertThat(actual.socialMedias()).hasSize(1);
@@ -91,7 +91,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             saveSocialMedia(school.getId(), OwnerType.SCHOOL, SocialMediaType.YOUTUBE);
 
             // when
-            SchoolDetailV1Response actual = schoolV1QueryService.findById(school.getId());
+            SchoolDetailV1Response actual = schoolV1QueryService.findDetailById(school.getId());
 
             // then
             assertThat(actual.socialMedias()).hasSize(2);
@@ -132,7 +132,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             Festival lastFestival = saveFestival(today.minusDays(3), today.minusDays(1));
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(
+            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(
                 school.getId(), today, null, null, true, 10);
 
             // then
@@ -152,7 +152,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             saveFestival(today.minusDays(3), today.minusDays(1));
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(
+            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(
                 school.getId(), today, null, null, false, 10);
 
             // then
@@ -167,7 +167,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             Festival recentFestival = saveFestival(today, today.plusDays(1));
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today, null, null, false,
+            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today, null, null, false,
                 10);
 
             // then
@@ -182,7 +182,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             Festival recentFestival = saveFestival(today.minusDays(3), today.minusDays(1));
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today, null, null, true,
+            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today, null, null, true,
                 10);
 
             // then
@@ -199,7 +199,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             saveFestival(today.plusDays(2), today.plusDays(2));
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today,
+            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today,
                 lastReadFestival.getId(), lastReadFestival.getStartDate(), false, 2);
 
             // then
@@ -219,7 +219,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             saveFestival(yesterday.minusDays(4), yesterday);
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today,
+            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today,
                 lastReadFestival.getId(), lastReadFestival.getStartDate(), true, 2);
 
             // then

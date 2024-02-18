@@ -21,8 +21,8 @@ public class SchoolV1Controller {
 
     @GetMapping("/{schoolId}")
     @Operation(description = "학교와 해당하는 소셜미디어 정보를 함께 조회한다.", summary = "학교 상세 조회")
-    public ResponseEntity<SchoolDetailV1Response> findById(@PathVariable Long schoolId) {
-        SchoolDetailV1Response response = schoolV1QueryService.findById(schoolId);
+    public ResponseEntity<SchoolDetailV1Response> findDetailId(@PathVariable Long schoolId) {
+        SchoolDetailV1Response response = schoolV1QueryService.findDetailById(schoolId);
         return ResponseEntity.ok(response);
     }
 }
