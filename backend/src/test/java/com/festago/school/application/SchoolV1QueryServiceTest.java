@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.common.exception.NotFoundException;
+import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
@@ -105,55 +106,88 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
     }
 
     @Test
-    void 현재_진행중혹은_진행예정_축제만_가져온다() {
+    void 과거_축제만_가져온다() {
         // given
         LocalDate today = LocalDate.now();
         School school = schoolRepository.save(SchoolFixture.school().build());
 
         //진행중
-        festivalRepository.save(
-            FestivalFixture.festival()
-                .startDate(today)
-                .endDate(today.plusDays(1))
-                .school(school)
-                .build());
-        festivalRepository.save(
-            FestivalFixture.festival()
-                .startDate(today)
-                .endDate(today.plusDays(1))
-                .school(school)
-                .build());
+        saveFestival(today, today.plusDays(1), school);
+        saveFestival(today, today.plusDays(1), school);
 
         //진행예정
-        festivalRepository.save(
-            FestivalFixture.festival()
-                .startDate(today.plusDays(1))
-                .endDate(today.plusDays(2))
-                .school(school)
-                .build());
-
-        festivalRepository.save(
-            FestivalFixture.festival()
-                .startDate(today.plusDays(1))
-                .endDate(today.plusDays(2))
-                .school(school)
-                .build());
-
+        saveFestival(today.plusDays(1), today.plusDays(2), school);
+        saveFestival(today.plusDays(1), today.plusDays(2), school);
 
         //종료
-        festivalRepository.save(
-            FestivalFixture.festival()
-                .startDate(today.minusDays(3))
-                .endDate(today.minusDays(1))
-                .school(school)
-                .build());
+        Festival lastFestival = saveFestival(today.minusDays(3), today.minusDays(1), school);
 
         // when
         List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(
-            school.getId(), today, 1L, today);
+            school.getId(), today, null, null, true);
 
         // then
-        assertThat(actual).hasSize(4);
-        assertThat(actual.get(0).startDate()).isEqualTo(today);
+        assertThat(actual).hasSize(1);
+        assertThat(actual.get(0).id()).isEqualTo(lastFestival.getId());
+    }
+
+    @Test
+    void 현재_혹은_예정_축제만_가져온다() {
+        // given
+        LocalDate today = LocalDate.now();
+        School school = schoolRepository.save(SchoolFixture.school().build());
+
+        saveFestival(today, today.plusDays(1), school);
+        saveFestival(today.plusDays(1), today.plusDays(2), school);
+        saveFestival(today.minusDays(3), today.minusDays(1), school);
+        // when
+        List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(
+            school.getId(), today, null, null, false);
+
+        // then
+        assertThat(actual).hasSize(2);
+    }
+
+    @Test
+    void 현재_축제를_시작일자가_빠른순으로_조회한다() {
+        // given
+        LocalDate today = LocalDate.now();
+        School school = schoolRepository.save(SchoolFixture.school().build());
+
+        saveFestival(today.plusDays(2), today.plusDays(3), school);
+        saveFestival(today.plusDays(2), today.plusDays(3), school);
+        Festival recentFestival = saveFestival(today, today.plusDays(1), school);
+
+        // when
+        List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today, null, null, false);
+
+        // then
+        assertThat(actual.get(0).id()).isEqualTo(recentFestival.getId());
+    }
+
+    @Test
+    void 과거_축제를_종료일자가_느린순으로_조회한다() {
+        // given
+        LocalDate today = LocalDate.now();
+        School school = schoolRepository.save(SchoolFixture.school().build());
+
+        saveFestival(today.minusDays(4), today.minusDays(3), school);
+        saveFestival(today.minusDays(3), today.minusDays(2), school);
+        Festival recentFestival = saveFestival(today.minusDays(3), today.minusDays(1), school);
+
+        // when
+        List<SchoolFestivalResponse> actual = schoolV1QueryService.findAll(school.getId(), today, null, null, true);
+
+        // then
+        assertThat(actual.get(0).id()).isEqualTo(recentFestival.getId());
+    }
+
+    private Festival saveFestival(LocalDate startDate, LocalDate endDate, School school) {
+        return festivalRepository.save(
+            FestivalFixture.festival()
+                .startDate(startDate)
+                .endDate(endDate)
+                .school(school)
+                .build());
     }
 }

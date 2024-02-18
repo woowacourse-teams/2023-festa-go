@@ -1,30 +1,26 @@
 package com.festago.school.repository.v1;
 
-import static com.festago.artist.domain.QArtist.artist;
 import static com.festago.festival.domain.QFestival.festival;
+import static com.festago.festival.domain.QFestivalQueryInfo.festivalQueryInfo;
 import static com.festago.school.domain.QSchool.school;
 import static com.festago.socialmedia.domain.QSocialMedia.socialMedia;
-import static com.festago.stage.domain.QStage.stage;
-import static com.festago.stage.domain.QStageArtist.stageArtist;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
-import com.festago.festival.domain.Festival;
 import com.festago.school.domain.School;
 import com.festago.school.dto.v1.QSchoolDetailV1Response;
-import com.festago.school.dto.v1.QSchoolFestivalArtistResponse;
+import com.festago.school.dto.v1.QSchoolFestivalResponse;
 import com.festago.school.dto.v1.QSchoolSocialMediaV1Response;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
-import com.festago.school.dto.v1.SchoolFestivalArtistResponse;
 import com.festago.school.dto.v1.SchoolFestivalResponse;
 import com.festago.socialmedia.domain.OwnerType;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 //TODO: 커밋전 변경 클래스들 개행 수정
@@ -64,45 +60,41 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
     }
 
     public List<SchoolFestivalResponse> findCurrentFestivalBySchoolId(Long schoolId, LocalDate today, int size,
-                                                                      Long lastFestivalId, LocalDate startDate) {
-        List<Festival> festivals = getCurrentOrFutureFestivals(schoolId, today, size, lastFestivalId, startDate);
-        List<Long> festivalIds = festivals.stream()
-            .map(Festival::getId)
-            .toList();
-        Map<Long, List<SchoolFestivalArtistResponse>> artistResponses = getArtistResponses(festivalIds);
-
-        return festivals.stream()
-            .map(it -> SchoolFestivalResponse.of(it, artistResponses.get(it.getId())))
-            .toList();
-    }
-
-    private List<Festival> getCurrentOrFutureFestivals(Long schoolId, LocalDate today, int size, Long lastFestivalId,
-                                                       LocalDate startDate) {
-        return selectFrom(festival)
-            .where(festival.school.id.eq(schoolId)
-                .and(festival.endDate.goe(today))
-                .and(applyPage(lastFestivalId, startDate))
-            )
-            .orderBy(festival.startDate.asc())
+                                                                      Long lastFestivalId, LocalDate lastStartDate,
+                                                                      boolean isPast) {
+        return select(new QSchoolFestivalResponse(festival.id,
+            festival.name,
+            festival.startDate,
+            festival.endDate,
+            festival.thumbnail,
+            festivalQueryInfo.artistInfo)
+        )
+            .from(festival)
+            .where(school.id.eq(schoolId), addPagingOption(lastFestivalId, lastStartDate),
+                addPhaseOption(isPast, today))
+            .leftJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
+            .orderBy(addOrderOption(isPast))
             .limit(size + 1)
             .fetch();
     }
 
-    private BooleanExpression applyPage(Long lastFestivalId, LocalDate lastStartDate) {
-        if (lastStartDate == null || lastStartDate == null) {
-            return null;
-        }
-
-        return festival.startDate.goe(lastStartDate)
-                .and(festival.id.gt(lastFestivalId));
+    private BooleanExpression addPagingOption(Long lastFestivalId, LocalDate lastStartDate) {
+        return null;
     }
 
-    private Map<Long, List<SchoolFestivalArtistResponse>> getArtistResponses(List<Long> festivalIds) {
-        return selectFrom(stage)
-            .where(stage.festival.id.in(festivalIds))
-            .leftJoin(stageArtist).on(stageArtist.stageId.eq(stage.id))
-            .leftJoin(artist).on(artist.id.eq(stage.id))
-            .transform(groupBy(stage.festival.id).as(
-                list(new QSchoolFestivalArtistResponse(artist.id, artist.name, artist.profileImage))));
+    private BooleanExpression addPhaseOption(boolean isPast, LocalDate today) {
+        if (isPast) {
+            return festival.endDate.lt(today);
+        }
+
+        return festival.startDate.goe(today);
+    }
+
+    private OrderSpecifier<LocalDate>[] addOrderOption(boolean isPast) {
+        if (isPast) {
+            return new OrderSpecifier[]{festival.endDate.desc()};
+        }
+
+        return new OrderSpecifier[]{festival.startDate.asc()};
     }
 }
