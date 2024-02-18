@@ -16,6 +16,7 @@ import com.festago.school.dto.v1.QSchoolFestivalV1Response;
 import com.festago.school.dto.v1.QSchoolSocialMediaV1Response;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
+import com.festago.school.dto.v1.SliceResponse;
 import com.festago.socialmedia.domain.OwnerType;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -26,6 +27,8 @@ import org.springframework.stereotype.Repository;
 //TODO: 커밋전 변경 클래스들 개행 수정
 @Repository
 public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
+
+    private static final int NEXT_PAGE_CHECK_NUMBER = 1;
 
     public SchoolV1QueryDslRepository() {
         super(School.class);
@@ -58,29 +61,28 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         return response.get(0);
     }
 
-    public List<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today, int size,
-                                                                  Long lastFestivalId, LocalDate lastStartDate,
-                                                                  boolean isPast) {
-        List<SchoolFestivalV1Response> result = select(new QSchoolFestivalV1Response(festival.id,
-            festival.name,
-            festival.startDate,
-            festival.endDate,
-            festival.thumbnail,
-            festivalQueryInfo.artistInfo)
+    public SliceResponse<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today,
+                                                 SchoolFestivalV1SearchCondition searchCondition) {
+        List<SchoolFestivalV1Response> result =
+            select(new QSchoolFestivalV1Response(festival.id,
+                festival.name,
+                festival.startDate,
+                festival.endDate,
+                festival.thumbnail,
+                festivalQueryInfo.artistInfo
+            )
         )
             .from(festival)
             .where(festival.school.id.eq(schoolId),
-                addPhaseOption(isPast, today),
-                addPagingOption(lastFestivalId, lastStartDate, isPast))
+                addPhaseOption(searchCondition.isPast(), today),
+                addPagingOption(searchCondition.lastFestivalId(), searchCondition.lastStartDate(),
+                    searchCondition.isPast()))
             .leftJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
-            .orderBy(addOrderOption(isPast))
-            .limit(size + 1)
+            .orderBy(addOrderOption(searchCondition.isPast()))
+            .limit(searchCondition.size() + NEXT_PAGE_CHECK_NUMBER)
             .fetch();
-        if (result.size() > size) {
-            result.remove(result.size() - 1);
-        }
 
-        return result;
+        return createResponse(searchCondition, result);
     }
 
     private BooleanExpression addPhaseOption(boolean isPast, LocalDate today) {
@@ -116,5 +118,17 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         }
 
         return new OrderSpecifier[]{festival.startDate.asc()};
+    }
+
+    private SliceResponse<SchoolFestivalV1Response> createResponse(
+        SchoolFestivalV1SearchCondition searchCondition,
+        List<SchoolFestivalV1Response> content) {
+        boolean isLast = true;
+        if (content.size()  ==  searchCondition.size() + NEXT_PAGE_CHECK_NUMBER) {
+            content.remove(content.size() - NEXT_PAGE_CHECK_NUMBER);
+            isLast = false;
+        }
+
+        return new SliceResponse(isLast, content);
     }
 }
