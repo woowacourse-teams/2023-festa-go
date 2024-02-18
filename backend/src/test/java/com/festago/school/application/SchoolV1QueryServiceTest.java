@@ -9,7 +9,7 @@ import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
-import com.festago.school.dto.v1.SchoolFestivalResponse;
+import com.festago.school.dto.v1.SchoolFestivalV1Response;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.socialmedia.domain.OwnerType;
 import com.festago.socialmedia.domain.SocialMedia;
@@ -132,7 +132,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             Festival lastFestival = saveFestival(today.minusDays(3), today.minusDays(1));
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(
+            List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(
                 school.getId(), today, null, null, true, 10);
 
             // then
@@ -152,7 +152,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             saveFestival(today.minusDays(3), today.minusDays(1));
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(
+            List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(
                 school.getId(), today, null, null, false, 10);
 
             // then
@@ -167,7 +167,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             Festival recentFestival = saveFestival(today, today.plusDays(1));
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today, null, null, false,
+            List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today, null, null, false,
                 10);
 
             // then
@@ -182,7 +182,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             Festival recentFestival = saveFestival(today.minusDays(3), today.minusDays(1));
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today, null, null, true,
+            List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today, null, null, true,
                 10);
 
             // then
@@ -199,7 +199,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             saveFestival(today.plusDays(2), today.plusDays(2));
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today,
+            List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today,
                 lastReadFestival.getId(), lastReadFestival.getStartDate(), false, 2);
 
             // then
@@ -219,7 +219,7 @@ class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
             saveFestival(yesterday.minusDays(4), yesterday);
 
             // when
-            List<SchoolFestivalResponse> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today,
+            List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today,
                 lastReadFestival.getId(), lastReadFestival.getStartDate(), true, 2);
 
             // then

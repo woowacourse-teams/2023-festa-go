@@ -1,7 +1,7 @@
 package com.festago.school.application;
 
 import com.festago.school.dto.v1.SchoolDetailV1Response;
-import com.festago.school.dto.v1.SchoolFestivalResponse;
+import com.festago.school.dto.v1.SchoolFestivalV1Response;
 import com.festago.school.repository.v1.SchoolV1QueryDslRepository;
 import java.time.LocalDate;
 import java.util.List;
@@ -20,8 +20,8 @@ public class SchoolV1QueryService {
         return schoolV1QueryDslRepository.findDetailById(schoolId);
     }
 
-    public List<SchoolFestivalResponse> findFestivalsBySchoolId(Long schoolId, LocalDate today, Long lastFestivalId,
-                                                                LocalDate lastStartDate, Boolean isPast, int size) {
+    public List<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today, Long lastFestivalId,
+                                                                  LocalDate lastStartDate, Boolean isPast, int size) {
         return schoolV1QueryDslRepository.findFestivalsBySchoolId(schoolId, today, size, lastFestivalId, lastStartDate, isPast);
     }
 }

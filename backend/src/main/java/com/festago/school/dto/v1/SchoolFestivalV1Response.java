@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDate;
 
-public record SchoolFestivalResponse(
+public record SchoolFestivalV1Response(
     Long id,
     String name,
     LocalDate startDate,
@@ -14,6 +14,6 @@ public record SchoolFestivalResponse(
 ) {
 
     @QueryProjection
-    public SchoolFestivalResponse {
+    public SchoolFestivalV1Response {
     }
 }

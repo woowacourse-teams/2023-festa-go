@@ -12,10 +12,10 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.school.domain.School;
 import com.festago.school.dto.v1.QSchoolDetailV1Response;
-import com.festago.school.dto.v1.QSchoolFestivalResponse;
+import com.festago.school.dto.v1.QSchoolFestivalV1Response;
 import com.festago.school.dto.v1.QSchoolSocialMediaV1Response;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
-import com.festago.school.dto.v1.SchoolFestivalResponse;
+import com.festago.school.dto.v1.SchoolFestivalV1Response;
 import com.festago.socialmedia.domain.OwnerType;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -38,8 +38,7 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
                 .and(socialMedia.ownerType.eq(OwnerType.SCHOOL)))
             .transform(
                 groupBy(school.id).list(
-                    new QSchoolDetailV1Response(
-                        school.id, school.name, school.logoUrl, school.backgroundUrl,
+                    new QSchoolDetailV1Response(school.id, school.name, school.logoUrl, school.backgroundUrl,
                         list(
                             new QSchoolSocialMediaV1Response(
                                 socialMedia.mediaType,
@@ -59,10 +58,10 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         return response.get(0);
     }
 
-    public List<SchoolFestivalResponse> findFestivalsBySchoolId(Long schoolId, LocalDate today, int size,
-                                                                Long lastFestivalId, LocalDate lastStartDate,
-                                                                boolean isPast) {
-        List<SchoolFestivalResponse> result = select(new QSchoolFestivalResponse(festival.id,
+    public List<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today, int size,
+                                                                  Long lastFestivalId, LocalDate lastStartDate,
+                                                                  boolean isPast) {
+        List<SchoolFestivalV1Response> result = select(new QSchoolFestivalV1Response(festival.id,
             festival.name,
             festival.startDate,
             festival.endDate,

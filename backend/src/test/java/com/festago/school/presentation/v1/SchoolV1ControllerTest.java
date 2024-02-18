@@ -9,9 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.school.application.SchoolV1QueryService;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
+import com.festago.school.dto.v1.SchoolFestivalV1Response;
 import com.festago.school.dto.v1.SchoolSocialMediaV1Response;
 import com.festago.socialmedia.domain.SocialMediaType;
 import com.festago.support.CustomWebMvcTest;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -37,7 +39,7 @@ public class SchoolV1ControllerTest {
     ObjectMapper objectMapper;
 
     @Nested
-    class 학교_단일_조회 {
+    class 학교_상세_조회 {
 
         final String uri = "/api/v1/school/{schoolId}";
 
@@ -60,6 +62,37 @@ public class SchoolV1ControllerTest {
                     )
                 );
                 given(schoolV1QueryService.findDetailById(expected.id()))
+                    .willReturn(expected);
+
+                // when & then
+                mockMvc.perform(get(uri, 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+            }
+        }
+    }
+
+    @Nested
+    class 학교_축제_조회 {
+
+        final String uri = "/api/v1/school/{schoolId}/festivals";
+
+        @Nested
+        @DisplayName("GET " + uri)
+        class 올바른_주소로 {
+
+            @Test
+            void 요청을_보내면_200_응답과_body가_반환된다() throws Exception {
+                // given
+                var today = LocalDate.now();
+                var expected = List.of(new SchoolFestivalV1Response(
+                    1L, "경북대학교", today, today.plusDays(1), "www.image.com/image.png",
+                    "아티스트"
+                ));
+
+                given(schoolV1QueryService.findFestivalsBySchoolId(1L, today, null , null, false, 10))
                     .willReturn(expected);
 
                 // when & then
