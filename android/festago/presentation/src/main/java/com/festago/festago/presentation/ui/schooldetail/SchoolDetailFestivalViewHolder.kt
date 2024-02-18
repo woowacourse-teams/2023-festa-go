@@ -47,17 +47,19 @@ class SchoolDetailFestivalViewHolder(
             }
 
             LocalDate.now() == item.startDate.minusDays(1) -> {
+                dDayView.setTextColor(context.getColor(R.color.background_gray_01))
                 dDayView.text = context.getString(
                     R.string.festival_list_tv_dday_format,
-                    item.startDate.compareTo(LocalDate.now()).toString(),
+                    LocalDate.now().compareTo(item.startDate).toString(),
                 )
                 dDayView.setBackgroundColor(0xffff1273.toInt())
             }
 
             else -> binding.tvFestivalDDay.apply {
+                dDayView.setTextColor(context.getColor(R.color.background_gray_01))
                 dDayView.text = context.getString(
                     R.string.festival_list_tv_dday_format,
-                    item.startDate.compareTo(LocalDate.now()).toString(),
+                    (LocalDate.now().toEpochDay() - item.startDate.toEpochDay()).toString(),
                 )
                 dDayView.setBackgroundColor(context.getColor(android.R.color.black))
             }
