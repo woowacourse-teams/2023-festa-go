@@ -22,15 +22,9 @@ public class FestivalUpdateService {
      */
     public void updateFestival(Long festivalId, FestivalUpdateCommand command) {
         Festival festival = festivalRepository.getOrThrow(festivalId);
-        /**
-         * TODO
-         * 일자를 수정할 때, 축제에 등록된 공연이 일자의 범위에 벗어난다면 문제가 발생하지 않을까?
-         * StageFestivalUpdateValidator를 만들어서 검증이 필요함
-         * 논의가 필요하므로 인터페이스만 만들고, 아직 구현하지 않음
-         */
-        validators.forEach(validator -> validator.validate(festivalId, command));
         festival.changeName(command.name());
         festival.changeThumbnail(command.thumbnail());
         festival.changeDate(command.startDate(), command.endDate());
+        validators.forEach(validator -> validator.validate(festivalId, command));
     }
 }
