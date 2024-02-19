@@ -1,15 +1,15 @@
 package com.festago.festago.data.dto.festival
 
-import com.festago.festago.domain.model.festival.FestivalsPage
+import com.festago.festago.domain.model.festival.PopularFestivals
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FestivalsResponse(
-    val last: Boolean,
+data class PopularFestivalsResponse(
+    val title: String,
     val content: List<FestivalResponse>,
 ) {
-    fun toDomain() = FestivalsPage(
-        isLastPage = last,
+    fun toDomain() = PopularFestivals(
+        title = title,
         festivals = content.map { it.toDomain() },
     )
 }
