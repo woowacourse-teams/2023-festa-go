@@ -41,7 +41,7 @@ public class ArtistDetailV1QueryService {
         );
     }
 
-    private Boolean isPastOrDefault(Boolean isPast) {
+    private boolean isPastOrDefault(Boolean isPast) {
         if (isPast == null) {
             return false;
         }
