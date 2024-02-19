@@ -32,7 +32,7 @@ public class ArtistDetailV1Controller {
     }
 
     @GetMapping("/{artistId}/festivals")
-    @Operation(description = "아티스트가 참석한 축제를 조회한다. isPast 값으로 종료 축제 와 진행, 예정 축제를 구분 가능하", summary = "아티스트 축제 조회")
+    @Operation(description = "아티스트가 참석한 축제를 조회한다. isPast 값으로 종료 축제 와 진행, 예정 축제를 구분 가능하다", summary = "아티스트 축제 조회")
     @ValidPageable(maxSize = 20)
     public ResponseEntity<Slice<ArtistFestivalDetailV1Response>> getArtistInfo(
         @PathVariable Long artistId,
