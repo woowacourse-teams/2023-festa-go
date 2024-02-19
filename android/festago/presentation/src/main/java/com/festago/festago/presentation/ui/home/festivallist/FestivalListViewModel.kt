@@ -32,7 +32,7 @@ class FestivalListViewModel @Inject constructor(
 
     private var festivalFilter: FestivalFilter = FestivalFilter.PROGRESS
 
-    fun loadFestivals(festivalFilterUiState: FestivalFilterUiState?) {
+    fun loadFestivals(festivalFilterUiState: FestivalFilterUiState? = null) {
         viewModelScope.launch {
             if (festivalFilterUiState != null) {
                 festivalFilter = festivalFilterUiState.toDomain()

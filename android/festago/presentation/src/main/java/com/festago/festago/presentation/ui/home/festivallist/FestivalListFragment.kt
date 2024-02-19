@@ -54,7 +54,7 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initView() {
-        vm.loadFestivals(festivalFilterUiState = null)
+        vm.loadFestivals()
         initViewPager()
         initRecyclerView()
         initRefresh()
@@ -62,7 +62,7 @@ class FestivalListFragment : Fragment() {
 
     private fun initRefresh() {
         binding.srlFestivalList.setOnRefreshListener {
-            vm.loadFestivals(festivalFilterUiState = null)
+            vm.loadFestivals()
             binding.srlFestivalList.isRefreshing = false
         }
     }
