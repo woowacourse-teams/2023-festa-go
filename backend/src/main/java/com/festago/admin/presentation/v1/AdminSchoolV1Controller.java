@@ -64,7 +64,7 @@ public class AdminSchoolV1Controller {
 
     @GetMapping
     @ValidPageable(maxSize = 20)
-    public ResponseEntity<Page<com.festago.school.presentation.v1.dto.SchoolV1Response>> findAllSchools(
+    public ResponseEntity<Page<SchoolV1Response>> findAllSchools(
             @RequestParam(defaultValue = "") String searchFilter,
             @RequestParam(defaultValue = "") String searchKeyword,
             Pageable pageable
