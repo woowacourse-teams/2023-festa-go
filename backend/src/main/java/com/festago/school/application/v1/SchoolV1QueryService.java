@@ -1,5 +1,7 @@
 package com.festago.school.application.v1;
 
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
 import com.festago.school.dto.v1.SliceResponse;
@@ -18,7 +20,8 @@ public class SchoolV1QueryService {
     private final SchoolV1QueryDslRepository schoolV1QueryDslRepository;
 
     public SchoolDetailV1Response findDetailById(Long schoolId) {
-        return schoolV1QueryDslRepository.findDetailById(schoolId);
+        return schoolV1QueryDslRepository.findDetailById(schoolId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
     }
 
     public SliceResponse<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today, SchoolFestivalV1SearchCondition searchCondition) {

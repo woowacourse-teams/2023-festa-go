@@ -7,8 +7,6 @@ import static com.festago.socialmedia.domain.QSocialMedia.socialMedia;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.NotFoundException;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.school.domain.School;
 import com.festago.school.dto.v1.QSchoolDetailV1Response;
@@ -22,6 +20,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -33,7 +32,7 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         super(School.class);
     }
 
-    public SchoolDetailV1Response findDetailById(Long schoolId) {
+    public Optional<SchoolDetailV1Response> findDetailById(Long schoolId) {
         List<SchoolDetailV1Response> response = selectFrom(school)
             .where(school.id.eq(schoolId))
             .leftJoin(socialMedia).on(socialMedia.ownerId.eq(schoolId)
@@ -54,10 +53,10 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
             );
 
         if (response.isEmpty()) {
-            throw new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND);
+            return Optional.empty();
         }
 
-        return response.get(0);
+        return Optional.of(response.get(0));
     }
 
     public SliceResponse<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today,
