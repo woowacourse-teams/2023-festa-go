@@ -1,9 +1,9 @@
 package com.festago.festago.data.repository
 
 import com.festago.festago.domain.model.festival.FestivalFilter
-import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.festival.PopularFestivals
+import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.domain.repository.FestivalRepository
 import java.time.LocalDate
 import javax.inject.Inject
