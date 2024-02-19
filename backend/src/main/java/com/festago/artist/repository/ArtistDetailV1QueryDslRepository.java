@@ -137,7 +137,7 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
         if (isPast) {
             return festival.endDate.lt(currentTime);
         }
-        return festival.startDate.goe(currentTime).or(festival.endDate.goe(currentTime));
+        return festival.endDate.goe(currentTime);
     }
 
     private OrderSpecifier<LocalDate>[] getDynamicOrderBy(Boolean isPast) {
