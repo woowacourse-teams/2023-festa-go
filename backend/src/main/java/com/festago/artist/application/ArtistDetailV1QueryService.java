@@ -2,7 +2,6 @@ package com.festago.artist.application;
 
 import com.festago.artist.dto.ArtistDetailV1Response;
 import com.festago.artist.dto.ArtistFestivalDetailV1Response;
-import com.festago.artist.presentation.v1.ArtistFestivalDetailV1Request;
 import com.festago.artist.repository.ArtistFestivalSearchCondition;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
@@ -27,23 +26,21 @@ public class ArtistDetailV1QueryService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.ARTIST_NOT_FOUND));
     }
 
-    public Slice<ArtistFestivalDetailV1Response> findArtistFestivals(
-        Long artistId,
-        ArtistFestivalDetailV1Request request,
-        Pageable pageable) {
+    public Slice<ArtistFestivalDetailV1Response> findArtistFestivals(Long artistId, Long lastFestivalId,
+                                                                     LocalDate lastStartDate, Boolean isPast,
+                                                                     Pageable pageable) {
         return artistDetailV1QueryDslRepository.findArtistFestivals(new ArtistFestivalSearchCondition(
                 artistId,
-                isPastOrDefault(request),
-                request.getLastFestivalId(),
-                request.getLastStartDate(),
+                isPastOrDefault(isPast),
+                lastFestivalId,
+                lastStartDate,
                 pageable,
                 LocalDate.now(clock)
             )
         );
     }
 
-    private Boolean isPastOrDefault(ArtistFestivalDetailV1Request request) {
-        Boolean isPast = request.getPast();
+    private Boolean isPastOrDefault(Boolean isPast) {
         if (isPast == null) {
             return false;
         }

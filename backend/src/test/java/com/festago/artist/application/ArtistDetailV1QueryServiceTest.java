@@ -7,7 +7,6 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.ArtistDetailV1Response;
 import com.festago.artist.dto.ArtistFestivalDetailV1Response;
-import com.festago.artist.presentation.v1.ArtistFestivalDetailV1Request;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
@@ -179,13 +178,12 @@ class ArtistDetailV1QueryServiceTest extends ApplicationIntegrationTest {
 
         @Test
         void 진행중인_축제_조회가_가능하다() {
-            // given
-            ArtistFestivalDetailV1Request request = new ArtistFestivalDetailV1Request(null, null, false);
-
-            // when
+            // given & when
             Slice<ArtistFestivalDetailV1Response> actual = artistDetailV1QueryService.findArtistFestivals(
                 오리.getId(),
-                request,
+                null,
+                null,
+                false,
                 PageRequest.ofSize(10)
             );
 
@@ -195,13 +193,12 @@ class ArtistDetailV1QueryServiceTest extends ApplicationIntegrationTest {
 
         @Test
         void 종료된_축제_조회가_가능하다() {
-            // given
-            ArtistFestivalDetailV1Request request = new ArtistFestivalDetailV1Request(null, null, true);
-
-            // when
+            // given & when
             Slice<ArtistFestivalDetailV1Response> actual = artistDetailV1QueryService.findArtistFestivals(
                 오리.getId(),
-                request,
+                null,
+                null,
+                true,
                 PageRequest.ofSize(10)
             );
 
@@ -212,23 +209,24 @@ class ArtistDetailV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 커서_기반_검색이_가능하다() {
             // given
-            ArtistFestivalDetailV1Request firstRequest = new ArtistFestivalDetailV1Request(null, null, false);
             PageRequest pageable = PageRequest.ofSize(1);
 
             Slice<ArtistFestivalDetailV1Response> firstResponse = artistDetailV1QueryService.findArtistFestivals(
                 글렌.getId(),
-                firstRequest,
+                null,
+                null,
+                false,
                 pageable
             );
 
-            ArtistFestivalDetailV1Response festivalResponse = firstResponse.getContent().get(0);
-            ArtistFestivalDetailV1Request secondRequest = new ArtistFestivalDetailV1Request(
-                festivalResponse.id(), festivalResponse.startDate(), false);
+            ArtistFestivalDetailV1Response firstFestivalResponse = firstResponse.getContent().get(0);
 
             // when
             Slice<ArtistFestivalDetailV1Response> secondResponse = artistDetailV1QueryService.findArtistFestivals(
                 글렌.getId(),
-                secondRequest,
+                firstFestivalResponse.id(),
+                firstFestivalResponse.startDate(),
+                false,
                 pageable
             );
 
