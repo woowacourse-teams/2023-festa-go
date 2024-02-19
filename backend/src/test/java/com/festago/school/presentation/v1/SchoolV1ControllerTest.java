@@ -43,7 +43,7 @@ public class SchoolV1ControllerTest {
     @Nested
     class 학교_상세_조회 {
 
-        final String uri = "/api/v1/school/{schoolId}";
+        final String uri = "/api/v1/schools/{schoolId}";
 
         @Nested
         @DisplayName("GET " + uri)
@@ -79,7 +79,7 @@ public class SchoolV1ControllerTest {
     @Nested
     class 학교_축제_조회 {
 
-        final String uri = "/api/v1/school/{schoolId}/festivals";
+        final String uri = "/api/v1/schools/{schoolId}/festivals";
 
         @Nested
         @DisplayName("GET " + uri)
