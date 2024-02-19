@@ -7,7 +7,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
-import com.festago.school.application.SchoolV1QueryService;
+import com.festago.school.application.v1.SchoolV1QueryService;
 import com.festago.school.domain.School;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;

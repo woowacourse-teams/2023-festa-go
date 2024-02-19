@@ -1,10 +1,10 @@
-package com.festago.school.application;
+package com.festago.school.application.v1;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.presentation.v1.dto.SchoolV1Response;
-import com.festago.school.repository.AdminSchoolV1QueryDslRepository;
+import com.festago.school.repository.v1.AdminSchoolV1QueryDslRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

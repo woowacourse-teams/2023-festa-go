@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
-//TODO: 커밋전 변경 클래스들 개행 수정
 @Repository
 public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
 
@@ -62,27 +61,27 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
     }
 
     public SliceResponse<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today,
-                                                 SchoolFestivalV1SearchCondition searchCondition) {
+                                                                           SchoolFestivalV1SearchCondition searchCondition) {
         List<SchoolFestivalV1Response> result =
             select(new QSchoolFestivalV1Response(festival.id,
-                festival.name,
-                festival.startDate,
-                festival.endDate,
-                festival.thumbnail,
-                festivalQueryInfo.artistInfo
+                    festival.name,
+                    festival.startDate,
+                    festival.endDate,
+                    festival.thumbnail,
+                    festivalQueryInfo.artistInfo
+                )
             )
-        )
-            .from(festival)
-            .where(festival.school.id.eq(schoolId),
-                addPhaseOption(searchCondition.isPast(), today),
-                addPagingOption(searchCondition.lastFestivalId(), searchCondition.lastStartDate(),
-                    searchCondition.isPast()))
-            .leftJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
-            .orderBy(addOrderOption(searchCondition.isPast()))
-            .limit(searchCondition.size() + NEXT_PAGE_CHECK_NUMBER)
-            .fetch();
+                .from(festival)
+                .where(festival.school.id.eq(schoolId),
+                    addPhaseOption(searchCondition.isPast(), today),
+                    addPagingOption(searchCondition.lastFestivalId(), searchCondition.lastStartDate(),
+                        searchCondition.isPast()))
+                .leftJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
+                .orderBy(addOrderOption(searchCondition.isPast()))
+                .limit(searchCondition.size() + NEXT_PAGE_CHECK_NUMBER)
+                .fetch();
 
-        return createResponse(searchCondition, result);
+        return createResponse(searchCondition.size(), result);
     }
 
     private BooleanExpression addPhaseOption(boolean isPast, LocalDate today) {
@@ -121,10 +120,10 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
     }
 
     private SliceResponse<SchoolFestivalV1Response> createResponse(
-        SchoolFestivalV1SearchCondition searchCondition,
+        Integer pageSize,
         List<SchoolFestivalV1Response> content) {
         boolean isLast = true;
-        if (content.size()  ==  searchCondition.size() + NEXT_PAGE_CHECK_NUMBER) {
+        if (content.size() == pageSize + NEXT_PAGE_CHECK_NUMBER) {
             content.remove(content.size() - NEXT_PAGE_CHECK_NUMBER);
             isLast = false;
         }

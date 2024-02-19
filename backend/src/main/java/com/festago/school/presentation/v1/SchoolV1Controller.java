@@ -1,7 +1,8 @@
 package com.festago.school.presentation.v1;
 
-import com.festago.school.application.SchoolV1QueryService;
+import com.festago.school.application.v1.SchoolV1QueryService;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
+import com.festago.school.dto.v1.SchoolFestivalV1Response;
 import com.festago.school.dto.v1.SliceResponse;
 import com.festago.school.repository.v1.SchoolFestivalV1SearchCondition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +33,7 @@ public class SchoolV1Controller {
 
     @GetMapping("/{schoolId}/festivals")
     @Operation(description = "해당 학교의 축제들을 페이징하여 조회한다.", summary = "학교 상세 조회")
-    public ResponseEntity<SliceResponse> findFestivalsBySchoolId(
+    public ResponseEntity<SliceResponse<SchoolFestivalV1Response>> findFestivalsBySchoolId(
         @PathVariable Long schoolId,
         @RequestParam(required = false) Long lastFestivalId,
         @RequestParam(required = false) LocalDate lastStartDate,
@@ -41,7 +42,7 @@ public class SchoolV1Controller {
     ) {
         LocalDate today = LocalDate.now();
         var searchCondition = new SchoolFestivalV1SearchCondition(lastFestivalId, lastStartDate, isPast, size);
-        SliceResponse response = schoolV1QueryService.findFestivalsBySchoolId(
+        SliceResponse<SchoolFestivalV1Response> response = schoolV1QueryService.findFestivalsBySchoolId(
             schoolId,
             today,
             searchCondition

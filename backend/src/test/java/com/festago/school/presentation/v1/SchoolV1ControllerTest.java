@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.school.application.SchoolV1QueryService;
+import com.festago.school.application.v1.SchoolV1QueryService;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
 import com.festago.school.dto.v1.SchoolSocialMediaV1Response;

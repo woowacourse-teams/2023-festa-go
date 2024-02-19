@@ -1,6 +1,7 @@
-package com.festago.school.application;
+package com.festago.school.application.v1;
 
 import com.festago.school.dto.v1.SchoolDetailV1Response;
+import com.festago.school.dto.v1.SchoolFestivalV1Response;
 import com.festago.school.dto.v1.SliceResponse;
 import com.festago.school.repository.v1.SchoolFestivalV1SearchCondition;
 import com.festago.school.repository.v1.SchoolV1QueryDslRepository;
@@ -20,7 +21,7 @@ public class SchoolV1QueryService {
         return schoolV1QueryDslRepository.findDetailById(schoolId);
     }
 
-    public SliceResponse findFestivalsBySchoolId(Long schoolId, LocalDate today, SchoolFestivalV1SearchCondition searchCondition) {
+    public SliceResponse<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today, SchoolFestivalV1SearchCondition searchCondition) {
         return schoolV1QueryDslRepository.findFestivalsBySchoolId(schoolId, today, searchCondition);
     }
 }

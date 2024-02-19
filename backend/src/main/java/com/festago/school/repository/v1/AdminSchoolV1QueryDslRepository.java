@@ -1,4 +1,4 @@
-package com.festago.school.repository;
+package com.festago.school.repository.v1;
 
 import static com.festago.school.domain.QSchool.school;
 
