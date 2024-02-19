@@ -1,6 +1,6 @@
 package com.festago.festival.application.command;
 
-import com.festago.festival.application.FestivalUpdateValidator;
+import com.festago.festival.application.validator.FestivalUpdateValidator;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.command.FestivalUpdateCommand;
 import com.festago.festival.repository.FestivalRepository;

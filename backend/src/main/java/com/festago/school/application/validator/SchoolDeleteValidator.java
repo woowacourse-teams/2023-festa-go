@@ -1,4 +1,4 @@
-package com.festago.school.application;
+package com.festago.school.application.validator;
 
 public interface SchoolDeleteValidator {
 

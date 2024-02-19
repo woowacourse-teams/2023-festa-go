@@ -1,8 +1,8 @@
-package com.festago.stage.application;
+package com.festago.stage.application.validator.festival;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.festival.application.FestivalDeleteValidator;
+import com.festago.festival.application.validator.FestivalDeleteValidator;
 import com.festago.stage.repository.StageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class StageFestivalDeleteValidator implements FestivalDeleteValidator {
+public class ExistsStageFestivalDeleteValidator implements FestivalDeleteValidator {
 
     private final StageRepository stageRepository;
 
