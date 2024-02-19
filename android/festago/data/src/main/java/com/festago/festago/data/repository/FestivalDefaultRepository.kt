@@ -4,9 +4,9 @@ import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.domain.model.festival.FestivalFilter
-import com.festago.festago.domain.model.festival.FestivalLocation
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.festival.PopularFestivals
+import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.domain.repository.FestivalRepository
 import java.time.LocalDate
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class FestivalDefaultRepository @Inject constructor(
     }
 
     override suspend fun loadFestivals(
-        festivalLocation: FestivalLocation?,
+        schoolRegion: SchoolRegion?,
         festivalFilter: FestivalFilter?,
         lastFestivalId: Long?,
         lastStartDate: LocalDate?,
@@ -30,21 +30,12 @@ class FestivalDefaultRepository @Inject constructor(
     ): Result<FestivalsPage> {
         return runCatchingResponse {
             festivalRetrofitService.getFestivals(
-                region = getFestivalLocationName(festivalLocation),
+                region = schoolRegion?.name,
                 filter = festivalFilter?.name,
                 lastFestivalId = lastFestivalId,
                 lastStartDate = lastStartDate,
                 size = size,
             )
         }.onSuccessOrCatch { it.toDomain() }
-    }
-
-    private fun getFestivalLocationName(festivalLocation: FestivalLocation?): String? {
-        return when (festivalLocation) {
-            FestivalLocation.BUSAN -> "부산"
-            FestivalLocation.SEOUL -> "서울"
-            FestivalLocation.GYEONGGI -> "경기"
-            else -> null
-        }
     }
 }

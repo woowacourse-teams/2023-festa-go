@@ -1,7 +1,7 @@
 package com.festago.festago.data.repository
 
 import com.festago.festago.domain.model.festival.FestivalFilter
-import com.festago.festago.domain.model.festival.FestivalLocation
+import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.festival.PopularFestivals
 import com.festago.festago.domain.repository.FestivalRepository
@@ -15,7 +15,7 @@ class FakeFestivalRepository @Inject constructor() : FestivalRepository {
     }
 
     override suspend fun loadFestivals(
-        festivalLocation: FestivalLocation?,
+        schoolRegion: SchoolRegion?,
         festivalFilter: FestivalFilter?,
         lastFestivalId: Long?,
         lastStartDate: LocalDate?,
