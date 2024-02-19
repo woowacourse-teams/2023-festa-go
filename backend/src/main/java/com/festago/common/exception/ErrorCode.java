@@ -38,6 +38,7 @@ public enum ErrorCode {
     INVALID_PAGING_MAX_SIZE("최대 size 값을 초과했습니다."),
     INVALID_NUMBER_FORMAT_PAGING_SIZE("size는 1 이상의 정수 형식이어야 합니다."),
     FESTIVAL_DELETE_CONSTRAINT_EXISTS_STAGE("공연이 등록된 축제는 삭제할 수 없습니다."),
+    FESTIVAL_UPDATE_OUT_OF_DATE_STAGE_START_TIME("공연이 등록된 축제는 삭제할 수 없습니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
