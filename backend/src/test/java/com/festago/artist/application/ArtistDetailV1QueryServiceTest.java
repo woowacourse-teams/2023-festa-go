@@ -145,16 +145,16 @@ class ArtistDetailV1QueryServiceTest extends ApplicationIntegrationTest {
             nowDate = LocalDate.now();
             nowDateTime = LocalDateTime.now();
 
-            School school1 = schoolRepository.save(new School("domain1", "부산 학교", SchoolRegion.부산));
-            School school2 = schoolRepository.save(new School("domain2", "서울 학교", SchoolRegion.서울));
-            School school3 = schoolRepository.save(new School("domain3", "대구 학교", SchoolRegion.대구));
+            School 부산_학교 = schoolRepository.save(new School("domain1", "부산 학교", SchoolRegion.부산));
+            School 서울_학교 = schoolRepository.save(new School("domain2", "서울 학교", SchoolRegion.서울));
+            School 대구_학교 = schoolRepository.save(new School("domain3", "대구 학교", SchoolRegion.대구));
 
             Festival 부산_축제 = festivalRepository.save(
-                new Festival("부산 축제", nowDate.minusDays(5), nowDate.minusDays(1), school1));
+                new Festival("부산 축제", nowDate.minusDays(5), nowDate.minusDays(1), 부산_학교));
             Festival 서울_축제 = festivalRepository.save(
-                new Festival("서울 축제", nowDate.minusDays(1), nowDate.plusDays(3), school2));
+                new Festival("서울 축제", nowDate.minusDays(1), nowDate.plusDays(3), 서울_학교));
             Festival 대구_축제 = festivalRepository.save(
-                new Festival("대구 축제", nowDate.plusDays(1), nowDate.plusDays(5), school3));
+                new Festival("대구 축제", nowDate.plusDays(1), nowDate.plusDays(5), 대구_학교));
 
             Stage 부산_공연 = stageRepository.save(new Stage(nowDateTime.minusDays(5L), nowDateTime.minusDays(6L), 부산_축제));
             Stage 서울_공연 = stageRepository.save(new Stage(nowDateTime.minusDays(1L), nowDateTime.minusDays(2L), 서울_축제));

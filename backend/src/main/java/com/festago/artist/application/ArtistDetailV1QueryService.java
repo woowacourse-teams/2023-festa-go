@@ -27,9 +27,10 @@ public class ArtistDetailV1QueryService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.ARTIST_NOT_FOUND));
     }
 
-    public Slice<ArtistFestivalDetailV1Response> findArtistFestivals(Long artistId,
-                                                                     ArtistFestivalDetailV1Request request,
-                                                                     Pageable pageable) {
+    public Slice<ArtistFestivalDetailV1Response> findArtistFestivals(
+        Long artistId,
+        ArtistFestivalDetailV1Request request,
+        Pageable pageable) {
         return artistDetailV1QueryDslRepository.findArtistFestivals(new ArtistFestivalSearchCondition(
                 artistId,
                 isPastOrDefault(request),

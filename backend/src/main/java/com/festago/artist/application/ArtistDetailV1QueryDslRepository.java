@@ -40,8 +40,7 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
 
     public Optional<ArtistDetailV1Response> findArtistDetail(Long artistId) {
         List<ArtistDetailV1Response> response = selectFrom(artist)
-            .leftJoin(socialMedia)
-            .on(socialMedia.ownerId.eq(artist.id).and(socialMedia.ownerType.eq(OwnerType.ARTIST)))
+            .leftJoin(socialMedia).on(socialMedia.ownerId.eq(artist.id).and(socialMedia.ownerType.eq(OwnerType.ARTIST)))
             .where(artist.id.eq(artistId))
             .transform(
                 groupBy(artist.id).list(
@@ -108,8 +107,12 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
             .leftJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId));
     }
 
-    private BooleanExpression getDynamicWhere(Boolean isPast, LocalDate lastStartDate, Long lastFestivalId,
-                                              LocalDate currentTime) {
+    private BooleanExpression getDynamicWhere(
+        Boolean isPast,
+        LocalDate lastStartDate,
+        Long lastFestivalId,
+        LocalDate currentTime
+    ) {
         if (hasCursor(lastStartDate, lastFestivalId)) {
             return getCursorBasedWhere(isPast, lastStartDate, lastFestivalId);
         }
@@ -120,8 +123,7 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
         return lastStartDate != null && lastFestivalId != null;
     }
 
-    private BooleanExpression getCursorBasedWhere(boolean isPast, LocalDate lastStartDate,
-                                                  Long lastFestivalId) {
+    private BooleanExpression getCursorBasedWhere(boolean isPast, LocalDate lastStartDate, Long lastFestivalId) {
         if (isPast) {
             return festival.startDate.lt(lastStartDate)
                 .or(festival.startDate.eq(lastStartDate)
@@ -132,7 +134,7 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
                 .and(festival.id.gt(lastFestivalId)));
     }
 
-    private BooleanExpression getDefaultWhere(Boolean isPast, LocalDate currentTime) {
+    private BooleanExpression getDefaultWhere(boolean isPast, LocalDate currentTime) {
         if (isPast) {
             return festival.endDate.lt(currentTime);
         }
