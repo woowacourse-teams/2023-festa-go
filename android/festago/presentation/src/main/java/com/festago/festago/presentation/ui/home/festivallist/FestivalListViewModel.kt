@@ -8,6 +8,7 @@ import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.model.festival.FestivalFilter
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalUiState
