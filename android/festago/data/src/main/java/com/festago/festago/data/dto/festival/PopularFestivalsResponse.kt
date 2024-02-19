@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PopularFestivalsResponse(
     val title: String,
-    val contents: List<FestivalResponse>,
+    val content: List<FestivalResponse>,
 ) {
     fun toDomain() = PopularFestivals(
         title = title,
-        festivals = contents.map { it.toDomain() },
+        festivals = content.map { it.toDomain() },
     )
 }
