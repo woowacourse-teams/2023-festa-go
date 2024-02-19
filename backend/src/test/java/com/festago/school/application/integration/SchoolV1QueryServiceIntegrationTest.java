@@ -1,4 +1,4 @@
-package com.festago.school.application;
+package com.festago.school.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -7,6 +7,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.application.SchoolV1QueryService;
 import com.festago.school.domain.School;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
@@ -31,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class SchoolV1QueryServiceTest extends ApplicationIntegrationTest {
+class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     SchoolV1QueryService schoolV1QueryService;
