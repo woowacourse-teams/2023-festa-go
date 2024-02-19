@@ -1,4 +1,4 @@
-package com.festago.artist.application;
+package com.festago.artist.repository;
 
 import static com.festago.artist.domain.QArtist.artist;
 import static com.festago.festival.domain.QFestival.festival;
@@ -15,7 +15,6 @@ import com.festago.artist.dto.ArtistFestivalDetailV1Response;
 import com.festago.artist.dto.QArtistDetailV1Response;
 import com.festago.artist.dto.QArtistFestivalDetailV1Response;
 import com.festago.artist.dto.QArtistMediaV1Response;
-import com.festago.artist.repository.ArtistFestivalSearchCondition;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.socialmedia.domain.OwnerType;
 import com.querydsl.core.types.OrderSpecifier;

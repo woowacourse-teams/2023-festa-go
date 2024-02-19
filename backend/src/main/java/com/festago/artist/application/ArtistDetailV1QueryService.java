@@ -2,6 +2,7 @@ package com.festago.artist.application;
 
 import com.festago.artist.dto.ArtistDetailV1Response;
 import com.festago.artist.dto.ArtistFestivalDetailV1Response;
+import com.festago.artist.repository.ArtistDetailV1QueryDslRepository;
 import com.festago.artist.repository.ArtistFestivalSearchCondition;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
