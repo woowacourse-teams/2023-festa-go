@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.home.festivallist.festival
+package com.festago.festago.presentation.ui.artistdetail.adapter.festival
 
 import android.content.res.Resources
 import android.graphics.Rect
@@ -10,16 +10,15 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.festago.festago.presentation.R
-import com.festago.festago.presentation.databinding.ItemFestivalListFestivalBinding
-import com.festago.festago.presentation.ui.home.festivallist.festival.artistlist.ArtistAdapter
-import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
+import com.festago.festago.presentation.databinding.ItemArtistDetailFestivalBinding
+import com.festago.festago.presentation.ui.artistdetail.adapter.artistlist.ArtistAdapter
+import com.festago.festago.presentation.ui.artistdetail.uistate.StageUiState
 import java.time.LocalDate
 
-class FestivalListFestivalViewHolder(
-    private val binding: ItemFestivalListFestivalBinding,
+class ArtistDetailFestivalViewHolder(
+    private val binding: ItemArtistDetailFestivalBinding,
     onArtistClick: (Long) -> Unit,
-) :
-    FestivalListViewHolder(binding) {
+) : RecyclerView.ViewHolder(binding.root) {
     private val artistAdapter = ArtistAdapter(onArtistClick)
 
     init {
@@ -27,16 +26,17 @@ class FestivalListFestivalViewHolder(
         binding.rvFestivalArtists.addItemDecoration(ArtistItemDecoration())
     }
 
-    fun bind(item: FestivalItemUiState) {
+    fun bind(item: StageUiState) {
         binding.item = item
         artistAdapter.submitList(item.artists)
         bindDDayView(item)
     }
 
-    private fun bindDDayView(item: FestivalItemUiState) {
+    private fun bindDDayView(item: StageUiState) {
         val context = binding.root.context
 
         val dDayView = binding.tvFestivalDDay
+
         when {
             LocalDate.now() > item.endDate -> Unit
 
@@ -45,25 +45,25 @@ class FestivalListFestivalViewHolder(
                 dDayView.setTextColor(context.getColor(R.color.secondary_pink_01))
                 dDayView.background = AppCompatResources.getDrawable(
                     context,
-                    R.drawable.bg_festival_list_dday_in_progress,
+                    R.drawable.bg_artist_detail_dday_in_progress,
                 )
             }
 
             LocalDate.now() == item.startDate.minusDays(1) -> {
-                dDayView.setTextColor(context.getColor(R.color.background_gray_01))
                 dDayView.text = context.getString(
-                    R.string.festival_list_tv_dday_format,
-                    LocalDate.now().compareTo(item.startDate).toString(),
+                    R.string.artist_detail_tv_dday_format,
+                    item.startDate.compareTo(LocalDate.now()).toString(),
                 )
+                dDayView.setTextColor(context.getColor(android.R.color.white))
                 dDayView.setBackgroundColor(0xffff1273.toInt())
             }
 
-            else -> binding.tvFestivalDDay.apply {
-                dDayView.setTextColor(context.getColor(R.color.background_gray_01))
+            else -> {
                 dDayView.text = context.getString(
-                    R.string.festival_list_tv_dday_format,
+                    R.string.artist_detail_tv_dday_format,
                     (LocalDate.now().toEpochDay() - item.startDate.toEpochDay()).toString(),
                 )
+                dDayView.setTextColor(context.getColor(android.R.color.white))
                 dDayView.setBackgroundColor(context.getColor(android.R.color.black))
             }
         }
@@ -89,16 +89,13 @@ class FestivalListFestivalViewHolder(
     }
 
     companion object {
-        fun of(
-            parent: ViewGroup,
-            onArtistClick: (Long) -> Unit,
-        ): FestivalListFestivalViewHolder {
-            val binding = ItemFestivalListFestivalBinding.inflate(
+        fun of(parent: ViewGroup, onArtistClick: (Long) -> Unit): ArtistDetailFestivalViewHolder {
+            val binding = ItemArtistDetailFestivalBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return FestivalListFestivalViewHolder(binding, onArtistClick)
+            return ArtistDetailFestivalViewHolder(binding, onArtistClick)
         }
     }
 }

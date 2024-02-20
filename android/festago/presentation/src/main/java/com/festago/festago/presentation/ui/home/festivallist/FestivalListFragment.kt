@@ -7,15 +7,21 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.util.repeatOnStarted
+import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,6 +40,11 @@ class FestivalListFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFestivalListBinding.inflate(inflater)
+        binding.root.setOnApplyWindowInsetsCompatListener { view, windowInsets ->
+            val statusBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.setPadding(0, statusBarInsets.top, 0, 0)
+            windowInsets
+        }
         return binding.root
     }
 
@@ -68,7 +79,16 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initViewPager() {
-        festivalListAdapter = FestivalListAdapter()
+        festivalListAdapter = FestivalListAdapter(
+            // TODO: Navigation으로 변경
+            onArtistClick = { artistId ->
+                requireActivity().supportFragmentManager.commit {
+                    add(R.id.fcvHomeContainer, ArtistDetailFragment.newInstance(artistId))
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
+                    addToBackStack(null)
+                }
+            },
+        )
         binding.rvFestivalList.adapter = festivalListAdapter
     }
 
