@@ -77,7 +77,7 @@ class FestivalListFragment : Fragment() {
             vm.loadFestivals()
             binding.srlFestivalList.isRefreshing = false
         }
-        binding.ivSearch.setOnClickListener {// 임시 연결
+        binding.ivSearch.setOnClickListener { // 임시 연결
             showSchoolDetail()
         }
     }
