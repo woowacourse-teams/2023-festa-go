@@ -10,7 +10,7 @@ import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.application.v1.AdminSchoolV1QueryService;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
-import com.festago.school.presentation.v1.dto.SchoolV1Response;
+import com.festago.school.dto.v1.AdminSchoolV1Response;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,10 +55,10 @@ class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             SearchCondition searchCondition = new SearchCondition("", "", pageable);
 
             // when
-            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
+            Page<AdminSchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
-                .map(SchoolV1Response::name)
+                .map(AdminSchoolV1Response::name)
                 .containsExactly(글렌대학교.getName(), 우테대학교.getName(), 테코대학교.getName());
         }
 
@@ -69,10 +69,10 @@ class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             SearchCondition searchCondition = new SearchCondition("id", 글렌대학교.getId().toString(), pageable);
 
             // when
-            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
+            Page<AdminSchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
-                .map(SchoolV1Response::name)
+                .map(AdminSchoolV1Response::name)
                 .containsExactlyInAnyOrder(글렌대학교.getName());
         }
 
@@ -83,10 +83,10 @@ class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             SearchCondition searchCondition = new SearchCondition("region", "서울", pageable);
 
             // when
-            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
+            Page<AdminSchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
-                .map(SchoolV1Response::name)
+                .map(AdminSchoolV1Response::name)
                 .containsExactlyInAnyOrder(우테대학교.getName(), 테코대학교.getName());
         }
 
@@ -97,10 +97,10 @@ class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             SearchCondition searchCondition = new SearchCondition("domain", "wote", pageable);
 
             // when
-            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
+            Page<AdminSchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
-                .map(SchoolV1Response::name)
+                .map(AdminSchoolV1Response::name)
                 .containsExactly(우테대학교.getName());
         }
 
@@ -111,10 +111,10 @@ class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             SearchCondition searchCondition = new SearchCondition("name", "글렌", pageable);
 
             // when
-            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
+            Page<AdminSchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
-                .map(SchoolV1Response::name)
+                .map(AdminSchoolV1Response::name)
                 .containsExactly(글렌대학교.getName());
         }
 
@@ -125,7 +125,7 @@ class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             SearchCondition searchCondition = new SearchCondition("", "글렌", pageable);
 
             // when
-            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
+            Page<AdminSchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
                 .hasSize(3);
@@ -138,7 +138,7 @@ class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             SearchCondition searchCondition = new SearchCondition("id", "", pageable);
 
             // when
-            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
+            Page<AdminSchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
                 .hasSize(3);
@@ -151,7 +151,7 @@ class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             SearchCondition searchCondition = new SearchCondition("", "", pageable);
 
             // when
-            Page<SchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
+            Page<AdminSchoolV1Response> response = adminSchoolV1QueryService.findAll(searchCondition);
 
             // then
             assertSoftly(softly -> {
@@ -171,7 +171,7 @@ class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             Long 테코대학교_식별자 = 테코대학교.getId();
 
             // when
-            SchoolV1Response response = adminSchoolV1QueryService.findById(테코대학교_식별자);
+            AdminSchoolV1Response response = adminSchoolV1QueryService.findById(테코대학교_식별자);
 
             // then
             assertThat(response.name()).isEqualTo("테코대학교");

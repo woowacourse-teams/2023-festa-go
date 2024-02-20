@@ -5,8 +5,8 @@ import static com.festago.school.domain.QSchool.school;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.domain.School;
-import com.festago.school.presentation.v1.dto.QSchoolV1Response;
-import com.festago.school.presentation.v1.dto.SchoolV1Response;
+import com.festago.school.dto.v1.AdminSchoolV1Response;
+import com.festago.school.dto.v1.QAdminSchoolV1Response;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -21,13 +21,13 @@ public class AdminSchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         super(School.class);
     }
 
-    public Page<SchoolV1Response> findAll(SearchCondition searchCondition) {
+    public Page<AdminSchoolV1Response> findAll(SearchCondition searchCondition) {
         Pageable pageable = searchCondition.pageable();
         String searchFilter = searchCondition.searchFilter();
         String searchKeyword = searchCondition.searchKeyword();
         return applyPagination(pageable,
             queryFactory -> queryFactory.select(
-                    new QSchoolV1Response(
+                    new QAdminSchoolV1Response(
                         school.id,
                         school.domain,
                         school.name,
@@ -80,9 +80,9 @@ public class AdminSchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         return null;
     }
 
-    public Optional<SchoolV1Response> findById(Long schoolId) {
+    public Optional<AdminSchoolV1Response> findById(Long schoolId) {
         return fetchOne(queryFactory -> queryFactory.select(
-                new QSchoolV1Response(
+                new QAdminSchoolV1Response(
                     school.id,
                     school.domain,
                     school.name,

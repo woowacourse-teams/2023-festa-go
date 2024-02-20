@@ -22,7 +22,7 @@ import com.festago.school.application.SchoolDeleteService;
 import com.festago.school.application.v1.AdminSchoolV1QueryService;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
-import com.festago.school.presentation.v1.dto.SchoolV1Response;
+import com.festago.school.dto.v1.AdminSchoolV1Response;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import jakarta.servlet.http.Cookie;
@@ -147,8 +147,8 @@ class AdminSchoolV1ControllerTest {
             void 요청을_하면_200_응답과_학교_정보_목록이_반환된다() throws Exception {
                 // given
                 var expected = List.of(
-                    new SchoolV1Response(1L, "teco.ac.kr", "테코대학교", SchoolRegion.서울),
-                    new SchoolV1Response(2L, "wote.ac.kr", "우테대학교", SchoolRegion.부산)
+                    new AdminSchoolV1Response(1L, "teco.ac.kr", "테코대학교", SchoolRegion.서울),
+                    new AdminSchoolV1Response(2L, "wote.ac.kr", "우테대학교", SchoolRegion.부산)
                 );
                 given(adminSchoolV1QueryService.findAll(any(SearchCondition.class)))
                     .willReturn(new PageImpl<>(expected));
@@ -176,7 +176,7 @@ class AdminSchoolV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_하면_200_응답과_학교_정보가_반환된다() throws Exception {
                 // given
-                var expected = new SchoolV1Response(1L, "teco.ac.kr", "테코대학교", SchoolRegion.서울);
+                var expected = new AdminSchoolV1Response(1L, "teco.ac.kr", "테코대학교", SchoolRegion.서울);
                 given(adminSchoolV1QueryService.findById(anyLong()))
                     .willReturn(expected);
 
@@ -188,7 +188,7 @@ class AdminSchoolV1ControllerTest {
                     .andReturn()
                     .getResponse()
                     .getContentAsString(StandardCharsets.UTF_8);
-                var actual = objectMapper.readValue(content, SchoolV1Response.class);
+                var actual = objectMapper.readValue(content, AdminSchoolV1Response.class);
 
                 assertThat(actual).isEqualTo(expected);
             }

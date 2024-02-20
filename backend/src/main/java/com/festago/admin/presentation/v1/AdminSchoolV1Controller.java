@@ -7,7 +7,7 @@ import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.application.SchoolCommandService;
 import com.festago.school.application.SchoolDeleteService;
 import com.festago.school.application.v1.AdminSchoolV1QueryService;
-import com.festago.school.presentation.v1.dto.SchoolV1Response;
+import com.festago.school.dto.v1.AdminSchoolV1Response;
 import io.swagger.v3.oas.annotations.Hidden;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class AdminSchoolV1Controller {
 
     @GetMapping
     @ValidPageable(maxSize = 20)
-    public ResponseEntity<Page<SchoolV1Response>> findAllSchools(
+    public ResponseEntity<Page<AdminSchoolV1Response>> findAllSchools(
             @RequestParam(defaultValue = "") String searchFilter,
             @RequestParam(defaultValue = "") String searchKeyword,
             Pageable pageable
@@ -74,7 +74,7 @@ public class AdminSchoolV1Controller {
     }
 
     @GetMapping("/{schoolId}")
-    public ResponseEntity<SchoolV1Response> findSchoolById(
+    public ResponseEntity<AdminSchoolV1Response> findSchoolById(
             @PathVariable Long schoolId
     ) {
         return ResponseEntity.ok()
