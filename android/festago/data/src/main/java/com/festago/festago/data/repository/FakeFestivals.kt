@@ -127,7 +127,7 @@ object FakeFestivals {
 
     val plannedFestivals = listOf(
         Festival(
-            id = 1,
+            id = 30,
             name = "뉴진스 콘서트",
             startDate = LocalDate.now().plusDays(1L),
             endDate = LocalDate.MAX,
@@ -142,7 +142,7 @@ object FakeFestivals {
             ),
         ),
         Festival(
-            id = 2,
+            id = 31,
             name = "아이브 콘서트",
             startDate = LocalDate.now().plusDays(3L),
             endDate = LocalDate.MAX,
@@ -177,7 +177,7 @@ object FakeFestivals {
             ),
         ),
         Festival(
-            id = 3,
+            id = 32,
             name = "아이들 콘서트",
             startDate = LocalDate.now().plusDays(5L),
             endDate = LocalDate.MAX,
@@ -192,7 +192,7 @@ object FakeFestivals {
             ),
         ),
         Festival(
-            id = 4,
+            id = 33,
             name = "뉴진스 콘서트",
             startDate = LocalDate.now().plusDays(20L),
             endDate = LocalDate.MAX,
@@ -207,7 +207,7 @@ object FakeFestivals {
             ),
         ),
         Festival(
-            id = 5,
+            id = 34,
             name = "아이브 콘서트",
             startDate = LocalDate.now().plusDays(40L),
             endDate = LocalDate.MAX,
