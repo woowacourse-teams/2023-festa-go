@@ -7,7 +7,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -18,6 +17,7 @@ import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FestivalListFragment : Fragment() {
+
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
@@ -64,9 +65,17 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initView() {
-        initViewPager()
         vm.loadFestivals()
+        initViewPager()
         initRecyclerView()
+        initRefresh()
+    }
+
+    private fun initRefresh() {
+        binding.srlFestivalList.setOnRefreshListener {
+            vm.loadFestivals()
+            binding.srlFestivalList.isRefreshing = false
+        }
     }
 
     private fun initViewPager() {
@@ -80,11 +89,11 @@ class FestivalListFragment : Fragment() {
                 }
             },
         )
-        binding.rvList.adapter = festivalListAdapter
+        binding.rvFestivalList.adapter = festivalListAdapter
     }
 
     private fun initRecyclerView() {
-        binding.rvList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+        binding.rvFestivalList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
                 view: View,
@@ -119,11 +128,14 @@ class FestivalListFragment : Fragment() {
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
         festivalListAdapter.submitList(
             listOf(
-                uiState,
+                uiState.popularFestivals,
                 FestivalTabUiState {
-                    Toast.makeText(requireContext(), "Clicked $it", Toast.LENGTH_SHORT).show()
-                    // TODO: Handle tab click
-                    vm.loadFestivals()
+                    val festivalFilter = when (it) {
+                        0 -> FestivalFilterUiState.PROGRESS
+                        1 -> FestivalFilterUiState.PLANNED
+                        else -> FestivalFilterUiState.PROGRESS
+                    }
+                    vm.loadFestivals(festivalFilter)
                 },
             ) + uiState.festivals,
         )

@@ -33,18 +33,6 @@ class FakeArtistRepository @Inject constructor() : ArtistRepository {
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/531px-X_logo_2023.svg.png",
                         "https://twitter.com/NewJeans_ADOR",
                     ),
-                    ArtistMedia(
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/600px-X_logo_2023.svg.png?20230819000805",
-                        "공식 엑스",
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/531px-X_logo_2023.svg.png",
-                        "https://twitter.com/NewJeans_ADOR",
-                    ),
-                    ArtistMedia(
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/600px-X_logo_2023.svg.png?20230819000805",
-                        "공식 엑스",
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/531px-X_logo_2023.svg.png",
-                        "https://twitter.com/NewJeans_ADOR",
-                    ),
                 ),
             ),
         )

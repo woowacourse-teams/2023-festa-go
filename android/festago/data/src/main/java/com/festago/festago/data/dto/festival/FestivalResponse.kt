@@ -3,8 +3,10 @@ package com.festago.festago.data.dto.festival
 import com.festago.festago.data.dto.artist.ArtistResponse
 import com.festago.festago.data.dto.school.SchoolResponse
 import com.festago.festago.domain.model.festival.Festival
+import kotlinx.serialization.Serializable
 import java.time.LocalDate
 
+@Serializable
 data class FestivalResponse(
     val id: Long,
     val name: String,
