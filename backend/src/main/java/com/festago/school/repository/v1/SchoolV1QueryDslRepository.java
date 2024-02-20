@@ -125,11 +125,11 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         List<SchoolFestivalV1Response> content
     ) {
         boolean hasNext = true;
-        if (content.size() == pageable.getPageSize() + NEXT_PAGE_CHECK_NUMBER) {
-            content.remove(content.size() - NEXT_PAGE_CHECK_NUMBER);
+        if (content.size() > pageable.getPageSize()) {
+            content.remove(content.size() - 1);
             hasNext = false;
         }
 
-        return new SliceImpl<SchoolFestivalV1Response>(content, pageable, hasNext);
+        return new SliceImpl(content, pageable, hasNext);
     }
 }
