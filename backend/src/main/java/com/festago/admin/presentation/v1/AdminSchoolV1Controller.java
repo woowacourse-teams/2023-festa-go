@@ -66,19 +66,19 @@ public class AdminSchoolV1Controller {
     @GetMapping
     @ValidPageable(maxSize = 20)
     public ResponseEntity<Page<AdminSchoolV1Response>> findAllSchools(
-            @RequestParam(defaultValue = "") String searchFilter,
-            @RequestParam(defaultValue = "") String searchKeyword,
-            Pageable pageable
+        @RequestParam(defaultValue = "") String searchFilter,
+        @RequestParam(defaultValue = "") String searchKeyword,
+        Pageable pageable
     ) {
         return ResponseEntity.ok()
-                .body(schoolQueryService.findAll(new SearchCondition(searchFilter, searchKeyword, pageable)));
+            .body(schoolQueryService.findAll(new SearchCondition(searchFilter, searchKeyword, pageable)));
     }
 
     @GetMapping("/{schoolId}")
     public ResponseEntity<AdminSchoolV1Response> findSchoolById(
-            @PathVariable Long schoolId
+        @PathVariable Long schoolId
     ) {
         return ResponseEntity.ok()
-                .body(schoolQueryService.findById(schoolId));
+            .body(schoolQueryService.findById(schoolId));
     }
 }

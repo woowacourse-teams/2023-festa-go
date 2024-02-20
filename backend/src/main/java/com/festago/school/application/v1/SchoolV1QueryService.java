@@ -24,7 +24,11 @@ public class SchoolV1QueryService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
     }
 
-    public Slice<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today, SchoolFestivalV1SearchCondition searchCondition) {
+    public Slice<SchoolFestivalV1Response> findFestivalsBySchoolId(
+        Long schoolId,
+        LocalDate today,
+        SchoolFestivalV1SearchCondition searchCondition
+    ) {
         return schoolV1QueryDslRepository.findFestivalsBySchoolId(schoolId, today, searchCondition);
     }
 }
