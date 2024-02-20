@@ -6,7 +6,7 @@ import com.festago.acceptance.CucumberClient;
 import com.festago.admin.presentation.v1.dto.SchoolV1CreateRequest;
 import com.festago.admin.presentation.v1.dto.SchoolV1UpdateRequest;
 import com.festago.school.domain.SchoolRegion;
-import com.festago.school.presentation.v1.dto.SchoolV1Response;
+import com.festago.school.dto.v1.AdminSchoolV1Response;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -49,18 +49,19 @@ public class SchoolStepDefinitions {
             .statusCode(200);
     }
 
-    public List<SchoolV1Response> getSchoolResponsesByName(String src) {
+    public List<AdminSchoolV1Response> getSchoolResponsesByName(String src) {
         return RestAssured.given()
             .contentType(ContentType.JSON)
             .queryParams(Map.of("searchFilter", "name", "searchKeyword", src))
-            .get("/api/v1/schools")
+            .cookie("token", cucumberClient.getToken())
+            .get("/admin/api/v1/schools")
             .then()
             .log().ifError()
             .statusCode(200)
             .extract()
             .body()
             .jsonPath()
-            .getList("content", SchoolV1Response.class);
+            .getList("content", AdminSchoolV1Response.class);
     }
 
     @When("이름이 {string}인 학교를 삭제한다.")
