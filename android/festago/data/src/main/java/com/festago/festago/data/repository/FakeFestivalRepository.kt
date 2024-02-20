@@ -27,6 +27,15 @@ class FakeFestivalRepository @Inject constructor() : FestivalRepository {
         val notNullSize = size ?: DEFAULT_SIZE
         val notNullLastFestivalId = lastFestivalId ?: DEFAULT_LAST_FESTIVAL_ID
 
+        if(festivalFilter == FestivalFilter.PLANNED) {
+            return Result.success(
+                FestivalsPage(
+                    false,
+                    getFestivals(15L..20L),
+                ),
+            )
+        }
+
         if (notNullLastFestivalId + notNullSize < LAST_ITEM_ID) {
             return Result.success(
                 FestivalsPage(
