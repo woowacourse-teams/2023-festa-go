@@ -1,5 +1,6 @@
 package com.festago.school.presentation.v1;
 
+import com.festago.common.aop.ValidPageable;
 import com.festago.school.application.v1.SchoolV1QueryService;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
@@ -34,6 +35,7 @@ public class SchoolV1Controller {
     }
 
     @GetMapping("/{schoolId}/festivals")
+    @ValidPageable(maxSize = 20)
     @Operation(description = "해당 학교의 축제들을 페이징하여 조회한다.", summary = "학교 상세 조회")
     public ResponseEntity<Slice<SchoolFestivalV1Response>> findFestivalsBySchoolId(
         @PathVariable Long schoolId,

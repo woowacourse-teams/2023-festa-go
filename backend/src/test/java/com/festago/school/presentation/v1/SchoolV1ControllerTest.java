@@ -107,6 +107,20 @@ class SchoolV1ControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().json(objectMapper.writeValueAsString(expected)));
             }
+
+            @Test
+            void 요청시_페이지가_20을_넘어가면_예외() throws Exception {
+                // given
+                int maxPageSize = 20;
+
+                // when && then
+                mockMvc.perform(get(uri, 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("size", String.valueOf(maxPageSize + 1)))
+                        .andDo(print())
+                    .andExpect(status().isBadRequest());
+
+            }
         }
     }
 }
