@@ -5,10 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
 import com.festago.festago.domain.model.festival.Festival
+import com.festago.festago.domain.model.festival.FestivalFilter
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.SchoolUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -27,17 +30,27 @@ class FestivalListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<FestivalListUiState>(FestivalListUiState.Loading)
     val uiState: StateFlow<FestivalListUiState> = _uiState.asStateFlow()
 
-    fun loadFestivals() {
+    private var festivalFilter: FestivalFilter = FestivalFilter.PROGRESS
+
+    fun loadFestivals(festivalFilterUiState: FestivalFilterUiState? = null) {
         viewModelScope.launch {
+            if (festivalFilterUiState != null) {
+                festivalFilter = festivalFilterUiState.toDomain()
+            }
+
             val deferredPopularFestivals = async { festivalRepository.loadPopularFestivals() }
-            val deferredFestivals = async { festivalRepository.loadFestivals() }
+            val deferredFestivals =
+                async { festivalRepository.loadFestivals(festivalFilter = festivalFilter) }
 
             runCatching {
                 val festivalsPage = deferredFestivals.await().getOrThrow()
                 val popularFestivals = deferredPopularFestivals.await().getOrThrow()
 
                 _uiState.value = FestivalListUiState.Success(
-                    popularFestivals = popularFestivals.map { it.toUiState() },
+                    PopularFestivalUiState(
+                        title = popularFestivals.title,
+                        popularFestivals = popularFestivals.festivals.map { it.toUiState() },
+                    ),
                     festivals = festivalsPage.festivals.map { it.toUiState() },
                     isLastPage = festivalsPage.isLastPage,
                 )
@@ -49,6 +62,11 @@ class FestivalListViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun FestivalFilterUiState.toDomain() = when (this) {
+        FestivalFilterUiState.PLANNED -> FestivalFilter.PLANNED
+        FestivalFilterUiState.PROGRESS -> FestivalFilter.PROGRESS
     }
 
     private fun Festival.toUiState() = FestivalItemUiState(

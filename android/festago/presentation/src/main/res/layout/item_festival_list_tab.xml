@@ -12,6 +12,7 @@
             android:id="@+id/tlFestivalListTab"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
             android:background="@android:color/transparent"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/contents_gray_07"
