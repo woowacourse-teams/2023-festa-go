@@ -28,23 +28,16 @@ public class ArtistDetailV1QueryService {
     }
 
     public Slice<ArtistFestivalDetailV1Response> findArtistFestivals(Long artistId, Long lastFestivalId,
-                                                                     LocalDate lastStartDate, Boolean isPast,
+                                                                     LocalDate lastStartDate, boolean isPast,
                                                                      Pageable pageable) {
         return artistDetailV1QueryDslRepository.findArtistFestivals(new ArtistFestivalSearchCondition(
                 artistId,
-                isPastOrDefault(isPast),
+                isPast,
                 lastFestivalId,
                 lastStartDate,
                 pageable,
                 LocalDate.now(clock)
             )
         );
-    }
-
-    private boolean isPastOrDefault(Boolean isPast) {
-        if (isPast == null) {
-            return false;
-        }
-        return isPast;
     }
 }

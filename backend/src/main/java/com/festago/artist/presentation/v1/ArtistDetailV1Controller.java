@@ -40,7 +40,7 @@ public class ArtistDetailV1Controller {
         @PathVariable Long artistId,
         @RequestParam(required = false) Long lastFestivalId,
         @RequestParam(required = false) LocalDate lastStartDate,
-        @RequestParam(required = false) Boolean isPast,
+        @RequestParam(required = false, defaultValue = "false") boolean isPast,
         @PageableDefault(size = 10) Pageable pageable
     ) {
         validate(lastFestivalId, lastStartDate);
