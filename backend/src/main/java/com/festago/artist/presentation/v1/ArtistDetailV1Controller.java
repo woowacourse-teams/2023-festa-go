@@ -38,8 +38,8 @@ public class ArtistDetailV1Controller {
     @ValidPageable(maxSize = 20)
     public ResponseEntity<Slice<ArtistFestivalDetailV1Response>> getArtistInfo(
         @PathVariable Long artistId,
-        @RequestParam Long lastFestivalId,
-        @RequestParam LocalDate lastStartDate,
+        @RequestParam(required = false) Long lastFestivalId,
+        @RequestParam(required = false) LocalDate lastStartDate,
         @RequestParam(required = false) Boolean isPast,
         @PageableDefault(size = 10) Pageable pageable
     ) {
