@@ -3,12 +3,14 @@ package com.festago.school.presentation.v1;
 import com.festago.school.application.v1.SchoolV1QueryService;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
-import com.festago.school.dto.v1.SliceResponse;
 import com.festago.school.repository.v1.SchoolFestivalV1SearchCondition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,16 +35,16 @@ public class SchoolV1Controller {
 
     @GetMapping("/{schoolId}/festivals")
     @Operation(description = "해당 학교의 축제들을 페이징하여 조회한다.", summary = "학교 상세 조회")
-    public ResponseEntity<SliceResponse<SchoolFestivalV1Response>> findFestivalsBySchoolId(
+    public ResponseEntity<Slice<SchoolFestivalV1Response>> findFestivalsBySchoolId(
         @PathVariable Long schoolId,
         @RequestParam(required = false) Long lastFestivalId,
         @RequestParam(required = false) LocalDate lastStartDate,
         @RequestParam(defaultValue = "false") Boolean isPast,
-        @RequestParam(defaultValue = "10") Integer size
+        @PageableDefault(size = 10) Pageable pageable
     ) {
         LocalDate today = LocalDate.now();
-        var searchCondition = new SchoolFestivalV1SearchCondition(lastFestivalId, lastStartDate, isPast, size);
-        SliceResponse<SchoolFestivalV1Response> response = schoolV1QueryService.findFestivalsBySchoolId(
+        var searchCondition = new SchoolFestivalV1SearchCondition(lastFestivalId, lastStartDate, isPast, pageable);
+        Slice<SchoolFestivalV1Response> response = schoolV1QueryService.findFestivalsBySchoolId(
             schoolId,
             today,
             searchCondition

@@ -14,13 +14,15 @@ import com.festago.school.dto.v1.QSchoolFestivalV1Response;
 import com.festago.school.dto.v1.QSchoolSocialMediaV1Response;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
-import com.festago.school.dto.v1.SliceResponse;
 import com.festago.socialmedia.domain.OwnerType;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -59,8 +61,8 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         return Optional.of(response.get(0));
     }
 
-    public SliceResponse<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today,
-                                                                           SchoolFestivalV1SearchCondition searchCondition) {
+    public Slice<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today,
+                                                                   SchoolFestivalV1SearchCondition searchCondition) {
         List<SchoolFestivalV1Response> result =
             select(new QSchoolFestivalV1Response(festival.id,
                     festival.name,
@@ -71,16 +73,16 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
                 )
             )
                 .from(festival)
+                .leftJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
                 .where(festival.school.id.eq(schoolId),
                     addPhaseOption(searchCondition.isPast(), today),
                     addPagingOption(searchCondition.lastFestivalId(), searchCondition.lastStartDate(),
                         searchCondition.isPast()))
-                .leftJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
                 .orderBy(addOrderOption(searchCondition.isPast()))
-                .limit(searchCondition.size() + NEXT_PAGE_CHECK_NUMBER)
+                .limit(searchCondition.pageable().getPageSize() + NEXT_PAGE_CHECK_NUMBER)
                 .fetch();
 
-        return createResponse(searchCondition.size(), result);
+        return createResponse(searchCondition.pageable(), result);
     }
 
     private BooleanExpression addPhaseOption(boolean isPast, LocalDate today) {
@@ -110,23 +112,24 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         return lastFestivalId != null && lastStartDate != null;
     }
 
-    private OrderSpecifier<LocalDate>[] addOrderOption(boolean isPast) {
+    private OrderSpecifier<LocalDate> addOrderOption(boolean isPast) {
         if (isPast) {
-            return new OrderSpecifier[]{festival.endDate.desc()};
+            return festival.endDate.desc();
         }
 
-        return new OrderSpecifier[]{festival.startDate.asc()};
+        return festival.startDate.asc();
     }
 
-    private SliceResponse<SchoolFestivalV1Response> createResponse(
-        Integer pageSize,
-        List<SchoolFestivalV1Response> content) {
-        boolean isLast = true;
-        if (content.size() == pageSize + NEXT_PAGE_CHECK_NUMBER) {
+    private Slice<SchoolFestivalV1Response> createResponse(
+        Pageable pageable,
+        List<SchoolFestivalV1Response> content
+    ) {
+        boolean hasNext = true;
+        if (content.size() == pageable.getPageSize() + NEXT_PAGE_CHECK_NUMBER) {
             content.remove(content.size() - NEXT_PAGE_CHECK_NUMBER);
-            isLast = false;
+            hasNext = false;
         }
 
-        return new SliceResponse(isLast, content);
+        return new SliceImpl<SchoolFestivalV1Response>(content, pageable, hasNext);
     }
 }

@@ -147,18 +147,18 @@ class AdminSchoolV1ControllerTest {
             void 요청을_하면_200_응답과_학교_정보_목록이_반환된다() throws Exception {
                 // given
                 var expected = List.of(
-                        new SchoolV1Response(1L, "teco.ac.kr", "테코대학교", SchoolRegion.서울),
-                        new SchoolV1Response(2L, "wote.ac.kr", "우테대학교", SchoolRegion.부산)
+                    new SchoolV1Response(1L, "teco.ac.kr", "테코대학교", SchoolRegion.서울),
+                    new SchoolV1Response(2L, "wote.ac.kr", "우테대학교", SchoolRegion.부산)
                 );
                 given(adminSchoolV1QueryService.findAll(any(SearchCondition.class)))
-                        .willReturn(new PageImpl<>(expected));
+                    .willReturn(new PageImpl<>(expected));
 
                 // when & then
                 mockMvc.perform(get(uri)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .cookie(new Cookie("token", "Bearer token")))
-                        .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.content.size()").value(2));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("token", "Bearer token")))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.content.size()").value(2));
             }
         }
     }
@@ -178,16 +178,16 @@ class AdminSchoolV1ControllerTest {
                 // given
                 var expected = new SchoolV1Response(1L, "teco.ac.kr", "테코대학교", SchoolRegion.서울);
                 given(adminSchoolV1QueryService.findById(anyLong()))
-                        .willReturn(expected);
+                    .willReturn(expected);
 
                 // when & then
                 String content = mockMvc.perform(get(uri, 1L)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .cookie(new Cookie("token", "Bearer token")))
-                        .andExpect(status().isOk())
-                        .andReturn()
-                        .getResponse()
-                        .getContentAsString(StandardCharsets.UTF_8);
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("token", "Bearer token")))
+                    .andExpect(status().isOk())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString(StandardCharsets.UTF_8);
                 var actual = objectMapper.readValue(content, SchoolV1Response.class);
 
                 assertThat(actual).isEqualTo(expected);

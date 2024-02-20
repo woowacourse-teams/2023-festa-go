@@ -11,7 +11,6 @@ import com.festago.school.application.v1.SchoolV1QueryService;
 import com.festago.school.domain.School;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
-import com.festago.school.dto.v1.SliceResponse;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.school.repository.v1.SchoolFestivalV1SearchCondition;
 import com.festago.socialmedia.domain.OwnerType;
@@ -29,6 +28,8 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -134,10 +135,10 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             // 종료
             Festival lastFestival = saveFestival(today.minusDays(3), today.minusDays(1));
 
-            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, true, 10);
+            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, true, Pageable.ofSize(10));
             // when
             List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(
-                school.getId(), today, searchCondition).content();
+                school.getId(), today, searchCondition).getContent();
 
             // then
             assertThat(actual).hasSize(1);
@@ -152,14 +153,14 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             saveFestival(today, today.plusDays(1));
             saveFestival(today.plusDays(1), today.plusDays(2));
 
-            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, false, 10);
+            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, false, Pageable.ofSize(10));
 
             // 종료 축제
             saveFestival(today.minusDays(3), today.minusDays(1));
 
             // when
             List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(
-                school.getId(), today, searchCondition).content();
+                school.getId(), today, searchCondition).getContent();
 
             // then
             assertThat(actual).hasSize(2);
@@ -171,11 +172,11 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             saveFestival(today.plusDays(2), today.plusDays(3));
             saveFestival(today.plusDays(2), today.plusDays(3));
             Festival recentFestival = saveFestival(today, today.plusDays(1));
-            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, false, 10);
+            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, false, Pageable.ofSize(10));
 
             // when
             List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(
-                school.getId(), today, searchCondition).content();
+                school.getId(), today, searchCondition).getContent();
 
             // then
             assertThat(actual.get(0).id()).isEqualTo(recentFestival.getId());
@@ -187,11 +188,11 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             saveFestival(today.minusDays(4), today.minusDays(3));
             saveFestival(today.minusDays(3), today.minusDays(2));
             Festival recentFestival = saveFestival(today.minusDays(3), today.minusDays(1));
-            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, true, 10);
+            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, true, Pageable.ofSize(10));
 
             // when
             List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(
-                school.getId(), today, searchCondition).content();
+                school.getId(), today, searchCondition).getContent();
 
             // then
             assertThat(actual.get(0).id()).isEqualTo(recentFestival.getId());
@@ -206,11 +207,11 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             saveFestival(today.plusDays(1), today.plusDays(1));
             saveFestival(today.plusDays(2), today.plusDays(2));
             var searchCondition = new SchoolFestivalV1SearchCondition(
-                lastReadFestival.getId(), lastReadFestival.getStartDate(), false, 2);
+                lastReadFestival.getId(), lastReadFestival.getStartDate(), false, Pageable.ofSize(2));
 
             // when
             List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(
-                school.getId(), today, searchCondition).content();
+                school.getId(), today, searchCondition).getContent();
 
             // then
             assertThat(actual).hasSize(2);
@@ -228,11 +229,11 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             saveFestival(yesterday.minusDays(4), yesterday);
             saveFestival(yesterday.minusDays(4), yesterday);
             var searchCondition = new SchoolFestivalV1SearchCondition(
-                lastReadFestival.getId(), lastReadFestival.getStartDate(), true, 2);
+                lastReadFestival.getId(), lastReadFestival.getStartDate(), true, Pageable.ofSize(2));
 
             // when
             List<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(
-                school.getId(), today, searchCondition).content();
+                school.getId(), today, searchCondition).getContent();
 
             // then
             assertThat(actual).hasSize(2);
@@ -244,28 +245,29 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             // given
             saveFestival(today, today.plusDays(1));
             saveFestival(today, today.plusDays(1));
-            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, false, 1);
+            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, false, Pageable.ofSize(1));
 
             // when
-            SliceResponse actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today,
+            Slice<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(
+                school.getId(), today,
                 searchCondition);
 
             // then
-            assertThat(actual.last()).isFalse();
+            assertThat(actual.hasNext()).isFalse();
         }
 
         @Test
         void 다음_페이지가_존재하지않는다() {
             // given
             saveFestival(today, today.plusDays(1));
-            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, false, 1);
+            var searchCondition = new SchoolFestivalV1SearchCondition(null, null, false, Pageable.ofSize(1));
 
             // when
-            SliceResponse actual = schoolV1QueryService.findFestivalsBySchoolId(school.getId(), today,
-                searchCondition);
+            Slice<SchoolFestivalV1Response> actual = schoolV1QueryService.findFestivalsBySchoolId(
+                school.getId(), today, searchCondition);
 
             // then
-            assertThat(actual.last()).isTrue();
+            assertThat(actual.hasNext()).isTrue();
         }
 
         private Festival saveFestival(LocalDate startDate, LocalDate endDate) {

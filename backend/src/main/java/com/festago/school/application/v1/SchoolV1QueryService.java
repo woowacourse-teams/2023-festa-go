@@ -4,11 +4,11 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
-import com.festago.school.dto.v1.SliceResponse;
 import com.festago.school.repository.v1.SchoolFestivalV1SearchCondition;
 import com.festago.school.repository.v1.SchoolV1QueryDslRepository;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,7 @@ public class SchoolV1QueryService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
     }
 
-    public SliceResponse<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today, SchoolFestivalV1SearchCondition searchCondition) {
+    public Slice<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today, SchoolFestivalV1SearchCondition searchCondition) {
         return schoolV1QueryDslRepository.findFestivalsBySchoolId(schoolId, today, searchCondition);
     }
 }
