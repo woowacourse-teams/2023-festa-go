@@ -18,7 +18,7 @@ import javax.inject.Inject
 class ArtistDetailViewModel @Inject constructor(
     private val artistRepository: ArtistRepository,
 ) : ViewModel() {
-    val _uiState: MutableStateFlow<ArtistDetailUiState> =
+    private val _uiState: MutableStateFlow<ArtistDetailUiState> =
         MutableStateFlow(ArtistDetailUiState.Loading)
     val uiState: StateFlow<ArtistDetailUiState> = _uiState.asStateFlow()
 
