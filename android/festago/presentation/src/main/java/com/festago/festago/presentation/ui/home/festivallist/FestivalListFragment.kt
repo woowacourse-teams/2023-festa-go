@@ -9,10 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,6 +74,30 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
+        initScrollEvent()
+        initDecoration()
+    }
+
+    private fun initScrollEvent() {
+        binding.rvFestivalList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val festivalListUiState = vm.uiState.value as? FestivalListUiState.Success ?: return
+                if (festivalListUiState.isLastPage) return
+
+                val lastVisibleItemPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+
+                val itemTotalCount = recyclerView.adapter!!.itemCount - 1
+                if (lastVisibleItemPosition == itemTotalCount) {
+                    vm.loadFestivals()
+                }
+            }
+        })
+    }
+
+    private fun initDecoration() {
         binding.rvFestivalList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
@@ -105,12 +131,18 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
-        festivalListAdapter.submitList(
-            listOf(
-                uiState.popularFestivals,
-                FestivalTabUiState(uiState.festivalFilter) { vm.loadFestivals(it) },
-            ) + uiState.festivals,
-        )
+        val lastItem = if (!uiState.isLastPage) {
+            listOf(FestivalMoreItemUiState)
+        } else {
+            emptyList()
+        }
+
+        val festivalItems = listOf(
+            uiState.popularFestivals,
+            FestivalTabUiState(uiState.festivalFilter) { vm.loadFestivals(it) },
+        ) + uiState.festivals
+
+        festivalListAdapter.submitList(festivalItems + lastItem)
     }
 
     override fun onDestroyView() {
