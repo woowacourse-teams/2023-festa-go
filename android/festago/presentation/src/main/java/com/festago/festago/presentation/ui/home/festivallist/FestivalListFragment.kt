@@ -12,7 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
-import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -109,14 +108,7 @@ class FestivalListFragment : Fragment() {
         festivalListAdapter.submitList(
             listOf(
                 uiState.popularFestivals,
-                FestivalTabUiState {
-                    val festivalFilter = when (it) {
-                        0 -> FestivalFilterUiState.PROGRESS
-                        1 -> FestivalFilterUiState.PLANNED
-                        else -> FestivalFilterUiState.PROGRESS
-                    }
-                    vm.loadFestivals(festivalFilter)
-                },
+                FestivalTabUiState(uiState.festivalFilter) { vm.loadFestivals(it) },
             ) + uiState.festivals,
         )
     }

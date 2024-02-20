@@ -52,6 +52,7 @@ class FestivalListViewModel @Inject constructor(
                         popularFestivals = popularFestivals.festivals.map { it.toUiState() },
                     ),
                     festivals = festivalsPage.festivals.map { it.toUiState() },
+                    festivalFilter = festivalFilter.toUiState(),
                     isLastPage = festivalsPage.isLastPage,
                 )
             }.onFailure {
@@ -67,6 +68,12 @@ class FestivalListViewModel @Inject constructor(
     private fun FestivalFilterUiState.toDomain() = when (this) {
         FestivalFilterUiState.PLANNED -> FestivalFilter.PLANNED
         FestivalFilterUiState.PROGRESS -> FestivalFilter.PROGRESS
+    }
+
+    private fun FestivalFilter.toUiState() = when (this) {
+        FestivalFilter.PLANNED -> FestivalFilterUiState.PLANNED
+        FestivalFilter.PROGRESS -> FestivalFilterUiState.PROGRESS
+        else -> FestivalFilterUiState.PLANNED
     }
 
     private fun Festival.toUiState() = FestivalItemUiState(

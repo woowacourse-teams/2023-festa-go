@@ -6,6 +6,7 @@ sealed interface FestivalListUiState {
     data class Success(
         val popularFestivals: PopularFestivalUiState,
         val festivals: List<FestivalItemUiState>,
+        val festivalFilter: FestivalFilterUiState,
         val isLastPage: Boolean,
     ) : FestivalListUiState
 
