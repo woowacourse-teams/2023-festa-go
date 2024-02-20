@@ -78,8 +78,8 @@ class ArtistDetailV1QueryServiceTest extends ApplicationIntegrationTest {
             // given
             Artist pooh = artistRepository.save(new Artist("pooh", "image.jpg"));
             Long id = pooh.getId();
-            socialMediaRepository.save(makeArtistSocialMedia(id, OwnerType.ARTIST, SocialMediaType.INSTAGRAM));
-            socialMediaRepository.save(makeArtistSocialMedia(id, OwnerType.ARTIST, SocialMediaType.YOUTUBE));
+            makeArtistSocialMedia(id, OwnerType.ARTIST, SocialMediaType.INSTAGRAM);
+            makeArtistSocialMedia(id, OwnerType.ARTIST, SocialMediaType.YOUTUBE);
 
             // when
             ArtistDetailV1Response acutal = artistDetailV1QueryService.findArtistDetail(id);
@@ -106,8 +106,8 @@ class ArtistDetailV1QueryServiceTest extends ApplicationIntegrationTest {
             // given
             Artist pooh = artistRepository.save(new Artist("pooh", "image.jpg"));
             Long id = pooh.getId();
-            socialMediaRepository.save(makeArtistSocialMedia(id, OwnerType.ARTIST, SocialMediaType.INSTAGRAM));
-            socialMediaRepository.save(makeArtistSocialMedia(id, OwnerType.SCHOOL, SocialMediaType.INSTAGRAM));
+            makeArtistSocialMedia(id, OwnerType.ARTIST, SocialMediaType.INSTAGRAM);
+            makeArtistSocialMedia(id, OwnerType.SCHOOL, SocialMediaType.INSTAGRAM);
 
             // when
             ArtistDetailV1Response acutal = artistDetailV1QueryService.findArtistDetail(id);
@@ -126,7 +126,8 @@ class ArtistDetailV1QueryServiceTest extends ApplicationIntegrationTest {
         }
 
         SocialMedia makeArtistSocialMedia(Long id, OwnerType ownerType, SocialMediaType socialMediaType) {
-            return new SocialMedia(id, ownerType, socialMediaType, "총학생회", "logoUrl", "url");
+            return socialMediaRepository.save(
+                new SocialMedia(id, ownerType, socialMediaType, "총학생회", "logoUrl", "url"));
         }
     }
 
