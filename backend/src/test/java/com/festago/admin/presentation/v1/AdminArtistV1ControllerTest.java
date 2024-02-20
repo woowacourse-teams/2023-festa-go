@@ -37,15 +37,21 @@ import org.springframework.test.web.servlet.MockMvc;
 @SuppressWarnings("NonAsciiCharacters")
 class AdminArtistV1ControllerTest {
 
-    private static final Cookie COOKIE = new Cookie("token", "token");
+    private static final Cookie TOKEN_COOKIE = new Cookie("token", "token");
+
     @Autowired
     MockMvc mockMvc;
+
     @Autowired
     ObjectMapper objectMapper;
+
     @Autowired
     ArtistV1QueryService artistV1QueryService;
+
     @Autowired
     ArtistCommandService artistCommandService;
+
+    private static final Cookie COOKIE = new Cookie("token", "token");
 
     @Nested
     class 아티스트_생성 {
@@ -66,12 +72,28 @@ class AdminArtistV1ControllerTest {
 
                 // when & then
                 mockMvc.perform(post(uri)
-                        .cookie(COOKIE)
+                        .cookie(TOKEN_COOKIE)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isCreated())
                     .andExpect(header().string(HttpHeaders.LOCATION, uri + "/1"));
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(post(uri))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(post(uri)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
             }
         }
     }
@@ -93,11 +115,27 @@ class AdminArtistV1ControllerTest {
 
                 // when & then
                 mockMvc.perform(put(uri, 1L)
-                        .cookie(COOKIE)
+                        .cookie(TOKEN_COOKIE)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isOk());
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(put(uri, 1L))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(put(uri, 1L)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
             }
         }
     }
@@ -116,10 +154,26 @@ class AdminArtistV1ControllerTest {
             void 요청을_보내면_204_응답이_반환된다() throws Exception {
                 // when & then
                 mockMvc.perform(delete(uri, 1L)
-                        .cookie(COOKIE)
+                        .cookie(TOKEN_COOKIE)
                         .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isNoContent());
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(delete(uri, 1L))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(delete(uri, 1L)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
             }
         }
     }
@@ -143,11 +197,27 @@ class AdminArtistV1ControllerTest {
 
                 // when & then
                 mockMvc.perform(get(uri, 1L)
-                        .cookie(COOKIE)
+                        .cookie(TOKEN_COOKIE)
                         .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri, 1L))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri, 1L)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
             }
         }
     }
@@ -174,11 +244,27 @@ class AdminArtistV1ControllerTest {
 
                 // when & then
                 mockMvc.perform(get(uri)
-                        .cookie(COOKIE)
+                        .cookie(TOKEN_COOKIE)
                         .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
             }
         }
     }

@@ -37,6 +37,7 @@ public class AdminAuthController {
         return ResponseCookie.from("token", token)
             .httpOnly(true)
             .secure(true)
+            .sameSite("None")
             .path("/")
             .build().toString();
     }

@@ -38,15 +38,14 @@ public class SchoolCommandService {
     }
 
     /**
-     * 학교를 인증한 학생이 있다면, domain을 변경하는 것은 문제가 될 수 있지 않을까?
+     * TODO 학교를 인증한 학생이 있다면, domain을 변경하는 것은 문제가 될 수 있지 않을까?
      */
     public void updateSchool(Long schoolId, SchoolUpdateCommand command) {
         School school = schoolRepository.getOrThrow(schoolId);
         validateUpdate(school, command.domain(), command.name());
         school.changeName(command.name());
         school.changeDomain(command.domain());
-        // TODO School 도메인 이슈에서 주석 해제할 것!
-        // school.changeRegion(command.region());
+        school.changeRegion(command.region());
     }
 
     private void validateUpdate(School school, String domain, String name) {

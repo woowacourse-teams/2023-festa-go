@@ -44,6 +44,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @SuppressWarnings("NonAsciiCharacters")
 class AdminSchoolV1ControllerTest {
 
+    private static final Cookie TOKEN_COOKIE = new Cookie("token", "token");
+
     @Autowired
     MockMvc mockMvc;
 
@@ -78,11 +80,27 @@ class AdminSchoolV1ControllerTest {
 
                 // when & then
                 mockMvc.perform(post(uri)
-                        .cookie(new Cookie("token", "Bearer token"))
+                        .cookie(TOKEN_COOKIE)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated())
                     .andExpect(header().string(HttpHeaders.LOCATION, "/api/v1/schools/1"));
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(post(uri))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(post(uri)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
             }
         }
     }
@@ -109,6 +127,22 @@ class AdminSchoolV1ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
             }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(patch(uri, 1L))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(patch(uri, 1L)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
+            }
         }
     }
 
@@ -129,6 +163,22 @@ class AdminSchoolV1ControllerTest {
                         .cookie(new Cookie("token", "Bearer token"))
                         .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNoContent());
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(delete(uri, 1L))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(delete(uri, 1L)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
             }
         }
     }
