@@ -34,14 +34,21 @@ class FestivalListViewModel @Inject constructor(
 
     fun loadFestivals(festivalFilterUiState: FestivalFilterUiState? = null) {
         viewModelScope.launch {
-            if (festivalFilterUiState != null) {
+            var festivals = (uiState.value as? FestivalListUiState.Success)?.festivals ?: listOf()
+
+            if (festivalFilterUiState != null && festivalFilter != festivalFilterUiState.toDomain()) {
                 festivalFilter = festivalFilterUiState.toDomain()
+                festivals = listOf()
             }
 
             val deferredPopularFestivals = async { festivalRepository.loadPopularFestivals() }
-            val deferredFestivals =
-                async { festivalRepository.loadFestivals(festivalFilter = festivalFilter) }
-
+            val deferredFestivals = async {
+                festivalRepository.loadFestivals(
+                    festivalFilter = festivalFilter,
+                    lastFestivalId = festivals.lastOrNull()?.id,
+                    lastStartDate = festivals.lastOrNull()?.startDate,
+                )
+            }
             runCatching {
                 val festivalsPage = deferredFestivals.await().getOrThrow()
                 val popularFestivals = deferredPopularFestivals.await().getOrThrow()
@@ -51,7 +58,7 @@ class FestivalListViewModel @Inject constructor(
                         title = popularFestivals.title,
                         popularFestivals = popularFestivals.festivals.map { it.toUiState() },
                     ),
-                    festivals = festivalsPage.festivals.map { it.toUiState() },
+                    festivals = festivals + festivalsPage.festivals.map { it.toUiState() },
                     festivalFilter = festivalFilter.toUiState(),
                     isLastPage = festivalsPage.isLastPage,
                 )
