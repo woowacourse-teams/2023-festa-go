@@ -34,19 +34,13 @@ class FestivalListViewModel @Inject constructor(
 
     fun loadFestivals(festivalFilterUiState: FestivalFilterUiState? = null) {
         viewModelScope.launch {
-            var festivals = (uiState.value as? FestivalListUiState.Success)?.festivals ?: listOf()
-
-            if (festivalFilterUiState != null && festivalFilter != festivalFilterUiState.toDomain()) {
-                festivalFilter = festivalFilterUiState.toDomain()
-                festivals = listOf()
-            }
-
+            val currentFestivals = getCurrentFestivals(festivalFilterUiState)
             val deferredPopularFestivals = async { festivalRepository.loadPopularFestivals() }
             val deferredFestivals = async {
                 festivalRepository.loadFestivals(
                     festivalFilter = festivalFilter,
-                    lastFestivalId = festivals.lastOrNull()?.id,
-                    lastStartDate = festivals.lastOrNull()?.startDate,
+                    lastFestivalId = currentFestivals.lastOrNull()?.id,
+                    lastStartDate = currentFestivals.lastOrNull()?.startDate,
                 )
             }
             runCatching {
@@ -58,7 +52,7 @@ class FestivalListViewModel @Inject constructor(
                         title = popularFestivals.title,
                         popularFestivals = popularFestivals.festivals.map { it.toUiState() },
                     ),
-                    festivals = festivals + festivalsPage.festivals.map { it.toUiState() },
+                    festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
                     festivalFilter = festivalFilter.toUiState(),
                     isLastPage = festivalsPage.isLastPage,
                 )
@@ -70,6 +64,16 @@ class FestivalListViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun getCurrentFestivals(festivalFilterUiState: FestivalFilterUiState?): List<FestivalItemUiState> {
+        var festivals = (uiState.value as? FestivalListUiState.Success)?.festivals ?: listOf()
+
+        if (festivalFilterUiState != null && festivalFilter != festivalFilterUiState.toDomain()) {
+            festivalFilter = festivalFilterUiState.toDomain()
+            festivals = listOf()
+        }
+        return festivals
     }
 
     private fun FestivalFilterUiState.toDomain() = when (this) {
