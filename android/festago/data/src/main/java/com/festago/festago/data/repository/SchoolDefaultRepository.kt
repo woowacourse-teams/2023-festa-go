@@ -18,7 +18,7 @@ class SchoolDefaultRepository @Inject constructor(
         return Result.success(
             FestivalsPage(
                 isLastPage = true,
-                festivals = FakeFestivals.festivalList,
+                festivals = FakeFestivals.progressFestivals,
             )
         )
     }
