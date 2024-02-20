@@ -3,6 +3,7 @@ package com.festago.common.querydsl;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -37,7 +38,7 @@ public abstract class QueryDslRepositorySupport {
         SimpleEntityPathResolver resolver = SimpleEntityPathResolver.INSTANCE;
         EntityPath<?> path = resolver.createPath(entityInformation.getJavaType());
         this.querydsl = new Querydsl(entityManager, new PathBuilder<>(path.getType(), path.getMetadata()));
-        this.queryFactory = new JPAQueryFactory(entityManager);
+        this.queryFactory = new JPAQueryFactory(JPQLTemplates.DEFAULT, entityManager);
     }
 
     protected <T> JPAQuery<T> select(Expression<T> expr) {

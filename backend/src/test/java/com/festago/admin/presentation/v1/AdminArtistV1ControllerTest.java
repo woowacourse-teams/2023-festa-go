@@ -51,6 +51,7 @@ class AdminArtistV1ControllerTest {
     @Autowired
     ArtistCommandService artistCommandService;
 
+    private static final Cookie COOKIE = new Cookie("token", "token");
 
     @Nested
     class 아티스트_생성 {

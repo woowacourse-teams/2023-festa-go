@@ -11,7 +11,7 @@ public interface ArtistRepository extends Repository<Artist, Long> {
 
     default Artist getOrThrow(Long artistId) {
         return findById(artistId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.ARTIST_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.ARTIST_NOT_FOUND));
     }
 
     Artist save(Artist artist);
