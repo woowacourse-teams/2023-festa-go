@@ -1,7 +1,9 @@
 package com.festago.festival.presentation.v1;
 
 import com.festago.common.exception.ValidException;
+import com.festago.festival.application.FestivalDetailV1QueryService;
 import com.festago.festival.application.FestivalV1QueryService;
+import com.festago.festival.dto.FestivalDetailV1Response;
 import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FestivalV1Controller {
 
     private final FestivalV1QueryService festivalV1QueryService;
+    private final FestivalDetailV1QueryService festivalDetailV1QueryService;
 
     @GetMapping
     @Operation(description = "축제 목록를 조건별로 조회한다. PROGRESS: 진행 중, PLANNED: 진행 예정, END: 종료, 기본값 -> 진행 중, limit의 크기는 0 < limit < 21 이며 기본 값 10이다.", summary = "축제 목록 조회")
@@ -54,5 +58,14 @@ public class FestivalV1Controller {
         if (limit > 20 || limit < 1) {
             throw new ValidException("페이지 갯수의 제한을 벗어납니다.");
         }
+    }
+
+    @GetMapping("/{festivalId}")
+    @Operation(description = "특정 축제의 상세 정보를 조회한다.", summary = "특정 축제 상세 조회")
+    public ResponseEntity<FestivalDetailV1Response> findFestivalDetail(
+        @PathVariable Long festivalId
+    ) {
+        var response = festivalDetailV1QueryService.findFestivalDetail(festivalId);
+        return ResponseEntity.ok(response);
     }
 }
