@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:tint="@color/primary_blue_07" android:drawable="@drawable/ic_bookmark_check" android:state_selected="true" />
+    <item android:tint="@color/primary_blue_07" android:drawable="@drawable/ic_bookmark_check" android:state_checked="true" />
+    <item android:tint="@color/contents_gray_05" android:drawable="@drawable/ic_bookmark_normal"/>
+
+</selector>

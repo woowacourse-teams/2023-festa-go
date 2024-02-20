@@ -81,6 +81,26 @@
                     tools:src="@drawable/ic_launcher_foreground" />
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvBookmark"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                app:cardCornerRadius="1000dp"
+                app:layout_constraintBottom_toBottomOf="@id/cvSchoolLogo"
+                app:layout_constraintEnd_toEndOf="@id/cvSchoolLogo">
+
+                <ImageView
+                    android:id="@+id/ivBookmark"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_bookmark"
+                    app:tint="@color/tint_bookmark" />
+            </androidx.cardview.widget.CardView>
+
             <TextView
                 android:id="@+id/tvSchoolName"
                 style="@style/H2Bold20Lh24"

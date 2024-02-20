@@ -54,6 +54,9 @@ class SchoolDetailFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+        binding.cvBookmark.setOnClickListener {
+            binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
+        }
     }
 
     private fun updateUi(uiState: SchoolDetailUiState) {
