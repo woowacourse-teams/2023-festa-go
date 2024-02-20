@@ -18,8 +18,7 @@ import java.time.LocalDate
 class ArtistDetailFestivalViewHolder(
     private val binding: ItemArtistDetailFestivalBinding,
     onArtistClick: (Long) -> Unit,
-) :
-    ArtistDetailViewHolder(binding) {
+) : RecyclerView.ViewHolder(binding.root) {
     private val artistAdapter = ArtistAdapter(onArtistClick)
 
     init {

@@ -7,40 +7,24 @@ import com.festago.festago.presentation.ui.artistdetail.uistate.StageUiState
 
 class ArtistDetailAdapter(
     private val onArtistClick: (Long) -> Unit,
-) : ListAdapter<Any, ArtistDetailViewHolder>(diffUtil) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistDetailViewHolder {
-        return when (viewType) {
-            1 -> ArtistDetailFestivalViewHolder.of(parent, onArtistClick)
-            else -> throw IllegalArgumentException("Invalid viewType")
-        }
+) : ListAdapter<StageUiState, ArtistDetailFestivalViewHolder>(diffUtil) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistDetailFestivalViewHolder {
+        return ArtistDetailFestivalViewHolder.of(parent, onArtistClick)
     }
 
-    override fun onBindViewHolder(holder: ArtistDetailViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ArtistDetailFestivalViewHolder, position: Int) {
         val item = getItem(position)
-        return when (holder) {
-            is ArtistDetailFestivalViewHolder -> holder.bind(item as StageUiState)
-        }
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is StageUiState -> 1
-            else -> throw IllegalArgumentException("Invalid item")
-        }
+        holder.bind(item)
     }
 
     companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<Any>() {
-            override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean = when {
-                oldItem is StageUiState && newItem is StageUiState -> oldItem.id == newItem.id
-                else -> false
+        private val diffUtil = object : DiffUtil.ItemCallback<StageUiState>() {
+            override fun areItemsTheSame(oldItem: StageUiState, newItem: StageUiState): Boolean {
+                return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean = when {
-                oldItem is StageUiState && newItem is StageUiState
-                -> oldItem as StageUiState == newItem
-
-                else -> false
+            override fun areContentsTheSame(oldItem: StageUiState, newItem: StageUiState): Boolean {
+                return oldItem == newItem
             }
         }
     }

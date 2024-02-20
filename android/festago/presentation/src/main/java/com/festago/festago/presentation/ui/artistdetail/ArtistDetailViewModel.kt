@@ -37,7 +37,7 @@ class ArtistDetailViewModel @Inject constructor(
 
     private fun Stages.toUiState() = this.stage.map {
         StageUiState(
-            id = it.id.toLong(),
+            id = it.id,
             name = it.name,
             imageUrl = it.imageUrl,
             startDate = it.startDate,
