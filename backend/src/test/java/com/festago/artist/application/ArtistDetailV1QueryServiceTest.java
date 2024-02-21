@@ -127,7 +127,7 @@ class ArtistDetailV1QueryServiceTest extends ApplicationIntegrationTest {
 
         SocialMedia makeArtistSocialMedia(Long id, OwnerType ownerType, SocialMediaType socialMediaType) {
             return socialMediaRepository.save(
-                new SocialMedia(id, ownerType, socialMediaType, "총학생회", "logoUrl", "url"));
+                new SocialMedia(id, ownerType, socialMediaType, "총학생회", "profileImageUrl", "url"));
         }
     }
 

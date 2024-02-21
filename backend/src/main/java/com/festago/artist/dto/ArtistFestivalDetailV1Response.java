@@ -9,7 +9,7 @@ public record ArtistFestivalDetailV1Response(
     String name,
     LocalDate startDate,
     LocalDate endDate,
-    String imageUrl,
+    String posterImageUrl,
     @JsonRawValue String artists
 ) {
 

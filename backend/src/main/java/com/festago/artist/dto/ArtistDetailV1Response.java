@@ -5,9 +5,9 @@ import java.util.List;
 
 public record ArtistDetailV1Response(
     Long id,
-    String artistName,
-    String logoUrl,
-    String backgroundUrl,
+    String name,
+    String profileImageUrl,
+    String backgroundImageUrl,
     List<ArtistMediaV1Response> socialMedias
 ) {
 
