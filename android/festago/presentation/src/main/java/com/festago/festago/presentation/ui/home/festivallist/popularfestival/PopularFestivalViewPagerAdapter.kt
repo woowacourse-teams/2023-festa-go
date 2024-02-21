@@ -90,10 +90,8 @@ class PopularFestivalViewPagerAdapter(
         popularFestivals.addAll(festivals)
         foregroundAdapter.submitList(festivals)
         backgroundAdapter.submitList(festivals)
-        foregroundViewPager.setCurrentItem(
-            /* item = */ Int.MAX_VALUE / 2 - (Int.MAX_VALUE / 2 % popularFestivals.size),
-            /* smoothScroll = */ false,
-        )
+        val initialPosition = Int.MAX_VALUE / 2 - (Int.MAX_VALUE / 2 % popularFestivals.size)
+        foregroundViewPager.setCurrentItem(initialPosition, false)
     }
 
     companion object {
