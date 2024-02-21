@@ -9,7 +9,7 @@ import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalIte
 import kotlin.math.abs
 
 class PopularFestivalViewPagerAdapter(
-    foregroundViewPager: ViewPager2,
+    private val foregroundViewPager: ViewPager2,
     backgroundViewPager: ViewPager2,
     private val onPopularFestivalSelected: (FestivalItemUiState) -> Unit,
 ) {
@@ -35,8 +35,9 @@ class PopularFestivalViewPagerAdapter(
         val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                target.setCurrentItem(position, false)
-                onPopularFestivalSelected(popularFestivals[position])
+                val itemIndex = position % popularFestivals.size
+                target.setCurrentItem(itemIndex, false)
+                onPopularFestivalSelected(popularFestivals[itemIndex])
             }
         }
         viewpager.registerOnPageChangeCallback(onPageChangeCallback)
@@ -89,6 +90,10 @@ class PopularFestivalViewPagerAdapter(
         popularFestivals.addAll(festivals)
         foregroundAdapter.submitList(festivals)
         backgroundAdapter.submitList(festivals)
+        foregroundViewPager.setCurrentItem(
+            /* item = */ Int.MAX_VALUE / 2 - (Int.MAX_VALUE / 2 % popularFestivals.size),
+            /* smoothScroll = */ false,
+        )
     }
 
     companion object {
