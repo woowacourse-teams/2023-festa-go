@@ -1,4 +1,4 @@
-package com.festago.school.dto.v1;
+package com.festago.admin.dto;
 
 import com.festago.school.domain.SchoolRegion;
 import com.querydsl.core.annotations.QueryProjection;

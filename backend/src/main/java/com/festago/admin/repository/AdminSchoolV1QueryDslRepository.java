@@ -1,11 +1,11 @@
-package com.festago.school.repository.v1;
+package com.festago.admin.repository;
 
 import static com.festago.school.domain.QSchool.school;
 
+import com.festago.admin.dto.AdminSchoolV1Response;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.domain.School;
-import com.festago.school.dto.v1.AdminSchoolV1Response;
 import com.festago.school.dto.v1.QAdminSchoolV1Response;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.Optional;

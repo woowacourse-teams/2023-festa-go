@@ -13,16 +13,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.admin.application.AdminSchoolV1QueryService;
+import com.festago.admin.dto.AdminSchoolV1Response;
 import com.festago.admin.presentation.v1.dto.SchoolV1CreateRequest;
 import com.festago.admin.presentation.v1.dto.SchoolV1UpdateRequest;
 import com.festago.auth.domain.Role;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.application.SchoolCommandService;
 import com.festago.school.application.SchoolDeleteService;
-import com.festago.school.application.v1.AdminSchoolV1QueryService;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
-import com.festago.school.dto.v1.AdminSchoolV1Response;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import jakarta.servlet.http.Cookie;

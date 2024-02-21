@@ -3,10 +3,10 @@ package com.festago.acceptance.steps;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.acceptance.CucumberClient;
+import com.festago.admin.dto.AdminSchoolV1Response;
 import com.festago.admin.presentation.v1.dto.SchoolV1CreateRequest;
 import com.festago.admin.presentation.v1.dto.SchoolV1UpdateRequest;
 import com.festago.school.domain.SchoolRegion;
-import com.festago.school.dto.v1.AdminSchoolV1Response;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class SchoolStepDefinitions {
+public class AdminSchoolStepDefinitions {
 
     @Autowired
     CucumberClient cucumberClient;
