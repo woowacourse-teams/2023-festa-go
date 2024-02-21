@@ -24,14 +24,14 @@ class PopularFestivalViewPagerAdapter(
         foregroundViewPager.adapter = foregroundAdapter
         backgroundViewPager.adapter = backgroundAdapter
 
-        setTargetItemOnPageSelected(viewpager = foregroundViewPager, target = backgroundViewPager)
+        setTargetItemOnPageSelected(viewPager = foregroundViewPager, target = backgroundViewPager)
         narrowSpaceViewPager(viewPager = foregroundViewPager)
         setOffscreenPagesLimit(foregroundViewPager, PAGE_LIMIT)
         setOffscreenPagesLimit(backgroundViewPager, PAGE_LIMIT)
         backgroundViewPager.isUserInputEnabled = false
     }
 
-    private fun setTargetItemOnPageSelected(viewpager: ViewPager2, target: ViewPager2) {
+    private fun setTargetItemOnPageSelected(viewPager: ViewPager2, target: ViewPager2) {
         val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -40,7 +40,7 @@ class PopularFestivalViewPagerAdapter(
                 onPopularFestivalSelected(popularFestivals[itemIndex])
             }
         }
-        viewpager.registerOnPageChangeCallback(onPageChangeCallback)
+        viewPager.registerOnPageChangeCallback(onPageChangeCallback)
     }
 
     private fun narrowSpaceViewPager(viewPager: ViewPager2) {
