@@ -5,9 +5,9 @@ import java.util.List;
 
 public record SchoolDetailV1Response(
     Long id,
-    String schoolName,
+    String name,
     String logoUrl,
-    String backgroundUrl,
+    String backgroundImageUrl,
     List<SchoolSocialMediaV1Response> socialMedias
 ) {
 
