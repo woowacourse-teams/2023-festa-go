@@ -123,7 +123,7 @@ class FestivalDetailV1QueryServiceIntegrationTest extends ApplicationIntegration
             softly.assertThat(response.name()).isEqualTo("테코대학교 축제");
             softly.assertThat(response.startDate()).isEqualTo("2077-06-30");
             softly.assertThat(response.endDate()).isEqualTo("2077-07-02");
-            softly.assertThat(response.imageUrl()).isEqualTo("https://school.com/image.com");
+            softly.assertThat(response.posterImageUrl()).isEqualTo("https://school.com/image.com");
             softly.assertThat(response.school().name()).isEqualTo("테코대학교");
             softly.assertThat(response.socialMedias())
                 .map(SocialMediaV1Response::name)
