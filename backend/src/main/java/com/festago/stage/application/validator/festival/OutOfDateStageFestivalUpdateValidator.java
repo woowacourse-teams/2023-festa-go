@@ -27,12 +27,12 @@ public class OutOfDateStageFestivalUpdateValidator implements FestivalUpdateVali
         LocalDate festivalStartDate = command.startDate();
         LocalDate festivalEndDate = command.endDate();
         List<Stage> stages = stageRepository.findAllByFestivalId(festivalId);
-        boolean isOutOfRange = stages.stream()
+        boolean isOutOfDate = stages.stream()
             .anyMatch(stage -> {
                 LocalDate stageStartDate = stage.getStartTime().toLocalDate();
                 return stageStartDate.isBefore(festivalStartDate) || stageStartDate.isAfter(festivalEndDate);
             });
-        if (isOutOfRange) {
+        if (isOutOfDate) {
             throw new BadRequestException(ErrorCode.FESTIVAL_UPDATE_OUT_OF_DATE_STAGE_START_TIME);
         }
     }
