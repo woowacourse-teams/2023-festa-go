@@ -6,7 +6,7 @@ public record FestivalUpdateCommand(
     String name,
     LocalDate startDate,
     LocalDate endDate,
-    String thumbnail
+    String posterImageUrl
 ) {
 
 }

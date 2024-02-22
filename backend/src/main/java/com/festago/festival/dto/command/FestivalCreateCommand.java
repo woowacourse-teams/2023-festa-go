@@ -8,11 +8,11 @@ public record FestivalCreateCommand(
     String name,
     LocalDate startDate,
     LocalDate endDate,
-    String thumbnail,
+    String posterImageUrl,
     Long schoolId
 ) {
 
     public Festival toEntity(School school) {
-        return new Festival(name, startDate, endDate, thumbnail, school);
+        return new Festival(name, startDate, endDate, posterImageUrl, school);
     }
 }

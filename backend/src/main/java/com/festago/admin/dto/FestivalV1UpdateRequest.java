@@ -20,7 +20,7 @@ public record FestivalV1UpdateRequest(
     LocalDate endDate,
 
     @Nullable
-    String thumbnail
+    String posterImageUrl
 ) {
 
     public FestivalUpdateCommand toCommand() {
@@ -28,7 +28,7 @@ public record FestivalV1UpdateRequest(
             name,
             startDate,
             endDate,
-            thumbnail
+            posterImageUrl
         );
     }
 }

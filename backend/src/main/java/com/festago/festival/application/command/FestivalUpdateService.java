@@ -23,7 +23,7 @@ public class FestivalUpdateService {
     public void updateFestival(Long festivalId, FestivalUpdateCommand command) {
         Festival festival = festivalRepository.getOrThrow(festivalId);
         festival.changeName(command.name());
-        festival.changeThumbnail(command.thumbnail());
+        festival.changeThumbnail(command.posterImageUrl());
         festival.changeDate(command.startDate(), command.endDate());
         validators.forEach(validator -> validator.validate(festivalId, command));
     }

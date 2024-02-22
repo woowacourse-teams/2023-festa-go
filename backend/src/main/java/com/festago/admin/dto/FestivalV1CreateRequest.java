@@ -20,7 +20,7 @@ public record FestivalV1CreateRequest(
     LocalDate endDate,
 
     @Nullable
-    String thumbnail,
+    String posterImageUrl,
 
     @NotNull(message = "schoolId는 null 일 수 없습니다.")
     Long schoolId
@@ -31,7 +31,7 @@ public record FestivalV1CreateRequest(
             name,
             startDate,
             endDate,
-            thumbnail,
+            posterImageUrl,
             schoolId
         );
     }
