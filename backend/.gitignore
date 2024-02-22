@@ -40,3 +40,6 @@ out/
 
 ### QUERYDSL ###
 /src/main/generated/
+
+### APPLICATION PROPERTIES ###
+src/main/resources/application-local.yml

@@ -1,9 +1,9 @@
-package com.festago.school.presentation.v1.dto;
+package com.festago.school.dto.v1;
 
 import com.festago.school.domain.SchoolRegion;
 import com.querydsl.core.annotations.QueryProjection;
 
-public record SchoolV1Response(
+public record AdminSchoolV1Response(
     Long id,
     String domain,
     String name,
@@ -11,7 +11,7 @@ public record SchoolV1Response(
 ) {
 
     @QueryProjection
-    public SchoolV1Response {
+    public AdminSchoolV1Response {
         // for QueryProjection
     }
 }

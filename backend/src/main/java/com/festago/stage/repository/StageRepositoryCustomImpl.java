@@ -20,18 +20,18 @@ public class StageRepositoryCustomImpl implements StageRepositoryCustom {
     @Override
     public List<Stage> findAllDetailByFestivalId(Long festivalId) {
         return queryFactory.selectFrom(stage)
-                .leftJoin(stage.tickets, ticket).fetchJoin()
-                .leftJoin(ticket.ticketAmount, ticketAmount).fetchJoin()
-                .where(stage.festival.id.eq(festivalId))
-                .fetch();
+            .leftJoin(stage.tickets, ticket).fetchJoin()
+            .leftJoin(ticket.ticketAmount, ticketAmount).fetchJoin()
+            .where(stage.festival.id.eq(festivalId))
+            .fetch();
     }
 
     @Override
     public Optional<Stage> findByIdWithFetch(Long id) {
         return Optional.ofNullable(queryFactory.selectFrom(stage)
-                .leftJoin(stage.festival, festival).fetchJoin()
-                .leftJoin(festival.school, school).fetchJoin()
-                .where(stage.id.eq(id))
-                .fetchOne());
+            .leftJoin(stage.festival, festival).fetchJoin()
+            .leftJoin(festival.school, school).fetchJoin()
+            .where(stage.id.eq(id))
+            .fetchOne());
     }
 }

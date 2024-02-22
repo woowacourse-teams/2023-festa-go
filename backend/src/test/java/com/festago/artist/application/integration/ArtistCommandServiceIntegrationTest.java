@@ -1,6 +1,7 @@
 package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.admin.dto.ArtistCreateRequest;
 import com.festago.admin.dto.ArtistUpdateRequest;
@@ -47,9 +48,11 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
 
         // then
         Artist actual = artistRepository.getOrThrow(artistId);
-        assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(request);
+
+        assertSoftly(softly -> {
+            softly.assertThat(actual.getName()).isEqualTo(request.name());
+            softly.assertThat(actual.getProfileImage()).isEqualTo(request.profileImage());
+        });
     }
 
     @Test

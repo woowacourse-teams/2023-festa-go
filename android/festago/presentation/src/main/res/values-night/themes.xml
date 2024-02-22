@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Festago" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:statusBarColor">@color/background_gray_01</item>

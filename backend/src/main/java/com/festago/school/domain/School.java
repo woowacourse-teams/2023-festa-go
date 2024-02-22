@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class School extends BaseTimeEntity {
 
+    private static final String DEFAULT_URL = "https://picsum.photos/536/354";
     private static final int MAX_DOMAIN_LENGTH = 50;
     private static final int MAX_NAME_LENGTH = 255;
 
@@ -35,24 +36,35 @@ public class School extends BaseTimeEntity {
     @Column(unique = true)
     private String name;
 
+    private String logoUrl;
+
+    private String backgroundUrl;
+
     @Enumerated(EnumType.STRING)
     private SchoolRegion region;
 
-    public School(String domain, String name, SchoolRegion region) {
-        this(null, domain, name, region);
-    }
-
-    public School(Long id, String domain, String name, SchoolRegion region) {
-        validate(domain, name);
+    public School(Long id, String domain, String name, String logoUrl, String backgroundUrl, SchoolRegion region) {
+        validate(domain, name, region);
         this.id = id;
         this.domain = domain;
         this.name = name;
+        this.logoUrl = logoUrl;
+        this.backgroundUrl = backgroundUrl;
         this.region = region;
     }
 
-    private void validate(String domain, String name) {
+    public School(String domain, String name, SchoolRegion region) {
+        this(null, domain, name, DEFAULT_URL, DEFAULT_URL, region);
+    }
+
+    public School(Long id, String domain, String name, SchoolRegion region) {
+        this(id, domain, name, DEFAULT_URL, DEFAULT_URL, region);
+    }
+
+    private void validate(String domain, String name, SchoolRegion region) {
         validateDomain(domain);
         validateName(name);
+        validateRegion(region);
     }
 
     private void validateDomain(String domain) {
@@ -67,6 +79,10 @@ public class School extends BaseTimeEntity {
         Validator.maxLength(name, MAX_NAME_LENGTH, fieldName);
     }
 
+    private void validateRegion(SchoolRegion region) {
+        Validator.notNull(region, "region");
+    }
+
     public void changeDomain(String domain) {
         validateDomain(domain);
         this.domain = domain;
@@ -75,6 +91,11 @@ public class School extends BaseTimeEntity {
     public void changeName(String name) {
         validateName(name);
         this.name = name;
+    }
+
+    public void changeRegion(SchoolRegion region) {
+        validateRegion(region);
+        this.region = region;
     }
 
     public Long getId() {
@@ -87,6 +108,14 @@ public class School extends BaseTimeEntity {
 
     public String getName() {
         return name;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public String getBackgroundUrl() {
+        return backgroundUrl;
     }
 
     public SchoolRegion getRegion() {
