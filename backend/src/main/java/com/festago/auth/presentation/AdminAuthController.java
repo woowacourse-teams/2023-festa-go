@@ -8,6 +8,7 @@ import com.festago.auth.dto.AdminSignupResponse;
 import com.festago.auth.dto.RootAdminInitializeRequest;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -59,6 +60,7 @@ public class AdminAuthController {
             .secure(true)
             .sameSite("None")
             .path("/")
+            .maxAge(Duration.ZERO)
             .build().toString();
     }
 
