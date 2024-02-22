@@ -1,16 +1,16 @@
-package com.festago.school.application.integration;
+package com.festago.admin.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.festago.admin.application.AdminSchoolV1QueryService;
+import com.festago.admin.dto.AdminSchoolV1Response;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.querydsl.SearchCondition;
-import com.festago.school.application.v1.AdminSchoolV1QueryService;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
-import com.festago.school.dto.v1.AdminSchoolV1Response;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;

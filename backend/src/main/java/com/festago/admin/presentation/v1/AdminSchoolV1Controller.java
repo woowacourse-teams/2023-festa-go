@@ -1,13 +1,13 @@
 package com.festago.admin.presentation.v1;
 
+import com.festago.admin.application.AdminSchoolV1QueryService;
+import com.festago.admin.dto.AdminSchoolV1Response;
 import com.festago.admin.presentation.v1.dto.SchoolV1CreateRequest;
 import com.festago.admin.presentation.v1.dto.SchoolV1UpdateRequest;
 import com.festago.common.aop.ValidPageable;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.application.SchoolCommandService;
 import com.festago.school.application.SchoolDeleteService;
-import com.festago.school.application.v1.AdminSchoolV1QueryService;
-import com.festago.school.dto.v1.AdminSchoolV1Response;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
 import java.net.URI;
