@@ -14,7 +14,7 @@ import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
 import com.festago.festival.repository.FestivalFilter;
-import com.festago.festival.repository.FestivalQueryInfoRepository;
+import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
@@ -43,7 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
 
     @Autowired
-    FestivalQueryInfoRepository festivalQueryInfoRepository;
+    FestivalInfoRepository festivalInfoRepository;
     @Autowired
     FestivalRepository festivalRepository;
     @Autowired
@@ -115,14 +115,14 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
 
         List<Artist> artists = List.of(뉴진스, 에픽하이, 소녀시대);
 
-        festivalQueryInfoRepository.save(FestivalQueryInfo.of(부산대학교_6일_13일_축제, artists, festivalInfoSerializer));
-        festivalQueryInfoRepository.save(FestivalQueryInfo.of(부산대학교_12일_14일_축제, artists, festivalInfoSerializer));
-        festivalQueryInfoRepository.save(FestivalQueryInfo.of(서울대학교_6일_12일_축제, artists, festivalInfoSerializer));
-        festivalQueryInfoRepository.save(FestivalQueryInfo.of(부산대학교_6일_12일_축제, artists, festivalInfoSerializer));
-        festivalQueryInfoRepository.save(FestivalQueryInfo.of(서울대학교_8일_12일_축제, artists, festivalInfoSerializer));
-        festivalQueryInfoRepository.save(FestivalQueryInfo.of(대구대학교_9일_12일_축제, artists, festivalInfoSerializer));
-        festivalQueryInfoRepository.save(FestivalQueryInfo.of(대구대학교_12일_14일_축제, artists, festivalInfoSerializer));
-        festivalQueryInfoRepository.save(FestivalQueryInfo.of(대구대학교_13일_14일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(부산대학교_6일_13일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(부산대학교_12일_14일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(서울대학교_6일_12일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(부산대학교_6일_12일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(서울대학교_8일_12일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(대구대학교_9일_12일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(대구대학교_12일_14일_축제, artists, festivalInfoSerializer));
+        festivalInfoRepository.save(FestivalQueryInfo.of(대구대학교_13일_14일_축제, artists, festivalInfoSerializer));
     }
 
     @Nested

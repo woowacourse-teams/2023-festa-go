@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.given;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.festival.dto.command.FestivalCreateCommand;
-import com.festago.festival.repository.FestivalQueryInfoRepository;
+import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
@@ -37,7 +37,7 @@ class FestivalCreateServiceTest extends ApplicationIntegrationTest {
     FestivalRepository festivalRepository;
 
     @Autowired
-    FestivalQueryInfoRepository festivalQueryInfoRepository;
+    FestivalInfoRepository festivalInfoRepository;
 
     @Autowired
     Clock clock;
@@ -98,7 +98,7 @@ class FestivalCreateServiceTest extends ApplicationIntegrationTest {
             // then
             assertSoftly(softly -> {
                 softly.assertThat(festivalRepository.findById(festivalId)).isPresent();
-                softly.assertThat(festivalQueryInfoRepository.findByFestivalId(festivalId)).isPresent();
+                softly.assertThat(festivalInfoRepository.findByFestivalId(festivalId)).isPresent();
             });
         }
     }

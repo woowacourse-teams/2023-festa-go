@@ -8,7 +8,7 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.domain.FestivalQueryInfo;
-import com.festago.festival.repository.FestivalQueryInfoRepository;
+import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
@@ -36,7 +36,7 @@ class FestivalDeleteServiceTest extends ApplicationIntegrationTest {
     FestivalDeleteService festivalDeleteService;
 
     @Autowired
-    FestivalQueryInfoRepository festivalQueryInfoRepository;
+    FestivalInfoRepository festivalInfoRepository;
 
     @Autowired
     FestivalRepository festivalRepository;
@@ -91,7 +91,7 @@ class FestivalDeleteServiceTest extends ApplicationIntegrationTest {
         @Test
         void 축제를_삭제하면_FestivalQueryInfo도_삭제된다() {
             // given
-            festivalQueryInfoRepository.save(FestivalQueryInfo.create(festivalId));
+            festivalInfoRepository.save(FestivalQueryInfo.create(festivalId));
 
             // when
             festivalDeleteService.deleteFestival(festivalId);
@@ -99,7 +99,7 @@ class FestivalDeleteServiceTest extends ApplicationIntegrationTest {
             // then
             assertSoftly(softly -> {
                 softly.assertThat(festivalRepository.findById(festivalId)).isEmpty();
-                softly.assertThat(festivalQueryInfoRepository.findByFestivalId(festivalId)).isEmpty();
+                softly.assertThat(festivalInfoRepository.findByFestivalId(festivalId)).isEmpty();
             });
         }
     }

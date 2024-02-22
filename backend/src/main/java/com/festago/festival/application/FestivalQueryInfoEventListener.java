@@ -3,7 +3,7 @@ package com.festago.festival.application;
 import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.dto.event.FestivalCreatedEvent;
 import com.festago.festival.dto.event.FestivalDeletedEvent;
-import com.festago.festival.repository.FestivalQueryInfoRepository;
+import com.festago.festival.repository.FestivalInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class FestivalQueryInfoEventListener {
 
-    private final FestivalQueryInfoRepository festivalQueryInfoRepository;
+    private final FestivalInfoRepository festivalInfoRepository;
 
     /**
      * 해당 이벤트는 비동기로 실행하면 문제가 발생할 수 있으니, 동기적으로 처리해야함 <br/> 축제가 생성되면 FestivalQueryInfo는 반드시! 생성되어야 함
@@ -23,7 +23,7 @@ public class FestivalQueryInfoEventListener {
     @Transactional(propagation = Propagation.MANDATORY)
     public void festivalCreatedEventHandler(FestivalCreatedEvent event) {
         FestivalQueryInfo festivalQueryInfo = FestivalQueryInfo.create(event.festivalId());
-        festivalQueryInfoRepository.save(festivalQueryInfo);
+        festivalInfoRepository.save(festivalQueryInfo);
     }
 
     /**
@@ -32,6 +32,6 @@ public class FestivalQueryInfoEventListener {
     @EventListener
     @Transactional(propagation = Propagation.MANDATORY)
     public void festivalDeletedEventHandler(FestivalDeletedEvent event) {
-        festivalQueryInfoRepository.deleteByFestivalId(event.festivalId());
+        festivalInfoRepository.deleteByFestivalId(event.festivalId());
     }
 }
