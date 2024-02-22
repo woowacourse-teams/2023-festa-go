@@ -1,8 +1,8 @@
 package com.festago.festival.domain.validator;
 
-import com.festago.festival.dto.command.FestivalUpdateCommand;
+import com.festago.festival.domain.Festival;
 
 public interface FestivalUpdateValidator {
 
-    void validate(Long festivalId, FestivalUpdateCommand command);
+    void validate(Festival festival);
 }

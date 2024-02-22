@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.festival.domain.Festival;
-import com.festago.festival.dto.command.FestivalUpdateCommand;
 import com.festago.stage.repository.MemoryStageRepository;
 import com.festago.support.FestivalFixture;
 import com.festago.support.StageFixture;
@@ -26,15 +25,15 @@ class OutOfDateStageFestivalUpdateValidatorTest {
     LocalDate festivalEndDate = LocalDate.parse("2077-02-21");
     MemoryStageRepository stageRepository = new MemoryStageRepository();
     OutOfDateStageFestivalUpdateValidator validator = new OutOfDateStageFestivalUpdateValidator(stageRepository);
-    Festival 축제 = FestivalFixture.festival()
-        .id(1L)
-        .startDate(festivalStartDate)
-        .endDate(festivalEndDate)
-        .build();
+    Festival 축제;
 
     @BeforeEach
     void setUp() {
         stageRepository.clear();
+        축제 = FestivalFixture.festival()
+            .startDate(festivalStartDate)
+            .endDate(festivalEndDate)
+            .build();
     }
 
     @Nested
@@ -58,29 +57,23 @@ class OutOfDateStageFestivalUpdateValidatorTest {
         @Test
         void 축제의_일자를_확장하면_예외가_발생하지_않는다() {
             // given
-            var command = new FestivalUpdateCommand(
-                "테코대학교 축제",
-                festivalStartDate.minusDays(1),
-                festivalEndDate.plusDays(1),
-                "https://image.com/image.png"
-            );
+            LocalDate startDate = festivalStartDate.minusDays(1);
+            LocalDate endDate = festivalEndDate.plusDays(1);
+            축제.changeDate(startDate, endDate);
 
             // when & then
-            assertDoesNotThrow(() -> validator.validate(축제.getId(), command));
+            assertDoesNotThrow(() -> validator.validate(축제));
         }
 
         @Test
         void 축제의_시작일자를_축소하면_예외가_발생한다() {
             // given
-            var command = new FestivalUpdateCommand(
-                "테코대학교 축제",
-                festivalStartDate.plusDays(1),
-                festivalEndDate,
-                "https://image.com/image.png"
-            );
+            LocalDate startDate = festivalStartDate.plusDays(1);
+            LocalDate endDate = festivalEndDate;
+            축제.changeDate(startDate, endDate);
 
             // when & then
-            assertThatThrownBy(() -> validator.validate(축제.getId(), command))
+            assertThatThrownBy(() -> validator.validate(축제))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ErrorCode.FESTIVAL_UPDATE_OUT_OF_DATE_STAGE_START_TIME.getMessage());
         }
@@ -88,15 +81,12 @@ class OutOfDateStageFestivalUpdateValidatorTest {
         @Test
         void 축제의_종료일자를_축소하면_예외가_발생한다() {
             // given
-            var command = new FestivalUpdateCommand(
-                "테코대학교 축제",
-                festivalStartDate,
-                festivalEndDate.minusDays(1),
-                "https://image.com/image.png"
-            );
+            LocalDate startDate = festivalStartDate;
+            LocalDate endDate = festivalEndDate.minusDays(1);
+            축제.changeDate(startDate, endDate);
 
             // when & then
-            assertThatThrownBy(() -> validator.validate(축제.getId(), command))
+            assertThatThrownBy(() -> validator.validate(축제))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ErrorCode.FESTIVAL_UPDATE_OUT_OF_DATE_STAGE_START_TIME.getMessage());
         }
@@ -108,43 +98,34 @@ class OutOfDateStageFestivalUpdateValidatorTest {
         @Test
         void 축제의_일자를_확장하면_예외가_발생하지_않는다() {
             // given
-            var command = new FestivalUpdateCommand(
-                "테코대학교 축제",
-                festivalStartDate.minusDays(1),
-                festivalEndDate.plusDays(1),
-                "https://image.com/image.png"
-            );
+            LocalDate startDate = festivalStartDate.minusDays(1);
+            LocalDate endDate = festivalEndDate.plusDays(1);
+            축제.changeDate(startDate, endDate);
 
             // when & then
-            assertDoesNotThrow(() -> validator.validate(축제.getId(), command));
+            assertDoesNotThrow(() -> validator.validate(축제));
         }
 
         @Test
         void 축제의_시작일자를_축소하면_예외가_발생하지_않는다() {
             // given
-            var command = new FestivalUpdateCommand(
-                "테코대학교 축제",
-                festivalStartDate.plusDays(1),
-                festivalEndDate,
-                "https://image.com/image.png"
-            );
+            LocalDate startDate = festivalStartDate.plusDays(1);
+            LocalDate endDate = festivalEndDate;
+            축제.changeDate(startDate, endDate);
 
             // when & then
-            assertDoesNotThrow(() -> validator.validate(축제.getId(), command));
+            assertDoesNotThrow(() -> validator.validate(축제));
         }
 
         @Test
         void 축제의_종료일자를_축소하면_예외가_발생하지_않는다() {
             // given
-            var command = new FestivalUpdateCommand(
-                "테코대학교 축제",
-                festivalStartDate,
-                festivalEndDate.minusDays(1),
-                "https://image.com/image.png"
-            );
+            LocalDate startDate = festivalStartDate;
+            LocalDate endDate = festivalEndDate.minusDays(1);
+            축제.changeDate(startDate, endDate);
 
             // when & then
-            assertDoesNotThrow(() -> validator.validate(축제.getId(), command));
+            assertDoesNotThrow(() -> validator.validate(축제));
         }
     }
 }
