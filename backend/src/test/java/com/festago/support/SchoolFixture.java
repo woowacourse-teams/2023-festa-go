@@ -13,6 +13,10 @@ public class SchoolFixture {
 
     private SchoolRegion region = SchoolRegion.서울;
 
+    private String logoUrl = "https://image.com/logo.png";
+
+    private String backgroundImageUrl = "https://image.com/backgroundImage.png";
+
     private SchoolFixture() {
     }
 
@@ -35,7 +39,17 @@ public class SchoolFixture {
         return this;
     }
 
+    public SchoolFixture logoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+        return this;
+    }
+
+    public SchoolFixture backgroundImageUrl(String backgroundImageUrl) {
+        this.backgroundImageUrl = backgroundImageUrl;
+        return this;
+    }
+
     public School build() {
-        return new School(id, domain, name, region);
+        return new School(id, domain, name, logoUrl, backgroundImageUrl, region);
     }
 }

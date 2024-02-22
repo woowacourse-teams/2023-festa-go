@@ -23,9 +23,14 @@ public class AdminSchoolStepDefinitions {
 
     @Given("지역이 {string}에 있고, 이름이 {string}이고, 도메인이 {string}인 학교를 생성한다.")
     public void 학교를_생성한다(String region, String name, String domain) {
+        var request = SchoolV1CreateRequest.builder()
+            .name(name)
+            .domain(domain)
+            .region(SchoolRegion.valueOf(region))
+            .build();
         RestAssured.given()
             .contentType(ContentType.JSON)
-            .body(new SchoolV1CreateRequest(name, domain, SchoolRegion.valueOf(region)))
+            .body(request)
             .cookie("token", cucumberClient.getToken())
             .post("/admin/api/v1/schools")
             .then()
@@ -38,9 +43,14 @@ public class AdminSchoolStepDefinitions {
     @When("이름이 {string}인 학교의 이름을 {string}로 변경한다.")
     public void 학교의_이름을_다른_이름으로_변경한다(String srcName, String dstName) {
         var response = getSchoolResponsesByName(srcName).get(0);
+        var request = SchoolV1UpdateRequest.builder()
+            .name(dstName)
+            .domain(response.domain())
+            .region(response.region())
+            .build();
         RestAssured.given()
             .contentType(ContentType.JSON)
-            .body(new SchoolV1UpdateRequest(dstName, response.domain(), response.region()))
+            .body(request)
             .cookie("token", cucumberClient.getToken())
             .pathParam("id", response.id())
             .patch("/admin/api/v1/schools/{id}")
