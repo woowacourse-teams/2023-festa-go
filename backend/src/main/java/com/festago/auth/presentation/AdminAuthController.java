@@ -28,7 +28,6 @@ public class AdminAuthController {
     private final AdminAuthService adminAuthService;
 
     @PostMapping("/login")
-    @Hidden
     public ResponseEntity<Void> login(@RequestBody @Valid AdminLoginRequest request) {
         String token = adminAuthService.login(request);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, createLoginCookie(token))
@@ -48,7 +47,6 @@ public class AdminAuthController {
      * 클라이언트 측에서 httpOnly 쿠키를 조작할 수 없기 때문에, 서버 측에서 쿠키를 관리해주어야 함
      */
     @GetMapping("/logout")
-    @Hidden
     public ResponseEntity<Void> logout() {
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, createLogoutCookie())
             .build();
@@ -65,7 +63,6 @@ public class AdminAuthController {
     }
 
     @PostMapping("/signup")
-    @Hidden
     public ResponseEntity<AdminSignupResponse> signupAdminAccount(@RequestBody @Valid AdminSignupRequest request,
                                                                   @Admin Long adminId) {
         AdminSignupResponse response = adminAuthService.signup(adminId, request);
@@ -74,7 +71,6 @@ public class AdminAuthController {
     }
 
     @PostMapping("/initialize")
-    @Hidden
     public ResponseEntity<Void> initializeRootAdmin(@RequestBody @Valid RootAdminInitializeRequest request) {
         adminAuthService.initializeRootAdmin(request.password());
         return ResponseEntity.ok()
