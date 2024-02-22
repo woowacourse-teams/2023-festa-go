@@ -134,4 +134,164 @@ class SchoolTest {
         // then
         assertThat(school.getName()).isEqualTo(name);
     }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", " ", "\t", "\n"})
+    void 학교의_logoUrl이_null_또는_공백이어도_성공(String logoUrl) {
+        // when
+        School school = new School(1L, "teco.ac.kr", "테코대학교", logoUrl, "https://image.com/backgroundImage.png",
+            SchoolRegion.서울);
+
+        // then
+        assertThat(school.getLogoUrl()).isNotBlank();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 255})
+    void 학교의_logoUrl이_255글자_이내_성공(int length) {
+        // given
+        String logoUrl = "1".repeat(length);
+
+        // when
+        School school = new School(1L, "teco.ac.kr", "테코대학교", logoUrl, "https://image.com/backgroundImage.png",
+            SchoolRegion.서울);
+
+        // then
+        assertThat(school.getLogoUrl()).isEqualTo(logoUrl);
+    }
+
+    @Test
+    void 학교의_logoUrl이_255자를_넘으면_예외() {
+        // given
+        String logoUrl = "1".repeat(256);
+
+        // when & then
+        assertThatThrownBy(() -> {
+            new School(1L, "teco.ac.kr", "테코대학교", logoUrl, "https://image.com/backgroundImage.png",
+                SchoolRegion.서울);
+        }).isInstanceOf(ValidException.class);
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", " ", "\t", "\n"})
+    void 학교의_logoUrl을_수정할때_null_또는_공백이어도_성공(String logoUrl) {
+        // given
+        School school = new School(1L, "teco.ac.kr", "테코대학교", "https://image.com/logo.png",
+            "https://image.com/backgroundImage.png", SchoolRegion.서울);
+
+        // when
+        school.changeLogoUrl(logoUrl);
+
+        // then
+        assertThat(school.getLogoUrl()).isNotBlank();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 255})
+    void 학교의_logoUrl을_수정할때_255글자_이내_성공(int length) {
+        // given
+        School school = new School(1L, "teco.ac.kr", "테코대학교", "https://image.com/logo.png",
+            "https://image.com/backgroundImage.png", SchoolRegion.서울);
+        String logoUrl = "1".repeat(length);
+
+        // when
+        school.changeLogoUrl(logoUrl);
+
+        // then
+        assertThat(school.getLogoUrl()).isEqualTo(logoUrl);
+    }
+
+    @Test
+    void 학교의_logoUrl을_수정할때_255자를_넘으면_예외() {
+        // given
+        String logoUrl = "1".repeat(256);
+        School school = new School(1L, "teco.ac.kr", "테코대학교", "https://image.com/logo.png",
+            "https://image.com/backgroundImage.png", SchoolRegion.서울);
+
+        // when & then
+        assertThatThrownBy(() -> school.changeLogoUrl(logoUrl))
+            .isInstanceOf(ValidException.class);
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", " ", "\t", "\n"})
+    void 학교의_backgroundImageUrl이_null_또는_공백이어도_성공(String backgroundImageUrl) {
+        // when
+        School school = new School(1L, "teco.ac.kr", "테코대학교", "https://image.com/logo.png", backgroundImageUrl,
+            SchoolRegion.서울);
+
+        // then
+        assertThat(school.getBackgroundUrl()).isNotBlank();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 255})
+    void 학교의_backgroundImageUrl이_255글자_이내_성공(int length) {
+        // given
+        String backgroundImageUrl = "1".repeat(length);
+
+        // when
+        School school = new School(1L, "teco.ac.kr", "테코대학교", "https://image.com/logo.png", backgroundImageUrl,
+            SchoolRegion.서울);
+
+        // then
+        assertThat(school.getBackgroundUrl()).isEqualTo(backgroundImageUrl);
+    }
+
+    @Test
+    void 학교의_backgroundImageUrl이_255자를_넘으면_예외() {
+        // given
+        String backgroundImageUrl = "1".repeat(256);
+
+        // when & then
+        assertThatThrownBy(() -> {
+            new School(1L, "teco.ac.kr", "테코대학교", "https://image.com/logo.png", backgroundImageUrl,
+                SchoolRegion.서울);
+        }).isInstanceOf(ValidException.class);
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", " ", "\t", "\n"})
+    void 학교의_backgroundImageUrl을_수정할때_null_또는_공백이어도_성공(String backgroundImageUrl) {
+        // given
+        School school = new School(1L, "teco.ac.kr", "테코대학교", "https://image.com/logo.png",
+            "https://image.com/backgroundImage.png", SchoolRegion.서울);
+
+        // when
+        school.changeBackgroundImageUrl(backgroundImageUrl);
+
+        // then
+        assertThat(school.getBackgroundUrl()).isNotBlank();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 255})
+    void 학교의_backgroundImageUrl을_수정할때_255글자_이내_성공(int length) {
+        // given
+        School school = new School(1L, "teco.ac.kr", "테코대학교", "https://image.com/logo.png",
+            "https://image.com/backgroundImage.png", SchoolRegion.서울);
+        String backgroundImageUrl = "1".repeat(length);
+
+        // when
+        school.changeBackgroundImageUrl(backgroundImageUrl);
+
+        // then
+        assertThat(school.getBackgroundUrl()).isEqualTo(backgroundImageUrl);
+    }
+
+    @Test
+    void 학교의_backgroundImageUrl을_수정할때_255자를_넘으면_예외() {
+        // given
+        String backgroundImageUrl = "1".repeat(256);
+        School school = new School(1L, "teco.ac.kr", "테코대학교", "https://image.com/logo.png",
+            "https://image.com/backgroundImage.png", SchoolRegion.서울);
+
+        // when & then
+        assertThatThrownBy(() -> school.changeBackgroundImageUrl(backgroundImageUrl))
+            .isInstanceOf(ValidException.class);
+    }
 }
