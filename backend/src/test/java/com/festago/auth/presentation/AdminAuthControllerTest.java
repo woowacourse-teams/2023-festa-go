@@ -3,6 +3,7 @@ package com.festago.auth.presentation;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -74,6 +75,48 @@ class AdminAuthControllerTest {
     }
 
     @Nested
+    class 어드민_로그아웃 {
+
+        final String uri = "/admin/api/logout";
+
+        @Nested
+        @DisplayName("GET " + uri)
+        class 올바른_주소로 {
+
+            @Test
+            @WithMockAuth(role = Role.ADMIN)
+            void 요청을_보내면_200_응답과_비어있는_값의_로그인_토큰이_담긴_쿠기가_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri)
+                        .cookie(AUTH_TOKEN))
+                    .andExpect(status().isOk())
+                    .andExpect(cookie().exists(AUTH_TOKEN.getName()))
+                    .andExpect(cookie().value(AUTH_TOKEN.getName(), ""))
+                    .andExpect(cookie().path(AUTH_TOKEN.getName(), "/"))
+                    .andExpect(cookie().secure(AUTH_TOKEN.getName(), true))
+                    .andExpect(cookie().httpOnly(AUTH_TOKEN.getName(), true))
+                    .andExpect(cookie().sameSite(AUTH_TOKEN.getName(), "None"));
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri)
+                        .cookie(AUTH_TOKEN))
+                    .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
     class 어드민_회원가입 {
 
         final String uri = "/admin/api/signup";
@@ -91,9 +134,8 @@ class AdminAuthControllerTest {
                     .willReturn(response);
 
                 // when & then
-                Cookie token = new Cookie("token", "token");
                 mockMvc.perform(post(uri)
-                        .cookie(token)
+                        .cookie(AUTH_TOKEN)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
