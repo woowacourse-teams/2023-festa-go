@@ -1,4 +1,4 @@
-package com.festago.festival.application.validator;
+package com.festago.festival.domain.validator;
 
 public interface FestivalDeleteValidator {
 

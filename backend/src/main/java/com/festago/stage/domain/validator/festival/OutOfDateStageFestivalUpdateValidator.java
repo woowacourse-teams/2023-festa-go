@@ -1,8 +1,8 @@
-package com.festago.stage.application.validator.festival;
+package com.festago.stage.domain.validator.festival;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.festival.application.validator.FestivalUpdateValidator;
+import com.festago.festival.domain.validator.FestivalUpdateValidator;
 import com.festago.festival.dto.command.FestivalUpdateCommand;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;

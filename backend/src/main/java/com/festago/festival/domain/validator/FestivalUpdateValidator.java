@@ -1,4 +1,4 @@
-package com.festago.festival.application.validator;
+package com.festago.festival.domain.validator;
 
 import com.festago.festival.dto.command.FestivalUpdateCommand;
 

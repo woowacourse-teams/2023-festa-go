@@ -1,6 +1,6 @@
 package com.festago.festival.application.command;
 
-import com.festago.festival.application.validator.FestivalDeleteValidator;
+import com.festago.festival.domain.validator.FestivalDeleteValidator;
 import com.festago.festival.dto.event.FestivalDeletedEvent;
 import com.festago.festival.repository.FestivalRepository;
 import java.util.List;

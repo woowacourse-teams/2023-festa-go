@@ -1,4 +1,4 @@
-package com.festago.stage.application.validator.festival;
+package com.festago.stage.domain.validator.festival;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
