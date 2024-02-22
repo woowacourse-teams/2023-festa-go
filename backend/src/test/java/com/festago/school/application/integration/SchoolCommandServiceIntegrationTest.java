@@ -81,11 +81,20 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
             .name("테코대학교")
             .domain("teco.ac.kr")
             .region(SchoolRegion.서울)
+            .logoUrl("https://image.com/newLogo.png")
+            .backgroundImageUrl("https://image.com/newBackgroundImage.png")
             .build();
 
         @BeforeEach
         void setUp() {
-            school = schoolRepository.save(new School("wote.ac.kr", "우테대학교", SchoolRegion.대구));
+            school = schoolRepository.save(SchoolFixture.school()
+                .name("우테대학교")
+                .domain("wote.ac.kr")
+                .region(SchoolRegion.대구)
+                .logoUrl("https://image.com/logo.png")
+                .backgroundImageUrl("https://image.com/backgroundImage.png")
+                .build()
+            );
         }
 
         @Test
@@ -173,6 +182,9 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
                 softly.assertThat(updatedSchool.getName()).isEqualTo("테코대학교");
                 softly.assertThat(updatedSchool.getDomain()).isEqualTo("teco.ac.kr");
                 softly.assertThat(updatedSchool.getRegion()).isEqualTo(SchoolRegion.서울);
+                softly.assertThat(updatedSchool.getLogoUrl()).isEqualTo("https://image.com/newLogo.png");
+                softly.assertThat(updatedSchool.getBackgroundUrl())
+                    .isEqualTo("https://image.com/newBackgroundImage.png");
             });
         }
     }

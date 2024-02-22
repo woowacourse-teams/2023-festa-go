@@ -39,6 +39,11 @@ public class SchoolFixture {
         return this;
     }
 
+    public SchoolFixture region(SchoolRegion region) {
+        this.region = region;
+        return this;
+    }
+
     public SchoolFixture logoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
         return this;

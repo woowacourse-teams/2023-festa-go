@@ -44,6 +44,8 @@ public class SchoolCommandService {
         school.changeName(command.name());
         school.changeDomain(command.domain());
         school.changeRegion(command.region());
+        school.changeLogoUrl(command.logoUrl());
+        school.changeBackgroundImageUrl(command.backgroundImageUrl());
     }
 
     private void validateUpdate(School school, SchoolUpdateCommand command) {
