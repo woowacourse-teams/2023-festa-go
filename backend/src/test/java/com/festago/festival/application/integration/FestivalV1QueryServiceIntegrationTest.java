@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.given;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.application.FestivalV1QueryService;
@@ -40,22 +39,26 @@ import org.springframework.transaction.annotation.Transactional;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Transactional
-class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
+class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
+
+    @Autowired
+    FestivalV1QueryService festivalV1QueryService;
 
     @Autowired
     FestivalInfoRepository festivalInfoRepository;
+
     @Autowired
     FestivalRepository festivalRepository;
+
     @Autowired
     SchoolRepository schoolRepository;
+
     @Autowired
     ArtistRepository artistRepository;
+
     @Autowired
     FestivalInfoSerializer festivalInfoSerializer;
-    @Autowired
-    FestivalV1QueryService festivalV1QueryService;
-    @Autowired
-    ObjectMapper objectMapper;
+
     @Autowired
     Clock clock;
 
@@ -131,7 +134,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_중_축제는_5개_이다() {
             // given
-            var request = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PROGRESS, null, null);
 
             // when
             var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
@@ -146,7 +149,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_예정_축제는_3개_이다() {
             // given
-            var request = new FestivalV1QueryRequest(null, FestivalFilter.PLANNED, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PLANNED, null, null);
 
             // when
             var actual = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
@@ -161,7 +164,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 원하는_갯수의_축제를_조회하면_마지막_페이지_여부를_알_수_있다() {
             // given
-            var request = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PROGRESS, null, null);
 
             // when
             var response = festivalV1QueryService.findFestivals(Pageable.ofSize(4), request);
@@ -176,7 +179,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_예정_축제는_시작_날짜가_빠른_순으로_정렬되고_시작_날짜가_같으면_식별자의_오름차순으로_정렬되어_반환된다() {
             // given
-            var request = new FestivalV1QueryRequest(null, FestivalFilter.PLANNED, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PLANNED, null, null);
 
             // when
             var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
@@ -194,7 +197,7 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 진행_중_축제는_시작_날짜가_느린_순으로_정렬되고_시작_날짜가_같으면_식별자의_오름차순으로_정렬되어_반환된다() {
             // given
-            var request = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, null, null);
+            var request = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PROGRESS, null, null);
 
             // when
             var response = festivalV1QueryService.findFestivals(Pageable.ofSize(10), request);
@@ -214,10 +217,10 @@ class FestivalV1QueryServiceTest extends ApplicationIntegrationTest {
         @Test
         void 커서_기반_페이징이_적용되어야_한다() {
             // given
-            var firstRequest = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, null, null);
+            var firstRequest = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PROGRESS, null, null);
             var firstResponse = festivalV1QueryService.findFestivals(Pageable.ofSize(2), firstRequest);
             var lastElement = firstResponse.getContent().get(1);
-            var secondRequest = new FestivalV1QueryRequest(null, FestivalFilter.PROGRESS, lastElement.id(),
+            var secondRequest = new FestivalV1QueryRequest(SchoolRegion.ANY, FestivalFilter.PROGRESS, lastElement.id(),
                 lastElement.startDate());
 
             // when
