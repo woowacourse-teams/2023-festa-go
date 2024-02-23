@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @deprecated 새로운 Festival CRUD 기능이 안정되면 삭제
+ */
+@Deprecated(forRemoval = true)
 @RestController
 @RequestMapping("/festivals")
 @Tag(name = "축제 정보 요청")

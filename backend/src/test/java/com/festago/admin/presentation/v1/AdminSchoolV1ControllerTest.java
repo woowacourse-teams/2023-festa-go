@@ -74,7 +74,13 @@ class AdminSchoolV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_201_응답과_Location_헤더에_식별자가_반환된다() throws Exception {
                 // given
-                var request = new SchoolV1CreateRequest("테코대학교", "teco.ac.kr", SchoolRegion.서울);
+                var request = SchoolV1CreateRequest.builder()
+                    .name("테코대학교")
+                    .domain("teco.ac.kr")
+                    .region(SchoolRegion.서울)
+                    .logoUrl("https://image.com/logo.png")
+                    .backgroundImageUrl("https://image.com/backgroundImage.png")
+                    .build();
                 given(schoolCommandService.createSchool(any(SchoolCreateCommand.class)))
                     .willReturn(1L);
 
@@ -118,7 +124,13 @@ class AdminSchoolV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_200_응답이_반환된다() throws Exception {
                 // given
-                var request = new SchoolV1UpdateRequest("테코대학교", "teco.ac.kr", SchoolRegion.서울);
+                var request = SchoolV1UpdateRequest.builder()
+                    .name("테코대학교")
+                    .domain("teco.ac.kr")
+                    .region(SchoolRegion.서울)
+                    .logoUrl("https://image.com/logo.png")
+                    .backgroundImageUrl("https://image.com/backgroundImage.png")
+                    .build();
 
                 // when & then
                 mockMvc.perform(patch(uri, 1L)

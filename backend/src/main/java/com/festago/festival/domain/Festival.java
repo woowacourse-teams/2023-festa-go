@@ -92,8 +92,8 @@ public class Festival extends BaseTimeEntity {
         }
     }
 
-    public boolean canCreate(LocalDate currentDate) {
-        return startDate.isEqual(currentDate) || startDate.isAfter(currentDate);
+    public boolean isBeforeStartDate(LocalDate currentDate) {
+        return startDate.isBefore(currentDate);
     }
 
     public boolean isNotInDuration(LocalDateTime time) {
