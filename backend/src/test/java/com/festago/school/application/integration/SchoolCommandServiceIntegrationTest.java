@@ -35,7 +35,11 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     @Nested
     class createSchool {
 
-        SchoolCreateCommand command = new SchoolCreateCommand("테코대학교", "teco.ac.kr", SchoolRegion.서울);
+        SchoolCreateCommand command = SchoolCreateCommand.builder()
+            .name("테코대학교")
+            .domain("teco.ac.kr")
+            .region(SchoolRegion.서울)
+            .build();
 
         @Test
         void 같은_도메인의_학교가_저장되어_있으면_예외가_발생한다() {
@@ -72,12 +76,25 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     @Nested
     class updateSchool {
 
-        SchoolUpdateCommand command = new SchoolUpdateCommand("테코대학교", "teco.ac.kr", SchoolRegion.서울);
         School school;
+        SchoolUpdateCommand command = SchoolUpdateCommand.builder()
+            .name("테코대학교")
+            .domain("teco.ac.kr")
+            .region(SchoolRegion.서울)
+            .logoUrl("https://image.com/newLogo.png")
+            .backgroundImageUrl("https://image.com/newBackgroundImage.png")
+            .build();
 
         @BeforeEach
         void setUp() {
-            school = schoolRepository.save(new School("wote.ac.kr", "우테대학교", SchoolRegion.대구));
+            school = schoolRepository.save(SchoolFixture.school()
+                .name("우테대학교")
+                .domain("wote.ac.kr")
+                .region(SchoolRegion.대구)
+                .logoUrl("https://image.com/logo.png")
+                .backgroundImageUrl("https://image.com/backgroundImage.png")
+                .build()
+            );
         }
 
         @Test
@@ -119,7 +136,11 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
         void 수정할_이름이_수정할_학교의_이름과_같으면_이름은_수정되지_않는다() {
             // given
             Long schoolId = school.getId();
-            SchoolUpdateCommand command = new SchoolUpdateCommand(school.getName(), "teco.ac.kr", SchoolRegion.서울);
+            var command = SchoolUpdateCommand.builder()
+                .name(school.getName())
+                .domain("teco.ac.kr")
+                .region(SchoolRegion.서울)
+                .build();
 
             // when
             schoolCommandService.updateSchool(schoolId, command);
@@ -133,7 +154,11 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
         void 수정할_도메인이_수정할_학교의_도메인과_같으면_도메인은_수정되지_않는다() {
             // given
             Long schoolId = school.getId();
-            SchoolUpdateCommand command = new SchoolUpdateCommand("테코대학교", school.getDomain(), SchoolRegion.서울);
+            var command = SchoolUpdateCommand.builder()
+                .name("테코대학교")
+                .domain(school.getDomain())
+                .region(SchoolRegion.서울)
+                .build();
 
             // when
             schoolCommandService.updateSchool(schoolId, command);
@@ -157,6 +182,9 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
                 softly.assertThat(updatedSchool.getName()).isEqualTo("테코대학교");
                 softly.assertThat(updatedSchool.getDomain()).isEqualTo("teco.ac.kr");
                 softly.assertThat(updatedSchool.getRegion()).isEqualTo(SchoolRegion.서울);
+                softly.assertThat(updatedSchool.getLogoUrl()).isEqualTo("https://image.com/newLogo.png");
+                softly.assertThat(updatedSchool.getBackgroundUrl())
+                    .isEqualTo("https://image.com/newBackgroundImage.png");
             });
         }
     }
