@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.common.dto.SliceResponse;
 import com.festago.school.application.v1.SchoolV1QueryService;
 import com.festago.school.dto.v1.SchoolDetailV1Response;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
@@ -95,10 +96,11 @@ class SchoolV1ControllerTest {
                     1L, "경북대학교", today, today.plusDays(1), "www.image.com/image.png",
                     "아티스트"
                 ));
-                var expected = new SliceImpl(content, Pageable.ofSize(10), true);
+                var slice = new SliceImpl(content, Pageable.ofSize(10), true);
+                var expected = SliceResponse.from(slice);
 
                 given(schoolV1QueryService.findFestivalsBySchoolId(1L, today, searchCondition))
-                    .willReturn(expected);
+                    .willReturn(slice);
 
                 // when & then
                 mockMvc.perform(get(uri, 1L)
