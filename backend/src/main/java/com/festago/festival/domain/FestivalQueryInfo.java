@@ -21,6 +21,7 @@ public class FestivalQueryInfo extends BaseTimeEntity {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private Long festivalId;
 
     @NotNull
@@ -34,6 +35,10 @@ public class FestivalQueryInfo extends BaseTimeEntity {
 
     public static FestivalQueryInfo of(Festival festival, List<Artist> artists, FestivalInfoSerializer serializer) {
         return new FestivalQueryInfo(festival.getId(), serializer.serialize(artists));
+    }
+
+    public static FestivalQueryInfo create(Long festivalId) {
+        return new FestivalQueryInfo(festivalId, "[]");
     }
 
     public Long getId() {

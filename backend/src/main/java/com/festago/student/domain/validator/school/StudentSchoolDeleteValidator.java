@@ -1,8 +1,8 @@
-package com.festago.student.application;
+package com.festago.student.domain.validator.school;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
-import com.festago.school.application.SchoolDeleteValidator;
+import com.festago.school.domain.validator.SchoolDeleteValidator;
 import com.festago.student.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -21,6 +21,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @deprecated 새로운 Festival CRUD 기능이 안정되면 삭제
+ */
+@Deprecated(forRemoval = true)
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -40,7 +44,7 @@ public class FestivalService {
     }
 
     private void validate(Festival festival) {
-        if (!festival.canCreate(LocalDate.now(clock))) {
+        if (festival.isBeforeStartDate(LocalDate.now(clock))) {
             throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_START_DATE);
         }
     }
@@ -56,13 +60,8 @@ public class FestivalService {
         return festivalStageService.findDetail(festivalId);
     }
 
-    private Festival findFestival(Long festivalId) {
-        return festivalRepository.findById(festivalId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
-    }
-
     public void update(Long festivalId, FestivalUpdateRequest request) {
-        Festival festival = findFestival(festivalId);
+        Festival festival = festivalRepository.getOrThrow(festivalId);
         festival.changeName(request.name());
         festival.changeThumbnail(request.thumbnail());
         festival.changeDate(request.startDate(), request.endDate());

@@ -1,5 +1,6 @@
 package com.festago.school.application;
 
+import com.festago.school.domain.validator.SchoolDeleteValidator;
 import com.festago.school.repository.SchoolRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

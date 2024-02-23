@@ -47,6 +47,10 @@ public class AdminController {
     private final SchoolService schoolService;
     private final Optional<BuildProperties> properties;
 
+    /**
+     * @deprecated 새로운 Festival CRUD 기능이 안정되면 삭제
+     */
+    @Deprecated(forRemoval = true)
     @PostMapping("/festivals")
     public ResponseEntity<FestivalResponse> createFestival(@RequestBody @Valid FestivalCreateRequest request) {
         FestivalResponse response = festivalService.create(request);
@@ -54,6 +58,10 @@ public class AdminController {
             .body(response);
     }
 
+    /**
+     * @deprecated 새로운 Festival CRUD 기능이 안정되면 삭제
+     */
+    @Deprecated(forRemoval = true)
     @PatchMapping("/festivals/{festivalId}")
     public ResponseEntity<Void> updateFestival(@RequestBody @Valid FestivalUpdateRequest request,
                                                @PathVariable Long festivalId) {
@@ -62,6 +70,10 @@ public class AdminController {
             .build();
     }
 
+    /**
+     * @deprecated 새로운 Festival CRUD 기능이 안정되면 삭제
+     */
+    @Deprecated(forRemoval = true)
     @DeleteMapping("/festivals/{festivalId}")
     public ResponseEntity<Void> deleteFestival(@PathVariable Long festivalId) {
         festivalService.delete(festivalId);
