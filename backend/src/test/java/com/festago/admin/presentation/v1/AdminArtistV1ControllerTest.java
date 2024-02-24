@@ -38,7 +38,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class AdminArtistV1ControllerTest {
 
     private static final Cookie TOKEN_COOKIE = new Cookie("token", "token");
-    private static final Cookie COOKIE = new Cookie("token", "token");
+
     @Autowired
     MockMvc mockMvc;
     @Autowired
