@@ -5,7 +5,7 @@ import com.festago.festago.domain.model.school.SchoolInfo
 import com.festago.festago.domain.repository.SchoolRepository
 import javax.inject.Inject
 
-class SchoolDefaultRepository @Inject constructor(
+class FakeSchoolRepository @Inject constructor(
     // TODO: Service 연결
 ) : SchoolRepository {
     override suspend fun loadSchoolInfo(schoolId: Long): Result<SchoolInfo> {
