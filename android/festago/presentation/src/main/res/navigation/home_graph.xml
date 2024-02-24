@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_graph"
+    app:startDestination="@id/festivalListFragment">
+
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="com.festago.festago.presentation.ui.home.HomeActivity"
+        tools:layout="@layout/activity_home"
+        android:label="HomeActivity" />
+    <fragment
+        android:id="@+id/festivalListFragment"
+        android:name="com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment"
+        android:label="FestivalListFragment"
+        tools:layout="@layout/fragment_festival_list">
+        <action
+            android:id="@+id/action_festivalListFragment_to_schoolDetailFragment"
+            app:destination="@id/schoolDetailFragment" />
+        <action
+            android:id="@+id/action_festivalListFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.festago.festago.presentation.ui.home.mypage.MyPageFragment"
+        android:label="MyPageFragment"
+        tools:layout="@layout/fragment_my_page" />
+    <fragment
+        android:id="@+id/artistDetailFragment"
+        android:name="com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment"
+        android:label="ArtistDetailFragment"
+        tools:layout="@layout/fragment_artist_detail">
+        <argument
+            android:name="artistId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_artistDetailFragment_to_schoolDetailFragment"
+            app:destination="@id/schoolDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ticketListFragment"
+        android:name="com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment"
+        android:label="TicketListFragment"
+        tools:layout="@layout/fragment_ticket_list" />
+    <fragment
+        android:id="@+id/bookmarkListFragment"
+        android:name="com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragment"
+        android:label="fragment_bookmark_list"
+        tools:layout="@layout/fragment_bookmark_list" />
+    <fragment
+        android:id="@+id/schoolDetailFragment"
+        android:name="com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment"
+        android:label="SchoolDetailFragment"
+        tools:layout="@layout/fragment_school_detail" >
+        <action
+            android:id="@+id/action_schoolDetailFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
+        <argument
+            android:name="schoolId"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>
