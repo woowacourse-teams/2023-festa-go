@@ -30,10 +30,6 @@ public class Artist {
         this.backgroundImageUrl = backgroundImageUrl;
     }
 
-    public Artist(Long id, String name, String profileImage) {
-        this(id, name, profileImage, DEFAULT_URL);
-    }
-
     public Artist(String name, String profileImage) {
         this(null, name, profileImage, DEFAULT_URL);
     }
