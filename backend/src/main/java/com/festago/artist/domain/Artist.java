@@ -38,9 +38,10 @@ public class Artist {
         this(id, name, profileImage, DEFAULT_URL);
     }
 
-    public void update(String name, String profileImage) {
+    public void update(String name, String profileImage, String backgroundImageUrl) {
         this.name = name;
         this.profileImage = profileImage;
+        this.backgroundImageUrl = backgroundImageUrl;
     }
 
     public Long getId() {

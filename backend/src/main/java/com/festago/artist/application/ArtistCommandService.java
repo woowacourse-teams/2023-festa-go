@@ -22,7 +22,7 @@ public class ArtistCommandService {
 
     public void update(ArtistUpdateRequest request, Long artistId) {
         Artist artist = artistRepository.getOrThrow(artistId);
-        artist.update(request.name(), request.profileImage());
+        artist.update(request.name(), request.profileImage(), request.backgroundImageUrl());
     }
 
     public void delete(Long artistId) {
