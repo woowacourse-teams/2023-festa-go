@@ -93,11 +93,11 @@ public class Stage extends BaseTimeEntity {
     }
 
     /**
-     * API 일부에 사용되는 곳이 있기 때문에 빈 문자열을 반환하도록 처리
+     * API 일부에 사용되는 곳이 있기 때문에 deprecated 문자열을 반환하도록 처리
      */
     @Deprecated(forRemoval = true)
     public String getLineUp() {
-        return "";
+        return "deprecated";
     }
 
     public LocalDateTime getTicketOpenTime() {
