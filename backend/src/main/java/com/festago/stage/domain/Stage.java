@@ -14,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +24,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Stage extends BaseTimeEntity {
 
-    private static final int MAX_LINEUP_LENGTH = 255;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
     private LocalDateTime startTime;
-
-    @Size(max = MAX_LINEUP_LENGTH)
-    private String lineUp;
 
     @NotNull
     private LocalDateTime ticketOpenTime;
@@ -47,32 +41,22 @@ public class Stage extends BaseTimeEntity {
     @OneToMany(mappedBy = "stage", fetch = FetchType.LAZY)
     private List<Ticket> tickets = new ArrayList<>();
 
-    public Stage(LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime, Festival festival) {
-        this(null, startTime, lineUp, ticketOpenTime, festival);
-    }
-
     public Stage(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
-        this(null, startTime, null, ticketOpenTime, festival);
+        this(null, startTime, ticketOpenTime, festival);
     }
 
-    public Stage(Long id, LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime,
+    public Stage(Long id, LocalDateTime startTime, LocalDateTime ticketOpenTime,
                  Festival festival) {
-        validate(startTime, lineUp, ticketOpenTime, festival);
+        validate(startTime, ticketOpenTime, festival);
         this.id = id;
         this.startTime = startTime;
-        this.lineUp = lineUp;
         this.ticketOpenTime = ticketOpenTime;
         this.festival = festival;
     }
 
-    private void validate(LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime, Festival festival) {
-        validateLineUp(lineUp);
+    private void validate(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
         validateFestival(festival);
         validateTime(startTime, ticketOpenTime, festival);
-    }
-
-    private void validateLineUp(String lineUp) {
-        Validator.maxLength(lineUp, MAX_LINEUP_LENGTH, "lineUp");
     }
 
     private void validateFestival(Festival festival) {
@@ -100,11 +84,6 @@ public class Stage extends BaseTimeEntity {
         this.ticketOpenTime = ticketOpenTime;
     }
 
-    public void changeLineUp(String lineUp) {
-        validateLineUp(lineUp);
-        this.lineUp = lineUp;
-    }
-
     public Long getId() {
         return id;
     }
@@ -113,8 +92,12 @@ public class Stage extends BaseTimeEntity {
         return startTime;
     }
 
+    /**
+     * API 일부에 사용되는 곳이 있기 때문에 빈 문자열을 반환하도록 처리
+     */
+    @Deprecated(forRemoval = true)
     public String getLineUp() {
-        return lineUp;
+        return "";
     }
 
     public LocalDateTime getTicketOpenTime() {
