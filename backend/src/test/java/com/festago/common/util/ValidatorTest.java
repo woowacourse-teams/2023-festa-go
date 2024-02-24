@@ -24,7 +24,7 @@ class ValidatorTest {
         @NullSource
         void 문자열이_null이면_예외(String input) {
             // when & then
-            assertThatThrownBy(() -> Validator.hasBlank(input, ""))
+            assertThatThrownBy(() -> Validator.notBlank(input, ""))
                 .isInstanceOf(ValidException.class);
         }
 
@@ -32,7 +32,7 @@ class ValidatorTest {
         @ValueSource(strings = {"", " ", "\t", "\n"})
         void 문자열이_공백이면_예외(String input) {
             // when & then
-            assertThatThrownBy(() -> Validator.hasBlank(input, ""))
+            assertThatThrownBy(() -> Validator.notBlank(input, ""))
                 .isInstanceOf(ValidException.class);
         }
 
@@ -43,7 +43,7 @@ class ValidatorTest {
 
             // when & then
             assertThatNoException()
-                .isThrownBy(() -> Validator.hasBlank(input, ""));
+                .isThrownBy(() -> Validator.notBlank(input, ""));
         }
     }
 
