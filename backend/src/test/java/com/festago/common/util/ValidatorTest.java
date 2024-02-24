@@ -222,7 +222,7 @@ class ValidatorTest {
             int value = -1;
 
             // when & then
-            assertThatThrownBy(() -> Validator.isNegative(value, ""))
+            assertThatThrownBy(() -> Validator.notNegative(value, ""))
                 .isInstanceOf(ValidException.class);
         }
 
@@ -231,7 +231,7 @@ class ValidatorTest {
         void 값이_음수가_아니면_통과(int value) {
             // when & then
             assertThatNoException()
-                .isThrownBy(() -> Validator.isNegative(value, ""));
+                .isThrownBy(() -> Validator.notNegative(value, ""));
         }
     }
 }
