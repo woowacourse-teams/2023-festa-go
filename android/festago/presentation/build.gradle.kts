@@ -54,6 +54,11 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":domain"))
 
+    // Feature module Support
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.7")
+
+    // Testing Navigation
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
     // android
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
