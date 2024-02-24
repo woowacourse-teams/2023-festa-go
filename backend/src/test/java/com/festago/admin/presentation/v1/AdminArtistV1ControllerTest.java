@@ -38,20 +38,15 @@ import org.springframework.test.web.servlet.MockMvc;
 class AdminArtistV1ControllerTest {
 
     private static final Cookie TOKEN_COOKIE = new Cookie("token", "token");
-
+    private static final Cookie COOKIE = new Cookie("token", "token");
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     ArtistV1QueryService artistV1QueryService;
-
     @Autowired
     ArtistCommandService artistCommandService;
-
-    private static final Cookie COOKIE = new Cookie("token", "token");
 
     @Nested
     class 아티스트_생성 {
@@ -66,7 +61,8 @@ class AdminArtistV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_201_응답과_Location_헤더에_식별자가_반환된다() throws Exception {
                 // given
-                ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png");
+                ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png",
+                    "https://image.com/image.png");
                 given(artistCommandService.save(any(ArtistCreateRequest.class)))
                     .willReturn(1L);
 
@@ -111,7 +107,8 @@ class AdminArtistV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_200_응답이_반환된다() throws Exception {
                 // given
-                ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image.png");
+                ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image.png",
+                    "https://image.com/image.png");
 
                 // when & then
                 mockMvc.perform(put(uri, 1L)
