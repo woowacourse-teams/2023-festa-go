@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/festivalList"
+    app:startDestination="@id/festivalListFragment">
+
+    <fragment
+        android:id="@+id/festivalListFragment"
+        android:name="com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment"
+        android:label="FestivalListFragment"
+        tools:layout="@layout/fragment_festival_list">
+        <action
+            android:id="@+id/action_festivalListFragment_to_schoolDetailFragment"
+            app:destination="@id/schoolDetailFragment" />
+        <action
+            android:id="@+id/action_festivalListFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artistDetailFragment"
+        android:name="com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment"
+        android:label="ArtistDetailFragment"
+        tools:layout="@layout/fragment_artist_detail">
+        <argument
+            android:name="artistId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_artistDetailFragment_to_schoolDetailFragment"
+            app:destination="@id/schoolDetailFragment" />
+        <action
+            android:id="@+id/action_artistDetailFragment_self"
+            app:destination="@id/artistDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/schoolDetailFragment"
+        android:name="com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment"
+        android:label="SchoolDetailFragment"
+        tools:layout="@layout/fragment_school_detail" >
+        <action
+            android:id="@+id/action_schoolDetailFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
+        <argument
+            android:name="schoolId"
+            app:argType="long" />
+    </fragment>
+
+</navigation>
