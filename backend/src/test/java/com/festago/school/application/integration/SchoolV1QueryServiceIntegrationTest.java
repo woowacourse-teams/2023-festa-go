@@ -104,7 +104,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         private void saveSocialMedia(Long ownerId, OwnerType ownerType, SocialMediaType mediaType) {
             socialMediaRepository.save(
                 new SocialMedia(ownerId, ownerType, mediaType,
-                    "defaultName", "www.logoUrl.com", "www.url.com")
+                    "defaultName", "www.profileImageUrl.com", "www.url.com")
             );
         }
     }

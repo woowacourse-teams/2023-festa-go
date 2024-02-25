@@ -10,7 +10,7 @@ public record FestivalDetailV1Response(
     SchoolV1Response school,
     LocalDate startDate,
     LocalDate endDate,
-    String imageUrl,
+    String posterImageUrl,
     Set<SocialMediaV1Response> socialMedias,
     Set<StageV1Response> stages
 ) {
