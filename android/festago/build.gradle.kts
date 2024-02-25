@@ -18,6 +18,8 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.44" apply false
 
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10" apply false
+
+    id("androidx.navigation.safeargs") version "2.5.3" apply false
 }
 
 allprojects {
