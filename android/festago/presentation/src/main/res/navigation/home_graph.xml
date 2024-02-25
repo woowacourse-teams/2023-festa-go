@@ -34,10 +34,13 @@
         tools:layout="@layout/fragment_artist_detail">
         <argument
             android:name="artistId"
-            app:argType="integer" />
+            app:argType="long" />
         <action
             android:id="@+id/action_artistDetailFragment_to_schoolDetailFragment"
             app:destination="@id/schoolDetailFragment" />
+        <action
+            android:id="@+id/action_artistDetailFragment_self"
+            app:destination="@id/artistDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/ticketListFragment"
@@ -59,7 +62,7 @@
             app:destination="@id/artistDetailFragment" />
         <argument
             android:name="schoolId"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
 
 </navigation>
