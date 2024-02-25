@@ -57,6 +57,7 @@ dependencies {
 
     // Feature module Support
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")

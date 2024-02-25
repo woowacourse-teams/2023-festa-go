@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -14,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SchoolDetailFragment : Fragment() {
-
     private var _binding: FragmentSchoolDetailBinding? = null
     private val binding get() = _binding!!
 
@@ -22,10 +22,12 @@ class SchoolDetailFragment : Fragment() {
 
     private lateinit var adapter: SchoolFestivalListAdapter
 
+    private val args: SchoolDetailFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSchoolDetailBinding.inflate(inflater)
         return binding.root
@@ -33,8 +35,7 @@ class SchoolDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val schoolId = requireArguments().getLong(SCHOOL_ID_KEY)
-        initView(schoolId)
+        initView(args.schoolId)
         initObserve()
     }
 
@@ -76,7 +77,7 @@ class SchoolDetailFragment : Fragment() {
         binding.llcSchoolSocialMedia.removeAllViews()
         uiState.schoolInfo.socialMedia.forEach { sm ->
             binding.llcSchoolSocialMedia.addView(
-                SocialMediaView(requireActivity(), null, sm.logoUrl, sm.url)
+                SocialMediaView(requireActivity(), null, sm.logoUrl, sm.url),
             )
         }
     }
@@ -84,15 +85,5 @@ class SchoolDetailFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    companion object {
-        private const val SCHOOL_ID_KEY = "SCHOOL_ID_KEY"
-
-        fun newInstance(id: Long) = SchoolDetailFragment().apply {
-            arguments = Bundle().apply {
-                putLong(SCHOOL_ID_KEY, id)
-            }
-        }
     }
 }

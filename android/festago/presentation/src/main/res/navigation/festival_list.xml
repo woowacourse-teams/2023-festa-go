@@ -12,10 +12,14 @@
         tools:layout="@layout/fragment_festival_list">
         <action
             android:id="@+id/action_festivalListFragment_to_schoolDetailFragment"
-            app:destination="@id/schoolDetailFragment" />
+            app:destination="@id/schoolDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_festivalListFragment_to_artistDetailFragment"
-            app:destination="@id/artistDetailFragment" />
+            app:destination="@id/artistDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/artistDetailFragment"
@@ -27,19 +31,27 @@
             app:argType="long" />
         <action
             android:id="@+id/action_artistDetailFragment_to_schoolDetailFragment"
-            app:destination="@id/schoolDetailFragment" />
+            app:destination="@id/schoolDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_artistDetailFragment_self"
-            app:destination="@id/artistDetailFragment" />
+            app:destination="@id/artistDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpToSaveState="true"
+            app:restoreState="true" />
     </fragment>
     <fragment
         android:id="@+id/schoolDetailFragment"
         android:name="com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment"
         android:label="SchoolDetailFragment"
-        tools:layout="@layout/fragment_school_detail" >
+        tools:layout="@layout/fragment_school_detail">
         <action
             android:id="@+id/action_schoolDetailFragment_to_artistDetailFragment"
-            app:destination="@id/artistDetailFragment" />
+            app:destination="@id/artistDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <argument
             android:name="schoolId"
             app:argType="long" />
