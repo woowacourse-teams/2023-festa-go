@@ -9,4 +9,6 @@ public interface StageQueryInfoRepository extends Repository<StageQueryInfo, Lon
     StageQueryInfo save(StageQueryInfo stageQueryInfo);
 
     Optional<StageQueryInfo> findByStageId(Long stageId);
+
+    void deleteByStageId(Long stageId);
 }

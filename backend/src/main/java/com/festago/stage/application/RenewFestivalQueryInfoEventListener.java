@@ -9,6 +9,7 @@ import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.dto.event.StageCreatedEvent;
+import com.festago.stage.dto.event.StageDeletedEvent;
 import com.festago.stage.dto.event.StageUpdatedEvent;
 import com.festago.stage.repository.StageArtistRepository;
 import com.festago.stage.repository.StageRepository;
@@ -52,6 +53,13 @@ public class RenewFestivalQueryInfoEventListener {
     @EventListener
     @Transactional(propagation = Propagation.MANDATORY)
     public void stageUpdatedEventHandler(StageUpdatedEvent event) {
+        Stage stage = event.stage();
+        renewFestivalQueryInfo(stage);
+    }
+
+    @EventListener
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void stageDeletedEventHandler(StageDeletedEvent event) {
         Stage stage = event.stage();
         renewFestivalQueryInfo(stage);
     }

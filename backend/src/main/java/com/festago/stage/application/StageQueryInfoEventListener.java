@@ -8,6 +8,7 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.domain.StageQueryInfo;
 import com.festago.stage.dto.event.StageCreatedEvent;
+import com.festago.stage.dto.event.StageDeletedEvent;
 import com.festago.stage.dto.event.StageUpdatedEvent;
 import com.festago.stage.repository.StageArtistRepository;
 import com.festago.stage.repository.StageQueryInfoRepository;
@@ -62,5 +63,12 @@ public class StageQueryInfoEventListener {
         StageQueryInfo stageQueryInfo = stageQueryInfoRepository.findByStageId(stageId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.STAGE_NOT_FOUND));
         stageQueryInfo.updateArtist(artists, serializer);
+    }
+
+    @EventListener
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void stageDeletedEventHandler(StageDeletedEvent event) {
+        Stage stage = event.stage();
+        stageQueryInfoRepository.deleteByStageId(stage.getId());
     }
 }

@@ -37,10 +37,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
+    StageCreateService stageCreateService;
+
+    @Autowired
     StageUpdateService stageUpdateService;
 
     @Autowired
-    StageCreateService stageCreateService;
+    StageDeleteService stageDeleteService;
 
     @Autowired
     FestivalCreateService festivalCreateService;
@@ -259,6 +262,41 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
             assertThat(actual)
                 .map(Artist::getId)
                 .containsExactlyInAnyOrder(에픽하이_식별자, 소녀시대_식별자);
+        }
+    }
+
+    @Nested
+    class deleteStage {
+
+        Long 테코대학교_축제_공연_식별자;
+
+        @BeforeEach
+        void setUp() {
+            테코대학교_축제_공연_식별자 = stageCreateService.createStage(new StageCreateCommand(
+                테코대학교_축제_식별자,
+                festivalStartDate.atTime(18, 0),
+                now.minusWeeks(1),
+                List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자)
+            ));
+        }
+
+        @Test
+        void 공연을_삭제하면_StageQueryInfo가_삭제된다() {
+            // when
+            stageDeleteService.deleteStage(테코대학교_축제_공연_식별자);
+
+            // then
+            assertThat(stageQueryInfoRepository.findByStageId(테코대학교_축제_공연_식별자)).isEmpty();
+        }
+
+        @Test
+        void 공연을_삭제하면_FestivalQueryInfo가_갱신된다() {
+            // when
+            stageDeleteService.deleteStage(테코대학교_축제_공연_식별자);
+
+            // then
+            FestivalQueryInfo festivalQueryInfo = festivalInfoRepository.findByFestivalId(테코대학교_축제_식별자).get();
+            assertThat(festivalQueryInfo.getArtistInfo()).isEqualTo("[]");
         }
     }
 }
