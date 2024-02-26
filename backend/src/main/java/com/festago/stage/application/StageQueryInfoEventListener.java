@@ -11,6 +11,7 @@ import com.festago.stage.dto.event.StageCreatedEvent;
 import com.festago.stage.repository.StageArtistRepository;
 import com.festago.stage.repository.StageQueryInfoRepository;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -39,7 +40,7 @@ public class StageQueryInfoEventListener {
     }
 
     private List<Artist> getStageArtists(Long stageId) {
-        List<Long> artistIds = stageArtistRepository.findAllArtistIdByStageId(stageId);
+        Set<Long> artistIds = stageArtistRepository.findAllArtistIdByStageId(stageId);
         List<Artist> artists = artistRepository.findByIdIn(artistIds);
         if (artists.size() != artistIds.size()) {
             // TODO EventListener에서 예외가 나면 예외를 던질 필요가 있을까?

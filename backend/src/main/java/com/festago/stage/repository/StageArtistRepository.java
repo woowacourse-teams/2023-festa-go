@@ -13,8 +13,10 @@ public interface StageArtistRepository extends Repository<StageArtist, Long> {
 
     // TODO Custom 클래스를 새롭게 만들어서 JPQL을 작성할 필요가 있을까?
     @Query("select sa.artistId from StageArtist sa where sa.stageId = :stageId")
-    List<Long> findAllArtistIdByStageId(@Param("stageId") Long stageId);
+    Set<Long> findAllArtistIdByStageId(@Param("stageId") Long stageId);
 
     @Query("select sa.artistId from StageArtist sa where sa.stageId in :stageIds")
     Set<Long> findAllArtistIdByStageIdIn(@Param("stageIds") List<Long> stageIds);
+
+    void deleteByStageId(Long stageId);
 }

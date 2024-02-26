@@ -32,11 +32,11 @@ public class MemoryStageArtistRepository implements StageArtistRepository {
     }
 
     @Override
-    public List<Long> findAllArtistIdByStageId(Long stageId) {
+    public Set<Long> findAllArtistIdByStageId(Long stageId) {
         return memory.values().stream()
             .filter(stageArtist -> Objects.equals(stageArtist.getStageId(), stageId))
             .map(StageArtist::getArtistId)
-            .toList();
+            .collect(toUnmodifiableSet());
     }
 
     @Override
@@ -45,5 +45,10 @@ public class MemoryStageArtistRepository implements StageArtistRepository {
             .filter(stageArtist -> stageIds.contains(stageArtist.getStageId()))
             .map(StageArtist::getArtistId)
             .collect(toUnmodifiableSet());
+    }
+
+    @Override
+    public void deleteByStageId(Long stageId) {
+        memory.entrySet().removeIf(entry -> Objects.equals(entry.getValue().getStageId(), stageId));
     }
 }

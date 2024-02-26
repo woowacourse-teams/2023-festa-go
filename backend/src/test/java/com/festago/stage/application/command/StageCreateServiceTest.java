@@ -16,6 +16,7 @@ import com.festago.stage.repository.MemoryStageRepository;
 import com.festago.support.FestivalFixture;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -114,7 +115,7 @@ class StageCreateServiceTest {
             Long stageId = stageCreateService.createStage(command);
 
             // then
-            List<Long> stageArtists = stageArtistRepository.findAllArtistIdByStageId(stageId);
+            Set<Long> stageArtists = stageArtistRepository.findAllArtistIdByStageId(stageId);
             assertThat(stageArtists)
                 .containsExactlyInAnyOrder(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId());
         }
