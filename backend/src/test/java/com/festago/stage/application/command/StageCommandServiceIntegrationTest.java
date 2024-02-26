@@ -16,6 +16,7 @@ import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
 import com.festago.stage.domain.StageQueryInfo;
 import com.festago.stage.dto.command.StageCreateCommand;
+import com.festago.stage.dto.command.StageUpdateCommand;
 import com.festago.stage.repository.StageQueryInfoRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.TimeInstantProvider;
@@ -25,11 +26,18 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class StageCreateServiceIntegrationTest extends ApplicationIntegrationTest {
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@SuppressWarnings("NonAsciiCharacters")
+public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTest {
+
+    @Autowired
+    StageUpdateService stageUpdateService;
 
     @Autowired
     StageCreateService stageCreateService;
@@ -113,7 +121,7 @@ public class StageCreateServiceIntegrationTest extends ApplicationIntegrationTes
         }
 
         @Test
-        void 공연을_생성하면_FestivalQueryInfo가_새롭게_갱신된다() {
+        void 공연을_생성하면_FestivalQueryInfo가_갱신된다() {
             // given
             var command = new StageCreateCommand(
                 테코대학교_축제_식별자,
@@ -192,6 +200,65 @@ public class StageCreateServiceIntegrationTest extends ApplicationIntegrationTes
             assertThat(actual)
                 .map(Artist::getId)
                 .containsExactlyInAnyOrder(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자);
+        }
+    }
+
+    @Nested
+    class updateStage {
+
+        Long 테코대학교_축제_공연_식별자;
+
+        @BeforeEach
+        void setUp() {
+            테코대학교_축제_공연_식별자 = stageCreateService.createStage(new StageCreateCommand(
+                테코대학교_축제_식별자,
+                festivalStartDate.atTime(18, 0),
+                now.minusWeeks(1),
+                List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자)
+            ));
+        }
+
+        @Test
+        void 공연을_수정하면_StageQueryInfo가_갱신된다() throws Exception {
+            // given
+            var command = new StageUpdateCommand(
+                festivalStartDate.atTime(18, 0),
+                festivalStartDate.minusWeeks(1).atStartOfDay(),
+                List.of(에픽하이_식별자, 소녀시대_식별자)
+            );
+
+            // when
+            stageUpdateService.updateStage(테코대학교_축제_공연_식별자, command);
+
+            // then
+            StageQueryInfo stageQueryInfo = stageQueryInfoRepository.findByStageId(테코대학교_축제_공연_식별자).get();
+            List<Artist> actual = Arrays.asList(
+                objectMapper.readValue(stageQueryInfo.getArtistInfo(), Artist[].class)
+            );
+            assertThat(actual)
+                .map(Artist::getId)
+                .containsExactlyInAnyOrder(에픽하이_식별자, 소녀시대_식별자);
+        }
+
+        @Test
+        void 공연을_수정하면_FestivalQueryInfo가_갱신된다() throws Exception {
+            // given
+            var command = new StageUpdateCommand(
+                festivalStartDate.atTime(18, 0),
+                festivalStartDate.minusWeeks(1).atStartOfDay(),
+                List.of(에픽하이_식별자, 소녀시대_식별자)
+            );
+
+            // when
+            stageUpdateService.updateStage(테코대학교_축제_공연_식별자, command);
+
+            FestivalQueryInfo festivalQueryInfo = festivalInfoRepository.findByFestivalId(테코대학교_축제_식별자).get();
+            List<Artist> actual = Arrays.asList(
+                objectMapper.readValue(festivalQueryInfo.getArtistInfo(), Artist[].class)
+            );
+            assertThat(actual)
+                .map(Artist::getId)
+                .containsExactlyInAnyOrder(에픽하이_식별자, 소녀시대_식별자);
         }
     }
 }

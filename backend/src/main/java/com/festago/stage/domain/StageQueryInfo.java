@@ -55,6 +55,10 @@ public class StageQueryInfo {
         this.artistInfo = artistInfo;
     }
 
+    public void updateArtist(List<Artist> artists, ArtistsSerializer serializer) {
+        this.artistInfo = serializer.serialize(artists);
+    }
+
     public Long getId() {
         return id;
     }

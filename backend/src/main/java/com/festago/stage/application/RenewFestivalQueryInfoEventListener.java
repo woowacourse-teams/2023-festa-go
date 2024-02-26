@@ -9,6 +9,7 @@ import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.dto.event.StageCreatedEvent;
+import com.festago.stage.dto.event.StageUpdatedEvent;
 import com.festago.stage.repository.StageArtistRepository;
 import com.festago.stage.repository.StageRepository;
 import java.util.List;
@@ -46,5 +47,12 @@ public class RenewFestivalQueryInfoEventListener {
         FestivalQueryInfo festivalQueryInfo = festivalInfoRepository.findByFestivalId(festivalId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
         festivalQueryInfo.updateArtistInfo(artists, serializer);
+    }
+
+    @EventListener
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void stageUpdatedEventHandler(StageUpdatedEvent event) {
+        Stage stage = event.stage();
+        renewFestivalQueryInfo(stage);
     }
 }
