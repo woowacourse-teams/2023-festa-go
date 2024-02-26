@@ -27,7 +27,7 @@ class ArtistDetailViewModel @Inject constructor(
             runCatching {
                 _uiState.value = ArtistDetailUiState.Success(
                     artistRepository.loadArtistDetail(id).getOrThrow(),
-                    artistRepository.loadArtistStages(id, 20).getOrThrow().toUiState(),
+                    artistRepository.loadArtistFestivals(id, 20).getOrThrow().toUiState(),
                 )
             }.onFailure {
                 _uiState.value = ArtistDetailUiState.Error
