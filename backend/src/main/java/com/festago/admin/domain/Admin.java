@@ -61,14 +61,14 @@ public class Admin extends BaseTimeEntity {
 
     private void validateUsername(String username) {
         String fieldName = "username";
-        Validator.hasBlank(username, fieldName);
+        Validator.notBlank(username, fieldName);
         Validator.minLength(username, MIN_USERNAME_LENGTH, fieldName);
         Validator.maxLength(username, MAX_USERNAME_LENGTH, fieldName);
     }
 
     private void validatePassword(String password) {
         String fieldName = "password";
-        Validator.hasBlank(password, fieldName);
+        Validator.notBlank(password, fieldName);
         Validator.minLength(password, MIN_PASSWORD_LENGTH, fieldName);
         Validator.maxLength(password, MAX_PASSWORD_LENGTH, fieldName);
     }
