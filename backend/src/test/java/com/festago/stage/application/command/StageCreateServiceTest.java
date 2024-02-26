@@ -10,7 +10,6 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.MemoryFestivalRepository;
-import com.festago.stage.domain.StageArtist;
 import com.festago.stage.dto.command.StageCreateCommand;
 import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageRepository;
@@ -115,9 +114,8 @@ class StageCreateServiceTest {
             Long stageId = stageCreateService.createStage(command);
 
             // then
-            List<StageArtist> stageArtists = stageArtistRepository.findAllByStageId(stageId);
+            List<Long> stageArtists = stageArtistRepository.findAllArtistIdByStageId(stageId);
             assertThat(stageArtists)
-                .map(StageArtist::getArtistId)
                 .containsExactlyInAnyOrder(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId());
         }
     }

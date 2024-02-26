@@ -1,9 +1,12 @@
 package com.festago.stage.repository;
 
+import static java.util.stream.Collectors.toUnmodifiableSet;
+
 import com.festago.stage.domain.StageArtist;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.SneakyThrows;
@@ -29,9 +32,18 @@ public class MemoryStageArtistRepository implements StageArtistRepository {
     }
 
     @Override
-    public List<StageArtist> findAllByStageId(Long stageId) {
+    public List<Long> findAllArtistIdByStageId(Long stageId) {
         return memory.values().stream()
             .filter(stageArtist -> Objects.equals(stageArtist.getStageId(), stageId))
+            .map(StageArtist::getArtistId)
             .toList();
+    }
+
+    @Override
+    public Set<Long> findAllArtistIdByStageIdIn(List<Long> stageIds) {
+        return memory.values().stream()
+            .filter(stageArtist -> stageIds.contains(stageArtist.getStageId()))
+            .map(StageArtist::getArtistId)
+            .collect(toUnmodifiableSet());
     }
 }

@@ -2,6 +2,7 @@ package com.festago.artist.repository;
 
 import com.festago.artist.domain.Artist;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,5 +49,12 @@ public class MemoryArtistRepository implements ArtistRepository {
         return memory.values().stream()
             .filter(artist -> artistIds.contains(artist.getId()))
             .count();
+    }
+
+    @Override
+    public List<Artist> findByIdIn(Collection<Long> artistIds) {
+        return memory.values().stream()
+            .filter(artist -> artistIds.contains(artist.getId()))
+            .toList();
     }
 }

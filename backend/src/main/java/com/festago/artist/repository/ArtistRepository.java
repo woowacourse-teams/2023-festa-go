@@ -3,6 +3,7 @@ package com.festago.artist.repository;
 import com.festago.artist.domain.Artist;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.repository.Repository;
@@ -23,4 +24,6 @@ public interface ArtistRepository extends Repository<Artist, Long> {
     List<Artist> findAll();
 
     long countByIdIn(List<Long> artistIds);
+
+    List<Artist> findByIdIn(Collection<Long> artistIds);
 }
