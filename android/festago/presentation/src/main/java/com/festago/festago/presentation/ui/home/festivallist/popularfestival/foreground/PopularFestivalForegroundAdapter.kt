@@ -23,6 +23,9 @@ class PopularFestivalForegroundAdapter(festivals: List<FestivalItemUiState> = li
     override fun getItemCount(): Int = Int.MAX_VALUE
 
     fun submitList(festivals: List<FestivalItemUiState>) {
+        if (_festivals.toList() == festivals) {
+            return
+        }
         _festivals.clear()
         _festivals.addAll(festivals)
         notifyDataSetChanged()

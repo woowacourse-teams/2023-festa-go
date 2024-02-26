@@ -86,16 +86,24 @@ class PopularFestivalViewPagerAdapter(
     }
 
     fun submitList(festivals: List<FestivalItemUiState>) {
+        val lastFestivals = popularFestivals.toList()
         popularFestivals.clear()
         popularFestivals.addAll(festivals)
         foregroundAdapter.submitList(festivals)
         backgroundAdapter.submitList(festivals)
+
+        if (lastFestivals != festivals) {
+            initItemPosition()
+        }
+    }
+
+    private fun initItemPosition() {
         val initialPosition = Int.MAX_VALUE / 2 - (Int.MAX_VALUE / 2 % popularFestivals.size)
         foregroundViewPager.setCurrentItem(initialPosition, false)
     }
 
     companion object {
-        private const val ALREADY_LOAD_POSITION_CONDITION = 2
+        private const val ALREADY_LOAD_POSITION_CONDITION = 4
         private const val RATE_SELECT_BY_UNSELECT = 0.81f
         private const val PAGE_LIMIT = 4
         private const val IMAGE_SIZE = 220.0f
