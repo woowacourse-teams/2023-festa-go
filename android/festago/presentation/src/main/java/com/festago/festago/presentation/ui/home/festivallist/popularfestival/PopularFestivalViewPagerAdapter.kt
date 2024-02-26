@@ -103,7 +103,7 @@ class PopularFestivalViewPagerAdapter(
     }
 
     companion object {
-        private const val ALREADY_LOAD_POSITION_CONDITION = 4
+        private const val ALREADY_LOAD_POSITION_CONDITION = 2
         private const val RATE_SELECT_BY_UNSELECT = 0.81f
         private const val PAGE_LIMIT = 4
         private const val IMAGE_SIZE = 220.0f
