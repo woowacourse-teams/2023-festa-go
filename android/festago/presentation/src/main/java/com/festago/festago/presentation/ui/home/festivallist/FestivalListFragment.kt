@@ -20,6 +20,7 @@ import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalLi
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,6 +76,9 @@ class FestivalListFragment : Fragment() {
         binding.srlFestivalList.setOnRefreshListener {
             vm.loadFestivals()
             binding.srlFestivalList.isRefreshing = false
+        }
+        binding.ivSearch.setOnClickListener { // 임시 연결
+            showSchoolDetail()
         }
     }
 
@@ -139,6 +143,13 @@ class FestivalListFragment : Fragment() {
                 },
             ) + uiState.festivals,
         )
+    }
+
+    private fun showSchoolDetail() {
+        activity?.supportFragmentManager!!.beginTransaction()
+            .replace(R.id.fcvHomeContainer, SchoolDetailFragment.newInstance(0))
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {
