@@ -27,7 +27,6 @@ public class StageService {
         Festival festival = festivalRepository.getOrThrow(request.festivalId());
         Stage newStage = stageRepository.save(new Stage(
             request.startTime(),
-            request.lineUp(),
             request.ticketOpenTime(),
             festival));
 
@@ -47,7 +46,6 @@ public class StageService {
     public void update(Long stageId, StageUpdateRequest request) {
         Stage stage = findStage(stageId);
         stage.changeTime(request.startTime(), request.ticketOpenTime());
-        stage.changeLineUp(request.lineUp());
     }
 
     public void delete(Long stageId) {
