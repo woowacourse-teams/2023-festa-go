@@ -21,4 +21,6 @@ public interface ArtistRepository extends Repository<Artist, Long> {
     Optional<Artist> findById(Long id);
 
     List<Artist> findAll();
+
+    long countByIdIn(List<Long> artistIds);
 }
