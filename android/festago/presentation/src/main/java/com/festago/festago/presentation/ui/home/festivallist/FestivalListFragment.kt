@@ -126,19 +126,27 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
-        festivalListAdapter.submitList(
-            listOf(
-                uiState.popularFestivals,
-                FestivalTabUiState {
-                    val festivalFilter = when (it) {
-                        0 -> FestivalFilterUiState.PROGRESS
-                        1 -> FestivalFilterUiState.PLANNED
-                        else -> FestivalFilterUiState.PROGRESS
-                    }
-                    vm.loadFestivals(festivalFilter)
-                },
-            ) + uiState.festivals,
+        val items = uiState.getItems()
+        festivalListAdapter.submitList(items)
+    }
+
+    private fun FestivalListUiState.Success.getItems(): List<Any> {
+        val items = mutableListOf<Any>()
+        if (popularFestivalUiState.festivals.isNotEmpty()) {
+            items.add(popularFestivalUiState)
+        }
+        items.add(
+            FestivalTabUiState {
+                val festivalFilter = when (it) {
+                    0 -> FestivalFilterUiState.PROGRESS
+                    1 -> FestivalFilterUiState.PLANNED
+                    else -> FestivalFilterUiState.PROGRESS
+                }
+                vm.loadFestivals(festivalFilter)
+            },
         )
+        items.addAll(festivals)
+        return items.toList()
     }
 
     override fun onDestroyView() {

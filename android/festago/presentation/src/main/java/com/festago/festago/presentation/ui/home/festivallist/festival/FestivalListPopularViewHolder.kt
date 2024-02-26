@@ -30,7 +30,7 @@ class FestivalListPopularViewHolder(val binding: ItemFestivalListPopularBinding)
 
     fun bind(popularFestivalUiState: PopularFestivalUiState) {
         binding.tvPopularFestivalTitle.text = popularFestivalUiState.title
-        popularFestivalViewPager.submitList(popularFestivalUiState.popularFestivals)
+        popularFestivalViewPager.submitList(popularFestivalUiState.festivals)
     }
 
     companion object {
