@@ -29,11 +29,11 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class StageUpdateServiceTest {
 
-    MemoryStageRepository StageRepository = new MemoryStageRepository();
+    MemoryStageRepository stageRepository = new MemoryStageRepository();
     MemoryArtistRepository artistRepository = new MemoryArtistRepository();
     MemoryStageArtistRepository stageArtistRepository = new MemoryStageArtistRepository();
     StageUpdateService stageUpdateService = new StageUpdateService(
-        StageRepository,
+        stageRepository,
         artistRepository,
         stageArtistRepository,
         mock()
@@ -49,12 +49,13 @@ class StageUpdateServiceTest {
 
     @BeforeEach
     void setUp() {
-        StageRepository.clear();
+        stageRepository.clear();
         테코대학교_축제 = FestivalFixture.festival()
+            .name("테코대학교 축제")
             .startDate(stageStartTime.toLocalDate())
             .endDate(stageStartTime.toLocalDate().plusDays(2))
             .build();
-        테코대학교_축제_공연 = StageRepository.save(
+        테코대학교_축제_공연 = stageRepository.save(
             StageFixture.stage()
                 .festival(테코대학교_축제)
                 .startTime(stageStartTime)
@@ -116,7 +117,7 @@ class StageUpdateServiceTest {
             stageUpdateService.updateStage(테코대학교_축제_공연.getId(), command);
 
             // then
-            Stage actual = StageRepository.findById(테코대학교_축제_공연.getId()).get();
+            Stage actual = stageRepository.findById(테코대학교_축제_공연.getId()).get();
             assertThat(actual.getStartTime()).isEqualTo(command.startTime());
             assertThat(actual.getTicketOpenTime()).isEqualTo(command.ticketOpenTime());
         }
