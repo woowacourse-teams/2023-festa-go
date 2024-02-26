@@ -13,7 +13,7 @@
 
         <variable
             name="item"
-            type="com.festago.festago.presentation.ui.artistdetail.uistate.StageUiState" />
+            type="com.festago.festago.presentation.ui.artistdetail.uistate.FestivalItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

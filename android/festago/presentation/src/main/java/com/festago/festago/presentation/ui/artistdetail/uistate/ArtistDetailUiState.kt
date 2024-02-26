@@ -9,6 +9,6 @@ sealed interface ArtistDetailUiState {
 
     data class Success(
         val artist: ArtistDetail,
-        val stages: List<StageUiState>,
+        val stages: List<FestivalItemUiState>,
     ) : ArtistDetailUiState
 }

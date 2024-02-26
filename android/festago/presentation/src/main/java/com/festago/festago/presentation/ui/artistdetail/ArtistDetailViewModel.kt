@@ -6,7 +6,7 @@ import com.festago.festago.domain.model.artist.Stages
 import com.festago.festago.domain.repository.ArtistRepository
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistUiState
-import com.festago.festago.presentation.ui.artistdetail.uistate.StageUiState
+import com.festago.festago.presentation.ui.artistdetail.uistate.FestivalItemUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +36,7 @@ class ArtistDetailViewModel @Inject constructor(
     }
 
     private fun Stages.toUiState() = this.stage.map {
-        StageUiState(
+        FestivalItemUiState(
             id = it.id,
             name = it.name,
             imageUrl = it.imageUrl,
