@@ -31,14 +31,6 @@ class StageCreateServiceTest {
     MemoryFestivalRepository festivalRepository = new MemoryFestivalRepository();
     MemoryArtistRepository artistRepository = new MemoryArtistRepository();
     MemoryStageArtistRepository stageArtistRepository = new MemoryStageArtistRepository();
-
-    LocalDate festivalStartDate = LocalDate.parse("2077-06-30");
-    LocalDate festivalEndDate = LocalDate.parse("2077-07-02");
-    Festival 테코대학교_축제;
-    Artist 에픽하이;
-    Artist 소녀시대;
-    Artist 뉴진스;
-
     StageCreateService stageCreateService = new StageCreateService(
         stageRepository,
         festivalRepository,
@@ -46,6 +38,13 @@ class StageCreateServiceTest {
         stageArtistRepository,
         mock()
     );
+
+    LocalDate festivalStartDate = LocalDate.parse("2077-06-30");
+    LocalDate festivalEndDate = LocalDate.parse("2077-07-02");
+    Festival 테코대학교_축제;
+    Artist 에픽하이;
+    Artist 소녀시대;
+    Artist 뉴진스;
 
     @BeforeEach
     void setUp() {
