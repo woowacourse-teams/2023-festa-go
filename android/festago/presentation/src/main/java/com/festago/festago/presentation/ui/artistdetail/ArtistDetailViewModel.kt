@@ -2,7 +2,7 @@ package com.festago.festago.presentation.ui.artistdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.festago.festago.domain.model.artist.Stages
+import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.repository.ArtistRepository
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistUiState
@@ -35,7 +35,7 @@ class ArtistDetailViewModel @Inject constructor(
         }
     }
 
-    private fun Stages.toUiState() = this.stage.map {
+    private fun FestivalsPage.toUiState() = festivals.map {
         FestivalItemUiState(
             id = it.id,
             name = it.name,

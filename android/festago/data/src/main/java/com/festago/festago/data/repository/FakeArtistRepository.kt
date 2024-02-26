@@ -37,11 +37,11 @@ class FakeArtistRepository @Inject constructor() : ArtistRepository {
             ),
         )
 
-    override suspend fun loadArtistStages(id: Long, size: Int): Result<Stages> =
+    override suspend fun loadArtistFestivals(id: Long, size: Int): Result<FestivalsPage> =
         Result.success(
-            Stages(
-                false,
-                (0..10).flatMap {
+            FestivalsPage(
+                isLastPage = false,
+                festivals = (0..10).flatMap {
                     listOf(
                         Festival(
                             1,
