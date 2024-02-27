@@ -3,8 +3,8 @@ package com.festago.festago.data.repository
 import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.artist.ArtistDetail
 import com.festago.festago.domain.model.artist.ArtistMedia
-import com.festago.festago.domain.model.artist.Stages
 import com.festago.festago.domain.model.festival.Festival
+import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.school.School
 import com.festago.festago.domain.repository.ArtistRepository
 import java.time.LocalDate
