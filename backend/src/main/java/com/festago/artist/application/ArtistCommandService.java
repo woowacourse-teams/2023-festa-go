@@ -16,13 +16,14 @@ public class ArtistCommandService {
     private final ArtistRepository artistRepository;
 
     public Long save(ArtistCreateRequest request) {
-        Artist artist = artistRepository.save(new Artist(request.name(), request.profileImage()));
+        Artist artist = artistRepository.save(
+            new Artist(request.name(), request.profileImage(), request.backgroundImageUrl()));
         return artist.getId();
     }
 
     public void update(ArtistUpdateRequest request, Long artistId) {
         Artist artist = artistRepository.getOrThrow(artistId);
-        artist.update(request.name(), request.profileImage());
+        artist.update(request.name(), request.profileImage(), request.backgroundImageUrl());
     }
 
     public void delete(Long artistId) {
