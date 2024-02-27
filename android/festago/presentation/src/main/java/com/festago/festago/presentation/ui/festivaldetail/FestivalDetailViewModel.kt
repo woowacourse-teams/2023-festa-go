@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
+import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.festival.FestivalDetail
 import com.festago.festago.domain.model.stage.Stage
 import com.festago.festago.domain.repository.FestivalRepository
+import com.festago.festago.presentation.ui.festivaldetail.uiState.ArtistItemUiState
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalUiState
 import com.festago.festago.presentation.ui.festivaldetail.uiState.StageItemUiState
@@ -56,7 +58,13 @@ class FestivalDetailViewModel @Inject constructor(
     private fun Stage.toUiState() = StageItemUiState(
         id = id,
         startDateTime = startDateTime,
-        artists = artists,
+        artists = artists.map { it.toUiState() },
+    )
+
+    private fun Artist.toUiState() = ArtistItemUiState(
+        id = id,
+        name = name,
+        imageUrl = imageUrl,
     )
 
     companion object {
