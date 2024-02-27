@@ -2,13 +2,17 @@ package com.festago.festago.data.repository
 
 import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.festival.Festival
+import com.festago.festago.domain.model.festival.FestivalDetail
 import com.festago.festago.domain.model.festival.FestivalFilter
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.festival.PopularFestivals
 import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.domain.model.school.School
+import com.festago.festago.domain.model.social.SocialMedia
+import com.festago.festago.domain.model.stage.Stage
 import com.festago.festago.domain.repository.FestivalRepository
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class FakeFestivalRepository @Inject constructor() : FestivalRepository {
@@ -61,6 +65,64 @@ class FakeFestivalRepository @Inject constructor() : FestivalRepository {
                 ),
             )
         }
+    }
+
+    override suspend fun loadFestivalDetail(id: Long): Result<FestivalDetail> {
+        return Result.success(
+            FestivalDetail(
+                id = 1L,
+                name = "대동제",
+                startDate = LocalDate.now().minusDays(1L),
+                endDate = LocalDate.now().plusDays(1L),
+                posterImageUrl = "https://scontent-lax3-1.xx.fbcdn.net/v/t39.30808-6/279157499_2243399062505940_3971514424591662251_n.jpg?stp=dst-jpg_p526x296&_nc_cat=109&ccb=1-7&_nc_sid=dd5e9f&_nc_ohc=47PXoJjSATcAX8RDKYA&_nc_ht=scontent-lax3-1.xx&oh=00_AfClc8Z5CvQf1P8eZrt1H0Zp0QLqB-1lMhWJJPVP6SYUxg&oe=65E188C8",
+                school = School(id = 2L, name = "부경대학교", imageUrl = ""),
+                socialMedias = listOf(
+                    SocialMedia(
+                        type = "INSTAGRAM",
+                        name = "부경대학교 인스타",
+                        logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png",
+                        url = "https://www.instagram.com/25th_solution/",
+                    ),
+                    SocialMedia(
+                        type = "FACEBOOK",
+                        name = "부경대학교 페이스북",
+                        logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png",
+                        url = "https://www.facebook.com/23rdemotion/",
+                    ),
+                ),
+                stages = listOf(
+                    Stage(
+                        id = 1L,
+                        startDateTime = LocalDateTime.now(),
+                        artists = listOf(
+                            Artist(id = 1L, "BTS", ""),
+                            Artist(id = 2L, "싸이", ""),
+                            Artist(id = 10L, "마마무", ""),
+                            Artist(id = 11L, "블랙핑크", ""),
+                        ),
+                    ),
+                    Stage(
+                        id = 1L,
+                        startDateTime = LocalDateTime.now(),
+                        artists = listOf(
+                            Artist(id = 3L, "아이유", ""),
+                            Artist(id = 4L, "AKMU", ""),
+                            Artist(id = 5L, "뉴진스", ""),
+                            Artist(id = 6L, "비비", ""),
+                        ),
+                    ),
+                    Stage(
+                        id = 1L,
+                        startDateTime = LocalDateTime.now(),
+                        artists = listOf(
+                            Artist(id = 7L, "TWS", ""),
+                            Artist(id = 8L, "소녀시대", ""),
+                            Artist(id = 9L, "르세라핌", ""),
+                        ),
+                    ),
+                ),
+            ),
+        )
     }
 
     companion object {

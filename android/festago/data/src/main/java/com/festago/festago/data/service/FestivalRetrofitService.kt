@@ -1,5 +1,6 @@
 package com.festago.festago.data.service
 
+import com.festago.festago.data.dto.festival.FestivalDetailResponse
 import com.festago.festago.data.dto.festival.FestivalsResponse
 import com.festago.festago.data.dto.festival.PopularFestivalsResponse
 import retrofit2.Response
@@ -19,4 +20,7 @@ interface FestivalRetrofitService {
         @Query("lastStartDate") lastStartDate: LocalDate?,
         @Query("size") size: Int?,
     ): Response<FestivalsResponse>
+
+    @GET("api/v1/popular/festivals/")
+    suspend fun getFestivalDetail(id: Long): Response<FestivalDetailResponse>
 }
