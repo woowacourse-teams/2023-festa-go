@@ -19,9 +19,11 @@ import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Slf4j
 public class ArtistSearchV1QueryDslRepository extends QueryDslRepositorySupport {
 
     public ArtistSearchV1QueryDslRepository() {
@@ -40,10 +42,10 @@ public class ArtistSearchV1QueryDslRepository extends QueryDslRepositorySupport 
     }
 
     private Optional<ArtistsSearchV1Response> searchByEqual(String keyword) {
-        return searchByExpression(artist.name.eq(keyword));
+        return searchByExpression(artist.name.eq(keyword), keyword);
     }
 
-    private Optional<ArtistsSearchV1Response> searchByExpression(BooleanExpression expression) {
+    private Optional<ArtistsSearchV1Response> searchByExpression(BooleanExpression expression, String keyword) {
         List<ArtistSearchV1Response> response = selectFrom(artist)
             .leftJoin(stageArtist).on(expression.and(stageArtist.artistId.eq(artist.id)))
             .leftJoin(stage).on(stage.id.eq(stageArtist.stageId))
@@ -72,10 +74,14 @@ public class ArtistSearchV1QueryDslRepository extends QueryDslRepositorySupport 
             return Optional.empty();
         }
 
+        if (response.size() > 5) {
+            log.warn("{} 키워드로 검색시 3개를 초과한 검색 결괄르 반환하였습니다", keyword);
+        }
+
         return Optional.of(new ArtistsSearchV1Response(response));
     }
 
     private Optional<ArtistsSearchV1Response> searchByLike(String keyword) {
-        return searchByExpression(artist.name.contains(keyword));
+        return searchByExpression(artist.name.contains(keyword), keyword);
     }
 }
