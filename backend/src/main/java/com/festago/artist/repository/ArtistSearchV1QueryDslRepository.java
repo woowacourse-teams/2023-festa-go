@@ -70,8 +70,8 @@ public class ArtistSearchV1QueryDslRepository extends QueryDslRepositorySupport 
 
         if (response.isEmpty()) {
             return Optional.empty();
-
         }
+
         return Optional.of(new ArtistsSearchV1Response(response));
     }
 
