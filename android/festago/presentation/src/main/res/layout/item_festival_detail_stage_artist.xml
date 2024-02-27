@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="artist"
+            type="com.festago.festago.presentation.ui.festivaldetail.uiState.ArtistItemUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvFestivalImage"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginHorizontal="8dp"
+            app:cardCornerRadius="1000dp"
+            app:cardElevation="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivFestivalImage"
+                imageUrl="@{artist.imageUrl}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_launcher_background" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvFestivalName"
+            style="@style/B3Medium14Lh14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{artist.name}"
+            android:textColor="@color/contents_gray_07"
+            app:layout_constraintEnd_toEndOf="@id/cvFestivalImage"
+            app:layout_constraintStart_toStartOf="@id/cvFestivalImage"
+            app:layout_constraintTop_toBottomOf="@id/cvFestivalImage"
+            tools:text="윤하" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
