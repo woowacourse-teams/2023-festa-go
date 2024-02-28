@@ -17,12 +17,12 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{()-> item.onFestivalDetail.invoke(item.id)}"
         android:layout_width="match_parent"
         android:layout_height="132dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_festival_list_festival"
-        android:onClick="@{() -> item.onFestivalDetail.invoke(item.id)}">
+        android:background="@drawable/bg_festival_list_festival">
 
 
         <ImageView
