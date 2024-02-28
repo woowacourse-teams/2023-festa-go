@@ -79,8 +79,9 @@ class FestivalDetailFragment : Fragment() {
         uiState.festival.socialMedias.forEach { media ->
             with(ItemMediaBinding.inflate(layoutInflater, binding.llcFestivalSocialMedia, false)) {
                 imageUrl = media.logoUrl
-                ivImage.setOnClickListener { startBrowser(media.url) }
-                binding.llcFestivalSocialMedia.addView(ivImage)
+                name = media.name
+                clMedia.setOnClickListener { startBrowser(media.url) }
+                binding.llcFestivalSocialMedia.addView(clMedia)
             }
         }
     }

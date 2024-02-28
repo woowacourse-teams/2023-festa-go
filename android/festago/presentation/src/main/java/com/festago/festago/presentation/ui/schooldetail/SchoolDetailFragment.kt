@@ -80,8 +80,9 @@ class SchoolDetailFragment : Fragment() {
         uiState.schoolInfo.socialMedia.forEach { media ->
             with(ItemMediaBinding.inflate(layoutInflater, binding.llcSchoolSocialMedia, false)) {
                 imageUrl = media.logoUrl
-                ivImage.setOnClickListener { startBrowser(media.url) }
-                binding.llcSchoolSocialMedia.addView(ivImage)
+                name = media.name
+                clMedia.setOnClickListener { startBrowser(media.url) }
+                binding.llcSchoolSocialMedia.addView(clMedia)
             }
         }
     }

@@ -22,8 +22,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_festival_list_festival"
-        tools:layout_height="132dp"
-        tools:layout_width="328dp">
+        android:onClick="@{() -> item.onFestivalDetail.invoke(item.id)}">
 
 
         <ImageView
@@ -45,9 +44,9 @@
             android:layout_width="56dp"
             android:layout_height="24dp"
             android:background="#FFFA1273"
-            android:visibility="@{LocalDate.now().compareTo(item.endDate) &lt;= 0 ? View.VISIBLE : View.GONE}"
             android:gravity="center"
             android:textColor="@color/background_gray_01"
+            android:visibility="@{LocalDate.now().compareTo(item.endDate) &lt;= 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="D-1" />
