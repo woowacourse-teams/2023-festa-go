@@ -93,7 +93,7 @@
 
             <TextView
                 android:id="@+id/tvFestivalName"
-                style="@style/H1Bold20Lh20"
+                style="@style/H2Bold20Lh24"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
