@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivityHomeBinding
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailFragment
 import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragment
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
@@ -63,12 +64,14 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initBackStackListener() {
         supportFragmentManager.addOnBackStackChangedListener {
-            val fragment = supportFragmentManager.findFragmentById(R.id.fcvHomeContainer)
-            if (fragment is ArtistDetailFragment) {
-                setStatusBarMode(isLight = false, backgroundColor = Color.TRANSPARENT)
-            } else {
-                setStatusBarMode(isLight = true, backgroundColor = Color.TRANSPARENT)
+            val isLight = when (supportFragmentManager.findFragmentById(R.id.fcvHomeContainer)) {
+                is ArtistDetailFragment,
+                is FestivalDetailFragment,
+                -> true
+
+                else -> false
             }
+            setStatusBarMode(isLight = isLight, backgroundColor = Color.TRANSPARENT)
         }
     }
 
@@ -109,7 +112,8 @@ class HomeActivity : AppCompatActivity() {
         var targetFragment = supportFragmentManager.findFragmentByTag(tag)
 
         if (targetFragment == null) {
-            targetFragment = supportFragmentManager.fragmentFactory.instantiate(classLoader, tag)
+            targetFragment =
+                supportFragmentManager.fragmentFactory.instantiate(classLoader, tag)
             fragmentTransaction.add(R.id.fcvHomeContainer, targetFragment, tag)
         } else {
             fragmentTransaction.show(targetFragment)

@@ -1,6 +1,7 @@
 package com.festago.festago.presentation.ui.festivaldetail
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -74,6 +75,7 @@ class FestivalDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: FestivalDetailUiState.Success) {
         binding.successUiState = uiState
+        binding.ivFestivalBackground.setColorFilter(Color.parseColor("#66000000"))
         adapter.submitList(uiState.stages)
         binding.llcFestivalSocialMedia.removeAllViews()
         uiState.festival.socialMedias.forEach { media ->
