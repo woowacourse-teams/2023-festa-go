@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
@@ -61,6 +62,11 @@ class FestivalListFragment : Fragment() {
             vm.uiState.collect {
                 binding.uiState = it
                 updateUi(it)
+            }
+        }
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect {
+                handleEvent(it)
             }
         }
     }
@@ -126,6 +132,18 @@ class FestivalListFragment : Fragment() {
             -> Unit
 
             is FestivalListUiState.Success -> handleSuccess(uiState)
+        }
+    }
+
+    private fun handleEvent(event: FestivalListEvent) {
+        when (event) {
+            is FestivalListEvent.ShowFestivalDetail -> {
+                requireActivity().supportFragmentManager.commit {
+                    add(R.id.fcvHomeContainer, FestivalDetailFragment.newInstance(event.festivalId))
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
+                    addToBackStack(null)
+                }
+            }
         }
     }
 

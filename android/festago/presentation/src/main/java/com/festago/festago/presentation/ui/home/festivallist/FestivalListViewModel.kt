@@ -15,8 +15,11 @@ import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFest
 import com.festago.festago.presentation.ui.home.festivallist.uistate.SchoolUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,6 +32,9 @@ class FestivalListViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<FestivalListUiState>(FestivalListUiState.Loading)
     val uiState: StateFlow<FestivalListUiState> = _uiState.asStateFlow()
+
+    private val _event = MutableSharedFlow<FestivalListEvent>()
+    val event: SharedFlow<FestivalListEvent> = _event.asSharedFlow()
 
     private var festivalFilter: FestivalFilter = FestivalFilter.PROGRESS
 
@@ -82,7 +88,14 @@ class FestivalListViewModel @Inject constructor(
         artists = artists.map { artist ->
             ArtistUiState(artist.id, artist.name, artist.imageUrl)
         },
+        ::showFestivalDetail,
     )
+
+    private fun showFestivalDetail(festivalId: Long) {
+        viewModelScope.launch {
+            _event.emit(FestivalListEvent.ShowFestivalDetail(festivalId))
+        }
+    }
 
     companion object {
         private const val KEY_LOAD_FESTIVAL = "KEY_LOAD_FESTIVAL"
