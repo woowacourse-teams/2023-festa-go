@@ -13,7 +13,7 @@ object FakeFestivals {
 
     val festivalDetail = FestivalDetail(
         id = 1L,
-        name = "대동제",
+        name = "부경대 대동제",
         startDate = LocalDate.now(),
         endDate = LocalDate.now().plusDays(5L),
         posterImageUrl = "https://mblogthumb-phinf.pstatic.net/MjAyMzA1MjNfMTMx/MDAxNjg0ODIwNzY5NzQ5.MuYItN1HCOQUcADB6B7ua0SO9Au_QNNk01-6yZkcTH0g.wxSjluY-Glq20JIojs7OuScLQWh6c_sQsoW5xXqiM7Ag.JPEG.chummilmil99/SE-126908ba-0f82-4903-91c5-695db78a98e9.jpg?type=w800",
