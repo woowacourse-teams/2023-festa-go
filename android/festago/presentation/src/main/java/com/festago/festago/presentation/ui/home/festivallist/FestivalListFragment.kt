@@ -67,7 +67,7 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initView() {
-        vm.loadFestivals()
+        vm.initFestivalList()
         initViewPager()
         initRecyclerView()
         initRefresh()
@@ -75,7 +75,7 @@ class FestivalListFragment : Fragment() {
 
     private fun initRefresh() {
         binding.srlFestivalList.setOnRefreshListener {
-            vm.loadFestivals()
+            vm.initFestivalList()
             binding.srlFestivalList.isRefreshing = false
         }
         binding.ivSearch.setOnClickListener { // 임시 연결

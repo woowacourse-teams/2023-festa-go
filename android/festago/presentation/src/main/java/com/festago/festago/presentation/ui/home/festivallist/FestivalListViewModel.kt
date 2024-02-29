@@ -32,16 +32,11 @@ class FestivalListViewModel @Inject constructor(
 
     private var festivalFilter: FestivalFilter = FestivalFilter.PROGRESS
 
-    fun loadFestivals(festivalFilterUiState: FestivalFilterUiState? = null) {
+    fun initFestivalList() {
         viewModelScope.launch {
-            val currentFestivals = getCurrentFestivals(festivalFilterUiState)
             val deferredPopularFestivals = async { festivalRepository.loadPopularFestivals() }
             val deferredFestivals = async {
-                festivalRepository.loadFestivals(
-                    festivalFilter = festivalFilter,
-                    lastFestivalId = currentFestivals.lastOrNull()?.id,
-                    lastStartDate = currentFestivals.lastOrNull()?.startDate,
-                )
+                festivalRepository.loadFestivals(festivalFilter = festivalFilter)
             }
             runCatching {
                 val festivalsPage = deferredFestivals.await().getOrThrow()
@@ -52,7 +47,7 @@ class FestivalListViewModel @Inject constructor(
                         title = popularFestivals.title,
                         festivals = popularFestivals.festivals.map { it.toUiState() },
                     ),
-                    festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
+                    festivals = festivalsPage.festivals.map { it.toUiState() },
                     festivalFilter = festivalFilter.toUiState(),
                     isLastPage = festivalsPage.isLastPage,
                 )
@@ -61,6 +56,30 @@ class FestivalListViewModel @Inject constructor(
                 analyticsHelper.logNetworkFailure(
                     key = KEY_LOAD_FESTIVAL,
                     value = it.message.toString(),
+                )
+            }
+        }
+    }
+
+    fun loadFestivals(festivalFilterUiState: FestivalFilterUiState? = null) {
+        val successUiState = uiState.value as? FestivalListUiState.Success ?: return
+
+        viewModelScope.launch {
+            val currentFestivals = getCurrentFestivals(festivalFilterUiState)
+
+            festivalRepository.loadFestivals(
+                festivalFilter = festivalFilter,
+                lastFestivalId = currentFestivals.lastOrNull()?.id,
+                lastStartDate = currentFestivals.lastOrNull()?.startDate,
+            ).onSuccess { festivalsPage ->
+                _uiState.value = FestivalListUiState.Success(
+                    PopularFestivalUiState(
+                        title = successUiState.popularFestivalUiState.title,
+                        festivals = successUiState.popularFestivalUiState.festivals,
+                    ),
+                    festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
+                    festivalFilter = festivalFilter.toUiState(),
+                    isLastPage = festivalsPage.isLastPage,
                 )
             }
         }
