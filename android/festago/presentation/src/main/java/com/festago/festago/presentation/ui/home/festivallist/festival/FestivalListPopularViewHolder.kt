@@ -22,13 +22,15 @@ class FestivalListPopularViewHolder(val binding: ItemFestivalListPopularBinding)
     init {
         TabLayoutMediator(
             binding.tlDotIndicator,
-            binding.vpPopularFestivalForeground,
-        ) { tab, position -> }.attach()
+            binding.vpPopularFestivalBackground,
+        ) { tab, position ->
+            tab.view.isClickable = false
+        }.attach()
     }
 
     fun bind(popularFestivalUiState: PopularFestivalUiState) {
         binding.tvPopularFestivalTitle.text = popularFestivalUiState.title
-        popularFestivalViewPager.submitList(popularFestivalUiState.popularFestivals)
+        popularFestivalViewPager.submitList(popularFestivalUiState.festivals)
     }
 
     companion object {

@@ -34,12 +34,14 @@ public class AdminArtistV1Controller {
     public ResponseEntity<Void> create(@RequestBody @Valid ArtistCreateRequest request) {
         Long artistId = artistCommandService.save(request);
         return ResponseEntity.created(URI.create("/admin/api/v1/artists/" + artistId))
-                .build();
+            .build();
     }
 
     @PutMapping("/{artistId}")
-    public ResponseEntity<Void> update(@RequestBody @Valid ArtistUpdateRequest request,
-                                       @PathVariable Long artistId) {
+    public ResponseEntity<Void> update(
+        @RequestBody @Valid ArtistUpdateRequest request,
+        @PathVariable Long artistId
+    ) {
         artistCommandService.update(request, artistId);
         return ResponseEntity.ok().build();
     }

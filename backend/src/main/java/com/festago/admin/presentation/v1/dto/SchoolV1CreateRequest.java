@@ -2,19 +2,32 @@ package com.festago.admin.presentation.v1.dto;
 
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
+@Builder
 public record SchoolV1CreateRequest(
-    @NotBlank(message = "name은 공백일 수 없습니다.")
+    @NotBlank
     String name,
-    @NotBlank(message = "domain은 공백일 수 없습니다.")
+    @NotBlank
     String domain,
-    @NotNull(message = "region은 null일 수 없습니다.")
-    SchoolRegion region
+    @NotNull
+    SchoolRegion region,
+    @Nullable
+    String logoUrl,
+    @Nullable
+    String backgroundImageUrl
 ) {
 
     public SchoolCreateCommand toCommand() {
-        return new SchoolCreateCommand(name, domain, region);
+        return SchoolCreateCommand.builder()
+            .name(name)
+            .domain(domain)
+            .region(region)
+            .logoUrl(logoUrl)
+            .backgroundImageUrl(backgroundImageUrl)
+            .build();
     }
 }

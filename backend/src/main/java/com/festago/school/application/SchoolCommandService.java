@@ -3,7 +3,6 @@ package com.festago.school.application;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.school.domain.School;
-import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
 import com.festago.school.dto.SchoolUpdateCommand;
 import com.festago.school.repository.SchoolRepository;
@@ -20,15 +19,14 @@ public class SchoolCommandService {
     private final SchoolRepository schoolRepository;
 
     public Long createSchool(SchoolCreateCommand command) {
-        String domain = command.domain();
-        String name = command.name();
-        SchoolRegion region = command.region();
-        validateCreate(domain, name);
-        School school = schoolRepository.save(new School(domain, name, region));
+        validateCreate(command);
+        School school = schoolRepository.save(command.toDomain());
         return school.getId();
     }
 
-    private void validateCreate(String domain, String name) {
+    private void validateCreate(SchoolCreateCommand command) {
+        String domain = command.domain();
+        String name = command.name();
         if (schoolRepository.existsByDomain(domain)) {
             throw new BadRequestException(ErrorCode.DUPLICATE_SCHOOL_DOMAIN);
         }
@@ -42,13 +40,17 @@ public class SchoolCommandService {
      */
     public void updateSchool(Long schoolId, SchoolUpdateCommand command) {
         School school = schoolRepository.getOrThrow(schoolId);
-        validateUpdate(school, command.domain(), command.name());
+        validateUpdate(school, command);
         school.changeName(command.name());
         school.changeDomain(command.domain());
         school.changeRegion(command.region());
+        school.changeLogoUrl(command.logoUrl());
+        school.changeBackgroundImageUrl(command.backgroundImageUrl());
     }
 
-    private void validateUpdate(School school, String domain, String name) {
+    private void validateUpdate(School school, SchoolUpdateCommand command) {
+        String domain = command.domain();
+        String name = command.name();
         if (!Objects.equals(school.getDomain(), domain) && schoolRepository.existsByDomain(domain)) {
             throw new BadRequestException(ErrorCode.DUPLICATE_SCHOOL_DOMAIN);
         }

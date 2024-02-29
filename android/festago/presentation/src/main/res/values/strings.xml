@@ -18,4 +18,8 @@
     <string name="festival_list_tv_dday_end">종료</string>
     <string name="festival_list_tv_dday_in_progress">진행 중</string>
     <string name="festival_list_tv_dday_format">D%1$s</string>
+
+    <!-- String related to artist detail -->
+    <string name="artist_detail_tv_dday_format">D%1$s</string>
+
 </resources>

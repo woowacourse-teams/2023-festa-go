@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="artist"
+            type="com.festago.festago.presentation.ui.schooldetail.uistate.ArtistUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:background="@color/background_gray_02">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvFestivalImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardCornerRadius="1000dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toTopOf="@id/tvFestivalName"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="48">
+
+            <ImageView
+                android:id="@+id/ivFestivalImage"
+                imageUrl="@{artist.imageUrl}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/festival_list_iv_image"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_launcher_background" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvFestivalName"
+            style="@style/B4Medium12Lh14"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@{artist.name}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/cvFestivalImage"
+            app:layout_constraintStart_toStartOf="@id/cvFestivalImage"
+            app:layout_constraintTop_toBottomOf="@id/cvFestivalImage"
+            app:layout_constraintVertical_weight="18"
+            tools:text="윤하" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

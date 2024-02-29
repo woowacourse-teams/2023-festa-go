@@ -8,12 +8,14 @@ import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMor
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalUiState
 
-class FestivalListAdapter : ListAdapter<Any, FestivalListViewHolder>(diffUtil) {
+class FestivalListAdapter(
+    private val onArtistClick: (Long) -> Unit,
+) : ListAdapter<Any, FestivalListViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FestivalListViewHolder {
         return when (viewType) {
             1 -> FestivalListPopularViewHolder.of(parent)
-            2 -> FestivalListFestivalViewHolder.of(parent)
+            2 -> FestivalListFestivalViewHolder.of(parent, onArtistClick)
             3 -> FestivalListTabViewHolder.of(parent)
             4 -> FestivalListMoreItemViewHolder.of(parent)
             else -> throw IllegalArgumentException("Invalid viewType")

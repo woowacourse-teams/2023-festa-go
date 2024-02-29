@@ -1,6 +1,7 @@
 package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.admin.dto.ArtistCreateRequest;
 import com.festago.admin.dto.ArtistUpdateRequest;
@@ -26,7 +27,8 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 아티스트를_저장한다() {
         // given
-        ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png");
+        ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png",
+            "https://image.com/image.png");
 
         // when
         Long artistId = artistCommandService.save(request);
@@ -40,16 +42,19 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     void 아티스트_정보를_변경한다() {
         // given
         Long artistId = artistRepository.save(new Artist("고윤하", "https://image.com/image1.png")).getId();
-        ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image2.png");
+        ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image2.png",
+            "https://image.com/image2.png");
 
         // when
         artistCommandService.update(request, artistId);
 
         // then
         Artist actual = artistRepository.getOrThrow(artistId);
-        assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(request);
+
+        assertSoftly(softly -> {
+            softly.assertThat(actual.getName()).isEqualTo(request.name());
+            softly.assertThat(actual.getProfileImage()).isEqualTo(request.profileImage());
+        });
     }
 
     @Test

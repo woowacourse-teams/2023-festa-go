@@ -22,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminAuthService {
 
-    private static final String ROOT_ADMIN = "admin";
-
     private final AuthProvider authProvider;
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
@@ -42,9 +40,9 @@ public class AdminAuthService {
     }
 
     public void initializeRootAdmin(String password) {
-        adminRepository.findByUsername(ROOT_ADMIN).ifPresentOrElse(admin -> {
+        adminRepository.findByUsername(Admin.ROOT_ADMIN_NAME).ifPresentOrElse(admin -> {
             throw new BadRequestException(ErrorCode.DUPLICATE_ACCOUNT_USERNAME);
-        }, () -> adminRepository.save(new Admin(ROOT_ADMIN, passwordEncoder.encode(password))));
+        }, () -> adminRepository.save(new Admin(Admin.ROOT_ADMIN_NAME, passwordEncoder.encode(password))));
     }
 
     public AdminSignupResponse signup(Long adminId, AdminSignupRequest request) {
@@ -65,7 +63,7 @@ public class AdminAuthService {
     private void validateRootAdmin(Long adminId) {
         adminRepository.findById(adminId)
             .map(Admin::getUsername)
-            .filter(username -> Objects.equals(username, ROOT_ADMIN))
+            .filter(username -> Objects.equals(username, Admin.ROOT_ADMIN_NAME))
             .ifPresentOrElse(username -> {
             }, () -> {
                 throw new ForbiddenException(ErrorCode.NOT_ENOUGH_PERMISSION);
