@@ -25,5 +25,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_bottom_navigation" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background_gray_03"
+            app:layout_constraintTop_toTopOf="@id/nvHome" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
