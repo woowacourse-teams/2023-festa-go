@@ -1,5 +1,6 @@
-package com.festago.festago.data.dto.school
+package com.festago.festago.data.dto.schooldetail
 
+import com.festago.festago.data.dto.school.SocialMediaResponse
 import com.festago.festago.domain.model.school.SchoolInfo
 import kotlinx.serialization.Serializable
 
