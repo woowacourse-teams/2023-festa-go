@@ -8,6 +8,7 @@ import com.festago.artist.application.ArtistV1SearchQueryService;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.ArtistSearchResponse;
 import com.festago.artist.repository.ArtistRepository;
+import com.festago.common.exception.BadRequestException;
 import com.festago.support.ApplicationIntegrationTest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -68,6 +69,6 @@ class ArtistV1SearchQueryServiceIntegrationTest extends ApplicationIntegrationTe
 
         // when && then
         assertThatThrownBy(() -> artistV1SearchQueryService.findAllByKeyword("핑크"))
-            .isInstanceOf(IllegalStateException.class);
+            .isInstanceOf(BadRequestException.class);
     }
 }
