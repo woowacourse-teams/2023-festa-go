@@ -3,10 +3,10 @@ package com.festago.festival.presentation.v1;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.festival.application.FestivalSearchV1QueryService;
-import com.festago.festival.dto.ArtistsSearchV1Response;
+import com.festago.festival.dto.FestivalSearchV1Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Optional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,19 +24,14 @@ public class FestivalSearchV1Controller {
 
     @GetMapping
     @Operation(description = "아티스트를 검색한다.", summary = "아티스트 검색")
-    public ResponseEntity<ArtistsSearchV1Response> getArtistInfo(@RequestParam String keyword) {
+    public ResponseEntity<List<FestivalSearchV1Response>> getArtistInfo(@RequestParam String keyword) {
         validate(keyword);
-        return makeResponse(festivalSearchV1QueryService.search(keyword));
+        return ResponseEntity.ok(festivalSearchV1QueryService.search(keyword));
     }
 
     private void validate(String keyword) {
         if (keyword.isBlank()) {
             throw new BadRequestException(ErrorCode.INVALID_KEYWORD);
         }
-    }
-
-    private ResponseEntity<ArtistsSearchV1Response> makeResponse(Optional<ArtistsSearchV1Response> result) {
-        return result.map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }
