@@ -4,6 +4,7 @@ import com.festago.artist.domain.Artist;
 import com.festago.artist.domain.ArtistsSerializer;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.InternalServerException;
 import com.festago.common.exception.NotFoundException;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.domain.StageQueryInfo;
@@ -41,15 +42,15 @@ public class StageQueryInfoEventListener {
         stageQueryInfoRepository.save(stageQueryInfo);
     }
 
+    /**
+     * 해당 메서드를 사용하는 로직이 비동기로 처리된다면 예외 던지는 것을 다시 생각해볼것! (동기로 실행되면 ControllerAdvice에서 처리가 됨)
+     */
     private List<Artist> getStageArtists(Long stageId) {
         Set<Long> artistIds = stageArtistRepository.findAllArtistIdByStageId(stageId);
         List<Artist> artists = artistRepository.findByIdIn(artistIds);
         if (artists.size() != artistIds.size()) {
-            // TODO EventListener에서 예외가 나면 예외를 던질 필요가 있을까?
-            // 지금은 동기로 진행되니 의미가 있겠지만, 비동기로 로직이 변경된다면?
-            // 애초에 이벤트를 호출하는 곳에서 검증이 되는데, 검증을 할 필요가 있을까?
             log.error("StageArtist에 존재하지 않은 Artist가 있습니다. artistsIds=" + artistIds);
-            throw new NotFoundException(ErrorCode.ARTIST_NOT_FOUND);
+            throw new InternalServerException(ErrorCode.ARTIST_NOT_FOUND);
         }
         return artists;
     }
