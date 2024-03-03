@@ -42,16 +42,22 @@ public class ArtistFestivalSearchV1QueryDslRepository extends QueryDslRepository
 
     private List<FestivalSearchV1Response> searchByExpression(BooleanExpression expression, String keyword) {
         List<FestivalSearchV1Response> response = select(
-            new QFestivalSearchV1Response(festival.id, festival.name, festival.startDate, festival.endDate,
-                festival.thumbnail, festivalQueryInfo.artistInfo))
+            new QFestivalSearchV1Response(
+                festival.id,
+                festival.name,
+                festival.startDate,
+                festival.endDate,
+                festival.thumbnail,
+                festivalQueryInfo.artistInfo))
             .from(artist)
             .innerJoin(stageArtist).on(expression.and(stageArtist.artistId.eq(artist.id)))
             .innerJoin(stage).on(stage.id.eq(stageArtist.stageId))
             .innerJoin(festival).on(festival.id.eq(stage.festival.id))
-            .innerJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId)).where(expression).fetch();
+            .innerJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId)).where(expression)
+            .fetch();
 
         if (response.size() > 5) {
-            log.warn("{} 키워드로 검색시 3개를 초과한 검색 결괄르 반환하였습니다", keyword);
+            log.warn("{} 키워드로 검색시 5개를 초과한 검색 결과를 반환하였습니다", keyword);
         }
 
         return response;
