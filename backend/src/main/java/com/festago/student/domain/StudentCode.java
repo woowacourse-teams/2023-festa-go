@@ -90,7 +90,7 @@ public class StudentCode {
 
     private void validateUsername(String username) {
         String fieldName = "username";
-        Validator.hasBlank(username, fieldName);
+        Validator.notBlank(username, fieldName);
         Validator.maxLength(username, MAX_USERNAME_LENGTH, fieldName);
     }
 

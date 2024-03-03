@@ -20,6 +20,7 @@ import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalLi
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,6 +77,9 @@ class FestivalListFragment : Fragment() {
             vm.loadFestivals()
             binding.srlFestivalList.isRefreshing = false
         }
+        binding.ivSearch.setOnClickListener { // 임시 연결
+            showSchoolDetail()
+        }
     }
 
     private fun initViewPager() {
@@ -126,19 +130,34 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
-        festivalListAdapter.submitList(
-            listOf(
-                uiState.popularFestivals,
-                FestivalTabUiState {
-                    val festivalFilter = when (it) {
-                        0 -> FestivalFilterUiState.PROGRESS
-                        1 -> FestivalFilterUiState.PLANNED
-                        else -> FestivalFilterUiState.PROGRESS
-                    }
-                    vm.loadFestivals(festivalFilter)
-                },
-            ) + uiState.festivals,
+        val items = uiState.getItems()
+        festivalListAdapter.submitList(items)
+    }
+
+    private fun FestivalListUiState.Success.getItems(): List<Any> {
+        val items = mutableListOf<Any>()
+        if (popularFestivalUiState.festivals.isNotEmpty()) {
+            items.add(popularFestivalUiState)
+        }
+        items.add(
+            FestivalTabUiState {
+                val festivalFilter = when (it) {
+                    0 -> FestivalFilterUiState.PROGRESS
+                    1 -> FestivalFilterUiState.PLANNED
+                    else -> FestivalFilterUiState.PROGRESS
+                }
+                vm.loadFestivals(festivalFilter)
+            },
         )
+        items.addAll(festivals)
+        return items.toList()
+    }
+
+    private fun showSchoolDetail() {
+        activity?.supportFragmentManager!!.beginTransaction()
+            .replace(R.id.fcvHomeContainer, SchoolDetailFragment.newInstance(0))
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {

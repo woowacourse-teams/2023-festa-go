@@ -9,7 +9,7 @@ import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalIte
 import kotlin.math.abs
 
 class PopularFestivalViewPagerAdapter(
-    foregroundViewPager: ViewPager2,
+    private val foregroundViewPager: ViewPager2,
     backgroundViewPager: ViewPager2,
     private val onPopularFestivalSelected: (FestivalItemUiState) -> Unit,
 ) {
@@ -24,22 +24,23 @@ class PopularFestivalViewPagerAdapter(
         foregroundViewPager.adapter = foregroundAdapter
         backgroundViewPager.adapter = backgroundAdapter
 
-        setTargetItemOnPageSelected(viewpager = foregroundViewPager, target = backgroundViewPager)
+        setTargetItemOnPageSelected(viewPager = foregroundViewPager, target = backgroundViewPager)
         narrowSpaceViewPager(viewPager = foregroundViewPager)
         setOffscreenPagesLimit(foregroundViewPager, PAGE_LIMIT)
         setOffscreenPagesLimit(backgroundViewPager, PAGE_LIMIT)
         backgroundViewPager.isUserInputEnabled = false
     }
 
-    private fun setTargetItemOnPageSelected(viewpager: ViewPager2, target: ViewPager2) {
+    private fun setTargetItemOnPageSelected(viewPager: ViewPager2, target: ViewPager2) {
         val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                target.setCurrentItem(position, false)
-                onPopularFestivalSelected(popularFestivals[position])
+                val itemIndex = position % popularFestivals.size
+                target.setCurrentItem(itemIndex, false)
+                onPopularFestivalSelected(popularFestivals[itemIndex])
             }
         }
-        viewpager.registerOnPageChangeCallback(onPageChangeCallback)
+        viewPager.registerOnPageChangeCallback(onPageChangeCallback)
     }
 
     private fun narrowSpaceViewPager(viewPager: ViewPager2) {
@@ -85,10 +86,20 @@ class PopularFestivalViewPagerAdapter(
     }
 
     fun submitList(festivals: List<FestivalItemUiState>) {
+        val lastFestivals = popularFestivals.toList()
         popularFestivals.clear()
         popularFestivals.addAll(festivals)
         foregroundAdapter.submitList(festivals)
         backgroundAdapter.submitList(festivals)
+
+        if (lastFestivals != festivals) {
+            initItemPosition()
+        }
+    }
+
+    private fun initItemPosition() {
+        val initialPosition = Int.MAX_VALUE / 2 - (Int.MAX_VALUE / 2 % popularFestivals.size)
+        foregroundViewPager.setCurrentItem(initialPosition, false)
     }
 
     companion object {

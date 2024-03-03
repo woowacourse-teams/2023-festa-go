@@ -29,7 +29,7 @@ public class VerificationCode {
     }
 
     private void validateBlank(String value) {
-        Validator.hasBlank(value, "VerificationCode");
+        Validator.notBlank(value, "VerificationCode");
     }
 
     private void validateLength(String value) {
