@@ -1,5 +1,6 @@
-package com.festago.artist.dto;
+package com.festago.festival.dto;
 
+import com.festago.artist.dto.ArtistFestivalDetailV1Response;
 import com.querydsl.core.annotations.QueryProjection;
 import java.util.List;
 

@@ -3,10 +3,11 @@ package com.festago.artist.application;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistsSearchV1Response;
 import com.festago.artist.repository.ArtistRepository;
+import com.festago.festival.application.FestivalSearchV1QueryService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.domain.FestivalInfoSerializer;
+import com.festago.festival.dto.ArtistsSearchV1Response;
 import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
@@ -31,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistSearchV1QueryServiceTest extends ApplicationIntegrationTest {
+class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
 
     @Autowired
     StageArtistRepository stageArtistRepository;
@@ -58,7 +59,7 @@ class ArtistSearchV1QueryServiceTest extends ApplicationIntegrationTest {
     SocialMediaRepository socialMediaRepository;
 
     @Autowired
-    ArtistSearchV1QueryService artistSearchV1QueryService;
+    FestivalSearchV1QueryService festivalSearchV1QueryService;
 
     Stage 부산_공연;
     Stage 서울_공연;
@@ -104,7 +105,7 @@ class ArtistSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             stageArtistRepository.save(new StageArtist(대구_공연.getId(), 우푸우.getId()));
 
             // when
-            Optional<ArtistsSearchV1Response> actual = artistSearchV1QueryService.search("푸우");
+            Optional<ArtistsSearchV1Response> actual = festivalSearchV1QueryService.search("푸우");
 
             // then
             assertSoftly(softly -> {
@@ -131,7 +132,7 @@ class ArtistSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             stageArtistRepository.save(new StageArtist(대구_공연.getId(), 우푸우.getId()));
 
             // when
-            Optional<ArtistsSearchV1Response> actual = artistSearchV1QueryService.search("렌글");
+            Optional<ArtistsSearchV1Response> actual = festivalSearchV1QueryService.search("렌글");
 
             // then
             Assertions.assertThat(actual).isEmpty();
@@ -143,7 +144,7 @@ class ArtistSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             Artist 우푸우 = artistRepository.save(new Artist("우푸우", "image.jpg"));
 
             // when
-            Optional<ArtistsSearchV1Response> actual = artistSearchV1QueryService.search("우푸");
+            Optional<ArtistsSearchV1Response> actual = festivalSearchV1QueryService.search("우푸");
 
             // then
             assertSoftly(softly -> {
@@ -170,7 +171,7 @@ class ArtistSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             stageArtistRepository.save(new StageArtist(서울_공연.getId(), 푸.getId()));
 
             // when
-            Optional<ArtistsSearchV1Response> actual = artistSearchV1QueryService.search("푸");
+            Optional<ArtistsSearchV1Response> actual = festivalSearchV1QueryService.search("푸");
 
             // then
             assertSoftly(softly -> {
@@ -193,7 +194,7 @@ class ArtistSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             stageArtistRepository.save(new StageArtist(부산_공연.getId(), 글렌.getId()));
 
             // when
-            Optional<ArtistsSearchV1Response> actual = artistSearchV1QueryService.search("푸");
+            Optional<ArtistsSearchV1Response> actual = festivalSearchV1QueryService.search("푸");
 
             // then
             Assertions.assertThat(actual).isEmpty();
@@ -205,7 +206,7 @@ class ArtistSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             Artist 우푸우 = artistRepository.save(new Artist("우푸우", "image.jpg"));
 
             // when
-            Optional<ArtistsSearchV1Response> actual = artistSearchV1QueryService.search("우푸");
+            Optional<ArtistsSearchV1Response> actual = festivalSearchV1QueryService.search("우푸");
 
             // then
             assertSoftly(softly -> {

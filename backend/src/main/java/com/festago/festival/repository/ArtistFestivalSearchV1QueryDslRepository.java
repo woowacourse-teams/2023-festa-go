@@ -1,4 +1,4 @@
-package com.festago.artist.repository;
+package com.festago.festival.repository;
 
 import static com.festago.artist.domain.QArtist.artist;
 import static com.festago.festival.domain.QFestival.festival;
@@ -9,13 +9,13 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistSearchV1Response;
-import com.festago.artist.dto.ArtistsSearchV1Response;
 import com.festago.artist.dto.QArtistFestivalDetailV1Response;
-import com.festago.artist.dto.QArtistSearchV1Response;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
+import com.festago.festival.dto.ArtistSearchV1Response;
+import com.festago.festival.dto.ArtistsSearchV1Response;
+import com.festago.festival.dto.QArtistSearchV1Response;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +24,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Slf4j
-public class ArtistSearchV1QueryDslRepository extends QueryDslRepositorySupport {
+public class ArtistFestivalSearchV1QueryDslRepository extends QueryDslRepositorySupport {
 
-    public ArtistSearchV1QueryDslRepository() {
+    public ArtistFestivalSearchV1QueryDslRepository() {
         super(Artist.class);
     }
 

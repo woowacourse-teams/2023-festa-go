@@ -1,9 +1,9 @@
-package com.festago.artist.presentation.v1;
+package com.festago.festival.presentation.v1;
 
-import com.festago.artist.application.ArtistSearchV1QueryService;
-import com.festago.artist.dto.ArtistsSearchV1Response;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
+import com.festago.festival.application.FestivalSearchV1QueryService;
+import com.festago.festival.dto.ArtistsSearchV1Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/search/artists")
 @Tag(name = "아티스트 검색 요청 V1")
 @RequiredArgsConstructor
-public class ArtistSearchV1Controller {
+public class FestivalSearchV1Controller {
 
-    private final ArtistSearchV1QueryService artistSearchV1QueryService;
+    private final FestivalSearchV1QueryService festivalSearchV1QueryService;
 
     @GetMapping
     @Operation(description = "아티스트를 검색한다.", summary = "아티스트 검색")
     public ResponseEntity<ArtistsSearchV1Response> getArtistInfo(@RequestParam String keyword) {
         validate(keyword);
-        return makeResponse(artistSearchV1QueryService.search(keyword));
+        return makeResponse(festivalSearchV1QueryService.search(keyword));
     }
 
     private void validate(String keyword) {
