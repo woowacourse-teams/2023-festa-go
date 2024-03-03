@@ -94,12 +94,16 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
             "https://image.com/posterImage.png",
             테코대학교_식별자
         ));
-        에픽하이_식별자 = artistCommandService.save(
-            new ArtistCreateRequest("에픽하이", "https://image.com/profileImage.png"));
-        소녀시대_식별자 = artistCommandService.save(
-            new ArtistCreateRequest("소녀시대", "https://image.com/profileImage.png"));
-        뉴진스_식별자 = artistCommandService.save(
-            new ArtistCreateRequest("뉴진스", "https://image.com/profileImage.png")
+        에픽하이_식별자 = artistCommandService.save(createArtistCreateRequest("에픽하이"));
+        소녀시대_식별자 = artistCommandService.save(createArtistCreateRequest("소녀시대"));
+        뉴진스_식별자 = artistCommandService.save(createArtistCreateRequest("뉴진스"));
+    }
+
+    private ArtistCreateRequest createArtistCreateRequest(String name) {
+        return new ArtistCreateRequest(
+            name,
+            "https://image.com/profileImage.png",
+            "https://image.com/backgroundImage.png"
         );
     }
 
