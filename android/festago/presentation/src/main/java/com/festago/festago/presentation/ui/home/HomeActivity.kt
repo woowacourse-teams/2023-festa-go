@@ -19,6 +19,7 @@ import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmen
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
 import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
 import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import com.festago.festago.presentation.util.setStatusBarMode
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,6 +68,7 @@ class HomeActivity : AppCompatActivity() {
             val isLight = when (supportFragmentManager.findFragmentById(R.id.fcvHomeContainer)) {
                 is ArtistDetailFragment,
                 is FestivalDetailFragment,
+                is SchoolDetailFragment,
                 -> false
 
                 else -> true

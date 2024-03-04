@@ -165,7 +165,7 @@ class FestivalListFragment : Fragment() {
 
     private fun showSchoolDetail() {
         activity?.supportFragmentManager!!.beginTransaction()
-            .replace(R.id.fcvHomeContainer, SchoolDetailFragment.newInstance(0))
+            .add(R.id.fcvHomeContainer, SchoolDetailFragment.newInstance(0))
             .addToBackStack(null)
             .commit()
     }
