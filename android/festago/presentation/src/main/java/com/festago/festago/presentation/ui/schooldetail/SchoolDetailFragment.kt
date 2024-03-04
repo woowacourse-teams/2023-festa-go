@@ -28,7 +28,7 @@ class SchoolDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSchoolDetailBinding.inflate(inflater)
         return binding.root
@@ -80,9 +80,8 @@ class SchoolDetailFragment : Fragment() {
         uiState.schoolInfo.socialMedia.forEach { media ->
             with(ItemMediaBinding.inflate(layoutInflater, binding.llcSchoolSocialMedia, false)) {
                 imageUrl = media.logoUrl
-                name = media.name
-                clMedia.setOnClickListener { startBrowser(media.url) }
-                binding.llcSchoolSocialMedia.addView(clMedia)
+                ivImage.setOnClickListener { startBrowser(media.url) }
+                binding.llcSchoolSocialMedia.addView(ivImage)
             }
         }
     }

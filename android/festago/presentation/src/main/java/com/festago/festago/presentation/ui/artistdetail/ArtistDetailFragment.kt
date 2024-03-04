@@ -89,9 +89,8 @@ class ArtistDetailFragment : Fragment() {
         uiState.artist.artistMedia.map { media ->
             with(ItemMediaBinding.inflate(layoutInflater, binding.llcArtistMedia, false)) {
                 imageUrl = media.logoUrl
-                name = media.name
-                clMedia.setOnClickListener { startBrowser(media.url) }
-                binding.llcArtistMedia.addView(clMedia)
+                ivImage.setOnClickListener { startBrowser(media.url) }
+                binding.llcArtistMedia.addView(ivImage)
             }
         }
     }
