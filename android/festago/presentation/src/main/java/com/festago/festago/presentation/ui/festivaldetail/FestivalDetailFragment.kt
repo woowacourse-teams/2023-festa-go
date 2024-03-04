@@ -8,9 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
 import com.festago.festago.presentation.ui.festivaldetail.adapter.stage.StageListAdapter
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -61,6 +65,11 @@ class FestivalDetailFragment : Fragment() {
                 updateUi(it)
             }
         }
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect {
+                handleEvent(it)
+            }
+        }
     }
 
     private fun updateUi(uiState: FestivalDetailUiState) {
@@ -91,6 +100,18 @@ class FestivalDetailFragment : Fragment() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(url)
         startActivity(intent)
+    }
+
+    private fun handleEvent(event: FestivalDetailEvent) {
+        when (event) {
+            is FestivalDetailEvent.ShowArtistDetail -> {
+                requireActivity().supportFragmentManager.commit {
+                    add(R.id.fcvHomeContainer, ArtistDetailFragment.newInstance(event.artistId))
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
+                    addToBackStack(null)
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

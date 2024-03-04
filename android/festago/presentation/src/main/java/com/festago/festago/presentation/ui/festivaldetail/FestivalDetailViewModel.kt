@@ -13,8 +13,11 @@ import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetail
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalUiState
 import com.festago.festago.presentation.ui.festivaldetail.uiState.StageItemUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,8 +27,12 @@ class FestivalDetailViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow<FestivalDetailUiState>(FestivalDetailUiState.Loading)
     val uiState: StateFlow<FestivalDetailUiState> = _uiState.asStateFlow()
+
+    private val _event = MutableSharedFlow<FestivalDetailEvent>()
+    val event: SharedFlow<FestivalDetailEvent> = _event.asSharedFlow()
 
     fun loadFestivalDetail(festivalId: Long) {
         viewModelScope.launch {
@@ -65,7 +72,14 @@ class FestivalDetailViewModel @Inject constructor(
         id = id,
         name = name,
         imageUrl = imageUrl,
+        onArtistDetail = ::showArtistDetail,
     )
+
+    private fun showArtistDetail(artistId: Long) {
+        viewModelScope.launch {
+            _event.emit(FestivalDetailEvent.ShowArtistDetail(artistId))
+        }
+    }
 
     companion object {
         private const val KEY_LOAD_FESTIVAL_DETAIL = "KEY_LOAD_FESTIVAL_DETAIL"

@@ -11,7 +11,7 @@ class ArtistViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: ArtistItemUiState) {
-        binding.artist = item
+        binding.item = item
     }
 
     companion object {
