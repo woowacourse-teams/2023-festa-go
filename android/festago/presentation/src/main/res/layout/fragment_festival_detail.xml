@@ -70,6 +70,29 @@
                 tools:src="@drawable/ic_launcher_foreground" />
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cvFestivalDDay"
+                android:layout_width="68dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginBottom="8dp"
+                app:cardBackgroundColor="@color/secondary_pink_01"
+                app:cardCornerRadius="1000dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivFestivalBackground"
+                app:layout_constraintStart_toEndOf="@+id/ivFestivalPoster">
+
+                <TextView
+                    android:id="@+id/tvFestivalDDay"
+                    style="@style/H5Bold14Lh16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/background_gray_01"
+                    tools:text="D-DAY" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cvBookmark"
                 android:layout_width="28dp"
                 android:layout_height="28dp"

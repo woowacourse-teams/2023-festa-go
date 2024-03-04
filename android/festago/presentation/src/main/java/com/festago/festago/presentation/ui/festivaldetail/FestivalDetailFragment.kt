@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
@@ -19,6 +20,7 @@ import com.festago.festago.presentation.ui.festivaldetail.adapter.stage.StageLis
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class FestivalDetailFragment : Fragment() {
@@ -84,6 +86,7 @@ class FestivalDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: FestivalDetailUiState.Success) {
         binding.successUiState = uiState
+        binding.tvFestivalDDay.setFestivalDDay(uiState.festival.startDate, uiState.festival.endDate)
         binding.ivFestivalBackground.setColorFilter(Color.parseColor("#66000000"))
         adapter.submitList(uiState.stages)
         binding.llcFestivalSocialMedia.removeAllViews()
@@ -92,6 +95,25 @@ class FestivalDetailFragment : Fragment() {
                 imageUrl = media.logoUrl
                 ivImage.setOnClickListener { startBrowser(media.url) }
                 binding.llcFestivalSocialMedia.addView(ivImage)
+            }
+        }
+    }
+
+    private fun TextView.setFestivalDDay(startDate: LocalDate, endDate: LocalDate) {
+        when {
+            LocalDate.now() in startDate..endDate -> {
+                text = context.getString(R.string.festival_detail_tv_dday)
+            }
+
+            LocalDate.now() < startDate -> {
+                text = context.getString(
+                    R.string.festival_detail_tv_dday_format,
+                    (LocalDate.now().toEpochDay() - startDate.toEpochDay()).toString(),
+                )
+            }
+
+            else -> {
+                text = context.getString(R.string.festival_detail_tv_dday_end)
             }
         }
     }
