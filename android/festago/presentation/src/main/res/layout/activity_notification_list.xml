@@ -25,11 +25,10 @@
                 android:layout_marginStart="16dp"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_arrow_back_ios_new_24"
-                android:tintMode="src_atop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/background_gray_01" />
+                app:tint="@color/contents_gray_07" />
 
             <TextView
                 style="@style/H4Bold16Lh20"
