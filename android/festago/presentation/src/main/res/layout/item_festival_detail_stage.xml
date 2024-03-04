@@ -24,7 +24,7 @@
             style="@style/H3Bold18Lh20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="@{item.startDateTime.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format))}"
             android:textColor="@color/contents_gray_07"
             app:layout_constraintStart_toStartOf="parent"
