@@ -67,9 +67,9 @@ class HomeActivity : AppCompatActivity() {
             val isLight = when (supportFragmentManager.findFragmentById(R.id.fcvHomeContainer)) {
                 is ArtistDetailFragment,
                 is FestivalDetailFragment,
-                -> true
+                -> false
 
-                else -> false
+                else -> true
             }
             setStatusBarMode(isLight = isLight, backgroundColor = Color.TRANSPARENT)
         }
