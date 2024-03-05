@@ -1,4 +1,4 @@
-package com.festago.scheduler.application;
+package com.festago.mock.application;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
