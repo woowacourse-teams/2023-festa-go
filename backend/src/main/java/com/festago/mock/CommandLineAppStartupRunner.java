@@ -1,5 +1,6 @@
-package com.festago.mock.application;
+package com.festago.mock;
 
+import com.festago.mock.application.MockDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -8,10 +9,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CommandLineAppStartupRunner implements CommandLineRunner {
 
-    private final MockDataInitializer mockDataInitializer;
+    private final MockDataService mockDataService;
 
     @Override
     public void run(String... args) {
-        mockDataInitializer.initialize();
+        mockDataService.initialize();
     }
 }

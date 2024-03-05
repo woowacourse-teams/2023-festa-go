@@ -1,10 +1,10 @@
-package com.festago.mock.application;
+package com.festago.mock;
 
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class SchedulerService {
+@Component
+public class MockScheduler {
 
     @Scheduled(fixedDelay = 1000)
     public void run() {

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MockDataInitializer {
+public class MockDataService {
 
     private final SchoolRepository schoolRepository;
     private final ArtistRepository artistRepository;
@@ -44,5 +44,9 @@ public class MockDataInitializer {
         for (MockArtist artist : MockArtist.values()) {
             artistRepository.save(new Artist(artist.name(), artist.getProfileImage(), artist.getBackgroundImageUrl()));
         }
+    }
+
+    public void makeMockFestivals() {
+
     }
 }
