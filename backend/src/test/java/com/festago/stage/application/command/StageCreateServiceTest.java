@@ -1,6 +1,7 @@
 package com.festago.stage.application.command;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.mock;
 
@@ -8,6 +9,7 @@ import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.MemoryArtistRepository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
+import com.festago.common.exception.ValidException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.MemoryFestivalRepository;
 import com.festago.stage.dto.command.StageCreateCommand;
@@ -17,6 +19,7 @@ import com.festago.support.FestivalFixture;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.LongStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -26,6 +29,8 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class StageCreateServiceTest {
+
+    private static final String PROFILE_IMAGE_URL = "https://image.com/profileImage.png";
 
     MemoryStageRepository stageRepository = new MemoryStageRepository();
     MemoryFestivalRepository festivalRepository = new MemoryFestivalRepository();
@@ -60,13 +65,67 @@ class StageCreateServiceTest {
                 .endDate(festivalEndDate)
                 .build()
         );
-        에픽하이 = artistRepository.save(new Artist("에픽하이", "https://image.com/profileImage.png"));
-        소녀시대 = artistRepository.save(new Artist("소녀시대", "https://image.com/profileImage.png"));
-        뉴진스 = artistRepository.save(new Artist("뉴진스", "https://image.com/profileImage.png"));
+        에픽하이 = artistRepository.save(new Artist("에픽하이", PROFILE_IMAGE_URL));
+        소녀시대 = artistRepository.save(new Artist("소녀시대", PROFILE_IMAGE_URL));
+        뉴진스 = artistRepository.save(new Artist("뉴진스", PROFILE_IMAGE_URL));
     }
 
     @Nested
     class createStage {
+
+        @Test
+        void ArtistIds에_중복이_있으면_예외() {
+            // given
+            var command = new StageCreateCommand(
+                테코대학교_축제.getId(),
+                festivalStartDate.atTime(18, 0),
+                festivalStartDate.minusWeeks(1).atStartOfDay(),
+                List.of(에픽하이.getId(), 에픽하이.getId())
+            );
+
+            // then
+            // when & then
+            assertThatThrownBy(() -> stageCreateService.createStage(command))
+                .isInstanceOf(ValidException.class)
+                .hasMessage("중복된 Artist가 존재합니다.");
+        }
+
+        @Test
+        void ArtistIds의_개수가_10개를_초과하면_예외() {
+            // given
+            List<Long> artistIds = LongStream.rangeClosed(1, 11)
+                .boxed()
+                .toList();
+            var command = new StageCreateCommand(
+                테코대학교_축제.getId(),
+                festivalStartDate.atTime(18, 0),
+                festivalStartDate.minusWeeks(1).atStartOfDay(),
+                artistIds
+            );
+
+            // when & then
+            assertThatThrownBy(() -> stageCreateService.createStage(command))
+                .isInstanceOf(ValidException.class)
+                .hasMessage("Artist의 수는 10 이하여야 합니다.");
+        }
+
+        @Test
+        void ArtistIds의_개수가_10개_이하이면_예외가_발생하지_않는다() {
+            // given
+            List<Long> artistIds = LongStream.rangeClosed(1, 10)
+                .mapToObj(it -> artistRepository.save(new Artist("Artist " + it, PROFILE_IMAGE_URL)))
+                .map(Artist::getId)
+                .toList();
+            var command = new StageCreateCommand(
+                테코대학교_축제.getId(),
+                festivalStartDate.atTime(18, 0),
+                festivalStartDate.minusWeeks(1).atStartOfDay(),
+                artistIds
+            );
+
+            // when
+            assertThatNoException().isThrownBy(() -> stageCreateService.createStage(command));
+        }
 
         @Test
         void Festival_식별자에_대한_Festival이_없으면_예외() {
