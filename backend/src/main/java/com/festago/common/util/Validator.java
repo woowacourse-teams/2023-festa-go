@@ -15,7 +15,7 @@ public final class Validator {
      * @param fieldName 예외 메시지에 출력할 필드명
      * @throws ValidException input이 null 또는 공백이면
      */
-    public static void hasBlank(String input, String fieldName) {
+    public static void notBlank(String input, String fieldName) {
         if (input == null || input.isBlank()) {
             throw new ValidException("%s은/는 null 또는 공백이 될 수 없습니다.".formatted(fieldName));
         }
@@ -141,7 +141,7 @@ public final class Validator {
      * @param fieldName 예외 메시지에 출력할 필드명
      * @throws ValidException value가 음수이면
      */
-    public static void isNegative(int value, String fieldName) {
+    public static void notNegative(int value, String fieldName) {
         if (value < 0) {
             throw new ValidException("%s은/는 음수가 될 수 없습니다.".formatted(fieldName));
         }
@@ -154,7 +154,7 @@ public final class Validator {
      * @param fieldName 예외 메시지에 출력할 필드명
      * @throws ValidException value가 음수이면
      */
-    public static void isNegative(long value, String fieldName) {
+    public static void notNegative(long value, String fieldName) {
         if (value < 0) {
             throw new ValidException("%s은/는 음수가 될 수 없습니다.".formatted(fieldName));
         }

@@ -1,6 +1,8 @@
 package com.festago.festago.presentation.ui.schooldetail
 
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
+import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SchoolDetailFragment : Fragment() {
+
     private var _binding: FragmentSchoolDetailBinding? = null
     private val binding get() = _binding!!
 
@@ -75,11 +79,20 @@ class SchoolDetailFragment : Fragment() {
         binding.ivSchoolBackground.setColorFilter(Color.parseColor("#66000000"))
         adapter.submitList(uiState.festivals)
         binding.llcSchoolSocialMedia.removeAllViews()
-        uiState.schoolInfo.socialMedia.forEach { sm ->
-            binding.llcSchoolSocialMedia.addView(
-                SocialMediaView(requireActivity(), null, sm.logoUrl, sm.url),
-            )
+
+        uiState.schoolInfo.socialMedia.forEach { media ->
+            with(ItemMediaBinding.inflate(layoutInflater, binding.llcSchoolSocialMedia, false)) {
+                imageUrl = media.logoUrl
+                ivImage.setOnClickListener { startBrowser(media.url) }
+                binding.llcSchoolSocialMedia.addView(ivImage)
+            }
         }
+    }
+
+    private fun startBrowser(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

@@ -12,6 +12,7 @@ import com.festago.common.exception.UnauthorizedException;
 import com.festago.common.exception.UnexpectedException;
 import com.festago.common.exception.ValidException;
 import com.festago.common.exception.dto.ErrorResponse;
+import com.festago.common.exception.dto.ValidErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -121,11 +122,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+        MethodArgumentNotValidException e,
+        HttpHeaders headers,
+        HttpStatusCode status,
+        WebRequest request
+    ) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(ErrorResponse.from(ErrorCode.INVALID_REQUEST_ARGUMENT, e));
+            .body(ValidErrorResponse.from(e));
     }
 
     private void logInfo(FestaGoException e, HttpServletRequest request) {

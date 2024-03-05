@@ -22,7 +22,7 @@ public class ArtistV1QueryService {
 
     public List<ArtistV1Response> findAll() {
         return artistRepository.findAll().stream()
-                .map(ArtistV1Response::from)
-                .toList();
+            .map(ArtistV1Response::from)
+            .toList();
     }
 }

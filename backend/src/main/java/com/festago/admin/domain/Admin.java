@@ -25,6 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Admin extends BaseTimeEntity {
 
+    public static final String ROOT_ADMIN_NAME = "admin";
     private static final int MIN_USERNAME_LENGTH = 4;
     private static final int MAX_USERNAME_LENGTH = 20;
     private static final int MIN_PASSWORD_LENGTH = 4;
@@ -60,14 +61,14 @@ public class Admin extends BaseTimeEntity {
 
     private void validateUsername(String username) {
         String fieldName = "username";
-        Validator.hasBlank(username, fieldName);
+        Validator.notBlank(username, fieldName);
         Validator.minLength(username, MIN_USERNAME_LENGTH, fieldName);
         Validator.maxLength(username, MAX_USERNAME_LENGTH, fieldName);
     }
 
     private void validatePassword(String password) {
         String fieldName = "password";
-        Validator.hasBlank(password, fieldName);
+        Validator.notBlank(password, fieldName);
         Validator.minLength(password, MIN_PASSWORD_LENGTH, fieldName);
         Validator.maxLength(password, MAX_PASSWORD_LENGTH, fieldName);
     }

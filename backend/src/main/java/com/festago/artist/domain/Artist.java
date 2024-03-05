@@ -11,20 +11,37 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Artist {
 
+    private static final String DEFAULT_URL = "https://picsum.photos/536/354";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String profileImage;
 
-    public Artist(String name, String profileImage) {
-        this(null, name, profileImage);
-    }
+    private String backgroundImageUrl;
 
-    public Artist(Long id, String name, String profileImage) {
+    public Artist(Long id, String name, String profileImage, String backgroundImageUrl) {
         this.id = id;
         this.name = name;
         this.profileImage = profileImage;
+        this.backgroundImageUrl = backgroundImageUrl;
+    }
+
+    public Artist(String name, String profileImage) {
+        this(null, name, profileImage, DEFAULT_URL);
+    }
+
+    public Artist(String name, String profileImage, String backgroundImageUrl) {
+        this(null, name, profileImage, backgroundImageUrl);
+    }
+
+    public void update(String name, String profileImage, String backgroundImageUrl) {
+        this.name = name;
+        this.profileImage = profileImage;
+        this.backgroundImageUrl = backgroundImageUrl;
     }
 
     public Long getId() {
@@ -39,8 +56,7 @@ public class Artist {
         return profileImage;
     }
 
-    public void update(String name, String profileImage) {
-        this.name = name;
-        this.profileImage = profileImage;
+    public String getBackgroundImageUrl() {
+        return backgroundImageUrl;
     }
 }

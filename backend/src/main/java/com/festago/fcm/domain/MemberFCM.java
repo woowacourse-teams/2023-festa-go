@@ -52,7 +52,7 @@ public class MemberFCM extends BaseTimeEntity {
 
     private void validateFcmToken(String fcmToken) {
         String fieldName = "fcmToken";
-        Validator.hasBlank(fcmToken, fieldName);
+        Validator.notBlank(fcmToken, fieldName);
         Validator.maxLength(fcmToken, MAX_FCM_TOKEN_LENGTH, fieldName);
     }
 

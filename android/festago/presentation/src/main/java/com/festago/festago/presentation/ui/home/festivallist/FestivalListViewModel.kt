@@ -49,7 +49,7 @@ class FestivalListViewModel @Inject constructor(
                 _uiState.value = FestivalListUiState.Success(
                     PopularFestivalUiState(
                         title = popularFestivals.title,
-                        popularFestivals = popularFestivals.festivals.map { it.toUiState() },
+                        festivals = popularFestivals.festivals.map { it.toUiState() },
                     ),
                     festivals = festivalsPage.festivals.map { it.toUiState() },
                     isLastPage = festivalsPage.isLastPage,
