@@ -21,8 +21,9 @@ fun ImageView.setBlurImage(imageUrl: String?, blurRadius: Int, blurSampling: Int
     val transformation = BlurTransformation(blurRadius, blurSampling)
     Glide.with(context)
         .load(imageUrl)
+        .placeholder(R.color.background_gray_03)
         .apply(RequestOptions.bitmapTransform(transformation))
-        .error(R.drawable.ic_launcher_background)
-        .fallback(R.drawable.ic_launcher_background)
+        .error(R.color.background_gray_03)
+        .fallback(R.color.background_gray_03)
         .into(this)
 }
