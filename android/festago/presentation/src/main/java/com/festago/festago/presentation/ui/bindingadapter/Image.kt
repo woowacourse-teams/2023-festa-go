@@ -11,8 +11,9 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 fun ImageView.setImage(imageUrl: String?) {
     Glide.with(context)
         .load(imageUrl)
-        .error(R.drawable.ic_launcher_background)
-        .fallback(R.drawable.ic_launcher_background)
+        .placeholder(R.color.background_gray_03)
+        .error(R.color.background_gray_03)
+        .fallback(R.color.background_gray_03)
         .into(this)
 }
 
