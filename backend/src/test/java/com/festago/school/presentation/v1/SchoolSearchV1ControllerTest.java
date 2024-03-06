@@ -6,9 +6,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.festago.school.application.v1.SchoolSearchV1QueryService;
-import com.festago.school.dto.v1.SchoolSearchV1Response;
+import com.festago.school.application.v1.SchoolTotalSearchV1QueryService;
+import com.festago.school.dto.v1.SchoolSearchRecentFestivalV1Response;
+import com.festago.school.dto.v1.SchoolTotalSearchV1Response;
 import com.festago.support.CustomWebMvcTest;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -28,7 +30,7 @@ class SchoolSearchV1ControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    SchoolSearchV1QueryService schoolSearchV1QueryService;
+    SchoolTotalSearchV1QueryService schoolTotalSearchV1QueryService;
 
     @Nested
     class 학교_상세_조회 {
@@ -39,14 +41,24 @@ class SchoolSearchV1ControllerTest {
         @DisplayName("GET " + uri)
         class 올바른_주소로 {
 
+
             @Test
             void 요청을_보내면_200_응답과_학교_목록이_반환된다() throws Exception {
                 // given
+                LocalDate festivalStartDate = LocalDate.now();
+                LocalDate festivalEndDate = festivalStartDate.plusDays(1);
+
                 var response = List.of(
-                    new SchoolSearchV1Response(1L, "테코대학교", "https://image.com/logo1.png"),
-                    new SchoolSearchV1Response(2L, "우테대학교", "https://image.com/logo2.png")
+                    new SchoolTotalSearchV1Response(1L, "테코대학교", "https://image.com/logo1.png",
+                        new SchoolSearchRecentFestivalV1Response(
+                            1L,
+                            1L,
+                            festivalStartDate,
+                            festivalEndDate
+                        )),
+                    new SchoolTotalSearchV1Response(2L, "우테대학교", "https://image.com/logo2.png", null)
                 );
-                given(schoolSearchV1QueryService.searchSchools(anyString()))
+                given(schoolTotalSearchV1QueryService.searchSchools(anyString()))
                     .willReturn(response);
 
                 // when & then

@@ -1,8 +1,8 @@
 package com.festago.school.presentation.v1;
 
 import com.festago.common.util.Validator;
-import com.festago.school.application.v1.SchoolSearchV1QueryService;
-import com.festago.school.dto.v1.SchoolSearchV1Response;
+import com.festago.school.application.v1.SchoolTotalSearchV1QueryService;
+import com.festago.school.dto.v1.SchoolTotalSearchV1Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -19,16 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SchoolSearchV1Controller {
 
-    private final SchoolSearchV1QueryService schoolSearchV1QueryService;
+    private final SchoolTotalSearchV1QueryService schoolTotalSearchV1QueryService;
 
     @GetMapping
     @Operation(description = "학교를 검색한다.", summary = "학교 검색")
-    public ResponseEntity<List<SchoolSearchV1Response>> searchSchools(
+    public ResponseEntity<List<SchoolTotalSearchV1Response>> searchSchools(
         @RequestParam String keyword
     ) {
         validate(keyword);
         return ResponseEntity.ok()
-            .body(schoolSearchV1QueryService.searchSchools(keyword));
+            .body(schoolTotalSearchV1QueryService.searchSchools(keyword));
     }
 
     private void validate(String keyword) {
