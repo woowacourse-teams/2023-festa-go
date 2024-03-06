@@ -21,11 +21,6 @@ public class StageDeleteService {
         stageRepository.findByIdWithFetch(stageId).ifPresent(stage -> {
             stageRepository.deleteById(stageId);
             stageArtistRepository.deleteByStageId(stageId);
-            // TODO
-            // delete 호출하면 엔티티가 비영속 상태로 변하게 됨
-            // 그럼에도 이벤트로 엔티티를 넘겨주는 것이 맞는지..?
-            // 사용하는 곳에서 삭제 이벤트를 받았으니, 수정을 하지 않으면 상관 없지 않을까?
-            // 수정을 해도, 비영속 상태니까 사이드 이펙트는 발생하지 않을 것 같음.
             eventPublisher.publishEvent(new StageDeletedEvent(stage));
         });
     }

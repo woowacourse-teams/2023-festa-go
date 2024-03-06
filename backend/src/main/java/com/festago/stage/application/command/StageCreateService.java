@@ -32,7 +32,6 @@ public class StageCreateService {
     private final StageArtistRepository stageArtistRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    // TODO 추가할 수 있는 Artist 개수에 대한 검증이 필요하지 않을까?
     public Long createStage(StageCreateCommand command) {
         validate(command);
         Festival festival = festivalRepository.getOrThrow(command.festivalId());
@@ -68,8 +67,6 @@ public class StageCreateService {
         if (artistRepository.countByIdIn(artistIds) == artistIds.size()) {
             artistIds.forEach(artistId -> stageArtistRepository.save(new StageArtist(stage.getId(), artistId)));
         } else {
-            // TODO 명확한 예외를 던져주는게 좋을지?
-            // ex) 존재하지 않은 아티스트 입니다. artistId = ...
             throw new NotFoundException(ErrorCode.ARTIST_NOT_FOUND);
         }
     }
