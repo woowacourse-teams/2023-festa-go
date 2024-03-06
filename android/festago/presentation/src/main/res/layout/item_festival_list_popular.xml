@@ -44,13 +44,13 @@
             android:ellipsize="end"
             android:gravity="center"
             android:lineSpacingExtra="0dp"
-            android:maxLines="2"
-            android:text="@{item.schoolUiState.name+'\n'+ item.name }"
+            android:lines="2"
+            android:text="@{item.name}"
             android:textColor="@color/background_gray_01"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/vpPopularFestivalForeground"
-            tools:text="대학교 \n 축제 이름" />
+            tools:text="연세대 아카라카 연세대 아카라카 연세대 아카라카" />
 
         <TextView
             android:id="@+id/tvFestivalSchedule"

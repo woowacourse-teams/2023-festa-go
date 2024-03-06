@@ -78,6 +78,7 @@ class FestivalListFragment : Fragment() {
             vm.initFestivalList()
             binding.srlFestivalList.isRefreshing = false
         }
+        binding.srlFestivalList.setDistanceToTriggerSync(400)
         binding.ivSearch.setOnClickListener { // 임시 연결
             showSchoolDetail()
         }
