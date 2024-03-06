@@ -16,13 +16,18 @@
             android:background="@android:color/transparent"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/contents_gray_07"
-            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorFullWidth="false"
             app:tabIndicatorHeight="2dp"
             app:tabSelectedTextColor="@color/contents_gray_07"
             app:tabTextAppearance="@style/H1Bold20Lh20"
             app:tabTextColor="@color/contents_gray_04">
 
         </com.google.android.material.tabs.TabLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background_gray_03" />
 
     </LinearLayout>
 </layout>

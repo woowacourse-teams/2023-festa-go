@@ -27,7 +27,8 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 아티스트를_저장한다() {
         // given
-        ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png");
+        ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png",
+            "https://image.com/image.png");
 
         // when
         Long artistId = artistCommandService.save(request);
@@ -41,7 +42,8 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     void 아티스트_정보를_변경한다() {
         // given
         Long artistId = artistRepository.save(new Artist("고윤하", "https://image.com/image1.png")).getId();
-        ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image2.png");
+        ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image2.png",
+            "https://image.com/image2.png");
 
         // when
         artistCommandService.update(request, artistId);

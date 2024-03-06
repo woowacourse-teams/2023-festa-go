@@ -23,6 +23,11 @@
     <!-- String related to artist detail -->
     <string name="artist_detail_tv_dday_format">D%1$s</string>
 
+    <!-- String related to notification list-->
+    <string name="notification_list_tv_notification_app_bar">알림</string>
+    <string name="notification_list_tv_no_notification">아직 도착한 알림이 없어요</string>
+    <string name="notification_list_tv_no_notification_explain">새로운 소식이 도착하면 알려드릴게요</string>
+
     <!-- String related to festival detail -->
     <string name="festival_detail_tv_dday_in_progress">진행 중</string>
     <string name="festival_detail_tv_dday_format">D%1$s</string>

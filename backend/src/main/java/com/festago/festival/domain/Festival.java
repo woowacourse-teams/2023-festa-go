@@ -74,13 +74,13 @@ public class Festival extends BaseTimeEntity {
 
     private void validateName(String name) {
         String fieldName = "name";
-        Validator.hasBlank(name, fieldName);
+        Validator.notBlank(name, fieldName);
         Validator.maxLength(name, MAX_NAME_LENGTH, fieldName);
     }
 
     private void validateThumbnail(String thumbnail) {
         String fieldName = "thumbnail";
-        Validator.hasBlank(thumbnail, fieldName);
+        Validator.notBlank(thumbnail, fieldName);
         Validator.maxLength(thumbnail, MAX_THUMBNAIL_LENGTH, fieldName);
     }
 

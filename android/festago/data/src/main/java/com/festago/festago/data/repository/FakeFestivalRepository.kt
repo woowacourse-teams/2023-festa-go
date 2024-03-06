@@ -15,7 +15,12 @@ import javax.inject.Inject
 class FakeFestivalRepository @Inject constructor() : FestivalRepository {
 
     override suspend fun loadPopularFestivals(): Result<PopularFestivals> {
-        return Result.success(PopularFestivals("인기 축제 목록", FakeFestivals.popularFestivals))
+        return Result.success(
+            PopularFestivals(
+                title = "인기 축제 목록",
+                festivals = FakeFestivals.popularFestivals,
+            ),
+        )
     }
 
     override suspend fun loadFestivals(
@@ -28,18 +33,24 @@ class FakeFestivalRepository @Inject constructor() : FestivalRepository {
         val notNullSize = size ?: DEFAULT_SIZE
         val notNullLastFestivalId = lastFestivalId ?: DEFAULT_LAST_FESTIVAL_ID
 
+        if (festivalFilter == FestivalFilter.PLANNED) {
+            return Result.success(
+                FestivalsPage(isLastPage = true, festivals = FakeFestivals.plannedFestivals),
+            )
+        }
+
         if (notNullLastFestivalId + notNullSize < LAST_ITEM_ID) {
             return Result.success(
                 FestivalsPage(
-                    false,
-                    getFestivals((notNullLastFestivalId + 1)..(notNullLastFestivalId + notNullSize)),
+                    isLastPage = false,
+                    festivals = getFestivals((notNullLastFestivalId + 1)..(notNullLastFestivalId + notNullSize)),
                 ),
             )
         }
         return Result.success(
             FestivalsPage(
-                true,
-                getFestivals((notNullLastFestivalId + 1)..LAST_ITEM_ID),
+                isLastPage = true,
+                festivals = getFestivals((notNullLastFestivalId + 1)..LAST_ITEM_ID),
             ),
         )
     }
