@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ItemArtistDetailFestivalBinding
 import com.festago.festago.presentation.ui.artistdetail.adapter.artistlist.ArtistAdapter
-import com.festago.festago.presentation.ui.artistdetail.uistate.StageUiState
+import com.festago.festago.presentation.ui.artistdetail.uistate.FestivalItemUiState
 import java.time.LocalDate
 
 class ArtistDetailFestivalViewHolder(
@@ -26,13 +26,13 @@ class ArtistDetailFestivalViewHolder(
         binding.rvFestivalArtists.addItemDecoration(ArtistItemDecoration())
     }
 
-    fun bind(item: StageUiState) {
+    fun bind(item: FestivalItemUiState) {
         binding.item = item
         artistAdapter.submitList(item.artists)
         bindDDayView(item)
     }
 
-    private fun bindDDayView(item: StageUiState) {
+    private fun bindDDayView(item: FestivalItemUiState) {
         val context = binding.root.context
 
         val dDayView = binding.tvFestivalDDay

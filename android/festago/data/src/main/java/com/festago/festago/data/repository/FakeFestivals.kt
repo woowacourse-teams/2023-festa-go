@@ -2,10 +2,154 @@ package com.festago.festago.data.repository
 
 import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.festival.Festival
+import com.festago.festago.domain.model.festival.FestivalDetail
 import com.festago.festago.domain.model.school.School
+import com.festago.festago.domain.model.social.SocialMedia
+import com.festago.festago.domain.model.stage.Stage
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 object FakeFestivals {
+
+    val festivalDetail = FestivalDetail(
+        id = 1L,
+        name = "부경대 대동제",
+        startDate = LocalDate.now().plusDays(7L),
+        endDate = LocalDate.now().plusDays(10L),
+        posterImageUrl = "https://mblogthumb-phinf.pstatic.net/MjAyMzA1MjNfMTMx/MDAxNjg0ODIwNzY5NzQ5.MuYItN1HCOQUcADB6B7ua0SO9Au_QNNk01-6yZkcTH0g.wxSjluY-Glq20JIojs7OuScLQWh6c_sQsoW5xXqiM7Ag.JPEG.chummilmil99/SE-126908ba-0f82-4903-91c5-695db78a98e9.jpg?type=w800",
+        school = School(id = 2L, name = "부경대학교", imageUrl = ""),
+        socialMedias = listOf(
+            SocialMedia(
+                type = "INSTAGRAM",
+                name = "총학생회 인스타그램",
+                logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png",
+                url = "https://www.instagram.com/25th_solution/",
+            ),
+            SocialMedia(
+                type = "FACEBOOK",
+                name = "총학생회 페이스북",
+                logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png",
+                url = "https://www.facebook.com/23rdemotion/",
+            ),
+        ),
+        stages = listOf(
+            Stage(
+                id = 1L,
+                startDateTime = LocalDateTime.now().plusDays(0L),
+                artists = listOf(
+                    Artist(
+                        id = 1L,
+                        name = "BTS",
+                        imageUrl = "https://i.namu.wiki/i/gpgJvt_C2vKJS4VA4K_Vm57Y5WoS83ofshxhJlQaT4P9Tu0N96vZ2OcdeAN7ZtRAM26UyyQs3sualkKk6i_SrRMvwVKrU015XJqzJ7wKRbOub_oUAxPSFre_8D5De3oy-fCxL0uZ-HGvsWxIX57yrw.webp",
+                    ),
+                    Artist(
+                        id = 2L,
+                        name = "싸이",
+                        imageUrl = "https://i.namu.wiki/i/VH58lI8f-y8QSoxFH9IAjjCobySN0lflZ4rMy6Un7qawUwAyi9UfeseZWCzxH-lQeZk7q_eUyTHGlZBAPqSLWliIKWYDLaAgomVtOyAQg60aCpF3oNTBOgUe_hig3rbHW-YAgoj95Fww3MCToyM6MA.webp",
+                    ),
+                    Artist(
+                        id = 10L,
+                        name = "마마무",
+                        imageUrl = "https://i.namu.wiki/i/Mre8tXnE40mB9_UwXIwASMEAUSVhHvyjJxXq-lQo40C3bLWYfxXBeai8t6TugyomPjFgxL3VfDA2zn65HlzqPXgTKlvdRl1gJ6PGZLxYYk8Uhk8L6va7zm_etSK5UzVLE56fUATqUCq-6tRQXigmYQ.webp",
+                    ),
+                    Artist(
+                        id = 11L,
+                        name = "블랙핑크",
+                        imageUrl = "https://i.namu.wiki/i/VZxRYO8_CXa2QbOSZgttDq5ue5QEu_Fbk1Lwo3qpasLAfS802YExcnmVmDhCq3ONF0ExzhACz_YkZbxOGmIfjuPDZnFo7i0pWaT05NluHRHGfp9NqsAT6WBNb0k5KecOyDvakXk0VH2fUo4ojSwC6g.webp",
+                    ),
+                    Artist(
+                        id = 4L,
+                        name = "AKMU",
+                        imageUrl = "https://i.namu.wiki/i/7yRF8Yrk9kdQxzETNO8TQp9jJpQENVUGbj-4YwB-xdVmJWoTAY7MgVA6G72Z-xmunPG0Zd3WTN_EsTwsx7oNFIO-yl0nHmaIU-ZRCpyhzVE5L9y8Sb9gkAKVt_jZBtgvVrOjw1UQq32gQsYaoS1jsg.webp",
+                    ),
+                ),
+            ),
+            Stage(
+                id = 2L,
+                startDateTime = LocalDateTime.now().plusDays(1L),
+                artists = listOf(
+                    Artist(
+                        id = 3L,
+                        name = "아이유",
+                        imageUrl = "https://i.namu.wiki/i/-GuxB5nI9Q-a5W_nAJEapwdUzCLyFShWJfmUfZk04cW_fFC485TRD6UlzGQCBnFpJegXBaa4WO-PThNom_7wlosOiXgb-k3-wgUr3PkyX89PU3RCschmgQ0FmS1ClOK3ph4ztAd55YWWlhk7Gm114w.webp",
+                    ),
+                    Artist(
+                        id = 5L,
+                        name = "뉴진스",
+                        imageUrl = "https://i.namu.wiki/i/GdMUzQlsrAXyF5zlgqRR0lYvAGnFghBbLxqTZK_mzLvV0LYPNQdaak1ezYtKqSNBA7UaINkrMNqncRkxThI8j2IEk2qcXJ3bLqIllRexenai641g-uvxCxFcDa9doCy0kTnMLEp5gad8Ze2fLDDBvg.webp",
+                    ),
+                    Artist(
+                        id = 6L,
+                        name = "비비",
+                        imageUrl = "https://i.namu.wiki/i/JlXBTAah7fOILgmvAQf5bW4yWbS082qw6XtV36g4a-2g5TrwTRaUf95r1YnEYi6dt_rf3o9YuRN2qVl0pdgIW5d6-DeYg67KwaSrqu3_MkUwQItlsrSLqDjm1G0jW-Z5mzQ2aOTU4ZvyE1hpSokIOA.webp",
+                    ),
+                ),
+            ),
+            Stage(
+                id = 3L,
+                startDateTime = LocalDateTime.now().plusDays(2L),
+                artists = listOf(
+                    Artist(
+                        id = 7L,
+                        name = "TWS",
+                        imageUrl = "https://i.namu.wiki/i/rVwKhMepUc-b-hRa2Nc6mIJRO0eTfgxyAEwVS5XfADNRhQhYJdSg8ke3o6VZd3rLyNasMlGjuXJWqHDoD_Z24o3dBzkaf7gqhCc89XoCKOiII4P-eilx46XHOOTfd2eaonCVNQevsAVl0l5WIWaI5Q.webp",
+                    ),
+                    Artist(
+                        id = 8L,
+                        name = "소녀시대",
+                        imageUrl = "https://i.namu.wiki/i/snftu-N6Op26hU4HITlraWW6Q_WiSXqhRX2NOhQadzI81RPC7054_mi-evsqRTdRe9nKcBEF-Ugji4vtWunmtiEY1v319tHhIVestCkcSJ0MZF6KbKOScoDjOypW7WPa58goYA-vX5D8baIa2UYFZg.webp",
+                    ),
+                    Artist(
+                        id = 9L,
+                        name = "르세라핌",
+                        imageUrl = "https://i.namu.wiki/i/Zbm1DseL0fjSd9H2uLrfL9SpBLPYQe7j4S9BPI2wdTw9G_Gykifyw-Nil8yVZglxxW-CRQt15b-tMdrvfuUiSW9mm2ZEBf8sQQQgp9wZmZhe8neg_5A6ehJ6hYLATAqvnOw157aODDq4qU1J-kv-bA.webp",
+                    ),
+                ),
+            ),
+            Stage(
+                id = 4L,
+                startDateTime = LocalDateTime.now().plusDays(3L),
+                artists = listOf(
+                    Artist(
+                        id = 7L,
+                        name = "TWS",
+                        imageUrl = "https://i.namu.wiki/i/rVwKhMepUc-b-hRa2Nc6mIJRO0eTfgxyAEwVS5XfADNRhQhYJdSg8ke3o6VZd3rLyNasMlGjuXJWqHDoD_Z24o3dBzkaf7gqhCc89XoCKOiII4P-eilx46XHOOTfd2eaonCVNQevsAVl0l5WIWaI5Q.webp",
+                    ),
+                    Artist(
+                        id = 8L,
+                        name = "소녀시대",
+                        imageUrl = "https://i.namu.wiki/i/snftu-N6Op26hU4HITlraWW6Q_WiSXqhRX2NOhQadzI81RPC7054_mi-evsqRTdRe9nKcBEF-Ugji4vtWunmtiEY1v319tHhIVestCkcSJ0MZF6KbKOScoDjOypW7WPa58goYA-vX5D8baIa2UYFZg.webp",
+                    ),
+                    Artist(
+                        id = 9L,
+                        name = "르세라핌",
+                        imageUrl = "https://i.namu.wiki/i/Zbm1DseL0fjSd9H2uLrfL9SpBLPYQe7j4S9BPI2wdTw9G_Gykifyw-Nil8yVZglxxW-CRQt15b-tMdrvfuUiSW9mm2ZEBf8sQQQgp9wZmZhe8neg_5A6ehJ6hYLATAqvnOw157aODDq4qU1J-kv-bA.webp",
+                    ),
+                ),
+            ),
+            Stage(
+                id = 5L,
+                startDateTime = LocalDateTime.now().plusDays(4L),
+                artists = listOf(
+                    Artist(
+                        id = 7L,
+                        name = "TWS",
+                        imageUrl = "https://i.namu.wiki/i/rVwKhMepUc-b-hRa2Nc6mIJRO0eTfgxyAEwVS5XfADNRhQhYJdSg8ke3o6VZd3rLyNasMlGjuXJWqHDoD_Z24o3dBzkaf7gqhCc89XoCKOiII4P-eilx46XHOOTfd2eaonCVNQevsAVl0l5WIWaI5Q.webp",
+                    ),
+                    Artist(
+                        id = 8L,
+                        name = "소녀시대",
+                        imageUrl = "https://i.namu.wiki/i/snftu-N6Op26hU4HITlraWW6Q_WiSXqhRX2NOhQadzI81RPC7054_mi-evsqRTdRe9nKcBEF-Ugji4vtWunmtiEY1v319tHhIVestCkcSJ0MZF6KbKOScoDjOypW7WPa58goYA-vX5D8baIa2UYFZg.webp",
+                    ),
+                    Artist(
+                        id = 9L,
+                        name = "르세라핌",
+                        imageUrl = "https://i.namu.wiki/i/Zbm1DseL0fjSd9H2uLrfL9SpBLPYQe7j4S9BPI2wdTw9G_Gykifyw-Nil8yVZglxxW-CRQt15b-tMdrvfuUiSW9mm2ZEBf8sQQQgp9wZmZhe8neg_5A6ehJ6hYLATAqvnOw157aODDq4qU1J-kv-bA.webp",
+                    ),
+                ),
+            ),
+        ),
+    )
 
     val progressFestivals = listOf(
         Festival(

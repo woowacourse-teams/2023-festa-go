@@ -2,6 +2,7 @@ package com.festago.festago.data.repository
 
 import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.festival.Festival
+import com.festago.festago.domain.model.festival.FestivalDetail
 import com.festago.festago.domain.model.festival.FestivalFilter
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.festival.PopularFestivals
@@ -69,9 +70,33 @@ class FakeFestivalRepository @Inject constructor() : FestivalRepository {
                         name = "뉴진스",
                         imageUrl = "https://cdn.mediatoday.co.kr/news/photo/202311/313885_438531_4716.jpg",
                     ),
+                    Artist(
+                        id = 1L,
+                        name = "BTS",
+                        imageUrl = "https://i.namu.wiki/i/gpgJvt_C2vKJS4VA4K_Vm57Y5WoS83ofshxhJlQaT4P9Tu0N96vZ2OcdeAN7ZtRAM26UyyQs3sualkKk6i_SrRMvwVKrU015XJqzJ7wKRbOub_oUAxPSFre_8D5De3oy-fCxL0uZ-HGvsWxIX57yrw.webp",
+                    ),
+                    Artist(
+                        id = 2L,
+                        name = "싸이",
+                        imageUrl = "https://i.namu.wiki/i/VH58lI8f-y8QSoxFH9IAjjCobySN0lflZ4rMy6Un7qawUwAyi9UfeseZWCzxH-lQeZk7q_eUyTHGlZBAPqSLWliIKWYDLaAgomVtOyAQg60aCpF3oNTBOgUe_hig3rbHW-YAgoj95Fww3MCToyM6MA.webp",
+                    ),
+                    Artist(
+                        id = 10L,
+                        name = "마마무",
+                        imageUrl = "https://i.namu.wiki/i/Mre8tXnE40mB9_UwXIwASMEAUSVhHvyjJxXq-lQo40C3bLWYfxXBeai8t6TugyomPjFgxL3VfDA2zn65HlzqPXgTKlvdRl1gJ6PGZLxYYk8Uhk8L6va7zm_etSK5UzVLE56fUATqUCq-6tRQXigmYQ.webp",
+                    ),
+                    Artist(
+                        id = 11L,
+                        name = "블랙핑크",
+                        imageUrl = "https://i.namu.wiki/i/VZxRYO8_CXa2QbOSZgttDq5ue5QEu_Fbk1Lwo3qpasLAfS802YExcnmVmDhCq3ONF0ExzhACz_YkZbxOGmIfjuPDZnFo7i0pWaT05NluHRHGfp9NqsAT6WBNb0k5KecOyDvakXk0VH2fUo4ojSwC6g.webp",
+                    ),
                 ),
             )
         }
+    }
+
+    override suspend fun loadFestivalDetail(id: Long): Result<FestivalDetail> {
+        return Result.success(FakeFestivals.festivalDetail)
     }
 
     companion object {

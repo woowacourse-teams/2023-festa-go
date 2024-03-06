@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="java.time.LocalDate" />
+
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState" />
+
+        <variable
+            name="successUiState"
+            type="com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState.Success" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_gray_01"
+        android:clickable="true"
+        tools:context=".ui.festivaldetail.FestivalDetailFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFestivalInfo"
+            visibility="@{uiState.shouldShowSuccess}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/background_gray_01"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivFestivalBackground"
+                imageUrl="@{successUiState.festival.posterImageUrl}"
+                android:layout_width="match_parent"
+                android:layout_height="136dp"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_launcher_background" />
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="@id/ivFestivalBackground"
+                app:layout_constraintStart_toStartOf="@id/ivFestivalBackground"
+                app:layout_constraintTop_toTopOf="@id/ivFestivalBackground" />
+
+            <ImageView
+                android:id="@+id/ivFestivalPoster"
+                imageUrl="@{successUiState.festival.posterImageUrl}"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="-40dp"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivFestivalBackground"
+                tools:src="@drawable/ic_launcher_foreground" />
+
+            <TextView
+                android:id="@+id/tvFestivalDDay"
+                style="@style/H5Bold14Lh16"
+                android:layout_width="56dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/secondary_pink_01"
+                android:gravity="center"
+                android:textColor="@color/background_gray_01"
+                app:layout_constraintBottom_toBottomOf="@+id/ivFestivalBackground"
+                app:layout_constraintStart_toEndOf="@+id/ivFestivalPoster"
+                tools:text="D-DAY" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvBookmark"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                app:cardBackgroundColor="@color/background_gray_02"
+                app:cardCornerRadius="1000dp"
+                app:layout_constraintBottom_toBottomOf="@id/ivFestivalPoster"
+                app:layout_constraintEnd_toEndOf="@id/ivFestivalPoster"
+                app:layout_constraintStart_toEndOf="@id/ivFestivalPoster">
+
+                <ImageView
+                    android:id="@+id/ivBookmark"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_bookmark"
+                    app:tint="@color/tint_bookmark" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvFestivalName"
+                style="@style/H2Bold20Lh24"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="start"
+                android:includeFontPadding="false"
+                android:maxLines="2"
+                android:text="@{successUiState.festival.name}"
+                android:textColor="@color/contents_gray_07"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivFestivalPoster"
+                app:layout_constraintTop_toBottomOf="@id/ivFestivalBackground"
+                tools:text="홍익대학교 와우페스티벌 2023" />
+
+            <TextView
+                android:id="@+id/tvFestivalSchedule"
+                style="@style/B1Medium16Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{@string/festival_list_tv_date_range_format(successUiState.festival.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),successUiState.festival.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
+                android:textColor="@color/contents_gray_07"
+                app:layout_constraintStart_toStartOf="@+id/tvFestivalName"
+                app:layout_constraintTop_toBottomOf="@+id/tvFestivalName"
+                tools:text="21.10.10 ~ 21.10.12" />
+
+            <HorizontalScrollView
+                android:id="@+id/hsvFestivalSocialMedia"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:scrollbars="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/mdDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tvFestivalSchedule"
+                app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule"
+                app:singleLine="true">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llcFestivalSocialMedia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/mdDivider"
+                android:layout_width="match_parent"
+                android:layout_height="0.2dp"
+                app:dividerColor="@color/background_gray_03"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvStageList"
+            visibility="@{uiState.shouldShowSuccess}"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clFestivalInfo"
+            tools:listitem="@layout/item_festival_detail_stage" />
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

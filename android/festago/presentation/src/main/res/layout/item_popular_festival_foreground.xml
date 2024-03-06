@@ -20,6 +20,7 @@
         <ImageView
             android:id="@+id/ivPopularFestivalImage"
             imageUrl="@{item.imageUrl}"
+            onSingleClick="@{()-> item.onFestivalDetail.invoke(item.id)}"
             android:layout_width="220dp"
             android:layout_height="220dp"
             android:layout_marginTop="12dp"

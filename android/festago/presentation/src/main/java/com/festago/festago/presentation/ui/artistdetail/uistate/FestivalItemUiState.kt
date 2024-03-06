@@ -2,7 +2,7 @@ package com.festago.festago.presentation.ui.artistdetail.uistate
 
 import java.time.LocalDate
 
-data class StageUiState(
+data class FestivalItemUiState(
     val id: Long,
     val name: String,
     val startDate: LocalDate,

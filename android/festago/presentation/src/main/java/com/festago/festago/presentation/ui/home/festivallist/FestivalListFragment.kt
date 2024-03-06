@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
@@ -63,6 +64,11 @@ class FestivalListFragment : Fragment() {
             vm.uiState.collect {
                 binding.uiState = it
                 updateUi(it)
+            }
+        }
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect {
+                handleEvent(it)
             }
         }
     }
@@ -159,6 +165,18 @@ class FestivalListFragment : Fragment() {
         }
     }
 
+    private fun handleEvent(event: FestivalListEvent) {
+        when (event) {
+            is FestivalListEvent.ShowFestivalDetail -> {
+                requireActivity().supportFragmentManager.commit {
+                    add(R.id.fcvHomeContainer, FestivalDetailFragment.newInstance(event.festivalId))
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
+                    addToBackStack(null)
+                }
+            }
+        }
+    }
+
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
         val items = uiState.getItems()
         festivalListAdapter.submitList(items)
@@ -177,7 +195,7 @@ class FestivalListFragment : Fragment() {
 
     private fun showSchoolDetail() {
         activity?.supportFragmentManager!!.beginTransaction()
-            .replace(R.id.fcvHomeContainer, SchoolDetailFragment.newInstance(0))
+            .add(R.id.fcvHomeContainer, SchoolDetailFragment.newInstance(0))
             .addToBackStack(null)
             .commit()
     }
