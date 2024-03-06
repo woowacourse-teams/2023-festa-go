@@ -12,13 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
-import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -66,7 +67,7 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initView() {
-        vm.loadFestivals()
+        vm.initFestivalList()
         initViewPager()
         initRecyclerView()
         initRefresh()
@@ -74,7 +75,7 @@ class FestivalListFragment : Fragment() {
 
     private fun initRefresh() {
         binding.srlFestivalList.setOnRefreshListener {
-            vm.loadFestivals()
+            vm.initFestivalList()
             binding.srlFestivalList.isRefreshing = false
         }
         binding.ivSearch.setOnClickListener { // 임시 연결
@@ -97,6 +98,30 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
+        initScrollEvent()
+        initDecoration()
+    }
+
+    private fun initScrollEvent() {
+        binding.rvFestivalList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val festivalListUiState = vm.uiState.value as? FestivalListUiState.Success ?: return
+                if (festivalListUiState.isLastPage) return
+
+                val lastVisibleItemPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+
+                val itemTotalCount = recyclerView.adapter!!.itemCount - 1
+                if (lastVisibleItemPosition == itemTotalCount) {
+                    vm.loadFestivals()
+                }
+            }
+        })
+    }
+
+    private fun initDecoration() {
         binding.rvFestivalList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
@@ -135,22 +160,14 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun FestivalListUiState.Success.getItems(): List<Any> {
-        val items = mutableListOf<Any>()
-        if (popularFestivalUiState.festivals.isNotEmpty()) {
-            items.add(popularFestivalUiState)
-        }
-        items.add(
-            FestivalTabUiState {
-                val festivalFilter = when (it) {
-                    0 -> FestivalFilterUiState.PROGRESS
-                    1 -> FestivalFilterUiState.PLANNED
-                    else -> FestivalFilterUiState.PROGRESS
-                }
-                vm.loadFestivals(festivalFilter)
-            },
-        )
-        items.addAll(festivals)
-        return items.toList()
+        return mutableListOf<Any>().apply {
+            if (popularFestivalUiState.festivals.isNotEmpty()) {
+                add(popularFestivalUiState)
+            }
+            add(FestivalTabUiState(festivalFilter) { vm.loadFestivals(it) })
+            addAll(festivals)
+            if (!isLastPage) add(FestivalMoreItemUiState)
+        }.toList()
     }
 
     private fun showSchoolDetail() {

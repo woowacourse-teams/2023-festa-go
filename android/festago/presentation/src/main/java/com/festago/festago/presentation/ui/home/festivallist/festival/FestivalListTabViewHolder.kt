@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ItemFestivalListTabBinding
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.google.android.material.tabs.TabLayout
 
@@ -23,18 +24,25 @@ class FestivalListTabViewHolder(val binding: ItemFestivalListTabBinding) :
     }
 
     fun bind(festivalTabUiState: FestivalTabUiState) {
-        binding.tlFestivalListTab.clearOnTabSelectedListeners()
-        binding.tlFestivalListTab.addOnTabSelectedListener(
-            object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab) {
-                    festivalTabUiState.onClick(tab.position)
-                }
+        with(binding.tlFestivalListTab) {
+            clearOnTabSelectedListeners()
+            selectTab(getTabAt(festivalTabUiState.selectedFilter.tabPosition))
+            addOnTabSelectedListener(
+                object : TabLayout.OnTabSelectedListener {
+                    override fun onTabSelected(tab: TabLayout.Tab) {
+                        festivalTabUiState.onFilterSelected(getFestivalFilterAt(tab.position))
+                    }
 
-                override fun onTabUnselected(tab: TabLayout.Tab) = Unit
-                override fun onTabReselected(tab: TabLayout.Tab) = Unit
-            },
-        )
+                    override fun onTabUnselected(tab: TabLayout.Tab) = Unit
+                    override fun onTabReselected(tab: TabLayout.Tab) = Unit
+                },
+            )
+        }
     }
+
+    private fun getFestivalFilterAt(position: Int): FestivalFilterUiState =
+        FestivalFilterUiState.values().find { it.tabPosition == position }
+            ?: FestivalFilterUiState.PROGRESS
 
     companion object {
         fun of(parent: ViewGroup): FestivalListTabViewHolder {
