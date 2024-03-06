@@ -1,6 +1,7 @@
 package com.festago.stage.application.command;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
@@ -8,6 +9,7 @@ import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.MemoryArtistRepository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
+import com.festago.common.exception.ValidException;
 import com.festago.festival.domain.Festival;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.domain.StageArtist;
@@ -19,6 +21,7 @@ import com.festago.support.StageFixture;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.LongStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -29,6 +32,7 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class StageUpdateServiceTest {
 
+    private static final String PROFILE_IMAGE_URL = "https://image.com/profileImage.png";
     MemoryStageRepository stageRepository = new MemoryStageRepository();
     MemoryArtistRepository artistRepository = new MemoryArtistRepository();
     MemoryStageArtistRepository stageArtistRepository = new MemoryStageArtistRepository();
@@ -62,9 +66,9 @@ class StageUpdateServiceTest {
                 .ticketOpenTime(ticketOpenTime)
                 .build()
         );
-        에픽하이 = artistRepository.save(new Artist("에픽하이", "https://image.com/profileImage.png"));
-        소녀시대 = artistRepository.save(new Artist("소녀시대", "https://image.com/profileImage.png"));
-        뉴진스 = artistRepository.save(new Artist("뉴진스", "https://image.com/profileImage.png"));
+        에픽하이 = artistRepository.save(new Artist("에픽하이", PROFILE_IMAGE_URL));
+        소녀시대 = artistRepository.save(new Artist("소녀시대", PROFILE_IMAGE_URL));
+        뉴진스 = artistRepository.save(new Artist("뉴진스", PROFILE_IMAGE_URL));
         stageArtistRepository.save(new StageArtist(테코대학교_축제_공연.getId(), 에픽하이.getId()));
         stageArtistRepository.save(new StageArtist(테코대학교_축제_공연.getId(), 소녀시대.getId()));
         stageArtistRepository.save(new StageArtist(테코대학교_축제_공연.getId(), 뉴진스.getId()));
@@ -72,6 +76,58 @@ class StageUpdateServiceTest {
 
     @Nested
     class updateStage {
+
+        @Test
+        void ArtistIds에_중복이_있으면_예외() {
+            // given
+            var command = new StageUpdateCommand(
+                stageStartTime.minusHours(1),
+                ticketOpenTime.minusDays(1),
+                List.of(에픽하이.getId(), 에픽하이.getId())
+            );
+
+            // then
+            // when & then
+            assertThatThrownBy(() -> stageUpdateService.updateStage(테코대학교_축제_공연.getId(), command))
+                .isInstanceOf(ValidException.class)
+                .hasMessage("artistIds에 중복된 값이 있습니다.");
+        }
+
+        @Test
+        void ArtistIds의_개수가_10개를_초과하면_예외() {
+            // given
+            List<Long> artistIds = LongStream.rangeClosed(1, 11)
+                .boxed()
+                .toList();
+            var command = new StageUpdateCommand(
+                stageStartTime.minusHours(1),
+                ticketOpenTime.minusDays(1),
+                artistIds
+            );
+
+            // when & then
+            assertThatThrownBy(() -> stageUpdateService.updateStage(테코대학교_축제_공연.getId(), command))
+                .isInstanceOf(ValidException.class)
+                .hasMessage("artistIds의 size는 10 이하여야 합니다.");
+        }
+
+        @Test
+        void ArtistIds의_개수가_10개_이하이면_예외가_발생하지_않는다() {
+            // given
+            List<Long> artistIds = LongStream.rangeClosed(1, 10)
+                .mapToObj(it -> artistRepository.save(new Artist("Artist " + it, PROFILE_IMAGE_URL)))
+                .map(Artist::getId)
+                .toList();
+            var command = new StageUpdateCommand(
+                stageStartTime.minusHours(1),
+                ticketOpenTime.minusDays(1),
+                artistIds
+            );
+
+            // when
+            assertThatNoException()
+                .isThrownBy(() -> stageUpdateService.updateStage(테코대학교_축제_공연.getId(), command));
+        }
 
         @Test
         void Stage에_대한_식별자가_없으면_예외() {
