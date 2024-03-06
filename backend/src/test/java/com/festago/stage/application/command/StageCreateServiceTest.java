@@ -87,7 +87,7 @@ class StageCreateServiceTest {
             // when & then
             assertThatThrownBy(() -> stageCreateService.createStage(command))
                 .isInstanceOf(ValidException.class)
-                .hasMessage("중복된 Artist가 존재합니다.");
+                .hasMessage("artistIds에 중복된 값이 있습니다.");
         }
 
         @Test
@@ -106,7 +106,7 @@ class StageCreateServiceTest {
             // when & then
             assertThatThrownBy(() -> stageCreateService.createStage(command))
                 .isInstanceOf(ValidException.class)
-                .hasMessage("Artist의 수는 10 이하여야 합니다.");
+                .hasMessage("artistIds의 size는 10 이하여야 합니다.");
         }
 
         @Test
