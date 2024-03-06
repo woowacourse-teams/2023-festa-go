@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 class ValidatorTest {
 
     @Nested
-    class hasBlank {
+    class notBlank {
 
         @ParameterizedTest
         @NullSource
@@ -215,7 +215,7 @@ class ValidatorTest {
     }
 
     @Nested
-    class isNegative {
+    class notNegative {
 
         @Test
         void 값이_음수이면_예외() {
