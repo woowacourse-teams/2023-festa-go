@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
@@ -102,17 +103,33 @@ class FestivalDetailFragment : Fragment() {
     private fun TextView.setFestivalDDay(startDate: LocalDate, endDate: LocalDate) {
         when {
             LocalDate.now() in startDate..endDate -> {
-                text = context.getString(R.string.festival_detail_tv_dday)
-            }
-
-            LocalDate.now() < startDate -> {
-                text = context.getString(
-                    R.string.festival_detail_tv_dday_format,
-                    (LocalDate.now().toEpochDay() - startDate.toEpochDay()).toString(),
+                text = context.getString(R.string.festival_detail_tv_dday_in_progress)
+                setTextColor(context.getColor(R.color.secondary_pink_01))
+                background = AppCompatResources.getDrawable(
+                    context,
+                    R.drawable.bg_festival_list_dday_in_progress,
                 )
             }
 
+            LocalDate.now() < startDate -> {
+                val dDay = LocalDate.now().toEpochDay() - startDate.toEpochDay()
+                val backgroundColor = if (dDay >= -7L) {
+                    context.getColor(R.color.secondary_pink_01)
+                } else {
+                    context.getColor(R.color.contents_gray_07)
+                }
+                setBackgroundColor(backgroundColor)
+                setTextColor(context.getColor(R.color.background_gray_01))
+                text = context.getString(R.string.festival_detail_tv_dday_format, dDay.toString())
+            }
+
             else -> {
+                setBackgroundColor(Color.TRANSPARENT)
+                setTextColor(context.getColor(R.color.background_gray_01))
+                background = AppCompatResources.getDrawable(
+                    context,
+                    R.drawable.bg_festival_detail_dday_end,
+                )
                 text = context.getString(R.string.festival_detail_tv_dday_end)
             }
         }
