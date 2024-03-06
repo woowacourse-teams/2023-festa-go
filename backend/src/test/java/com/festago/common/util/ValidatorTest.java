@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.common.exception.UnexpectedException;
 import com.festago.common.exception.ValidException;
+import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
@@ -232,6 +233,82 @@ class ValidatorTest {
             // when & then
             assertThatNoException()
                 .isThrownBy(() -> Validator.notNegative(value, ""));
+        }
+    }
+
+    @Nested
+    class maxSize {
+
+        @Test
+        void 원소의_개수가_3이고_최대_개수가_3이면_통과() {
+            // given
+            int maxSize = 3;
+            List<Integer> input = List.of(1, 2, 3);
+
+            // when & then
+            assertThatNoException()
+                .isThrownBy(() -> Validator.maxSize(input, maxSize, "input"));
+        }
+
+        @Test
+        void 원소의_개수가_4이고_최대_개수가_3이면_예외() {
+            // given
+            int maxSize = 3;
+            List<Integer> input = List.of(1, 2, 3, 4);
+
+            // given
+            assertThatThrownBy(() -> Validator.maxSize(input, maxSize, "input"))
+                .isInstanceOf(ValidException.class);
+        }
+    }
+
+    @Nested
+    class minSize {
+
+        @Test
+        void 원소의_개수가_3이고_최소_개수가_3이면_통과() {
+            // given
+            int minSize = 3;
+            List<Integer> input = List.of(1, 2, 3);
+
+            // when & then
+            assertThatNoException()
+                .isThrownBy(() -> Validator.minSize(input, minSize, "input"));
+        }
+
+        @Test
+        void 원소의_개수가_2이고_최소_개수가_3이면_예외() {
+            // given
+            int minSize = 3;
+            List<Integer> input = List.of(1, 2);
+
+            // given
+            assertThatThrownBy(() -> Validator.minSize(input, minSize, "input"))
+                .isInstanceOf(ValidException.class);
+        }
+    }
+
+    @Nested
+    class notDuplicate {
+
+        @Test
+        void 리스트에_중복된_값이_없으면_통과() {
+            // given
+            List<Integer> list = List.of(1, 2, 3);
+
+            // when & then
+            assertThatNoException()
+                .isThrownBy(() -> Validator.notDuplicate(list, "list"));
+        }
+
+        @Test
+        void 리스트에_중복된_값이_있으면_예외() {
+            // given
+            List<Integer> list = List.of(1, 2, 1);
+
+            // when & then
+            assertThatThrownBy(() -> Validator.notDuplicate(list, "list"))
+                .isInstanceOf(ValidException.class);
         }
     }
 }
