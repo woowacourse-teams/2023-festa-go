@@ -7,16 +7,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SchoolInfoResponse(
     val id: Int,
-    val schoolName: String?,
+    val name: String?,
     val logoUrl: String?,
-    val backgroundUrl: String?,
+    val backgroundImageUrl: String?,
     val socialMedias: List<SocialMediaResponse>,
 ) {
     fun toDomain(): SchoolInfo = SchoolInfo(
         id = id,
-        schoolName = schoolName ?: "",
+        schoolName = name ?: "",
         logoUrl = logoUrl ?: "",
-        backgroundUrl = backgroundUrl ?: "",
+        backgroundUrl = backgroundImageUrl ?: "",
         socialMedia = socialMedias.map { it.toDomain() },
     )
 }
