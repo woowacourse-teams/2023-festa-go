@@ -46,15 +46,12 @@ class SchoolSearchV1ControllerTest {
             void 요청을_보내면_200_응답과_학교_목록이_반환된다() throws Exception {
                 // given
                 LocalDate festivalStartDate = LocalDate.now();
-                LocalDate festivalEndDate = festivalStartDate.plusDays(1);
 
                 var response = List.of(
                     new SchoolTotalSearchV1Response(1L, "테코대학교", "https://image.com/logo1.png",
                         new SchoolSearchRecentFestivalV1Response(
                             1L,
-                            1L,
-                            festivalStartDate,
-                            festivalEndDate
+                            festivalStartDate
                         )),
                     new SchoolTotalSearchV1Response(2L, "우테대학교", "https://image.com/logo2.png", null)
                 );

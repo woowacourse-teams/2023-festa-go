@@ -4,10 +4,8 @@ import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDate;
 
 public record SchoolSearchRecentFestivalV1Response(
-    Long id,
     Long schoolId,
-    LocalDate startDate,
-    LocalDate endDate
+    LocalDate startDate
 ) {
 
     @QueryProjection
