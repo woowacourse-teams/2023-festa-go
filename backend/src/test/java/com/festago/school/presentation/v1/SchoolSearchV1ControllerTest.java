@@ -41,7 +41,6 @@ class SchoolSearchV1ControllerTest {
         @DisplayName("GET " + uri)
         class 올바른_주소로 {
 
-
             @Test
             void 요청을_보내면_200_응답과_학교_목록이_반환된다() throws Exception {
                 // given
