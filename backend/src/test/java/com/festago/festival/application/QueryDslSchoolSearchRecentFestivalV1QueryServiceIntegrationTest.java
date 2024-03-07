@@ -120,7 +120,7 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
     }
 
     @Test
-    void 오늘이_6월_17일_일때_테코대학교는_null_우테대학교는_6월_16일_축제가_조회된다() {
+    void 오늘이_6월_17일_일때_테코대학교는_null_우테대학교는_6월_16일_조회된다() {
         // given
         given(clock.instant())
             .willReturn(TimeInstantProvider.from(_6월_17일));
