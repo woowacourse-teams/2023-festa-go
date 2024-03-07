@@ -34,7 +34,7 @@
                 android:layout_height="match_parent"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                tools:src="@drawable/ic_launcher_background" />
+                tools:src="@color/background_gray_03" />
 
         </androidx.cardview.widget.CardView>
 

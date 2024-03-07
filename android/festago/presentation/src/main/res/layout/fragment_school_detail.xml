@@ -48,7 +48,7 @@
                 android:layout_height="136dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_launcher_background" />
+                tools:src="@color/background_gray_02" />
 
             <ImageView
                 android:id="@+id/ivBack"
@@ -78,7 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    tools:src="@drawable/ic_launcher_foreground" />
+                    tools:src="@color/background_gray_03" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView

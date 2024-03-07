@@ -43,7 +43,7 @@
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_launcher_background" />
+                tools:src="@color/background_gray_02" />
 
             <ImageView
                 android:id="@+id/ivBack"
@@ -68,7 +68,7 @@
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ivFestivalBackground"
-                tools:src="@drawable/ic_launcher_foreground" />
+                tools:src="@color/background_gray_03" />
 
             <TextView
                 android:id="@+id/tvFestivalDDay"
