@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalUiState
 
@@ -16,6 +17,7 @@ class FestivalListAdapter(
             1 -> FestivalListPopularViewHolder.of(parent)
             2 -> FestivalListFestivalViewHolder.of(parent, onArtistClick)
             3 -> FestivalListTabViewHolder.of(parent)
+            4 -> FestivalListMoreItemViewHolder.of(parent)
             else -> throw IllegalArgumentException("Invalid viewType")
         }
     }
@@ -26,6 +28,7 @@ class FestivalListAdapter(
             is FestivalListPopularViewHolder -> holder.bind(item as PopularFestivalUiState)
             is FestivalListFestivalViewHolder -> holder.bind(item as FestivalItemUiState)
             is FestivalListTabViewHolder -> holder.bind(item as FestivalTabUiState)
+            is FestivalListMoreItemViewHolder -> holder.bind(item as FestivalMoreItemUiState)
         }
     }
 
@@ -34,6 +37,7 @@ class FestivalListAdapter(
             is PopularFestivalUiState -> 1
             is FestivalItemUiState -> 2
             is FestivalTabUiState -> 3
+            is FestivalMoreItemUiState -> 4
             else -> throw IllegalArgumentException("Invalid item")
         }
     }
@@ -44,6 +48,7 @@ class FestivalListAdapter(
                 oldItem is PopularFestivalUiState && newItem is PopularFestivalUiState -> true
                 oldItem is FestivalItemUiState && newItem is FestivalItemUiState -> oldItem.id == newItem.id
                 oldItem is FestivalTabUiState && newItem is FestivalTabUiState -> true
+                oldItem is FestivalMoreItemUiState && newItem is FestivalMoreItemUiState -> true
                 else -> false
             }
 
@@ -54,8 +59,9 @@ class FestivalListAdapter(
                 oldItem is FestivalItemUiState && newItem is FestivalItemUiState
                 -> oldItem as FestivalItemUiState == newItem
 
-                oldItem is FestivalTabUiState && newItem is FestivalTabUiState
-                -> true
+                oldItem is FestivalTabUiState && newItem is FestivalTabUiState -> true
+
+                oldItem is FestivalMoreItemUiState && newItem is FestivalMoreItemUiState -> true
 
                 else -> false
             }

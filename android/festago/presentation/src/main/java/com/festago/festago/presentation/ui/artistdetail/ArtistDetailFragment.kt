@@ -26,11 +26,7 @@ class ArtistDetailFragment : Fragment() {
 
     private val args: ArtistDetailFragmentArgs by navArgs()
 
-    private val adapter = ArtistDetailAdapter { artistId ->
-        findNavController().navigate(
-            ArtistDetailFragmentDirections.actionArtistDetailFragmentSelf(artistId),
-        )
-    }
+    private val adapter = ArtistDetailAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,6 +63,11 @@ class ArtistDetailFragment : Fragment() {
                 updateUi(it)
             }
         }
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect {
+                handleEvent(it)
+            }
+        }
     }
 
     private fun updateUi(uiState: ArtistDetailUiState) = when (uiState) {
@@ -89,6 +90,22 @@ class ArtistDetailFragment : Fragment() {
                 ivImage.setOnClickListener { startBrowser(media.url) }
                 binding.llcArtistMedia.addView(ivImage)
             }
+        }
+    }
+
+    private fun handleEvent(event: ArtistDetailEvent) = when (event) {
+        is ArtistDetailEvent.ShowArtistDetail -> {
+            findNavController().navigate(
+                ArtistDetailFragmentDirections.actionArtistDetailFragmentSelf(event.artistId),
+            )
+        }
+
+        is ArtistDetailEvent.ShowFestivalDetail -> {
+            findNavController().navigate(
+                ArtistDetailFragmentDirections.actionArtistDetailFragmentToFestivalDetailFragment(
+                    event.festivalId,
+                ),
+            )
         }
     }
 

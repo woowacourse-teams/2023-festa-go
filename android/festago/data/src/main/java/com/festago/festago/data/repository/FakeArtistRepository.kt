@@ -3,8 +3,8 @@ package com.festago.festago.data.repository
 import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.artist.ArtistDetail
 import com.festago.festago.domain.model.artist.ArtistMedia
-import com.festago.festago.domain.model.artist.Stages
 import com.festago.festago.domain.model.festival.Festival
+import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.school.School
 import com.festago.festago.domain.repository.ArtistRepository
 import java.time.LocalDate
@@ -37,18 +37,18 @@ class FakeArtistRepository @Inject constructor() : ArtistRepository {
             ),
         )
 
-    override suspend fun loadArtistStages(id: Long, size: Int): Result<Stages> =
+    override suspend fun loadArtistFestivals(id: Long, size: Int): Result<FestivalsPage> =
         Result.success(
-            Stages(
-                false,
-                (0..10).flatMap {
+            FestivalsPage(
+                isLastPage = false,
+                festivals = (0..10).flatMap {
                     listOf(
                         Festival(
                             1,
                             "예시 페스티벌 1",
                             LocalDate.parse("2024-05-01"),
                             LocalDate.parse("2024-05-03"),
-                            "https://source.unsplash.com/random/300×${300 + index++}",
+                            "https://source.unsplash.com/random/300×${300}",
                             School(
                                 1,
                                 "예시 학교",

@@ -6,28 +6,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.databinding.ItemArtistDetailArtistBinding
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistUiState
 
-class ArtistViewHolder(
-    private val binding: ItemArtistDetailArtistBinding,
-    onArtistClick: (Long) -> Unit,
-) : RecyclerView.ViewHolder(binding.root) {
-    init {
-        binding.root.setOnClickListener {
-            binding.artist?.id?.let(onArtistClick)
-        }
-    }
-
+class ArtistViewHolder(private val binding: ItemArtistDetailArtistBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ArtistUiState) {
         binding.artist = item
     }
 
     companion object {
-        fun of(parent: ViewGroup, onArtistClick: (Long) -> Unit): ArtistViewHolder {
+        fun of(parent: ViewGroup): ArtistViewHolder {
             val binding = ItemArtistDetailArtistBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return ArtistViewHolder(binding, onArtistClick)
+            return ArtistViewHolder(binding)
         }
     }
 }
