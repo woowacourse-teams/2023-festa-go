@@ -33,7 +33,9 @@ class ArtistDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentArtistDetailBinding.inflate(inflater)
+        if (_binding == null) {
+            _binding = FragmentArtistDetailBinding.inflate(inflater)
+        }
         return binding.root
     }
 
@@ -79,6 +81,8 @@ class ArtistDetailFragment : Fragment() {
     }
 
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
+        println("ArtistDetailFragment: handleSuccess")
+        println(uiState.stages.size)
         binding.uiState = uiState
         adapter.submitList(uiState.stages)
 

@@ -28,7 +28,9 @@ class ArtistDetailViewModel @Inject constructor(
         MutableStateFlow(ArtistDetailUiState.Loading)
     val uiState: StateFlow<ArtistDetailUiState> = _uiState.asStateFlow()
 
-    fun loadArtistDetail(id: Long) {
+    fun loadArtistDetail(id: Long, refresh: Boolean = false) {
+        if (!refresh && _uiState.value is ArtistDetailUiState.Success) return
+
         viewModelScope.launch {
             runCatching {
                 _uiState.value = ArtistDetailUiState.Success(
