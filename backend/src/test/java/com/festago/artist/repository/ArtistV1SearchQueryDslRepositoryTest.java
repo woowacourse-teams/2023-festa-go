@@ -3,6 +3,7 @@ package com.festago.artist.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.artist.domain.Artist;
+import com.festago.artist.dto.ArtistSearchStageCount;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
@@ -12,7 +13,7 @@ import com.festago.stage.domain.Stage;
 import com.festago.stage.domain.StageArtist;
 import com.festago.stage.repository.StageArtistRepository;
 import com.festago.stage.repository.StageRepository;
-import com.festago.support.StageFixture;
+import com.festago.support.ApplicationIntegrationTest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -24,12 +25,10 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@SpringBootTest
-class ArtistV1SearchQueryDslRepositoryTest {
+class ArtistV1SearchQueryDslRepositoryTest extends ApplicationIntegrationTest {
 
     @Autowired
     private ArtistV1SearchQueryDslRepository artistV1SearchQueryDslRepository;
@@ -52,59 +51,74 @@ class ArtistV1SearchQueryDslRepositoryTest {
     @Nested
     class 검색 {
 
-        Artist artistA;
-        Artist artistB;
-        Artist artistC;
-        Festival festival;
+        Artist 아이유;
+        Artist 아이브;
+        Artist 아이들;
+        Stage 어제_공연;
+        Stage 오늘_공연;
+        Stage 내일_공연;
         LocalDate today = LocalDate.now();
         School school;
 
         @BeforeEach
         void setUp() {
-            artistA = artistRepository.save(new Artist("에이핑크", "image"));
-            artistB = artistRepository.save(new Artist("블랙핑크", "image"));
-            artistC = artistRepository.save(new Artist("핑크 플로이드", "image"));
+            아이유 = artistRepository.save(new Artist("아이유", "www.IU-profileImage.png"));
+            아이브 = artistRepository.save(new Artist("아이브", "www.IVE-profileImage.png"));
+            아이들 = artistRepository.save(new Artist("아이들", "www.Idle-profileImage.png"));
             school = schoolRepository.save(new School("knu.ac.kr", "경북대", SchoolRegion.대구));
-            festival = festivalRepository.save(new Festival("축제", today, today.plusDays(10L), school));
-            
+            var festivalA = festivalRepository.save(
+                new Festival("축제", today.minusDays(1), today.plusDays(10L), school));
+
+            var yesterdayDateTime = LocalDateTime.of(festivalA.getStartDate(), LocalTime.MIN);
+            어제_공연 = stageRepository.save(new Stage(yesterdayDateTime, yesterdayDateTime.minusHours(1), festivalA));
+            오늘_공연 = stageRepository.save(
+                new Stage(yesterdayDateTime.plusDays(1), yesterdayDateTime.minusHours(1), festivalA));
+            내일_공연 = stageRepository.save(
+                new Stage(yesterdayDateTime.plusDays(2), yesterdayDateTime.minusHours(1), festivalA));
         }
 
         @Test
-        void 아티스트의_당일_및_예정_공연시간을_조회한다() {
-            // given - 조회 가능
-            LocalDateTime todayNoon = LocalDateTime.of(today, LocalTime.NOON);
-            Stage stageA = stageRepository.save(StageFixture.stage().startTime(todayNoon).festival(festival).build());
-            saveStageArtist(stageA, artistA);
-            saveStageArtist(stageA, artistB);
-            Stage stageB = stageRepository.save(StageFixture.stage().startTime(todayNoon.plusHours(1)).festival(festival).build());
-            saveStageArtist(stageB, artistA);
-            saveStageArtist(stageB, artistB);
+        void 아티스트의_당일_및_예정_공연_갯수를_조회한다() {
+            // given
+            saveStageArtist(아이유, 오늘_공연);
+            var 아이유_공연_갯수 = new ArtistSearchStageCount(1, 0);
 
-            //끝난 공연 및 축제 - 조회 불가
-            LocalDate endFestivalStartDate = today.minusDays(10);
-            LocalDateTime endStageStartTime = LocalDateTime.of(endFestivalStartDate, LocalTime.MIDNIGHT);
-            Festival endFestival = festivalRepository.save(
-                new Festival("축제", endFestivalStartDate, today.minusDays(5), school));
-            Stage endStage = stageRepository.save(
-                new Stage(endStageStartTime, endStageStartTime.minusHours(10), endFestival));
-            saveStageArtist(endStage, artistA);
-            saveStageArtist(endStage, artistB);
-            saveStageArtist(endStage, artistC);
+            saveStageArtist(아이브, 오늘_공연);
+            saveStageArtist(아이브, 내일_공연);
+            var 아이브_공연_갯수 = new ArtistSearchStageCount(1, 1);
 
+            saveStageArtist(아이들, 어제_공연);
+            saveStageArtist(아이들, 내일_공연);
+            var 아이들_공연_갯수 = new ArtistSearchStageCount(0, 1);
+
+            List<Long> artistIds = List.of(아이브.getId(), 아이유.getId(), 아이들.getId());
 
             // when
-            List<Long> artistIds = List.of(artistA.getId(), artistB.getId(), artistC.getId());
-            Map<Long, List<LocalDateTime>> actual = artistV1SearchQueryDslRepository.findArtistsStageStartTimeAfterDate(artistIds, today);
+            Map<Long, ArtistSearchStageCount> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDate(
+                artistIds, today);
 
             // then
-            assertThat(actual.get(artistA.getId())).hasSize(2);
-            assertThat(actual.get(artistB.getId())).hasSize(2);
-            assertThat(actual.get(artistC.getId())).hasSize(0);
+            assertThat(actual.get(아이유.getId())).isEqualTo(아이유_공연_갯수);
+            assertThat(actual.get(아이브.getId())).isEqualTo(아이브_공연_갯수);
+            assertThat(actual.get(아이들.getId())).isEqualTo(아이들_공연_갯수);
+        }
+
+        @Test
+        void 아티스트가_오늘_이후_공연이_없으면_0개() {
+            saveStageArtist(아이브, 어제_공연);
+            List<Long> artistIds = List.of(아이브.getId());
+            var 아이브_공연_갯수 = new ArtistSearchStageCount(0, 0);
+
+            // when
+            Map<Long, ArtistSearchStageCount> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDate(
+                artistIds, today);
+
+            // then
+            assertThat(actual.get(아이브.getId())).isEqualTo(아이브_공연_갯수);
         }
     }
 
-    private void saveStageArtist(Stage stage, Artist artist) {
+    private void saveStageArtist(Artist artist, Stage stage) {
         stageArtistRepository.save(new StageArtist(stage.getId(), artist.getId()));
     }
-
 }
