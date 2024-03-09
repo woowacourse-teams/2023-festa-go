@@ -81,8 +81,6 @@ class ArtistDetailFragment : Fragment() {
     }
 
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
-        println("ArtistDetailFragment: handleSuccess")
-        println(uiState.stages.size)
         binding.uiState = uiState
         adapter.submitList(uiState.stages)
 

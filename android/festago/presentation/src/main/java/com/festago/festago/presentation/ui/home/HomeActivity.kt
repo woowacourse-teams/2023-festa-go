@@ -12,17 +12,11 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivityHomeBinding
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
 import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailFragment
-import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragment
-import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
-import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
-import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import com.festago.festago.presentation.util.setStatusBarMode
