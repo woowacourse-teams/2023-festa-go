@@ -16,8 +16,6 @@ import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
-import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragmentArgs
-import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragmentDirections
 import com.festago.festago.presentation.ui.festivaldetail.adapter.stage.StageListAdapter
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
