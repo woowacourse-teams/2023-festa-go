@@ -6,10 +6,11 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.artist.application.ArtistV1SearchQueryService;
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistSearchResponse;
+import com.festago.artist.dto.ArtistSearchTotalResponse;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.common.exception.BadRequestException;
 import com.festago.support.ApplicationIntegrationTest;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -34,7 +35,7 @@ class ArtistV1SearchQueryServiceIntegrationTest extends ApplicationIntegrationTe
         artistRepository.save(new Artist("못", "www.profileImage.png"));
 
         // when
-        List<ArtistSearchResponse> actual = artistV1SearchQueryService.findAllByKeyword("못");
+        List<ArtistSearchTotalResponse> actual = artistV1SearchQueryService.findAllByKeyword("못", LocalDate.now());
 
         // then
         assertSoftly(softly -> {
@@ -54,7 +55,7 @@ class ArtistV1SearchQueryServiceIntegrationTest extends ApplicationIntegrationTe
         artistRepository.save(new Artist("크", "www.profileImage.png"));
 
         // when
-        List<ArtistSearchResponse> actual = artistV1SearchQueryService.findAllByKeyword("핑크");
+        List<ArtistSearchTotalResponse> actual = artistV1SearchQueryService.findAllByKeyword("핑크",LocalDate.now());
 
         // then
         assertThat(actual).hasSize(4);
@@ -68,7 +69,7 @@ class ArtistV1SearchQueryServiceIntegrationTest extends ApplicationIntegrationTe
         }
 
         // when && then
-        assertThatThrownBy(() -> artistV1SearchQueryService.findAllByKeyword("핑크"))
+        assertThatThrownBy(() -> artistV1SearchQueryService.findAllByKeyword("핑크",LocalDate.now()))
             .isInstanceOf(BadRequestException.class);
     }
 }

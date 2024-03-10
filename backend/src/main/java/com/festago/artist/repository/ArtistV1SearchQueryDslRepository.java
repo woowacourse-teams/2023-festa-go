@@ -44,11 +44,11 @@ public class ArtistV1SearchQueryDslRepository extends QueryDslRepositorySupport 
     }
 
     public Map<Long, ArtistSearchStageCount> findArtistsStageScheduleAfterDate(List<Long> artistIds, LocalDate today) {
-        LocalDateTime todayMidnight = LocalDateTime.of(today, LocalTime.MIN);
+        LocalDateTime todayStartTime = LocalDateTime.of(today, LocalTime.MIN);
         Map<Long, List<LocalDateTime>> result = selectFrom(stageArtist)
             .leftJoin(stage).on(stage.id.eq(stageArtist.stageId))
             .where(stageArtist.artistId.in(artistIds)
-                .and(stage.startTime.goe(todayMidnight)))
+                .and(stage.startTime.goe(todayStartTime)))
             .transform(groupBy(stageArtist.artistId).as(GroupBy.list(stage.startTime)));
         return getStageCountResult(artistIds, today, result);
     }

@@ -8,8 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.artist.application.ArtistV1SearchQueryService;
-import com.festago.artist.dto.ArtistSearchResponse;
+import com.festago.artist.dto.ArtistSearchTotalResponse;
 import com.festago.support.CustomWebMvcTest;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -49,10 +50,11 @@ class ArtistSearchV1ControllerTest {
             void 요청을_보내면_200_응답과_body가_반환된다() throws Exception {
                 // given
                 var expected = List.of(
-                    new ArtistSearchResponse(1L, "블랙핑크", "www.profileImage.png"),
-                    new ArtistSearchResponse(2L, "에이핑크", "www.profileImage.png")
+                    new ArtistSearchTotalResponse(1L, "블랙핑크", "www.profileImage.png", 1, 1),
+                    new ArtistSearchTotalResponse(2L, "에이핑크", "www.profileImage.png", 0, 0)
                 );
-                given(artistV1SearchQueryService.findAllByKeyword("핑크"))
+
+                given(artistV1SearchQueryService.findAllByKeyword("핑크", LocalDate.now()))
                     .willReturn(expected);
 
                 // when & then
