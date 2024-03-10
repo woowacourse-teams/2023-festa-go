@@ -8,7 +8,8 @@ public record ArtistTotalSearchV1Response(
     Integer countOfPlannedStage
 ) {
 
-    public static ArtistTotalSearchV1Response of(ArtistSearchV1Response artistResponse, ArtistSearchStageCountV1Response stageCount) {
+    public static ArtistTotalSearchV1Response of(ArtistSearchV1Response artistResponse,
+                                                 ArtistSearchStageCountV1Response stageCount) {
         return new ArtistTotalSearchV1Response(
             artistResponse.id(),
             artistResponse.name(),

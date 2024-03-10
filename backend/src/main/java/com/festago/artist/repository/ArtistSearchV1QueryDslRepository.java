@@ -41,7 +41,8 @@ public class ArtistSearchV1QueryDslRepository extends QueryDslRepositorySupport 
             .fetch();
     }
 
-    public Map<Long, List<LocalDateTime>> findArtistsStageScheduleAfterDateTime(List<Long> artistIds, LocalDateTime localDateTime) {
+    public Map<Long, List<LocalDateTime>> findArtistsStageScheduleAfterDateTime(List<Long> artistIds,
+                                                                                LocalDateTime localDateTime) {
         return selectFrom(stageArtist)
             .leftJoin(stage).on(stage.id.eq(stageArtist.stageId))
             .where(stageArtist.artistId.in(artistIds)
