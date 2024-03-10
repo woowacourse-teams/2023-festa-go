@@ -3,7 +3,7 @@ package com.festago.artist.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistSearchStageCount;
+import com.festago.artist.dto.ArtistSearchStageCountV1Response;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
@@ -81,20 +81,20 @@ class ArtistV1SearchQueryDslRepositoryTest extends ApplicationIntegrationTest {
         void 아티스트의_당일_및_예정_공연_갯수를_조회한다() {
             // given
             saveStageArtist(아이유, 오늘_공연);
-            var 아이유_공연_갯수 = new ArtistSearchStageCount(1, 0);
+            var 아이유_공연_갯수 = new ArtistSearchStageCountV1Response(1, 0);
 
             saveStageArtist(아이브, 오늘_공연);
             saveStageArtist(아이브, 내일_공연);
-            var 아이브_공연_갯수 = new ArtistSearchStageCount(1, 1);
+            var 아이브_공연_갯수 = new ArtistSearchStageCountV1Response(1, 1);
 
             saveStageArtist(아이들, 어제_공연);
             saveStageArtist(아이들, 내일_공연);
-            var 아이들_공연_갯수 = new ArtistSearchStageCount(0, 1);
+            var 아이들_공연_갯수 = new ArtistSearchStageCountV1Response(0, 1);
 
             List<Long> artistIds = List.of(아이브.getId(), 아이유.getId(), 아이들.getId());
 
             // when
-            Map<Long, ArtistSearchStageCount> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
+            Map<Long, ArtistSearchStageCountV1Response> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
                 artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
             // then
@@ -107,10 +107,10 @@ class ArtistV1SearchQueryDslRepositoryTest extends ApplicationIntegrationTest {
         void 아티스트가_오늘_이후_공연이_없으면_0개() {
             saveStageArtist(아이브, 어제_공연);
             List<Long> artistIds = List.of(아이브.getId());
-            var 아이브_공연_갯수 = new ArtistSearchStageCount(0, 0);
+            var 아이브_공연_갯수 = new ArtistSearchStageCountV1Response(0, 0);
 
             // when
-            Map<Long, ArtistSearchStageCount> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
+            Map<Long, ArtistSearchStageCountV1Response> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
                 artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
             // then

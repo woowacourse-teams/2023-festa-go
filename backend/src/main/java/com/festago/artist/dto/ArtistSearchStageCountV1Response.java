@@ -1,6 +1,6 @@
 package com.festago.artist.dto;
 
-public record ArtistSearchStageCount(
+public record ArtistSearchStageCountV1Response(
     Integer countOfTodayStage,
     Integer countOfPlannedStage
 ) {

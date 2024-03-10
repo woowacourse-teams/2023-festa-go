@@ -1,8 +1,8 @@
 package com.festago.artist.application;
 
-import com.festago.artist.dto.ArtistSearchResponse;
-import com.festago.artist.dto.ArtistSearchStageCount;
-import com.festago.artist.dto.ArtistSearchTotalResponse;
+import com.festago.artist.dto.ArtistSearchStageCountV1Response;
+import com.festago.artist.dto.ArtistSearchTotalV1Response;
+import com.festago.artist.dto.ArtistSearchV1Response;
 import com.festago.artist.repository.ArtistV1SearchQueryDslRepository;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
@@ -24,27 +24,27 @@ public class ArtistV1SearchQueryService {
 
     private final ArtistV1SearchQueryDslRepository artistV1SearchQueryDslRepository;
 
-    public List<ArtistSearchTotalResponse> findAllByKeyword(String keyword, LocalDate today) {
-        List<ArtistSearchResponse> artists = findByKeywordLength(keyword);
+    public List<ArtistSearchTotalV1Response> findAllByKeyword(String keyword, LocalDate today) {
+        List<ArtistSearchV1Response> artists = findByKeywordLength(keyword);
         validateSearchCount(artists);
         List<Long> artistIds = artists.stream()
-            .map(ArtistSearchResponse::id)
+            .map(ArtistSearchV1Response::id)
             .toList();
-        Map<Long, ArtistSearchStageCount> artistToStageCount = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
+        Map<Long, ArtistSearchStageCountV1Response> artistToStageCount = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
             artistIds, LocalDateTime.of(today, LocalTime.MIN));
         return artists.stream()
-            .map(it -> ArtistSearchTotalResponse.of(it, artistToStageCount.get(it.id())))
+            .map(it -> ArtistSearchTotalV1Response.of(it, artistToStageCount.get(it.id())))
             .toList();
     }
 
-    private List<ArtistSearchResponse> findByKeywordLength(String keyword) {
+    private List<ArtistSearchV1Response> findByKeywordLength(String keyword) {
         if (keyword.length() == 1) {
             return artistV1SearchQueryDslRepository.findAllByEqual(keyword);
         }
         return artistV1SearchQueryDslRepository.findAllByLike(keyword);
     }
 
-    private void validateSearchCount(List<ArtistSearchResponse> response) {
+    private void validateSearchCount(List<ArtistSearchV1Response> response) {
         if (response.size() >= MAX_SEARCH_COUNT) {
             throw new BadRequestException(ErrorCode.BROAD_SEARCH_KEYWORD);
         }

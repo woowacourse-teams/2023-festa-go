@@ -6,7 +6,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.artist.application.ArtistV1SearchQueryService;
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistSearchTotalResponse;
+import com.festago.artist.dto.ArtistSearchTotalV1Response;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.common.exception.BadRequestException;
 import com.festago.support.ApplicationIntegrationTest;
@@ -35,7 +35,7 @@ class ArtistV1SearchQueryServiceIntegrationTest extends ApplicationIntegrationTe
         artistRepository.save(new Artist("못", "www.profileImage.png"));
 
         // when
-        List<ArtistSearchTotalResponse> actual = artistV1SearchQueryService.findAllByKeyword("못", LocalDate.now());
+        List<ArtistSearchTotalV1Response> actual = artistV1SearchQueryService.findAllByKeyword("못", LocalDate.now());
 
         // then
         assertSoftly(softly -> {
@@ -55,7 +55,7 @@ class ArtistV1SearchQueryServiceIntegrationTest extends ApplicationIntegrationTe
         artistRepository.save(new Artist("크", "www.profileImage.png"));
 
         // when
-        List<ArtistSearchTotalResponse> actual = artistV1SearchQueryService.findAllByKeyword("핑크",LocalDate.now());
+        List<ArtistSearchTotalV1Response> actual = artistV1SearchQueryService.findAllByKeyword("핑크",LocalDate.now());
 
         // then
         assertThat(actual).hasSize(4);

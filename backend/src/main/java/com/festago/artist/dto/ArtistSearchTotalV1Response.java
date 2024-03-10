@@ -1,6 +1,6 @@
 package com.festago.artist.dto;
 
-public record ArtistSearchTotalResponse(
+public record ArtistSearchTotalV1Response(
     Long id,
     String name,
     String profileImageUrl,
@@ -8,8 +8,8 @@ public record ArtistSearchTotalResponse(
     Integer countOfPlannedStage
 ) {
 
-    public static ArtistSearchTotalResponse of(ArtistSearchResponse artistResponse, ArtistSearchStageCount stageCount) {
-        return new ArtistSearchTotalResponse(
+    public static ArtistSearchTotalV1Response of(ArtistSearchV1Response artistResponse, ArtistSearchStageCountV1Response stageCount) {
+        return new ArtistSearchTotalV1Response(
             artistResponse.id(),
             artistResponse.name(),
             artistResponse.profileImageUrl(),
