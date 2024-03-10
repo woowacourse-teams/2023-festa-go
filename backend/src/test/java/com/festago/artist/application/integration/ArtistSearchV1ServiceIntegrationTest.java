@@ -61,6 +61,24 @@ class ArtistSearchV1ServiceIntegrationTest extends ApplicationIntegrationTest {
     }
 
     @Test
+    void 아티스트명은_영어_한국어_순으로_오름차순_정렬된다() {
+        // given
+        Artist 세번째 = artistRepository.save(new Artist("가_아티스트", "www.profileImage.png"));
+        Artist 첫번째 = artistRepository.save(new Artist("A_아티스트", "www.profileImage.png"));
+        Artist 네번째 = artistRepository.save(new Artist("나_아티스트", "www.profileImage.png"));
+        Artist 두번째 = artistRepository.save(new Artist("C_아티스트", "www.profileImage.png"));
+
+        // when
+        List<ArtistSearchV1Response> actual = artistSearchV1QueryService.findAllByKeyword("아티스트");
+
+        // then
+        List<Long> result = actual.stream()
+            .map(ArtistSearchV1Response::id)
+            .toList();
+        assertThat(result).isEqualTo(List.of(첫번째.getId(), 두번째.getId(), 세번째.getId(), 네번째.getId()));
+    }
+
+    @Test
     void 검색결과가_10개_이상이면_예외() {
         // given
         for (int i = 0; i < 10; i++) {

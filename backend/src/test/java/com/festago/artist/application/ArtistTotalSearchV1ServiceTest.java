@@ -48,7 +48,7 @@ class ArtistTotalSearchV1ServiceTest {
             1L, new ArtistSearchStageCountV1Response(1, 0),
             2L, new ArtistSearchStageCountV1Response(0, 0),
             3L, new ArtistSearchStageCountV1Response(0, 2));
-        given(artistSearchStageScheduleV1QueryService.findArtistsStageScheduleAfterDateTime(
+        given(artistSearchStageScheduleV1QueryService.findArtistsStageCountAfterDateTime(
             List.of(1L, 2L, 3L), LocalDateTime.of(today, LocalTime.MIN)))
             .willReturn(artistToStageSchedule);
 

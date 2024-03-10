@@ -25,7 +25,7 @@ public class ArtistTotalSearchV1Service {
         List<Long> artistIds = artists.stream()
             .map(ArtistSearchV1Response::id)
             .toList();
-        Map<Long, ArtistSearchStageCountV1Response> artistToStageCount = artistSearchStageScheduleV1QueryService.findArtistsStageScheduleAfterDateTime(
+        Map<Long, ArtistSearchStageCountV1Response> artistToStageCount = artistSearchStageScheduleV1QueryService.findArtistsStageCountAfterDateTime(
             artistIds, LocalDateTime.of(today, LocalTime.MIN));
         return artists.stream()
             .map(it -> ArtistSearchTotalV1Response.of(it, artistToStageCount.get(it.id())))

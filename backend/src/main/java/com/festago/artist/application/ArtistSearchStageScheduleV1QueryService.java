@@ -18,8 +18,8 @@ public class ArtistSearchStageScheduleV1QueryService {
 
     private final ArtistV1SearchQueryDslRepository artistV1SearchQueryDslRepository;
 
-    public Map<Long, ArtistSearchStageCountV1Response> findArtistsStageScheduleAfterDateTime(List<Long> artistIds,
-                                                                                             LocalDateTime dateTime) {
+    public Map<Long, ArtistSearchStageCountV1Response> findArtistsStageCountAfterDateTime(List<Long> artistIds,
+                                                                                          LocalDateTime dateTime) {
         Map<Long, List<LocalDateTime>> artistToStageStartTimes = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
             artistIds, dateTime);
         return getStageCountResponse(artistIds, dateTime.toLocalDate(), artistToStageStartTimes);

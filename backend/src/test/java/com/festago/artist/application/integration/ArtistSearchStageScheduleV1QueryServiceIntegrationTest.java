@@ -96,7 +96,7 @@ class ArtistSearchStageScheduleV1QueryServiceIntegrationTest extends Application
             List<Long> artistIds = List.of(아이브.getId(), 아이유.getId(), 아이들.getId());
 
             // when
-            Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageScheduleV1QueryService.findArtistsStageScheduleAfterDateTime(
+            Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageScheduleV1QueryService.findArtistsStageCountAfterDateTime(
                 artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
             // then
@@ -112,7 +112,7 @@ class ArtistSearchStageScheduleV1QueryServiceIntegrationTest extends Application
             var 아이브_공연_갯수 = new ArtistSearchStageCountV1Response(0, 0);
 
             // when
-            Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageScheduleV1QueryService.findArtistsStageScheduleAfterDateTime(
+            Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageScheduleV1QueryService.findArtistsStageCountAfterDateTime(
                 artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
             // then

@@ -28,6 +28,7 @@ public class ArtistV1SearchQueryDslRepository extends QueryDslRepositorySupport 
             new QArtistSearchV1Response(artist.id, artist.name, artist.profileImage))
             .from(artist)
             .where(artist.name.contains(keyword))
+            .orderBy(artist.name.asc())
             .fetch();
     }
 
@@ -36,6 +37,7 @@ public class ArtistV1SearchQueryDslRepository extends QueryDslRepositorySupport 
             new QArtistSearchV1Response(artist.id, artist.name, artist.profileImage))
             .from(artist)
             .where(artist.name.eq(keyword))
+            .orderBy(artist.name.asc())
             .fetch();
     }
 
