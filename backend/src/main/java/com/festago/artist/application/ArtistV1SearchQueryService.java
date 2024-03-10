@@ -7,6 +7,8 @@ import com.festago.artist.repository.ArtistV1SearchQueryDslRepository;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +30,8 @@ public class ArtistV1SearchQueryService {
         List<Long> artistIds = artists.stream()
             .map(ArtistSearchResponse::id)
             .toList();
-        Map<Long, ArtistSearchStageCount> artistToStageCount = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDate(
-            artistIds, today);
+        Map<Long, ArtistSearchStageCount> artistToStageCount = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
+            artistIds, LocalDateTime.of(today, LocalTime.MIN));
         return artists.stream()
             .map(it -> ArtistSearchTotalResponse.of(it, artistToStageCount.get(it.id())))
             .toList();

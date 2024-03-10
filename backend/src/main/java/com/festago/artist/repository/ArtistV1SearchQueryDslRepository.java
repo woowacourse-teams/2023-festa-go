@@ -14,7 +14,6 @@ import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.querydsl.core.group.GroupBy;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,14 +42,13 @@ public class ArtistV1SearchQueryDslRepository extends QueryDslRepositorySupport 
             .fetch();
     }
 
-    public Map<Long, ArtistSearchStageCount> findArtistsStageScheduleAfterDate(List<Long> artistIds, LocalDate today) {
-        LocalDateTime todayStartTime = LocalDateTime.of(today, LocalTime.MIN);
+    public Map<Long, ArtistSearchStageCount> findArtistsStageScheduleAfterDateTime(List<Long> artistIds, LocalDateTime localDateTime) {
         Map<Long, List<LocalDateTime>> result = selectFrom(stageArtist)
             .leftJoin(stage).on(stage.id.eq(stageArtist.stageId))
             .where(stageArtist.artistId.in(artistIds)
-                .and(stage.startTime.goe(todayStartTime)))
+                .and(stage.startTime.goe(localDateTime)))
             .transform(groupBy(stageArtist.artistId).as(GroupBy.list(stage.startTime)));
-        return getStageCountResult(artistIds, today, result);
+        return getStageCountResult(artistIds, localDateTime.toLocalDate(), result);
     }
 
     private Map<Long, ArtistSearchStageCount> getStageCountResult(List<Long> artistIds,

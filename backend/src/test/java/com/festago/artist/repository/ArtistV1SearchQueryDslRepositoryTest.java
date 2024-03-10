@@ -94,8 +94,8 @@ class ArtistV1SearchQueryDslRepositoryTest extends ApplicationIntegrationTest {
             List<Long> artistIds = List.of(아이브.getId(), 아이유.getId(), 아이들.getId());
 
             // when
-            Map<Long, ArtistSearchStageCount> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDate(
-                artistIds, today);
+            Map<Long, ArtistSearchStageCount> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
+                artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
             // then
             assertThat(actual.get(아이유.getId())).isEqualTo(아이유_공연_갯수);
@@ -110,8 +110,8 @@ class ArtistV1SearchQueryDslRepositoryTest extends ApplicationIntegrationTest {
             var 아이브_공연_갯수 = new ArtistSearchStageCount(0, 0);
 
             // when
-            Map<Long, ArtistSearchStageCount> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDate(
-                artistIds, today);
+            Map<Long, ArtistSearchStageCount> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
+                artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
             // then
             assertThat(actual.get(아이브.getId())).isEqualTo(아이브_공연_갯수);
