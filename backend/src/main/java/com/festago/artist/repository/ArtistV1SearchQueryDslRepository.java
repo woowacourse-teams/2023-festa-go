@@ -53,23 +53,22 @@ public class ArtistV1SearchQueryDslRepository extends QueryDslRepositorySupport 
 
     private Map<Long, ArtistSearchStageCount> getStageCountResult(List<Long> artistIds,
                                                                   LocalDate today,
-                                                                  Map<Long, List<LocalDateTime>> result) {
-        Map<Long, ArtistSearchStageCount> map = new HashMap<>();
+                                                                  Map<Long, List<LocalDateTime>> artistToStageStartTimes) {
+        Map<Long, ArtistSearchStageCount> result = new HashMap<>();
         for (Long artistId : artistIds) {
-            int todayStage = 0;
-            int plannedStage = 0;
-            if (result.containsKey(artistId)) {
-                List<LocalDateTime> startTimes = result.get(artistId);
-                for (LocalDateTime startTime : startTimes) {
+            int todayStageCount = 0;
+            int plannedStageCount = 0;
+            if (artistToStageStartTimes.containsKey(artistId)) {
+                for (LocalDateTime startTime : artistToStageStartTimes.get(artistId)) {
                     if (startTime.toLocalDate().equals(today)) {
-                        todayStage++;
+                        todayStageCount++;
                     } else {
-                        plannedStage++;
+                        plannedStageCount++;
                     }
                 }
             }
-            map.put(artistId, new ArtistSearchStageCount(todayStage, plannedStage));
+            result.put(artistId, new ArtistSearchStageCount(todayStageCount, plannedStageCount));
         }
-        return map;
+        return result;
     }
 }
