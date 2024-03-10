@@ -1,0 +1,67 @@
+package com.festago.artist.application;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+
+import com.festago.artist.dto.ArtistSearchStageCountV1Response;
+import com.festago.artist.dto.ArtistSearchTotalV1Response;
+import com.festago.artist.dto.ArtistSearchV1Response;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@DisplayNameGeneration(ReplaceUnderscores.class)
+@SuppressWarnings("NonAsciiCharacters")
+@ExtendWith(MockitoExtension.class)
+class ArtistTotalSearchV1ServiceTest {
+
+    @Mock
+    ArtistSearchV1QueryService artistSearchV1QueryService;
+
+    @Mock
+    ArtistSearchStageScheduleV1QueryService artistSearchStageScheduleV1QueryService;
+
+    @InjectMocks
+    ArtistTotalSearchV1Service artistTotalSearchV1Service;
+
+    @Test
+    void 아티스트_정보와_공연_일정을_종합하여_반환한다() {
+        // given
+        List<ArtistSearchV1Response> artists = List.of(
+            new ArtistSearchV1Response(1L, "아이브", "www.IVE-image.png"),
+            new ArtistSearchV1Response(2L, "아이유", "www.IU-image.png"),
+            new ArtistSearchV1Response(3L, "(여자)아이들", "www.IDLE-image.png"));
+        given(artistSearchV1QueryService.findAllByKeyword("아이"))
+            .willReturn(artists);
+
+        LocalDate today = LocalDate.now();
+        Map<Long, ArtistSearchStageCountV1Response> artistToStageSchedule = Map.of(
+            1L, new ArtistSearchStageCountV1Response(1, 0),
+            2L, new ArtistSearchStageCountV1Response(0, 0),
+            3L, new ArtistSearchStageCountV1Response(0, 2));
+        given(artistSearchStageScheduleV1QueryService.findArtistsStageScheduleAfterDateTime(
+            List.of(1L, 2L, 3L), LocalDateTime.of(today, LocalTime.MIN)))
+            .willReturn(artistToStageSchedule);
+
+        // when
+        List<ArtistSearchTotalV1Response> actual = artistTotalSearchV1Service.findAllByKeyword("아이", today);
+
+        // then
+        var expected = List.of(
+            new ArtistSearchTotalV1Response(1L, "아이브", "www.IVE-image.png", 1, 0),
+            new ArtistSearchTotalV1Response(2L, "아이유", "www.IU-image.png", 0, 0),
+            new ArtistSearchTotalV1Response(3L, "(여자)아이들", "www.IDLE-image.png", 0, 2)
+        );
+        assertThat(actual).isEqualTo(expected);
+    }
+
+}
