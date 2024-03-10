@@ -1,6 +1,7 @@
 package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.artist.application.ArtistSearchStageCountV1QueryService;
 import com.festago.artist.domain.Artist;
@@ -99,10 +100,11 @@ class ArtistSearchStageCountV1QueryServiceIntegrationTest extends ApplicationInt
             Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageCountV1QueryService.findArtistsStageCountAfterDateTime(
                 artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
-            // then
-            assertThat(actual.get(아이유.getId())).isEqualTo(아이유_공연_갯수);
-            assertThat(actual.get(아이브.getId())).isEqualTo(아이브_공연_갯수);
-            assertThat(actual.get(아이들.getId())).isEqualTo(아이들_공연_갯수);
+            assertSoftly(softly -> {
+                softly.assertThat(actual.get(아이유.getId())).isEqualTo(아이유_공연_갯수);
+                softly.assertThat(actual.get(아이브.getId())).isEqualTo(아이브_공연_갯수);
+                softly.assertThat(actual.get(아이들.getId())).isEqualTo(아이들_공연_갯수);
+            });
         }
 
         @Test
