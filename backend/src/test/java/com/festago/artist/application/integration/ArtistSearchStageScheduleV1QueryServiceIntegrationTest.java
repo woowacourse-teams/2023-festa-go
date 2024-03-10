@@ -1,9 +1,11 @@
-package com.festago.artist.repository;
+package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.festago.artist.application.ArtistSearchStageScheduleV1QueryService;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.ArtistSearchStageCountV1Response;
+import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
@@ -28,10 +30,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistV1SearchQueryDslRepositoryTest extends ApplicationIntegrationTest {
+class ArtistSearchStageScheduleV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
-    private ArtistV1SearchQueryDslRepository artistV1SearchQueryDslRepository;
+    private ArtistSearchStageScheduleV1QueryService artistSearchStageScheduleV1QueryService;
 
     @Autowired
     private FestivalRepository festivalRepository;
@@ -94,7 +96,7 @@ class ArtistV1SearchQueryDslRepositoryTest extends ApplicationIntegrationTest {
             List<Long> artistIds = List.of(아이브.getId(), 아이유.getId(), 아이들.getId());
 
             // when
-            Map<Long, ArtistSearchStageCountV1Response> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
+            Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageScheduleV1QueryService.findArtistsStageScheduleAfterDateTime(
                 artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
             // then
@@ -110,7 +112,7 @@ class ArtistV1SearchQueryDslRepositoryTest extends ApplicationIntegrationTest {
             var 아이브_공연_갯수 = new ArtistSearchStageCountV1Response(0, 0);
 
             // when
-            Map<Long, ArtistSearchStageCountV1Response> actual = artistV1SearchQueryDslRepository.findArtistsStageScheduleAfterDateTime(
+            Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageScheduleV1QueryService.findArtistsStageScheduleAfterDateTime(
                 artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
             // then
