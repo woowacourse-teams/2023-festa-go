@@ -2,7 +2,7 @@ package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.artist.application.ArtistSearchStageScheduleV1QueryService;
+import com.festago.artist.application.ArtistSearchStageCountV1QueryService;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.ArtistSearchStageCountV1Response;
 import com.festago.artist.repository.ArtistRepository;
@@ -30,10 +30,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistSearchStageScheduleV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
+class ArtistSearchStageCountV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
-    private ArtistSearchStageScheduleV1QueryService artistSearchStageScheduleV1QueryService;
+    private ArtistSearchStageCountV1QueryService artistSearchStageCountV1QueryService;
 
     @Autowired
     private FestivalRepository festivalRepository;
@@ -96,7 +96,7 @@ class ArtistSearchStageScheduleV1QueryServiceIntegrationTest extends Application
             List<Long> artistIds = List.of(아이브.getId(), 아이유.getId(), 아이들.getId());
 
             // when
-            Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageScheduleV1QueryService.findArtistsStageCountAfterDateTime(
+            Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageCountV1QueryService.findArtistsStageCountAfterDateTime(
                 artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
             // then
@@ -112,7 +112,7 @@ class ArtistSearchStageScheduleV1QueryServiceIntegrationTest extends Application
             var 아이브_공연_갯수 = new ArtistSearchStageCountV1Response(0, 0);
 
             // when
-            Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageScheduleV1QueryService.findArtistsStageCountAfterDateTime(
+            Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageCountV1QueryService.findArtistsStageCountAfterDateTime(
                 artistIds, LocalDateTime.of(today, LocalTime.MIN));
 
             // then

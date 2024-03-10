@@ -2,7 +2,7 @@ package com.festago.artist.presentation.v1;
 
 
 import com.festago.artist.application.ArtistTotalSearchV1Service;
-import com.festago.artist.dto.ArtistSearchTotalV1Response;
+import com.festago.artist.dto.ArtistTotalSearchV1Response;
 import com.festago.common.util.Validator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,10 +25,10 @@ public class ArtistSearchV1Controller {
 
     @GetMapping
     @Operation(description = "키워드로 아티스트 목록을 검색한다", summary = "아티스트 목록 검색 조회")
-    public ResponseEntity<List<ArtistSearchTotalV1Response>> searchByKeyword(@RequestParam String keyword) {
+    public ResponseEntity<List<ArtistTotalSearchV1Response>> searchByKeyword(@RequestParam String keyword) {
         Validator.notBlank(keyword, "keyword");
         LocalDate today = LocalDate.now();
-        List<ArtistSearchTotalV1Response> response = artistTotalSearchV1Service.findAllByKeyword(keyword, today);
+        List<ArtistTotalSearchV1Response> response = artistTotalSearchV1Service.findAllByKeyword(keyword, today);
         return ResponseEntity.ok(response);
     }
 }

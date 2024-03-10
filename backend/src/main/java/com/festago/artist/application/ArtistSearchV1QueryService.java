@@ -1,7 +1,7 @@
 package com.festago.artist.application;
 
 import com.festago.artist.dto.ArtistSearchV1Response;
-import com.festago.artist.repository.ArtistV1SearchQueryDslRepository;
+import com.festago.artist.repository.ArtistSearchV1QueryDslRepository;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import java.util.List;
@@ -16,7 +16,7 @@ public class ArtistSearchV1QueryService {
 
     private static final int MAX_SEARCH_COUNT = 10;
 
-    private final ArtistV1SearchQueryDslRepository artistV1SearchQueryDslRepository;
+    private final ArtistSearchV1QueryDslRepository artistSearchV1QueryDslRepository;
 
     public List<ArtistSearchV1Response> findAllByKeyword(String keyword) {
         List<ArtistSearchV1Response> response = getResponse(keyword);
@@ -28,8 +28,8 @@ public class ArtistSearchV1QueryService {
 
     private List<ArtistSearchV1Response> getResponse(String keyword) {
         if (keyword.length() == 1) {
-            return artistV1SearchQueryDslRepository.findAllByEqual(keyword);
+            return artistSearchV1QueryDslRepository.findAllByEqual(keyword);
         }
-        return artistV1SearchQueryDslRepository.findAllByLike(keyword);
+        return artistSearchV1QueryDslRepository.findAllByLike(keyword);
     }
 }

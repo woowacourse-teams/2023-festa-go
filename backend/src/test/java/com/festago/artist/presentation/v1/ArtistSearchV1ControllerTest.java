@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.artist.application.ArtistTotalSearchV1Service;
-import com.festago.artist.dto.ArtistSearchTotalV1Response;
+import com.festago.artist.dto.ArtistTotalSearchV1Response;
 import com.festago.support.CustomWebMvcTest;
 import java.time.LocalDate;
 import java.util.List;
@@ -50,8 +50,8 @@ class ArtistSearchV1ControllerTest {
             void 요청을_보내면_200_응답과_body가_반환된다() throws Exception {
                 // given
                 var expected = List.of(
-                    new ArtistSearchTotalV1Response(1L, "블랙핑크", "www.profileImage.png", 1, 1),
-                    new ArtistSearchTotalV1Response(2L, "에이핑크", "www.profileImage.png", 0, 0)
+                    new ArtistTotalSearchV1Response(1L, "블랙핑크", "www.profileImage.png", 1, 1),
+                    new ArtistTotalSearchV1Response(2L, "에이핑크", "www.profileImage.png", 0, 0)
                 );
 
                 given(artistTotalSearchV1Service.findAllByKeyword("핑크", LocalDate.now()))

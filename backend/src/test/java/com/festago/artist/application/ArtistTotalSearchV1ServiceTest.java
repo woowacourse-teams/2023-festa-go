@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.artist.dto.ArtistSearchStageCountV1Response;
-import com.festago.artist.dto.ArtistSearchTotalV1Response;
 import com.festago.artist.dto.ArtistSearchV1Response;
+import com.festago.artist.dto.ArtistTotalSearchV1Response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,7 +28,7 @@ class ArtistTotalSearchV1ServiceTest {
     ArtistSearchV1QueryService artistSearchV1QueryService;
 
     @Mock
-    ArtistSearchStageScheduleV1QueryService artistSearchStageScheduleV1QueryService;
+    ArtistSearchStageCountV1QueryService artistSearchStageCountV1QueryService;
 
     @InjectMocks
     ArtistTotalSearchV1Service artistTotalSearchV1Service;
@@ -48,18 +48,18 @@ class ArtistTotalSearchV1ServiceTest {
             1L, new ArtistSearchStageCountV1Response(1, 0),
             2L, new ArtistSearchStageCountV1Response(0, 0),
             3L, new ArtistSearchStageCountV1Response(0, 2));
-        given(artistSearchStageScheduleV1QueryService.findArtistsStageCountAfterDateTime(
+        given(artistSearchStageCountV1QueryService.findArtistsStageCountAfterDateTime(
             List.of(1L, 2L, 3L), LocalDateTime.of(today, LocalTime.MIN)))
             .willReturn(artistToStageSchedule);
 
         // when
-        List<ArtistSearchTotalV1Response> actual = artistTotalSearchV1Service.findAllByKeyword("아이", today);
+        List<ArtistTotalSearchV1Response> actual = artistTotalSearchV1Service.findAllByKeyword("아이", today);
 
         // then
         var expected = List.of(
-            new ArtistSearchTotalV1Response(1L, "아이브", "www.IVE-image.png", 1, 0),
-            new ArtistSearchTotalV1Response(2L, "아이유", "www.IU-image.png", 0, 0),
-            new ArtistSearchTotalV1Response(3L, "(여자)아이들", "www.IDLE-image.png", 0, 2)
+            new ArtistTotalSearchV1Response(1L, "아이브", "www.IVE-image.png", 1, 0),
+            new ArtistTotalSearchV1Response(2L, "아이유", "www.IU-image.png", 0, 0),
+            new ArtistTotalSearchV1Response(3L, "(여자)아이들", "www.IDLE-image.png", 0, 2)
         );
         assertThat(actual).isEqualTo(expected);
     }

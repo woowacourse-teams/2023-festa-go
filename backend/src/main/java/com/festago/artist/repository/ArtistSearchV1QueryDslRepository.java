@@ -17,9 +17,9 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ArtistV1SearchQueryDslRepository extends QueryDslRepositorySupport {
+public class ArtistSearchV1QueryDslRepository extends QueryDslRepositorySupport {
 
-    public ArtistV1SearchQueryDslRepository() {
+    public ArtistSearchV1QueryDslRepository() {
         super(Artist.class);
     }
 
