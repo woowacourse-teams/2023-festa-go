@@ -9,7 +9,7 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.ArtistSearchStageCountV1Response;
 import com.festago.artist.dto.ArtistSearchV1Response;
-import com.festago.artist.dto.QArtistSearchResponse;
+import com.festago.artist.dto.QArtistSearchV1Response;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.querydsl.core.group.GroupBy;
 import java.time.LocalDate;
@@ -28,7 +28,7 @@ public class ArtistV1SearchQueryDslRepository extends QueryDslRepositorySupport 
 
     public List<ArtistSearchV1Response> findAllByLike(String keyword) {
         return select(
-            new QArtistSearchResponse(artist.id, artist.name, artist.profileImage))
+            new QArtistSearchV1Response(artist.id, artist.name, artist.profileImage))
             .from(artist)
             .where(artist.name.contains(keyword))
             .fetch();
@@ -36,7 +36,7 @@ public class ArtistV1SearchQueryDslRepository extends QueryDslRepositorySupport 
 
     public List<ArtistSearchV1Response> findAllByEqual(String keyword) {
         return select(
-            new QArtistSearchResponse(artist.id, artist.name, artist.profileImage))
+            new QArtistSearchV1Response(artist.id, artist.name, artist.profileImage))
             .from(artist)
             .where(artist.name.eq(keyword))
             .fetch();

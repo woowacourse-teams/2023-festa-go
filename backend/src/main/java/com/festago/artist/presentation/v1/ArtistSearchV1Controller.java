@@ -1,7 +1,7 @@
 package com.festago.artist.presentation.v1;
 
 
-import com.festago.artist.application.ArtistV1SearchQueryService;
+import com.festago.artist.application.ArtistTotalSearchV1Service;
 import com.festago.artist.dto.ArtistSearchTotalV1Response;
 import com.festago.common.util.Validator;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ArtistSearchV1Controller {
 
-    private final ArtistV1SearchQueryService artistV1SearchQueryService;
+    private final ArtistTotalSearchV1Service artistTotalSearchV1Service;
 
     @GetMapping
     @Operation(description = "키워드로 아티스트 목록을 검색한다", summary = "아티스트 목록 검색 조회")
     public ResponseEntity<List<ArtistSearchTotalV1Response>> searchByKeyword(@RequestParam String keyword) {
         Validator.notBlank(keyword, "keyword");
         LocalDate today = LocalDate.now();
-        List<ArtistSearchTotalV1Response> response = artistV1SearchQueryService.findAllByKeyword(keyword, today);
+        List<ArtistSearchTotalV1Response> response = artistTotalSearchV1Service.findAllByKeyword(keyword, today);
         return ResponseEntity.ok(response);
     }
 }

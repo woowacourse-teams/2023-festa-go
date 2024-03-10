@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.artist.application.ArtistV1SearchQueryService;
+import com.festago.artist.application.ArtistTotalSearchV1Service;
 import com.festago.artist.dto.ArtistSearchTotalV1Response;
 import com.festago.support.CustomWebMvcTest;
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ class ArtistSearchV1ControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    ArtistV1SearchQueryService artistV1SearchQueryService;
+    ArtistTotalSearchV1Service artistTotalSearchV1Service;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -54,7 +54,7 @@ class ArtistSearchV1ControllerTest {
                     new ArtistSearchTotalV1Response(2L, "에이핑크", "www.profileImage.png", 0, 0)
                 );
 
-                given(artistV1SearchQueryService.findAllByKeyword("핑크", LocalDate.now()))
+                given(artistTotalSearchV1Service.findAllByKeyword("핑크", LocalDate.now()))
                     .willReturn(expected);
 
                 // when & then
