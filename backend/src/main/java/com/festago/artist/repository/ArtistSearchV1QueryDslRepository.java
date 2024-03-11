@@ -1,6 +1,5 @@
 package com.festago.artist.repository;
 
-
 import static com.festago.artist.domain.QArtist.artist;
 import static com.festago.stage.domain.QStage.stage;
 import static com.festago.stage.domain.QStageArtist.stageArtist;

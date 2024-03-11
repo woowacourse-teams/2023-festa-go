@@ -1,6 +1,5 @@
 package com.festago.artist.presentation.v1;
 
-
 import com.festago.artist.application.ArtistTotalSearchV1Service;
 import com.festago.artist.dto.ArtistTotalSearchV1Response;
 import com.festago.common.util.Validator;
