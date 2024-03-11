@@ -177,7 +177,6 @@ class AdminFestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationT
                 var response = adminFestivalV1QueryService.findAll(searchCondition);
 
                 // then
-                System.out.println(response.getContent());
                 assertThat(response.getContent())
                     .map(AdminFestivalV1Response::id)
                     .containsExactly(테코대학교_공연_없는_축제.getId(), 우테대학교_축제.getId(), 테코대학교_축제.getId());
