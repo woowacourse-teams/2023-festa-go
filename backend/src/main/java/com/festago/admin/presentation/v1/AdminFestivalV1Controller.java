@@ -1,6 +1,7 @@
 package com.festago.admin.presentation.v1;
 
 import com.festago.admin.application.AdminFestivalV1QueryService;
+import com.festago.admin.dto.AdminFestivalDetailV1Response;
 import com.festago.admin.dto.AdminFestivalV1Response;
 import com.festago.admin.dto.FestivalV1CreateRequest;
 import com.festago.admin.dto.FestivalV1UpdateRequest;
@@ -43,6 +44,14 @@ public class AdminFestivalV1Controller {
     ) {
         return ResponseEntity.ok()
             .body(adminFestivalV1QueryService.findAll(new SearchCondition(searchFilter, searchKeyword, pageable)));
+    }
+
+    @GetMapping("/{festivalId}")
+    public ResponseEntity<AdminFestivalDetailV1Response> findDetail(
+        @PathVariable Long festivalId
+    ) {
+        return ResponseEntity.ok()
+            .body(adminFestivalV1QueryService.findDetail(festivalId));
     }
 
     @PostMapping
