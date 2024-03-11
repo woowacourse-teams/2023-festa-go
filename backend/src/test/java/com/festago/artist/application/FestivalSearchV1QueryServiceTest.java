@@ -147,7 +147,7 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             }
 
             @Test
-            void 해당하는_키워드의_아티스트가_없으면_빈_옵셔널을_빤화한다() {
+            void 해당하는_키워드의_아티스트가_없으면_빈_리스트을_반환한다() {
                 // given
                 Artist 오리 = artistRepository.save(new Artist("오리", "image.jpg"));
                 Artist 우푸우 = artistRepository.save(new Artist("우푸우", "image.jpg"));
@@ -204,7 +204,7 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             }
 
             @Test
-            void 해당하는_키워드의_아티스트가_없으면_빈_옵셔널을_빤화한다() {
+            void 해당하는_키워드의_아티스트가_없으면_빈_리스트를_반환한다() {
                 // given
                 Artist 푸우 = artistRepository.save(new Artist("푸우", "image.jpg"));
                 Artist 푸푸푸푸 = artistRepository.save(new Artist("푸푸푸푸", "image.jpg"));
@@ -222,7 +222,7 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             }
 
             @Test
-            void 아티스트가_공연에_참여하고_있지_않으면_빈_리스트를_반환_한다() {
+            void 아티스트가_공연에_참여하고_있지_않으면_빈_리스트를_반환한다() {
                 // given
                 Artist 우푸우 = artistRepository.save(new Artist("우푸우", "image.jpg"));
 
