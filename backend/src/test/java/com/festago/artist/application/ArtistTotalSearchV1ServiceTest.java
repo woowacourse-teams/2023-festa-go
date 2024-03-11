@@ -7,8 +7,6 @@ import com.festago.artist.dto.ArtistSearchStageCountV1Response;
 import com.festago.artist.dto.ArtistSearchV1Response;
 import com.festago.artist.dto.ArtistTotalSearchV1Response;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -49,7 +47,7 @@ class ArtistTotalSearchV1ServiceTest {
             2L, new ArtistSearchStageCountV1Response(0, 0),
             3L, new ArtistSearchStageCountV1Response(0, 2));
         given(artistSearchStageCountV1QueryService.findArtistsStageCountAfterDateTime(
-            List.of(1L, 2L, 3L), LocalDateTime.of(today, LocalTime.MIN)))
+            List.of(1L, 2L, 3L), today.atStartOfDay()))
             .willReturn(artistToStageSchedule);
 
         // when

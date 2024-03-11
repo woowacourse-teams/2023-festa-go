@@ -98,7 +98,7 @@ class ArtistSearchStageCountV1QueryServiceIntegrationTest extends ApplicationInt
 
             // when
             Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageCountV1QueryService.findArtistsStageCountAfterDateTime(
-                artistIds, LocalDateTime.of(today, LocalTime.MIN));
+                artistIds, today.atStartOfDay());
 
             assertSoftly(softly -> {
                 softly.assertThat(actual.get(아이유.getId())).isEqualTo(아이유_공연_갯수);
@@ -115,7 +115,7 @@ class ArtistSearchStageCountV1QueryServiceIntegrationTest extends ApplicationInt
 
             // when
             Map<Long, ArtistSearchStageCountV1Response> actual = artistSearchStageCountV1QueryService.findArtistsStageCountAfterDateTime(
-                artistIds, LocalDateTime.of(today, LocalTime.MIN));
+                artistIds, today.atStartOfDay());
 
             // then
             assertThat(actual.get(아이브.getId())).isEqualTo(아이브_공연_갯수);

@@ -4,8 +4,6 @@ import com.festago.artist.dto.ArtistSearchStageCountV1Response;
 import com.festago.artist.dto.ArtistSearchV1Response;
 import com.festago.artist.dto.ArtistTotalSearchV1Response;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +24,7 @@ public class ArtistTotalSearchV1Service {
             .map(ArtistSearchV1Response::id)
             .toList();
         Map<Long, ArtistSearchStageCountV1Response> artistToStageCount = artistSearchStageCountV1QueryService.findArtistsStageCountAfterDateTime(
-            artistIds, LocalDateTime.of(today, LocalTime.MIN));
+            artistIds, today.atStartOfDay());
         return artists.stream()
             .map(it -> ArtistTotalSearchV1Response.of(it, artistToStageCount.get(it.id())))
             .toList();
