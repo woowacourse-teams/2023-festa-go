@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import com.festago.artist.dto.ArtistSearchStageCountV1Response;
 import com.festago.artist.dto.ArtistSearchV1Response;
 import com.festago.artist.dto.ArtistTotalSearchV1Response;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -28,12 +30,14 @@ class ArtistTotalSearchV1ServiceTest {
     @Mock
     ArtistSearchStageCountV1QueryService artistSearchStageCountV1QueryService;
 
+    @Spy
+    Clock clock = Clock.systemDefaultZone();
+
     @InjectMocks
     ArtistTotalSearchV1Service artistTotalSearchV1Service;
 
     @Test
     void 아티스트_정보와_공연_일정을_종합하여_반환한다() {
-        // given
         List<ArtistSearchV1Response> artists = List.of(
             new ArtistSearchV1Response(1L, "아이브", "www.IVE-image.png"),
             new ArtistSearchV1Response(2L, "아이유", "www.IU-image.png"),
@@ -51,7 +55,7 @@ class ArtistTotalSearchV1ServiceTest {
             .willReturn(artistToStageSchedule);
 
         // when
-        List<ArtistTotalSearchV1Response> actual = artistTotalSearchV1Service.findAllByKeyword("아이", today);
+        List<ArtistTotalSearchV1Response> actual = artistTotalSearchV1Service.findAllByKeyword("아이");
 
         // then
         var expected = List.of(

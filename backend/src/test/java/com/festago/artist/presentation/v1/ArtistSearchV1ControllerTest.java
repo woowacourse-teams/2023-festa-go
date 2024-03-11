@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.artist.application.ArtistTotalSearchV1Service;
 import com.festago.artist.dto.ArtistTotalSearchV1Response;
 import com.festago.support.CustomWebMvcTest;
-import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -54,7 +53,7 @@ class ArtistSearchV1ControllerTest {
                     new ArtistTotalSearchV1Response(2L, "에이핑크", "www.profileImage.png", 0, 0)
                 );
 
-                given(artistTotalSearchV1Service.findAllByKeyword("핑크", LocalDate.now()))
+                given(artistTotalSearchV1Service.findAllByKeyword("핑크"))
                     .willReturn(expected);
 
                 // when & then
