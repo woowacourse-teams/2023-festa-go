@@ -1,12 +1,15 @@
 package com.festago.artist.application;
 
+import static java.util.stream.Collectors.toMap;
+
 import com.festago.artist.dto.ArtistSearchStageCountV1Response;
 import com.festago.artist.repository.ArtistSearchV1QueryDslRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,29 +27,24 @@ public class ArtistSearchStageCountV1QueryService {
     ) {
         Map<Long, List<LocalDateTime>> artistToStageStartTimes = artistSearchV1QueryDslRepository.findArtistsStageScheduleAfterDateTime(
             artistIds, dateTime);
-        return getStageCountResponse(artistIds, dateTime.toLocalDate(), artistToStageStartTimes);
+        LocalDate today = dateTime.toLocalDate();
+        return artistIds.stream()
+            .collect(toMap(
+                Function.identity(),
+                artistId -> getArtistStageCount(artistId, artistToStageStartTimes, today)
+            ));
     }
 
-    private Map<Long, ArtistSearchStageCountV1Response> getStageCountResponse(
-        List<Long> artistIds,
-        LocalDate today,
-        Map<Long, List<LocalDateTime>> artistToStageStartTimes
+    private ArtistSearchStageCountV1Response getArtistStageCount(
+        Long artistId,
+        Map<Long, List<LocalDateTime>> artistToStageStartTimes,
+        LocalDate today
     ) {
-        Map<Long, ArtistSearchStageCountV1Response> result = new HashMap<>();
-        for (Long artistId : artistIds) {
-            int countOfTodayStage = 0;
-            int countOfPlannedStage = 0;
-            if (artistToStageStartTimes.containsKey(artistId)) {
-                for (LocalDateTime startTime : artistToStageStartTimes.get(artistId)) {
-                    if (startTime.toLocalDate().equals(today)) {
-                        countOfTodayStage++;
-                    } else {
-                        countOfPlannedStage++;
-                    }
-                }
-            }
-            result.put(artistId, new ArtistSearchStageCountV1Response(countOfTodayStage, countOfPlannedStage));
-        }
-        return result;
+        List<LocalDateTime> stageStartTimes = artistToStageStartTimes.getOrDefault(artistId, Collections.emptyList());
+        int countOfTodayStage = (int) stageStartTimes.stream()
+            .filter(it -> it.toLocalDate().equals(today))
+            .count();
+        int countOfPlannedStage = stageStartTimes.size() - countOfTodayStage;
+        return new ArtistSearchStageCountV1Response(countOfTodayStage, countOfPlannedStage);
     }
 }
