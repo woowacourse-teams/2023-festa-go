@@ -13,10 +13,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.admin.application.AdminArtistV1QueryService;
-import com.festago.admin.dto.artist.ArtistCreateRequest;
-import com.festago.admin.dto.artist.ArtistUpdateRequest;
+import com.festago.admin.dto.artist.ArtistV1CreateRequest;
 import com.festago.admin.dto.artist.ArtistV1Response;
+import com.festago.admin.dto.artist.ArtistV1UpdateRequest;
 import com.festago.artist.application.ArtistCommandService;
+import com.festago.artist.dto.command.ArtistCreateCommand;
 import com.festago.auth.domain.Role;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
@@ -61,9 +62,9 @@ class AdminArtistV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_201_응답과_Location_헤더에_식별자가_반환된다() throws Exception {
                 // given
-                ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png",
+                ArtistV1CreateRequest request = new ArtistV1CreateRequest("윤서연", "https://image.com/image.png",
                     "https://image.com/image.png");
-                given(artistCommandService.save(any(ArtistCreateRequest.class)))
+                given(artistCommandService.save(any(ArtistCreateCommand.class)))
                     .willReturn(1L);
 
                 // when & then
@@ -107,7 +108,7 @@ class AdminArtistV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_200_응답이_반환된다() throws Exception {
                 // given
-                ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image.png",
+                ArtistV1UpdateRequest request = new ArtistV1UpdateRequest("윤하", "https://image.com/image.png",
                     "https://image.com/image.png");
 
                 // when & then

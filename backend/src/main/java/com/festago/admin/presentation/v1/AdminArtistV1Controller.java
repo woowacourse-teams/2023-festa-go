@@ -1,9 +1,9 @@
 package com.festago.admin.presentation.v1;
 
 import com.festago.admin.application.AdminArtistV1QueryService;
-import com.festago.admin.dto.artist.ArtistCreateRequest;
-import com.festago.admin.dto.artist.ArtistUpdateRequest;
+import com.festago.admin.dto.artist.ArtistV1CreateRequest;
 import com.festago.admin.dto.artist.ArtistV1Response;
+import com.festago.admin.dto.artist.ArtistV1UpdateRequest;
 import com.festago.artist.application.ArtistCommandService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
@@ -30,18 +30,18 @@ public class AdminArtistV1Controller {
     private final AdminArtistV1QueryService artistV1QueryService;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody @Valid ArtistCreateRequest request) {
-        Long artistId = artistCommandService.save(request);
+    public ResponseEntity<Void> create(@RequestBody @Valid ArtistV1CreateRequest request) {
+        Long artistId = artistCommandService.save(request.toCommand());
         return ResponseEntity.created(URI.create("/admin/api/v1/artists/" + artistId))
             .build();
     }
 
     @PutMapping("/{artistId}")
     public ResponseEntity<Void> update(
-        @RequestBody @Valid ArtistUpdateRequest request,
+        @RequestBody @Valid ArtistV1UpdateRequest request,
         @PathVariable Long artistId
     ) {
-        artistCommandService.update(request, artistId);
+        artistCommandService.update(request.toCommand(), artistId);
         return ResponseEntity.ok().build();
     }
 

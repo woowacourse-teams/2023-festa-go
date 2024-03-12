@@ -8,21 +8,21 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public record FestivalV1CreateRequest(
-    @NotBlank(message = "name은 공백일 수 없습니다.")
+    @NotBlank
     String name,
 
-    @NotNull(message = "startDate는 null 일 수 없습니다.")
+    @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate startDate,
 
-    @NotNull(message = "endDate는 null 일 수 없습니다.")
+    @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate endDate,
 
     @Nullable
     String posterImageUrl,
 
-    @NotNull(message = "schoolId는 null 일 수 없습니다.")
+    @NotNull
     Long schoolId
 ) {
 

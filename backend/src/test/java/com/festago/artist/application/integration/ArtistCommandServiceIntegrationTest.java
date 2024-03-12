@@ -3,10 +3,10 @@ package com.festago.artist.application.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.festago.admin.dto.artist.ArtistCreateRequest;
-import com.festago.admin.dto.artist.ArtistUpdateRequest;
 import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.domain.Artist;
+import com.festago.artist.dto.command.ArtistCreateCommand;
+import com.festago.artist.dto.command.ArtistUpdateCommand;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -27,11 +27,11 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 아티스트를_저장한다() {
         // given
-        ArtistCreateRequest request = new ArtistCreateRequest("윤서연", "https://image.com/image.png",
+        ArtistCreateCommand command = new ArtistCreateCommand("윤서연", "https://image.com/image.png",
             "https://image.com/image.png");
 
         // when
-        Long artistId = artistCommandService.save(request);
+        Long artistId = artistCommandService.save(command);
 
         // then
         Artist actual = artistRepository.getOrThrow(artistId);
@@ -42,18 +42,18 @@ class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
     void 아티스트_정보를_변경한다() {
         // given
         Long artistId = artistRepository.save(new Artist("고윤하", "https://image.com/image1.png")).getId();
-        ArtistUpdateRequest request = new ArtistUpdateRequest("윤하", "https://image.com/image2.png",
+        ArtistUpdateCommand command = new ArtistUpdateCommand("윤하", "https://image.com/image2.png",
             "https://image.com/image2.png");
 
         // when
-        artistCommandService.update(request, artistId);
+        artistCommandService.update(command, artistId);
 
         // then
         Artist actual = artistRepository.getOrThrow(artistId);
 
         assertSoftly(softly -> {
-            softly.assertThat(actual.getName()).isEqualTo(request.name());
-            softly.assertThat(actual.getProfileImage()).isEqualTo(request.profileImage());
+            softly.assertThat(actual.getName()).isEqualTo(command.name());
+            softly.assertThat(actual.getProfileImage()).isEqualTo(command.profileImageUrl());
         });
     }
 

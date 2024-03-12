@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.admin.dto.artist.ArtistCreateRequest;
 import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.domain.Artist;
+import com.festago.artist.dto.command.ArtistCreateCommand;
 import com.festago.festival.application.command.FestivalCreateService;
 import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.dto.command.FestivalCreateCommand;
@@ -94,13 +94,13 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
             "https://image.com/posterImage.png",
             테코대학교_식별자
         ));
-        에픽하이_식별자 = artistCommandService.save(createArtistCreateRequest("에픽하이"));
-        소녀시대_식별자 = artistCommandService.save(createArtistCreateRequest("소녀시대"));
-        뉴진스_식별자 = artistCommandService.save(createArtistCreateRequest("뉴진스"));
+        에픽하이_식별자 = artistCommandService.save(createArtistCreateCommand("에픽하이"));
+        소녀시대_식별자 = artistCommandService.save(createArtistCreateCommand("소녀시대"));
+        뉴진스_식별자 = artistCommandService.save(createArtistCreateCommand("뉴진스"));
     }
 
-    private ArtistCreateRequest createArtistCreateRequest(String name) {
-        return new ArtistCreateRequest(
+    private ArtistCreateCommand createArtistCreateCommand(String name) {
+        return new ArtistCreateCommand(
             name,
             "https://image.com/profileImage.png",
             "https://image.com/backgroundImage.png"
