@@ -1,8 +1,8 @@
 package com.festago.admin.presentation.v1;
 
 import com.festago.admin.application.AdminArtistV1QueryService;
+import com.festago.admin.dto.artist.AdminArtistV1Response;
 import com.festago.admin.dto.artist.ArtistV1CreateRequest;
-import com.festago.admin.dto.artist.ArtistV1Response;
 import com.festago.admin.dto.artist.ArtistV1UpdateRequest;
 import com.festago.artist.application.ArtistCommandService;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -52,14 +52,14 @@ public class AdminArtistV1Controller {
     }
 
     @GetMapping("/{artistId}")
-    public ResponseEntity<ArtistV1Response> findById(@PathVariable Long artistId) {
-        ArtistV1Response response = artistV1QueryService.findById(artistId);
+    public ResponseEntity<AdminArtistV1Response> findById(@PathVariable Long artistId) {
+        AdminArtistV1Response response = artistV1QueryService.findById(artistId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<ArtistV1Response>> findAll() {
-        List<ArtistV1Response> response = artistV1QueryService.findAll();
+    public ResponseEntity<List<AdminArtistV1Response>> findAll() {
+        List<AdminArtistV1Response> response = artistV1QueryService.findAll();
         return ResponseEntity.ok(response);
     }
 }

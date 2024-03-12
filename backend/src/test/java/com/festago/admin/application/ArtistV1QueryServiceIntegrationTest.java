@@ -2,7 +2,7 @@ package com.festago.admin.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.admin.dto.artist.ArtistV1Response;
+import com.festago.admin.dto.artist.AdminArtistV1Response;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.support.ApplicationIntegrationTest;
@@ -28,7 +28,7 @@ class ArtistV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         Artist expected = artistRepository.save(new Artist("윤하", "www.naver.com"));
 
         // when
-        ArtistV1Response actual = adminArtistV1QueryService.findById(expected.getId());
+        AdminArtistV1Response actual = adminArtistV1QueryService.findById(expected.getId());
 
         // then
         assertThat(actual).usingRecursiveComparison()
@@ -45,7 +45,7 @@ class ArtistV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         );
 
         // when
-        List<ArtistV1Response> actual = adminArtistV1QueryService.findAll();
+        List<AdminArtistV1Response> actual = adminArtistV1QueryService.findAll();
 
         // then
         assertThat(actual).usingRecursiveComparison()
