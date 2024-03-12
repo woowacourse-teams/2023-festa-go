@@ -12,11 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.admin.dto.ArtistCreateRequest;
-import com.festago.admin.dto.ArtistUpdateRequest;
-import com.festago.admin.dto.ArtistV1Response;
+import com.festago.admin.application.AdminArtistV1QueryService;
+import com.festago.admin.dto.artist.ArtistCreateRequest;
+import com.festago.admin.dto.artist.ArtistUpdateRequest;
+import com.festago.admin.dto.artist.ArtistV1Response;
 import com.festago.artist.application.ArtistCommandService;
-import com.festago.artist.application.ArtistV1QueryService;
 import com.festago.auth.domain.Role;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
@@ -44,7 +44,7 @@ class AdminArtistV1ControllerTest {
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
-    ArtistV1QueryService artistV1QueryService;
+    AdminArtistV1QueryService adminArtistV1QueryService;
     @Autowired
     ArtistCommandService artistCommandService;
 
@@ -189,7 +189,7 @@ class AdminArtistV1ControllerTest {
             void 요청을_보내면_200_응답과_body가_반환된다() throws Exception {
                 // given
                 ArtistV1Response expected = new ArtistV1Response(1L, "윤하", "https://image.com/image.png");
-                given(artistV1QueryService.findById(expected.id()))
+                given(adminArtistV1QueryService.findById(expected.id()))
                     .willReturn(expected);
 
                 // when & then
@@ -236,7 +236,7 @@ class AdminArtistV1ControllerTest {
                     new ArtistV1Response(1L, "윤하", "https://image.com/image1.png"),
                     new ArtistV1Response(2L, "고윤하", "https://image.com/image2.png")
                 );
-                given(artistV1QueryService.findAll())
+                given(adminArtistV1QueryService.findAll())
                     .willReturn(expected);
 
                 // when & then

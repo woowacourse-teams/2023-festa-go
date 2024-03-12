@@ -1,13 +1,13 @@
-package com.festago.admin.dto;
+package com.festago.admin.dto.festival;
 
-import com.festago.festival.dto.command.FestivalUpdateCommand;
+import com.festago.festival.dto.command.FestivalCreateCommand;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-public record FestivalV1UpdateRequest(
+public record FestivalV1CreateRequest(
     @NotBlank(message = "name은 공백일 수 없습니다.")
     String name,
 
@@ -20,15 +20,19 @@ public record FestivalV1UpdateRequest(
     LocalDate endDate,
 
     @Nullable
-    String posterImageUrl
+    String posterImageUrl,
+
+    @NotNull(message = "schoolId는 null 일 수 없습니다.")
+    Long schoolId
 ) {
 
-    public FestivalUpdateCommand toCommand() {
-        return new FestivalUpdateCommand(
+    public FestivalCreateCommand toCommand() {
+        return new FestivalCreateCommand(
             name,
             startDate,
             endDate,
-            posterImageUrl
+            posterImageUrl,
+            schoolId
         );
     }
 }

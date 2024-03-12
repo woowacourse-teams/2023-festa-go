@@ -1,13 +1,14 @@
 package com.festago.artist.application;
 
-import com.festago.admin.dto.ArtistCreateRequest;
-import com.festago.admin.dto.ArtistUpdateRequest;
+import com.festago.admin.dto.artist.ArtistCreateRequest;
+import com.festago.admin.dto.artist.ArtistUpdateRequest;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// TODO Artist Command DTO 사용하여 admin 패키지 의존 제거
 @Service
 @Transactional
 @RequiredArgsConstructor

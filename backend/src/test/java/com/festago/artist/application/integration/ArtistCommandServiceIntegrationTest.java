@@ -3,8 +3,8 @@ package com.festago.artist.application.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.festago.admin.dto.ArtistCreateRequest;
-import com.festago.admin.dto.ArtistUpdateRequest;
+import com.festago.admin.dto.artist.ArtistCreateRequest;
+import com.festago.admin.dto.artist.ArtistUpdateRequest;
 import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;

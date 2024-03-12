@@ -1,10 +1,10 @@
 package com.festago.admin.presentation.v1;
 
-import com.festago.admin.dto.ArtistCreateRequest;
-import com.festago.admin.dto.ArtistUpdateRequest;
-import com.festago.admin.dto.ArtistV1Response;
+import com.festago.admin.application.AdminArtistV1QueryService;
+import com.festago.admin.dto.artist.ArtistCreateRequest;
+import com.festago.admin.dto.artist.ArtistUpdateRequest;
+import com.festago.admin.dto.artist.ArtistV1Response;
 import com.festago.artist.application.ArtistCommandService;
-import com.festago.artist.application.ArtistV1QueryService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/admin/api/v1/artists")
 @RequiredArgsConstructor
@@ -28,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminArtistV1Controller {
 
     private final ArtistCommandService artistCommandService;
-    private final ArtistV1QueryService artistV1QueryService;
+    private final AdminArtistV1QueryService artistV1QueryService;
 
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody @Valid ArtistCreateRequest request) {

@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.admin.dto.ArtistCreateRequest;
+import com.festago.admin.dto.artist.ArtistCreateRequest;
 import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.domain.Artist;
 import com.festago.festival.application.command.FestivalCreateService;

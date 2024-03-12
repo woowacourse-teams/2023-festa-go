@@ -1,8 +1,8 @@
-package com.festago.admin.dto;
+package com.festago.admin.dto.artist;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record ArtistCreateRequest(
+public record ArtistUpdateRequest(
     @NotBlank
     String name,
     @NotBlank

@@ -14,9 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.admin.application.AdminFestivalV1QueryService;
-import com.festago.admin.dto.AdminFestivalDetailV1Response;
-import com.festago.admin.dto.AdminFestivalV1Response;
-import com.festago.admin.dto.FestivalV1UpdateRequest;
+import com.festago.admin.dto.festival.AdminFestivalDetailV1Response;
+import com.festago.admin.dto.festival.AdminFestivalV1Response;
+import com.festago.admin.dto.festival.FestivalV1UpdateRequest;
 import com.festago.auth.domain.Role;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.festival.application.command.FestivalCommandFacadeService;

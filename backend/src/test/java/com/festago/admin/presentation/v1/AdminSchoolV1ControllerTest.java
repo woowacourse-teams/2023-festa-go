@@ -14,9 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.admin.application.AdminSchoolV1QueryService;
-import com.festago.admin.dto.AdminSchoolV1Response;
-import com.festago.admin.presentation.v1.dto.SchoolV1CreateRequest;
-import com.festago.admin.presentation.v1.dto.SchoolV1UpdateRequest;
+import com.festago.admin.dto.school.AdminSchoolV1Response;
+import com.festago.admin.dto.school.SchoolV1CreateRequest;
+import com.festago.admin.dto.school.SchoolV1UpdateRequest;
 import com.festago.auth.domain.Role;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.application.SchoolCommandService;
