@@ -6,7 +6,7 @@ public record SchoolTotalSearchV1Response(
     Long id,
     String name,
     String logoUrl,
-    @Nullable SchoolSearchRecentFestivalV1Response festival
+    @Nullable SchoolSearchUpcomingFestivalV1Response festival
 ) {
 
 }

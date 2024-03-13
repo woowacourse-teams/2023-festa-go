@@ -28,7 +28,7 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
     private static final String POSTER_IMAGE_URL = "https://image.com/posterimage.png";
 
     @Autowired
-    QueryDslSchoolSearchRecentFestivalV1QueryService queryDslSchoolSearchRecentFestivalV1QueryService;
+    QueryDslSchoolSearchUpcomingFestivalV1QueryService queryDslSchoolSearchRecentFestivalV1QueryService;
 
     @Autowired
     SchoolCommandService schoolCommandService;
@@ -78,7 +78,7 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
             .willReturn(TimeInstantProvider.from(_6월_14일));
 
         // when
-        var actual = queryDslSchoolSearchRecentFestivalV1QueryService.searchRecentFestivals(
+        var actual = queryDslSchoolSearchRecentFestivalV1QueryService.searchUpcomingFestivals(
             List.of(테코대학교_식별자, 우테대학교_식별자)
         );
 
@@ -94,7 +94,7 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
             .willReturn(TimeInstantProvider.from(_6월_15일));
 
         // when
-        var actual = queryDslSchoolSearchRecentFestivalV1QueryService.searchRecentFestivals(
+        var actual = queryDslSchoolSearchRecentFestivalV1QueryService.searchUpcomingFestivals(
             List.of(테코대학교_식별자, 우테대학교_식별자)
         );
 
@@ -110,7 +110,7 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
             .willReturn(TimeInstantProvider.from(_6월_16일));
 
         // when
-        var actual = queryDslSchoolSearchRecentFestivalV1QueryService.searchRecentFestivals(
+        var actual = queryDslSchoolSearchRecentFestivalV1QueryService.searchUpcomingFestivals(
             List.of(테코대학교_식별자, 우테대학교_식별자)
         );
 
@@ -126,7 +126,7 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
             .willReturn(TimeInstantProvider.from(_6월_17일));
 
         // when
-        var actual = queryDslSchoolSearchRecentFestivalV1QueryService.searchRecentFestivals(
+        var actual = queryDslSchoolSearchRecentFestivalV1QueryService.searchUpcomingFestivals(
             List.of(테코대학교_식별자, 우테대학교_식별자)
         );
 
@@ -142,7 +142,7 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
             .willReturn(TimeInstantProvider.from(_6월_18일));
 
         // when
-        var actual = queryDslSchoolSearchRecentFestivalV1QueryService.searchRecentFestivals(
+        var actual = queryDslSchoolSearchRecentFestivalV1QueryService.searchUpcomingFestivals(
             List.of(테코대학교_식별자, 우테대학교_식별자)
         );
 
