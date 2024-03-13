@@ -33,9 +33,7 @@ class ArtistDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        if (_binding == null) {
-            _binding = FragmentArtistDetailBinding.inflate(inflater)
-        }
+        _binding = FragmentArtistDetailBinding.inflate(inflater)
         return binding.root
     }
 

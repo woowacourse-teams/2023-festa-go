@@ -38,9 +38,7 @@ class FestivalDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        if (_binding == null) {
-            _binding = FragmentFestivalDetailBinding.inflate(inflater)
-        }
+        _binding = FragmentFestivalDetailBinding.inflate(inflater)
         return binding.root
     }
 
