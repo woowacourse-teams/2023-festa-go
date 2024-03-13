@@ -3,12 +3,14 @@
     <item
         android:id="@+id/festivalList"
         android:enabled="true"
+        android:menuCategory="secondary"
         android:icon="@drawable/ic_bottom_nav_home"
         android:iconTint="@color/contents_gray_07"
         android:title="@string/home_bottom_nav_festival" />
     <item
         android:id="@+id/ticketList"
         android:enabled="true"
+        android:menuCategory="secondary"
         android:icon="@drawable/ic_bottom_nav_ticket"
         android:iconTint="@color/contents_gray_07"
         android:title="@string/home_bottom_nav_ticket" />
@@ -16,6 +18,7 @@
     <item
         android:id="@+id/bookMark"
         android:enabled="true"
+        android:menuCategory="secondary"
         android:icon="@drawable/ic_bottom_nav_bookmark"
         android:iconTint="@color/contents_gray_07"
         android:title="@string/home_bottom_nav_bookmark" />
@@ -23,6 +26,7 @@
     <item
         android:id="@+id/myPage"
         android:enabled="true"
+        android:menuCategory="secondary"
         android:icon="@drawable/ic_bottom_nav_my_page"
         android:iconTint="@color/contents_gray_07"
         android:title="@string/home_bottom_nav_my_page" />
