@@ -15,9 +15,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivityHomeBinding
-import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
-import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailFragment
-import com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import com.festago.festago.presentation.util.setStatusBarMode
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -40,7 +37,7 @@ class HomeActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
 
         initBackPressedDispatcher()
-        initBackStackListener()
+        initDestinationChangedListener()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         binding.root.setOnApplyWindowInsetsCompatListener { view, windowInsets ->
@@ -60,17 +57,16 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    private fun initBackStackListener() {
-        supportFragmentManager.addOnBackStackChangedListener {
-            val isLight = when (supportFragmentManager.findFragmentById(R.id.fcvHomeContainer)) {
-                is ArtistDetailFragment,
-                is FestivalDetailFragment,
-                is SchoolDetailFragment,
-                -> false
+    private fun initDestinationChangedListener() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.artistDetailFragment,
+                R.id.festivalDetailFragment,
+                R.id.schoolDetailFragment,
+                -> setStatusBarMode(isLight = false, backgroundColor = Color.TRANSPARENT)
 
-                else -> true
+                else -> setStatusBarMode(isLight = true, backgroundColor = Color.TRANSPARENT)
             }
-            setStatusBarMode(isLight = isLight, backgroundColor = Color.TRANSPARENT)
         }
     }
 
