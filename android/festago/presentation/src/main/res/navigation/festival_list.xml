@@ -22,7 +22,9 @@
             app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_festivalListFragment_to_festivalDetailFragment"
-            app:destination="@id/festivalDetailFragment" />
+            app:destination="@id/festivalDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/artistDetailFragment"
