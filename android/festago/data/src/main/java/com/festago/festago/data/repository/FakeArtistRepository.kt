@@ -48,7 +48,7 @@ class FakeArtistRepository @Inject constructor() : ArtistRepository {
                             "예시 페스티벌 1",
                             LocalDate.parse("2024-05-01"),
                             LocalDate.parse("2024-05-03"),
-                            "https://source.unsplash.com/random/300×${300 + index++}",
+                            "https://source.unsplash.com/random/300×${300}",
                             School(
                                 1,
                                 "예시 학교",

@@ -10,13 +10,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
-import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
 import com.festago.festago.presentation.ui.festivaldetail.adapter.stage.StageListAdapter
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -25,11 +24,12 @@ import java.time.LocalDate
 
 @AndroidEntryPoint
 class FestivalDetailFragment : Fragment() {
-
     private var _binding: FragmentFestivalDetailBinding? = null
     private val binding get() = _binding!!
 
     private val vm: FestivalDetailViewModel by viewModels()
+
+    private val args: FestivalDetailFragmentArgs by navArgs()
 
     private lateinit var adapter: StageListAdapter
 
@@ -49,7 +49,7 @@ class FestivalDetailFragment : Fragment() {
     }
 
     private fun initView() {
-        val id = requireArguments().getLong(FESTIVAL_ID)
+        val id = args.festivalId
         adapter = StageListAdapter()
         binding.rvStageList.adapter = adapter
         vm.loadFestivalDetail(id)
@@ -144,11 +144,11 @@ class FestivalDetailFragment : Fragment() {
     private fun handleEvent(event: FestivalDetailEvent) {
         when (event) {
             is FestivalDetailEvent.ShowArtistDetail -> {
-                requireActivity().supportFragmentManager.commit {
-                    add(R.id.fcvHomeContainer, ArtistDetailFragment.newInstance(event.artistId))
-                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
-                    addToBackStack(null)
-                }
+                findNavController().navigate(
+                    FestivalDetailFragmentDirections.actionFestivalDetailFragmentToArtistDetailFragment(
+                        event.artistId,
+                    ),
+                )
             }
         }
     }
@@ -156,15 +156,5 @@ class FestivalDetailFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    companion object {
-        private const val FESTIVAL_ID = "FESTIVAL_ID"
-
-        fun newInstance(id: Long) = FestivalDetailFragment().apply {
-            arguments = Bundle().apply {
-                putLong(FESTIVAL_ID, id)
-            }
-        }
     }
 }

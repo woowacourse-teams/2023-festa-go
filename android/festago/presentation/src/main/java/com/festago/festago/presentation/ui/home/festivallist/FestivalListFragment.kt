@@ -9,28 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
-import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
-import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailFragment
+import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragmentDirections.actionFestivalListFragmentToSchoolDetailFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
 import com.festago.festago.presentation.ui.notificationlist.NotificationListActivity
-import com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FestivalListFragment : Fragment() {
-
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
@@ -96,13 +91,12 @@ class FestivalListFragment : Fragment() {
 
     private fun initViewPager() {
         festivalListAdapter = FestivalListAdapter(
-            // TODO: Navigation으로 변경
             onArtistClick = { artistId ->
-                requireActivity().supportFragmentManager.commit {
-                    add(R.id.fcvHomeContainer, ArtistDetailFragment.newInstance(artistId))
-                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
-                    addToBackStack(null)
-                }
+                findNavController().navigate(
+                    FestivalListFragmentDirections.actionFestivalListFragmentToArtistDetailFragment(
+                        artistId,
+                    ),
+                )
             },
         )
         binding.rvFestivalList.adapter = festivalListAdapter
@@ -168,11 +162,11 @@ class FestivalListFragment : Fragment() {
     private fun handleEvent(event: FestivalListEvent) {
         when (event) {
             is FestivalListEvent.ShowFestivalDetail -> {
-                requireActivity().supportFragmentManager.commit {
-                    add(R.id.fcvHomeContainer, FestivalDetailFragment.newInstance(event.festivalId))
-                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
-                    addToBackStack(null)
-                }
+                findNavController().navigate(
+                    FestivalListFragmentDirections.actionFestivalListFragmentToFestivalDetailFragment(
+                        event.festivalId,
+                    ),
+                )
             }
         }
     }
@@ -194,10 +188,7 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun showSchoolDetail() {
-        activity?.supportFragmentManager!!.beginTransaction()
-            .add(R.id.fcvHomeContainer, SchoolDetailFragment.newInstance(0))
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(actionFestivalListFragmentToSchoolDetailFragment(0))
     }
 
     private fun showNotificationList() {

@@ -34,7 +34,9 @@ class FestivalDetailViewModel @Inject constructor(
     private val _event = MutableSharedFlow<FestivalDetailEvent>()
     val event: SharedFlow<FestivalDetailEvent> = _event.asSharedFlow()
 
-    fun loadFestivalDetail(festivalId: Long) {
+    fun loadFestivalDetail(festivalId: Long, refresh: Boolean = false) {
+        if (!refresh && _uiState.value is FestivalDetailUiState.Success) return
+
         viewModelScope.launch {
             festivalRepository.loadFestivalDetail(festivalId).onSuccess { festivalDetail ->
                 _uiState.value = festivalDetail.toSuccessUiState()
