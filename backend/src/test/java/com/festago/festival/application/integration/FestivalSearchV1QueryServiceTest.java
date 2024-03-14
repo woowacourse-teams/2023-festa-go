@@ -1,4 +1,4 @@
-package com.festago.artist.application;
+package com.festago.festival.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
