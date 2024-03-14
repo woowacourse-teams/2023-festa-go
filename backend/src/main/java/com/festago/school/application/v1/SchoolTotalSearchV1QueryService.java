@@ -23,12 +23,7 @@ public class SchoolTotalSearchV1QueryService {
         var schoolIdToUpcomingFestivalResponse = schoolSearchUpcomingFestivalV1QueryService.searchUpcomingFestivals(
             schoolIds);
         return schoolSearchResponses.stream()
-            .map(it -> new SchoolTotalSearchV1Response(
-                it.id(),
-                it.name(),
-                it.logoUrl(),
-                schoolIdToUpcomingFestivalResponse.get(it.id())
-            ))
+            .map(it -> SchoolTotalSearchV1Response.of(it, schoolIdToUpcomingFestivalResponse.get(it.id())))
             .toList();
     }
 }

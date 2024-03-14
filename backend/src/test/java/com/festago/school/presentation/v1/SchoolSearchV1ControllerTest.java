@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.festago.school.application.v1.SchoolTotalSearchV1QueryService;
-import com.festago.school.dto.v1.SchoolSearchUpcomingFestivalV1Response;
 import com.festago.school.dto.v1.SchoolTotalSearchV1Response;
 import com.festago.support.CustomWebMvcTest;
 import java.time.LocalDate;
@@ -47,11 +46,7 @@ class SchoolSearchV1ControllerTest {
                 LocalDate festivalStartDate = LocalDate.now();
 
                 var response = List.of(
-                    new SchoolTotalSearchV1Response(1L, "테코대학교", "https://image.com/logo1.png",
-                        new SchoolSearchUpcomingFestivalV1Response(
-                            1L,
-                            festivalStartDate
-                        )),
+                    new SchoolTotalSearchV1Response(1L, "테코대학교", "https://image.com/logo1.png", festivalStartDate),
                     new SchoolTotalSearchV1Response(2L, "우테대학교", "https://image.com/logo2.png", null)
                 );
                 given(schoolTotalSearchV1QueryService.searchSchools(anyString()))
