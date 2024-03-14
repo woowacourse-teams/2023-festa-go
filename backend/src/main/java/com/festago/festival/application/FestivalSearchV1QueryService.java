@@ -15,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class FestivalSearchV1QueryService {
 
-    private static final Pattern schoolPattern = Pattern.compile(".*대(학교)?$", Pattern.CANON_EQ);
+    private static final Pattern SCHOOL_PATTERN = Pattern.compile(" .*대(학교)?$");
 
     private final ArtistFestivalSearchV1QueryDslRepository artistFestivalSearchV1QueryDslRepository;
     private final SchoolFestivalSearchV1QueryDslRepository schoolFestivalSearchV1QueryDslRepository;
 
     public List<FestivalSearchV1Response> search(String keyword) {
-        Matcher schoolMatcher = schoolPattern.matcher(keyword);
+        Matcher schoolMatcher = SCHOOL_PATTERN.matcher(keyword);
         if (schoolMatcher.matches()) {
             return schoolFestivalSearchV1QueryDslRepository.executeSearch(keyword);
         }
