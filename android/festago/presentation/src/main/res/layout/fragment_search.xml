@@ -62,20 +62,6 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColorHint="@color/contents_gray_05" />
-                <!--                <EditText-->
-                <!--                    android:id="@+id/etSearch"-->
-                <!--                    style="@style/B2Medium14Lh20"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_gravity="center"-->
-                <!--                    android:layout_marginStart="12dp"-->
-                <!--                    android:layout_marginEnd="24dp"-->
-                <!--                    android:background="@null"-->
-                <!--                    android:hint="@string/search_et_search_hint"-->
-                <!--                    android:imeOptions="actionSearch"-->
-                <!--                    android:inputType="text"-->
-                <!--                    android:maxLines="1"-->
-                <!--                    android:textColorHint="@color/contents_gray_05" />-->
 
             </androidx.cardview.widget.CardView>
 
