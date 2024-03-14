@@ -22,7 +22,7 @@ public class SchoolSearchV1Controller {
     private final SchoolTotalSearchV1QueryService schoolTotalSearchV1QueryService;
 
     @GetMapping
-    @Operation(description = "학교를 검색한다.", summary = "학교 검색")
+    @Operation(description = "곧 시작하는 축제일을 포함된 학교를 검색한다.", summary = "학교 검색")
     public ResponseEntity<List<SchoolTotalSearchV1Response>> searchSchools(
         @RequestParam String keyword
     ) {
