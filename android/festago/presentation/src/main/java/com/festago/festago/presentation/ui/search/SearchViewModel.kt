@@ -6,30 +6,37 @@ import com.festago.festago.domain.model.recentsearch.RecentSearchQuery
 import com.festago.festago.domain.repository.RecentSearchRepository
 import com.festago.festago.presentation.ui.search.uistate.RecentSearchItemUiState
 import com.festago.festago.presentation.ui.search.uistate.SearchUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel(
+@HiltViewModel
+class SearchViewModel @Inject constructor(
     private val recentSearchRepository: RecentSearchRepository,
 ) : ViewModel() {
 
-    private var _uiState: MutableStateFlow<SearchUiState> = MutableStateFlow(SearchUiState.Loading)
+    private val _uiState: MutableStateFlow<SearchUiState> = MutableStateFlow(SearchUiState.Loading)
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
-    fun loadRecentSearchQueries() {
+    init {
         viewModelScope.launch {
-            val recentSearchQueries = recentSearchRepository.getRecentSearchQueries(10)
-            _uiState.value = SearchUiState.RecentSearchSuccess(
-                recentSearchQueries.map { it.toUiState() },
-            )
+            recentSearchRepository.getRecentSearchQueries(10).collect { recentSearchQueries ->
+                _uiState.value = SearchUiState.RecentSearchSuccess(
+                    recentSearchQueries.map { it.toUiState() },
+                )
+            }
         }
     }
 
     fun search(searchQuery: String) {
         viewModelScope.launch {
             recentSearchRepository.insertOrReplaceRecentSearch(searchQuery)
+            searchArtists(searchQuery)
+            searchFestivals(searchQuery)
+            searchSchool(searchQuery)
         }
     }
 
@@ -39,7 +46,7 @@ class SearchViewModel(
         }
     }
 
-    private fun deleteAllRecentSearch() {
+    fun deleteAllRecentSearch() {
         viewModelScope.launch {
             recentSearchRepository.clearRecentSearches()
         }

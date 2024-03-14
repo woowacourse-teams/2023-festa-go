@@ -12,7 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> item.onQuerySearched.invoke(item.recentQuery)}">
 
         <TextView
             android:id="@+id/tvRecentSearch"
@@ -20,6 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:text="@{item.recentQuery}"
             android:textColor="@color/contents_gray_07"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,6 +33,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:importantForAccessibility="no"
+            android:onClick="@{() -> item.onRecentSearchDeleted.invoke(item.recentQuery)}"
             android:src="@drawable/ic_close"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
