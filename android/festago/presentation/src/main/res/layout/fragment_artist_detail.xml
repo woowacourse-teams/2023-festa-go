@@ -50,7 +50,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:contentDescription="@null"
-            android:src="@drawable/ic_arrow_back_ios_new_24"
+            android:src="@drawable/ic_back_gray_07"
             android:tintMode="src_atop"
             app:layout_constraintBottom_toBottomOf="@id/ivBackgroundImage"
             app:layout_constraintStart_toStartOf="@id/ivBackgroundImage"

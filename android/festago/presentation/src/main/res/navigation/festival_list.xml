@@ -25,6 +25,9 @@
             app:destination="@id/festivalDetailFragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_festivalListFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/artistDetailFragment"
@@ -80,4 +83,26 @@
             app:enterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.festago.festago.presentation.ui.search.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_schoolDetailFragment"
+            app:destination="@id/schoolDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_festivalDetailFragment"
+            app:destination="@id/festivalDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
 </navigation>
