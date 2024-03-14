@@ -1,7 +1,6 @@
 package com.festago.festival.presentation.v1;
 
-import com.festago.common.exception.BadRequestException;
-import com.festago.common.exception.ErrorCode;
+import com.festago.common.util.Validator;
 import com.festago.festival.application.FestivalSearchV1QueryService;
 import com.festago.festival.dto.FestivalSearchV1Response;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,8 +29,6 @@ public class FestivalSearchV1Controller {
     }
 
     private void validate(String keyword) {
-        if (keyword.isBlank()) {
-            throw new BadRequestException(ErrorCode.INVALID_KEYWORD);
-        }
+        Validator.notBlank(keyword, "keyword");
     }
 }
