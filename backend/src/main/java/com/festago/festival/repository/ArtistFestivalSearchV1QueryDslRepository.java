@@ -14,11 +14,9 @@ import com.festago.festival.dto.FestivalSearchV1Response;
 import com.festago.festival.dto.QFestivalSearchV1Response;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Slf4j
 public class ArtistFestivalSearchV1QueryDslRepository extends QueryDslRepositorySupport {
 
     public ArtistFestivalSearchV1QueryDslRepository() {
@@ -37,11 +35,11 @@ public class ArtistFestivalSearchV1QueryDslRepository extends QueryDslRepository
     }
 
     private List<FestivalSearchV1Response> searchByEqual(String keyword) {
-        return searchByExpression(artist.name.eq(keyword), keyword);
+        return searchByExpression(artist.name.eq(keyword));
     }
 
-    private List<FestivalSearchV1Response> searchByExpression(BooleanExpression expression, String keyword) {
-        List<FestivalSearchV1Response> response = select(
+    private List<FestivalSearchV1Response> searchByExpression(BooleanExpression expression) {
+        return select(
             new QFestivalSearchV1Response(
                 festival.id,
                 festival.name,
@@ -56,15 +54,9 @@ public class ArtistFestivalSearchV1QueryDslRepository extends QueryDslRepository
             .innerJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId))
             .where(expression)
             .fetch();
-
-        if (response.size() > 5) {
-            log.warn("{} 키워드로 검색시 5개를 초과한 검색 결과를 반환하였습니다", keyword);
-        }
-
-        return response;
     }
 
     private List<FestivalSearchV1Response> searchByLike(String keyword) {
-        return searchByExpression(artist.name.contains(keyword), keyword);
+        return searchByExpression(artist.name.contains(keyword));
     }
 }
