@@ -53,7 +53,8 @@ public class ArtistFestivalSearchV1QueryDslRepository extends QueryDslRepository
             .innerJoin(stageArtist).on(expression.and(stageArtist.artistId.eq(artist.id)))
             .innerJoin(stage).on(stage.id.eq(stageArtist.stageId))
             .innerJoin(festival).on(festival.id.eq(stage.festival.id))
-            .innerJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId)).where(expression)
+            .innerJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId))
+            .where(expression)
             .fetch();
 
         if (response.size() > 5) {
