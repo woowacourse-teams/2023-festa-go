@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.festago.festago.domain.model.recentsearch.RecentSearchQuery
-import kotlinx.datetime.Instant
 
 @Entity(
     tableName = "recentSearchQueries",
@@ -12,8 +11,8 @@ import kotlinx.datetime.Instant
 data class RecentSearchQueryEntity(
     @PrimaryKey
     val query: String,
-    @ColumnInfo
-    val queriedDate: Instant,
+    @ColumnInfo(name = "created_at")
+    val createdAt: Long,
 ) {
-    fun toDomain() = RecentSearchQuery(query = query, queriedDate = queriedDate)
+    fun toDomain() = RecentSearchQuery(query = query)
 }

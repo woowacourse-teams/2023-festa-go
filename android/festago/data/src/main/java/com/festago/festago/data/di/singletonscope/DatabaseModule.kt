@@ -12,10 +12,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object DatabaseModule {
+object DatabaseModule {
     @Provides
     @Singleton
-    fun providesNiaDatabase(
+    fun providesFestagoDatabase(
         @ApplicationContext context: Context,
     ): FestagoDatabase = Room.databaseBuilder(
         context,
