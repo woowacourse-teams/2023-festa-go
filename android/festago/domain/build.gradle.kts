@@ -10,9 +10,6 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
-
-    // kotlinx-datetime
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
 }
 
 kotlin.jvmToolchain(17)

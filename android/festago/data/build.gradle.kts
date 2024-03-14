@@ -85,9 +85,6 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-
-    // kotlinx-datetime
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
 }
 
 fun getSecretKey(propertyKey: String): String {
