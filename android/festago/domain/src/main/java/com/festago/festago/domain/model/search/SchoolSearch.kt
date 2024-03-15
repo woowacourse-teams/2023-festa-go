@@ -6,5 +6,5 @@ data class SchoolSearch(
     val id: Long,
     val name: String,
     val logoUrl: String,
-    val upcomingFestivalStartDate: LocalDate,
+    val upcomingFestivalStartDate: LocalDate?,
 )
