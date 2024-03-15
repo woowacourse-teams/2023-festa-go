@@ -1,11 +1,11 @@
-create table if not extists bookmark
+create table if not exists bookmark
 (
-    id bigint not null auto_increment,
+    id            bigint not null auto_increment,
     bookmark_type varchar(255),
-    resource_id bigint,
-    member_id bigint,
-    created_at datetime(6),
-    updated_at datetime(6),
+    resource_id   bigint,
+    member_id     bigint,
+    created_at    datetime(6),
+    updated_at    datetime(6),
     primary key (id)
 );
 
