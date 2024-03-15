@@ -14,5 +14,5 @@ data class RecentSearchQueryEntity(
     @ColumnInfo(name = "created_at")
     val createdAt: Long,
 ) {
-    fun toDomain() = RecentSearchQuery(query = query)
+    fun toDomain() = RecentSearchQuery(query = query, queriedDate = createdAt)
 }
