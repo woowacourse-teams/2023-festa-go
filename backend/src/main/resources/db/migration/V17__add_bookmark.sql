@@ -14,6 +14,3 @@ alter table bookmark
 
 create index bookmark_member_id_bookmark_type
     on bookmark (member_id, bookmark_type);
-
-
-
