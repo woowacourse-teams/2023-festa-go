@@ -1,7 +1,7 @@
 create table if not exists bookmark
 (
     id            bigint not null auto_increment,
-    bookmark_type varchar(255),
+    bookmark_type varchar(10),
     resource_id   bigint,
     member_id     bigint,
     created_at    datetime(6),
