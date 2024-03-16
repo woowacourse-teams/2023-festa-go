@@ -5,6 +5,8 @@ import com.festago.bookmark.application.FestivalBookmarkCommandService;
 import com.festago.bookmark.application.FestivalBookmarkV1QueryService;
 import com.festago.bookmark.repository.FestivalBookmarkOrder;
 import com.festago.festival.dto.FestivalV1Response;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/bookmark/festivals")
+@Tag(name = "축제 북마크 V1")
 public class FestivalBookmarkV1Controller {
 
     private final FestivalBookmarkV1QueryService festivalBookmarkV1QueryService;
     private final FestivalBookmarkCommandService festivalBookmarkCommandService;
 
     @GetMapping("/ids")
+    @Operation(description = "북마크 된 축제의 식별자 목록을 조회한다.")
     public ResponseEntity<List<Long>> findBookmarkedFestivalIds(
         @Member Long memberId
     ) {
@@ -34,6 +38,7 @@ public class FestivalBookmarkV1Controller {
 
     // TODO Festival 패키지에 속해야 할 것 같은데, 북마크 최신 저장 순 정렬 조건 때문에 어쩔 수 없음...
     @GetMapping
+    @Operation(description = "축제의 식별자 목록으로 북마크 된 축제의 목록을 조회한다.")
     public ResponseEntity<List<FestivalV1Response>> findBookmarkedFestivals(
         @Member Long memberId,
         @RequestParam List<Long> festivalIds,
@@ -48,6 +53,7 @@ public class FestivalBookmarkV1Controller {
     }
 
     @PutMapping("/{festivalId}")
+    @Operation(description = "축제의 식별자로 축제 북마크를 등록한다.")
     public ResponseEntity<Void> putFestivalBookmark(
         @Member Long memberId,
         @PathVariable Long festivalId
@@ -58,6 +64,7 @@ public class FestivalBookmarkV1Controller {
     }
 
     @DeleteMapping("/{festivalId}")
+    @Operation(description = "축제의 식별자로 축제 북마크를 삭제한다.")
     public ResponseEntity<Void> deleteFestivalBookmark(
         @Member Long memberId,
         @PathVariable Long festivalId
