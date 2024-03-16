@@ -13,4 +13,10 @@ public interface BookmarkRepository extends Repository<Bookmark, Long> {
     boolean existsByBookmarkTypeAndMemberIdAndResourceId(BookmarkType bookmarkType, Long memberId, Long resourceId);
 
     long countByMemberIdAndBookmarkType(Long memberId, BookmarkType bookmarkType);
+
+    void deleteByBookmarkTypeAndMemberIdAndResourceId(
+        BookmarkType bookmarkType,
+        Long memberId,
+        Long resourceId
+    );
 }
