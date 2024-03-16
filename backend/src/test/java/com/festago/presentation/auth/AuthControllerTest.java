@@ -42,7 +42,7 @@ class AuthControllerTest {
         LoginResponse expected = new LoginResponse("accesstoken", "nickname", true);
         given(authFacadeService.login(any(), any()))
             .willReturn(expected);
-        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "code", "fcmToken");
+        LoginRequest request = new LoginRequest(SocialType.FESTAGO, "code");
 
         // when & then
         String response = mockMvc.perform(post("/auth/oauth2")

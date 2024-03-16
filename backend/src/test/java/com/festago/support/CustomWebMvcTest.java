@@ -13,7 +13,7 @@ import org.springframework.test.context.TestExecutionListeners.MergeMode;
 @EnableAspectJAutoProxy
 @WebMvcTest
 @Import({TestAuthConfig.class, ErrorLoggerConfig.class, MockAllServiceBeanFactoryPostProcessor.class,
-    MockEventPublisherConfig.class, ValidPageableAspect.class})
+    ValidPageableAspect.class})
 @Retention(RetentionPolicy.RUNTIME)
 @TestExecutionListeners(value = {MockAuthTestExecutionListener.class,
     ResetMockTestExecutionListener.class}, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
