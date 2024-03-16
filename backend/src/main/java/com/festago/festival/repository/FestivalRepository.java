@@ -22,4 +22,6 @@ public interface FestivalRepository extends Repository<Festival, Long>, Festival
     void deleteById(Long festivalId);
 
     void flush();
+
+    boolean existsById(Long festivalId);
 }
