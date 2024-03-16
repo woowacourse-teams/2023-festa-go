@@ -34,7 +34,7 @@ public class AnnotationDelegateInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
         throws Exception {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
-        if (handlerMethod.getMethodAnnotation(annotation) != null) {
+        if (handlerMethod.hasMethodAnnotation(annotation)) {
             return interceptor.preHandle(request, response, handler);
         }
         return true;
