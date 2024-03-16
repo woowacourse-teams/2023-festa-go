@@ -5,6 +5,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.festival.domain.Festival;
 import com.festago.school.domain.School;
+import com.festago.school.domain.SchoolRegion;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.RepositoryTest;
 import java.time.LocalDate;
@@ -37,7 +38,7 @@ class FestivalRepositoryTest {
 
     @BeforeEach
     public void setting() {
-        this.school = schoolRepository.save(new School("domain", "name"));
+        this.school = schoolRepository.save(new School("domain", "name", SchoolRegion.서울));
     }
 
     private void prepareNotOrderedFestivals() {

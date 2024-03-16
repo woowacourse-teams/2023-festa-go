@@ -47,6 +47,10 @@ public class AdminController {
     private final SchoolService schoolService;
     private final Optional<BuildProperties> properties;
 
+    /**
+     * @deprecated 새로운 Festival CRUD 기능이 안정되면 삭제
+     */
+    @Deprecated(forRemoval = true)
     @PostMapping("/festivals")
     public ResponseEntity<FestivalResponse> createFestival(@RequestBody @Valid FestivalCreateRequest request) {
         FestivalResponse response = festivalService.create(request);
@@ -54,6 +58,10 @@ public class AdminController {
             .body(response);
     }
 
+    /**
+     * @deprecated 새로운 Festival CRUD 기능이 안정되면 삭제
+     */
+    @Deprecated(forRemoval = true)
     @PatchMapping("/festivals/{festivalId}")
     public ResponseEntity<Void> updateFestival(@RequestBody @Valid FestivalUpdateRequest request,
                                                @PathVariable Long festivalId) {
@@ -62,6 +70,10 @@ public class AdminController {
             .build();
     }
 
+    /**
+     * @deprecated 새로운 Festival CRUD 기능이 안정되면 삭제
+     */
+    @Deprecated(forRemoval = true)
     @DeleteMapping("/festivals/{festivalId}")
     public ResponseEntity<Void> deleteFestival(@PathVariable Long festivalId) {
         festivalService.delete(festivalId);
@@ -98,6 +110,10 @@ public class AdminController {
             .body(response);
     }
 
+    /**
+     * @deprecated API 버저닝이 적용되면 해당 메서드 삭제
+     */
+    @Deprecated(forRemoval = true)
     @PostMapping("/schools")
     public ResponseEntity<SchoolResponse> createSchool(@RequestBody @Valid SchoolCreateRequest request) {
         SchoolResponse response = schoolService.create(request);
@@ -105,6 +121,10 @@ public class AdminController {
             .body(response);
     }
 
+    /**
+     * @deprecated API 버저닝이 적용되면 해당 메서드 삭제
+     */
+    @Deprecated(forRemoval = true)
     @PatchMapping("/schools/{schoolId}")
     public ResponseEntity<Void> updateSchool(@RequestBody @Valid SchoolUpdateRequest request,
                                              @PathVariable Long schoolId) {
@@ -113,6 +133,10 @@ public class AdminController {
             .build();
     }
 
+    /**
+     * @deprecated API 버저닝이 적용되면 해당 메서드 삭제
+     */
+    @Deprecated(forRemoval = true)
     @DeleteMapping("/schools/{schoolId}")
     public ResponseEntity<Void> deleteSchool(@PathVariable Long schoolId) {
         schoolService.delete(schoolId);

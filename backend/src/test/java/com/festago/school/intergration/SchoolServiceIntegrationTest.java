@@ -9,6 +9,7 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.school.application.SchoolService;
 import com.festago.school.domain.School;
+import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateRequest;
 import com.festago.school.dto.SchoolResponse;
 import com.festago.school.dto.SchoolUpdateRequest;
@@ -54,7 +55,7 @@ public class SchoolServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 중복된_도메인이_존재하면_예외() {
             // given
-            School savedSchool = schoolRepository.save(new School("domain.com", "name"));
+            School savedSchool = schoolRepository.save(new School("domain.com", "name", SchoolRegion.서울));
 
             // when && then
             assertThatThrownBy(
@@ -66,7 +67,7 @@ public class SchoolServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 중복된_이름이_존재하면_예외() {
             // given
-            School savedSchool = schoolRepository.save(new School("domain.com", "name"));
+            School savedSchool = schoolRepository.save(new School("domain.com", "name", SchoolRegion.서울));
 
             // when && then
             assertThatThrownBy(() -> schoolService.create(new SchoolCreateRequest("otherDomain.com", savedSchool.getName())))
@@ -78,9 +79,9 @@ public class SchoolServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 모든_학교를_조회한다() {
         // given
-        schoolRepository.save(new School("domain.com", "name1"));
-        schoolRepository.save(new School("domain.kr", "name2"));
-        schoolRepository.save(new School("domain.jp", "name3"));
+        schoolRepository.save(new School("domain.com", "name1", SchoolRegion.서울));
+        schoolRepository.save(new School("domain.kr", "name2", SchoolRegion.서울));
+        schoolRepository.save(new School("domain.jp", "name3", SchoolRegion.서울));
 
         // when
         SchoolsResponse actual = schoolService.findAll();
@@ -92,7 +93,7 @@ public class SchoolServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 단건_학교를_조회한다() {
         // given
-        School expected = schoolRepository.save(new School("domain.com", "name"));
+        School expected = schoolRepository.save(new School("domain.com", "name", SchoolRegion.서울));
 
         // when
         SchoolResponse actual = schoolService.findById(expected.getId());
@@ -116,7 +117,7 @@ public class SchoolServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 학교_정보를_수정한다() {
         // given
-        Long savedSchoolId = schoolRepository.save(new School("domain.com", "name")).getId();
+        Long savedSchoolId = schoolRepository.save(new School("domain.com", "name", SchoolRegion.서울)).getId();
         SchoolUpdateRequest expected = new SchoolUpdateRequest("newDomain.com", "newName");
 
         // when
@@ -134,7 +135,7 @@ public class SchoolServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 학교를_삭제한다() {
         // given
-        Long savedSchoolId = schoolRepository.save(new School("domain.com", "name")).getId();
+        Long savedSchoolId = schoolRepository.save(new School("domain.com", "name", SchoolRegion.서울)).getId();
 
         // when
         schoolService.delete(savedSchoolId);

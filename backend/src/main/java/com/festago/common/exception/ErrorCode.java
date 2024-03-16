@@ -26,11 +26,18 @@ public enum ErrorCode {
     INVALID_STUDENT_VERIFICATION_CODE("올바르지 않은 학생 인증 코드입니다."),
     DELETE_CONSTRAINT_FESTIVAL("공연이 등록된 축제는 삭제할 수 없습니다."),
     DELETE_CONSTRAINT_STAGE("티켓이 등록된 공연은 삭제할 수 없습니다."),
-    DELETE_CONSTRAINT_SCHOOL("학생 또는 축제에 등록된 학교는 삭제할 수 없습니다."),
-    DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."),
+    DELETE_CONSTRAINT_SCHOOL("학생 또는 축제에 등록된 학교는 삭제할 수 없습니다."), // @deprecate
+    DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."), // @deprecate
     VALIDATION_FAIL("검증이 실패하였습니다."),
     INVALID_FESTIVAL_FILTER("유효하지 않은 축제의 필터 값입니다."),
-
+    SCHOOL_DELETE_CONSTRAINT_EXISTS_STUDENT("학생이 등록된 학교는 삭제할 수 없습니다."),
+    SCHOOL_DELETE_CONSTRAINT_EXISTS_FESTIVAL("축제가 등록된 학교는 삭제할 수 없습니다."),
+    DUPLICATE_SCHOOL_NAME("이미 존재하는 학교의 이름입니다."),
+    DUPLICATE_SCHOOL_DOMAIN("이미 존재하는 학교의 도메인입니다."),
+    INVALID_PAGING_MAX_SIZE("최대 size 값을 초과했습니다."),
+    INVALID_NUMBER_FORMAT_PAGING_SIZE("size는 1 이상의 정수 형식이어야 합니다."),
+    FESTIVAL_DELETE_CONSTRAINT_EXISTS_STAGE("공연이 등록된 축제는 삭제할 수 없습니다."),
+    FESTIVAL_UPDATE_OUT_OF_DATE_STAGE_START_TIME("축제에 등록된 공연 중 변경하려는 날짜에 포함되지 않는 공연이 있습니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
@@ -50,6 +57,7 @@ public enum ErrorCode {
     FESTIVAL_NOT_FOUND("존재하지 않는 축제입니다."),
     TICKET_NOT_FOUND("존재하지 않는 티켓입니다."),
     SCHOOL_NOT_FOUND("존재하지 않는 학교입니다."),
+    ARTIST_NOT_FOUND("존재하지 않는 아티스트입니다."),
 
     // 429
     TOO_FREQUENT_REQUESTS("너무 잦은 요청입니다. 잠시 후 다시 시도해주세요."),
@@ -59,8 +67,9 @@ public enum ErrorCode {
     OAUTH2_PROVIDER_NOT_RESPONSE("OAuth2 제공자 서버에 문제가 발생했습니다."),
     FOR_TEST_ERROR("테스트용 에러입니다."),
     FAIL_SEND_FCM_MESSAGE("FCM Message 전송에 실패했습니다."),
-    FCM_NOT_FOUND("유효하지 않은 MemberFCM이 감지 되었습니다."),
-    TICKET_SEQUENCE_DATA_ERROR("입장 순서 값의 데이터 정합성에 문제가 발생했습니다.");
+    TICKET_SEQUENCE_DATA_ERROR("입장 순서 값의 데이터 정합성에 문제가 발생했습니다."),
+    FESTIVAL_INFO_CONVERT_ERROR("FestivalInfo 를 만들 수 없습니다"),
+    ;
 
     private final String message;
 

@@ -24,19 +24,13 @@ public class StageService {
     private final FestivalRepository festivalRepository;
 
     public StageResponse create(StageCreateRequest request) {
-        Festival festival = findFestival(request.festivalId());
+        Festival festival = festivalRepository.getOrThrow(request.festivalId());
         Stage newStage = stageRepository.save(new Stage(
             request.startTime(),
-            request.lineUp(),
             request.ticketOpenTime(),
             festival));
 
         return StageResponse.from(newStage);
-    }
-
-    private Festival findFestival(Long festivalId) {
-        return festivalRepository.findById(festivalId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
     }
 
     public StageResponse findDetail(Long stageId) {
@@ -52,7 +46,6 @@ public class StageService {
     public void update(Long stageId, StageUpdateRequest request) {
         Stage stage = findStage(stageId);
         stage.changeTime(request.startTime(), request.ticketOpenTime());
-        stage.changeLineUp(request.lineUp());
     }
 
     public void delete(Long stageId) {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <variable
+            name="item"
+            type="com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@color/contents_gray_07">
+
+        <ImageView
+            android:id="@+id/ivPopularFestivalImage"
+            imageUrl="@{item.imageUrl}"
+            onSingleClick="@{()-> item.onFestivalDetail.invoke(item.id)}"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_marginTop="12dp"
+            android:elevation="12dp"
+            android:importantForAccessibility="no"
+            android:outlineProvider="bounds"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_launcher_background" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

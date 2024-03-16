@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.HomeActivity">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcvHomeContainer"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="48dp"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/home_graph"
+            tools:layout="@layout/fragment_festival_list" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nvHome"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#00000000"
+            app:itemIconTint="@drawable/selector_menu_color"
+            app:labelVisibilityMode="unlabeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_bottom_navigation" />
+
+        <View
+            android:id="@+id/navigationUpperLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background_gray_03"
+            app:layout_constraintTop_toTopOf="@id/nvHome" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -2,6 +2,9 @@ package com.festago.common.util;
 
 import com.festago.common.exception.UnexpectedException;
 import com.festago.common.exception.ValidException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 public final class Validator {
 
@@ -15,7 +18,7 @@ public final class Validator {
      * @param fieldName 예외 메시지에 출력할 필드명
      * @throws ValidException input이 null 또는 공백이면
      */
-    public static void hasBlank(String input, String fieldName) {
+    public static void notBlank(String input, String fieldName) {
         if (input == null || input.isBlank()) {
             throw new ValidException("%s은/는 null 또는 공백이 될 수 없습니다.".formatted(fieldName));
         }
@@ -141,7 +144,7 @@ public final class Validator {
      * @param fieldName 예외 메시지에 출력할 필드명
      * @throws ValidException value가 음수이면
      */
-    public static void isNegative(int value, String fieldName) {
+    public static void notNegative(int value, String fieldName) {
         if (value < 0) {
             throw new ValidException("%s은/는 음수가 될 수 없습니다.".formatted(fieldName));
         }
@@ -154,9 +157,61 @@ public final class Validator {
      * @param fieldName 예외 메시지에 출력할 필드명
      * @throws ValidException value가 음수이면
      */
-    public static void isNegative(long value, String fieldName) {
+    public static void notNegative(long value, String fieldName) {
         if (value < 0) {
             throw new ValidException("%s은/는 음수가 될 수 없습니다.".formatted(fieldName));
+        }
+    }
+
+    /**
+     * 컬렉션의 최대 size를 검증합니다.
+     *
+     * @param collection 검증할 컬렉션
+     * @param maxSize    검증할 컬렉션의 최대 원소 수
+     * @param fieldName  예외 메시지에 출력할 필드명
+     * @throws UnexpectedException 최대 크기가 0 이하이면
+     * @throws ValidException      collecion의 size가 maxSize를 초과하면
+     */
+    public static void maxSize(Collection<?> collection, int maxSize, String fieldName) {
+        if (maxSize <= 0) {
+            throw new UnexpectedException("최대 size는 0 이하일 수 없습니다.");
+        }
+        if (collection.size() > maxSize) {
+            throw new ValidException("%s의 size는 %d 이하여야 합니다.".formatted(fieldName, maxSize));
+        }
+    }
+
+    /**
+     * 컬렉션의 최소 size를 검증합니다.
+     *
+     * @param collection 검증할 컬렉션
+     * @param minSize    검증할 컬렉션의 최소 원소 수
+     * @param fieldName  예외 메시지에 출력할 필드명
+     * @throws UnexpectedException 최대 크기가 0 이하이면
+     * @throws ValidException      collecion의 size가 minSize 미만이면
+     */
+    public static void minSize(Collection<?> collection, int minSize, String fieldName) {
+        if (minSize <= 0) {
+            throw new UnexpectedException("최대 size는 0 이하일 수 없습니다.");
+        }
+        if (collection.size() < minSize) {
+            throw new ValidException("%s의 size는 %d 이상이어야 합니다.".formatted(fieldName, minSize));
+        }
+    }
+
+    /**
+     * 리스트에 중복이 있는지 검사합니다. HashSet을 사용하여 중복을 검사하므로, 리스트의 원소 타입은 반드시 equals, hashCode 메서드를 구현해야 합니다.
+     *
+     * @param list      검증할 리스트
+     * @param fieldName 예외 메시지에 출력할 필드명
+     */
+    public static void notDuplicate(List<?> list, String fieldName) {
+        // avoid NPE
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+        if (new HashSet<>(list).size() != list.size()) {
+            throw new ValidException("%s에 중복된 값이 있습니다.".formatted(fieldName));
         }
     }
 }

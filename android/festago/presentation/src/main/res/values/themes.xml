@@ -1,0 +1,12 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Festago" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/background_gray_01</item>
+        <item name="android:navigationBarColor">@color/background_gray_01</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:colorBackground">@color/background_gray_01</item>
+    </style>
+
+    <style name="Theme.Festago" parent="Base.Theme.Festago" />
+</resources>

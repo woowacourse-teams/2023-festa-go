@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState.Success" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_gray_01"
+        android:clickable="true"
+        android:orientation="vertical"
+        app:layout_collapseMode="parallax"
+        app:layout_collapseParallaxMultiplier="0.0">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivBackgroundImage"
+            imageUrl="@{uiState.artist.backgroundUrl}"
+            android:layout_width="match_parent"
+            android:layout_height="136dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:layout_collapseMode="parallax"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="1" />
+
+        <View
+            android:id="@+id/tvFestivalDDayEnd"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#40000000"
+            app:layout_constraintBottom_toBottomOf="@+id/ivBackgroundImage"
+            app:layout_constraintEnd_toEndOf="@id/ivBackgroundImage"
+            app:layout_constraintStart_toStartOf="@id/ivBackgroundImage"
+            app:layout_constraintTop_toTopOf="@id/ivBackgroundImage" />
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_arrow_back_ios_new_24"
+            android:tintMode="src_atop"
+            app:layout_constraintBottom_toBottomOf="@id/ivBackgroundImage"
+            app:layout_constraintStart_toStartOf="@id/ivBackgroundImage"
+            app:layout_constraintTop_toTopOf="@id/ivBackgroundImage"
+            app:tint="@color/background_gray_01" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvProfileImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            app:cardCornerRadius="1000dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivBackgroundImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivBackgroundImage">
+
+            <ImageView
+                android:id="@+id/ivProfileImage"
+                imageUrl="@{uiState.artist.logoUrl}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_foreground" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvBookmark"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            app:cardCornerRadius="1000dp"
+            app:layout_constraintBottom_toBottomOf="@id/cvProfileImage"
+            app:layout_constraintEnd_toEndOf="@id/cvProfileImage">
+
+            <ImageView
+                android:id="@+id/ivBookmark"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_bookmark"
+                app:tint="@color/tint_bookmark" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvArtistName"
+            style="@style/H2Bold20Lh24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@{uiState.artist.artistName}"
+            app:layout_constraintBottom_toBottomOf="@+id/cvProfileImage"
+            app:layout_constraintStart_toEndOf="@id/cvProfileImage"
+            tools:text="뉴진스" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llcArtistMedia"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvArtistName"
+            app:layout_constraintTop_toBottomOf="@id/tvArtistName"
+            app:singleLine="true" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvToDoList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llcArtistMedia"
+            app:layout_constraintVertical_weight="1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
