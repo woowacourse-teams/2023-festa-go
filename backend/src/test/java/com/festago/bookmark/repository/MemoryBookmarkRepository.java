@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.SneakyThrows;
 
-class MemoryBookmarkRepository implements BookmarkRepository {
+public class MemoryBookmarkRepository implements BookmarkRepository {
 
     private final ConcurrentHashMap<Long, Bookmark> memory = new ConcurrentHashMap<>();
     private final AtomicLong autoIncrement = new AtomicLong();
