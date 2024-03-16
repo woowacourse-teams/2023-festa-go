@@ -34,20 +34,23 @@ class LoginConfigTest {
         @Test
         @WithMockAuth(role = Role.ANONYMOUS)
         void 토큰이_없으면_401_응답이_반환된다() throws Exception {
-            mockMvc.perform(get("/annotation-member-auth")).andExpect(status().isUnauthorized());
+            mockMvc.perform(get("/annotation-member-auth"))
+                .andExpect(status().isUnauthorized());
         }
 
         @Test
         @WithMockAuth
         void 토큰이_있으면_200_응답이_반환된다() throws Exception {
-            mockMvc.perform(get("/annotation-member-auth").header(HttpHeaders.AUTHORIZATION, "Bearer token"))
+            mockMvc.perform(get("/annotation-member-auth")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
                 .andExpect(status().isOk());
         }
 
         @Test
         @WithMockAuth(role = Role.ADMIN)
         void 토큰의_권한이_어드민이면_404_응답이_반환된다() throws Exception {
-            mockMvc.perform(get("/annotation-member-auth").header(HttpHeaders.AUTHORIZATION, "Bearer token"))
+            mockMvc.perform(get("/annotation-member-auth")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.NOT_ENOUGH_PERMISSION.name()));
         }
