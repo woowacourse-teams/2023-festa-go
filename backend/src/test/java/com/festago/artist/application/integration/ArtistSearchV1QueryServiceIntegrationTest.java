@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistSearchV1ServiceIntegrationTest extends ApplicationIntegrationTest {
+class ArtistSearchV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     ArtistSearchV1QueryService artistSearchV1QueryService;
@@ -88,5 +88,14 @@ class ArtistSearchV1ServiceIntegrationTest extends ApplicationIntegrationTest {
         // when && then
         assertThatThrownBy(() -> artistSearchV1QueryService.findAllByKeyword("핑크"))
             .isInstanceOf(BadRequestException.class);
+    }
+
+    @Test
+    void 검색_결과가_없다면_빈리스트_반환() {
+        // when
+        List<ArtistSearchV1Response> actual = artistSearchV1QueryService.findAllByKeyword("없음");
+
+        // then
+        assertThat(actual).isEmpty();
     }
 }

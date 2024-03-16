@@ -8,6 +8,7 @@ import com.festago.artist.dto.ArtistSearchV1Response;
 import com.festago.artist.dto.ArtistTotalSearchV1Response;
 import java.time.Clock;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -66,4 +67,20 @@ class ArtistTotalSearchV1ServiceTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @Test
+    void 검색_결과가_해당하는_아티스트가_없으면_빈리스트를_반환한다() {
+        // given
+        LocalDate today = LocalDate.now();
+        given(artistSearchV1QueryService.findAllByKeyword("없어"))
+            .willReturn(Collections.emptyList());
+        given(artistSearchStageCountV1QueryService.findArtistsStageCountAfterDateTime(
+            Collections.emptyList(), today.atStartOfDay()))
+            .willReturn(Collections.emptyMap());
+
+        // when
+        List<ArtistTotalSearchV1Response> actual = artistTotalSearchV1Service.findAllByKeyword("없어");
+
+        // then
+        assertThat(actual).isEmpty();
+    }
 }
