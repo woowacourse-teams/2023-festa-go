@@ -42,7 +42,7 @@ public class LoginConfig implements WebMvcConfigurer {
                 .allowMethod(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT, HttpMethod.PATCH)
                 .interceptor(memberAuthInterceptor())
                 .build())
-            .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**", "/students/**")
+            .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**", "/students/**", "/api/v1/bookmark/**")
             .excludePathPatterns("/auth/oauth2");
     }
 
