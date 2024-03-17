@@ -6,6 +6,7 @@ import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
 import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.model.festival.FestivalFilter
+import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
@@ -67,13 +68,17 @@ class FestivalListViewModel @Inject constructor(
         }
     }
 
-    fun loadFestivals(festivalFilterUiState: FestivalFilterUiState? = null) {
+    fun loadFestivals(
+        festivalFilterUiState: FestivalFilterUiState? = null,
+        schoolRegion: SchoolRegion? = null,
+    ) {
         val successUiState = uiState.value as? FestivalListUiState.Success ?: return
 
         viewModelScope.launch {
             val currentFestivals = getCurrentFestivals(festivalFilterUiState)
 
             festivalRepository.loadFestivals(
+                schoolRegion = schoolRegion,
                 festivalFilter = festivalFilter,
                 lastFestivalId = currentFestivals.lastOrNull()?.id,
                 lastStartDate = currentFestivals.lastOrNull()?.startDate,
@@ -85,6 +90,7 @@ class FestivalListViewModel @Inject constructor(
                     ),
                     festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
                     festivalFilter = festivalFilter.toUiState(),
+                    schoolRegion = schoolRegion,
                     isLastPage = festivalsPage.isLastPage,
                 )
             }

@@ -13,12 +13,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragmentDirections.actionFestivalListFragmentToSchoolDetailFragment
+import com.festago.festago.presentation.ui.home.festivallist.bottomsheet.RegionBottomSheetDialogFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.SchoolRegionUiState
 import com.festago.festago.presentation.ui.notificationlist.NotificationListActivity
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
@@ -174,18 +177,49 @@ class FestivalListFragment : Fragment() {
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
         val items = uiState.getItems()
         festivalListAdapter.submitList(items)
+        binding.rvFestivalList.itemAnimator = null
     }
 
     private fun FestivalListUiState.Success.getItems(): List<Any> {
+        val schoolRegions = SchoolRegion.values().map {
+            SchoolRegionUiState(it, it == this.schoolRegion)
+        }
+        val dialog = createRegionDialog(schoolRegions)
+
         return mutableListOf<Any>().apply {
             if (popularFestivalUiState.festivals.isNotEmpty()) {
                 add(popularFestivalUiState)
             }
-            add(FestivalTabUiState(festivalFilter) { vm.loadFestivals(it) })
+            add(
+                FestivalTabUiState(
+                    selectedFilter = festivalFilter,
+                    selectedRegion = schoolRegion,
+                    onFilterSelected = { vm.loadFestivals(it, schoolRegion) }
+                ) {
+                    dialog.show(
+                        parentFragmentManager,
+                        RegionBottomSheetDialogFragment::class.java.name
+                    )
+                }
+            )
             addAll(festivals)
             if (!isLastPage) add(FestivalMoreItemUiState)
         }.toList()
     }
+
+    private fun FestivalListUiState.Success.createRegionDialog(
+        schoolRegions: List<SchoolRegionUiState>
+    ) = RegionBottomSheetDialogFragment.newInstance(
+        items = schoolRegions,
+        listener = object : RegionBottomSheetDialogFragment.OnRegionSelectListener {
+            override fun onRegionSelect(region: SchoolRegion) {
+                vm.loadFestivals(
+                    festivalFilterUiState = festivalFilter,
+                    schoolRegion = if (region == schoolRegion) null else region
+                )
+            }
+        }
+    )
 
     private fun showSchoolDetail() {
         findNavController().navigate(actionFestivalListFragmentToSchoolDetailFragment(0))
