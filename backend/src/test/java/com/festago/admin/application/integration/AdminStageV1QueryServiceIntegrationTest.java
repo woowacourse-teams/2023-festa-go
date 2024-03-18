@@ -153,7 +153,7 @@ class AdminStageV1QueryServiceIntegrationTest extends ApplicationIntegrationTest
 
             // then
             assertThat(actual)
-                .map(AdminStageV1Response::stageId)
+                .map(AdminStageV1Response::id)
                 .containsExactly(_6월_15일_공연_식별자, _6월_16일_공연_식별자);
 
         }
@@ -162,7 +162,7 @@ class AdminStageV1QueryServiceIntegrationTest extends ApplicationIntegrationTest
         void 해당_일자의_공연에_참여하는_아티스트_목록을_조회할_수_있다() {
             // when
             var stageIdToArtists = adminStageV1QueryService.findAllByFestivalId(축제_식별자).stream()
-                .collect(toMap(AdminStageV1Response::stageId, AdminStageV1Response::artists));
+                .collect(toMap(AdminStageV1Response::id, AdminStageV1Response::artists));
 
             // then
             assertSoftly(softly -> {

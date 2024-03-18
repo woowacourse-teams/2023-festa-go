@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record AdminStageV1Response(
-    Long stageId,
+    Long id,
     LocalDateTime startDateTime,
     LocalDateTime ticketOpenTime,
     List<AdminStageArtistV1Response> artists,
