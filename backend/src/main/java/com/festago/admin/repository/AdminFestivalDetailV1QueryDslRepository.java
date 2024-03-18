@@ -3,8 +3,8 @@ package com.festago.admin.repository;
 import static com.festago.festival.domain.QFestival.festival;
 import static com.festago.school.domain.QSchool.school;
 
-import com.festago.admin.dto.AdminFestivalDetailV1Response;
-import com.festago.admin.dto.QAdminFestivalDetailV1Response;
+import com.festago.admin.dto.festival.AdminFestivalDetailV1Response;
+import com.festago.admin.dto.festival.QAdminFestivalDetailV1Response;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.festival.domain.Festival;
 import java.util.Optional;

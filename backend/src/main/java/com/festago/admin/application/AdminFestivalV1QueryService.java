@@ -1,7 +1,7 @@
 package com.festago.admin.application;
 
-import com.festago.admin.dto.AdminFestivalDetailV1Response;
-import com.festago.admin.dto.AdminFestivalV1Response;
+import com.festago.admin.dto.festival.AdminFestivalDetailV1Response;
+import com.festago.admin.dto.festival.AdminFestivalV1Response;
 import com.festago.admin.repository.AdminFestivalDetailV1QueryDslRepository;
 import com.festago.admin.repository.AdminFestivalV1QueryDslRepository;
 import com.festago.common.exception.ErrorCode;

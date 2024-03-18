@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.admin.application.AdminFestivalV1QueryService;
-import com.festago.admin.dto.AdminFestivalV1Response;
+import com.festago.admin.dto.festival.AdminFestivalV1Response;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.querydsl.SearchCondition;

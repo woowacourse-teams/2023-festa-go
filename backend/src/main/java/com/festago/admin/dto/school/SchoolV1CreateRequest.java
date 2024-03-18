@@ -1,4 +1,4 @@
-package com.festago.admin.presentation.v1.dto;
+package com.festago.admin.dto.school;
 
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
