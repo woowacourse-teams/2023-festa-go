@@ -1,10 +1,13 @@
 package com.festago.admin.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.admin.application.AdminFestivalV1QueryService;
-import com.festago.admin.dto.AdminFestivalV1Response;
+import com.festago.admin.dto.festival.AdminFestivalV1Response;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
@@ -45,6 +48,8 @@ class AdminFestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationT
     LocalDate now = LocalDate.parse("2077-06-30");
     LocalDate tomorrow = now.plusDays(1);
 
+    School 테코대학교;
+    School 우테대학교;
     Festival 테코대학교_축제;
     Festival 테코대학교_공연_없는_축제;
     Festival 우테대학교_축제;
@@ -55,8 +60,8 @@ class AdminFestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationT
     @BeforeEach
     void setUp() {
         LocalDateTime ticketOpenTime = now.atStartOfDay().minusWeeks(1);
-        School 테코대학교 = schoolRepository.save(new School("teco.ac.kr", "테코대학교", SchoolRegion.서울));
-        School 우테대학교 = schoolRepository.save(new School("wote.ac.kr", "우테대학교", SchoolRegion.서울));
+        테코대학교 = schoolRepository.save(new School("teco.ac.kr", "테코대학교", SchoolRegion.서울));
+        우테대학교 = schoolRepository.save(new School("wote.ac.kr", "우테대학교", SchoolRegion.서울));
         테코대학교_축제 = festivalRepository.save(new Festival("테코대학교 축제", now, now, 테코대학교));
         테코대학교_공연_없는_축제 = festivalRepository.save(new Festival("테코대학교 공연 없는 축제", tomorrow, tomorrow, 테코대학교));
         우테대학교_축제 = festivalRepository.save(new Festival("우테대학교 축제", now, tomorrow, 우테대학교));
@@ -172,7 +177,6 @@ class AdminFestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationT
                 var response = adminFestivalV1QueryService.findAll(searchCondition);
 
                 // then
-                System.out.println(response.getContent());
                 assertThat(response.getContent())
                     .map(AdminFestivalV1Response::id)
                     .containsExactly(테코대학교_공연_없는_축제.getId(), 우테대학교_축제.getId(), 테코대학교_축제.getId());
@@ -264,6 +268,32 @@ class AdminFestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationT
                 assertThat(response.getContent())
                     .hasSize(3);
             }
+        }
+    }
+
+    @Nested
+    class findDetail {
+
+        @Test
+        void 축제의_식별자로_조회할_수_있어야_한다() {
+            // when
+            var actual = adminFestivalV1QueryService.findDetail(우테대학교_축제.getId());
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(actual.id()).isEqualTo(우테대학교_축제.getId());
+                softly.assertThat(actual.name()).isEqualTo(우테대학교_축제.getName());
+                softly.assertThat(actual.schoolId()).isEqualTo(우테대학교.getId());
+                softly.assertThat(actual.schoolName()).isEqualTo(우테대학교.getName());
+            });
+        }
+
+        @Test
+        void 축제의_식별자에_해당하는_축제가_없으면_예외가_발생한다() {
+            // when & then
+            assertThatThrownBy(() -> adminFestivalV1QueryService.findDetail(4885L))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(ErrorCode.FESTIVAL_NOT_FOUND.getMessage());
         }
     }
 }

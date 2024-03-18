@@ -3,9 +3,9 @@ package com.festago.acceptance.steps;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.acceptance.CucumberClient;
-import com.festago.admin.dto.AdminSchoolV1Response;
-import com.festago.admin.presentation.v1.dto.SchoolV1CreateRequest;
-import com.festago.admin.presentation.v1.dto.SchoolV1UpdateRequest;
+import com.festago.admin.dto.school.AdminSchoolV1Response;
+import com.festago.admin.dto.school.SchoolV1CreateRequest;
+import com.festago.admin.dto.school.SchoolV1UpdateRequest;
 import com.festago.school.domain.SchoolRegion;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

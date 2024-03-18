@@ -1,6 +1,8 @@
 package com.festago.admin.presentation.v1;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -12,8 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.admin.application.AdminFestivalV1QueryService;
-import com.festago.admin.dto.AdminFestivalV1Response;
-import com.festago.admin.dto.FestivalV1UpdateRequest;
+import com.festago.admin.dto.festival.AdminFestivalDetailV1Response;
+import com.festago.admin.dto.festival.AdminFestivalV1Response;
+import com.festago.admin.dto.festival.FestivalV1UpdateRequest;
 import com.festago.auth.domain.Role;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.festival.application.command.FestivalCommandFacadeService;
@@ -22,7 +25,9 @@ import com.festago.festival.dto.command.FestivalCreateCommand;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import jakarta.servlet.http.Cookie;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -224,6 +229,78 @@ class AdminFestivalV1ControllerTest {
                 mockMvc.perform(get(uri)
                         .cookie(TOKEN_COOKIE))
                     .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    class 축제_상세_조회 {
+
+        final String uri = "/admin/api/v1/festivals/{festivalId}";
+
+        @Nested
+        @DisplayName("GET " + uri)
+        class 올바른_주소로 {
+
+            private final Long festivalId = 1L;
+
+            @Test
+            @WithMockAuth(role = Role.ADMIN)
+            void 요청을_하면_200_응답과_축제_상세_정보가_반환된다() throws Exception {
+                // given
+                var expected = getAdminFestivalDetailV1Response();
+                given(adminFestivalV1QueryService.findDetail(anyLong()))
+                    .willReturn(expected);
+
+                // when & then
+                String content = mockMvc.perform(get(uri, festivalId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isOk())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString(StandardCharsets.UTF_8);
+
+                assertThat(objectMapper.readValue(content, AdminFestivalDetailV1Response.class))
+                    .isEqualTo(expected);
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri, festivalId))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri, festivalId)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
+            }
+
+            private AdminFestivalDetailV1Response getAdminFestivalDetailV1Response() {
+                String name = "테코대학교 축제";
+                Long schoolId = 2L;
+                String schoolName = "테코대학교";
+                LocalDate startDate = LocalDate.parse("2077-06-29");
+                LocalDate endDate = startDate.plusDays(2);
+                String posterImageUrl = "https://image.com/image.png";
+                LocalDateTime createdAt = startDate.atStartOfDay();
+                LocalDateTime updatedAt = startDate.atStartOfDay();
+                return new AdminFestivalDetailV1Response(
+                    festivalId,
+                    name,
+                    schoolId,
+                    schoolName,
+                    startDate,
+                    endDate,
+                    posterImageUrl,
+                    createdAt,
+                    updatedAt
+                );
             }
         }
     }

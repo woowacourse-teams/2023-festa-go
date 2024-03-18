@@ -1,4 +1,4 @@
-package com.festago.admin.presentation.v1.dto;
+package com.festago.admin.dto.stage;
 
 import com.festago.stage.dto.command.StageUpdateCommand;
 import jakarta.validation.constraints.NotNull;
