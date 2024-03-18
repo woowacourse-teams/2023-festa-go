@@ -14,9 +14,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.admin.application.AdminFestivalV1QueryService;
+import com.festago.admin.application.AdminStageV1QueryService;
 import com.festago.admin.dto.festival.AdminFestivalDetailV1Response;
 import com.festago.admin.dto.festival.AdminFestivalV1Response;
 import com.festago.admin.dto.festival.FestivalV1UpdateRequest;
+import com.festago.admin.dto.stage.AdminStageArtistV1Response;
+import com.festago.admin.dto.stage.AdminStageV1Response;
 import com.festago.auth.domain.Role;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.festival.application.command.FestivalCommandFacadeService;
@@ -58,6 +61,9 @@ class AdminFestivalV1ControllerTest {
 
     @Autowired
     AdminFestivalV1QueryService adminFestivalV1QueryService;
+
+    @Autowired
+    AdminStageV1QueryService adminStageV1QueryService;
 
     @Nested
     class 축제_생성 {
@@ -301,6 +307,83 @@ class AdminFestivalV1ControllerTest {
                     createdAt,
                     updatedAt
                 );
+            }
+        }
+    }
+
+    @Nested
+    class 축제_공연_목록_조회 {
+
+        final String uri = "/admin/api/v1/festivals/{festivalId}/stages";
+
+        @Nested
+        @DisplayName("GET " + uri)
+        class 올바른_주소로 {
+
+            private final Long festivalId = 1L;
+
+            @Test
+            @WithMockAuth(role = Role.ADMIN)
+            void 요청을_하면_200_응답과_축제에_속한_공연_목록_정보가_반환된다() throws Exception {
+                var expected = getAdminStageV1Responses();
+                given(adminStageV1QueryService.findAllByFestivalId(festivalId))
+                    .willReturn(expected);
+
+                mockMvc.perform(get(uri, festivalId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isOk());
+            }
+
+            private List<AdminStageV1Response> getAdminStageV1Responses() {
+                return List.of(
+                    new AdminStageV1Response(
+                        1L,
+                        LocalDateTime.now(),
+                        LocalDateTime.now().minusWeeks(1),
+                        List.of(
+                            new AdminStageArtistV1Response(
+                                1L,
+                                "에픽하이"
+                            ),
+                            new AdminStageArtistV1Response(
+                                2L,
+                                "아이유"
+                            )
+                        ),
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                    ),
+                    new AdminStageV1Response(
+                        2L,
+                        LocalDateTime.now().plusDays(1),
+                        LocalDateTime.now().minusWeeks(1),
+                        List.of(
+                            new AdminStageArtistV1Response(
+                                3L,
+                                "푸우회장"
+                            )
+                        ),
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                    )
+                );
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri, festivalId))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri, festivalId)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
             }
         }
     }
