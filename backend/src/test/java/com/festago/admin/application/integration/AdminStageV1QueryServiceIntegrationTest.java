@@ -155,7 +155,6 @@ class AdminStageV1QueryServiceIntegrationTest extends ApplicationIntegrationTest
             assertThat(actual)
                 .map(AdminStageV1Response::id)
                 .containsExactly(_6월_15일_공연_식별자, _6월_16일_공연_식별자);
-
         }
 
         @Test
