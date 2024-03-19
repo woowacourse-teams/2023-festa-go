@@ -5,8 +5,9 @@ import com.festago.festago.domain.model.search.ArtistSearch
 import com.festago.festago.domain.model.search.SchoolSearch
 import com.festago.festago.domain.repository.SearchRepository
 import java.time.LocalDate
+import javax.inject.Inject
 
-class FakeSearchRepository : SearchRepository {
+class FakeSearchRepository @Inject constructor() : SearchRepository {
     override suspend fun searchFestivals(searchQuery: String): Result<List<Festival>> {
         return Result.success(FakeFestivals.plannedFestivals)
     }
