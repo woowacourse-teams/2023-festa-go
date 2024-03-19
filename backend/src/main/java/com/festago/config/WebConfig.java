@@ -1,5 +1,6 @@
 package com.festago.config;
 
+import com.festago.common.filter.UriPatternMatcher;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,5 +32,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         return new FixedLocaleResolver(Locale.KOREA);
+    }
+
+    // WebMvcConfig 테스트에서 의존성 문제 때문에 Bean으로 여기서 등록
+    @Bean
+    public UriPatternMatcher urlMatcher() {
+        return new UriPatternMatcher();
     }
 }
