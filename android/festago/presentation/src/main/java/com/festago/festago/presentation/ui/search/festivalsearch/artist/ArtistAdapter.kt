@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.ui.search.uistate.ArtistUiState
 
-
 class ArtistAdapter : ListAdapter<ArtistUiState, ArtistViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
