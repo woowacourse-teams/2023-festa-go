@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.festago.festago.presentation.ui.search.uistate.SchoolSearchItemUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{() -> item.onSchoolSearchClick.invoke(item.id)}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_festival_list_festival">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvSchoolLogo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginVertical="16dp"
+            android:layout_marginStart="12dp"
+            app:cardCornerRadius="1000dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivSchoolLogoImage"
+                imageUrl="@{item.logoUrl}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_launcher_foreground" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvSchoolName"
+            style="@style/H4Bold16Lh20"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@{item.name}"
+            android:textColor="@color/contents_gray_07"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cvSchoolLogo"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="서울과학기술대학교" />
+
+        <TextView
+            android:id="@+id/tvSchoolFestivalDday"
+            style="@style/B2Medium14Lh20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:includeFontPadding="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvSchoolName"
+            app:layout_constraintTop_toBottomOf="@id/tvSchoolName"
+            tools:text="D-7" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
