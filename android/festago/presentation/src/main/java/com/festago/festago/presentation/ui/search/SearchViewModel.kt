@@ -10,6 +10,8 @@ import com.festago.festago.domain.model.search.ArtistSearch
 import com.festago.festago.domain.model.search.SchoolSearch
 import com.festago.festago.domain.repository.RecentSearchRepository
 import com.festago.festago.domain.repository.SearchRepository
+import com.festago.festago.presentation.ui.search.screen.ItemSearchScreenUiState
+import com.festago.festago.presentation.ui.search.screen.ItemSearchScreenUiState.FestivalSearchScreen
 import com.festago.festago.presentation.ui.search.uistate.ArtistSearchItemUiState
 import com.festago.festago.presentation.ui.search.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.search.uistate.FestivalSearchItemUiState
@@ -35,11 +37,14 @@ class SearchViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<SearchUiState> = MutableStateFlow(SearchUiState.Loading)
+    private val _uiState: MutableStateFlow<SearchUiState> =
+        MutableStateFlow(SearchUiState.RecentSearchSuccess(listOf()))
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
     private val _event = MutableSharedFlow<SearchEvent>()
     val event: SharedFlow<SearchEvent> = _event.asSharedFlow()
+
+    var currentScreen: ItemSearchScreenUiState = FestivalSearchScreen(listOf())
 
     fun loadRecentSearch() {
         if (uiState.value is SearchUiState.SearchSuccess) return
@@ -56,6 +61,7 @@ class SearchViewModel @Inject constructor(
                 _event.emit(SearchEvent.SearchBlank)
                 return@launch
             }
+            _uiState.value = SearchUiState.Loading
             recentSearchRepository.insertOrReplaceRecentSearch(searchQuery)
             val deferredFestivals = async { searchRepository.searchFestivals(searchQuery) }
             val deferredArtist = async { searchRepository.searchArtists(searchQuery) }
