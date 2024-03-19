@@ -7,10 +7,18 @@ sealed interface SearchUiState {
         val recentSearchQueries: List<RecentSearchItemUiState>,
     ) : SearchUiState
 
+    data class SearchSuccess(
+        val searchedFestivals: List<FestivalSearchItemUiState>,
+        val searchedArtists: List<ArtistSearchItemUiState>,
+        val searchedSchools: List<SchoolSearchItemUiState>,
+    ) : SearchUiState
+
     object Error : SearchUiState
 
-    val shouldShowRecentSearchSuccessNotEmpty get() = this is SearchUiState.RecentSearchSuccess && recentSearchQueries.isNotEmpty()
-    val shouldShowEmptyRecentSearchSuccessEmpty get() = this is SearchUiState.RecentSearchSuccess && recentSearchQueries.isEmpty()
-    val shouldShowLoading get() = this is SearchUiState.Loading
-    val shouldShowError get() = this is SearchUiState.Error
+    val shouldShowRecentSearchSuccessNotEmpty get() = this is RecentSearchSuccess && recentSearchQueries.isNotEmpty()
+    val shouldShowEmptyRecentSearchSuccessEmpty get() = this is RecentSearchSuccess && recentSearchQueries.isEmpty()
+    val shouldShowEmptyRecentSearchSuccess get() = this is RecentSearchSuccess
+    val shouldShowSearchSuccess get() = this is SearchSuccess
+    val shouldShowLoading get() = this is Loading
+    val shouldShowError get() = this is Error
 }
