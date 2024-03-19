@@ -4,15 +4,23 @@ import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.model.search.ArtistSearch
 import com.festago.festago.domain.model.search.SchoolSearch
 import com.festago.festago.domain.repository.SearchRepository
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 import javax.inject.Inject
 
 class FakeSearchRepository @Inject constructor() : SearchRepository {
+    private var times = 0
     override suspend fun searchFestivals(searchQuery: String): Result<List<Festival>> {
-        return Result.success(FakeFestivals.plannedFestivals)
+        delay(1000)
+        times++
+        if (times % 2 == 0) {
+            return Result.success(FakeFestivals.popularFestivals)
+        }
+        return Result.success(listOf())
     }
 
     override suspend fun searchArtists(searchQuery: String): Result<List<ArtistSearch>> {
+        delay(1000)
         return Result.success(
             listOf(
                 ArtistSearch(
@@ -55,24 +63,25 @@ class FakeSearchRepository @Inject constructor() : SearchRepository {
     }
 
     override suspend fun searchSchools(searchQuery: String): Result<List<SchoolSearch>> {
+        delay(1000)
         return Result.success(
             listOf(
                 SchoolSearch(
                     id = 1L,
-                    name = "부경대학고",
-                    logoUrl = "https://www.pknu.ac.kr/images/front/sub/univ_logo01.png",
-                    upcomingFestivalStartDate = LocalDate.now().plusDays(5L),
+                    name = "부경대학교",
+                    logoUrl = "htts://www.pknu.ac.kr/images/front/sub/univ_logo00.png",
+                    upcomingFestivalStartDate = LocalDate.now().plusDays(10L),
                 ),
                 SchoolSearch(
-                    id = 1L,
-                    name = "서울대학고",
-                    logoUrl = "https://www.snu.ac.kr/webdata/uploads/kor/image/2019/12/about-symbol-bi_lg.png",
+                    id = 2L,
+                    name = "서울대학교",
+                    logoUrl = "https://blog.kakaocdn.net/dn/CYoCP/btrSeivmaxD/e7JaOZVPI3Je55nAJaHDMK/img.png",
                     upcomingFestivalStartDate = LocalDate.now().plusDays(3L),
                 ),
                 SchoolSearch(
-                    id = 1L,
-                    name = "서울대학고",
-                    logoUrl = "https://i.namu.wiki/i/lw8P8ZIL5-HV94rCgFUq9y4bv_geodMRaDX0uIQ_woQL51W5y04LcpG_vYtNXafpVJYWN0F1MxgZdeqvDyOs5g.svg",
+                    id = 3L,
+                    name = "서울과학기술대학교",
+                    logoUrl = "https://www.seoultech.ac.kr/site/www/images/intro/img_ui01_01.gif",
                     upcomingFestivalStartDate = null,
                 ),
 
