@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+@Deprecated(forRemoval = true)
 @Component
 @RequiredArgsConstructor
 public class FestivalInfoSerializerImpl implements FestivalInfoSerializer {

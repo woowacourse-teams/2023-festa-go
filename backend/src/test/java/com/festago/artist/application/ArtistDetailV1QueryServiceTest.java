@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
+// TODO Repository 사용하지 않고 Service로 데이터 세팅하도록 변경
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class ArtistDetailV1QueryServiceTest extends ApplicationIntegrationTest {
