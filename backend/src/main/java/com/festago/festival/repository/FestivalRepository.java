@@ -6,7 +6,7 @@ import com.festago.festival.domain.Festival;
 import java.util.Optional;
 import org.springframework.data.repository.Repository;
 
-public interface FestivalRepository extends Repository<Festival, Long>, FestivalRepositoryCustom {
+public interface FestivalRepository extends Repository<Festival, Long> {
 
     default Festival getOrThrow(Long festivalId) {
         return findById(festivalId)
@@ -20,6 +20,4 @@ public interface FestivalRepository extends Repository<Festival, Long>, Festival
     Optional<Festival> findById(Long festivalId);
 
     void deleteById(Long festivalId);
-
-    void flush();
 }
