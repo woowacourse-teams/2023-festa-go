@@ -53,12 +53,6 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
     ArtistRepository artistRepository;
 
     @Autowired
-    FestivalInfoSerializer festivalInfoSerializer;
-
-    @Autowired
-    SocialMediaRepository socialMediaRepository;
-
-    @Autowired
     FestivalSearchV1QueryService festivalSearchV1QueryService;
 
     Stage 부산_공연;
