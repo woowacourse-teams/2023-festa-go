@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class FestivalSearchV1QueryService {
 
-    private static final Pattern SCHOOL_PATTERN = Pattern.compile(" .*대(학교)?$");
+    private static final Pattern SCHOOL_PATTERN = Pattern.compile(".*대(학교)?$");
 
     private final ArtistFestivalSearchV1QueryDslRepository artistFestivalSearchV1QueryDslRepository;
     private final SchoolFestivalSearchV1QueryDslRepository schoolFestivalSearchV1QueryDslRepository;
