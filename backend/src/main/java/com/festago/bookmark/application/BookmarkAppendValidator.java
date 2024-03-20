@@ -9,11 +9,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class BookmarkAppendValidator {
 
+    private static final int BOOKMARK_MAXIMUM_COUNT = 12;
     private final BookmarkRepository bookmarkRepository;
 
     public void validate(BookmarkType bookmarkType, Long resourceId, Long memberId) {
         long bookmarkCount = bookmarkRepository.countByMemberIdAndBookmarkType(memberId, bookmarkType);
-        if (bookmarkCount >= 12) {
+        if (bookmarkCount >= BOOKMARK_MAXIMUM_COUNT) {
             throw new IllegalArgumentException("북마크는 최대 12개까지 가능합니다.");
         }
 
