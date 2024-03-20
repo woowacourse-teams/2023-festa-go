@@ -55,7 +55,7 @@
                 android:drawablePadding="4dp"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
-                android:text='@{schoolRegion.name() ?? "지역별"}'
+                android:text='@{schoolRegion.name() ?? @string/region_bottom_sheet_tv_region}'
                 android:textColor='@{schoolRegion != null ? @color/primary_blue_07 : @color/contents_gray_06}'
                 tools:ignore="UseCompatTextViewDrawableXml"
                 tools:text="서울" />
