@@ -1,20 +1,20 @@
 package com.festago.festago.presentation.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.doOnPreDraw
+import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentSearchBinding
 import com.festago.festago.presentation.ui.search.recentsearch.RecentSearchAdapter
+import com.festago.festago.presentation.ui.search.screen.ItemSearchScreenUiState
 import com.festago.festago.presentation.ui.search.screen.ItemSearchScreenUiState.ArtistSearchScreen
 import com.festago.festago.presentation.ui.search.screen.ItemSearchScreenUiState.FestivalSearchScreen
 import com.festago.festago.presentation.ui.search.screen.ItemSearchScreenUiState.SchoolSearchScreen
@@ -22,7 +22,6 @@ import com.festago.festago.presentation.ui.search.screen.SearchScreenAdapter
 import com.festago.festago.presentation.ui.search.uistate.SearchUiState
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -95,10 +94,19 @@ class SearchFragment : Fragment() {
         binding.vpSearch.adapter = searchScreenAdapter
         TabLayoutMediator(binding.tlSearch, binding.vpSearch) { tab, position ->
             tab.text = when (position) {
-                0 -> getString(R.string.search_tl_tab_festival)
-                1 -> getString(R.string.search_tl_tab_Artist)
-                2 -> getString(R.string.search_tl_tab_school)
+                ItemSearchScreenUiState.FESTIVAL_POSITION -> getString(R.string.search_tl_tab_festival)
+                ItemSearchScreenUiState.ARTIST_POSITION -> getString(R.string.search_tl_tab_Artist)
+                ItemSearchScreenUiState.SCHOOL_POSITION -> getString(R.string.search_tl_tab_school)
                 else -> ""
+            }
+            tab.view.setOnClickListener {
+                val currentScreen = when (tab.position) {
+                    ItemSearchScreenUiState.FESTIVAL_POSITION -> FestivalSearchScreen(listOf())
+                    ItemSearchScreenUiState.ARTIST_POSITION -> ArtistSearchScreen(listOf())
+                    ItemSearchScreenUiState.SCHOOL_POSITION -> SchoolSearchScreen(listOf())
+                    else -> FestivalSearchScreen(listOf())
+                }
+                vm.currentScreen = currentScreen
             }
         }.attach()
     }
@@ -149,29 +157,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun initSearchTab() {
-        with(binding.tlSearch) {
-            addOnTabSelectedListener(
-                object : TabLayout.OnTabSelectedListener {
-                    override fun onTabSelected(tab: TabLayout.Tab) {
-                        binding.tlSearch.clearAnimation()
-                        val currentScreen = when (tab.position) {
-                            0 -> FestivalSearchScreen(listOf())
-                            1 -> ArtistSearchScreen(listOf())
-                            2 -> SchoolSearchScreen(listOf())
-                            else -> FestivalSearchScreen(listOf())
-                        }
-                        vm.currentScreen = currentScreen
-                    }
-
-                    override fun onTabUnselected(tab: TabLayout.Tab) = Unit
-                    override fun onTabReselected(tab: TabLayout.Tab) = Unit
-                },
-            )
-        }
-
-        binding.vpSearch.doOnPreDraw {
+        binding.vpSearch.doOnNextLayout {
             binding.vpSearch.setCurrentItem(vm.currentScreen.screenPosition, false)
-            Log.d("asdf", vm.currentScreen.screenPosition.toString())
         }
     }
 

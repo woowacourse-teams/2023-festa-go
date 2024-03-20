@@ -6,11 +6,17 @@ import com.festago.festago.presentation.ui.search.uistate.SchoolSearchItemUiStat
 
 sealed class ItemSearchScreenUiState(val screenPosition: Int) {
     data class FestivalSearchScreen(val festivalSearches: List<FestivalSearchItemUiState>) :
-        ItemSearchScreenUiState(0)
+        ItemSearchScreenUiState(FESTIVAL_POSITION)
 
     data class ArtistSearchScreen(val artistSearches: List<ArtistSearchItemUiState>) :
-        ItemSearchScreenUiState(1)
+        ItemSearchScreenUiState(ARTIST_POSITION)
 
     data class SchoolSearchScreen(val schoolSearches: List<SchoolSearchItemUiState>) :
-        ItemSearchScreenUiState(2)
+        ItemSearchScreenUiState(SCHOOL_POSITION)
+
+    companion object {
+        const val FESTIVAL_POSITION = 0
+        const val ARTIST_POSITION = 1
+        const val SCHOOL_POSITION = 2
+    }
 }
