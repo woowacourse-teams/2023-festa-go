@@ -1,12 +1,12 @@
 package com.festago.festival.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.application.FestivalSearchV1QueryService;
 import com.festago.festival.domain.Festival;
-import com.festago.festival.domain.FestivalInfoSerializer;
 import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.dto.FestivalSearchV1Response;
 import com.festago.festival.repository.FestivalInfoRepository;
@@ -14,7 +14,6 @@ import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.repository.SchoolRepository;
-import com.festago.socialmedia.repository.SocialMediaRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.domain.StageArtist;
 import com.festago.stage.repository.StageArtistRepository;
@@ -23,6 +22,7 @@ import com.festago.support.ApplicationIntegrationTest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -96,7 +96,10 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search(keyword);
 
             // then
-            assertThat(actual).hasSize(1);
+            assertSoftly(softly -> {
+                softly.assertThat(actual).hasSize(1);
+                softly.assertThat(actual.get(0).name()).contains(keyword);
+            });
         }
 
         @Test
@@ -108,7 +111,10 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search(keyword);
 
             // then
-            assertThat(actual).hasSize(1);
+            assertSoftly(softly -> {
+                softly.assertThat(actual).hasSize(1);
+                softly.assertThat(actual.get(0).name()).contains(keyword);
+            });
         }
     }
 
@@ -137,7 +143,11 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("푸우");
 
                 // then
-                assertThat(actual).hasSize(2);
+                assertSoftly(softly -> {
+                    softly.assertThat(actual).hasSize(2);
+                    softly.assertThat(actual.get(0).name()).isEqualTo("부산대학교 축제");
+                    softly.assertThat(actual.get(1).name()).isEqualTo("대구대학교 축제");
+                });
             }
 
             @Test
@@ -194,7 +204,11 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("푸");
 
                 // then
-                assertThat(actual).hasSize(2);
+                assertSoftly(softly -> {
+                    softly.assertThat(actual).hasSize(2);
+                    softly.assertThat(actual.get(0).name()).isEqualTo("부산대학교 축제");
+                    softly.assertThat(actual.get(1).name()).isEqualTo("서울대학교 축제");
+                });
             }
 
             @Test
