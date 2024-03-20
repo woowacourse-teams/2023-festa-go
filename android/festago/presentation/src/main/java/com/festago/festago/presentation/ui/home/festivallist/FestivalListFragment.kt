@@ -123,7 +123,7 @@ class FestivalListFragment : Fragment() {
 
                 val itemTotalCount = recyclerView.adapter!!.itemCount - 1
                 if (lastVisibleItemPosition == itemTotalCount) {
-                    vm.loadFestivals()
+                    vm.loadFestivals(isLoadMore = true)
                 }
             }
         })

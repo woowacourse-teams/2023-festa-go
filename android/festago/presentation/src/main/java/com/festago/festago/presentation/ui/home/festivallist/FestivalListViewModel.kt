@@ -71,6 +71,7 @@ class FestivalListViewModel @Inject constructor(
     fun loadFestivals(
         festivalFilterUiState: FestivalFilterUiState? = null,
         schoolRegion: SchoolRegion? = null,
+        isLoadMore: Boolean = false,
     ) {
         val successUiState = uiState.value as? FestivalListUiState.Success ?: return
 
@@ -80,15 +81,21 @@ class FestivalListViewModel @Inject constructor(
             festivalRepository.loadFestivals(
                 schoolRegion = schoolRegion,
                 festivalFilter = festivalFilter,
-                lastFestivalId = currentFestivals.lastOrNull()?.id,
-                lastStartDate = currentFestivals.lastOrNull()?.startDate,
+                lastFestivalId = if (isLoadMore) {
+                    currentFestivals.lastOrNull()?.id
+                } else null,
+                lastStartDate = if (isLoadMore) {
+                    currentFestivals.lastOrNull()?.startDate
+                } else null,
             ).onSuccess { festivalsPage ->
                 _uiState.value = FestivalListUiState.Success(
                     PopularFestivalUiState(
                         title = successUiState.popularFestivalUiState.title,
                         festivals = successUiState.popularFestivalUiState.festivals,
                     ),
-                    festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
+                    festivals = if (isLoadMore) {
+                        currentFestivals + festivalsPage.festivals.map { it.toUiState() }
+                    } else festivalsPage.festivals.map { it.toUiState() },
                     festivalFilter = festivalFilter.toUiState(),
                     schoolRegion = schoolRegion,
                     isLastPage = festivalsPage.isLastPage,
