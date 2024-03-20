@@ -21,6 +21,9 @@ class FakeSearchRepository @Inject constructor() : SearchRepository {
 
     override suspend fun searchArtists(searchQuery: String): Result<List<ArtistSearch>> {
         delay(1000)
+        if (times % 5 == 0) {
+            return Result.failure(Exception())
+        }
         return Result.success(
             listOf(
                 ArtistSearch(
