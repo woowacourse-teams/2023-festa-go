@@ -1,28 +1,31 @@
-package com.festago.artist.application.integration;
+package com.festago.artist.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.command.ArtistCreateCommand;
 import com.festago.artist.dto.command.ArtistUpdateCommand;
 import com.festago.artist.repository.ArtistRepository;
-import com.festago.support.ApplicationIntegrationTest;
+import com.festago.artist.repository.MemoryArtistRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-@DisplayNameGeneration(ReplaceUnderscores.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistCommandServiceIntegrationTest extends ApplicationIntegrationTest {
+class ArtistCommandServiceTest {
 
-    @Autowired
     ArtistCommandService artistCommandService;
 
-    @Autowired
     ArtistRepository artistRepository;
+
+    @BeforeEach
+    void setUp() {
+        artistRepository = new MemoryArtistRepository();
+        artistCommandService = new ArtistCommandService(artistRepository);
+    }
 
     @Test
     void 아티스트를_저장한다() {
