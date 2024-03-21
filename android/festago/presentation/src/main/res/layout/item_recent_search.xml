@@ -30,11 +30,13 @@
 
         <ImageView
             android:id="@+id/ivDelete"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:importantForAccessibility="no"
             android:onClick="@{() -> item.onRecentSearchDeleted.invoke(item.recentQuery)}"
-            android:src="@drawable/ic_close"
+            android:paddingVertical="12dp"
+            android:paddingStart="12dp"
+            android:src="@drawable/ic_x_close"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
