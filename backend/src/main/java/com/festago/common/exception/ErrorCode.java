@@ -68,7 +68,6 @@ public enum ErrorCode {
     FOR_TEST_ERROR("테스트용 에러입니다."),
     FAIL_SEND_FCM_MESSAGE("FCM Message 전송에 실패했습니다."),
     TICKET_SEQUENCE_DATA_ERROR("입장 순서 값의 데이터 정합성에 문제가 발생했습니다."),
-    FESTIVAL_INFO_CONVERT_ERROR("FestivalInfo 를 만들 수 없습니다"),
     ;
 
     private final String message;
