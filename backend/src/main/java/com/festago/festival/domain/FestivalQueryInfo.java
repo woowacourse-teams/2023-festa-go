@@ -34,11 +34,6 @@ public class FestivalQueryInfo extends BaseTimeEntity {
         this.artistInfo = artistInfo;
     }
 
-    @Deprecated(forRemoval = true)
-    public static FestivalQueryInfo of(Festival festival, List<Artist> artists, FestivalInfoSerializer serializer) {
-        return new FestivalQueryInfo(festival.getId(), serializer.serialize(artists));
-    }
-
     public static FestivalQueryInfo create(Long festivalId) {
         return new FestivalQueryInfo(festivalId, "[]");
     }
