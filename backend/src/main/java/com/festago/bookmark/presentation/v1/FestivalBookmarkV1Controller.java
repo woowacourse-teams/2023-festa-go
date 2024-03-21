@@ -3,8 +3,8 @@ package com.festago.bookmark.presentation.v1;
 import com.festago.auth.annotation.Member;
 import com.festago.bookmark.application.FestivalBookmarkCommandService;
 import com.festago.bookmark.application.FestivalBookmarkV1QueryService;
+import com.festago.bookmark.dto.FestivalBookmarkV1Response;
 import com.festago.bookmark.repository.FestivalBookmarkOrder;
-import com.festago.festival.dto.FestivalV1Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -39,7 +39,7 @@ public class FestivalBookmarkV1Controller {
     // TODO Festival 패키지에 속해야 할 것 같은데, 북마크 최신 저장 순 정렬 조건 때문에 어쩔 수 없음...
     @GetMapping
     @Operation(description = "축제의 식별자 목록으로 북마크 된 축제의 목록을 조회한다.")
-    public ResponseEntity<List<FestivalV1Response>> findBookmarkedFestivals(
+    public ResponseEntity<List<FestivalBookmarkV1Response>> findBookmarkedFestivals(
         @Member Long memberId,
         @RequestParam List<Long> festivalIds,
         @RequestParam FestivalBookmarkOrder festivalBookmarkOrder // TODO 더 좋은 이름이 없을까?

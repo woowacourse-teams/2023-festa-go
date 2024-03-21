@@ -7,8 +7,9 @@ import static com.festago.school.domain.QSchool.school;
 
 import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
+import com.festago.bookmark.dto.FestivalBookmarkV1Response;
+import com.festago.bookmark.dto.QFestivalBookmarkV1Response;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
-import com.festago.festival.dto.FestivalV1Response;
 import com.festago.festival.dto.QFestivalV1Response;
 import com.festago.festival.dto.QSchoolV1Response;
 import com.querydsl.core.types.OrderSpecifier;
@@ -29,23 +30,27 @@ public class FestivalBookmarkV1QueryDslRepository extends QueryDslRepositorySupp
             .fetch();
     }
 
-    public List<FestivalV1Response> findBookmarkedFestivals(
+    public List<FestivalBookmarkV1Response> findBookmarkedFestivals(
         Long memberId,
         List<Long> festivalIds,
         FestivalBookmarkOrder festivalBookmarkOrder
     ) {
-        return select(new QFestivalV1Response(
-            festival.id,
-            festival.name,
-            festival.startDate,
-            festival.endDate,
-            festival.thumbnail,
-            new QSchoolV1Response(
-                school.id,
-                school.name
-            ),
-            festivalQueryInfo.artistInfo)
-        )
+        return select(
+            new QFestivalBookmarkV1Response(
+                new QFestivalV1Response(
+                    festival.id,
+                    festival.name,
+                    festival.startDate,
+                    festival.endDate,
+                    festival.thumbnail,
+                    new QSchoolV1Response(
+                        school.id,
+                        school.name
+                    ),
+                    festivalQueryInfo.artistInfo
+                ),
+                bookmark.createdAt
+            ))
             .from(festival)
             .innerJoin(school).on(school.id.eq(festival.school.id))
             .innerJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))

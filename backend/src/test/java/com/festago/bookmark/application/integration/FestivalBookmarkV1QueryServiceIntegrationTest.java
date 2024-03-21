@@ -5,6 +5,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.bookmark.application.FestivalBookmarkCommandService;
 import com.festago.bookmark.application.FestivalBookmarkV1QueryService;
+import com.festago.bookmark.dto.FestivalBookmarkV1Response;
 import com.festago.bookmark.repository.FestivalBookmarkOrder;
 import com.festago.festival.application.command.FestivalCreateService;
 import com.festago.festival.dto.FestivalV1Response;
@@ -131,6 +132,7 @@ class FestivalBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegrati
 
             // then
             assertThat(회원A_북마크_축제_정보_목록)
+                .map(FestivalBookmarkV1Response::festival)
                 .map(FestivalV1Response::id)
                 .containsExactly(우테대학교_가을_축제_식별자, 테코대학교_봄_축제_식별자, 우테대학교_여름_축제_식별자);
         }
@@ -151,6 +153,7 @@ class FestivalBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegrati
 
             // then
             assertThat(회원A_북마크_축제_정보_목록)
+                .map(FestivalBookmarkV1Response::festival)
                 .map(FestivalV1Response::id)
                 .containsExactly(테코대학교_봄_축제_식별자, 우테대학교_여름_축제_식별자, 우테대학교_가을_축제_식별자);
         }

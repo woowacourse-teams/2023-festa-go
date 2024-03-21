@@ -13,11 +13,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.bookmark.application.FestivalBookmarkV1QueryService;
+import com.festago.bookmark.dto.FestivalBookmarkV1Response;
 import com.festago.festival.dto.FestivalV1Response;
 import com.festago.festival.dto.SchoolV1Response;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -103,20 +105,23 @@ class FestivalBookmarkV1ControllerTest {
                         .queryParam("festivalBookmarkOrder", "FESTIVAL"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$").isArray())
-                    .andExpect(jsonPath("$[*].id").value(contains(1, 2, 3)));
+                    .andExpect(jsonPath("$[*].festival.id").value(contains(1, 2, 3)));
             }
 
-            private FestivalV1Response createFestivalV1Response(Long festivalId, String festivalName) {
+            private FestivalBookmarkV1Response createFestivalV1Response(Long festivalId, String festivalName) {
                 LocalDate startDate = LocalDate.now();
                 LocalDate endDate = LocalDate.now();
-                return new FestivalV1Response(
-                    festivalId,
-                    festivalName,
-                    startDate,
-                    endDate,
-                    "https://image.com/posterImage.png",
-                    new SchoolV1Response(1L, "테코대학교"),
-                    "[]"
+                return new FestivalBookmarkV1Response(
+                    new FestivalV1Response(
+                        festivalId,
+                        festivalName,
+                        startDate,
+                        endDate,
+                        "https://image.com/posterImage.png",
+                        new SchoolV1Response(1L, "테코대학교"),
+                        "[]"
+                    ),
+                    LocalDateTime.now()
                 );
             }
 

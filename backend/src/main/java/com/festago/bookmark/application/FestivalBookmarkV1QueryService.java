@@ -1,8 +1,8 @@
 package com.festago.bookmark.application;
 
+import com.festago.bookmark.dto.FestivalBookmarkV1Response;
 import com.festago.bookmark.repository.FestivalBookmarkOrder;
 import com.festago.bookmark.repository.FestivalBookmarkV1QueryDslRepository;
-import com.festago.festival.dto.FestivalV1Response;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class FestivalBookmarkV1QueryService {
         return festivalBookmarkV1QueryDslRepository.findBookmarkedFestivalIds(memberId);
     }
 
-    public List<FestivalV1Response> findBookmarkedFestivals(
+    public List<FestivalBookmarkV1Response> findBookmarkedFestivals(
         Long memberId,
         List<Long> festivalIds,
         FestivalBookmarkOrder festivalBookmarkOrder
