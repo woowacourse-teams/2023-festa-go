@@ -63,13 +63,13 @@ public enum ErrorCode {
     // 429
     TOO_FREQUENT_REQUESTS("너무 잦은 요청입니다. 잠시 후 다시 시도해주세요."),
 
-    // 500,
+    // 500
     INTERNAL_SERVER_ERROR("서버 내부에 문제가 발생했습니다."),
     OAUTH2_PROVIDER_NOT_RESPONSE("OAuth2 제공자 서버에 문제가 발생했습니다."),
     FOR_TEST_ERROR("테스트용 에러입니다."),
     FAIL_SEND_FCM_MESSAGE("FCM Message 전송에 실패했습니다."),
     TICKET_SEQUENCE_DATA_ERROR("입장 순서 값의 데이터 정합성에 문제가 발생했습니다."),
-    FESTIVAL_INFO_CONVERT_ERROR("FestivalInfo 를 만들 수 없습니다")
+    FESTIVAL_INFO_CONVERT_ERROR("FestivalInfo 를 만들 수 없습니다"),
     ;
 
     private final String message;
