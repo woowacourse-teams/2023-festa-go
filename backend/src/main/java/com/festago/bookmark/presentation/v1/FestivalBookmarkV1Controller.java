@@ -36,13 +36,12 @@ public class FestivalBookmarkV1Controller {
             .body(festivalBookmarkV1QueryService.findBookmarkedFestivalIds(memberId));
     }
 
-    // TODO Festival 패키지에 속해야 할 것 같은데, 북마크 최신 저장 순 정렬 조건 때문에 어쩔 수 없음...
     @GetMapping
     @Operation(description = "축제의 식별자 목록으로 북마크 된 축제의 목록을 조회한다.")
     public ResponseEntity<List<FestivalBookmarkV1Response>> findBookmarkedFestivals(
         @Member Long memberId,
         @RequestParam List<Long> festivalIds,
-        @RequestParam FestivalBookmarkOrder festivalBookmarkOrder // TODO 더 좋은 이름이 없을까?
+        @RequestParam FestivalBookmarkOrder festivalBookmarkOrder
     ) {
         return ResponseEntity.ok()
             .body(festivalBookmarkV1QueryService.findBookmarkedFestivals(
@@ -59,7 +58,7 @@ public class FestivalBookmarkV1Controller {
         @PathVariable Long festivalId
     ) {
         festivalBookmarkCommandService.putFestivalBookmark(memberId, festivalId);
-        return ResponseEntity.ok() // TODO HTTP 스펙에는 PUT 응답에서 201을 보내야 하지만, 식별자로 사용할 자원이 없기에 200으로 보냄
+        return ResponseEntity.ok()
             .build();
     }
 

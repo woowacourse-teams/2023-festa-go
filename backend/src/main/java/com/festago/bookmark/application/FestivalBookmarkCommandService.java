@@ -21,7 +21,6 @@ public class FestivalBookmarkCommandService {
     private final BookmarkRepository bookmarkRepository;
     private final FestivalRepository festivalRepository;
 
-    // TODO 종료된 축제를 북마크에 추가할 때 검증할 필요가 있을까?
     public void putFestivalBookmark(Long memberId, Long festivalId) {
         validate(memberId, festivalId);
         if (isExistsBookmark(memberId, festivalId)) {
