@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
@@ -22,7 +23,7 @@ public class UriPatternRequestWrappingFilter extends OncePerRequestFilter {
         HttpServletResponse response,
         FilterChain chain
     ) throws ServletException, IOException {
-        if (uriPatternMatcher.match(request.getMethod().toUpperCase(), request.getRequestURI())) {
+        if (uriPatternMatcher.match(RequestMethod.resolve(request.getMethod()), request.getRequestURI())) {
             ContentCachingRequestWrapper wrappingRequest = new ContentCachingRequestWrapper(request);
             chain.doFilter(wrappingRequest, response);
         } else {

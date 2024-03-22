@@ -1,13 +1,12 @@
 package com.festago.common.filter;
 
-import static java.util.stream.Collectors.toUnmodifiableSet;
-
 import com.festago.common.aop.LogRequestBody;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -28,16 +27,10 @@ public class UriPatternInitializer {
             RequestMappingInfo requestMappingInfo = entry.getKey();
             HandlerMethod handlerMethod = entry.getValue();
             if (handlerMethod.hasMethodAnnotation(LogRequestBody.class)) {
-                Set<String> methods = getMethods(requestMappingInfo);
+                Set<RequestMethod> methods = requestMappingInfo.getMethodsCondition().getMethods();
                 Set<String> directPaths = requestMappingInfo.getDirectPaths();
                 uriPatternMatcher.addPattern(methods, directPaths);
             }
         }
-    }
-
-    private Set<String> getMethods(RequestMappingInfo requestMappingInfo) {
-        return requestMappingInfo.getMethodsCondition().getMethods().stream()
-            .map(Enum::name)
-            .collect(toUnmodifiableSet());
     }
 }
