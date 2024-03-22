@@ -55,4 +55,13 @@ class UriPatternMatcherTest {
         // when & then
         assertThat(uriPatternMatcher.match(RequestMethod.GET, "/api/v1/schools/1")).isTrue();
     }
+
+    @Test
+    void QueryParameter가_있어도_패턴에_매칭되어야_한다() {
+        // given
+        uriPatternMatcher.addPattern(Set.of(RequestMethod.GET), Set.of("/api/v1/schools/{schoolId}"));
+
+        // when & then
+        assertThat(uriPatternMatcher.match(RequestMethod.GET, "/api/v1/schools/1?foo=bar")).isTrue();
+    }
 }
