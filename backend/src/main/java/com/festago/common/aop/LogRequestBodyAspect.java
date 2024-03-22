@@ -85,8 +85,10 @@ public class LogRequestBodyAspect {
         try {
             ContentCachingRequestWrapper cachedRequest = (ContentCachingRequestWrapper) request;
             return objectMapper.readTree(cachedRequest.getContentAsByteArray()).toPrettyString();
-        } catch (IOException | ClassCastException e) {
+        } catch (IOException e) {
             log.warn("ObjectMapper에서 직렬화 중에 문제가 발생했습니다.", e);
+        } catch (ClassCastException e) {
+            log.warn("HttpServletRequest 객체를 ContentCachingRequestWrapper 타입으로 형변환 하는 중 문제가 발생했습니다.", e);
         }
         return "[ObjectMapper에서 직렬화 중에 문제가 발생했습니다.]";
     }
