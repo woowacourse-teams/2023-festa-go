@@ -28,7 +28,7 @@ public class FestivalBookmarkV1Controller {
     private final FestivalBookmarkCommandService festivalBookmarkCommandService;
 
     @GetMapping("/ids")
-    @Operation(description = "북마크 된 축제의 식별자 목록을 조회한다.")
+    @Operation(description = "북마크 된 축제의 식별자 목록을 조회한다.", summary = "북마크 된 축제 식별자 목록 조회")
     public ResponseEntity<List<Long>> findBookmarkedFestivalIds(
         @Member Long memberId
     ) {
@@ -37,7 +37,7 @@ public class FestivalBookmarkV1Controller {
     }
 
     @GetMapping
-    @Operation(description = "축제의 식별자 목록으로 북마크 된 축제의 목록을 조회한다.")
+    @Operation(description = "축제의 식별자 목록으로 북마크 된 축제의 목록을 조회한다.", summary = "축제의 식별자 목록으로 북마크 된 축제의 목록 조회")
     public ResponseEntity<List<FestivalBookmarkV1Response>> findBookmarkedFestivals(
         @Member Long memberId,
         @RequestParam List<Long> festivalIds,
@@ -52,7 +52,7 @@ public class FestivalBookmarkV1Controller {
     }
 
     @PutMapping("/{festivalId}")
-    @Operation(description = "축제의 식별자로 축제 북마크를 등록한다.")
+    @Operation(description = "축제의 식별자로 축제 북마크를 등록한다.", summary = "축제 북마크 등록")
     public ResponseEntity<Void> putFestivalBookmark(
         @Member Long memberId,
         @PathVariable Long festivalId
@@ -63,7 +63,7 @@ public class FestivalBookmarkV1Controller {
     }
 
     @DeleteMapping("/{festivalId}")
-    @Operation(description = "축제의 식별자로 축제 북마크를 삭제한다.")
+    @Operation(description = "축제의 식별자로 축제 북마크를 삭제한다.", summary = "축제 북마크 삭제")
     public ResponseEntity<Void> deleteFestivalBookmark(
         @Member Long memberId,
         @PathVariable Long festivalId
