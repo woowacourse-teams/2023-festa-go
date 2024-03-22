@@ -1,9 +1,10 @@
-package com.festago.artist.application;
+package com.festago.artist.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.festago.artist.application.ArtistDetailV1QueryService;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.ArtistDetailV1Response;
 import com.festago.artist.dto.ArtistFestivalDetailV1Response;
@@ -41,7 +42,7 @@ import org.springframework.data.domain.Slice;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistDetailV1QueryServiceTest extends ApplicationIntegrationTest {
+class ArtistDetailV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     StageArtistRepository stageArtistRepository;
