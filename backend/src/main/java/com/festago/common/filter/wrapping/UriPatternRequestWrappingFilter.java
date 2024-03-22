@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
+/**
+ * LogRequestBodyAspect 클래스가 해당 클래스에 의존하므로, 해당 클래스 수정, 삭제 시 LogRequestBodyAspect 클래스도 수정하거나 삭제할 것!
+ */
 @Profile("!test")
 @Component
 @RequiredArgsConstructor
