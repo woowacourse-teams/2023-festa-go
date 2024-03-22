@@ -1,6 +1,6 @@
 package com.festago.config;
 
-import com.festago.common.filter.UriPatternMatcher;
+import com.festago.common.filter.wrapping.UriPatternMatcher;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.festago.common.filter;
+package com.festago.common.filter.wrapping;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

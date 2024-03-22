@@ -1,4 +1,4 @@
-package com.festago.common.filter;
+package com.festago.common.filter.wrapping;
 
 import java.util.ArrayList;
 import java.util.List;

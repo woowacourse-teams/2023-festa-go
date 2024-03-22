@@ -1,4 +1,4 @@
-package com.festago.common.filter;
+package com.festago.common.filter.wrapping;
 
 import com.festago.common.aop.LogRequestBody;
 import java.util.Set;
