@@ -52,6 +52,11 @@ public class MemoryFestivalRepository implements FestivalRepository {
     }
 
     @Override
+    public boolean existsById(Long festivalId) {
+        return memory.containsKey(festivalId);
+    }
+
+    @Override
     public List<Festival> findByFilter(FestivalFilter filter, LocalDate currentTime) {
         throw new UnsupportedOperationException();
     }
