@@ -3,9 +3,11 @@ package com.festago.common.filter.wrapping;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+@Component
 public class UriPatternMatcher {
 
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
