@@ -29,4 +29,8 @@ public class SchoolBookmarkCommandService {
         }
         bookmarkAppendValidator.validate(BookmarkType.SCHOOL, schoolId, memberId);
     }
+
+    public void delete(Long schoolId, Long memberId) {
+        bookmarkRepository.deleteByBookmarkTypeAndMemberIdAndResourceId(BookmarkType.SCHOOL, memberId, schoolId);
+    }
 }

@@ -1,12 +1,13 @@
 package com.festago.bookmark.application;
 
+import static com.festago.bookmark.domain.BookmarkType.SCHOOL;
 import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 
-import com.festago.bookmark.domain.BookmarkType;
+import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.repository.BookmarkRepository;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.repository.MemberRepository;
@@ -58,6 +59,22 @@ class SchoolBookmarkCommandServiceTest extends ApplicationIntegrationTest {
 
         // then
         assertThat(actual).isPositive();
-        verify(bookmarkAppendValidator, only()).validate(BookmarkType.SCHOOL, schoolId, memberId);
+        verify(bookmarkAppendValidator, only()).validate(SCHOOL, schoolId, memberId);
+    }
+
+    @Test
+    void 북마크를_삭제한다() {
+        // given
+        Long memberId = memberRepository.save(MemberFixture.member().build()).getId();
+        Long schoolId = schoolRepository.save(SchoolFixture.school().build()).getId();
+        bookmarkRepository.save(new Bookmark(SCHOOL, schoolId, memberId));
+
+        // when
+        schoolBookmarkCommandService.delete(schoolId, memberId);
+
+        // then
+        var actual = bookmarkRepository.existsByBookmarkTypeAndMemberIdAndResourceId(SCHOOL, memberId,
+            schoolId);
+        assertThat(actual).isFalse();
     }
 }
