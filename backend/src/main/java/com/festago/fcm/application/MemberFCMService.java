@@ -1,70 +1,52 @@
 package com.festago.fcm.application;
 
-import com.festago.auth.application.AuthExtractor;
-import com.festago.auth.domain.AuthPayload;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
 import com.festago.fcm.domain.MemberFCM;
-import com.festago.fcm.dto.MemberFCMsResponse;
 import com.festago.fcm.repository.MemberFCMRepository;
+import com.festago.member.repository.MemberRepository;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class MemberFCMService {
 
-    private static final Logger log = LoggerFactory.getLogger(MemberFCMService.class);
-
     private final MemberFCMRepository memberFCMRepository;
-    private final AuthExtractor authExtractor;
-
-    public MemberFCMService(MemberFCMRepository memberFCMRepository, AuthExtractor authExtractor) {
-        this.memberFCMRepository = memberFCMRepository;
-        this.authExtractor = authExtractor;
-    }
+    private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public MemberFCMsResponse findMemberFCM(Long memberId) {
-        List<MemberFCM> memberFCM = memberFCMRepository.findByMemberId(memberId);
+    public List<String> findAllMemberFCMTokens(Long memberId) {
+        List<MemberFCM> memberFCM = memberFCMRepository.findAllByMemberId(memberId);
         if (memberFCM.isEmpty()) {
             log.warn("member {} 의 FCM 토큰이 발급되지 않았습니다.", memberId);
+            return Collections.emptyList();
         }
-        return MemberFCMsResponse.from(memberFCM);
+        return memberFCM.stream()
+            .map(MemberFCM::getFcmToken)
+            .toList();
     }
 
-    @Async
-    public void saveMemberFCM(boolean isNewMember, String accessToken, String fcmToken) {
-        if (isNewMember) {
-            saveNewMemberFCM(accessToken, fcmToken);
-            return;
+    public void saveMemberFCM(Long memberId, String fcmToken) {
+        if (!memberRepository.existsById(memberId)) {
+            throw new NotFoundException(ErrorCode.MEMBER_NOT_FOUND);
         }
-        saveOriginMemberFCM(accessToken, fcmToken);
-    }
-
-    private void saveNewMemberFCM(String accessToken, String fcmToken) {
-        Long memberId = extractMemberId(accessToken);
-        memberFCMRepository.save(new MemberFCM(memberId, fcmToken));
-    }
-
-    private void saveOriginMemberFCM(String accessToken, String fcmToken) {
-        Long memberId = extractMemberId(accessToken);
-        Optional<MemberFCM> memberFCM = memberFCMRepository.findByMemberIdAndFcmToken(memberId, fcmToken);
-        if (memberFCM.isEmpty()) {
+        if (isNotExistsFcmToken(memberId, fcmToken)) {
             memberFCMRepository.save(new MemberFCM(memberId, fcmToken));
         }
     }
 
-    private Long extractMemberId(String accessToken) {
-        AuthPayload authPayload = authExtractor.extract(accessToken);
-        return authPayload.getMemberId();
+    private boolean isNotExistsFcmToken(Long memberId, String fcmToken) {
+        return !memberFCMRepository.existsByMemberIdAndFcmToken(memberId, fcmToken);
     }
 
-    @Async
-    public void deleteMemberFCM(Long memberId) {
+    public void deleteAllMemberFCM(Long memberId) {
         memberFCMRepository.deleteAllByMemberId(memberId);
     }
 }
