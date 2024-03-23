@@ -25,7 +25,7 @@ class BookmarkAppendValidatorTest {
 
     @ParameterizedTest
     @EnumSource(value = BookmarkType.class)
-    void 북마크_갯수가_12개_이상이면_예외(BookmarkType bookmarkType) {
+    void 같은_타입에_북마크_갯수가_이미_12개_이상이면_예외(BookmarkType bookmarkType) {
         // given
         Long memberId = 1L;
         for (int i = 0; i < 12; i++) {
