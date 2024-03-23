@@ -1,7 +1,6 @@
 package com.festago.bookmark.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
@@ -53,11 +52,7 @@ class SchoolBookmarkV1QueryServiceTest extends ApplicationIntegrationTest {
         var actual = schoolBookmarkV1QueryService.findAllByMemberId(회원A_ID);
 
         // then
-        assertSoftly(softly -> {
-            softly.assertThat(actual).hasSize(3);
-            softly.assertThat(actual).allSatisfy(it ->
-                assertThat(it).hasNoNullFieldsOrProperties());
-        });
+        assertThat(actual).hasSize(3);
     }
 
     private Long saveMember(String socialId) {

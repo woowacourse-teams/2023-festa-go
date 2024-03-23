@@ -1,6 +1,6 @@
 package com.festago.bookmark.application;
 
-import com.festago.bookmark.dto.SchoolBookmarkV1Response;
+import com.festago.bookmark.dto.SchoolBookmarkTotalV1Response;
 import com.festago.bookmark.repository.SchoolBookmarkV1QuerydslRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ public class SchoolBookmarkV1QueryService {
 
     private final SchoolBookmarkV1QuerydslRepository schoolBookmarkV1QuerydslRepository;
 
-    public List<SchoolBookmarkV1Response> findAllByMemberId(Long memberId) {
+    public List<SchoolBookmarkTotalV1Response> findAllByMemberId(Long memberId) {
         return schoolBookmarkV1QuerydslRepository.findAllByMemberId(memberId);
     }
 }
