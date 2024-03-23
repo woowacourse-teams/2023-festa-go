@@ -47,9 +47,10 @@ public class LoginConfig implements WebMvcConfigurer {
             .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**", "/students/**", "/member-fcm/**")
             .excludePathPatterns("/auth/oauth2");
         registry.addInterceptor(AnnotationDelegateInterceptor.builder()
-            .annotation(MemberAuth.class)
-            .interceptor(memberAuthInterceptor())
-            .build());
+                .annotation(MemberAuth.class)
+                .interceptor(memberAuthInterceptor())
+                .build())
+            .addPathPatterns("/api/**");
     }
 
     @Bean
