@@ -2,7 +2,7 @@ package com.festago.auth.application;
 
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
-import com.festago.auth.dto.event.MemberDeleteEvent;
+import com.festago.auth.dto.event.MemberDeletedEvent;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
@@ -43,7 +43,7 @@ public class AuthService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
         logDeleteMember(member);
         memberRepository.delete(member);
-        eventPublisher.publishEvent(new MemberDeleteEvent(memberId));
+        eventPublisher.publishEvent(new MemberDeletedEvent(member));
     }
 
     private void logDeleteMember(Member member) {
