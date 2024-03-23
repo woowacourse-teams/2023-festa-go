@@ -3,6 +3,8 @@ package com.festago.bookmark.application;
 import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
 import com.festago.bookmark.repository.BookmarkRepository;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
 import com.festago.school.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,7 @@ public class SchoolBookmarkCommandService {
 
     private void validate(Long schoolId, Long memberId) {
         if (!schoolRepository.existsById(schoolId)) {
-            throw new IllegalArgumentException("존재하지 않는 학교입니다.");
+            throw new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND);
         }
         bookmarkAppendValidator.validate(BookmarkType.SCHOOL, schoolId, memberId);
     }
