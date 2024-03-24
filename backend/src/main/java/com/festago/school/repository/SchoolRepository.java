@@ -6,9 +6,21 @@ import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.Repository;
 
-public interface SchoolRepository extends JpaRepository<School, Long> {
+public interface SchoolRepository extends Repository<School, Long> {
+
+    School save(School school);
+
+    List<School> findAll();
+
+    Optional<School> findById(Long schoolId);
+
+    void deleteById(Long id);
+
+    void flush();
+
+    boolean existsById(Long id);
 
     default School getOrThrow(Long schoolId) {
         return findById(schoolId)
