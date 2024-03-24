@@ -147,7 +147,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvRecentSearch"
-            app:visibility="@{uiState.shouldShowRecentSearchSuccessNotEmpty}"
+            app:visibility="@{uiState.shouldShowNotEmptyRecentSearchSuccess}"
             tools:listitem="@layout/item_recent_search" />
 
         <TextView
@@ -159,7 +159,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvRecentSearch"
-            app:visibility="@{uiState.shouldShowEmptyRecentSearchSuccessEmpty}" />
+            app:visibility="@{uiState.shouldShowEmptyRecentSearchSuccess}" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/mdDividerRecentSearchEmpty"
@@ -169,7 +169,7 @@
             android:layout_marginTop="32dp"
             app:dividerColor="@color/background_gray_03"
             app:layout_constraintTop_toBottomOf="@id/tvRecentSearchEmpty"
-            app:visibility="@{uiState.shouldShowEmptyRecentSearchSuccessEmpty}" />
+            app:visibility="@{uiState.shouldShowEmptyRecentSearchSuccess}" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
