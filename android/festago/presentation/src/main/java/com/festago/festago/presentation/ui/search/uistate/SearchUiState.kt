@@ -17,7 +17,7 @@ sealed interface SearchUiState {
 
     val shouldShowRecentSearchSuccessNotEmpty get() = this is RecentSearchSuccess && recentSearchQueries.isNotEmpty()
     val shouldShowEmptyRecentSearchSuccessEmpty get() = this is RecentSearchSuccess && recentSearchQueries.isEmpty()
-    val shouldShowEmptyRecentSearchSuccess get() = this is RecentSearchSuccess
+    val shouldShowRecentSearchSuccess get() = this is RecentSearchSuccess
     val shouldShowSearchSuccess get() = this is SearchSuccess
     val shouldShowLoading get() = this is Loading
     val shouldShowError get() = this is Error
