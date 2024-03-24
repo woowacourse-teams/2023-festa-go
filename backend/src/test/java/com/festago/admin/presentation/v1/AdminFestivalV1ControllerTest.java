@@ -16,11 +16,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.admin.application.AdminFestivalV1QueryService;
 import com.festago.admin.dto.festival.AdminFestivalDetailV1Response;
 import com.festago.admin.dto.festival.AdminFestivalV1Response;
+import com.festago.admin.dto.festival.FestivalV1CreateRequest;
 import com.festago.admin.dto.festival.FestivalV1UpdateRequest;
 import com.festago.auth.domain.Role;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.festival.application.command.FestivalCommandFacadeService;
-import com.festago.festival.dto.FestivalCreateRequest;
 import com.festago.festival.dto.command.FestivalCreateCommand;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
@@ -72,7 +72,7 @@ class AdminFestivalV1ControllerTest {
             LocalDate startDate = LocalDate.parse("2024-01-31");
             LocalDate endDate = LocalDate.parse("2024-02-01");
             String thumbnail = "https://image.com/image.png";
-            FestivalCreateRequest request = new FestivalCreateRequest(name, startDate, endDate, thumbnail, 1L);
+            FestivalV1CreateRequest request = new FestivalV1CreateRequest(name, startDate, endDate, thumbnail, 1L);
 
             @Test
             @WithMockAuth(role = Role.ADMIN)
