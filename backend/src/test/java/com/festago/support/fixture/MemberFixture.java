@@ -1,17 +1,17 @@
-package com.festago.support;
+package com.festago.support.fixture;
 
 import com.festago.auth.domain.SocialType;
 import com.festago.member.domain.Member;
 
-public class MemberFixture {
+public class MemberFixture extends BaseFixture {
 
     private Long id;
-    private String socialId = "123";
-    private SocialType socialType = SocialType.KAKAO;
-    private String nickname = "nickname";
-    private String profileImage = "https://profileImage.com/image.png";
+    private String socialId;
+    private SocialType socialType = SocialType.FESTAGO;
+    private String nickname;
+    private String profileImageUrl = "https://image.com/profileImage.png";
 
-    public static MemberFixture member() {
+    public static MemberFixture builder() {
         return new MemberFixture();
     }
 
@@ -35,12 +35,18 @@ public class MemberFixture {
         return this;
     }
 
-    public MemberFixture profileImage(String profileImage) {
-        this.profileImage = profileImage;
+    public MemberFixture profileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
         return this;
     }
 
     public Member build() {
-        return new Member(this.id, this.socialId, this.socialType, this.nickname, this.profileImage);
+        return new Member(
+            id,
+            uniqueValue("", socialId),
+            socialType,
+            uniqueValue("nickname", nickname),
+            profileImageUrl
+        );
     }
 }

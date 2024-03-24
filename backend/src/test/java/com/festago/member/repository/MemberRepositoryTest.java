@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.member.domain.Member;
-import com.festago.support.MemberFixture;
 import com.festago.support.RepositoryTest;
+import com.festago.support.fixture.MemberFixture;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -26,7 +26,7 @@ class MemberRepositoryTest {
     @Test
     void 소셜_아이디와_소셜_타입으로_멤버를_찾는다() {
         // given
-        Member member = MemberFixture.member()
+        Member member = MemberFixture.builder()
             .build();
         Member expected = memberRepository.save(member);
 
@@ -41,7 +41,7 @@ class MemberRepositoryTest {
     @Test
     void 회원_삭제() {
         // given
-        Member member = MemberFixture.member()
+        Member member = MemberFixture.builder()
             .build();
         Member expected = memberRepository.save(member);
 

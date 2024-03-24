@@ -1,4 +1,4 @@
-package com.festago.support;
+package com.festago.support.fixture;
 
 import com.festago.member.domain.Member;
 import com.festago.stage.domain.Stage;
@@ -6,11 +6,12 @@ import com.festago.ticket.domain.TicketType;
 import com.festago.ticketing.domain.MemberTicket;
 import java.time.LocalDateTime;
 
+@Deprecated
 public class MemberTicketFixture {
 
     private Long id;
-    private Member owner = MemberFixture.member().build();
-    private Stage stage = StageFixture.stage().build();
+    private Member owner = MemberFixture.builder().build();
+    private Stage stage = StageFixture.builder().build();
     private TicketType ticketType = TicketType.VISITOR;
     private LocalDateTime entryTime = LocalDateTime.now();
     private int number = 1;
@@ -18,7 +19,7 @@ public class MemberTicketFixture {
     private MemberTicketFixture() {
     }
 
-    public static MemberTicketFixture memberTicket() {
+    public static MemberTicketFixture builder() {
         return new MemberTicketFixture();
     }
 

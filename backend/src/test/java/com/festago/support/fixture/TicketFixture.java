@@ -1,20 +1,21 @@
-package com.festago.support;
+package com.festago.support.fixture;
 
 import com.festago.stage.domain.Stage;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketType;
 
+@Deprecated
 public class TicketFixture {
 
     private Long id;
-    private Stage stage = StageFixture.stage().build();
+    private Stage stage = StageFixture.builder().build();
     private TicketType ticketType = TicketType.VISITOR;
     private Long schoolId = 1L;
 
     private TicketFixture() {
     }
 
-    public static TicketFixture ticket() {
+    public static TicketFixture builder() {
         return new TicketFixture();
     }
 

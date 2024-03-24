@@ -1,20 +1,21 @@
-package com.festago.support;
+package com.festago.support.fixture;
 
 import com.festago.member.domain.Member;
 import com.festago.school.domain.School;
 import com.festago.student.domain.Student;
 
+@Deprecated
 public class StudentFixture {
 
     private Long id;
-    private Member member = MemberFixture.member().build();
-    private School school = SchoolFixture.school().build();
+    private Member member = MemberFixture.builder().build();
+    private School school = SchoolFixture.builder().build();
     private String username = "xxeol2";
 
     private StudentFixture() {
     }
 
-    public static StudentFixture student() {
+    public static StudentFixture builder() {
         return new StudentFixture();
     }
 
