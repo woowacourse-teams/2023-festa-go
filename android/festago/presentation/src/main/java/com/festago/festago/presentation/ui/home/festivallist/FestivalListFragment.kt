@@ -188,7 +188,6 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun showSchoolDetail() {
-//        findNavController().navigate(actionFestivalListFragmentToSchoolDetailFragment(0))
         findNavController().navigate(actionFestivalListFragmentToSearchFragment())
     }
 
