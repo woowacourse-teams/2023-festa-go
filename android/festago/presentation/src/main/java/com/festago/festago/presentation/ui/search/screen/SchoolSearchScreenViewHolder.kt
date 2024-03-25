@@ -16,8 +16,17 @@ class SchoolSearchScreenViewHolder(private val binding: ItemSchoolSearchScreenBi
 
     fun bind(item: ItemSearchScreenUiState.SchoolSearchScreen) {
         schoolSearchAdapter.submitList(item.schoolSearches)
-        binding.tvNoResult.visibility =
-            if (item.schoolSearches.isEmpty()) View.VISIBLE else View.GONE
+        setNoResultVisibility(item)
+        binding.btnFestago.setOnClickListener {
+            item.onAddSearchQueryClick()
+        }
+    }
+
+    private fun setNoResultVisibility(item: ItemSearchScreenUiState.SchoolSearchScreen) {
+        val visibility = if (item.schoolSearches.isEmpty()) View.VISIBLE else View.GONE
+        binding.tvNoResult.visibility = visibility
+        binding.tvNoResultGuide.visibility = visibility
+        binding.btnFestago.visibility = visibility
     }
 
     companion object {

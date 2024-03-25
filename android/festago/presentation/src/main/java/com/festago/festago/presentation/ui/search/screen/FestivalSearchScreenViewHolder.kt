@@ -18,6 +18,13 @@ class FestivalSearchScreenViewHolder(
 
     fun bind(item: ItemSearchScreenUiState.FestivalSearchScreen) {
         festivalSearchAdapter.submitList(item.festivalSearches)
+        setNoResultVisibility(item)
+        binding.btnFestago.setOnClickListener {
+            item.onAddSearchQueryClick()
+        }
+    }
+
+    private fun setNoResultVisibility(item: ItemSearchScreenUiState.FestivalSearchScreen) {
         val visibility = if (item.festivalSearches.isEmpty()) View.VISIBLE else View.GONE
         binding.tvNoResult.visibility = visibility
         binding.tvNoResultGuide.visibility = visibility

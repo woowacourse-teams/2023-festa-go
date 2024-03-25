@@ -1,6 +1,8 @@
 package com.festago.festago.presentation.ui.search
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -152,9 +154,9 @@ class SearchFragment : Fragment() {
     private fun handleSuccessSearch(uiState: SearchUiState.SearchSuccess) {
         searchScreenAdapter.submitList(
             listOf(
-                FestivalSearchScreen(uiState.searchedFestivals),
-                ArtistSearchScreen(uiState.searchedArtists),
-                SchoolSearchScreen(uiState.searchedSchools),
+                FestivalSearchScreen(uiState.searchedFestivals, ::requestAddSearchQuery),
+                ArtistSearchScreen(uiState.searchedArtists, ::requestAddSearchQuery),
+                SchoolSearchScreen(uiState.searchedSchools, ::requestAddSearchQuery),
             ),
         )
         initSearchTab()
@@ -204,6 +206,16 @@ class SearchFragment : Fragment() {
                 binding.etSearch.setText(event.searchQuery)
             }
         }
+    }
+
+    private fun requestAddSearchQuery() {
+        startBrowser("https://forms.gle/y17dmCFw1jAYLR9H7")
+    }
+
+    private fun startBrowser(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        startActivity(intent)
     }
 
     override fun onDestroyView() {
