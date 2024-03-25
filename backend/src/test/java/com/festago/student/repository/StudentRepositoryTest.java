@@ -7,10 +7,10 @@ import com.festago.member.repository.MemberRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.student.domain.Student;
-import com.festago.support.MemberFixture;
 import com.festago.support.RepositoryTest;
-import com.festago.support.SchoolFixture;
-import com.festago.support.StudentFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StudentFixture;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -34,9 +34,9 @@ class StudentRepositoryTest {
     @Test
     void 멤버id로_조회() {
         // given
-        Member member = memberRepository.save(MemberFixture.member().build());
-        School school = schoolRepository.save(SchoolFixture.school().build());
-        Student student = studentRepository.save(StudentFixture.student().school(school).member(member).build());
+        Member member = memberRepository.save(MemberFixture.builder().build());
+        School school = schoolRepository.save(SchoolFixture.builder().build());
+        Student student = studentRepository.save(StudentFixture.builder().school(school).member(member).build());
 
         // when
         Optional<Student> actual = studentRepository.findByMemberIdWithFetch(member.getId());

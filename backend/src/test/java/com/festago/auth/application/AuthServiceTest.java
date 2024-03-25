@@ -14,7 +14,7 @@ import com.festago.auth.dto.LoginMemberDto;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
-import com.festago.support.MemberFixture;
+import com.festago.support.fixture.MemberFixture;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -24,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -32,6 +33,9 @@ class AuthServiceTest {
 
     @Mock
     MemberRepository memberRepository;
+
+    @Mock
+    ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     AuthService authService;
@@ -42,7 +46,7 @@ class AuthServiceTest {
         @Test
         void 신규_회원으로_로그인() {
             // given
-            Member member = MemberFixture.member()
+            Member member = MemberFixture.builder()
                 .id(1L)
                 .build();
             given(memberRepository.findBySocialIdAndSocialType(anyString(), any(SocialType.class)))
@@ -63,7 +67,7 @@ class AuthServiceTest {
         @Test
         void 기존_회원으로_로그인() {
             // given
-            Member member = MemberFixture.member()
+            Member member = MemberFixture.builder()
                 .id(1L)
                 .build();
             given(memberRepository.findBySocialIdAndSocialType(anyString(), any(SocialType.class)))
@@ -100,7 +104,7 @@ class AuthServiceTest {
         void 성공() {
             // given
             Long memberId = 1L;
-            Member member = MemberFixture.member().id(memberId).build();
+            Member member = MemberFixture.builder().id(memberId).build();
             given(memberRepository.findById(memberId))
                 .willReturn(Optional.of(member));
 

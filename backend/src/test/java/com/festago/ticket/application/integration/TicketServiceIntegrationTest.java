@@ -13,9 +13,9 @@ import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.FestivalFixture;
-import com.festago.support.SchoolFixture;
-import com.festago.support.StageFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StageFixture;
 import com.festago.ticket.application.TicketService;
 import com.festago.ticket.domain.TicketAmount;
 import com.festago.ticket.domain.TicketType;
@@ -78,13 +78,13 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         LocalDateTime stageStartTime = LocalDateTime.parse("2022-07-26T18:00:00");
         doReturn(stageStartTime.minusWeeks(1).toInstant(ZoneOffset.UTC))
             .when(clock).instant();
-        School school = schoolRepository.save(SchoolFixture.school().build());
-        Festival festival = festivalRepository.save(FestivalFixture.festival()
+        School school = schoolRepository.save(SchoolFixture.builder().build());
+        Festival festival = festivalRepository.save(FestivalFixture.builder()
             .school(school)
             .startDate(stageStartTime.toLocalDate())
             .endDate(stageStartTime.toLocalDate())
             .build());
-        Stage stage = stageRepository.save(StageFixture.stage()
+        Stage stage = stageRepository.save(StageFixture.builder()
             .festival(festival)
             .startTime(stageStartTime)
             .ticketOpenTime(stageStartTime.minusDays(1))
@@ -106,13 +106,13 @@ class TicketServiceIntegrationTest extends ApplicationIntegrationTest {
         LocalDateTime stageStartTime = LocalDateTime.parse("2022-07-26T18:00:00");
         doReturn(stageStartTime.minusWeeks(1).toInstant(ZoneOffset.UTC))
             .when(clock).instant();
-        School school = schoolRepository.save(SchoolFixture.school().build());
-        Festival festival = festivalRepository.save(FestivalFixture.festival()
+        School school = schoolRepository.save(SchoolFixture.builder().build());
+        Festival festival = festivalRepository.save(FestivalFixture.builder()
             .school(school)
             .startDate(stageStartTime.toLocalDate())
             .endDate(stageStartTime.toLocalDate())
             .build());
-        Stage stage = stageRepository.save(StageFixture.stage()
+        Stage stage = stageRepository.save(StageFixture.builder()
             .festival(festival)
             .startTime(stageStartTime)
             .ticketOpenTime(stageStartTime.minusDays(1))

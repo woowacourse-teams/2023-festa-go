@@ -7,8 +7,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.festival.domain.Festival;
-import com.festago.support.FestivalFixture;
-import com.festago.support.StageFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.StageFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -25,13 +25,13 @@ class StageTest {
         // given
         LocalDateTime startTime = LocalDateTime.parse("2023-07-26T18:00:00");
         LocalDateTime ticketOpenTime = LocalDateTime.parse("2023-07-26T17:00:00");
-        Festival festival = FestivalFixture.festival()
+        Festival festival = FestivalFixture.builder()
             .startDate(startTime.plusDays(1).toLocalDate())
             .endDate(startTime.plusDays(1).toLocalDate())
             .build();
 
         // when & then
-        assertThatThrownBy(() -> StageFixture.stage()
+        assertThatThrownBy(() -> StageFixture.builder()
             .startTime(startTime)
             .ticketOpenTime(ticketOpenTime)
             .festival(festival)
@@ -46,13 +46,13 @@ class StageTest {
         // given
         LocalDateTime startTime = LocalDateTime.parse("2023-07-26T18:00:00");
         LocalDateTime ticketOpenTime = LocalDateTime.parse("2023-07-26T17:00:00");
-        Festival festival = FestivalFixture.festival()
+        Festival festival = FestivalFixture.builder()
             .startDate(startTime.minusDays(1).toLocalDate())
             .endDate(startTime.minusDays(1).toLocalDate())
             .build();
 
         // when & then
-        assertThatThrownBy(() -> StageFixture.stage()
+        assertThatThrownBy(() -> StageFixture.builder()
             .startTime(startTime)
             .ticketOpenTime(ticketOpenTime)
             .festival(festival)
@@ -67,13 +67,13 @@ class StageTest {
     void 티켓_오픈_시간이_무대_시작시간과_같거나_이후이면_예외(LocalDateTime ticketOpenTime) {
         // given
         LocalDateTime startTime = LocalDateTime.parse("2023-07-26T18:00:00");
-        Festival festival = FestivalFixture.festival()
+        Festival festival = FestivalFixture.builder()
             .startDate(startTime.toLocalDate())
             .endDate(startTime.toLocalDate())
             .build();
 
         // when & then
-        assertThatThrownBy(() -> StageFixture.stage()
+        assertThatThrownBy(() -> StageFixture.builder()
             .startTime(startTime)
             .ticketOpenTime(ticketOpenTime)
             .festival(festival)
@@ -88,13 +88,13 @@ class StageTest {
         // given
         LocalDateTime startTime = LocalDateTime.parse("2023-07-26T18:00:00");
         LocalDateTime ticketOpenTime = LocalDateTime.parse("2023-07-26T17:00:00");
-        Festival festival = FestivalFixture.festival()
+        Festival festival = FestivalFixture.builder()
             .startDate(startTime.toLocalDate())
             .endDate(startTime.toLocalDate())
             .build();
 
         // when & then
-        assertThatNoException().isThrownBy(() -> StageFixture.stage()
+        assertThatNoException().isThrownBy(() -> StageFixture.builder()
             .startTime(startTime)
             .ticketOpenTime(ticketOpenTime)
             .festival(festival)
