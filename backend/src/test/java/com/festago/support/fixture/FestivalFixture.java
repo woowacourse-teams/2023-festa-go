@@ -1,22 +1,22 @@
-package com.festago.support;
+package com.festago.support.fixture;
 
 import com.festago.festival.domain.Festival;
 import com.festago.school.domain.School;
 import java.time.LocalDate;
 
-public class FestivalFixture {
+public class FestivalFixture extends BaseFixture {
 
     private Long id;
-    private String name = "테코 대학교";
+    private String name;
     private LocalDate startDate = LocalDate.now();
     private LocalDate endDate = LocalDate.now().plusDays(3L);
-    private String thumbnail = "https://picsum.photos/536/354";
-    private School school = SchoolFixture.school().build();
+    private String posterImageUrl = "https://picsum.photos/536/354";
+    private School school = SchoolFixture.builder().build();
 
     private FestivalFixture() {
     }
 
-    public static FestivalFixture festival() {
+    public static FestivalFixture builder() {
         return new FestivalFixture();
     }
 
@@ -40,8 +40,8 @@ public class FestivalFixture {
         return this;
     }
 
-    public FestivalFixture thumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
+    public FestivalFixture posterImageUrl(String posterImageUrl) {
+        this.posterImageUrl = posterImageUrl;
         return this;
     }
 
@@ -51,6 +51,6 @@ public class FestivalFixture {
     }
 
     public Festival build() {
-        return new Festival(id, name, startDate, endDate, thumbnail, school);
+        return new Festival(id, uniqueValue("페스타고 대학교 축제", name), startDate, endDate, posterImageUrl, school);
     }
 }

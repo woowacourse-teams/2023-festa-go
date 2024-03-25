@@ -1,26 +1,21 @@
-package com.festago.support;
+package com.festago.support.fixture;
 
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 
-public class SchoolFixture {
+public class SchoolFixture extends BaseFixture {
 
     private Long id;
-
-    private String domain = "festago.com";
-
-    private String name = "페스타고 대학교";
-
+    private String domain;
+    private String name;
     private SchoolRegion region = SchoolRegion.서울;
-
     private String logoUrl = "https://image.com/logo.png";
-
     private String backgroundImageUrl = "https://image.com/backgroundImage.png";
 
     private SchoolFixture() {
     }
 
-    public static SchoolFixture school() {
+    public static SchoolFixture builder() {
         return new SchoolFixture();
     }
 
@@ -55,6 +50,13 @@ public class SchoolFixture {
     }
 
     public School build() {
-        return new School(id, domain, name, logoUrl, backgroundImageUrl, region);
+        return new School(
+            id,
+            uniqueValue("festago.com", domain),
+            uniqueValue("페스타고 대학교", name),
+            logoUrl,
+            backgroundImageUrl,
+            region
+        );
     }
 }

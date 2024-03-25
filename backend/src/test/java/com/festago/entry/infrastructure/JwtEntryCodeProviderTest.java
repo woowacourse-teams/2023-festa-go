@@ -6,7 +6,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import com.festago.common.exception.UnexpectedException;
 import com.festago.entry.application.EntryCodeProvider;
 import com.festago.entry.domain.EntryCodePayload;
-import com.festago.support.MemberTicketFixture;
+import com.festago.support.fixture.MemberTicketFixture;
 import com.festago.ticketing.domain.MemberTicket;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -28,7 +28,7 @@ class JwtEntryCodeProviderTest {
         // given
         Date now = new Date();
         Date expiredAt = new Date(now.getTime() - 1_000);
-        MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+        MemberTicket memberTicket = MemberTicketFixture.builder()
             .id(1L)
             .build();
         EntryCodePayload entryCodePayload = EntryCodePayload.from(memberTicket);
@@ -43,7 +43,7 @@ class JwtEntryCodeProviderTest {
     void JWT_토큰을_생성() {
         // given
         long period = 30_000;
-        MemberTicket memberTicket = MemberTicketFixture.memberTicket().id(1L).build();
+        MemberTicket memberTicket = MemberTicketFixture.builder().id(1L).build();
         Date now = new Date();
         Date expiredAt = new Date(now.getTime() + period);
         EntryCodePayload entryCodePayload = EntryCodePayload.from(memberTicket);
