@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.festago.festago.presentation.ui.search.uistate.ArtistUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{() -> item.onArtistDetailClick.invoke(item.id) }"
+        android:layout_width="66dp"
+        android:layout_height="66dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvArtistProfile"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardCornerRadius="1000dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toTopOf="@id/tvFestivalName"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="48">
+
+            <ImageView
+                android:id="@+id/ivArtistProfile"
+                imageUrl="@{item.imageUrl}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_launcher_background" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvFestivalName"
+            style="@style/B4Medium12Lh14"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@{item.name}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/cvArtistProfile"
+            app:layout_constraintStart_toStartOf="@id/cvArtistProfile"
+            app:layout_constraintTop_toBottomOf="@id/cvArtistProfile"
+            app:layout_constraintVertical_weight="18"
+            tools:text="윤하" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
