@@ -7,8 +7,8 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.festival.domain.Festival;
 import com.festago.stage.repository.MemoryStageRepository;
-import com.festago.support.FestivalFixture;
-import com.festago.support.StageFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.StageFixture;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ class OutOfDateStageFestivalUpdateValidatorTest {
     @BeforeEach
     void setUp() {
         stageRepository.clear();
-        축제 = FestivalFixture.festival()
+        축제 = FestivalFixture.builder()
             .startDate(festivalStartDate)
             .endDate(festivalEndDate)
             .build();
@@ -45,7 +45,7 @@ class OutOfDateStageFestivalUpdateValidatorTest {
             // 19, 20, 21 일자의 공연 생성
             for (int i = 0; i <= 2; i++) {
                 stageRepository.save(
-                    StageFixture.stage()
+                    StageFixture.builder()
                         .festival(축제)
                         .ticketOpenTime(ticketOpenTime)
                         .startTime(festivalStartDate.plusDays(i).atTime(18, 0))
