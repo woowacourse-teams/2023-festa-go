@@ -23,7 +23,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class SchoolBookmarkCommandServiceTest extends ApplicationIntegrationTest {
+class SchoolBookmarkCommandIntegrationServiceTest extends ApplicationIntegrationTest {
 
     @Autowired
     SchoolRepository schoolRepository;

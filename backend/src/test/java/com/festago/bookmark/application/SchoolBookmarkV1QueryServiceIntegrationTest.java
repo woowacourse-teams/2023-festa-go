@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class SchoolBookmarkV1QueryServiceTest extends ApplicationIntegrationTest {
+class SchoolBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     SchoolBookmarkV1QueryService schoolBookmarkV1QueryService;
