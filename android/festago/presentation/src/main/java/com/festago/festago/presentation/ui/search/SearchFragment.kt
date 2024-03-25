@@ -1,10 +1,12 @@
 package com.festago.festago.presentation.ui.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnNextLayout
@@ -129,10 +131,12 @@ class SearchFragment : Fragment() {
     }
 
     private fun initSearch() {
-        binding.etSearch.setOnKeyListener { _, keyCode, event ->
+        binding.etSearch.setOnKeyListener { editText, keyCode, event ->
             if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 vm.search(binding.etSearch.text.toString())
-                binding.etSearch.text?.clear()
+                val inputMethodManager =
+                    context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
                 true
             } else {
                 false
@@ -194,6 +198,10 @@ class SearchFragment : Fragment() {
                     getString(R.string.search_cant_search_blank),
                     Toast.LENGTH_SHORT,
                 ).show()
+            }
+
+            is SearchEvent.UpdateSearchQuery -> {
+                binding.etSearch.setText(event.searchQuery)
             }
         }
     }

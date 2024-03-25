@@ -9,36 +9,31 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.View.OnTouchListener
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.festago.festago.presentation.R
 
-class ClearEditText : AppCompatEditText, TextWatcher, OnTouchListener, OnFocusChangeListener {
+class ClearEditText(context: Context, attrs: AttributeSet) :
+    AppCompatEditText(context, attrs),
+    TextWatcher,
+    OnTouchListener,
+    OnFocusChangeListener {
 
-    private var clearDrawable: Drawable? = null
+    private val clearDrawable: Drawable by lazy {
+        val drawable = ContextCompat.getDrawable(context, R.drawable.ic_circle_close)!!
+        DrawableCompat.wrap(drawable)
+    }
     private var onFocusChangeListener: OnFocusChangeListener? = null
     private var onTouchListener: OnTouchListener? = null
 
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr,
-    )
-
     init {
-        val tempDrawable = ContextCompat.getDrawable(context, R.drawable.ic_circle_close)
-        clearDrawable = DrawableCompat.wrap(tempDrawable!!)
-        DrawableCompat.setTintList(clearDrawable!!, hintTextColors)
-        clearDrawable!!.setBounds(
+        clearDrawable.setBounds(
             0,
             0,
-            clearDrawable!!.intrinsicWidth,
-            clearDrawable!!.intrinsicHeight,
+            clearDrawable.intrinsicWidth,
+            clearDrawable.intrinsicHeight,
         )
         setClearIconVisible(false)
         super.setOnTouchListener(this)
@@ -55,11 +50,7 @@ class ClearEditText : AppCompatEditText, TextWatcher, OnTouchListener, OnFocusCh
     }
 
     override fun onFocusChange(view: View, hasFocus: Boolean) {
-        if (hasFocus) {
-            setClearIconVisible(text!!.isNotEmpty())
-        } else {
-            setClearIconVisible(false)
-        }
+        setClearIconVisible(text!!.isNotEmpty())
         if (onFocusChangeListener != null) {
             onFocusChangeListener!!.onFocusChange(view, hasFocus)
         }
@@ -67,10 +58,14 @@ class ClearEditText : AppCompatEditText, TextWatcher, OnTouchListener, OnFocusCh
 
     override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
         val x = motionEvent.x.toInt()
-        if (clearDrawable!!.isVisible && x > width - paddingRight - clearDrawable!!.intrinsicWidth) {
+        if (clearDrawable.isVisible && x > width - paddingRight - clearDrawable.intrinsicWidth) {
             if (motionEvent.action == MotionEvent.ACTION_UP) {
                 error = null
                 text = null
+                isFocusableInTouchMode = true
+                val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                requestFocus()
+                inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
             }
             return true
         }
@@ -91,7 +86,7 @@ class ClearEditText : AppCompatEditText, TextWatcher, OnTouchListener, OnFocusCh
     override fun afterTextChanged(s: Editable) = Unit
 
     private fun setClearIconVisible(visible: Boolean) {
-        clearDrawable!!.setVisible(visible, false)
+        clearDrawable.setVisible(visible, false)
         setCompoundDrawables(null, null, if (visible) clearDrawable else null, null)
     }
 }

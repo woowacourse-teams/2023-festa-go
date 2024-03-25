@@ -58,7 +58,6 @@
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="12dp"
                     android:background="@null"
-                    android:focusable="true"
                     android:hint="@string/search_et_search_hint"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
@@ -93,6 +92,15 @@
             app:dividerColor="@color/background_gray_03"
             app:layout_constraintTop_toBottomOf="@id/tlSearch" />
 
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpSearch"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tlSearch"
+            app:visibility="@{uiState.shouldShowSearchSuccess || uiState.shouldShowLoading}" />
+
         <ProgressBar
             android:id="@+id/pbLoading"
             visibility="@{uiState.shouldShowLoading}"
@@ -102,15 +110,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tlSearch" />
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vpSearch"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tlSearch"
-            app:visibility="@{uiState.shouldShowSearchSuccess}" />
 
         <TextView
             android:id="@+id/tvRecentSearch"

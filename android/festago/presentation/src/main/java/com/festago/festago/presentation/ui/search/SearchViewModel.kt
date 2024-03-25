@@ -98,7 +98,7 @@ class SearchViewModel @Inject constructor(
 
     private fun RecentSearchQuery.toUiState() = RecentSearchItemUiState(
         recentQuery = query,
-        onQuerySearched = ::search,
+        onQuerySearched = ::searchRecentQuery,
         onRecentSearchDeleted = ::deleteRecentSearch,
     )
 
@@ -150,6 +150,17 @@ class SearchViewModel @Inject constructor(
     private fun showSchoolDetail(schoolId: Long) {
         viewModelScope.launch {
             _event.emit(SearchEvent.ShowSchoolDetail(schoolId))
+        }
+    }
+
+    private fun searchRecentQuery(searchQuery: String) {
+        search(searchQuery)
+        updateSearchQuery(searchQuery)
+    }
+
+    private fun updateSearchQuery(searchQuery: String) {
+        viewModelScope.launch {
+            _event.emit(SearchEvent.UpdateSearchQuery(searchQuery))
         }
     }
 
