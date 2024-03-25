@@ -7,16 +7,19 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import com.festago.admin.application.AdminStageV1QueryService;
 import com.festago.admin.dto.stage.AdminStageArtistV1Response;
 import com.festago.admin.dto.stage.AdminStageV1Response;
-import com.festago.artist.application.ArtistCommandService;
-import com.festago.artist.dto.command.ArtistCreateCommand;
-import com.festago.festival.application.command.FestivalCreateService;
-import com.festago.festival.dto.command.FestivalCreateCommand;
-import com.festago.school.application.SchoolCommandService;
-import com.festago.school.domain.SchoolRegion;
-import com.festago.school.dto.SchoolCreateCommand;
-import com.festago.stage.application.command.StageCreateService;
-import com.festago.stage.dto.command.StageCreateCommand;
+import com.festago.artist.repository.ArtistRepository;
+import com.festago.festival.domain.Festival;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.repository.SchoolRepository;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.repository.StageArtistRepository;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.ApplicationIntegrationTest;
+import com.festago.support.fixture.ArtistFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StageArtistFixture;
+import com.festago.support.fixture.StageFixture;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,16 +37,19 @@ class AdminStageV1QueryServiceIntegrationTest extends ApplicationIntegrationTest
     AdminStageV1QueryService adminStageV1QueryService;
 
     @Autowired
-    FestivalCreateService festivalCreateService;
+    FestivalRepository festivalRepository;
 
     @Autowired
-    StageCreateService stageCreateService;
+    SchoolRepository schoolRepository;
 
     @Autowired
-    SchoolCommandService schoolCommandService;
+    ArtistRepository artistRepository;
 
     @Autowired
-    ArtistCommandService artistCommandService;
+    StageRepository stageRepository;
+
+    @Autowired
+    StageArtistRepository stageArtistRepository;
 
     LocalDate _2077년_6월_15일 = LocalDate.parse("2077-06-15");
     LocalDate _2077년_6월_16일 = LocalDate.parse("2077-06-16");
@@ -65,20 +71,12 @@ class AdminStageV1QueryServiceIntegrationTest extends ApplicationIntegrationTest
 
         @BeforeEach
         void setUp() {
-            Long 대학교_식별자 = schoolCommandService.createSchool(new SchoolCreateCommand(
-                "테코대학교",
-                "teco.ac.kr",
-                SchoolRegion.서울,
-                "https://image.com/logo.png",
-                "https://image.com/backgroundImage.png"
-            ));
-            축제_식별자 = festivalCreateService.createFestival(new FestivalCreateCommand(
-                "테코대학교 축제",
-                _2077년_6월_15일,
-                _2077년_6월_15일,
-                "https://image.com/posterImage.png",
-                대학교_식별자
-            ));
+            var 학교 = schoolRepository.save(SchoolFixture.builder().build());
+            축제_식별자 = festivalRepository.save(FestivalFixture.builder()
+                .startDate(_2077년_6월_15일)
+                .endDate(_2077년_6월_15일)
+                .school(학교)
+                .build()).getId();
         }
 
         @Test
@@ -102,7 +100,7 @@ class AdminStageV1QueryServiceIntegrationTest extends ApplicationIntegrationTest
         Long 아티스트A_식별자;
         Long 아티스트B_식별자;
         Long 아티스트C_식별자;
-        Long 축제_식별자;
+        Festival 축제;
         Long _6월_15일_공연_식별자;
         Long _6월_16일_공연_식별자;
 
@@ -111,45 +109,39 @@ class AdminStageV1QueryServiceIntegrationTest extends ApplicationIntegrationTest
             아티스트A_식별자 = createArtist("아티스트A");
             아티스트B_식별자 = createArtist("아티스트B");
             아티스트C_식별자 = createArtist("아티스트C");
-            Long 대학교_식별자 = schoolCommandService.createSchool(new SchoolCreateCommand(
-                "테코대학교",
-                "teco.ac.kr",
-                SchoolRegion.서울,
-                "https://image.com/logo.png",
-                "https://image.com/backgroundImage.png"
-            ));
-            축제_식별자 = festivalCreateService.createFestival(new FestivalCreateCommand(
-                "테코대학교 축제",
-                _2077년_6월_15일,
-                _2077년_6월_17일,
-                "https://image.com/posterImage.png",
-                대학교_식별자
-            ));
-            _6월_15일_공연_식별자 = createStage(축제_식별자, _2077년_6월_15일, List.of(아티스트A_식별자, 아티스트B_식별자));
-            _6월_16일_공연_식별자 = createStage(축제_식별자, _2077년_6월_16일, List.of(아티스트C_식별자));
+            var 학교 = schoolRepository.save(SchoolFixture.builder().build());
+            축제 = festivalRepository.save(FestivalFixture.builder()
+                .startDate(_2077년_6월_15일)
+                .endDate(_2077년_6월_17일)
+                .school(학교)
+                .build());
+            _6월_15일_공연_식별자 = createStage(축제, _2077년_6월_15일, List.of(아티스트A_식별자, 아티스트B_식별자)).getId();
+            _6월_16일_공연_식별자 = createStage(축제, _2077년_6월_16일, List.of(아티스트C_식별자)).getId();
         }
 
         private Long createArtist(String artistName) {
-            return artistCommandService.save(new ArtistCreateCommand(
-                artistName,
-                "https://image.com/profileImage.png",
-                "https://image.com/backgroundImage.png"
-            ));
+            return artistRepository.save(ArtistFixture.builder()
+                .name(artistName)
+                .build()
+            ).getId();
         }
 
-        private Long createStage(Long festivalId, LocalDate localDate, List<Long> artistIds) {
-            return stageCreateService.createStage(new StageCreateCommand(
-                festivalId,
-                localDate.atTime(18, 0),
-                localDate.minusWeeks(1).atStartOfDay(),
-                artistIds
-            ));
+        private Stage createStage(Festival festival, LocalDate localDate, List<Long> artistIds) {
+            var 공연 = stageRepository.save(StageFixture.builder()
+                .festival(festival)
+                .startTime(localDate.atTime(18, 0))
+                .build()
+            );
+            for (Long artistId : artistIds) {
+                stageArtistRepository.save(StageArtistFixture.builder(공연.getId(), artistId).build());
+            }
+            return 공연;
         }
 
         @Test
         void 공연의_시작_순서대로_정렬된다() {
             // when
-            var actual = adminStageV1QueryService.findAllByFestivalId(축제_식별자);
+            var actual = adminStageV1QueryService.findAllByFestivalId(축제.getId());
 
             // then
             assertThat(actual)
@@ -160,7 +152,7 @@ class AdminStageV1QueryServiceIntegrationTest extends ApplicationIntegrationTest
         @Test
         void 해당_일자의_공연에_참여하는_아티스트_목록을_조회할_수_있다() {
             // when
-            var stageIdToArtists = adminStageV1QueryService.findAllByFestivalId(축제_식별자).stream()
+            var stageIdToArtists = adminStageV1QueryService.findAllByFestivalId(축제.getId()).stream()
                 .collect(toMap(AdminStageV1Response::id, AdminStageV1Response::artists));
 
             // then
