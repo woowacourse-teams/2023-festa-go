@@ -2,7 +2,7 @@ package com.festago.bookmark.presentation;
 
 import com.festago.auth.annotation.Member;
 import com.festago.bookmark.application.SchoolBookmarkV1QueryService;
-import com.festago.bookmark.dto.SchoolBookmarkTotalV1Response;
+import com.festago.bookmark.dto.v1.SchoolBookmarkV1Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -22,7 +22,7 @@ public class SchoolBookmarkController {
 
     @GetMapping
     @Operation(description = "특정한 회원의 학교 북마크 목록을 반환한다", summary = "회원 학교 북마크 목록 조회")
-    public ResponseEntity<List<SchoolBookmarkTotalV1Response>> findAllByMemberId(@Member Long memberId) {
+    public ResponseEntity<List<SchoolBookmarkV1Response>> findAllByMemberId(@Member Long memberId) {
         return ResponseEntity.ok(schoolBookmarkV1QueryService.findAllByMemberId(memberId));
     }
 }
