@@ -17,20 +17,53 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/item_search_festival" />
+            tools:listitem="@layout/item_search_festival"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/tvNoResult"
             style="@style/H5Bold14Lh16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="@string/search_tv_no_result"
             android:textColor="@color/contents_gray_06"
             android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/tvNoResultGuide"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNoResultGuide"
+            style="@style/B4Medium12Lh14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/search_tv_no_result_guide"
+            android:textColor="@color/contents_gray_05"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/guideCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <View
+            android:id="@+id/guideCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />`
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.festago.festago.presentation.ui.customview.FestagoButton
+            android:id="@+id/btnFestago"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideCenter"
+            app:title="@string/search_tv_request_add" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

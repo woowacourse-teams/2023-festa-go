@@ -18,8 +18,10 @@ class FestivalSearchScreenViewHolder(
 
     fun bind(item: ItemSearchScreenUiState.FestivalSearchScreen) {
         festivalSearchAdapter.submitList(item.festivalSearches)
-        binding.tvNoResult.visibility =
-            if (item.festivalSearches.isEmpty()) View.VISIBLE else View.GONE
+        val visibility = if (item.festivalSearches.isEmpty()) View.VISIBLE else View.GONE
+        binding.tvNoResult.visibility = visibility
+        binding.tvNoResultGuide.visibility = visibility
+        binding.btnFestago.visibility = visibility
     }
 
     companion object {
