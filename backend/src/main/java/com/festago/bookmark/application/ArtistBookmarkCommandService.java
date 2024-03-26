@@ -32,7 +32,7 @@ public class ArtistBookmarkCommandService {
     }
 
     private void validateExistArtist(Long artistId) {
-        if (artistRepository.findById(artistId).isEmpty()) {
+        if (artistRepository.existsById(artistId)) {
             throw new NotFoundException(ErrorCode.ARTIST_NOT_FOUND);
         }
     }
