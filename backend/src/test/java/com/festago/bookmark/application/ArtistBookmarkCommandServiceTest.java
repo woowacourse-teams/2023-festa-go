@@ -4,41 +4,33 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
+import com.festago.artist.repository.MemoryArtistRepository;
 import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
 import com.festago.bookmark.repository.BookmarkRepository;
+import com.festago.bookmark.repository.MemoryBookmarkRepository;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
-import com.festago.support.ApplicationIntegrationTest;
+import com.festago.member.repository.MemoryMemberRepository;
 import com.festago.support.fixture.ArtistFixture;
 import com.festago.support.fixture.MemberFixture;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistBookmarkCommandServiceTest extends ApplicationIntegrationTest {
+class ArtistBookmarkCommandServiceTest {
 
-    @Autowired
     ArtistRepository artistRepository;
-
-    @Autowired
     MemberRepository memberRepository;
-
-    @Autowired
     BookmarkRepository bookmarkRepository;
-
-    @Autowired
     ArtistBookmarkCommandService artistBookmarkCommandService;
-
 
     Artist 브라운;
     Artist 브리;
@@ -50,6 +42,7 @@ class ArtistBookmarkCommandServiceTest extends ApplicationIntegrationTest {
 
     @BeforeEach
     void setting() {
+        initializeRepository();
         네오 = artistRepository.save(ArtistFixture.builder()
             .name("네오")
             .build());
@@ -69,6 +62,13 @@ class ArtistBookmarkCommandServiceTest extends ApplicationIntegrationTest {
         글렌 = memberRepository.save(MemberFixture.builder()
             .nickname("글렌")
             .build());
+    }
+
+    private void initializeRepository() {
+        artistRepository = new MemoryArtistRepository();
+        memberRepository = new MemoryMemberRepository();
+        bookmarkRepository = new MemoryBookmarkRepository();
+        artistBookmarkCommandService = new ArtistBookmarkCommandService(bookmarkRepository, artistRepository);
     }
 
     @Nested
