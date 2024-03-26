@@ -33,4 +33,7 @@
     <string name="festival_detail_tv_dday_format">D%1$s</string>
     <string name="festival_detail_tv_dday_end">종료</string>
 
+    <!-- String related to region bottom sheet -->
+    <string name="region_bottom_sheet_tv_region">지역별</string>
+
 </resources>

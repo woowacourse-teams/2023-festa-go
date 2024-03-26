@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.festago.festago.presentation.ui.home.festivallist.uistate.SchoolRegionUiState" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvRegion"
+            style="@style/B2Medium14Lh20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_btn_region"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="4dp"
+            android:text="@{item.schoolRegion.name()}"
+            android:textColor="@color/contents_gray_06"
+            tools:text="서울" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

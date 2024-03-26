@@ -38,6 +38,21 @@ class FestivalListTabViewHolder(val binding: ItemFestivalListTabBinding) :
                 },
             )
         }
+        binding.schoolRegion = festivalTabUiState.selectedRegion
+        binding.tvRegion.setOnClickListener {
+            festivalTabUiState.onRegionClick.invoke()
+        }
+        if (festivalTabUiState.selectedRegion == null) {
+            binding.tvRegion.isSelected = false
+            binding.tvRegion.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_pin_normal, 0, 0, 0
+            )
+        } else {
+            binding.tvRegion.isSelected = true
+            binding.tvRegion.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_pin_select, 0, 0, 0
+            )
+        }
     }
 
     private fun getFestivalFilterAt(position: Int): FestivalFilterUiState =
