@@ -15,7 +15,7 @@ import com.festago.festival.repository.MemoryFestivalRepository;
 import com.festago.stage.dto.command.StageCreateCommand;
 import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageRepository;
-import com.festago.support.FestivalFixture;
+import com.festago.support.fixture.FestivalFixture;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +59,7 @@ class StageCreateServiceTest {
         stageArtistRepository.clear();
 
         테코대학교_축제 = festivalRepository.save(
-            FestivalFixture.festival()
+            FestivalFixture.builder()
                 .name("테코대학교 축제")
                 .startDate(festivalStartDate)
                 .endDate(festivalEndDate)

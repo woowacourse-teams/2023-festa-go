@@ -14,7 +14,7 @@ import com.festago.school.dto.SchoolCreateCommand;
 import com.festago.school.dto.SchoolUpdateCommand;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.SchoolFixture;
+import com.festago.support.fixture.SchoolFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -44,7 +44,7 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 같은_도메인의_학교가_저장되어_있으면_예외가_발생한다() {
             // given
-            schoolRepository.save(SchoolFixture.school().domain("teco.ac.kr").build());
+            schoolRepository.save(SchoolFixture.builder().domain("teco.ac.kr").build());
 
             // when & then
             assertThatThrownBy(() -> schoolCommandService.createSchool(command))
@@ -55,7 +55,7 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 같은_이름의_학교가_저장되어_있으면_예외가_발생한다() {
             // given
-            schoolRepository.save(SchoolFixture.school().name("테코대학교").build());
+            schoolRepository.save(SchoolFixture.builder().name("테코대학교").build());
 
             // when & then
             assertThatThrownBy(() -> schoolCommandService.createSchool(command))
@@ -87,7 +87,7 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
 
         @BeforeEach
         void setUp() {
-            school = schoolRepository.save(SchoolFixture.school()
+            school = schoolRepository.save(SchoolFixture.builder()
                 .name("우테대학교")
                 .domain("wote.ac.kr")
                 .region(SchoolRegion.대구)
@@ -112,7 +112,7 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
         void 같은_도메인의_학교가_저장되어_있으면_예외가_발생한다() {
             // given
             Long schoolId = school.getId();
-            schoolRepository.save(SchoolFixture.school().domain("teco.ac.kr").build());
+            schoolRepository.save(SchoolFixture.builder().domain("teco.ac.kr").build());
 
             // when & then
             assertThatThrownBy(() -> schoolCommandService.updateSchool(schoolId, command))
@@ -124,7 +124,7 @@ class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
         void 같은_이름의_학교가_저장되어_있으면_예외가_발생한다() {
             // given
             Long schoolId = school.getId();
-            schoolRepository.save(SchoolFixture.school().name("테코대학교").build());
+            schoolRepository.save(SchoolFixture.builder().name("테코대학교").build());
 
             // when & then
             assertThatThrownBy(() -> schoolCommandService.updateSchool(schoolId, command))

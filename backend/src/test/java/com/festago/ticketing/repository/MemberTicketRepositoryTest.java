@@ -11,12 +11,12 @@ import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
-import com.festago.support.FestivalFixture;
-import com.festago.support.MemberFixture;
-import com.festago.support.MemberTicketFixture;
 import com.festago.support.RepositoryTest;
-import com.festago.support.SchoolFixture;
-import com.festago.support.StageFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.MemberTicketFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
 import com.festago.ticketing.domain.MemberTicket;
 import java.util.ArrayList;
@@ -60,17 +60,17 @@ class MemberTicketRepositoryTest {
         @Test
         void 성공() {
             // given
-            Member member1 = memberRepository.save(MemberFixture.member().socialId("abc").build());
-            Member member2 = memberRepository.save(MemberFixture.member().socialId("def").build());
+            Member member1 = memberRepository.save(MemberFixture.builder().socialId("abc").build());
+            Member member2 = memberRepository.save(MemberFixture.builder().socialId("def").build());
 
-            School school = schoolRepository.save(SchoolFixture.school().build());
-            Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
-            Stage stage1 = stageRepository.save(StageFixture.stage().festival(festival).build());
-            Stage stage2 = stageRepository.save(StageFixture.stage().festival(festival).build());
+            School school = schoolRepository.save(SchoolFixture.builder().build());
+            Festival festival = festivalRepository.save(FestivalFixture.builder().school(school).build());
+            Stage stage1 = stageRepository.save(StageFixture.builder().festival(festival).build());
+            Stage stage2 = stageRepository.save(StageFixture.builder().festival(festival).build());
 
-            memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage1).owner(member1).build());
-            memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage2).owner(member1).build());
-            memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage1).owner(member2).build());
+            memberTicketRepository.save(MemberTicketFixture.builder().stage(stage1).owner(member1).build());
+            memberTicketRepository.save(MemberTicketFixture.builder().stage(stage2).owner(member1).build());
+            memberTicketRepository.save(MemberTicketFixture.builder().stage(stage1).owner(member2).build());
 
             // when
             List<MemberTicket> memberTickets = memberTicketRepository.findAllByOwnerId(member1.getId(),
@@ -84,14 +84,14 @@ class MemberTicketRepositoryTest {
         void 지정한_갯수만큼_조회() {
             // given
             int expected = 10;
-            Member member = memberRepository.save(MemberFixture.member().build());
+            Member member = memberRepository.save(MemberFixture.builder().build());
 
-            School school = schoolRepository.save(SchoolFixture.school().build());
-            Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
-            Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
+            School school = schoolRepository.save(SchoolFixture.builder().build());
+            Festival festival = festivalRepository.save(FestivalFixture.builder().school(school).build());
+            Stage stage = stageRepository.save(StageFixture.builder().festival(festival).build());
 
             for (int i = 0; i < 20; i++) {
-                memberTicketRepository.save(MemberTicketFixture.memberTicket().stage(stage).owner(member).build());
+                memberTicketRepository.save(MemberTicketFixture.builder().stage(stage).owner(member).build());
             }
 
             // when
@@ -105,15 +105,15 @@ class MemberTicketRepositoryTest {
         @Test
         void 지정한_정렬으로_조회() {
             // given
-            Member member = memberRepository.save(MemberFixture.member().build());
+            Member member = memberRepository.save(MemberFixture.builder().build());
 
-            School school = schoolRepository.save(SchoolFixture.school().build());
-            Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
-            Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
+            School school = schoolRepository.save(SchoolFixture.builder().build());
+            Festival festival = festivalRepository.save(FestivalFixture.builder().school(school).build());
+            Stage stage = stageRepository.save(StageFixture.builder().festival(festival).build());
 
             List<MemberTicket> memberTickets = new ArrayList<>();
             for (int i = 0; i < 20; i++) {
-                memberTickets.add(MemberTicketFixture.memberTicket().stage(stage).owner(member).build());
+                memberTickets.add(MemberTicketFixture.builder().stage(stage).owner(member).build());
             }
             memberTicketRepository.saveAll(memberTickets);
 

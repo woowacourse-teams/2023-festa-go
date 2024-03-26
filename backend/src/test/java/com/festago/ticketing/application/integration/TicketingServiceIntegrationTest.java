@@ -12,7 +12,7 @@ import com.festago.member.repository.MemberRepository;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.MemberFixture;
+import com.festago.support.fixture.MemberFixture;
 import com.festago.ticketing.application.TicketingService;
 import com.festago.ticketing.dto.TicketingRequest;
 import com.festago.ticketing.repository.MemberTicketRepository;
@@ -54,7 +54,7 @@ class TicketingServiceIntegrationTest extends ApplicationIntegrationTest {
     void 동시에_100명이_예약() {
         // given
         int tryCount = 100;
-        Member member = memberRepository.save(MemberFixture.member().build());
+        Member member = memberRepository.save(MemberFixture.builder().build());
         TicketingRequest request = new TicketingRequest(1L);
         ExecutorService executor = Executors.newFixedThreadPool(16);
         doReturn(false)
@@ -80,7 +80,7 @@ class TicketingServiceIntegrationTest extends ApplicationIntegrationTest {
     @Sql("/ticketing-test-data.sql")
     void 하나의_공연에_중복으로_티켓을_예매하면_예외() {
         // given
-        Member member = memberRepository.save(MemberFixture.member().build());
+        Member member = memberRepository.save(MemberFixture.builder().build());
         TicketingRequest request = new TicketingRequest(1L);
         Long memberId = member.getId();
         doReturn(Instant.parse("2023-07-24T03:21:31Z"))

@@ -14,10 +14,10 @@ import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.FestivalFixture;
-import com.festago.support.SchoolFixture;
-import com.festago.support.StageFixture;
 import com.festago.support.TimeInstantProvider;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StageFixture;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,8 +60,8 @@ class FestivalDeleteServiceTest extends ApplicationIntegrationTest {
         void setUp() {
             given(clock.instant())
                 .willReturn(TimeInstantProvider.from(now));
-            School school = schoolRepository.save(SchoolFixture.school().build());
-            Festival festival = festivalRepository.save(FestivalFixture.festival()
+            School school = schoolRepository.save(SchoolFixture.builder().build());
+            Festival festival = festivalRepository.save(FestivalFixture.builder()
                 .startDate(now)
                 .endDate(now)
                 .school(school)
@@ -76,7 +76,7 @@ class FestivalDeleteServiceTest extends ApplicationIntegrationTest {
             Festival festival = festivalRepository.getOrThrow(festivalId);
             LocalDateTime startTime = LocalDateTime.now(clock);
             LocalDateTime ticketOpenTime = startTime.minusDays(1);
-            stageRepository.save(StageFixture.stage()
+            stageRepository.save(StageFixture.builder()
                 .festival(festival)
                 .startTime(startTime)
                 .ticketOpenTime(ticketOpenTime)

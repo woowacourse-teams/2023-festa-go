@@ -1,7 +1,7 @@
 package com.festago.admin.presentation.v1;
 
-import com.festago.admin.presentation.v1.dto.StageV1CreateRequest;
-import com.festago.admin.presentation.v1.dto.StageV1UpdateRequest;
+import com.festago.admin.dto.stage.StageV1CreateRequest;
+import com.festago.admin.dto.stage.StageV1UpdateRequest;
 import com.festago.stage.application.command.StageCommandFacadeService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;

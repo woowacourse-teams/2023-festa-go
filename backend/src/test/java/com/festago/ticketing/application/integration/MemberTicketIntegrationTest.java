@@ -11,11 +11,11 @@ import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.FestivalFixture;
-import com.festago.support.MemberFixture;
-import com.festago.support.MemberTicketFixture;
-import com.festago.support.SchoolFixture;
-import com.festago.support.StageFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.MemberTicketFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StageFixture;
 import com.festago.ticket.repository.TicketRepository;
 import com.festago.ticketing.application.MemberTicketService;
 import com.festago.ticketing.dto.MemberTicketsResponse;
@@ -54,12 +54,12 @@ class MemberTicketIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 예매한_티켓_조회시_Pageable_적용() {
         // given
-        School school = schoolRepository.save(SchoolFixture.school().build());
-        Member member = memberRepository.save(MemberFixture.member().build());
-        Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
-        Stage stage = stageRepository.save(StageFixture.stage().festival(festival).build());
+        School school = schoolRepository.save(SchoolFixture.builder().build());
+        Member member = memberRepository.save(MemberFixture.builder().build());
+        Festival festival = festivalRepository.save(FestivalFixture.builder().school(school).build());
+        Stage stage = stageRepository.save(StageFixture.builder().festival(festival).build());
         for (int i = 0; i < 20; i++) {
-            memberTicketRepository.save(MemberTicketFixture.memberTicket()
+            memberTicketRepository.save(MemberTicketFixture.builder()
                 .stage(stage)
                 .owner(member)
                 .build()

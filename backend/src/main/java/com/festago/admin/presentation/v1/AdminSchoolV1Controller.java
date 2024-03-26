@@ -1,9 +1,9 @@
 package com.festago.admin.presentation.v1;
 
 import com.festago.admin.application.AdminSchoolV1QueryService;
-import com.festago.admin.dto.AdminSchoolV1Response;
-import com.festago.admin.presentation.v1.dto.SchoolV1CreateRequest;
-import com.festago.admin.presentation.v1.dto.SchoolV1UpdateRequest;
+import com.festago.admin.dto.school.AdminSchoolV1Response;
+import com.festago.admin.dto.school.SchoolV1CreateRequest;
+import com.festago.admin.dto.school.SchoolV1UpdateRequest;
 import com.festago.common.aop.ValidPageable;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.application.SchoolCommandService;

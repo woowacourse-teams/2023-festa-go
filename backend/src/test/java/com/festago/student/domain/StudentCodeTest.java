@@ -9,8 +9,8 @@ import com.festago.common.exception.UnexpectedException;
 import com.festago.common.exception.ValidException;
 import com.festago.member.domain.Member;
 import com.festago.school.domain.School;
-import com.festago.support.MemberFixture;
-import com.festago.support.SchoolFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.SchoolFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -27,8 +27,8 @@ class StudentCodeTest {
     @Test
     void 성공() {
         // given
-        Member member = MemberFixture.member().build();
-        School school = SchoolFixture.school().build();
+        Member member = MemberFixture.builder().build();
+        School school = SchoolFixture.builder().build();
         LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
         VerificationCode verificationCode = new VerificationCode("123456");
 
@@ -42,8 +42,8 @@ class StudentCodeTest {
     @Test
     void username의_길이가_255자를_초과하면_예외() {
         // given
-        Member member = MemberFixture.member().build();
-        School school = SchoolFixture.school().build();
+        Member member = MemberFixture.builder().build();
+        School school = SchoolFixture.builder().build();
         LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
         VerificationCode verificationCode = new VerificationCode("123456");
         String username = "1".repeat(256);
@@ -59,8 +59,8 @@ class StudentCodeTest {
     @ValueSource(strings = {"", " ", "\t", "\n"})
     void username이_null_또는_공백이면_예외(String username) {
         // given
-        Member member = MemberFixture.member().build();
-        School school = SchoolFixture.school().build();
+        Member member = MemberFixture.builder().build();
+        School school = SchoolFixture.builder().build();
         LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
         VerificationCode verificationCode = new VerificationCode("123456");
 
@@ -73,8 +73,8 @@ class StudentCodeTest {
     @Test
     void 이메일_반환_성공() {
         // given
-        Member member = MemberFixture.member().build();
-        School school = SchoolFixture.school().domain("fiddich.com").build();
+        Member member = MemberFixture.builder().build();
+        School school = SchoolFixture.builder().domain("fiddich.com").build();
         LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
         VerificationCode verificationCode = new VerificationCode("123456");
 
@@ -91,8 +91,8 @@ class StudentCodeTest {
         @Test
         void 재발급할_코드에_식별자가_있으면_예외() {
             // given
-            Member member = MemberFixture.member().build();
-            School school = SchoolFixture.school().build();
+            Member member = MemberFixture.builder().build();
+            School school = SchoolFixture.builder().build();
             LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
             VerificationCode verificationCode = new VerificationCode("123456");
             StudentCode studentCode = new StudentCode(1L, verificationCode, school, member, "ash", issuedAt);
@@ -110,8 +110,8 @@ class StudentCodeTest {
         @ValueSource(longs = {0, 1, 30})
         void 발급한지_30초_이내면_예외(long second) {
             // given
-            Member member = MemberFixture.member().build();
-            School school = SchoolFixture.school().build();
+            Member member = MemberFixture.builder().build();
+            School school = SchoolFixture.builder().build();
             LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
             VerificationCode verificationCode = new VerificationCode("123456");
             StudentCode studentCode = new StudentCode(1L, verificationCode, school, member, "ash", issuedAt);
@@ -129,8 +129,8 @@ class StudentCodeTest {
         @ValueSource(longs = {31, 999, 9999})
         void 발급한지_30초_이후면_성공(long second) {
             // given
-            Member member = MemberFixture.member().build();
-            School school = SchoolFixture.school().build();
+            Member member = MemberFixture.builder().build();
+            School school = SchoolFixture.builder().build();
             LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
             VerificationCode verificationCode = new VerificationCode("123456");
             StudentCode studentCode = new StudentCode(1L, verificationCode, school, member, "ash", issuedAt);

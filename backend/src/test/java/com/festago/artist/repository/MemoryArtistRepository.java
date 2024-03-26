@@ -57,4 +57,9 @@ public class MemoryArtistRepository implements ArtistRepository {
             .filter(artist -> artistIds.contains(artist.getId()))
             .toList();
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return memory.containsKey(id);
+    }
 }

@@ -4,8 +4,8 @@ import static com.festago.festival.domain.QFestival.festival;
 import static com.festago.school.domain.QSchool.school;
 import static com.festago.stage.domain.QStage.stage;
 
-import com.festago.admin.dto.AdminFestivalV1Response;
-import com.festago.admin.dto.QAdminFestivalV1Response;
+import com.festago.admin.dto.festival.AdminFestivalV1Response;
+import com.festago.admin.dto.festival.QAdminFestivalV1Response;
 import com.festago.common.querydsl.OrderSpecifierUtils;
 import com.festago.common.querydsl.QueryDslHelper;
 import com.festago.common.querydsl.SearchCondition;

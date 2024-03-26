@@ -12,8 +12,8 @@ import com.festago.stage.domain.Stage;
 import com.festago.stage.domain.StageArtist;
 import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageRepository;
-import com.festago.support.FestivalFixture;
-import com.festago.support.StageFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.StageFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -49,14 +49,14 @@ class StageDeleteServiceTest {
         stageRepository.clear();
         stageArtistRepository.clear();
         테코대학교_축제 = festivalRepository.save(
-            FestivalFixture.festival()
+            FestivalFixture.builder()
                 .name("테코대학교 축제")
                 .startDate(stageStartTime.toLocalDate())
                 .endDate(stageStartTime.toLocalDate().plusDays(2))
                 .build()
         );
         테코대학교_축제_공연 = stageRepository.save(
-            StageFixture.stage()
+            StageFixture.builder()
                 .festival(테코대학교_축제)
                 .startTime(stageStartTime)
                 .ticketOpenTime(ticketOpenTime)

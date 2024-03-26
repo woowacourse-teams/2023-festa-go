@@ -12,7 +12,7 @@ data class FestivalResponse(
     val name: String,
     val startDate: String,
     val endDate: String,
-    val imageUrl: String,
+    val posterImageUrl: String,
     val school: SchoolResponse,
     val artists: List<ArtistResponse>,
 ) {
@@ -21,7 +21,7 @@ data class FestivalResponse(
         name = name,
         startDate = LocalDate.parse(startDate),
         endDate = LocalDate.parse(endDate),
-        imageUrl = imageUrl,
+        imageUrl = posterImageUrl,
         school = school.toDomain(),
         artists = artists.map { it.toDomain() },
     )

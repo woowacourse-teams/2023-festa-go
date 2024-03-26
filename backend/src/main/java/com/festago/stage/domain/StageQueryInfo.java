@@ -30,29 +30,13 @@ public class StageQueryInfo {
     @Column(columnDefinition = "TEXT")
     private String artistInfo;
 
-    @Deprecated(forRemoval = true)
-    private StageQueryInfo(Long stageId) {
-        this.stageId = stageId;
-        this.artistInfo = "[]";
-    }
-
     private StageQueryInfo(Long stageId, String artistInfo) {
         this.stageId = stageId;
         this.artistInfo = artistInfo;
     }
 
-    @Deprecated(forRemoval = true)
-    public static StageQueryInfo create(Long stageId) {
-        return new StageQueryInfo(stageId);
-    }
-
     public static StageQueryInfo of(Long stageId, List<Artist> artists, ArtistsSerializer serializer) {
         return new StageQueryInfo(stageId, serializer.serialize(artists));
-    }
-
-    @Deprecated(forRemoval = true)
-    public void updateArtist(String artistInfo) {
-        this.artistInfo = artistInfo;
     }
 
     public void updateArtist(List<Artist> artists, ArtistsSerializer serializer) {

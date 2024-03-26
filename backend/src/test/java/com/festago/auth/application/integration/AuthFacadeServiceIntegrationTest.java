@@ -8,7 +8,7 @@ import com.festago.auth.domain.SocialType;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.MemberFixture;
+import com.festago.support.fixture.MemberFixture;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -46,7 +46,7 @@ class AuthFacadeServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 회원탈퇴() {
         // given
-        Member member = memberRepository.save(MemberFixture.member().build());
+        Member member = memberRepository.save(MemberFixture.builder().build());
 
         // when
         authFacadeService.deleteMember(member.getId());
@@ -70,7 +70,7 @@ class AuthFacadeServiceIntegrationTest extends ApplicationIntegrationTest {
     @Test
     void 탈퇴한_회원은_조회되지않는다() {
         // given
-        Member member = memberRepository.save(MemberFixture.member().build());
+        Member member = memberRepository.save(MemberFixture.builder().build());
 
         // when
         authFacadeService.deleteMember(member.getId());

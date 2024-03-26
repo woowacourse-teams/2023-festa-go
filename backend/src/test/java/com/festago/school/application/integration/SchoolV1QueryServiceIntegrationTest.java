@@ -18,8 +18,8 @@ import com.festago.socialmedia.domain.SocialMedia;
 import com.festago.socialmedia.domain.SocialMediaType;
 import com.festago.socialmedia.repository.SocialMediaRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.FestivalFixture;
-import com.festago.support.SchoolFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.SchoolFixture;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,7 +61,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 학교에_소셜미디어가_존재하지_않아도_조회된다() {
             // given
-            School school = schoolRepository.save(SchoolFixture.school().build());
+            School school = schoolRepository.save(SchoolFixture.builder().build());
 
             // when
             SchoolDetailV1Response actual = schoolV1QueryService.findDetailById(school.getId());
@@ -76,7 +76,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 아티스트의_소셜미디어는_아이디가_같아도_조회되지_않는다() {
             // given
-            School school = schoolRepository.save(SchoolFixture.school().build());
+            School school = schoolRepository.save(SchoolFixture.builder().build());
             saveSocialMedia(school.getId(), OwnerType.SCHOOL, SocialMediaType.X);
             saveSocialMedia(school.getId(), OwnerType.ARTIST, SocialMediaType.YOUTUBE);
 
@@ -90,7 +90,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 학교와_포함된_소셜미디어를_모두_조회한다() {
             // given
-            School school = schoolRepository.save(SchoolFixture.school().build());
+            School school = schoolRepository.save(SchoolFixture.builder().build());
             saveSocialMedia(school.getId(), OwnerType.SCHOOL, SocialMediaType.X);
             saveSocialMedia(school.getId(), OwnerType.SCHOOL, SocialMediaType.YOUTUBE);
 
@@ -117,7 +117,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
         @BeforeEach
         void setUp() {
-            school = schoolRepository.save(SchoolFixture.school().build());
+            school = schoolRepository.save(SchoolFixture.builder().build());
         }
 
         @Test
@@ -272,7 +272,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
         private Festival saveFestival(LocalDate startDate, LocalDate endDate) {
             return festivalRepository.save(
-                FestivalFixture.festival()
+                FestivalFixture.builder()
                     .startDate(startDate)
                     .endDate(endDate)
                     .school(school)

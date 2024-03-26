@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.admin.presentation.v1.dto.StageV1CreateRequest;
-import com.festago.admin.presentation.v1.dto.StageV1UpdateRequest;
+import com.festago.admin.dto.stage.StageV1CreateRequest;
+import com.festago.admin.dto.stage.StageV1UpdateRequest;
 import com.festago.auth.domain.Role;
 import com.festago.stage.application.command.StageCommandFacadeService;
 import com.festago.stage.dto.command.StageCreateCommand;
