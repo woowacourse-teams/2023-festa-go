@@ -79,6 +79,6 @@ public class AdminAuthCommandService {
         adminRepository.findByUsername(Admin.ROOT_ADMIN_NAME)
             .ifPresentOrElse(ignore -> {
                 throw new BadRequestException(ErrorCode.DUPLICATE_ACCOUNT_USERNAME);
-            }, () -> adminRepository.save(Admin.createRootAdmin(password)));
+            }, () -> adminRepository.save(Admin.createRootAdmin(passwordEncoder.encode(password))));
     }
 }
