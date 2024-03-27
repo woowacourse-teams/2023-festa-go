@@ -38,8 +38,7 @@ class ArtistCommandServiceTest {
         Long artistId = artistCommandService.save(command);
 
         // then
-        Artist actual = artistRepository.getOrThrow(artistId);
-        assertThat(actual.getId()).isPositive();
+        assertThat(artistRepository.findById(artistId)).isPresent();
     }
 
     @Test
@@ -58,6 +57,7 @@ class ArtistCommandServiceTest {
         assertSoftly(softly -> {
             softly.assertThat(actual.getName()).isEqualTo(command.name());
             softly.assertThat(actual.getProfileImage()).isEqualTo(command.profileImageUrl());
+            softly.assertThat(actual.getBackgroundImageUrl()).isEqualTo(command.backgroundImageUrl());
         });
     }
 
