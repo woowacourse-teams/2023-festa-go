@@ -19,6 +19,7 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.ForbiddenException;
 import com.festago.common.exception.UnauthorizedException;
+import com.festago.support.fixture.AdminFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -64,7 +65,10 @@ class AdminAuthCommandServiceTest {
         @Test
         void 비밀번호가_틀리면_예외() {
             // given
-            adminRepository.save(new Admin("admin", "{noop}password"));
+            adminRepository.save(AdminFixture.builder()
+                .username("admin")
+                .password("{noop}password")
+                .build());
             var command = new AdminLoginCommand("admin", "admin");
 
             // when & then
@@ -76,7 +80,10 @@ class AdminAuthCommandServiceTest {
         @Test
         void 성공() {
             // given
-            adminRepository.save(new Admin("admin", "{noop}password"));
+            adminRepository.save(AdminFixture.builder()
+                .username("admin")
+                .password("{noop}password")
+                .build());
             var command = new AdminLoginCommand("admin", "password");
             given(authProvider.provide(any()))
                 .willReturn("token");
@@ -108,7 +115,10 @@ class AdminAuthCommandServiceTest {
         @Test
         void Root_어드민이_아니면_예외() {
             // given
-            Admin admin = adminRepository.save(new Admin("glen", "{noop}password"));
+            Admin admin = adminRepository.save(AdminFixture.builder()
+                .username("glen")
+                .password("{noop}password")
+                .build());
             var command = new AdminSignupCommand("newAdmin", "password");
 
             // when & then
