@@ -6,20 +6,20 @@ import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.Repository;
 
-public interface SchoolRepository extends JpaRepository<School, Long> {
+public interface SchoolRepository extends Repository<School, Long> {
 
     default School getOrThrow(Long schoolId) {
         return findById(schoolId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
     }
 
-    /**
-     * @deprecated API 버저닝이 적용되면 해당 메서드 삭제
-     */
-    @Deprecated(forRemoval = true)
-    boolean existsByDomainOrName(String domain, String name);
+    School save(School school);
+
+    Optional<School> findById(Long id);
+
+    void deleteById(Long id);
 
     List<School> findAllByRegion(SchoolRegion schoolRegion);
 
