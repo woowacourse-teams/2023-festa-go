@@ -12,8 +12,8 @@ import static org.mockito.BDDMockito.given;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
-import com.festago.support.MemberFixture;
-import com.festago.support.MemberTicketFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.MemberTicketFixture;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.dto.MemberTicketResponse;
 import com.festago.ticketing.dto.MemberTicketsResponse;
@@ -71,11 +71,11 @@ class MemberTicketServiceTest {
             // given
             Long memberId = 1L;
             Long memberTicketId = 1L;
-            Member other = MemberFixture.member()
+            Member other = MemberFixture.builder()
                 .id(2L)
                 .build();
 
-            MemberTicket otherMemberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket otherMemberTicket = MemberTicketFixture.builder()
                 .id(memberTicketId)
                 .owner(other)
                 .build();
@@ -94,10 +94,10 @@ class MemberTicketServiceTest {
             // given
             Long memberId = 1L;
             Long memberTicketId = 1L;
-            Member member = MemberFixture.member()
+            Member member = MemberFixture.builder()
                 .id(memberId)
                 .build();
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .id(memberTicketId)
                 .owner(member)
                 .build();
@@ -132,10 +132,10 @@ class MemberTicketServiceTest {
         void 성공() {
             // given
             Long memberId = 1L;
-            MemberTicket first = MemberTicketFixture.memberTicket()
+            MemberTicket first = MemberTicketFixture.builder()
                 .id(1L)
                 .build();
-            MemberTicket second = MemberTicketFixture.memberTicket()
+            MemberTicket second = MemberTicketFixture.builder()
                 .id(2L)
                 .build();
             given(memberTicketRepository.findAllByOwnerId(eq(memberId), any(Pageable.class)))
@@ -156,7 +156,7 @@ class MemberTicketServiceTest {
         void 입장시간이_24시간_지난_티켓은_조회되지_않는다() {
             // given
             Long memberId = 1L;
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .entryTime(LocalDateTime.now().minusHours(25))
                 .build();
 
@@ -174,11 +174,11 @@ class MemberTicketServiceTest {
         void 활성화된_티켓이_먼저_조회된다() {
             // given
             Long memberId = 1L;
-            MemberTicket pendingMemberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket pendingMemberTicket = MemberTicketFixture.builder()
                 .id(1L)
                 .entryTime(LocalDateTime.now().plusHours(1))
                 .build();
-            MemberTicket activateMemberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket activateMemberTicket = MemberTicketFixture.builder()
                 .id(2L)
                 .entryTime(LocalDateTime.now().minusHours(1))
                 .build();
@@ -200,19 +200,19 @@ class MemberTicketServiceTest {
         void 활성화_및_비활성화_내에서는_현재시간과_가까운순으로_정렬되어_조회된다() {
             // given
             Long memberId = 1L;
-            MemberTicket pendingMemberTicket1 = MemberTicketFixture.memberTicket()
+            MemberTicket pendingMemberTicket1 = MemberTicketFixture.builder()
                 .id(1L)
                 .entryTime(LocalDateTime.now().plusHours(1))
                 .build();
-            MemberTicket pendingMemberTicket2 = MemberTicketFixture.memberTicket()
+            MemberTicket pendingMemberTicket2 = MemberTicketFixture.builder()
                 .id(2L)
                 .entryTime(LocalDateTime.now().plusHours(2))
                 .build();
-            MemberTicket activateMemberTicket1 = MemberTicketFixture.memberTicket()
+            MemberTicket activateMemberTicket1 = MemberTicketFixture.builder()
                 .id(3L)
                 .entryTime(LocalDateTime.now().minusHours(2))
                 .build();
-            MemberTicket activateMemberTicket2 = MemberTicketFixture.memberTicket()
+            MemberTicket activateMemberTicket2 = MemberTicketFixture.builder()
                 .id(4L)
                 .entryTime(LocalDateTime.now().minusHours(1))
                 .build();

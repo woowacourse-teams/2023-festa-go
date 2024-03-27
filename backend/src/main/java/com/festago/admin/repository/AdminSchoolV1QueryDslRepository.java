@@ -2,8 +2,8 @@ package com.festago.admin.repository;
 
 import static com.festago.school.domain.QSchool.school;
 
-import com.festago.admin.dto.AdminSchoolV1Response;
-import com.festago.admin.dto.QAdminSchoolV1Response;
+import com.festago.admin.dto.school.AdminSchoolV1Response;
+import com.festago.admin.dto.school.QAdminSchoolV1Response;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.domain.School;

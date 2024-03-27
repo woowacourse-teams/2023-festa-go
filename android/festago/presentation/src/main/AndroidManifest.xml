@@ -3,6 +3,10 @@
 
     <application>
         <activity
+            android:name=".ui.notificationlist.NotificationListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.home.HomeActivity"
             android:exported="true"
             android:screenOrientation="portrait">
@@ -12,6 +16,5 @@
             </intent-filter>
         </activity>
     </application>
-
 
 </manifest>

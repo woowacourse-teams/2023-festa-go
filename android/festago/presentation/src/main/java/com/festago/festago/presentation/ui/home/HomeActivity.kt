@@ -10,16 +10,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivityHomeBinding
-import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
-import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragment
-import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragment
-import com.festago.festago.presentation.ui.home.mypage.MyPageFragment
-import com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import com.festago.festago.presentation.util.setStatusBarMode
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,12 +26,18 @@ class HomeActivity : AppCompatActivity() {
 
     private val vm: HomeViewModel by viewModels()
 
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
-        initView()
+        navController =
+            (supportFragmentManager.findFragmentById(R.id.fcvHomeContainer) as NavHostFragment).navController
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.nvHome)
+        bottomNavigationView.setupWithNavController(navController)
+
         initBackPressedDispatcher()
-        initBackStackListener()
+        initDestinationChangedListener()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         binding.root.setOnApplyWindowInsetsCompatListener { view, windowInsets ->
@@ -53,69 +57,17 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    private fun initView() {
-        binding.nvHome.setOnItemSelectedListener {
-            selectView(it.itemId)
-            true
-        }
-        changeFragment<FestivalListFragment>()
-    }
+    private fun initDestinationChangedListener() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.artistDetailFragment,
+                R.id.festivalDetailFragment,
+                R.id.schoolDetailFragment,
+                -> setStatusBarMode(isLight = false, backgroundColor = Color.TRANSPARENT)
 
-    private fun initBackStackListener() {
-        supportFragmentManager.addOnBackStackChangedListener {
-            val fragment = supportFragmentManager.findFragmentById(R.id.fcvHomeContainer)
-            if (fragment is ArtistDetailFragment) {
-                setStatusBarMode(isLight = false, backgroundColor = Color.TRANSPARENT)
-            } else {
-                setStatusBarMode(isLight = true, backgroundColor = Color.TRANSPARENT)
+                else -> setStatusBarMode(isLight = true, backgroundColor = Color.TRANSPARENT)
             }
         }
-    }
-
-    private fun selectView(menuItemId: Int) {
-        return when (menuItemId) {
-            R.id.itemFestival -> showFestivalList()
-            R.id.itemTicket -> showTicketList()
-            R.id.itemBookmark -> showBookmarkList()
-            R.id.itemMyPage -> showMyPage()
-            else -> throw IllegalArgumentException("menu item id not found")
-        }
-    }
-
-    private fun showFestivalList() {
-        changeFragment<FestivalListFragment>()
-    }
-
-    private fun showTicketList() {
-        changeFragment<TicketListFragment>()
-    }
-
-    private fun showBookmarkList() {
-        changeFragment<BookmarkListFragment>()
-    }
-
-    private fun showMyPage() {
-        changeFragment<MyPageFragment>()
-    }
-
-    private inline fun <reified T : Fragment> changeFragment() {
-        val tag = T::class.java.name
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-
-        supportFragmentManager.fragments.forEach { fragment ->
-            fragmentTransaction.hide(fragment)
-        }
-
-        var targetFragment = supportFragmentManager.findFragmentByTag(tag)
-
-        if (targetFragment == null) {
-            targetFragment = supportFragmentManager.fragmentFactory.instantiate(classLoader, tag)
-            fragmentTransaction.add(R.id.fcvHomeContainer, targetFragment, tag)
-        } else {
-            fragmentTransaction.show(targetFragment)
-        }
-
-        fragmentTransaction.commit()
     }
 
     private fun initBackPressedDispatcher() {

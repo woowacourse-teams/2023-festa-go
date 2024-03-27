@@ -9,9 +9,9 @@ import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.FestivalFixture;
-import com.festago.support.SchoolFixture;
 import com.festago.support.TimeInstantProvider;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.SchoolFixture;
 import java.time.Clock;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,8 +47,8 @@ class FestivalUpdateServiceTest extends ApplicationIntegrationTest {
         void setUp() {
             given(clock.instant())
                 .willReturn(TimeInstantProvider.from(now));
-            School school = schoolRepository.save(SchoolFixture.school().build());
-            Festival festival = festivalRepository.save(FestivalFixture.festival().school(school).build());
+            School school = schoolRepository.save(SchoolFixture.builder().build());
+            Festival festival = festivalRepository.save(FestivalFixture.builder().school(school).build());
             festivalId = festival.getId();
         }
 

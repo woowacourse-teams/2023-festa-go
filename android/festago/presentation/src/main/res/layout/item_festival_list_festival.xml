@@ -17,13 +17,12 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{()-> item.onFestivalDetail.invoke(item.id)}"
         android:layout_width="match_parent"
         android:layout_height="132dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_festival_list_festival"
-        tools:layout_height="132dp"
-        tools:layout_width="328dp">
+        android:background="@drawable/bg_festival_list_festival">
 
 
         <ImageView
@@ -45,9 +44,9 @@
             android:layout_width="56dp"
             android:layout_height="24dp"
             android:background="#FFFA1273"
-            android:visibility="@{LocalDate.now().compareTo(item.endDate) &lt;= 0 ? View.VISIBLE : View.GONE}"
             android:gravity="center"
             android:textColor="@color/background_gray_01"
+            android:visibility="@{LocalDate.now().compareTo(item.endDate) &lt;= 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="D-1" />
@@ -70,14 +69,17 @@
         <TextView
             android:id="@+id/tvFestivalName"
             style="@style/H4Bold16Lh20"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginHorizontal="12dp"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@{item.name}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivFestivalImage"
             app:layout_constraintTop_toTopOf="@+id/ivFestivalImage"
-            tools:text="중앙대학교 청진난만" />
+            tools:text="중앙대학교 청진난만 중앙대학교 천진난만" />
 
         <TextView
             android:id="@+id/tvFestivalSchedule"

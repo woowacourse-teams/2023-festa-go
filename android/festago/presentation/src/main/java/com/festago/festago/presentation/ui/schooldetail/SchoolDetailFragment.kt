@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
@@ -25,10 +26,12 @@ class SchoolDetailFragment : Fragment() {
 
     private lateinit var adapter: SchoolFestivalListAdapter
 
+    private val args: SchoolDetailFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSchoolDetailBinding.inflate(inflater)
         return binding.root
@@ -36,8 +39,7 @@ class SchoolDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val schoolId = requireArguments().getLong(SCHOOL_ID_KEY)
-        initView(schoolId)
+        initView(args.schoolId)
         initObserve()
     }
 
@@ -77,6 +79,7 @@ class SchoolDetailFragment : Fragment() {
         binding.ivSchoolBackground.setColorFilter(Color.parseColor("#66000000"))
         adapter.submitList(uiState.festivals)
         binding.llcSchoolSocialMedia.removeAllViews()
+
         uiState.schoolInfo.socialMedia.forEach { media ->
             with(ItemMediaBinding.inflate(layoutInflater, binding.llcSchoolSocialMedia, false)) {
                 imageUrl = media.logoUrl
@@ -95,15 +98,5 @@ class SchoolDetailFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    companion object {
-        private const val SCHOOL_ID_KEY = "SCHOOL_ID_KEY"
-
-        fun newInstance(id: Long) = SchoolDetailFragment().apply {
-            arguments = Bundle().apply {
-                putLong(SCHOOL_ID_KEY, id)
-            }
-        }
     }
 }

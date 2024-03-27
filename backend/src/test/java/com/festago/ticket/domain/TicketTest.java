@@ -12,10 +12,10 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.festival.domain.Festival;
 import com.festago.member.domain.Member;
 import com.festago.stage.domain.Stage;
-import com.festago.support.FestivalFixture;
-import com.festago.support.MemberFixture;
-import com.festago.support.StageFixture;
-import com.festago.support.TicketFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.StageFixture;
+import com.festago.support.fixture.TicketFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -36,11 +36,11 @@ class TicketTest {
         void 입장시간이_티켓오픈시간_이전이면_예외(long minute) {
             // given
             LocalDateTime now = LocalDateTime.now();
-            Stage stage = StageFixture.stage()
+            Stage stage = StageFixture.builder()
                 .startTime(now.plusDays(1))
                 .ticketOpenTime(now)
                 .build();
-            Ticket ticket = TicketFixture.ticket()
+            Ticket ticket = TicketFixture.builder()
                 .stage(stage)
                 .build();
 
@@ -55,7 +55,7 @@ class TicketTest {
         @ValueSource(longs = {0, 1})
         void 입장_시간이_축제_시작_시간보다_같거나_이후면_예외(long minute) {
             // given
-            Ticket ticket = TicketFixture.ticket()
+            Ticket ticket = TicketFixture.builder()
                 .build();
 
             Stage stage = ticket.getStage();
@@ -72,7 +72,7 @@ class TicketTest {
         @Test
         void 입장_시간이_공연_시작_12시간_이전이면_예외() {
             // given
-            Ticket ticket = TicketFixture.ticket()
+            Ticket ticket = TicketFixture.builder()
                 .build();
 
             Stage stage = ticket.getStage();
@@ -89,10 +89,10 @@ class TicketTest {
         @Test
         void 티켓_오픈_이후_티켓생성시_예외() {
             // given
-            Stage stage = StageFixture.stage()
+            Stage stage = StageFixture.builder()
                 .ticketOpenTime(LocalDateTime.now().minusHours(1))
                 .build();
-            Ticket ticket = TicketFixture.ticket()
+            Ticket ticket = TicketFixture.builder()
                 .build();
 
             LocalDateTime startTime = stage.getStartTime();
@@ -107,7 +107,7 @@ class TicketTest {
         void 입장시간을_추가한다() {
             // given
             Ticket ticket = TicketFixture
-                .ticket()
+                .builder()
                 .build();
 
             Stage stage = ticket.getStage();
@@ -134,19 +134,19 @@ class TicketTest {
             // given
             LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
             LocalDateTime now = stageStartTime.minusHours(6);
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(stageStartTime.toLocalDate())
                 .endDate(stageStartTime.toLocalDate())
                 .build();
-            Stage stage = StageFixture.stage()
+            Stage stage = StageFixture.builder()
                 .startTime(stageStartTime)
                 .ticketOpenTime(stageStartTime.minusDays(1))
                 .festival(festival)
                 .build();
-            Ticket ticket = TicketFixture.ticket()
+            Ticket ticket = TicketFixture.builder()
                 .stage(stage)
                 .build();
-            Member member = MemberFixture.member()
+            Member member = MemberFixture.builder()
                 .id(1L)
                 .build();
 

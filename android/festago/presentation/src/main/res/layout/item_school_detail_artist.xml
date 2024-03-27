@@ -12,8 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:background="@color/background_gray_02">
+        android:layout_height="66dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvFestivalImage"

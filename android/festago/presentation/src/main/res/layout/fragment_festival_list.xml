@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
         tools:context=".ui.home.festivallist.FestivalListFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,7 +70,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/containerAppBarFestivalList">
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.festago.festago.presentation.ui.customview.OrientationAwareRecyclerView
                 android:id="@+id/rvFestivalList"
                 visibility="@{uiState.shouldShowSuccess}"
                 android:layout_width="match_parent"

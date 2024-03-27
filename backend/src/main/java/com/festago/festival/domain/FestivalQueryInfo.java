@@ -1,6 +1,7 @@
 package com.festago.festival.domain;
 
 import com.festago.artist.domain.Artist;
+import com.festago.artist.domain.ArtistsSerializer;
 import com.festago.common.domain.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,12 +34,12 @@ public class FestivalQueryInfo extends BaseTimeEntity {
         this.artistInfo = artistInfo;
     }
 
-    public static FestivalQueryInfo of(Festival festival, List<Artist> artists, FestivalInfoSerializer serializer) {
-        return new FestivalQueryInfo(festival.getId(), serializer.serialize(artists));
-    }
-
     public static FestivalQueryInfo create(Long festivalId) {
         return new FestivalQueryInfo(festivalId, "[]");
+    }
+
+    public void updateArtistInfo(List<Artist> artists, ArtistsSerializer serializer) {
+        this.artistInfo = serializer.serialize(artists);
     }
 
     public Long getId() {

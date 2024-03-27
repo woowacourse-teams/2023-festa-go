@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_gray_01"
+        android:clickable="true"
         android:orientation="vertical"
         app:layout_collapseMode="parallax"
         app:layout_collapseParallaxMultiplier="0.0">
@@ -72,9 +73,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
+                android:contentDescription="@null"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_foreground"
-                android:contentDescription="@null" />
+                android:src="@drawable/ic_launcher_foreground" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
