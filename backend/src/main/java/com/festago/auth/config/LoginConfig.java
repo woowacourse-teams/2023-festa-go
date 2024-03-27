@@ -38,8 +38,9 @@ public class LoginConfig implements WebMvcConfigurer {
                 .allowMethod(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT, HttpMethod.PATCH)
                 .interceptor(adminAuthInterceptor())
                 .build())
-            .addPathPatterns("/admin/**", "/js/admin/**")
-            .excludePathPatterns("/admin/login", "/admin/api/login", "/admin/api/initialize");
+            .addPathPatterns("/admin/**")
+            .excludePathPatterns("/admin/api/login", "/admin/api/initialize", "/admin/api/v1/auth/login",
+                "/admin/api/v1/auth/initialize"); // TODO #797 이슈 해결되면 레거시 API 경로 삭제할 것
         registry.addInterceptor(HttpMethodDelegateInterceptor.builder()
                 .allowMethod(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT, HttpMethod.PATCH)
                 .interceptor(memberAuthInterceptor())
