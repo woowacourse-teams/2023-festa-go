@@ -10,7 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.SneakyThrows;
 
-public class MemorySchoolRepository implements SchoolRepository {
+// #809 PR에 MemorySchoolRepository 구현으로 인해 충돌 방지용으로 Temp 이름을 붙임.
+// TODO 위 PR 머지되면 해당 클래스 삭제하고 의존하는 클래스에서 MemorySchoolRepository 의존하도록 변경할 것
+@Deprecated(forRemoval = true)
+public class TempMemorySchoolRepository implements SchoolRepository {
 
     private final ConcurrentHashMap<Long, School> memory = new ConcurrentHashMap<>();
     private final AtomicLong autoIncrement = new AtomicLong();
