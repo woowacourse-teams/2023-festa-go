@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
+import com.festago.bookmark.repository.BookmarkRepository;
 import com.festago.bookmark.repository.MemoryBookmarkRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -14,12 +15,13 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class SchoolBookmarkAppendValidatorTest {
 
-    MemoryBookmarkRepository bookmarkRepository = new MemoryBookmarkRepository();
-    SchoolBookmarkAppendValidator schoolBookmarkAppendValidator = new SchoolBookmarkAppendValidator(bookmarkRepository);
+    BookmarkRepository bookmarkRepository;
+    SchoolBookmarkAppendValidator schoolBookmarkAppendValidator;
 
     @BeforeEach
     void setUp() {
-        bookmarkRepository.clear();
+        bookmarkRepository = new MemoryBookmarkRepository();
+        schoolBookmarkAppendValidator = new SchoolBookmarkAppendValidator(bookmarkRepository);
     }
 
     @Test
