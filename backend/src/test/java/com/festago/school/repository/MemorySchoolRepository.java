@@ -1,10 +1,8 @@
 package com.festago.school.repository;
 
 import com.festago.school.domain.School;
-import com.festago.school.domain.SchoolRegion;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -27,12 +25,6 @@ public class MemorySchoolRepository implements SchoolRepository {
     }
 
     @Override
-    public List<School> findAll() {
-        return db.values().stream()
-            .toList();
-    }
-
-    @Override
     public Optional<School> findById(Long schoolId) {
         return Optional.ofNullable(db.get(schoolId));
     }
@@ -43,24 +35,8 @@ public class MemorySchoolRepository implements SchoolRepository {
     }
 
     @Override
-    public void flush() {
-    }
-
-    @Override
     public boolean existsById(Long id) {
         return db.get(id) != null;
-    }
-
-    @Override
-    public boolean existsByDomainOrName(String domain, String name) {
-        return existsByDomain(domain) || existsByName(name);
-    }
-
-    @Override
-    public List<School> findAllByRegion(SchoolRegion region) {
-        return db.values().stream()
-            .filter(it -> it.getRegion() == region)
-            .toList();
     }
 
     @Override
