@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SchoolBookmarkCommandService {
 
     private final BookmarkRepository bookmarkRepository;
-    private final BookmarkAppendValidator bookmarkAppendValidator;
+    private final SchoolBookmarkAppendValidator schoolBookmarkAppendValidator;
     private final SchoolRepository schoolRepository;
 
     public Long save(Long schoolId, Long memberId) {
@@ -29,7 +29,7 @@ public class SchoolBookmarkCommandService {
         if (!schoolRepository.existsById(schoolId)) {
             throw new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND);
         }
-        bookmarkAppendValidator.validate(BookmarkType.SCHOOL, schoolId, memberId);
+        schoolBookmarkAppendValidator.validate(schoolId, memberId);
     }
 
     public void delete(Long schoolId, Long memberId) {

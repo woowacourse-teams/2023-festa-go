@@ -38,7 +38,7 @@ class SchoolBookmarkCommandIntegrationServiceTest extends ApplicationIntegration
     SchoolBookmarkCommandService schoolBookmarkCommandService;
 
     @MockBean
-    BookmarkAppendValidator bookmarkAppendValidator;
+    SchoolBookmarkAppendValidator schoolBookmarkAppendValidator;
 
     @Test
     void 학교가_존재하지_않으면_예외() {
@@ -59,7 +59,7 @@ class SchoolBookmarkCommandIntegrationServiceTest extends ApplicationIntegration
 
         // then
         assertThat(actual).isPositive();
-        verify(bookmarkAppendValidator, only()).validate(SCHOOL, schoolId, memberId);
+        verify(schoolBookmarkAppendValidator, only()).validate(schoolId, memberId);
     }
 
     @Test
