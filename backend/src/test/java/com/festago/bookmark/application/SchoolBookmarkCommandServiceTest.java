@@ -86,7 +86,6 @@ class SchoolBookmarkCommandServiceTest {
             // then
             assertThat(actual).isPositive();
         }
-
     }
 
     @Test
