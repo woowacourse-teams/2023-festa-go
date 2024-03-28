@@ -35,7 +35,7 @@ class SchoolBookmarkAppendValidatorTest {
         // when && then
         assertThatThrownBy(() -> schoolBookmarkAppendValidator.validate(13L, memberId))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("북마크는 최대 12개까지 가능합니다.");
+            .hasMessage("북마크는 저장 갯수를 초과하였습니다.");
     }
 
     @Test
