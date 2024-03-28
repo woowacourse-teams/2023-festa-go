@@ -41,44 +41,20 @@ public class MemorySchoolRepository implements SchoolRepository {
 
     @Override
     public boolean existsByDomain(String domain) {
-        return existsByField("domain", domain);
+        return db.values().stream()
+            .anyMatch(it -> it.getDomain().equals(domain));
     }
 
     @Override
     public boolean existsByName(String name) {
-        return existsByField("name", name);
+        return db.values().stream()
+            .anyMatch(it -> it.getName().equals(name));
     }
 
     @Override
     public Optional<School> findByName(String name) {
-        return findByField("name", name);
-    }
-
-    @SneakyThrows
-    private Optional<School> findByField(String fieldName, Object value) {
-        for (School school : db.values()) {
-            if (hasFieldValue(school, fieldName, value)) {
-                return Optional.of(school);
-            }
-        }
-        return Optional.empty();
-    }
-
-    @SneakyThrows
-    private boolean existsByField(String fieldName, Object value) {
-        for (School school : db.values()) {
-            if (hasFieldValue(school, fieldName, value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @SneakyThrows
-    private boolean hasFieldValue(School school, String fieldName, Object fieldValue) {
-        Field field = school.getClass()
-            .getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return field.get(school).equals(fieldValue);
+        return db.values().stream()
+            .filter(it -> it.getName().equals(name))
+            .findFirst();
     }
 }
