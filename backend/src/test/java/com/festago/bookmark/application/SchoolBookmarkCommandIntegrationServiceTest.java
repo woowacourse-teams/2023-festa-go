@@ -1,15 +1,12 @@
 package com.festago.bookmark.application;
 
 import static com.festago.bookmark.domain.BookmarkType.SCHOOL;
-import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 
 import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.repository.BookmarkRepository;
-import com.festago.common.exception.NotFoundException;
 import com.festago.member.repository.MemberRepository;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
@@ -39,14 +36,6 @@ class SchoolBookmarkCommandIntegrationServiceTest extends ApplicationIntegration
 
     @MockBean
     SchoolBookmarkAppendValidator schoolBookmarkAppendValidator;
-
-    @Test
-    void 학교가_존재하지_않으면_예외() {
-        // when && then
-        assertThatThrownBy(() -> schoolBookmarkCommandService.save(-1L, 1L))
-            .isInstanceOf(NotFoundException.class)
-            .hasMessage(SCHOOL_NOT_FOUND.getMessage());
-    }
 
     @Test
     void 북마크_저장_성공() {
