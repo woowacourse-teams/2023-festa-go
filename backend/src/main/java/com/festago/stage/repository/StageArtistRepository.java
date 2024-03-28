@@ -18,4 +18,6 @@ public interface StageArtistRepository extends Repository<StageArtist, Long> {
     Set<Long> findAllArtistIdByStageIdIn(@Param("stageIds") List<Long> stageIds);
 
     void deleteByStageId(Long stageId);
+
+    List<StageArtist> findAll();
 }

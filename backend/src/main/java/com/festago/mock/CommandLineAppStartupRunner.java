@@ -3,8 +3,10 @@ package com.festago.mock;
 import com.festago.mock.application.MockDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+@Profile({"dev"})
 @Component
 @RequiredArgsConstructor
 public class CommandLineAppStartupRunner implements CommandLineRunner {

@@ -2,6 +2,7 @@ package com.festago.stage.repository;
 
 import com.festago.stage.domain.Stage;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -55,6 +56,11 @@ public class MemoryStageRepository implements StageRepository {
         return memory.values().stream()
             .filter(stage -> Objects.equals(stage.getFestival().getId(), festivalId))
             .toList();
+    }
+
+    @Override
+    public List<Stage> findAll() {
+        return new ArrayList<>(memory.values());
     }
 
     @Override

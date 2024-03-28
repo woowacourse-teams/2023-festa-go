@@ -19,4 +19,6 @@ public interface StageRepository extends Repository<Stage, Long>, StageRepositor
 
     List<Stage> findAllByFestivalId(Long festivalId);
 
+    List<Stage> findAll();
+
 }

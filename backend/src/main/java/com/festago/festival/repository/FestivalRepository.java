@@ -3,6 +3,7 @@ package com.festago.festival.repository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.repository.Repository;
 
@@ -16,8 +17,10 @@ public interface FestivalRepository extends Repository<Festival, Long> {
     boolean existsBySchoolId(Long schoolId);
 
     Festival save(Festival festival);
-
+    
     Optional<Festival> findById(Long festivalId);
 
     void deleteById(Long festivalId);
+
+    List<Festival> findAll();
 }

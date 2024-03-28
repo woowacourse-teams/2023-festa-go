@@ -1,0 +1,197 @@
+package com.festago.mock.application;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doReturn;
+
+import com.festago.artist.domain.Artist;
+import com.festago.artist.repository.ArtistRepository;
+import com.festago.festival.domain.Festival;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.mock.MockArtist;
+import com.festago.school.domain.School;
+import com.festago.school.domain.SchoolRegion;
+import com.festago.school.repository.SchoolRepository;
+import com.festago.stage.domain.Stage;
+import com.festago.stage.domain.StageArtist;
+import com.festago.stage.repository.StageArtistRepository;
+import com.festago.stage.repository.StageRepository;
+import com.festago.support.ApplicationIntegrationTest;
+import com.festago.mock.config.MockDataConfig;
+import com.festago.support.fixture.SchoolFixture;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
+
+@DisplayNameGeneration(ReplaceUnderscores.class)
+@SuppressWarnings("NonAsciiCharacters")
+@Import(MockDataConfig.class)
+class MockDataServiceTest extends ApplicationIntegrationTest {
+
+    @Autowired
+    ArtistRepository artistRepository;
+
+    @Autowired
+    SchoolRepository schoolRepository;
+
+    @Autowired
+    FestivalRepository festivalRepository;
+
+    @Autowired
+    StageRepository stageRepository;
+
+    @Autowired
+    StageArtistRepository stageArtistRepository;
+
+    @SpyBean
+    FestivalDateGenerator festivalDateGenerator;
+
+    @Autowired
+    MockDataService mockDataService;
+
+    @Nested
+    class 목_데이터_초기화는 {
+
+        @Test
+        void 만약_하나의_학교라도_존재하면_초기화_된_상태로_판단한다() {
+            // given
+            schoolRepository.save(SchoolFixture.builder().build());
+
+            // when
+            mockDataService.initialize();
+            List<School> allSchool = schoolRepository.findAll();
+
+            // then
+            assertThat(allSchool).hasSize(1);
+        }
+
+        @Test
+        void 학교가_없다면_ANY_를_제외한_지역_곱하기_3개만큼의_학교와_MOCK_ARTIST_만큼의_아티스트를_생성한다() {
+            // given
+            mockDataService.initialize();
+            int expectGeneratedSchoolSize = (SchoolRegion.values().length - 1) * 3;
+            int expectArtistSize = MockArtist.values().length;
+
+            // when
+            List<School> allSchool = schoolRepository.findAll();
+            List<Artist> allArtist = artistRepository.findAll();
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(allSchool).hasSize(expectGeneratedSchoolSize);
+                softly.assertThat(allArtist).hasSize(expectArtistSize);
+            });
+        }
+    }
+
+    @Nested
+    class 목_축제_생성_요청은 {
+
+        @Test
+        @Transactional
+        void 존재하는_학교수_만큼의_축제를_만들어_낸다() {
+            // given
+            mockDataService.initialize();
+            List<School> allSchool = schoolRepository.findAll();
+            List<Festival> beforeFestivals = festivalRepository.findAll();
+
+            // when
+            mockDataService.makeMockFestivals(7);
+            List<Festival> afterFestivals = festivalRepository.findAll();
+            List<School> festivalSchools = afterFestivals.stream()
+                .map(festival -> festival.getSchool())
+                .toList();
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(beforeFestivals).hasSize(0);
+                softly.assertThat(afterFestivals).hasSize(allSchool.size());
+                softly.assertThat(festivalSchools).containsAll(allSchool);
+            });
+        }
+
+        @Test
+        void 생성된_모든_축제는_기간은_전달_받은_기간_이내_이다() {
+            // given
+            mockDataService.initialize();
+            mockDataService.makeMockFestivals(1);
+
+            // when
+            List<Festival> allFestival = festivalRepository.findAll();
+
+            // then
+            assertThat(allFestival).allMatch(
+                festival -> festival.getEndDate().until(festival.getStartDate(), ChronoUnit.DAYS) == 0);
+        }
+
+        @Test
+        @Transactional
+        void 무대는_생성된_축제_기간동안_전부_존재한다() {
+            // given
+            LocalDate now = LocalDate.now();
+            doReturn(now).when(festivalDateGenerator)
+                .makeRandomStartDate(anyInt(), any(LocalDate.class));
+            doReturn(now.plusDays(2)).when(festivalDateGenerator)
+                .makeRandomEndDate(anyInt(), any(LocalDate.class), any(LocalDate.class));
+
+            mockDataService.initialize();
+            mockDataService.makeMockFestivals(7);
+            List<Festival> allFestival = festivalRepository.findAll();
+
+            // when
+            List<Stage> allStage = stageRepository.findAll();
+            Map<Festival, List<Stage>> stageByFestival = allStage.stream()
+                .collect(Collectors.groupingBy(Stage::getFestival));
+
+            // then
+            assertThat(stageByFestival.values()).allMatch(stages -> stages.size() == 3);
+        }
+
+        @Test
+        void 같은_축제_속_무대_아티스트_들은_겹치지_않는다() {
+            // given
+            mockDataService.initialize();
+            mockDataService.makeMockFestivals(7);
+
+            List<StageArtist> stageArtists = stageArtistRepository.findAll();
+            List<Stage> allStage = stageRepository.findAll();
+
+            Map<Long, List<StageArtist>> stageArtistByStageId = stageArtists.stream()
+                .collect(Collectors.groupingBy(StageArtist::getStageId));
+            Map<Festival, List<Stage>> stageByFestival = allStage.stream()
+                .collect(Collectors.groupingBy(Stage::getFestival));
+
+            // when
+            Map<Festival, List<StageArtist>> stageArtistsByFestival = new HashMap<>();
+
+            stageByFestival.forEach((festival, stages) -> {
+                List<StageArtist> artistsForFestival = stages.stream()
+                    .map(stage -> stageArtistByStageId.getOrDefault(stage.getId(), Collections.emptyList()))
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+
+                stageArtistsByFestival.put(festival, artistsForFestival);
+            });
+
+
+            // then
+            assertThat(stageArtistsByFestival.values())
+                .allMatch(target -> target.size() != target.stream()
+                    .map(stageArtist -> stageArtist.getArtistId()).distinct().count());
+        }
+    }
+}
