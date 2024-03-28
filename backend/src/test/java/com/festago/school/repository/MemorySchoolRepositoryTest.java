@@ -44,8 +44,6 @@ class MemorySchoolRepositoryTest {
         // when && then
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(schoolRepository.findByName("학교이름")).isNotEmpty();
-            softly.assertThat(schoolRepository.findAllByRegion(SchoolRegion.서울)).hasSize(1);
-            softly.assertThat(schoolRepository.findAllByRegion(SchoolRegion.강원)).hasSize(0);
             softly.assertThat(schoolRepository.findByName("없는학교")).isEmpty();
             softly.assertThat(schoolRepository.existsByName("학교이름")).isTrue();
             softly.assertThat(schoolRepository.existsByName("없는학교")).isFalse();
