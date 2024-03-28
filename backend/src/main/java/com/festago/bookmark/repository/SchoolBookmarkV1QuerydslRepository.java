@@ -21,11 +21,11 @@ public class SchoolBookmarkV1QuerydslRepository extends QueryDslRepositorySuppor
 
     public List<SchoolBookmarkV1Response> findAllByMemberId(Long memberId) {
         return select(new QSchoolBookmarkV1Response(
-                new QSchoolSearchV1Response(school.id, school.name, school.logoUrl), bookmark.createdAt))
+            new QSchoolSearchV1Response(school.id, school.name, school.logoUrl), bookmark.createdAt))
             .from(bookmark)
-            .innerJoin(school).on(school.id.eq(bookmark.resourceId))
-            .where(bookmark.bookmarkType.eq(BookmarkType.SCHOOL)
-                .and(bookmark.memberId.eq(memberId)))
+            .innerJoin(school).on(school.id.eq(bookmark.resourceId)
+                .and(bookmark.memberId.eq(memberId))
+                .and(bookmark.bookmarkType.eq(BookmarkType.SCHOOL)))
             .fetch();
     }
 }
