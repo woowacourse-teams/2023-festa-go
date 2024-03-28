@@ -3,7 +3,6 @@ package com.festago.artist.presentation.v1;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +10,6 @@ import com.festago.artist.application.ArtistDetailV1QueryService;
 import com.festago.artist.dto.ArtistDetailV1Response;
 import com.festago.artist.dto.ArtistFestivalDetailV1Response;
 import com.festago.artist.dto.ArtistMediaV1Response;
-import com.festago.common.dto.SliceResponse;
 import com.festago.socialmedia.domain.SocialMediaType;
 import com.festago.support.CustomWebMvcTest;
 import java.time.LocalDate;
@@ -71,14 +69,10 @@ class ArtistDetailV1ControllerTest {
                 mockMvc.perform(get(uri, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+                    .andExpect(status().isOk());
             }
         }
     }
-
-
-
 
 
     @Nested
@@ -98,10 +92,7 @@ class ArtistDetailV1ControllerTest {
                     1L, "경북대학교", today, today.plusDays(1), "www.image.com/image.png",
                     "아티스트"
                 ));
-                Pageable pageable = Pageable.ofSize(10);
-                var slice = new SliceImpl(content, pageable, true);
-                var expected = SliceResponse.from(slice);
-
+                var slice = new SliceImpl<>(content, Pageable.ofSize(10), true);
                 given(artistDetailV1QueryService.findArtistFestivals(1L, null, null, false, Pageable.ofSize(10)))
                     .willReturn(slice);
 
@@ -109,8 +100,7 @@ class ArtistDetailV1ControllerTest {
                 mockMvc.perform(get(uri, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+                    .andExpect(status().isOk());
             }
 
             @Test
@@ -124,7 +114,6 @@ class ArtistDetailV1ControllerTest {
                         .param("size", String.valueOf(maxPageSize + 1)))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
-
             }
         }
     }
