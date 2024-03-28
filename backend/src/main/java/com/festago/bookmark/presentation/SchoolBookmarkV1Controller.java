@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/bookmarks/schools")
 @Tag(name = "학교 북마크 API V1")
-public class SchoolBookmarkController {
+public class SchoolBookmarkV1Controller {
 
     private final SchoolBookmarkV1QueryService schoolBookmarkV1QueryService;
 

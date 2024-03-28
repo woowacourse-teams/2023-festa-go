@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @CustomWebMvcTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class SchoolBookmarkControllerTest {
+class SchoolBookmarkV1ControllerTest {
 
     @Autowired
     MockMvc mockMvc;
