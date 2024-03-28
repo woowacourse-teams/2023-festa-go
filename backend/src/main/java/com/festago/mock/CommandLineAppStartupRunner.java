@@ -12,9 +12,11 @@ import org.springframework.stereotype.Component;
 public class CommandLineAppStartupRunner implements CommandLineRunner {
 
     private final MockDataService mockDataService;
+    private final MockScheduler mockScheduler;
 
     @Override
     public void run(String... args) {
         mockDataService.initialize();
+        mockScheduler.run();
     }
 }
