@@ -63,18 +63,9 @@ class StageDeleteServiceTest {
                 .ticketOpenTime(ticketOpenTime)
                 .build()
         );
-        에픽하이 = artistRepository.save(ArtistFixture.builder()
-            .name("에픽하이")
-            .build()
-        );
-        소녀시대 = artistRepository.save(ArtistFixture.builder()
-            .name("소녀시대")
-            .build()
-        );
-        뉴진스 = artistRepository.save(ArtistFixture.builder()
-            .name("뉴진스")
-            .build()
-        );
+        에픽하이 = artistRepository.save(ArtistFixture.builder().name("에픽하이").build());
+        소녀시대 = artistRepository.save(ArtistFixture.builder().name("소녀시대").build());
+        뉴진스 = artistRepository.save(ArtistFixture.builder().name("뉴진스").build());
         stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 에픽하이.getId()).build());
         stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 소녀시대.getId()).build());
         stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 뉴진스.getId()).build());
