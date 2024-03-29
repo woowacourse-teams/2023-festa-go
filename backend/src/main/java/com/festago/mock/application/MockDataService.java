@@ -137,7 +137,7 @@ public class MockDataService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.FESTIVAL_NOT_FOUND));
         LocalDate endDate = festival.getEndDate();
         LocalDate dateCursor = festival.getStartDate();
-        while (dateCursor.isAfter(endDate)) {
+        while (dateCursor.isBefore(endDate) || dateCursor.equals(endDate)) {
             makeStage(festival, artists, dateCursor);
             dateCursor = dateCursor.plusDays(1);
         }

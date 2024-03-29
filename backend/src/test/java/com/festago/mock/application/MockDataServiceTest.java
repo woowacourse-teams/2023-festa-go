@@ -2,24 +2,25 @@ package com.festago.mock.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doReturn;
 
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.domain.Festival;
+import com.festago.festival.domain.FestivalQueryInfo;
+import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.mock.MockArtist;
+import com.festago.mock.config.MockDataConfig;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.domain.StageArtist;
+import com.festago.stage.domain.StageQueryInfo;
 import com.festago.stage.repository.StageArtistRepository;
+import com.festago.stage.repository.StageQueryInfoRepository;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.mock.config.MockDataConfig;
 import com.festago.support.fixture.SchoolFixture;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -33,7 +34,6 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +57,12 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
 
     @Autowired
     StageArtistRepository stageArtistRepository;
+
+    @Autowired
+    StageQueryInfoRepository stageQueryInfoRepository;
+
+    @Autowired
+    FestivalInfoRepository festivalInfoRepository;
 
     @Autowired
     MockDataService mockDataService;
@@ -123,6 +129,23 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
         }
 
         @Test
+        void 쿼리_최적화_정보들을_생성한다() {
+            // given
+            mockDataService.initialize();
+            mockDataService.makeMockFestivals(7);
+
+            // when
+            List<StageQueryInfo> stageQueryInfos = stageQueryInfoRepository.findAll();
+            List<FestivalQueryInfo> festivalQueryInfos = festivalInfoRepository.findAll();
+
+            // then
+            assertSoftly(softly -> {
+                assertThat(stageQueryInfos).isNotEmpty();
+                assertThat(festivalQueryInfos).isNotEmpty();
+            });
+        }
+
+        @Test
         void 생성된_모든_축제는_기간은_전달_받은_기간_이내_이다() {
             // given
             mockDataService.initialize();
@@ -154,7 +177,8 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
             // then
             assertThat(stageByFestival.entrySet()).allMatch(festivalListEntry -> {
                 Festival festival = festivalListEntry.getKey();
-                long festivalDuration = festival.getEndDate().until(festival.getStartDate(), ChronoUnit.DAYS) + INCLUDE_FIRST_DATE;
+                long festivalDuration =
+                    festival.getStartDate().until(festival.getEndDate(), ChronoUnit.DAYS) + INCLUDE_FIRST_DATE;
                 return festivalListEntry.getValue().size() == festivalDuration;
             });
         }
@@ -185,11 +209,16 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
                 stageArtistsByFestival.put(festival, artistsForFestival);
             });
 
-
             // then
-            assertThat(stageArtistsByFestival.values())
-                .allMatch(target -> target.size() != target.stream()
-                    .map(stageArtist -> stageArtist.getArtistId()).distinct().count());
+            assertThat(stageArtistsByFestival.keySet())
+                .allMatch(festival -> {
+                    List<StageArtist> stageArtistsValue = stageArtistsByFestival.get(festival);
+                    long uniqueStageArtists = stageArtistsValue.stream()
+                        .map(stageArtist -> stageArtist.getArtistId())
+                        .distinct()
+                        .count();
+                    return stageArtistsValue.size() == uniqueStageArtists;
+                });
         }
     }
 }
