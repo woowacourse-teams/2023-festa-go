@@ -15,7 +15,7 @@ import com.festago.school.application.SchoolCommandService;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.MemberFixture;
+import com.festago.support.fixture.MemberFixture;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,9 +57,9 @@ class FestivalBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegrati
 
     @BeforeEach
     void setUp() {
-        회원A_식별자 = memberRepository.save(MemberFixture.member().socialId("1").nickname("회원A").build()).getId();
-        회원B_식별자 = memberRepository.save(MemberFixture.member().socialId("2").nickname("회원B").build()).getId();
-        회원C_식별자 = memberRepository.save(MemberFixture.member().socialId("3").nickname("회원C").build()).getId();
+        회원A_식별자 = memberRepository.save(MemberFixture.builder().socialId("1").nickname("회원A").build()).getId();
+        회원B_식별자 = memberRepository.save(MemberFixture.builder().socialId("2").nickname("회원B").build()).getId();
+        회원C_식별자 = memberRepository.save(MemberFixture.builder().socialId("3").nickname("회원C").build()).getId();
 
         테코대학교_식별자 = createSchool("테코대학교");
         우테대학교_식별자 = createSchool("우테대학교");

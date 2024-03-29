@@ -14,7 +14,7 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.festival.repository.MemoryFestivalRepository;
-import com.festago.support.FestivalFixture;
+import com.festago.support.fixture.FestivalFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -39,7 +39,7 @@ class FestivalBookmarkCommandServiceTest {
         bookmarkRepository = new MemoryBookmarkRepository();
         festivalRepository = new MemoryFestivalRepository();
         festivalBookmarkCommandService = new FestivalBookmarkCommandService(bookmarkRepository, festivalRepository);
-        축제 = festivalRepository.save(FestivalFixture.festival().build());
+        축제 = festivalRepository.save(FestivalFixture.builder().build());
     }
 
     @Nested
@@ -57,7 +57,7 @@ class FestivalBookmarkCommandServiceTest {
         void 기존에_저장된_북마크의_개수가_12개_이상이면_예외가_발생한다() {
             // given
             for (long i = 1; i <= 12; i++) {
-                Festival festival = festivalRepository.save(FestivalFixture.festival().build());
+                Festival festival = festivalRepository.save(FestivalFixture.builder().build());
                 bookmarkRepository.save(new Bookmark(BookmarkType.FESTIVAL, festival.getId(), 회원_식별자));
             }
 
