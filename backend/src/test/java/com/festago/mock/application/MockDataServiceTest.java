@@ -42,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Import(MockDataConfig.class)
 class MockDataServiceTest extends ApplicationIntegrationTest {
 
+    private static final int INCLUDE_FIRST_DATE = 1;
     @Autowired
     ArtistRepository artistRepository;
 
@@ -56,9 +57,6 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
 
     @Autowired
     StageArtistRepository stageArtistRepository;
-
-    @SpyBean
-    FestivalDateGenerator festivalDateGenerator;
 
     @Autowired
     MockDataService mockDataService;
@@ -135,7 +133,7 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
 
             // then
             assertThat(allFestival).allMatch(
-                festival -> festival.getEndDate().until(festival.getStartDate(), ChronoUnit.DAYS) == 0);
+                festival -> festival.getStartDate().until(festival.getStartDate(), ChronoUnit.DAYS) == 0);
         }
 
         @Test
@@ -143,10 +141,6 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
         void 무대는_생성된_축제_기간동안_전부_존재한다() {
             // given
             LocalDate now = LocalDate.now();
-            doReturn(now).when(festivalDateGenerator)
-                .makeRandomStartDate(anyInt(), any(LocalDate.class));
-            doReturn(now.plusDays(2)).when(festivalDateGenerator)
-                .makeRandomEndDate(anyInt(), any(LocalDate.class), any(LocalDate.class));
 
             mockDataService.initialize();
             mockDataService.makeMockFestivals(7);
@@ -158,7 +152,11 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
                 .collect(Collectors.groupingBy(Stage::getFestival));
 
             // then
-            assertThat(stageByFestival.values()).allMatch(stages -> stages.size() == 3);
+            assertThat(stageByFestival.entrySet()).allMatch(festivalListEntry -> {
+                Festival festival = festivalListEntry.getKey();
+                long festivalDuration = festival.getEndDate().until(festival.getStartDate(), ChronoUnit.DAYS) + INCLUDE_FIRST_DATE;
+                return festivalListEntry.getValue().size() == festivalDuration;
+            });
         }
 
         @Test

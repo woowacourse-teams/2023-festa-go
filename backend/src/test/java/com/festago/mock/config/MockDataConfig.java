@@ -5,6 +5,7 @@ import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.mock.CommandLineAppStartupRunner;
+import com.festago.mock.MockScheduler;
 import com.festago.mock.application.FestivalDateGenerator;
 import com.festago.mock.application.MockDataService;
 import com.festago.mock.application.RandomFestivalDateGenerator;
@@ -57,7 +58,12 @@ public class MockDataConfig {
     }
 
     @Bean
+    public MockScheduler mockScheduler(){
+        return new MockScheduler(mockDataService());
+
+    }
+    @Bean
     public CommandLineAppStartupRunner commandLineAppStartupRunner(){
-        return new CommandLineAppStartupRunner(mockDataService());
+        return new CommandLineAppStartupRunner(mockDataService(), mockScheduler());
     }
 }
