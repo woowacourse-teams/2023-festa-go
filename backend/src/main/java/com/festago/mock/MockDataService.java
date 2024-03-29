@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MockDataService {
 
-    private static final AtomicLong FESTIVAL_SEQUENCE = new AtomicLong();
+    private static final AtomicLong festivalSequence = new AtomicLong();
     private static final long STAGE_START_HOUR = 19L;
     private static final int STAGE_ARTIST_COUNT = 3;
     private static final int SCHOOL_PER_REGION = 3;
@@ -118,7 +118,7 @@ public class MockDataService {
         LocalDate endDate = mockFestivalDateGenerator.makeRandomEndDate(availableFestivalDuration, now, startDate);
 
         Long newFestivalId = festivalCommandFacadeService.createFestival(new FestivalCreateCommand(
-            school.getName() + "대 축제" + FESTIVAL_SEQUENCE.incrementAndGet(),
+            school.getName() + "대 축제" + festivalSequence.incrementAndGet(),
             startDate,
             endDate,
             "https://picsum.photos/536/354",
