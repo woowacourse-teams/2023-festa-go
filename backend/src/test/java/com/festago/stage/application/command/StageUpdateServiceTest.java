@@ -12,11 +12,12 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.common.exception.ValidException;
 import com.festago.festival.domain.Festival;
 import com.festago.stage.domain.Stage;
-import com.festago.stage.domain.StageArtist;
 import com.festago.stage.dto.command.StageUpdateCommand;
 import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageRepository;
+import com.festago.support.fixture.ArtistFixture;
 import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.StageArtistFixture;
 import com.festago.support.fixture.StageFixture;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,7 +33,6 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class StageUpdateServiceTest {
 
-    private static final String PROFILE_IMAGE_URL = "https://image.com/profileImage.png";
     MemoryStageRepository stageRepository = new MemoryStageRepository();
     MemoryArtistRepository artistRepository = new MemoryArtistRepository();
     MemoryStageArtistRepository stageArtistRepository = new MemoryStageArtistRepository();
@@ -66,12 +66,21 @@ class StageUpdateServiceTest {
                 .ticketOpenTime(ticketOpenTime)
                 .build()
         );
-        에픽하이 = artistRepository.save(new Artist("에픽하이", PROFILE_IMAGE_URL));
-        소녀시대 = artistRepository.save(new Artist("소녀시대", PROFILE_IMAGE_URL));
-        뉴진스 = artistRepository.save(new Artist("뉴진스", PROFILE_IMAGE_URL));
-        stageArtistRepository.save(new StageArtist(테코대학교_축제_공연.getId(), 에픽하이.getId()));
-        stageArtistRepository.save(new StageArtist(테코대학교_축제_공연.getId(), 소녀시대.getId()));
-        stageArtistRepository.save(new StageArtist(테코대학교_축제_공연.getId(), 뉴진스.getId()));
+        에픽하이 = artistRepository.save(ArtistFixture.builder()
+            .name("에픽하이")
+            .build()
+        );
+        소녀시대 = artistRepository.save(ArtistFixture.builder()
+            .name("소녀시대")
+            .build()
+        );
+        뉴진스 = artistRepository.save(ArtistFixture.builder()
+            .name("뉴진스")
+            .build()
+        );
+        stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 에픽하이.getId()).build());
+        stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 소녀시대.getId()).build());
+        stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 뉴진스.getId()).build());
     }
 
     @Nested
@@ -115,7 +124,7 @@ class StageUpdateServiceTest {
         void ArtistIds의_개수가_10개_이하이면_예외가_발생하지_않는다() {
             // given
             List<Long> artistIds = LongStream.rangeClosed(1, 10)
-                .mapToObj(it -> artistRepository.save(new Artist("Artist " + it, PROFILE_IMAGE_URL)))
+                .mapToObj(it -> artistRepository.save(ArtistFixture.builder().build()))
                 .map(Artist::getId)
                 .toList();
             var command = new StageUpdateCommand(
