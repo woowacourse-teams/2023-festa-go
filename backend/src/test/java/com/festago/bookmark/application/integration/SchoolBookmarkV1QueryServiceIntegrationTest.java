@@ -1,9 +1,9 @@
-package com.festago.bookmark.application;
+package com.festago.bookmark.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.festago.bookmark.domain.Bookmark;
+import com.festago.bookmark.application.SchoolBookmarkV1QueryService;
 import com.festago.bookmark.domain.BookmarkType;
 import com.festago.bookmark.dto.v1.SchoolBookmarkV1Response;
 import com.festago.bookmark.repository.BookmarkRepository;
@@ -11,6 +11,7 @@ import com.festago.member.repository.MemberRepository;
 import com.festago.school.dto.v1.SchoolSearchV1Response;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
+import com.festago.support.fixture.BookmarkFixture;
 import com.festago.support.fixture.MemberFixture;
 import com.festago.support.fixture.SchoolFixture;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -79,6 +80,12 @@ class SchoolBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegration
     }
 
     private void saveBookmark(Long schoolId, Long memberId) {
-        bookmarkRepository.save(new Bookmark(BookmarkType.SCHOOL, schoolId, memberId));
+        bookmarkRepository.save(
+            BookmarkFixture.builder()
+                .bookmarkType(BookmarkType.SCHOOL)
+                .resourceId(schoolId)
+                .memberId(memberId)
+                .build()
+        );
     }
 }

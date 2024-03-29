@@ -1,10 +1,10 @@
-package com.festago.bookmark.application;
+package com.festago.bookmark.application.integration;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
-import com.festago.bookmark.domain.Bookmark;
+import com.festago.bookmark.application.ArtistBookmarkV1QueryService;
 import com.festago.bookmark.domain.BookmarkType;
 import com.festago.bookmark.dto.v1.ArtistBookmarkV1Response;
 import com.festago.bookmark.repository.BookmarkRepository;
@@ -14,10 +14,10 @@ import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.fixture.ArtistFixture;
+import com.festago.support.fixture.BookmarkFixture;
 import com.festago.support.fixture.MemberFixture;
 import com.festago.support.fixture.SchoolFixture;
 import java.util.List;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistBookmarkQueryV1ServiceTest extends ApplicationIntegrationTest {
+class ArtistBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     ArtistRepository artistRepository;
@@ -77,10 +77,9 @@ class ArtistBookmarkQueryV1ServiceTest extends ApplicationIntegrationTest {
     @Test
     void 유저의_아티스트_북마크_목록을_반환한다() {
         // given
-        bookmarkRepository.save(new Bookmark(BookmarkType.ARTIST, 브리.getId(), 푸우.getId()));
-        bookmarkRepository.save(new Bookmark(BookmarkType.ARTIST, 네오.getId(), 푸우.getId()));
-
-        bookmarkRepository.save(new Bookmark(BookmarkType.ARTIST, 브라운.getId(), 오리.getId()));
+        createBookmark(브리.getId(), 푸우.getId());
+        createBookmark(네오.getId(), 푸우.getId());
+        createBookmark(브라운.getId(), 오리.getId());
 
         // when
         List<ArtistBookmarkV1Response> actual = artistBookmarkV1QueryService.findArtistBookmarksByMemberId(
@@ -96,11 +95,16 @@ class ArtistBookmarkQueryV1ServiceTest extends ApplicationIntegrationTest {
     @Test
     void 북마크들_중_아티스트에_대한_북마크만_가져온다() {
         // given
+        createBookmark(브리.getId(), 푸우.getId());
+        createBookmark(네오.getId(), 푸우.getId());
         School school = schoolRepository.save(SchoolFixture.builder().build());
-
-        bookmarkRepository.save(new Bookmark(BookmarkType.ARTIST, 브리.getId(), 푸우.getId()));
-        bookmarkRepository.save(new Bookmark(BookmarkType.ARTIST, 네오.getId(), 푸우.getId()));
-        bookmarkRepository.save(new Bookmark(BookmarkType.SCHOOL, school.getId(), 푸우.getId()));
+        bookmarkRepository.save(
+            BookmarkFixture.builder()
+                .bookmarkType(BookmarkType.SCHOOL)
+                .resourceId(school.getId())
+                .memberId(푸우.getId())
+                .build()
+        );
 
         // when
         List<ArtistBookmarkV1Response> actual = artistBookmarkV1QueryService.findArtistBookmarksByMemberId(
@@ -111,5 +115,14 @@ class ArtistBookmarkQueryV1ServiceTest extends ApplicationIntegrationTest {
             softly.assertThat(actual).hasSize(2);
             softly.assertThat(actual).extracting("artistInfo").extracting("name").contains("브리", "네오");
         });
+    }
+
+    public void createBookmark(Long resourceId, Long memberId) {
+        bookmarkRepository.save(BookmarkFixture.builder()
+            .bookmarkType(BookmarkType.ARTIST)
+            .resourceId(resourceId)
+            .memberId(memberId)
+            .build()
+        );
     }
 }
