@@ -9,25 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
-import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
+import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragmentDirections.actionFestivalListFragmentToSchoolDetailFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
-import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFilterUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
-import com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment
+import com.festago.festago.presentation.ui.notificationlist.NotificationListActivity
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FestivalListFragment : Fragment() {
-
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
@@ -63,10 +61,15 @@ class FestivalListFragment : Fragment() {
                 updateUi(it)
             }
         }
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect {
+                handleEvent(it)
+            }
+        }
     }
 
     private fun initView() {
-        vm.loadFestivals()
+        vm.initFestivalList()
         initViewPager()
         initRecyclerView()
         initRefresh()
@@ -74,29 +77,56 @@ class FestivalListFragment : Fragment() {
 
     private fun initRefresh() {
         binding.srlFestivalList.setOnRefreshListener {
-            vm.loadFestivals()
+            vm.initFestivalList()
             binding.srlFestivalList.isRefreshing = false
         }
+        binding.srlFestivalList.setDistanceToTriggerSync(400)
         binding.ivSearch.setOnClickListener { // 임시 연결
             showSchoolDetail()
+        }
+        binding.ivAlarm.setOnClickListener {
+            showNotificationList()
         }
     }
 
     private fun initViewPager() {
         festivalListAdapter = FestivalListAdapter(
-            // TODO: Navigation으로 변경
             onArtistClick = { artistId ->
-                requireActivity().supportFragmentManager.commit {
-                    add(R.id.fcvHomeContainer, ArtistDetailFragment.newInstance(artistId))
-                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
-                    addToBackStack(null)
-                }
+                findNavController().navigate(
+                    FestivalListFragmentDirections.actionFestivalListFragmentToArtistDetailFragment(
+                        artistId,
+                    ),
+                )
             },
         )
         binding.rvFestivalList.adapter = festivalListAdapter
     }
 
     private fun initRecyclerView() {
+        initScrollEvent()
+        initDecoration()
+    }
+
+    private fun initScrollEvent() {
+        binding.rvFestivalList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val festivalListUiState = vm.uiState.value as? FestivalListUiState.Success ?: return
+                if (festivalListUiState.isLastPage) return
+
+                val lastVisibleItemPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+
+                val itemTotalCount = recyclerView.adapter!!.itemCount - 1
+                if (lastVisibleItemPosition == itemTotalCount) {
+                    vm.loadFestivals()
+                }
+            }
+        })
+    }
+
+    private fun initDecoration() {
         binding.rvFestivalList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
@@ -129,27 +159,40 @@ class FestivalListFragment : Fragment() {
         }
     }
 
+    private fun handleEvent(event: FestivalListEvent) {
+        when (event) {
+            is FestivalListEvent.ShowFestivalDetail -> {
+                findNavController().navigate(
+                    FestivalListFragmentDirections.actionFestivalListFragmentToFestivalDetailFragment(
+                        event.festivalId,
+                    ),
+                )
+            }
+        }
+    }
+
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
-        festivalListAdapter.submitList(
-            listOf(
-                uiState.popularFestivals,
-                FestivalTabUiState {
-                    val festivalFilter = when (it) {
-                        0 -> FestivalFilterUiState.PROGRESS
-                        1 -> FestivalFilterUiState.PLANNED
-                        else -> FestivalFilterUiState.PROGRESS
-                    }
-                    vm.loadFestivals(festivalFilter)
-                },
-            ) + uiState.festivals,
-        )
+        val items = uiState.getItems()
+        festivalListAdapter.submitList(items)
+    }
+
+    private fun FestivalListUiState.Success.getItems(): List<Any> {
+        return mutableListOf<Any>().apply {
+            if (popularFestivalUiState.festivals.isNotEmpty()) {
+                add(popularFestivalUiState)
+            }
+            add(FestivalTabUiState(festivalFilter) { vm.loadFestivals(it) })
+            addAll(festivals)
+            if (!isLastPage) add(FestivalMoreItemUiState)
+        }.toList()
     }
 
     private fun showSchoolDetail() {
-        activity?.supportFragmentManager!!.beginTransaction()
-            .replace(R.id.fcvHomeContainer, SchoolDetailFragment.newInstance(0))
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(actionFestivalListFragmentToSchoolDetailFragment(0))
+    }
+
+    private fun showNotificationList() {
+        startActivity(NotificationListActivity.getIntent(requireContext()))
     }
 
     override fun onDestroyView() {

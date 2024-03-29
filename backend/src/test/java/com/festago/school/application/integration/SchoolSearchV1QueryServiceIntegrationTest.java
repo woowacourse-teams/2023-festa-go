@@ -7,7 +7,7 @@ import com.festago.school.domain.School;
 import com.festago.school.dto.v1.SchoolSearchV1Response;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.SchoolFixture;
+import com.festago.support.fixture.SchoolFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -32,9 +32,9 @@ class SchoolSearchV1QueryServiceIntegrationTest extends ApplicationIntegrationTe
 
     @BeforeEach
     void setUp() {
-        테코대학교 = schoolRepository.save(SchoolFixture.school().name("테코대학교").domain("teco.ac.kr").build());
-        테코여자대학교 = schoolRepository.save(SchoolFixture.school().name("테코여자대학교").domain("tecowoman.ac.kr").build());
-        우테대학교 = schoolRepository.save(SchoolFixture.school().name("우테대학교").domain("woote.ac.kr").build());
+        테코대학교 = schoolRepository.save(SchoolFixture.builder().name("테코대학교").domain("teco.ac.kr").build());
+        테코여자대학교 = schoolRepository.save(SchoolFixture.builder().name("테코여자대학교").domain("tecowoman.ac.kr").build());
+        우테대학교 = schoolRepository.save(SchoolFixture.builder().name("우테대학교").domain("woote.ac.kr").build());
     }
 
     @Test

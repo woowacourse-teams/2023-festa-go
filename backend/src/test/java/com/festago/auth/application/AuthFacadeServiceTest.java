@@ -12,7 +12,7 @@ import com.festago.auth.dto.LoginMemberDto;
 import com.festago.auth.dto.LoginResponse;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
 import com.festago.member.domain.Member;
-import com.festago.support.MemberFixture;
+import com.festago.support.fixture.MemberFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -44,7 +44,7 @@ class AuthFacadeServiceTest {
 
     @Test
     void 로그인() {
-        Member member = MemberFixture.member()
+        Member member = MemberFixture.builder()
             .id(1L)
             .build();
 

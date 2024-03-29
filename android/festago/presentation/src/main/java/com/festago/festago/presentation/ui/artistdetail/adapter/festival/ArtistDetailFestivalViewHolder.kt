@@ -12,27 +12,25 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ItemArtistDetailFestivalBinding
 import com.festago.festago.presentation.ui.artistdetail.adapter.artistlist.ArtistAdapter
-import com.festago.festago.presentation.ui.artistdetail.uistate.StageUiState
+import com.festago.festago.presentation.ui.artistdetail.uistate.FestivalItemUiState
 import java.time.LocalDate
 
-class ArtistDetailFestivalViewHolder(
-    private val binding: ItemArtistDetailFestivalBinding,
-    onArtistClick: (Long) -> Unit,
-) : RecyclerView.ViewHolder(binding.root) {
-    private val artistAdapter = ArtistAdapter(onArtistClick)
+class ArtistDetailFestivalViewHolder(private val binding: ItemArtistDetailFestivalBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    private val artistAdapter = ArtistAdapter()
 
     init {
         binding.rvFestivalArtists.adapter = artistAdapter
         binding.rvFestivalArtists.addItemDecoration(ArtistItemDecoration())
     }
 
-    fun bind(item: StageUiState) {
+    fun bind(item: FestivalItemUiState) {
         binding.item = item
         artistAdapter.submitList(item.artists)
         bindDDayView(item)
     }
 
-    private fun bindDDayView(item: StageUiState) {
+    private fun bindDDayView(item: FestivalItemUiState) {
         val context = binding.root.context
 
         val dDayView = binding.tvFestivalDDay
@@ -89,13 +87,13 @@ class ArtistDetailFestivalViewHolder(
     }
 
     companion object {
-        fun of(parent: ViewGroup, onArtistClick: (Long) -> Unit): ArtistDetailFestivalViewHolder {
+        fun of(parent: ViewGroup): ArtistDetailFestivalViewHolder {
             val binding = ItemArtistDetailFestivalBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return ArtistDetailFestivalViewHolder(binding, onArtistClick)
+            return ArtistDetailFestivalViewHolder(binding)
         }
     }
 }

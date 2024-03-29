@@ -7,7 +7,8 @@
     <string name="home_bottom_nav_bookmark">북마크</string>
     <string name="home_bottom_nav_my_page">마이페이지</string>
     <string name="home_back_pressed">한 번 더 누르면 앱이 종료됩니다</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- Strings related to festival fist -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="festival_list_tv_popular_festival_title">요즘 뜨는 축제</string>
     <string name="festival_list_tv_date_range_format">%s - %s</string>
@@ -21,5 +22,15 @@
 
     <!-- String related to artist detail -->
     <string name="artist_detail_tv_dday_format">D%1$s</string>
+
+    <!-- String related to notification list-->
+    <string name="notification_list_tv_notification_app_bar">알림</string>
+    <string name="notification_list_tv_no_notification">아직 도착한 알림이 없어요</string>
+    <string name="notification_list_tv_no_notification_explain">새로운 소식이 도착하면 알려드릴게요</string>
+
+    <!-- String related to festival detail -->
+    <string name="festival_detail_tv_dday_in_progress">진행 중</string>
+    <string name="festival_detail_tv_dday_format">D%1$s</string>
+    <string name="festival_detail_tv_dday_end">종료</string>
 
 </resources>

@@ -3,6 +3,7 @@ package com.festago.festago.data.repository
 import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
+import com.festago.festago.domain.model.festival.FestivalDetail
 import com.festago.festago.domain.model.festival.FestivalFilter
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.festival.PopularFestivals
@@ -36,6 +37,12 @@ class FestivalDefaultRepository @Inject constructor(
                 lastStartDate = lastStartDate,
                 size = size,
             )
+        }.onSuccessOrCatch { it.toDomain() }
+    }
+
+    override suspend fun loadFestivalDetail(id: Long): Result<FestivalDetail> {
+        return runCatchingResponse {
+            festivalRetrofitService.getFestivalDetail(id)
         }.onSuccessOrCatch { it.toDomain() }
     }
 }

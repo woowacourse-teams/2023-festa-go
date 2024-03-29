@@ -2,6 +2,7 @@ package com.festago.auth.application;
 
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
+import com.festago.auth.dto.event.MemberDeletedEvent;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.member.domain.Member;
@@ -9,6 +10,7 @@ import com.festago.member.repository.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final MemberRepository memberRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public LoginMemberDto login(UserInfo userInfo) {
         Optional<Member> originMember =
@@ -40,6 +43,7 @@ public class AuthService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
         logDeleteMember(member);
         memberRepository.delete(member);
+        eventPublisher.publishEvent(new MemberDeletedEvent(member));
     }
 
     private void logDeleteMember(Member member) {

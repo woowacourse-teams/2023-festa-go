@@ -34,13 +34,14 @@ public class Artist {
         this(null, name, profileImage, DEFAULT_URL);
     }
 
-    public Artist(Long id, String name, String profileImage) {
-        this(id, name, profileImage, DEFAULT_URL);
+    public Artist(String name, String profileImage, String backgroundImageUrl) {
+        this(null, name, profileImage, backgroundImageUrl);
     }
 
-    public void update(String name, String profileImage) {
+    public void update(String name, String profileImage, String backgroundImageUrl) {
         this.name = name;
         this.profileImage = profileImage;
+        this.backgroundImageUrl = backgroundImageUrl;
     }
 
     public Long getId() {
