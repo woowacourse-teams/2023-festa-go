@@ -1,4 +1,4 @@
-package com.festago.bookmark.dto;
+package com.festago.bookmark.dto.v1;
 
 import com.festago.festival.dto.FestivalV1Response;
 import com.querydsl.core.annotations.QueryProjection;

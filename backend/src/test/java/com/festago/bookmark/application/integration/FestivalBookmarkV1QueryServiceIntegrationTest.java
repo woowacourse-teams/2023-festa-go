@@ -5,7 +5,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.bookmark.application.FestivalBookmarkV1QueryService;
 import com.festago.bookmark.domain.BookmarkType;
-import com.festago.bookmark.dto.FestivalBookmarkV1Response;
+import com.festago.bookmark.dto.v1.FestivalBookmarkV1Response;
 import com.festago.bookmark.repository.BookmarkRepository;
 import com.festago.bookmark.repository.FestivalBookmarkOrder;
 import com.festago.festival.dto.FestivalV1Response;

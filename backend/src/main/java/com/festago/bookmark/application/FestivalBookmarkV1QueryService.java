@@ -1,6 +1,6 @@
 package com.festago.bookmark.application;
 
-import com.festago.bookmark.dto.FestivalBookmarkV1Response;
+import com.festago.bookmark.dto.v1.FestivalBookmarkV1Response;
 import com.festago.bookmark.repository.FestivalBookmarkOrder;
 import com.festago.bookmark.repository.FestivalBookmarkV1QueryDslRepository;
 import java.util.List;

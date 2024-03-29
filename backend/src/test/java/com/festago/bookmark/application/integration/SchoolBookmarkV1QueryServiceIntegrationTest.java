@@ -5,10 +5,10 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.bookmark.application.SchoolBookmarkV1QueryService;
 import com.festago.bookmark.domain.BookmarkType;
+import com.festago.bookmark.dto.v1.SchoolBookmarkInfoV1Response;
 import com.festago.bookmark.dto.v1.SchoolBookmarkV1Response;
 import com.festago.bookmark.repository.BookmarkRepository;
 import com.festago.member.repository.MemberRepository;
-import com.festago.school.dto.v1.SchoolSearchV1Response;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.fixture.BookmarkFixture;
@@ -59,8 +59,8 @@ class SchoolBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegration
             softly.assertThat(actual).allSatisfy(it -> assertThat(it).hasNoNullFieldsOrProperties());
             softly.assertThat(actual).map(SchoolBookmarkV1Response::school)
                 .containsExactly(
-                    new SchoolSearchV1Response(학교A_ID, "A대학교", "https://www.festago.com/A.png"),
-                    new SchoolSearchV1Response(학교B_ID, "B대학교", "https://www.festago.com/B.png")
+                    new SchoolBookmarkInfoV1Response(학교A_ID, "A대학교", "https://www.festago.com/A.png"),
+                    new SchoolBookmarkInfoV1Response(학교B_ID, "B대학교", "https://www.festago.com/B.png")
                 );
         });
     }

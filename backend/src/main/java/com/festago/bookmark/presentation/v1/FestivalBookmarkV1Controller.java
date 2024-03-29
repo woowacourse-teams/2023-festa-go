@@ -3,7 +3,7 @@ package com.festago.bookmark.presentation.v1;
 import com.festago.auth.annotation.Member;
 import com.festago.auth.annotation.MemberAuth;
 import com.festago.bookmark.application.FestivalBookmarkV1QueryService;
-import com.festago.bookmark.dto.FestivalBookmarkV1Response;
+import com.festago.bookmark.dto.v1.FestivalBookmarkV1Response;
 import com.festago.bookmark.repository.FestivalBookmarkOrder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

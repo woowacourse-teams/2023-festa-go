@@ -7,8 +7,8 @@ import static com.festago.school.domain.QSchool.school;
 
 import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
-import com.festago.bookmark.dto.FestivalBookmarkV1Response;
-import com.festago.bookmark.dto.QFestivalBookmarkV1Response;
+import com.festago.bookmark.dto.v1.FestivalBookmarkV1Response;
+import com.festago.bookmark.dto.v1.QFestivalBookmarkV1Response;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.festival.dto.QFestivalV1Response;
 import com.festago.festival.dto.QSchoolV1Response;
