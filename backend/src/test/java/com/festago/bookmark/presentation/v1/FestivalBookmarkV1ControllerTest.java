@@ -36,6 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class FestivalBookmarkV1ControllerTest {
 
     private static final String TOKEN = "Bearer token";
+
     @Autowired
     ObjectMapper objectMapper;
 
@@ -48,7 +49,7 @@ class FestivalBookmarkV1ControllerTest {
     @Nested
     class 축제_북마크_축제_식별자_목록_조회 {
 
-        final String uri = "/api/v1/bookmark/festivals/ids";
+        final String uri = "/api/v1/bookmarks/festivals/ids";
 
         @Nested
         @DisplayName("GET " + uri)
@@ -81,7 +82,7 @@ class FestivalBookmarkV1ControllerTest {
     @Nested
     class 축제_북마크_축제_목록_조회 {
 
-        final String uri = "/api/v1/bookmark/festivals";
+        final String uri = "/api/v1/bookmarks/festivals";
 
         @Nested
         @DisplayName("GET " + uri)
@@ -137,7 +138,7 @@ class FestivalBookmarkV1ControllerTest {
     @Nested
     class 축제_북마크_등록 {
 
-        final String uri = "/api/v1/bookmark/festivals/{festivalId}";
+        final String uri = "/api/v1/bookmarks/festivals/{festivalId}";
 
         Long festivalId = 1L;
 
@@ -166,7 +167,7 @@ class FestivalBookmarkV1ControllerTest {
     @Nested
     class 축제_북마크_삭제 {
 
-        final String uri = "/api/v1/bookmark/festivals/{festivalId}";
+        final String uri = "/api/v1/bookmarks/festivals/{festivalId}";
 
         Long festivalId = 1L;
 

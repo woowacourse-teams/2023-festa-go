@@ -1,6 +1,7 @@
 package com.festago.bookmark.presentation.v1;
 
 import com.festago.auth.annotation.Member;
+import com.festago.auth.annotation.MemberAuth;
 import com.festago.bookmark.application.FestivalBookmarkCommandService;
 import com.festago.bookmark.application.FestivalBookmarkV1QueryService;
 import com.festago.bookmark.dto.FestivalBookmarkV1Response;
@@ -20,13 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/bookmark/festivals")
+@RequestMapping("/api/v1/bookmarks/festivals")
 @Tag(name = "축제 북마크 V1")
 public class FestivalBookmarkV1Controller {
 
     private final FestivalBookmarkV1QueryService festivalBookmarkV1QueryService;
     private final FestivalBookmarkCommandService festivalBookmarkCommandService;
 
+    @MemberAuth
     @GetMapping("/ids")
     @Operation(description = "북마크 된 축제의 식별자 목록을 조회한다.", summary = "북마크 된 축제 식별자 목록 조회")
     public ResponseEntity<List<Long>> findBookmarkedFestivalIds(
@@ -36,6 +38,7 @@ public class FestivalBookmarkV1Controller {
             .body(festivalBookmarkV1QueryService.findBookmarkedFestivalIds(memberId));
     }
 
+    @MemberAuth
     @GetMapping
     @Operation(description = "축제의 식별자 목록으로 북마크 된 축제의 목록을 조회한다.", summary = "축제의 식별자 목록으로 북마크 된 축제의 목록 조회")
     public ResponseEntity<List<FestivalBookmarkV1Response>> findBookmarkedFestivals(
@@ -51,6 +54,7 @@ public class FestivalBookmarkV1Controller {
             ));
     }
 
+    @MemberAuth
     @PutMapping("/{festivalId}")
     @Operation(description = "축제의 식별자로 축제 북마크를 등록한다.", summary = "축제 북마크 등록")
     public ResponseEntity<Void> putFestivalBookmark(
@@ -62,6 +66,7 @@ public class FestivalBookmarkV1Controller {
             .build();
     }
 
+    @MemberAuth
     @DeleteMapping("/{festivalId}")
     @Operation(description = "축제의 식별자로 축제 북마크를 삭제한다.", summary = "축제 북마크 삭제")
     public ResponseEntity<Void> deleteFestivalBookmark(

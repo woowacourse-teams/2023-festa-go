@@ -1,4 +1,4 @@
-package com.festago.bookmark.presentation;
+package com.festago.bookmark.presentation.v1;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -7,11 +7,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -19,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class ArtistBookmarkV1ControllerTest {
+
+    private static final String TOKEN = "Bearer token";
 
     @Autowired
     MockMvc mockMvc;
@@ -37,6 +40,7 @@ class ArtistBookmarkV1ControllerTest {
             void 요청을_보내면_200_응답을_반환한다() throws Exception {
                 // when & then
                 mockMvc.perform(get(uri)
+                        .header(HttpHeaders.AUTHORIZATION, TOKEN)
                         .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isOk());
