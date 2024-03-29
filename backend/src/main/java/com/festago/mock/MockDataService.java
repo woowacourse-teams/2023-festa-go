@@ -3,18 +3,19 @@ package com.festago.mock;
 import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.command.ArtistCreateCommand;
-import com.festago.artist.repository.ArtistRepository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.application.command.FestivalCommandFacadeService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.command.FestivalCreateCommand;
-import com.festago.festival.repository.FestivalRepository;
+;
+import com.festago.mock.repository.ForMockArtistRepository;
+import com.festago.mock.repository.ForMockFestivalRepository;
+import com.festago.mock.repository.ForMockSchoolRepository;
 import com.festago.school.application.SchoolCommandService;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
-import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.application.command.StageCommandFacadeService;
 import com.festago.stage.dto.command.StageCreateCommand;
 import java.time.LocalDate;
@@ -39,11 +40,12 @@ public class MockDataService {
     private static final AtomicLong FESTIVAL_SEQUENCE = new AtomicLong();
     private static final long STAGE_START_HOUR = 19L;
     private static final int STAGE_ARTIST_COUNT = 3;
+    private static final int SCHOOL_PER_REGION = 3;
 
-    private final FestivalDateGenerator festivalDateGenerator;
-    private final SchoolRepository schoolRepository;
-    private final ArtistRepository artistRepository;
-    private final FestivalRepository festivalRepository;
+    private final MockFestivalDateGenerator mockFestivalDateGenerator;
+    private final ForMockSchoolRepository schoolRepository;
+    private final ForMockArtistRepository artistRepository;
+    private final ForMockFestivalRepository festivalRepository;
     private final FestivalCommandFacadeService festivalCommandFacadeService;
     private final StageCommandFacadeService stageCommandFacadeService;
     private final ArtistCommandService artistCommandService;
@@ -77,7 +79,7 @@ public class MockDataService {
     }
 
     private void makeRegionSchools(SchoolRegion schoolRegion) {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < SCHOOL_PER_REGION; i++) {
             int schoolNumber = i + 1;
             String schoolName = schoolRegion.name() + schoolNumber;
             schoolCommandService.createSchool(new SchoolCreateCommand(
@@ -112,8 +114,8 @@ public class MockDataService {
 
     private void makeFestival(int availableFestivalDuration, School school, List<Artist> artists) {
         LocalDate now = LocalDate.now();
-        LocalDate startDate = festivalDateGenerator.makeRandomStartDate(availableFestivalDuration, now);
-        LocalDate endDate = festivalDateGenerator.makeRandomEndDate(availableFestivalDuration, now, startDate);
+        LocalDate startDate = mockFestivalDateGenerator.makeRandomStartDate(availableFestivalDuration, now);
+        LocalDate endDate = mockFestivalDateGenerator.makeRandomEndDate(availableFestivalDuration, now, startDate);
 
         Long newFestivalId = festivalCommandFacadeService.createFestival(new FestivalCreateCommand(
             school.getName() + "대 축제" + FESTIVAL_SEQUENCE.incrementAndGet(),

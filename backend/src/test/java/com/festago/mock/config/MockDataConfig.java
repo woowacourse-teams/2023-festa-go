@@ -6,9 +6,12 @@ import com.festago.festival.application.command.FestivalCommandFacadeService;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.mock.CommandLineAppStartupRunner;
 import com.festago.mock.MockScheduler;
-import com.festago.mock.FestivalDateGenerator;
+import com.festago.mock.MockFestivalDateGenerator;
 import com.festago.mock.MockDataService;
-import com.festago.mock.RandomFestivalDateGenerator;
+import com.festago.mock.RandomMockFestivalDateGenerator;
+import com.festago.mock.repository.ForMockArtistRepository;
+import com.festago.mock.repository.ForMockFestivalRepository;
+import com.festago.mock.repository.ForMockSchoolRepository;
 import com.festago.school.application.SchoolCommandService;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.application.command.StageCommandFacadeService;
@@ -20,13 +23,13 @@ import org.springframework.context.annotation.Bean;
 public class MockDataConfig {
 
     @Autowired
-    private SchoolRepository schoolRepository;
+    private ForMockSchoolRepository schoolRepository;
 
     @Autowired
-    private ArtistRepository artistRepository;
+    private ForMockArtistRepository artistRepository;
 
     @Autowired
-    private FestivalRepository festivalRepository;
+    private ForMockFestivalRepository festivalRepository;
 
     @Autowired
     private FestivalCommandFacadeService festivalCommandFacadeService;
@@ -42,8 +45,8 @@ public class MockDataConfig {
 
 
     @Bean
-    public FestivalDateGenerator festivalDateGenerator() {
-        return new RandomFestivalDateGenerator();
+    public MockFestivalDateGenerator festivalDateGenerator() {
+        return new RandomMockFestivalDateGenerator();
     }
 
     @Bean

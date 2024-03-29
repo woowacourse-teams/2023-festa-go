@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Profile("dev")
 @Component
-public class RandomFestivalDateGenerator implements FestivalDateGenerator {
+public class RandomMockFestivalDateGenerator implements MockFestivalDateGenerator {
 
     private static final int COUNT_FIRST_DAY_AS_DURATION_ONE = 1;
     private static final int RANDOM_OFFSET = 1;

@@ -12,6 +12,13 @@ import com.festago.festival.repository.FestivalRepository;
 import com.festago.mock.MockArtist;
 import com.festago.mock.MockDataService;
 import com.festago.mock.config.MockDataConfig;
+import com.festago.mock.repository.ForMockArtistRepository;
+import com.festago.mock.repository.ForMockFestivalInfoRepository;
+import com.festago.mock.repository.ForMockFestivalRepository;
+import com.festago.mock.repository.ForMockSchoolRepository;
+import com.festago.mock.repository.ForMockStageArtistRepository;
+import com.festago.mock.repository.ForMockStageQueryInfoRepository;
+import com.festago.mock.repository.ForMockStageRepository;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.repository.SchoolRepository;
@@ -45,25 +52,25 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
 
     private static final int INCLUDE_FIRST_DATE = 1;
     @Autowired
-    ArtistRepository artistRepository;
+    ForMockArtistRepository artistRepository;
 
     @Autowired
-    SchoolRepository schoolRepository;
+    ForMockSchoolRepository schoolRepository;
 
     @Autowired
-    FestivalRepository festivalRepository;
+    ForMockFestivalRepository festivalRepository;
 
     @Autowired
-    StageRepository stageRepository;
+    ForMockStageRepository stageRepository;
 
     @Autowired
-    StageArtistRepository stageArtistRepository;
+    ForMockStageArtistRepository stageArtistRepository;
 
     @Autowired
-    StageQueryInfoRepository stageQueryInfoRepository;
+    ForMockStageQueryInfoRepository stageQueryInfoRepository;
 
     @Autowired
-    FestivalInfoRepository festivalInfoRepository;
+    ForMockFestivalInfoRepository festivalInfoRepository;
 
     @Autowired
     MockDataService mockDataService;

@@ -2,7 +2,7 @@ package com.festago.mock;
 
 import java.time.LocalDate;
 
-public interface FestivalDateGenerator {
+public interface MockFestivalDateGenerator {
 
     LocalDate makeRandomStartDate(int festivalDuration, LocalDate now);
 
