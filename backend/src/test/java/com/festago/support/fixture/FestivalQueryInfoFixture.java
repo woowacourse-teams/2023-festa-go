@@ -24,9 +24,8 @@ public class FestivalQueryInfoFixture extends BaseFixture {
         return this;
     }
 
+    //TODO FestivalQueryInfo에 ArtistInfo를 String으로 넣어줄 수가 없음..
     public FestivalQueryInfo build() {
-        FestivalQueryInfo festivalQueryInfo = FestivalQueryInfo.create(festivalId);
-        festivalQueryInfo.updateArtistInfo(null, ignore -> artistInfo);
-        return festivalQueryInfo;
+        return FestivalQueryInfo.create(festivalId);
     }
 }

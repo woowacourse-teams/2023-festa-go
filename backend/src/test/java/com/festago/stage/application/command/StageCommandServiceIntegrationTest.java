@@ -4,22 +4,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.command.ArtistCreateCommand;
-import com.festago.festival.application.command.FestivalCreateService;
+import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.domain.FestivalQueryInfo;
-import com.festago.festival.dto.command.FestivalCreateCommand;
 import com.festago.festival.repository.FestivalInfoRepository;
-import com.festago.school.application.SchoolCommandService;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
-import com.festago.school.dto.SchoolCreateCommand;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.StageQueryInfo;
 import com.festago.stage.dto.command.StageCreateCommand;
 import com.festago.stage.dto.command.StageUpdateCommand;
 import com.festago.stage.repository.StageQueryInfoRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.TimeInstantProvider;
+import com.festago.support.fixture.ArtistFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.FestivalQueryInfoFixture;
+import com.festago.support.fixture.SchoolFixture;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,19 +48,19 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
     StageDeleteService stageDeleteService;
 
     @Autowired
-    FestivalCreateService festivalCreateService;
-
-    @Autowired
-    SchoolCommandService schoolCommandService;
-
-    @Autowired
-    ArtistCommandService artistCommandService;
-
-    @Autowired
-    StageQueryInfoRepository stageQueryInfoRepository;
+    FestivalRepository festivalRepository;
 
     @Autowired
     FestivalInfoRepository festivalInfoRepository;
+
+    @Autowired
+    SchoolRepository schoolRepository;
+
+    @Autowired
+    ArtistRepository artistRepository;
+
+    @Autowired
+    StageQueryInfoRepository stageQueryInfoRepository;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -79,32 +81,22 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
     void setUp() {
         given(clock.instant())
             .willReturn(TimeInstantProvider.from(now));
+        School 테코대학교 = schoolRepository.save(SchoolFixture.builder()
+            .name("테코대학교")
+            .region(SchoolRegion.서울)
+            .build());
+        테코대학교_식별자 = 테코대학교.getId();
+        테코대학교_축제_식별자 = festivalRepository.save(FestivalFixture.builder()
+            .name("테코대학교 축제")
+            .startDate(festivalStartDate)
+            .endDate(festivalEndDate)
+            .school(테코대학교)
+            .build()).getId();
+        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(테코대학교_축제_식별자).build());
 
-        테코대학교_식별자 = schoolCommandService.createSchool(new SchoolCreateCommand(
-            "테코대학교",
-            "teco.ac.kr",
-            SchoolRegion.서울,
-            "https://image.com/logo.png",
-            "https://image.com/backgroundImage.png"
-        ));
-        테코대학교_축제_식별자 = festivalCreateService.createFestival(new FestivalCreateCommand(
-            "테코대학교 축제",
-            festivalStartDate,
-            festivalEndDate,
-            "https://image.com/posterImage.png",
-            테코대학교_식별자
-        ));
-        에픽하이_식별자 = artistCommandService.save(createArtistCreateCommand("에픽하이"));
-        소녀시대_식별자 = artistCommandService.save(createArtistCreateCommand("소녀시대"));
-        뉴진스_식별자 = artistCommandService.save(createArtistCreateCommand("뉴진스"));
-    }
-
-    private ArtistCreateCommand createArtistCreateCommand(String name) {
-        return new ArtistCreateCommand(
-            name,
-            "https://image.com/profileImage.png",
-            "https://image.com/backgroundImage.png"
-        );
+        에픽하이_식별자 = artistRepository.save(ArtistFixture.builder().name("에픽하이").build()).getId();
+        소녀시대_식별자 = artistRepository.save(ArtistFixture.builder().name("소녀시대").build()).getId();
+        뉴진스_식별자 = artistRepository.save(ArtistFixture.builder().name("뉴진스").build()).getId();
     }
 
     @Nested
