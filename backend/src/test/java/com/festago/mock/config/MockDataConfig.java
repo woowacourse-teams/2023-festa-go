@@ -21,16 +21,22 @@ public class MockDataConfig {
 
     @Autowired
     private SchoolRepository schoolRepository;
+
     @Autowired
     private ArtistRepository artistRepository;
+
     @Autowired
     private FestivalRepository festivalRepository;
+
     @Autowired
     private FestivalCommandFacadeService festivalCommandFacadeService;
+
     @Autowired
     private StageCommandFacadeService stageCommandFacadeService;
+
     @Autowired
     private ArtistCommandService artistCommandService;
+
     @Autowired
     private SchoolCommandService schoolCommandService;
 
