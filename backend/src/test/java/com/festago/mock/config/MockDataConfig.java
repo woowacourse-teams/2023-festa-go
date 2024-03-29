@@ -1,18 +1,17 @@
 package com.festago.mock.config;
 
-import com.festago.artist.domain.ArtistsSerializer;
+import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.repository.ArtistRepository;
-import com.festago.festival.repository.FestivalInfoRepository;
+import com.festago.festival.application.command.FestivalCommandFacadeService;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.mock.CommandLineAppStartupRunner;
 import com.festago.mock.MockScheduler;
 import com.festago.mock.application.FestivalDateGenerator;
 import com.festago.mock.application.MockDataService;
 import com.festago.mock.application.RandomFestivalDateGenerator;
+import com.festago.school.application.SchoolCommandService;
 import com.festago.school.repository.SchoolRepository;
-import com.festago.stage.repository.StageArtistRepository;
-import com.festago.stage.repository.StageQueryInfoRepository;
-import com.festago.stage.repository.StageRepository;
+import com.festago.stage.application.command.StageCommandFacadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -22,27 +21,18 @@ public class MockDataConfig {
 
     @Autowired
     private SchoolRepository schoolRepository;
-
     @Autowired
     private ArtistRepository artistRepository;
-
     @Autowired
     private FestivalRepository festivalRepository;
-
     @Autowired
-    private StageRepository stageRepository;
-
+    private FestivalCommandFacadeService festivalCommandFacadeService;
     @Autowired
-    private StageArtistRepository stageArtistRepository;
-
+    private StageCommandFacadeService stageCommandFacadeService;
     @Autowired
-    private FestivalInfoRepository festivalInfoRepository;
-
+    private ArtistCommandService artistCommandService;
     @Autowired
-    private StageQueryInfoRepository stageQueryInfoRepository;
-
-    @Autowired
-    private ArtistsSerializer artistsSerializer;
+    private SchoolCommandService schoolCommandService;
 
 
     @Bean
@@ -53,17 +43,17 @@ public class MockDataConfig {
     @Bean
     public MockDataService mockDataService() {
         return new MockDataService(festivalDateGenerator(), schoolRepository, artistRepository, festivalRepository,
-            stageRepository, stageArtistRepository, festivalInfoRepository, stageQueryInfoRepository,
-            artistsSerializer);
+            festivalCommandFacadeService, stageCommandFacadeService, artistCommandService, schoolCommandService);
     }
 
     @Bean
-    public MockScheduler mockScheduler(){
+    public MockScheduler mockScheduler() {
         return new MockScheduler(mockDataService());
 
     }
+
     @Bean
-    public CommandLineAppStartupRunner commandLineAppStartupRunner(){
+    public CommandLineAppStartupRunner commandLineAppStartupRunner() {
         return new CommandLineAppStartupRunner(mockDataService(), mockScheduler());
     }
 }
