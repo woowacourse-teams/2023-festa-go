@@ -51,7 +51,6 @@ public class MockDataService {
     private final ArtistCommandService artistCommandService;
     private final SchoolCommandService schoolCommandService;
 
-
     public boolean initialize() {
         if (alreadyInitialized()) {
             return false;
