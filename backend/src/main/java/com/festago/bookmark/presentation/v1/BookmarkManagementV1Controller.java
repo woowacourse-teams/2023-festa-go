@@ -2,7 +2,7 @@ package com.festago.bookmark.presentation.v1;
 
 import com.festago.auth.annotation.Member;
 import com.festago.auth.annotation.MemberAuth;
-import com.festago.bookmark.application.BookmarkFacadeService;
+import com.festago.bookmark.application.command.BookmarkFacadeService;
 import com.festago.bookmark.domain.BookmarkType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -3,8 +3,8 @@ package com.festago.bookmark.application.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.festago.bookmark.application.FestivalBookmarkCommandService;
 import com.festago.bookmark.application.FestivalBookmarkV1QueryService;
+import com.festago.bookmark.application.command.FestivalBookmarkCommandService;
 import com.festago.bookmark.dto.FestivalBookmarkV1Response;
 import com.festago.bookmark.repository.FestivalBookmarkOrder;
 import com.festago.festival.application.command.FestivalCreateService;
@@ -95,9 +95,9 @@ class FestivalBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegrati
         @Test
         void 회원의_식별자로_북마크한_축제의_식별자를_조회한다() {
             // given
-            festivalBookmarkCommandService.putFestivalBookmark(회원A_식별자, 테코대학교_봄_축제_식별자);
-            festivalBookmarkCommandService.putFestivalBookmark(회원B_식별자, 우테대학교_여름_축제_식별자);
-            festivalBookmarkCommandService.putFestivalBookmark(회원B_식별자, 우테대학교_가을_축제_식별자);
+            festivalBookmarkCommandService.save(회원A_식별자, 테코대학교_봄_축제_식별자);
+            festivalBookmarkCommandService.save(회원B_식별자, 우테대학교_여름_축제_식별자);
+            festivalBookmarkCommandService.save(회원B_식별자, 우테대학교_가을_축제_식별자);
 
             // when
             var 회원A_축제_북마크_식별자_목록 = festivalBookmarkV1QueryService.findBookmarkedFestivalIds(회원A_식별자);
@@ -119,9 +119,9 @@ class FestivalBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegrati
         @Test
         void 북마크를_등록한_시간의_내림차순으로_조회할_수_있다() {
             // given
-            festivalBookmarkCommandService.putFestivalBookmark(회원A_식별자, 우테대학교_여름_축제_식별자);
-            festivalBookmarkCommandService.putFestivalBookmark(회원A_식별자, 테코대학교_봄_축제_식별자);
-            festivalBookmarkCommandService.putFestivalBookmark(회원A_식별자, 우테대학교_가을_축제_식별자);
+            festivalBookmarkCommandService.save(회원A_식별자, 우테대학교_여름_축제_식별자);
+            festivalBookmarkCommandService.save(회원A_식별자, 테코대학교_봄_축제_식별자);
+            festivalBookmarkCommandService.save(회원A_식별자, 우테대학교_가을_축제_식별자);
 
             // when
             var 회원A_북마크_축제_정보_목록 = festivalBookmarkV1QueryService.findBookmarkedFestivals(
@@ -140,9 +140,9 @@ class FestivalBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegrati
         @Test
         void 축제의_시작_시간의_오름차순으로_조회할_수_있다() {
             // given
-            festivalBookmarkCommandService.putFestivalBookmark(회원A_식별자, 우테대학교_여름_축제_식별자);
-            festivalBookmarkCommandService.putFestivalBookmark(회원A_식별자, 테코대학교_봄_축제_식별자);
-            festivalBookmarkCommandService.putFestivalBookmark(회원A_식별자, 우테대학교_가을_축제_식별자);
+            festivalBookmarkCommandService.save(회원A_식별자, 우테대학교_여름_축제_식별자);
+            festivalBookmarkCommandService.save(회원A_식별자, 테코대학교_봄_축제_식별자);
+            festivalBookmarkCommandService.save(회원A_식별자, 우테대학교_가을_축제_식별자);
 
             // when
             var 회원A_북마크_축제_정보_목록 = festivalBookmarkV1QueryService.findBookmarkedFestivals(
@@ -161,7 +161,7 @@ class FestivalBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegrati
         @Test
         void 북마크에_등록되지_않은_축제_식별자를_보내면_해당_축제는_조회되지_않는다() {
             // given
-            festivalBookmarkCommandService.putFestivalBookmark(회원A_식별자, 테코대학교_봄_축제_식별자);
+            festivalBookmarkCommandService.save(회원A_식별자, 테코대학교_봄_축제_식별자);
 
             // when
             var 회원A_북마크_축제_정보_목록 = festivalBookmarkV1QueryService.findBookmarkedFestivals(

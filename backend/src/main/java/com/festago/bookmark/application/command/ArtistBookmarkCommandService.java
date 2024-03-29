@@ -1,4 +1,4 @@
-package com.festago.bookmark.application;
+package com.festago.bookmark.application.command;
 
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.bookmark.domain.Bookmark;
@@ -16,14 +16,17 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ArtistBookmarkCommandService {
 
-    private static final int MAX_ARTIST_BOOKMARK_COUNT = 12;
+    private static final long MAX_ARTIST_BOOKMARK_COUNT = 12L;
+
     private final BookmarkRepository bookmarkRepository;
     private final ArtistRepository artistRepository;
 
-    public Long save(Long artistId, Long memberId) {
+    public void save(Long artistId, Long memberId) {
         validate(artistId, memberId);
-        return bookmarkRepository.save(new Bookmark(BookmarkType.ARTIST, artistId, memberId))
-            .getId();
+        if (isExistsBookmark(artistId, memberId)) {
+            return;
+        }
+        bookmarkRepository.save(new Bookmark(BookmarkType.ARTIST, artistId, memberId));
     }
 
     private void validate(Long artistId, Long memberId) {
@@ -44,7 +47,15 @@ public class ArtistBookmarkCommandService {
         }
     }
 
-    public void delete(Long memberId, Long artistId) {
+    private boolean isExistsBookmark(Long artistId, Long memberId) {
+        return bookmarkRepository.existsByBookmarkTypeAndMemberIdAndResourceId(
+            BookmarkType.ARTIST,
+            memberId,
+            artistId
+        );
+    }
+
+    public void delete(Long artistId, Long memberId) {
         bookmarkRepository.deleteByBookmarkTypeAndMemberIdAndResourceId(BookmarkType.ARTIST, memberId, artistId);
     }
 }

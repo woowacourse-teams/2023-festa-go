@@ -1,4 +1,4 @@
-package com.festago.bookmark.application;
+package com.festago.bookmark.application.command;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
@@ -31,7 +31,7 @@ class FestivalBookmarkCommandServiceTest {
 
     FestivalBookmarkCommandService festivalBookmarkCommandService;
 
-    Long 회원_식별자 = 1L;
+    Long 회원_식별자 = 1234L;
     Festival 축제;
 
     @BeforeEach
@@ -43,12 +43,12 @@ class FestivalBookmarkCommandServiceTest {
     }
 
     @Nested
-    class putFestivalBookmark {
+    class 북마크_저장 {
 
         @Test
         void 북마크로_저장하려는_축제가_존재하지_않으면_예외가_발생한다() {
             // when & then
-            assertThatThrownBy(() -> festivalBookmarkCommandService.putFestivalBookmark(회원_식별자, 4885L))
+            assertThatThrownBy(() -> festivalBookmarkCommandService.save(4885L, 회원_식별자))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(ErrorCode.FESTIVAL_NOT_FOUND.getMessage());
         }
@@ -62,15 +62,15 @@ class FestivalBookmarkCommandServiceTest {
             }
 
             // when & then
-            assertThatThrownBy(() -> festivalBookmarkCommandService.putFestivalBookmark(회원_식별자, 축제.getId()))
+            assertThatThrownBy(() -> festivalBookmarkCommandService.save(축제.getId(), 회원_식별자))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage(ErrorCode.FOR_TEST_ERROR.getMessage());
+                .hasMessage(ErrorCode.BOOKMARK_LIMIT_EXCEEDED.getMessage());
         }
 
         @Test
         void 북마크를_저장한다() {
             // when
-            festivalBookmarkCommandService.putFestivalBookmark(회원_식별자, 축제.getId());
+            festivalBookmarkCommandService.save(축제.getId(), 회원_식별자);
 
             // then
             assertThat(bookmarkRepository.countByMemberIdAndBookmarkType(회원_식별자, BookmarkType.FESTIVAL))
@@ -80,10 +80,10 @@ class FestivalBookmarkCommandServiceTest {
         @Test
         void 기존에_저장된_북마크가_있으면_저장되지_않는다() {
             // given
-            festivalBookmarkCommandService.putFestivalBookmark(회원_식별자, 축제.getId());
+            festivalBookmarkCommandService.save(축제.getId(), 회원_식별자);
 
             // when
-            festivalBookmarkCommandService.putFestivalBookmark(회원_식별자, 축제.getId());
+            festivalBookmarkCommandService.save(축제.getId(), 회원_식별자);
 
             // then
             assertThat(bookmarkRepository.countByMemberIdAndBookmarkType(회원_식별자, BookmarkType.FESTIVAL))
@@ -92,22 +92,22 @@ class FestivalBookmarkCommandServiceTest {
     }
 
     @Nested
-    class deleteFestivalBookmark {
+    class 북마크_삭제 {
 
         @Test
         void 존재하지_않는_북마크를_삭제하더라도_예외가_발생하지_않는다() {
             // when & then
             assertThatNoException()
-                .isThrownBy(() -> festivalBookmarkCommandService.deleteFestivalBookmark(회원_식별자, 4885L));
+                .isThrownBy(() -> festivalBookmarkCommandService.delete(4885L, 회원_식별자));
         }
 
         @Test
         void 북마크를_삭제할_수_있다() {
             // given
-            festivalBookmarkCommandService.putFestivalBookmark(회원_식별자, 축제.getId());
+            festivalBookmarkCommandService.save(축제.getId(), 회원_식별자);
 
             // when
-            festivalBookmarkCommandService.deleteFestivalBookmark(회원_식별자, 축제.getId());
+            festivalBookmarkCommandService.delete(축제.getId(), 회원_식별자);
 
             // then
             assertThat(bookmarkRepository.countByMemberIdAndBookmarkType(회원_식별자, BookmarkType.FESTIVAL))
