@@ -162,8 +162,8 @@ public class MockDataService {
     }
 
     /**
-     * 실질적으로 무대를 만드는 부분으로 이때 하나의 stage 는 랜덤한 아티스트 3명을 갖도록 만듭니다. 축제 별로 생성되는 queue 에서 poll 을 통해 stageArtist 를 결정하기 때문에 같은
-     * 축제에서 아티스트는 중복되지 않습니다.
+     * 실질적으로 무대를 만드는 부분으로 이때 하나의 stage 는 랜덤한 아티스트 3명을 갖도록 만듭니다.
+     * 축제 별로 생성되는 queue 에서 poll 을 통해 stageArtist 를 결정하기 때문에 같은 축제에서 아티스트는 중복되지 않습니다.
      */
     private void makeStage(Festival festival, Queue<Artist> artists, LocalDate localDate) {
         LocalDateTime startTime = localDate.atTime(STAGE_START_HOUR, 0);
@@ -175,9 +175,6 @@ public class MockDataService {
         ));
     }
 
-    /**
-     * 아티스트는 무대별로 3명 배치하였고 이는 임의로 설정된 값입니다. 만약 아티스트가 무대별 인원 + 1 보다 작다면 peek 를 통한 연산 결과는 빈 아티스트 큐이기 때문에 poll 을 통해 동작합니다
-     */
     private List<Long> makeStageArtists(Queue<Artist> artists) {
         return makeStageArtistsByArtistCount(artists).stream()
             .map(Artist::getId)
@@ -185,10 +182,11 @@ public class MockDataService {
     }
 
     /**
-     * Stage 는 생성 제약 조건에 의해서 무조건 다른 아티스트로 구성해야합니다. 만약 STAGE_ARTIST_COUNT * 2 값보다 큐에 artist 가 작게 들어있으면 peek 연산 이후 artist
-     * 는 STAGE_ARTIST_COUNT 보다 적게 들어있습니다. 예를 들어 STAGE_ARTIST_COUNT = 3 일떄 6개의 아티스트에 대해서 peek 를 한다면 3개가 남아 나머지 3개로 중복 없는
-     * Stage 를 구성할 수 있지만 5개의 아티스트에 대해서 peek 한 후에 2개의 artist 로는 Stage 에 중복이 생길 수 밖에 없습니다. 따라서 STAGE_ARTIST_COUNT * 2
-     * artists 가 크다면 peek, 아닐 경우 peek 이후 다시 insert 해주는 로직을 진행합니다.
+     * Stage 는 생성 제약 조건에 의해서 무조건 다른 아티스트로 구성해야합니다.
+     * 만약 STAGE_ARTIST_COUNT * 2 값보다 큐에 artist 가 작게 들어있으면 poll 연산 이후 artist 는 STAGE_ARTIST_COUNT 보다 적게 들어있습니다.
+     * 예를 들어 STAGE_ARTIST_COUNT = 3 일떄 6개의 아티스트에 대해서 poll 를 한다면 3개가 남아 나머지 3개로 중복 없는Stage 를 구성할 수 있지만
+     * 5개의 아티스트에 대해서 poll 한 후에 2개의 artist 로는 Stage 에 중복이 생길 수 밖에 없습니다.
+     * 따라서 STAGE_ARTIST_COUNT * 2 artists 가 크다면 poll, 아닐 경우 poll 이후 다시 insert 해주는 로직을 진행합니다.
      */
     private List<Artist> makeStageArtistsByArtistCount(Queue<Artist> artists) {
         if (artists.size() < STAGE_ARTIST_COUNT * 2) {
