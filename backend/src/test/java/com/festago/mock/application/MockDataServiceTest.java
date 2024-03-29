@@ -2,15 +2,16 @@ package com.festago.mock.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doReturn;
 
 import com.festago.artist.domain.Artist;
-import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.domain.FestivalQueryInfo;
-import com.festago.festival.repository.FestivalInfoRepository;
-import com.festago.festival.repository.FestivalRepository;
 import com.festago.mock.MockArtist;
 import com.festago.mock.MockDataService;
+import com.festago.mock.MockFestivalDateGenerator;
 import com.festago.mock.config.MockDataConfig;
 import com.festago.mock.repository.ForMockArtistRepository;
 import com.festago.mock.repository.ForMockFestivalInfoRepository;
@@ -21,27 +22,26 @@ import com.festago.mock.repository.ForMockStageQueryInfoRepository;
 import com.festago.mock.repository.ForMockStageRepository;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
-import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.domain.StageArtist;
 import com.festago.stage.domain.StageQueryInfo;
-import com.festago.stage.repository.StageArtistRepository;
-import com.festago.stage.repository.StageQueryInfoRepository;
-import com.festago.stage.repository.StageRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.fixture.SchoolFixture;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +71,9 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
 
     @Autowired
     ForMockFestivalInfoRepository festivalInfoRepository;
+
+    @SpyBean
+    MockFestivalDateGenerator mockFestivalDateGenerator;
 
     @Autowired
     MockDataService mockDataService;
@@ -227,6 +230,51 @@ class MockDataServiceTest extends ApplicationIntegrationTest {
                         .count();
                     return stageArtistsValue.size() == uniqueStageArtists;
                 });
+        }
+
+        @Test
+        void 만약_아티스트가_중복없이_무대를_구성하기_부족하다면_중복을_허용한다() {
+
+            // given
+            LocalDate now = LocalDate.now();
+            int availableUniqueStageCount = MockArtist.values().length / MockDataService.STAGE_ARTIST_COUNT;
+            doReturn(now)
+                .when(mockFestivalDateGenerator)
+                .makeRandomStartDate(anyInt(), any(LocalDate.class));
+            doReturn(now.plusDays(availableUniqueStageCount + 1))
+                .when(mockFestivalDateGenerator)
+                .makeRandomEndDate(anyInt(), any(LocalDate.class), any(LocalDate.class));
+
+            mockDataService.initialize();
+            mockDataService.makeMockFestivals(10);
+
+            List<StageArtist> stageArtists = stageArtistRepository.findAll();
+            List<Stage> allStage = stageRepository.findAll();
+
+            Map<Long, List<StageArtist>> stageArtistByStageId = stageArtists.stream()
+                .collect(Collectors.groupingBy(StageArtist::getStageId));
+            Map<Festival, List<Stage>> stageByFestival = allStage.stream()
+                .collect(Collectors.groupingBy(Stage::getFestival));
+
+            // when
+            Map<Festival, List<StageArtist>> stageArtistsByFestival = new HashMap<>();
+
+            stageByFestival.forEach((festival, stages) -> {
+                List<StageArtist> artistsForFestival = stages.stream()
+                    .map(stage -> stageArtistByStageId.getOrDefault(stage.getId(), Collections.emptyList()))
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+
+                stageArtistsByFestival.put(festival, artistsForFestival);
+            });
+
+            List<Long> artistIds = stageArtistsByFestival.values().stream()
+                .flatMap(List::stream)
+                .map(stageArtist -> stageArtist.getArtistId())
+                .toList();
+
+            // then
+            assertThat(artistIds.size()).isNotEqualTo(new HashSet<>(artistIds).size());
         }
     }
 }

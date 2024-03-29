@@ -36,9 +36,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MockDataService {
 
+    public static final int STAGE_ARTIST_COUNT = 3;
     private static final AtomicLong festivalSequence = new AtomicLong();
     private static final int STAGE_START_HOUR = 19;
-    private static final int STAGE_ARTIST_COUNT = 3;
     private static final int SCHOOL_PER_REGION = 3;
     private static final int DATE_OFFSET = 1;
 
@@ -113,6 +113,11 @@ public class MockDataService {
     public void makeMockFestivals(int availableFestivalDuration) {
         List<School> allSchool = schoolRepository.findAll();
         List<Artist> allArtist = artistRepository.findAll();
+        int artistSize = allArtist.size();
+        if (STAGE_ARTIST_COUNT > artistSize) {
+            throw new IllegalArgumentException(
+                String.format("공연을 구성하기 위한 아티스트의 최소 수를 만족하지 못합니다 최소 수 : %d 현재 수 : %d", STAGE_ARTIST_COUNT, artistSize));
+        }
         for (School school : allSchool) {
             makeFestival(availableFestivalDuration, school, allArtist);
         }
@@ -171,19 +176,43 @@ public class MockDataService {
     }
 
     /**
-     * 아티스트는 무대별로 3명 배치하였고 이는 임의로 설정된 값입니다.
+     * 아티스트는 무대별로 3명 배치하였고 이는 임의로 설정된 값입니다. 만약 아티스트가 무대별 인원 + 1 보다 작다면 peek 를 통한 연산 결과는 빈 아티스트 큐이기 때문에 poll 을 통해 동작합니다
      */
     private List<Long> makeStageArtists(Queue<Artist> artists) {
+        return makeStageArtistsByArtistCount(artists).stream()
+            .map(Artist::getId)
+            .toList();
+    }
+
+    /**
+     * Stage 는 생성 제약 조건에 의해서 무조건 다른 아티스트로 구성해야합니다. 만약 STAGE_ARTIST_COUNT * 2 값보다 큐에 artist 가 작게 들어있으면 peek 연산 이후 artist
+     * 는 STAGE_ARTIST_COUNT 보다 적게 들어있습니다. 예를 들어 STAGE_ARTIST_COUNT = 3 일떄 6개의 아티스트에 대해서 peek 를 한다면 3개가 남아 나머지 3개로 중복 없는
+     * Stage 를 구성할 수 있지만 5개의 아티스트에 대해서 peek 한 후에 2개의 artist 로는 Stage 에 중복이 생길 수 밖에 없습니다. 따라서 STAGE_ARTIST_COUNT * 2
+     * artists 가 크다면 peek, 아닐 경우 peek 이후 다시 insert 해주는 로직을 진행합니다.
+     */
+    private List<Artist> makeStageArtistsByArtistCount(Queue<Artist> artists) {
+        if (artists.size() < STAGE_ARTIST_COUNT * 2) {
+            return makeDuplicateStageArtists(artists);
+        }
+        return makeUniqueStageArtists(artists);
+    }
+
+    private List<Artist> makeDuplicateStageArtists(Queue<Artist> artists) {
         List<Artist> result = new ArrayList<>();
         for (int i = 0; i < STAGE_ARTIST_COUNT; i++) {
             Artist artist = artists.poll();
-            if (artist == null) {
-                throw new IllegalArgumentException("축제를 구성하기 위한 아티스트가 부족합니다");
-            }
+            result.add(artist);
+            artists.add(artist);
+        }
+        return result;
+    }
+
+    private List<Artist> makeUniqueStageArtists(Queue<Artist> artists) {
+        List<Artist> result = new ArrayList<>();
+        for (int i = 0; i < STAGE_ARTIST_COUNT; i++) {
+            Artist artist = artists.poll();
             result.add(artist);
         }
-        return result.stream()
-            .map(Artist::getId)
-            .toList();
+        return result;
     }
 }
