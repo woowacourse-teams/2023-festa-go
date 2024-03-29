@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Profile({"dev"})
+@Profile({"local"})
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -109,7 +109,7 @@ public class MockDataService {
         LocalDate endDate = festivalDateGenerator.makeRandomEndDate(availableFestivalDuration, now, startDate);
 
         Festival newFestival = festivalRepository.save(
-            new Festival(school.getName() + " 축제" + FESTIVAL_SEQUENCE.incrementAndGet(),
+            new Festival(school.getName() + "대 축제" + FESTIVAL_SEQUENCE.incrementAndGet(),
                 startDate,
                 endDate,
                 school));
