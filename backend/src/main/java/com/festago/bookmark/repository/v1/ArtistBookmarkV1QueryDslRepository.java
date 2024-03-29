@@ -19,7 +19,7 @@ public class ArtistBookmarkV1QueryDslRepository extends QueryDslRepositorySuppor
         super(Bookmark.class);
     }
 
-    public List<ArtistBookmarkV1Response> findByMemberId(Long memberid) {
+    public List<ArtistBookmarkV1Response> findByMemberId(Long memberId) {
         return select(
             new QArtistBookmarkV1Response(
                 new QArtistBookmarkInfoV1Response(
@@ -30,7 +30,7 @@ public class ArtistBookmarkV1QueryDslRepository extends QueryDslRepositorySuppor
             .from(bookmark)
             .innerJoin(artist).on(
                 bookmark.bookmarkType.eq(BookmarkType.ARTIST)
-                    .and(bookmark.memberId.eq(memberid))
+                    .and(bookmark.memberId.eq(memberId))
                     .and(bookmark.resourceId.eq(artist.id)))
             .fetch();
     }

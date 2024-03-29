@@ -1,4 +1,4 @@
-package com.festago.bookmark.repository;
+package com.festago.bookmark.repository.v1;
 
 import static com.festago.bookmark.domain.QBookmark.bookmark;
 import static com.festago.school.domain.QSchool.school;

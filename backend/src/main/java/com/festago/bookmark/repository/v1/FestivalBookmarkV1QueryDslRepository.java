@@ -1,4 +1,4 @@
-package com.festago.bookmark.repository;
+package com.festago.bookmark.repository.v1;
 
 import static com.festago.bookmark.domain.QBookmark.bookmark;
 import static com.festago.festival.domain.QFestival.festival;
@@ -9,6 +9,7 @@ import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
 import com.festago.bookmark.dto.v1.FestivalBookmarkV1Response;
 import com.festago.bookmark.dto.v1.QFestivalBookmarkV1Response;
+import com.festago.bookmark.repository.FestivalBookmarkOrder;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.festival.dto.QFestivalV1Response;
 import com.festago.festival.dto.QSchoolV1Response;

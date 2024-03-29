@@ -1,7 +1,7 @@
 package com.festago.bookmark.application;
 
 import com.festago.bookmark.dto.v1.SchoolBookmarkV1Response;
-import com.festago.bookmark.repository.SchoolBookmarkV1QuerydslRepository;
+import com.festago.bookmark.repository.v1.SchoolBookmarkV1QuerydslRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
