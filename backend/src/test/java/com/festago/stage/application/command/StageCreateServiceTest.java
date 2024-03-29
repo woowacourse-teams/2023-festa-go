@@ -6,15 +6,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.mock;
 
 import com.festago.artist.domain.Artist;
+import com.festago.artist.repository.ArtistRepository;
 import com.festago.artist.repository.MemoryArtistRepository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.exception.ValidException;
 import com.festago.festival.domain.Festival;
+import com.festago.festival.repository.FestivalRepository;
 import com.festago.festival.repository.MemoryFestivalRepository;
 import com.festago.stage.dto.command.StageCreateCommand;
 import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageRepository;
+import com.festago.stage.repository.StageArtistRepository;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.fixture.ArtistFixture;
 import com.festago.support.fixture.FestivalFixture;
 import java.time.LocalDate;
@@ -31,10 +35,10 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class StageCreateServiceTest {
 
-    MemoryStageRepository stageRepository = new MemoryStageRepository();
-    MemoryFestivalRepository festivalRepository = new MemoryFestivalRepository();
-    MemoryArtistRepository artistRepository = new MemoryArtistRepository();
-    MemoryStageArtistRepository stageArtistRepository = new MemoryStageArtistRepository();
+    StageRepository stageRepository = new MemoryStageRepository();
+    FestivalRepository festivalRepository = new MemoryFestivalRepository();
+    ArtistRepository artistRepository = new MemoryArtistRepository();
+    StageArtistRepository stageArtistRepository = new MemoryStageArtistRepository();
     StageCreateService stageCreateService = new StageCreateService(
         stageRepository,
         festivalRepository,
@@ -52,10 +56,17 @@ class StageCreateServiceTest {
 
     @BeforeEach
     void setUp() {
-        stageRepository.clear();
-        festivalRepository.clear();
-        artistRepository.clear();
-        stageArtistRepository.clear();
+        stageRepository = new MemoryStageRepository();
+        festivalRepository = new MemoryFestivalRepository();
+        artistRepository = new MemoryArtistRepository();
+        stageArtistRepository = new MemoryStageArtistRepository();
+        stageCreateService = new StageCreateService(
+            stageRepository,
+            festivalRepository,
+            artistRepository,
+            stageArtistRepository,
+            mock()
+        );
 
         테코대학교_축제 = festivalRepository.save(
             FestivalFixture.builder()
@@ -64,18 +75,10 @@ class StageCreateServiceTest {
                 .endDate(festivalEndDate)
                 .build()
         );
-        에픽하이 = artistRepository.save(ArtistFixture.builder()
-            .name("에픽하이")
-            .build()
-        );
-        소녀시대 = artistRepository.save(ArtistFixture.builder()
-            .name("소녀시대")
-            .build()
-        );
-        뉴진스 = artistRepository.save(ArtistFixture.builder()
-            .name("뉴진스")
-            .build()
-        );
+
+        에픽하이 = artistRepository.save(ArtistFixture.builder().name("에픽하이").build());
+        소녀시대 = artistRepository.save(ArtistFixture.builder().name("소녀시대").build());
+        뉴진스 = artistRepository.save(ArtistFixture.builder().name("뉴진스").build());
     }
 
     @Nested

@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import com.festago.artist.domain.Artist;
+import com.festago.artist.repository.ArtistRepository;
 import com.festago.artist.repository.MemoryArtistRepository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
@@ -15,6 +16,8 @@ import com.festago.stage.domain.Stage;
 import com.festago.stage.dto.command.StageUpdateCommand;
 import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageRepository;
+import com.festago.stage.repository.StageArtistRepository;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.fixture.ArtistFixture;
 import com.festago.support.fixture.FestivalFixture;
 import com.festago.support.fixture.StageArtistFixture;
@@ -33,15 +36,10 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class StageUpdateServiceTest {
 
-    MemoryStageRepository stageRepository = new MemoryStageRepository();
-    MemoryArtistRepository artistRepository = new MemoryArtistRepository();
-    MemoryStageArtistRepository stageArtistRepository = new MemoryStageArtistRepository();
-    StageUpdateService stageUpdateService = new StageUpdateService(
-        stageRepository,
-        artistRepository,
-        stageArtistRepository,
-        mock()
-    );
+    StageRepository stageRepository;
+    ArtistRepository artistRepository;
+    StageArtistRepository stageArtistRepository;
+    StageUpdateService stageUpdateService;
 
     LocalDateTime stageStartTime = LocalDateTime.parse("2077-06-30T18:00:00");
     LocalDateTime ticketOpenTime = stageStartTime.minusWeeks(1);
@@ -53,7 +51,11 @@ class StageUpdateServiceTest {
 
     @BeforeEach
     void setUp() {
-        stageRepository.clear();
+        stageRepository = new MemoryStageRepository();
+        artistRepository = new MemoryArtistRepository();
+        stageArtistRepository = new MemoryStageArtistRepository();
+        stageUpdateService = new StageUpdateService(stageRepository, artistRepository, stageArtistRepository, mock());
+
         테코대학교_축제 = FestivalFixture.builder()
             .name("테코대학교 축제")
             .startDate(stageStartTime.toLocalDate())

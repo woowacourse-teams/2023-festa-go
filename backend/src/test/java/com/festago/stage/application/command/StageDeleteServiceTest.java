@@ -5,12 +5,16 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.mockito.Mockito.mock;
 
 import com.festago.artist.domain.Artist;
+import com.festago.artist.repository.ArtistRepository;
 import com.festago.artist.repository.MemoryArtistRepository;
 import com.festago.festival.domain.Festival;
+import com.festago.festival.repository.FestivalRepository;
 import com.festago.festival.repository.MemoryFestivalRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageRepository;
+import com.festago.stage.repository.StageArtistRepository;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.fixture.ArtistFixture;
 import com.festago.support.fixture.FestivalFixture;
 import com.festago.support.fixture.StageArtistFixture;
@@ -27,15 +31,11 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class StageDeleteServiceTest {
 
-    MemoryArtistRepository artistRepository = new MemoryArtistRepository();
-    MemoryFestivalRepository festivalRepository = new MemoryFestivalRepository();
-    MemoryStageRepository stageRepository = new MemoryStageRepository();
-    MemoryStageArtistRepository stageArtistRepository = new MemoryStageArtistRepository();
-    StageDeleteService stageDeleteService = new StageDeleteService(
-        stageRepository,
-        stageArtistRepository,
-        mock()
-    );
+    ArtistRepository artistRepository;
+    FestivalRepository festivalRepository;
+    StageRepository stageRepository;
+    StageArtistRepository stageArtistRepository;
+    StageDeleteService stageDeleteService;
 
     LocalDateTime stageStartTime = LocalDateTime.parse("2077-06-30T18:00:00");
     LocalDateTime ticketOpenTime = stageStartTime.minusWeeks(1);
@@ -47,8 +47,12 @@ class StageDeleteServiceTest {
 
     @BeforeEach
     void setUp() {
-        stageRepository.clear();
-        stageArtistRepository.clear();
+        artistRepository = new MemoryArtistRepository();
+        festivalRepository = new MemoryFestivalRepository();
+        stageRepository = new MemoryStageRepository();
+        stageArtistRepository = new MemoryStageArtistRepository();
+        stageDeleteService = new StageDeleteService(stageRepository, stageArtistRepository, mock());
+
         테코대학교_축제 = festivalRepository.save(
             FestivalFixture.builder()
                 .name("테코대학교 축제")
