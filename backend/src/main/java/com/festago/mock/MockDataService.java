@@ -50,11 +50,12 @@ public class MockDataService {
     private final SchoolCommandService schoolCommandService;
 
 
-    public void initialize() {
+    public boolean initialize() {
         if (alreadyInitialized()) {
-            return;
+            return false;
         }
         initializeData();
+        return true;
     }
 
     private boolean alreadyInitialized() {

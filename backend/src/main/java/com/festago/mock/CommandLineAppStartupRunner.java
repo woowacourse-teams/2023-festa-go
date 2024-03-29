@@ -15,7 +15,8 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        mockDataService.initialize();
-        mockScheduler.run();
+        if (mockDataService.initialize()) {
+            mockScheduler.run();
+        }
     }
 }
