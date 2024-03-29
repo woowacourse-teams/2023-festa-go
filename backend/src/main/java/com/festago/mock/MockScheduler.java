@@ -1,6 +1,5 @@
 package com.festago.mock;
 
-import com.festago.mock.application.MockDataService;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;

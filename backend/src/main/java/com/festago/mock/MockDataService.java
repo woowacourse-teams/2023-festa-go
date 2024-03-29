@@ -1,4 +1,4 @@
-package com.festago.mock.application;
+package com.festago.mock;
 
 import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.domain.Artist;
@@ -10,7 +10,6 @@ import com.festago.festival.application.command.FestivalCommandFacadeService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.command.FestivalCreateCommand;
 import com.festago.festival.repository.FestivalRepository;
-import com.festago.mock.MockArtist;
 import com.festago.school.application.SchoolCommandService;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;

@@ -1,4 +1,4 @@
-package com.festago.mock.application;
+package com.festago.mock;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Profile("dev")
 @Component
-public class RandomFestivalDateGenerator implements FestivalDateGenerator{
+public class RandomFestivalDateGenerator implements FestivalDateGenerator {
 
     private static final int COUNT_FIRST_DAY_AS_DURATION_ONE = 1;
     private static final int RANDOM_OFFSET = 1;

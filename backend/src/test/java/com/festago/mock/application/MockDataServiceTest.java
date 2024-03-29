@@ -10,6 +10,7 @@ import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.mock.MockArtist;
+import com.festago.mock.MockDataService;
 import com.festago.mock.config.MockDataConfig;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;

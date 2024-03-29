@@ -1,4 +1,4 @@
-package com.festago.mock.application;
+package com.festago.mock;
 
 import java.time.LocalDate;
 
