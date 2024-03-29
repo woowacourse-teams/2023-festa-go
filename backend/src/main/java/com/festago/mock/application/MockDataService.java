@@ -109,7 +109,10 @@ public class MockDataService {
         LocalDate endDate = festivalDateGenerator.makeRandomEndDate(availableFestivalDuration, now, startDate);
 
         Festival newFestival = festivalRepository.save(
-            new Festival("Festival" + FESTIVAL_SEQUENCE.incrementAndGet(), startDate, endDate, school));
+            new Festival(school.getName() + " 축제" + FESTIVAL_SEQUENCE.incrementAndGet(),
+                startDate,
+                endDate,
+                school));
         List<Artist> participatedArtists = makeStages(newFestival, makeRandomArtists(artists));
 
         makeFestivalQueryInfo(newFestival, participatedArtists);
