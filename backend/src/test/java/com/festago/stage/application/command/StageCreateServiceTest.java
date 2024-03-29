@@ -35,18 +35,11 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class StageCreateServiceTest {
 
-    StageRepository stageRepository = new MemoryStageRepository();
-    FestivalRepository festivalRepository = new MemoryFestivalRepository();
-    ArtistRepository artistRepository = new MemoryArtistRepository();
-    StageArtistRepository stageArtistRepository = new MemoryStageArtistRepository();
-    StageCreateService stageCreateService = new StageCreateService(
-        stageRepository,
-        festivalRepository,
-        artistRepository,
-        stageArtistRepository,
-        mock()
-    );
-
+    StageRepository stageRepository;
+    FestivalRepository festivalRepository;
+    ArtistRepository artistRepository;
+    StageArtistRepository stageArtistRepository;
+    StageCreateService stageCreateService;
     LocalDate festivalStartDate = LocalDate.parse("2077-06-30");
     LocalDate festivalEndDate = LocalDate.parse("2077-07-02");
     Festival 테코대학교_축제;
