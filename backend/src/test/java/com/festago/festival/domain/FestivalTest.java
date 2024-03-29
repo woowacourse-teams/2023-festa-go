@@ -6,8 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.school.domain.School;
-import com.festago.support.FestivalFixture;
-import com.festago.support.SchoolFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.SchoolFixture;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -23,7 +23,7 @@ class FestivalTest {
     void 시작일자가_종료일자_이전이면_예외() {
         // given
         LocalDate today = LocalDate.now();
-        School school = SchoolFixture.school().build();
+        School school = SchoolFixture.builder().build();
         LocalDate tomorrow = today.plusDays(1);
 
         // when & then
@@ -39,7 +39,7 @@ class FestivalTest {
         void 축제_시작_일자_이전이면_참() {
             // given
             LocalDateTime time = LocalDateTime.now();
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(time.plusDays(1).toLocalDate())
                 .endDate(time.plusDays(4).toLocalDate())
                 .build();
@@ -55,7 +55,7 @@ class FestivalTest {
         void 축제_종료_일자_이후이면_참() {
             // given
             LocalDateTime time = LocalDateTime.now();
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(time.minusDays(4).toLocalDate())
                 .endDate(time.minusDays(1).toLocalDate())
                 .build();
@@ -71,7 +71,7 @@ class FestivalTest {
         void 축제_기간중이면_거짓() {
             // given
             LocalDateTime time = LocalDateTime.now();
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(time.minusDays(1).toLocalDate())
                 .endDate(time.toLocalDate())
                 .build();

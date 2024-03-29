@@ -3,10 +3,12 @@ package com.festago.auth.config;
 import com.festago.auth.AuthInterceptor;
 import com.festago.auth.AuthenticateContext;
 import com.festago.auth.RoleArgumentResolver;
+import com.festago.auth.annotation.MemberAuth;
 import com.festago.auth.application.AuthExtractor;
 import com.festago.auth.domain.Role;
 import com.festago.auth.infrastructure.CookieTokenExtractor;
 import com.festago.auth.infrastructure.HeaderTokenExtractor;
+import com.festago.common.interceptor.AnnotationDelegateInterceptor;
 import com.festago.common.interceptor.HttpMethodDelegateInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +44,13 @@ public class LoginConfig implements WebMvcConfigurer {
                 .allowMethod(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT, HttpMethod.PATCH)
                 .interceptor(memberAuthInterceptor())
                 .build())
-            .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**", "/students/**", "/api/v1/bookmark/**")
+            .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**", "/students/**", "/member-fcm/**", "/api/v1/bookmark/**")
             .excludePathPatterns("/auth/oauth2");
+        registry.addInterceptor(AnnotationDelegateInterceptor.builder()
+                .annotation(MemberAuth.class)
+                .interceptor(memberAuthInterceptor())
+                .build())
+            .addPathPatterns("/api/**");
     }
 
     @Bean

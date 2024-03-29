@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.stage.domain.Stage;
-import com.festago.support.StageFixture;
-import com.festago.support.TicketFixture;
+import com.festago.support.fixture.StageFixture;
+import com.festago.support.fixture.TicketFixture;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketType;
 import com.festago.ticket.dto.StageTicketResponse;
@@ -35,10 +35,10 @@ class TicketServiceTest {
     void 공연_아이디로_모든_티켓의_정보_조회() {
         // given
         long stageId = 1L;
-        Stage stage = StageFixture.stage().id(stageId).build();
+        Stage stage = StageFixture.builder().id(stageId).build();
         List<Ticket> tickets = List.of(
-            TicketFixture.ticket().id(1L).ticketType(TicketType.STUDENT).stage(stage).build(),
-            TicketFixture.ticket().id(2L).ticketType(TicketType.VISITOR).stage(stage).build()
+            TicketFixture.builder().id(1L).ticketType(TicketType.STUDENT).stage(stage).build(),
+            TicketFixture.builder().id(2L).ticketType(TicketType.VISITOR).stage(stage).build()
         );
         given(ticketRepository.findAllByStageIdWithFetch(stageId))
             .willReturn(tickets);
