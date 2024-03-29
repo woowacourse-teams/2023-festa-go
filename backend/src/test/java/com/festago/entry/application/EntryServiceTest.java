@@ -23,11 +23,11 @@ import com.festago.entry.dto.event.EntryProcessEvent;
 import com.festago.festival.domain.Festival;
 import com.festago.member.domain.Member;
 import com.festago.stage.domain.Stage;
-import com.festago.support.FestivalFixture;
-import com.festago.support.MemberFixture;
-import com.festago.support.MemberTicketFixture;
-import com.festago.support.StageFixture;
 import com.festago.support.TimeInstantProvider;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.MemberTicketFixture;
+import com.festago.support.fixture.StageFixture;
 import com.festago.ticketing.domain.EntryState;
 import com.festago.ticketing.domain.MemberTicket;
 import com.festago.ticketing.repository.MemberTicketRepository;
@@ -75,16 +75,16 @@ class EntryServiceTest {
         void 입장_시간_전_요청하면_예외() {
             // given
             LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(entryTime.toLocalDate())
                 .endDate(entryTime.toLocalDate())
                 .build();
-            Stage stage = StageFixture.stage()
+            Stage stage = StageFixture.builder()
                 .festival(festival)
                 .startTime(entryTime.plusHours(2))
                 .ticketOpenTime(entryTime.minusHours(1))
                 .build();
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .id(1L)
                 .stage(stage)
                 .entryTime(entryTime)
@@ -106,16 +106,16 @@ class EntryServiceTest {
         void 입장_시간이_24시간이_넘은_경우_예외() {
             // given
             LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(entryTime.toLocalDate())
                 .endDate(entryTime.toLocalDate())
                 .build();
-            Stage stage = StageFixture.stage()
+            Stage stage = StageFixture.builder()
                 .festival(festival)
                 .startTime(entryTime.plusHours(2))
                 .ticketOpenTime(entryTime.minusHours(1))
                 .build();
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .id(1L)
                 .stage(stage)
                 .entryTime(entryTime)
@@ -137,10 +137,10 @@ class EntryServiceTest {
         void 자신의_티켓이_아니면_예외() {
             // given
             Long memberId = 1L;
-            Member other = MemberFixture.member()
+            Member other = MemberFixture.builder()
                 .id(2L)
                 .build();
-            MemberTicket otherTicket = MemberTicketFixture.memberTicket()
+            MemberTicket otherTicket = MemberTicketFixture.builder()
                 .id(1L)
                 .owner(other)
                 .build();
@@ -173,16 +173,16 @@ class EntryServiceTest {
             // given
             LocalDateTime entryTime = LocalDateTime.parse("2023-07-30T16:00:00");
             Instant now = Instant.from(ZonedDateTime.of(entryTime, ZoneId.systemDefault()));
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(entryTime.toLocalDate())
                 .endDate(entryTime.toLocalDate())
                 .build();
-            Stage stage = StageFixture.stage()
+            Stage stage = StageFixture.builder()
                 .festival(festival)
                 .startTime(entryTime.plusHours(2))
                 .ticketOpenTime(entryTime.minusHours(1))
                 .build();
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .id(1L)
                 .stage(stage)
                 .entryTime(entryTime)
@@ -216,7 +216,7 @@ class EntryServiceTest {
         void 예매한_티켓의_입장_상태와_요청의_입장_상태가_같으면_에매한_티켓의_입장_상태를_변경한다() {
             // given
             TicketValidationRequest request = new TicketValidationRequest("code");
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .id(1L)
                 .build();
             given(entryCodeManager.extract(anyString()))
@@ -238,7 +238,7 @@ class EntryServiceTest {
         void 예매한_티켓의_입장_상태와_요청의_입장_상태가_다르면_에매한_티켓의_입장_상태를_변경하지_않는다() {
             // given
             TicketValidationRequest request = new TicketValidationRequest("code");
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .id(1L)
                 .build();
             given(entryCodeManager.extract(anyString()))
