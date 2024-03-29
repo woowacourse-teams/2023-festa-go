@@ -44,7 +44,7 @@ public class LoginConfig implements WebMvcConfigurer {
                 .allowMethod(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT, HttpMethod.PATCH)
                 .interceptor(memberAuthInterceptor())
                 .build())
-            .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**", "/students/**", "/member-fcm/**")
+            .addPathPatterns("/member-tickets/**", "/members/**", "/auth/**", "/students/**", "/member-fcm/**", "/api/v1/bookmark/**")
             .excludePathPatterns("/auth/oauth2");
         registry.addInterceptor(AnnotationDelegateInterceptor.builder()
                 .annotation(MemberAuth.class)
