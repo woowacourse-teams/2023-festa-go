@@ -3,6 +3,7 @@ package com.festago.mock;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ public class RandomMockFestivalDateGenerator implements MockFestivalDateGenerato
     private static final int COUNT_FIRST_DAY_AS_DURATION_ONE = 1;
     private static final int RANDOM_OFFSET = 1;
     private static final int MAX_END_DATE_FROM_START_DATE = 2;
-    private final Random random = new Random();
+    private final Random random = ThreadLocalRandom.current();
     
     @Override
     public LocalDate makeRandomStartDate(int festivalDuration, LocalDate now) {
