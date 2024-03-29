@@ -12,7 +12,7 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.school.repository.MemorySchoolRepository;
 import com.festago.school.repository.SchoolRepository;
-import com.festago.support.SchoolFixture;
+import com.festago.support.fixture.SchoolFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -50,11 +50,11 @@ class SchoolBookmarkCommandServiceTest {
             // given
             Long memberId = 1L;
             for (long i = 0; i < 12; i++) {
-                Long schoolId = schoolRepository.save(SchoolFixture.school().build()).getId();
+                Long schoolId = schoolRepository.save(SchoolFixture.builder().build()).getId();
                 bookmarkRepository.save(new Bookmark(BookmarkType.SCHOOL, schoolId, memberId));
             }
 
-            Long schoolId = schoolRepository.save(SchoolFixture.school().build()).getId();
+            Long schoolId = schoolRepository.save(SchoolFixture.builder().build()).getId();
 
             // when && then
             assertThatThrownBy(() -> schoolBookmarkCommandService.save(schoolId, memberId))
@@ -65,7 +65,7 @@ class SchoolBookmarkCommandServiceTest {
         @Test
         void 이미_해당하는_북마크가_저장됐다면_예외() {
             // given
-            Long schoolId = schoolRepository.save(SchoolFixture.school().build()).getId();
+            Long schoolId = schoolRepository.save(SchoolFixture.builder().build()).getId();
             bookmarkRepository.save(new Bookmark(BookmarkType.SCHOOL, schoolId, 1L));
 
             // when && then
@@ -78,7 +78,7 @@ class SchoolBookmarkCommandServiceTest {
         void 북마크_저장_성공() {
             // given
             Long memberId = 1L;
-            Long schoolId = schoolRepository.save(SchoolFixture.school().build()).getId();
+            Long schoolId = schoolRepository.save(SchoolFixture.builder().build()).getId();
 
             // when
             Long actual = schoolBookmarkCommandService.save(schoolId, memberId);
@@ -92,7 +92,7 @@ class SchoolBookmarkCommandServiceTest {
     void 북마크를_삭제한다() {
         // given
         Long memberId = 1L;
-        Long schoolId = schoolRepository.save(SchoolFixture.school().build()).getId();
+        Long schoolId = schoolRepository.save(SchoolFixture.builder().build()).getId();
         bookmarkRepository.save(new Bookmark(SCHOOL, schoolId, memberId));
 
         // when

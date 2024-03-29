@@ -11,8 +11,8 @@ import com.festago.member.repository.MemberRepository;
 import com.festago.school.dto.v1.SchoolSearchV1Response;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.MemberFixture;
-import com.festago.support.SchoolFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.SchoolFixture;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -65,13 +65,13 @@ class SchoolBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegration
     }
 
     private Long saveMember(String socialId) {
-        return memberRepository.save(MemberFixture.member()
+        return memberRepository.save(MemberFixture.builder()
             .socialId(socialId)
             .build()).getId();
     }
 
     private Long saveSchool(String name, String domain, String logoUrl) {
-        return schoolRepository.save(SchoolFixture.school()
+        return schoolRepository.save(SchoolFixture.builder()
             .name(name)
             .domain(domain)
             .logoUrl(logoUrl)

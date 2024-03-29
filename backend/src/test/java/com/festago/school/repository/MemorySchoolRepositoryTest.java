@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
-import com.festago.support.SchoolFixture;
+import com.festago.support.fixture.SchoolFixture;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -25,7 +25,7 @@ class MemorySchoolRepositoryTest {
     @Test
     void 학교를_저장한다() {
         // given
-        School school = schoolRepository.save(SchoolFixture.school().build());
+        School school = schoolRepository.save(SchoolFixture.builder().build());
 
         // when && then
         assertThat(school.getId()).isPositive();
@@ -34,7 +34,7 @@ class MemorySchoolRepositoryTest {
     @Test
     void 특정_필드로_조회한다() {
         // given
-        schoolRepository.save(SchoolFixture.school()
+        schoolRepository.save(SchoolFixture.builder()
             .region(SchoolRegion.서울)
             .name("학교이름")
             .domain("knu.ac.kr")
