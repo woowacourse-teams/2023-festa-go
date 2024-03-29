@@ -2,7 +2,6 @@ package com.festago.bookmark.presentation.v1;
 
 import com.festago.auth.annotation.Member;
 import com.festago.auth.annotation.MemberAuth;
-import com.festago.bookmark.application.FestivalBookmarkCommandService;
 import com.festago.bookmark.application.FestivalBookmarkV1QueryService;
 import com.festago.bookmark.dto.FestivalBookmarkV1Response;
 import com.festago.bookmark.repository.FestivalBookmarkOrder;
@@ -11,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class FestivalBookmarkV1Controller {
 
     private final FestivalBookmarkV1QueryService festivalBookmarkV1QueryService;
-    private final FestivalBookmarkCommandService festivalBookmarkCommandService;
 
     @MemberAuth
     @GetMapping("/ids")
@@ -52,29 +47,5 @@ public class FestivalBookmarkV1Controller {
                 festivalIds,
                 festivalBookmarkOrder
             ));
-    }
-
-    @MemberAuth
-    @PutMapping("/{festivalId}")
-    @Operation(description = "축제의 식별자로 축제 북마크를 등록한다.", summary = "축제 북마크 등록")
-    public ResponseEntity<Void> putFestivalBookmark(
-        @Member Long memberId,
-        @PathVariable Long festivalId
-    ) {
-        festivalBookmarkCommandService.putFestivalBookmark(memberId, festivalId);
-        return ResponseEntity.ok()
-            .build();
-    }
-
-    @MemberAuth
-    @DeleteMapping("/{festivalId}")
-    @Operation(description = "축제의 식별자로 축제 북마크를 삭제한다.", summary = "축제 북마크 삭제")
-    public ResponseEntity<Void> deleteFestivalBookmark(
-        @Member Long memberId,
-        @PathVariable Long festivalId
-    ) {
-        festivalBookmarkCommandService.deleteFestivalBookmark(memberId, festivalId);
-        return ResponseEntity.noContent()
-            .build();
     }
 }

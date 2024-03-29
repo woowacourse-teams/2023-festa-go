@@ -5,9 +5,7 @@ import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.anyList;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -130,64 +128,6 @@ class FestivalBookmarkV1ControllerTest {
             void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
                 // when & then
                 mockMvc.perform(get(uri))
-                    .andExpect(status().isUnauthorized());
-            }
-        }
-    }
-
-    @Nested
-    class 축제_북마크_등록 {
-
-        final String uri = "/api/v1/bookmarks/festivals/{festivalId}";
-
-        Long festivalId = 1L;
-
-        @Nested
-        @DisplayName("PUT " + uri)
-        class 올바른_주소로 {
-
-            @Test
-            @WithMockAuth
-            void 요청을_보내면_200_응답이_반환된다() throws Exception {
-                // when & then
-                mockMvc.perform(put(uri, festivalId)
-                        .header(HttpHeaders.AUTHORIZATION, TOKEN))
-                    .andExpect(status().isOk());
-            }
-
-            @Test
-            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
-                // when & then
-                mockMvc.perform(put(uri, festivalId))
-                    .andExpect(status().isUnauthorized());
-            }
-        }
-    }
-
-    @Nested
-    class 축제_북마크_삭제 {
-
-        final String uri = "/api/v1/bookmarks/festivals/{festivalId}";
-
-        Long festivalId = 1L;
-
-        @Nested
-        @DisplayName("DELETE " + uri)
-        class 올바른_주소로 {
-
-            @Test
-            @WithMockAuth
-            void 요청을_보내면_204_응답이_반환된다() throws Exception {
-                // when & then
-                mockMvc.perform(delete(uri, festivalId)
-                        .header(HttpHeaders.AUTHORIZATION, TOKEN))
-                    .andExpect(status().isNoContent());
-            }
-
-            @Test
-            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
-                // when & then
-                mockMvc.perform(delete(uri, festivalId))
                     .andExpect(status().isUnauthorized());
             }
         }
