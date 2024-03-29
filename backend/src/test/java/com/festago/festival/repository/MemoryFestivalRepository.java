@@ -2,8 +2,6 @@ package com.festago.festival.repository;
 
 import com.festago.festival.domain.Festival;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,10 +42,5 @@ public class MemoryFestivalRepository implements FestivalRepository {
     @Override
     public void deleteById(Long festivalId) {
         memory.remove(festivalId);
-    }
-
-    @Override
-    public List<Festival> findAll() {
-        return new ArrayList<>(memory.values());
     }
 }

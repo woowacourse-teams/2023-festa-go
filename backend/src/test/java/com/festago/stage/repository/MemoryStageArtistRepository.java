@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 
 import com.festago.stage.domain.StageArtist;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -51,10 +50,5 @@ public class MemoryStageArtistRepository implements StageArtistRepository {
     @Override
     public void deleteByStageId(Long stageId) {
         memory.entrySet().removeIf(entry -> Objects.equals(entry.getValue().getStageId(), stageId));
-    }
-
-    @Override
-    public List<StageArtist> findAll() {
-        return new ArrayList<>(memory.values());
     }
 }

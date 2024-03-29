@@ -18,7 +18,4 @@ public interface StageRepository extends Repository<Stage, Long>, StageRepositor
     boolean existsByFestivalId(Long festivalId);
 
     List<Stage> findAllByFestivalId(Long festivalId);
-
-    List<Stage> findAll();
-
 }
