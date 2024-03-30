@@ -41,9 +41,13 @@ class FestivalListViewModel @Inject constructor(
 
     fun initFestivalList() {
         viewModelScope.launch {
+            val schoolRegion = (uiState.value as? FestivalListUiState.Success)?.schoolRegion
             val deferredPopularFestivals = async { festivalRepository.loadPopularFestivals() }
             val deferredFestivals = async {
-                festivalRepository.loadFestivals(festivalFilter = festivalFilter)
+                festivalRepository.loadFestivals(
+                    schoolRegion = schoolRegion,
+                    festivalFilter = festivalFilter
+                )
             }
             runCatching {
                 val festivalsPage = deferredFestivals.await().getOrThrow()
@@ -57,6 +61,7 @@ class FestivalListViewModel @Inject constructor(
                     festivals = festivalsPage.festivals.map { it.toUiState() },
                     festivalFilter = festivalFilter.toUiState(),
                     isLastPage = festivalsPage.isLastPage,
+                    schoolRegion = schoolRegion,
                 )
             }.onFailure {
                 _uiState.value = FestivalListUiState.Error
