@@ -25,7 +25,7 @@ public class BookmarkManagementV1Controller {
     @MemberAuth
     @PutMapping
     @Operation(description = "자원의 식별자와 타입으로 북마크를 등록한다.", summary = "북마크 등록")
-    public ResponseEntity<Void> putFestivalBookmark(
+    public ResponseEntity<Void> putBookmark(
         @Member Long memberId,
         @RequestParam Long resourceId,
         @RequestParam BookmarkType bookmarkType
@@ -38,7 +38,7 @@ public class BookmarkManagementV1Controller {
     @MemberAuth
     @DeleteMapping
     @Operation(description = "자원의 식별자와 타입으로 북마크를 삭제한다.", summary = "북마크 삭제")
-    public ResponseEntity<Void> deleteFestivalBookmark(
+    public ResponseEntity<Void> deleteBookmark(
         @Member Long memberId,
         @RequestParam Long resourceId,
         @RequestParam BookmarkType bookmarkType
