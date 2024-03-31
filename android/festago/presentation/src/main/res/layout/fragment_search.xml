@@ -152,10 +152,12 @@
 
         <TextView
             android:id="@+id/tvRecentSearchEmpty"
+            style="@style/H5Bold14Lh16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/search_tv_recent_search_empty"
+            android:textColor="@color/contents_gray_06"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvRecentSearch"
