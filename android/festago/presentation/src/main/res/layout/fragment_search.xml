@@ -44,6 +44,7 @@
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/background_gray_03"
                 android:elevation="0dp"
+                android:outlineProvider="none"
                 app:cardCornerRadius="1000dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
