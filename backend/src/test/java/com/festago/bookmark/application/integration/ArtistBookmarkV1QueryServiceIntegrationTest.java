@@ -88,7 +88,7 @@ class ArtistBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegration
         // then
         assertSoftly(softly -> {
             softly.assertThat(actual).hasSize(2);
-            softly.assertThat(actual).extracting("artistInfo").extracting("name").contains("브리", "네오");
+            softly.assertThat(actual).extracting("artist").extracting("name").contains("브리", "네오");
         });
     }
 
@@ -113,7 +113,7 @@ class ArtistBookmarkV1QueryServiceIntegrationTest extends ApplicationIntegration
         // then
         assertSoftly(softly -> {
             softly.assertThat(actual).hasSize(2);
-            softly.assertThat(actual).extracting("artistInfo").extracting("name").contains("브리", "네오");
+            softly.assertThat(actual).extracting("artist").extracting("name").contains("브리", "네오");
         });
     }
 
