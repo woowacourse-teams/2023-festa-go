@@ -48,7 +48,7 @@ jobs:
         run: docker build -t ${{ vars.DOCKER_DEV_TAG }} .
 
       - name: Push Docker images
-        run: docker push -t ${{ vars.DOCKER_DEV_TAG }} .
+        run: docker push ${{ vars.DOCKER_DEV_TAG }}
 
       - name: run application use ssh
         uses: appleboy/ssh-action@master
