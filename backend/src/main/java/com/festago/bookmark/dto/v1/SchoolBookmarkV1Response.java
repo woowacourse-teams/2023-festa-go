@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public record SchoolBookmarkV1Response(
     SchoolBookmarkInfoV1Response school,
-    LocalDateTime bookmarkCreatedAt
+    LocalDateTime createdAt
 ) {
 
     @QueryProjection
