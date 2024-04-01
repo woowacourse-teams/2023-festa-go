@@ -117,6 +117,7 @@ class FestivalListFragment : Fragment() {
 
                 val festivalListUiState = vm.uiState.value as? FestivalListUiState.Success ?: return
                 if (festivalListUiState.isLastPage) return
+                if (festivalListUiState.festivals.isEmpty()) return
 
                 val lastVisibleItemPosition =
                     (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
@@ -125,7 +126,7 @@ class FestivalListFragment : Fragment() {
                 if (lastVisibleItemPosition == itemTotalCount) {
                     vm.loadFestivals(
                         schoolRegion = festivalListUiState.schoolRegion,
-                        isLoadMore = true
+                        isLoadMore = true,
                     )
                 }
             }
@@ -197,13 +198,13 @@ class FestivalListFragment : Fragment() {
                 FestivalTabUiState(
                     selectedFilter = festivalFilter,
                     selectedRegion = schoolRegion,
-                    onFilterSelected = { vm.loadFestivals(it, schoolRegion) }
+                    onFilterSelected = { vm.loadFestivals(it, schoolRegion) },
                 ) {
                     dialog.show(
                         parentFragmentManager,
-                        RegionBottomSheetDialogFragment::class.java.name
+                        RegionBottomSheetDialogFragment::class.java.name,
                     )
-                }
+                },
             )
             addAll(festivals)
             if (!isLastPage) add(FestivalMoreItemUiState)
@@ -211,17 +212,17 @@ class FestivalListFragment : Fragment() {
     }
 
     private fun FestivalListUiState.Success.createRegionDialog(
-        schoolRegions: List<SchoolRegionUiState>
+        schoolRegions: List<SchoolRegionUiState>,
     ) = RegionBottomSheetDialogFragment.newInstance(
         items = schoolRegions,
         listener = object : RegionBottomSheetDialogFragment.OnRegionSelectListener {
             override fun onRegionSelect(region: SchoolRegion) {
                 vm.loadFestivals(
                     festivalFilterUiState = festivalFilter,
-                    schoolRegion = if (region == schoolRegion) null else region
+                    schoolRegion = if (region == schoolRegion) null else region,
                 )
             }
-        }
+        },
     )
 
     private fun showSchoolDetail() {

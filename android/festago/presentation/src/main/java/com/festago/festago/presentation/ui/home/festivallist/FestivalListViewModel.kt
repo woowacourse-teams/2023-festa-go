@@ -46,7 +46,7 @@ class FestivalListViewModel @Inject constructor(
             val deferredFestivals = async {
                 festivalRepository.loadFestivals(
                     schoolRegion = schoolRegion,
-                    festivalFilter = festivalFilter
+                    festivalFilter = festivalFilter,
                 )
             }
             runCatching {
@@ -82,31 +82,47 @@ class FestivalListViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentFestivals = getCurrentFestivals(festivalFilterUiState)
+            updateFestivalsState(festivalFilterUiState, successUiState)
 
             festivalRepository.loadFestivals(
                 schoolRegion = schoolRegion,
                 festivalFilter = festivalFilter,
                 lastFestivalId = if (isLoadMore) {
                     currentFestivals.lastOrNull()?.id
-                } else null,
+                } else {
+                    null
+                },
                 lastStartDate = if (isLoadMore) {
                     currentFestivals.lastOrNull()?.startDate
-                } else null,
+                } else {
+                    null
+                },
             ).onSuccess { festivalsPage ->
                 _uiState.value = FestivalListUiState.Success(
-                    PopularFestivalUiState(
-                        title = successUiState.popularFestivalUiState.title,
-                        festivals = successUiState.popularFestivalUiState.festivals,
-                    ),
+                    successUiState.popularFestivalUiState,
                     festivals = if (isLoadMore) {
                         currentFestivals + festivalsPage.festivals.map { it.toUiState() }
-                    } else festivalsPage.festivals.map { it.toUiState() },
+                    } else {
+                        festivalsPage.festivals.map { it.toUiState() }
+                    },
                     festivalFilter = festivalFilter.toUiState(),
                     schoolRegion = schoolRegion,
                     isLastPage = festivalsPage.isLastPage,
                 )
             }
         }
+    }
+
+    private fun updateFestivalsState(
+        festivalFilterUiState: FestivalFilterUiState?,
+        successUiState: FestivalListUiState.Success,
+    ) {
+        if (festivalFilterUiState == null) return
+        _uiState.value = successUiState.copy(
+            festivals = listOf(),
+            isLastPage = false,
+            festivalFilter = festivalFilterUiState,
+        )
     }
 
     private fun getCurrentFestivals(festivalFilterUiState: FestivalFilterUiState?): List<FestivalItemUiState> {
