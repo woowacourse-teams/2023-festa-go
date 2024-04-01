@@ -17,6 +17,9 @@ import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.ApplicationIntegrationTest;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StageFixture;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,14 +63,49 @@ class AdminFestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationT
     @BeforeEach
     void setUp() {
         LocalDateTime ticketOpenTime = now.atStartOfDay().minusWeeks(1);
-        테코대학교 = schoolRepository.save(new School("teco.ac.kr", "테코대학교", SchoolRegion.서울));
-        우테대학교 = schoolRepository.save(new School("wote.ac.kr", "우테대학교", SchoolRegion.서울));
-        테코대학교_축제 = festivalRepository.save(new Festival("테코대학교 축제", now, now, 테코대학교));
-        테코대학교_공연_없는_축제 = festivalRepository.save(new Festival("테코대학교 공연 없는 축제", tomorrow, tomorrow, 테코대학교));
-        우테대학교_축제 = festivalRepository.save(new Festival("우테대학교 축제", now, tomorrow, 우테대학교));
-        테코대학교_공연 = stageRepository.save(new Stage(now.atTime(18, 0), ticketOpenTime, 테코대학교_축제));
-        우테대학교_첫째날_공연 = stageRepository.save(new Stage(now.atTime(18, 0), ticketOpenTime, 우테대학교_축제));
-        우테대학교_둘째날_공연 = stageRepository.save(new Stage(tomorrow.atTime(18, 0), ticketOpenTime, 우테대학교_축제));
+        우테대학교 = schoolRepository.save(SchoolFixture.builder()
+            .name("우테대학교")
+            .region(SchoolRegion.서울)
+            .build());
+        테코대학교 = schoolRepository.save(SchoolFixture.builder()
+            .name("테코대학교")
+            .region(SchoolRegion.서울)
+            .build());
+
+        테코대학교_축제 = festivalRepository.save(FestivalFixture.builder()
+            .name("테코대학교 축제")
+            .startDate(now)
+            .endDate(now)
+            .school(테코대학교)
+            .build());
+        테코대학교_공연_없는_축제 = festivalRepository.save(FestivalFixture.builder()
+            .name("테코대학교 공연 없는 축제")
+            .startDate(tomorrow)
+            .endDate(tomorrow)
+            .school(테코대학교)
+            .build());
+        우테대학교_축제 = festivalRepository.save(FestivalFixture.builder()
+            .name("우테대학교 축제")
+            .startDate(now)
+            .endDate(tomorrow)
+            .school(우테대학교)
+            .build());
+
+        테코대학교_공연 = stageRepository.save(StageFixture.builder()
+            .startTime(now.atTime(18, 0))
+            .ticketOpenTime(ticketOpenTime)
+            .festival(테코대학교_축제)
+            .build());
+        우테대학교_첫째날_공연 = stageRepository.save(StageFixture.builder()
+            .startTime(now.atTime(18, 0))
+            .ticketOpenTime(ticketOpenTime)
+            .festival(우테대학교_축제)
+            .build());
+        우테대학교_둘째날_공연 = stageRepository.save(StageFixture.builder()
+            .startTime(tomorrow.atTime(18, 0))
+            .ticketOpenTime(ticketOpenTime)
+            .festival(우테대학교_축제)
+            .build());
     }
 
     @Nested
