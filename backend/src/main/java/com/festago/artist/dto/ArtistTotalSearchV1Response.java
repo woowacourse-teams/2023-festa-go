@@ -4,8 +4,8 @@ public record ArtistTotalSearchV1Response(
     Long id,
     String name,
     String profileImageUrl,
-    Integer countOfTodayStage,
-    Integer countOfPlannedStage
+    Integer todayStage,
+    Integer plannedStage
 ) {
 
     public static ArtistTotalSearchV1Response of(ArtistSearchV1Response artistResponse,
@@ -14,8 +14,8 @@ public record ArtistTotalSearchV1Response(
             artistResponse.id(),
             artistResponse.name(),
             artistResponse.profileImageUrl(),
-            stageCount.countOfTodayStage(),
-            stageCount.countOfPlannedStage()
+            stageCount.todayStage(),
+            stageCount.plannedStage()
         );
     }
 }
