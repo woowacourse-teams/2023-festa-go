@@ -1,16 +1,19 @@
 package com.festago.admin.presentation.v1;
 
 import com.festago.admin.application.AdminFestivalV1QueryService;
+import com.festago.admin.application.AdminStageV1QueryService;
 import com.festago.admin.dto.festival.AdminFestivalDetailV1Response;
 import com.festago.admin.dto.festival.AdminFestivalV1Response;
 import com.festago.admin.dto.festival.FestivalV1CreateRequest;
 import com.festago.admin.dto.festival.FestivalV1UpdateRequest;
+import com.festago.admin.dto.stage.AdminStageV1Response;
 import com.festago.common.aop.ValidPageable;
 import com.festago.common.querydsl.SearchCondition;
 import com.festago.festival.application.command.FestivalCommandFacadeService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Hidden
 public class AdminFestivalV1Controller {
 
+    private final AdminStageV1QueryService adminStageV1QueryService;
     private final AdminFestivalV1QueryService adminFestivalV1QueryService;
     private final FestivalCommandFacadeService festivalCommandFacadeService;
 
@@ -52,6 +56,14 @@ public class AdminFestivalV1Controller {
     ) {
         return ResponseEntity.ok()
             .body(adminFestivalV1QueryService.findDetail(festivalId));
+    }
+
+    @GetMapping("/{festivalId}/stages")
+    public ResponseEntity<List<AdminStageV1Response>> findAllStagesByFestivalId(
+        @PathVariable Long festivalId
+    ) {
+        return ResponseEntity.ok()
+            .body(adminStageV1QueryService.findAllByFestivalId(festivalId));
     }
 
     @PostMapping

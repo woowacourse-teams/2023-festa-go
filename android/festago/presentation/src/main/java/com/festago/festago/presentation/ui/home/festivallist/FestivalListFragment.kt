@@ -17,6 +17,7 @@ import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragmentDirections.actionFestivalListFragmentToSchoolDetailFragment
 import com.festago.festago.presentation.ui.home.festivallist.bottomsheet.RegionBottomSheetDialogFragment
+import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragmentDirections.actionFestivalListFragmentToSearchFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
@@ -226,7 +227,7 @@ class FestivalListFragment : Fragment() {
     )
 
     private fun showSchoolDetail() {
-        findNavController().navigate(actionFestivalListFragmentToSchoolDetailFragment(0))
+        findNavController().navigate(actionFestivalListFragmentToSearchFragment())
     }
 
     private fun showNotificationList() {

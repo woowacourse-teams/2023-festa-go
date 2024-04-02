@@ -36,4 +36,21 @@
     <!-- String related to region bottom sheet -->
     <string name="region_bottom_sheet_tv_region">지역별</string>
 
+    <!-- String related to search -->
+    <string name="search_et_search_hint">학교명, 아티스트명, 축제명으로 입력하세요.</string>
+    <string name="search_tv_recent_search">최근 검색어</string>
+    <string name="search_tv_delete_all">전체 삭제</string>
+    <string name="search_tv_recent_search_empty">최근 검색 내역이 없어요</string>
+    <string name="search_tl_tab_festival">축제</string>
+    <string name="search_tl_tab_Artist">아티스트</string>
+    <string name="search_tl_tab_school">학교</string>
+    <string name="search_cant_search_blank">검색어를 입력해주세요</string>
+    <string name="search_school_tv_dday_in_progress">축제 중</string>
+    <string name="search_school_tv_dday_format">D%1$s</string>
+    <string name="search_school_tv_no_plan">예정 없음</string>
+    <string name="search_artist_tv_today_stage_count">오늘 공연 %d개</string>
+    <string name="search_artist_tv_upcoming_stage_count">공연 예정 %d개</string>
+    <string name="search_tv_no_result">앗! 검색 결과가 없네요</string>
+    <string name="search_tv_no_result_guide">찾으시는 정보가 없다면 저희에게 알려주세요</string>
+    <string name="search_tv_request_add">추가 요청하러 가기</string>
 </resources>
