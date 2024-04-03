@@ -34,13 +34,11 @@ class ArtistDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             runCatching {
-                val deferredArtistDetail =
-                    async { artistRepository.loadArtistDetail(id).getOrThrow() }
-                val deferredFestivals =
-                    async { artistRepository.loadArtistFestivals(id, 10).getOrThrow().toUiState() }
+                val deferredArtistDetail = async { artistRepository.loadArtistDetail(id) }
+                val deferredFestivals = async { artistRepository.loadArtistFestivals(id, 10) }
                 _uiState.value = ArtistDetailUiState.Success(
-                    deferredArtistDetail.await(),
-                    deferredFestivals.await(),
+                    deferredArtistDetail.await().getOrThrow(),
+                    deferredFestivals.await().getOrThrow().toUiState(),
                 )
             }.onFailure {
                 _uiState.value = ArtistDetailUiState.Error
