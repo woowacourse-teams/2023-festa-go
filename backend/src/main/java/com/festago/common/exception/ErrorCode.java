@@ -39,6 +39,8 @@ public enum ErrorCode {
     FESTIVAL_DELETE_CONSTRAINT_EXISTS_STAGE("공연이 등록된 축제는 삭제할 수 없습니다."),
     FESTIVAL_UPDATE_OUT_OF_DATE_STAGE_START_TIME("축제에 등록된 공연 중 변경하려는 날짜에 포함되지 않는 공연이 있습니다."),
     BOOKMARK_LIMIT_EXCEEDED("최대 북마크 갯수를 초과했습니다"),
+    BROAD_SEARCH_KEYWORD("더 자세한 검색어로 입력해야합니다."),
+    INVALID_KEYWORD("유효하지 않은 키워드 입니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),

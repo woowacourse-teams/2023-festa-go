@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.search.uistate.SearchUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_gray_01"
+        tools:context=".ui.search.SearchFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAppBarSearch"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_back_gray_07"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvSearch"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginVertical="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/background_gray_03"
+                android:elevation="0dp"
+                android:outlineProvider="none"
+                app:cardCornerRadius="1000dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivBack"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.festago.festago.presentation.ui.customview.ClearEditText
+                    android:id="@+id/etSearch"
+                    style="@style/B2Medium14Lh20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="12dp"
+                    android:background="@null"
+                    android:hint="@string/search_et_search_hint"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColorHint="@color/contents_gray_05" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tlSearch"
+            visibility="@{uiState.shouldShowSearchSuccess || uiState.shouldShowLoading}"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@id/clAppBarSearch"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/contents_gray_07"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/contents_gray_07"
+            app:tabTextAppearance="@style/H4Bold16Lh20"
+            app:tabTextColor="@color/contents_gray_05" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/mdDividerSearch"
+            visibility="@{uiState.shouldShowSearchSuccess || uiState.shouldShowLoading}"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            app:dividerColor="@color/background_gray_03"
+            app:layout_constraintTop_toBottomOf="@id/tlSearch" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpSearch"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tlSearch"
+            app:visibility="@{uiState.shouldShowSearchSuccess || uiState.shouldShowLoading}" />
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tlSearch" />
+
+        <TextView
+            android:id="@+id/tvRecentSearch"
+            style="@style/H4Bold16Lh20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/search_tv_recent_search"
+            android:textColor="@color/contents_gray_07"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clAppBarSearch"
+            app:visibility="@{uiState.shouldShowRecentSearchSuccess}" />
+
+        <TextView
+            android:id="@+id/tvDeleteAll"
+            style="@style/B4Medium12Lh14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/search_tv_delete_all"
+            app:layout_constraintBottom_toBottomOf="@id/tvRecentSearch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvRecentSearch"
+            app:visibility="@{uiState.shouldShowRecentSearchSuccess}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecentSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvRecentSearch"
+            app:visibility="@{uiState.shouldShowNotEmptyRecentSearchSuccess}"
+            tools:listitem="@layout/item_recent_search" />
+
+        <TextView
+            android:id="@+id/tvRecentSearchEmpty"
+            style="@style/H5Bold14Lh16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/search_tv_recent_search_empty"
+            android:textColor="@color/contents_gray_06"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvRecentSearch"
+            app:visibility="@{uiState.shouldShowEmptyRecentSearchSuccess}" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/mdDividerRecentSearchEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="32dp"
+            app:dividerColor="@color/background_gray_03"
+            app:layout_constraintTop_toBottomOf="@id/tvRecentSearchEmpty"
+            app:visibility="@{uiState.shouldShowEmptyRecentSearchSuccess}" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -20,10 +20,32 @@ public class JsonArtistsSerializer implements ArtistsSerializer {
     @Override
     public String serialize(List<Artist> artists) {
         try {
-            return objectMapper.writeValueAsString(artists);
+            List<ArtistQueryModel> artistQueryModels = artists.stream()
+                .map(ArtistQueryModel::from)
+                .toList();
+            return objectMapper.writeValueAsString(artistQueryModels);
         } catch (JsonProcessingException e) {
             log.error(e.getMessage(), e);
             throw new UnexpectedException("Artist 목록을 직렬화 하는 중에 문제가 발생했습니다.");
+        }
+    }
+
+    /**
+     * 쿼리에서 사용되는 모델이므로, 필드를 추가해도 필드명은 변경되면 절대로 안 됨!!!
+     */
+    private record ArtistQueryModel(
+        Long id,
+        String name,
+        String profileImageUrl,
+        String backgroundImageUrl
+    ) {
+        public static ArtistQueryModel from(Artist artist) {
+            return new ArtistQueryModel(
+                artist.getId(),
+                artist.getName(),
+                artist.getProfileImage(),
+                artist.getBackgroundImageUrl()
+            );
         }
     }
 }
