@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Deprecated(forRemoval = true)
 @RestController
 @RequestMapping("/admin/api")
 @Hidden

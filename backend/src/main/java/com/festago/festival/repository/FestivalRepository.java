@@ -20,4 +20,6 @@ public interface FestivalRepository extends Repository<Festival, Long> {
     Optional<Festival> findById(Long festivalId);
 
     void deleteById(Long festivalId);
+
+    boolean existsById(Long festivalId);
 }

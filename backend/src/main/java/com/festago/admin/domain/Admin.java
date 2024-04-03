@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -54,6 +55,10 @@ public class Admin extends BaseTimeEntity {
         this.password = password;
     }
 
+    public static Admin createRootAdmin(String password) {
+        return new Admin(ROOT_ADMIN_NAME, password);
+    }
+
     private void validate(String username, String password) {
         validateUsername(username);
         validatePassword(password);
@@ -71,6 +76,10 @@ public class Admin extends BaseTimeEntity {
         Validator.notBlank(password, fieldName);
         Validator.minLength(password, MIN_PASSWORD_LENGTH, fieldName);
         Validator.maxLength(password, MAX_PASSWORD_LENGTH, fieldName);
+    }
+
+    public boolean isRootAdmin() {
+        return Objects.equals(username, ROOT_ADMIN_NAME);
     }
 
     public Long getId() {
