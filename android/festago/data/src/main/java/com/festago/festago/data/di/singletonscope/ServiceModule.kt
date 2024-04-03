@@ -2,6 +2,7 @@ package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.service.SchoolRetrofitService
+import com.festago.festago.data.service.SearchRetrofitService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,5 +28,13 @@ object ServiceModule {
         @NormalRetrofitQualifier retrofit: Retrofit,
     ): SchoolRetrofitService {
         return retrofit.create(SchoolRetrofitService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesSearchRetrofitService(
+        @NormalRetrofitQualifier retrofit: Retrofit,
+    ): SearchRetrofitService {
+        return retrofit.create(SearchRetrofitService::class.java)
     }
 }
