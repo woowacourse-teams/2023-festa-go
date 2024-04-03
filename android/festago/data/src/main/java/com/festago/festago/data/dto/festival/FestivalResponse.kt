@@ -13,7 +13,7 @@ data class FestivalResponse(
     val startDate: String,
     val endDate: String,
     val posterImageUrl: String,
-    val school: SchoolResponse?,
+    val school: SchoolResponse? = null,
     val artists: List<ArtistResponse>,
 ) {
     fun toDomain(): Festival = Festival(
