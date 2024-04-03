@@ -7,6 +7,7 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.festival.domain.Festival;
 import com.festago.stage.repository.MemoryStageRepository;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.fixture.FestivalFixture;
 import com.festago.support.fixture.StageFixture;
 import java.time.LocalDate;
@@ -23,13 +24,15 @@ class OutOfDateStageFestivalUpdateValidatorTest {
 
     LocalDate festivalStartDate = LocalDate.parse("2077-02-19");
     LocalDate festivalEndDate = LocalDate.parse("2077-02-21");
-    MemoryStageRepository stageRepository = new MemoryStageRepository();
-    OutOfDateStageFestivalUpdateValidator validator = new OutOfDateStageFestivalUpdateValidator(stageRepository);
+    StageRepository stageRepository;
+    OutOfDateStageFestivalUpdateValidator validator;
     Festival 축제;
 
     @BeforeEach
     void setUp() {
-        stageRepository.clear();
+        stageRepository = new MemoryStageRepository();
+        validator = new OutOfDateStageFestivalUpdateValidator(stageRepository);
+
         축제 = FestivalFixture.builder()
             .startDate(festivalStartDate)
             .endDate(festivalEndDate)

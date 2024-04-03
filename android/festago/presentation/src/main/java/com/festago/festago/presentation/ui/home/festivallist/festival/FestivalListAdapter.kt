@@ -47,7 +47,7 @@ class FestivalListAdapter(
             override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean = when {
                 oldItem is PopularFestivalUiState && newItem is PopularFestivalUiState -> true
                 oldItem is FestivalItemUiState && newItem is FestivalItemUiState -> oldItem.id == newItem.id
-                oldItem is FestivalTabUiState && newItem is FestivalTabUiState -> true
+                oldItem is FestivalTabUiState && newItem is FestivalTabUiState -> oldItem.selectedRegion == newItem.selectedRegion
                 oldItem is FestivalMoreItemUiState && newItem is FestivalMoreItemUiState -> true
                 else -> false
             }
@@ -59,7 +59,8 @@ class FestivalListAdapter(
                 oldItem is FestivalItemUiState && newItem is FestivalItemUiState
                 -> oldItem as FestivalItemUiState == newItem
 
-                oldItem is FestivalTabUiState && newItem is FestivalTabUiState -> true
+                oldItem is FestivalTabUiState && newItem is FestivalTabUiState
+                -> oldItem as FestivalTabUiState == newItem
 
                 oldItem is FestivalMoreItemUiState && newItem is FestivalMoreItemUiState -> true
 

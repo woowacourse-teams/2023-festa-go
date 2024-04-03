@@ -13,6 +13,7 @@ import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
+import com.festago.support.fixture.SchoolFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -40,9 +41,21 @@ class AdminSchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
 
     @BeforeEach
     void setUp() {
-        테코대학교 = schoolRepository.save(new School("teco.ac.kr", "테코대학교", SchoolRegion.서울));
-        우테대학교 = schoolRepository.save(new School("wote.ac.kr", "우테대학교", SchoolRegion.서울));
-        글렌대학교 = schoolRepository.save(new School("glen.ac.kr", "글렌대학교", SchoolRegion.대구));
+        테코대학교 = schoolRepository.save(SchoolFixture.builder()
+            .name("테코대학교")
+            .domain("teco.ac.kr")
+            .region(SchoolRegion.서울)
+            .build());
+        우테대학교 = schoolRepository.save(SchoolFixture.builder()
+            .name("우테대학교")
+            .domain("wote.ac.kr")
+            .region(SchoolRegion.서울)
+            .build());
+        글렌대학교 = schoolRepository.save(SchoolFixture.builder()
+            .name("글렌대학교")
+            .domain("glen.ac.kr")
+            .region(SchoolRegion.대구)
+            .build());
     }
 
     @Nested

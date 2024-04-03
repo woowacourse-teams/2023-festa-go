@@ -1,11 +1,12 @@
 package com.festago.support.fixture;
 
 import com.festago.festival.domain.FestivalQueryInfo;
+import java.util.Collections;
 
 public class FestivalQueryInfoFixture extends BaseFixture {
 
     private Long festivalId;
-    private String artistInfo;
+    private String artistInfo = "";
 
     private FestivalQueryInfoFixture() {
     }
@@ -26,7 +27,7 @@ public class FestivalQueryInfoFixture extends BaseFixture {
 
     public FestivalQueryInfo build() {
         FestivalQueryInfo festivalQueryInfo = FestivalQueryInfo.create(festivalId);
-        festivalQueryInfo.updateArtistInfo(null, ignore -> artistInfo);
+        festivalQueryInfo.updateArtistInfo(Collections.emptyList(), artists -> artistInfo);
         return festivalQueryInfo;
     }
 }
