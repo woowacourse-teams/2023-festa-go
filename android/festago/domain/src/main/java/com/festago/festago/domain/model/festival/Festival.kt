@@ -10,6 +10,6 @@ data class Festival(
     val startDate: LocalDate,
     val endDate: LocalDate,
     val imageUrl: String,
-    val school: School,
+    val school: School?,
     val artists: List<Artist>,
 )

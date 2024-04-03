@@ -13,7 +13,6 @@ import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalFil
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalUiState
-import com.festago.festago.presentation.ui.home.festivallist.uistate.SchoolUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -152,10 +151,6 @@ class FestivalListViewModel @Inject constructor(
         startDate = startDate,
         endDate = endDate,
         imageUrl = imageUrl,
-        schoolUiState = SchoolUiState(
-            id = school.id,
-            name = school.name,
-        ),
         artists = artists.map { artist ->
             ArtistUiState(artist.id, artist.name, artist.imageUrl)
         },

@@ -69,7 +69,7 @@
 
             <ImageView
                 android:id="@+id/ivProfileImage"
-                imageUrl="@{uiState.artist.logoUrl}"
+                imageUrl="@{uiState.artist.profileUrl}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
