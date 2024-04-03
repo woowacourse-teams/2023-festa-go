@@ -11,8 +11,8 @@ import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
 import com.festago.school.dto.SchoolUpdateCommand;
+import com.festago.school.repository.MemorySchoolRepository;
 import com.festago.school.repository.SchoolRepository;
-import com.festago.school.repository.TempMemorySchoolRepository;
 import com.festago.support.fixture.SchoolFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -30,7 +30,7 @@ class SchoolCommandServiceTest {
 
     @BeforeEach
     void setUp() {
-        schoolRepository = new TempMemorySchoolRepository();
+        schoolRepository = new MemorySchoolRepository();
         schoolCommandService = new SchoolCommandService(schoolRepository);
     }
 
