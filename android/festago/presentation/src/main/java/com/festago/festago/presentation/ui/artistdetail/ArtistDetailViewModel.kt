@@ -8,6 +8,7 @@ import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiSt
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.FestivalItemUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -33,9 +34,13 @@ class ArtistDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             runCatching {
+                val deferredArtistDetail =
+                    async { artistRepository.loadArtistDetail(id).getOrThrow() }
+                val deferredFestivals =
+                    async { artistRepository.loadArtistFestivals(id, 10).getOrThrow().toUiState() }
                 _uiState.value = ArtistDetailUiState.Success(
-                    artistRepository.loadArtistDetail(id).getOrThrow(),
-                    artistRepository.loadArtistFestivals(id, 20).getOrThrow().toUiState(),
+                    deferredArtistDetail.await(),
+                    deferredFestivals.await(),
                 )
             }.onFailure {
                 _uiState.value = ArtistDetailUiState.Error
