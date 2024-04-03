@@ -5,14 +5,19 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.mockito.Mockito.mock;
 
 import com.festago.artist.domain.Artist;
+import com.festago.artist.repository.ArtistRepository;
 import com.festago.artist.repository.MemoryArtistRepository;
 import com.festago.festival.domain.Festival;
+import com.festago.festival.repository.FestivalRepository;
 import com.festago.festival.repository.MemoryFestivalRepository;
 import com.festago.stage.domain.Stage;
-import com.festago.stage.domain.StageArtist;
 import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageRepository;
+import com.festago.stage.repository.StageArtistRepository;
+import com.festago.stage.repository.StageRepository;
+import com.festago.support.fixture.ArtistFixture;
 import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.StageArtistFixture;
 import com.festago.support.fixture.StageFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,15 +31,11 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class StageDeleteServiceTest {
 
-    MemoryArtistRepository artistRepository = new MemoryArtistRepository();
-    MemoryFestivalRepository festivalRepository = new MemoryFestivalRepository();
-    MemoryStageRepository stageRepository = new MemoryStageRepository();
-    MemoryStageArtistRepository stageArtistRepository = new MemoryStageArtistRepository();
-    StageDeleteService stageDeleteService = new StageDeleteService(
-        stageRepository,
-        stageArtistRepository,
-        mock()
-    );
+    ArtistRepository artistRepository;
+    FestivalRepository festivalRepository;
+    StageRepository stageRepository;
+    StageArtistRepository stageArtistRepository;
+    StageDeleteService stageDeleteService;
 
     LocalDateTime stageStartTime = LocalDateTime.parse("2077-06-30T18:00:00");
     LocalDateTime ticketOpenTime = stageStartTime.minusWeeks(1);
@@ -46,8 +47,12 @@ class StageDeleteServiceTest {
 
     @BeforeEach
     void setUp() {
-        stageRepository.clear();
-        stageArtistRepository.clear();
+        artistRepository = new MemoryArtistRepository();
+        festivalRepository = new MemoryFestivalRepository();
+        stageRepository = new MemoryStageRepository();
+        stageArtistRepository = new MemoryStageArtistRepository();
+        stageDeleteService = new StageDeleteService(stageRepository, stageArtistRepository, mock());
+
         테코대학교_축제 = festivalRepository.save(
             FestivalFixture.builder()
                 .name("테코대학교 축제")
@@ -62,12 +67,12 @@ class StageDeleteServiceTest {
                 .ticketOpenTime(ticketOpenTime)
                 .build()
         );
-        에픽하이 = artistRepository.save(new Artist("에픽하이", "https://image.com/profileImage.png"));
-        소녀시대 = artistRepository.save(new Artist("소녀시대", "https://image.com/profileImage.png"));
-        뉴진스 = artistRepository.save(new Artist("뉴진스", "https://image.com/profileImage.png"));
-        stageArtistRepository.save(new StageArtist(테코대학교_축제_공연.getId(), 에픽하이.getId()));
-        stageArtistRepository.save(new StageArtist(테코대학교_축제_공연.getId(), 소녀시대.getId()));
-        stageArtistRepository.save(new StageArtist(테코대학교_축제_공연.getId(), 뉴진스.getId()));
+        에픽하이 = artistRepository.save(ArtistFixture.builder().name("에픽하이").build());
+        소녀시대 = artistRepository.save(ArtistFixture.builder().name("소녀시대").build());
+        뉴진스 = artistRepository.save(ArtistFixture.builder().name("뉴진스").build());
+        stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 에픽하이.getId()).build());
+        stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 소녀시대.getId()).build());
+        stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 뉴진스.getId()).build());
     }
 
     @Nested
