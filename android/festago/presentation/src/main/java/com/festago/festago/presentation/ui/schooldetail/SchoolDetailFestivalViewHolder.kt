@@ -15,7 +15,7 @@ import com.festago.festago.presentation.ui.schooldetail.uistate.FestivalItemUiSt
 import java.time.LocalDate
 
 class SchoolDetailFestivalViewHolder(
-    private val binding: ItemSchoolDetailFestivalBinding
+    private val binding: ItemSchoolDetailFestivalBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val artistAdapter = ArtistAdapter()
 
@@ -46,7 +46,7 @@ class SchoolDetailFestivalViewHolder(
                 )
             }
 
-            LocalDate.now() == item.startDate.minusDays(1) -> {
+            LocalDate.now() >= item.startDate.minusDays(7) -> {
                 dDayView.setTextColor(context.getColor(R.color.background_gray_01))
                 dDayView.text = context.getString(
                     R.string.festival_list_tv_dday_format,
