@@ -43,4 +43,9 @@ public class MemoryFestivalRepository implements FestivalRepository {
     public void deleteById(Long festivalId) {
         memory.remove(festivalId);
     }
+
+    @Override
+    public boolean existsById(Long festivalId) {
+        return memory.containsKey(festivalId);
+    }
 }
