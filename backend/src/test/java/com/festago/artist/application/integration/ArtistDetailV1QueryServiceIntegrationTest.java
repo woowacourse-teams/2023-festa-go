@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.given;
 
+import com.festago.artist.application.ArtistDetailV1QueryService;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.ArtistFestivalDetailV1Response;
 import com.festago.artist.dto.ArtistMediaV1Response;
