@@ -1,7 +1,7 @@
 package com.festago.festago.data.repository
 
-import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.model.search.ArtistSearch
+import com.festago.festago.domain.model.search.FestivalSearch
 import com.festago.festago.domain.model.search.SchoolSearch
 import com.festago.festago.domain.repository.SearchRepository
 import kotlinx.coroutines.delay
@@ -10,11 +10,11 @@ import javax.inject.Inject
 
 class FakeSearchRepository @Inject constructor() : SearchRepository {
     private var times = 0
-    override suspend fun searchFestivals(searchQuery: String): Result<List<Festival>> {
+    override suspend fun searchFestivals(searchQuery: String): Result<List<FestivalSearch>> {
         delay(1000)
         times++
         if (times % 2 == 0) {
-            return Result.success(FakeFestivals.popularFestivals)
+            return Result.success(listOf())
         }
         return Result.success(listOf())
     }

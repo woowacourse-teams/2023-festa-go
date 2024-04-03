@@ -3,8 +3,8 @@ package com.festago.festago.data.repository
 import com.festago.festago.data.service.SearchRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
-import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.model.search.ArtistSearch
+import com.festago.festago.domain.model.search.FestivalSearch
 import com.festago.festago.domain.model.search.SchoolSearch
 import com.festago.festago.domain.repository.SearchRepository
 import javax.inject.Inject
@@ -13,7 +13,7 @@ class DefaultSearchRepository @Inject constructor(
     private val searchRetrofitService: SearchRetrofitService,
 ) : SearchRepository {
 
-    override suspend fun searchFestivals(searchQuery: String): Result<List<Festival>> {
+    override suspend fun searchFestivals(searchQuery: String): Result<List<FestivalSearch>> {
         return runCatchingResponse { searchRetrofitService.searchFestivals(searchQuery) }.onSuccessOrCatch { festivalResponses ->
             festivalResponses.map { it.toDomain() }
         }
