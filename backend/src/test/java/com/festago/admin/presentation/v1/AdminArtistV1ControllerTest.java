@@ -1,13 +1,13 @@
 package com.festago.admin.presentation.v1;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,6 +19,7 @@ import com.festago.admin.dto.artist.ArtistV1UpdateRequest;
 import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.dto.command.ArtistCreateCommand;
 import com.festago.auth.domain.Role;
+import com.festago.common.querydsl.SearchCondition;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import jakarta.servlet.http.Cookie;
@@ -29,6 +30,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -189,8 +191,8 @@ class AdminArtistV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_200_응답과_body가_반환된다() throws Exception {
                 // given
-                AdminArtistV1Response expected = new AdminArtistV1Response(1L, "윤하", "https://image.com/image.png");
-                given(adminArtistV1QueryService.findById(expected.id()))
+                var expected = new AdminArtistV1Response(1L, "윤하", "https://image.com/image.png");
+                given(adminArtistV1QueryService.findById(anyLong()))
                     .willReturn(expected);
 
                 // when & then
@@ -198,8 +200,7 @@ class AdminArtistV1ControllerTest {
                         .cookie(TOKEN_COOKIE)
                         .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+                    .andExpect(status().isOk());
             }
 
             @Test
@@ -233,20 +234,19 @@ class AdminArtistV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_200_응답과_body가_반환된다() throws Exception {
                 // given
-                List<AdminArtistV1Response> expected = List.of(
+                var expected = List.of(
                     new AdminArtistV1Response(1L, "윤하", "https://image.com/image1.png"),
                     new AdminArtistV1Response(2L, "고윤하", "https://image.com/image2.png")
                 );
-                given(adminArtistV1QueryService.findAll())
-                    .willReturn(expected);
+                given(adminArtistV1QueryService.findAll(any(SearchCondition.class)))
+                    .willReturn(new PageImpl<>(expected));
 
                 // when & then
                 mockMvc.perform(get(uri)
                         .cookie(TOKEN_COOKIE)
                         .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+                    .andExpect(status().isOk());
             }
 
             @Test

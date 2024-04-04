@@ -1,6 +1,6 @@
 package com.festago.admin.dto.artist;
 
-import com.festago.artist.domain.Artist;
+import com.querydsl.core.annotations.QueryProjection;
 
 public record AdminArtistV1Response(
     Long id,
@@ -8,7 +8,7 @@ public record AdminArtistV1Response(
     String profileImage
 ) {
 
-    public static AdminArtistV1Response from(Artist artist) {
-        return new AdminArtistV1Response(artist.getId(), artist.getName(), artist.getProfileImage());
+    @QueryProjection
+    public AdminArtistV1Response {
     }
 }
