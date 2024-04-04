@@ -40,11 +40,6 @@ public class MemoryArtistRepository implements ArtistRepository {
     }
 
     @Override
-    public List<Artist> findAll() {
-        return memory.values().stream().toList();
-    }
-
-    @Override
     public long countByIdIn(List<Long> artistIds) {
         return memory.values().stream()
             .filter(artist -> artistIds.contains(artist.getId()))
