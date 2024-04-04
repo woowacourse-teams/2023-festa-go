@@ -2,32 +2,11 @@ package com.festago.bookmark.repository;
 
 import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
-import java.lang.reflect.Field;
+import com.festago.support.AbstractMemoryRepository;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
-import lombok.SneakyThrows;
 
-public class MemoryBookmarkRepository implements BookmarkRepository {
-
-    private final ConcurrentHashMap<Long, Bookmark> memory = new ConcurrentHashMap<>();
-    private final AtomicLong autoIncrement = new AtomicLong();
-
-    public void clear() {
-        memory.clear();
-    }
-
-    @Override
-    @SneakyThrows
-    public Bookmark save(Bookmark bookmark) {
-        Field idField = bookmark.getClass()
-            .getDeclaredField("id");
-        idField.setAccessible(true);
-        idField.set(bookmark, autoIncrement.incrementAndGet());
-        memory.put(bookmark.getId(), bookmark);
-        return bookmark;
-    }
+public class MemoryBookmarkRepository extends AbstractMemoryRepository<Bookmark> implements BookmarkRepository {
 
     @Override
     public void deleteById(Long id) {
