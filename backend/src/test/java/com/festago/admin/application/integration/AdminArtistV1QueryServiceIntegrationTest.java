@@ -49,12 +49,20 @@ class AdminArtistV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
     @Nested
     class findAll {
 
+        Artist 벤;
+        Artist 베토벤;
         Artist 아이유;
         Artist 에픽하이;
         Artist 소녀시대;
 
         @BeforeEach
         void setUp() {
+            벤 = artistRepository.save(ArtistFixture.builder()
+                .name("벤")
+                .build());
+            베토벤 = artistRepository.save(ArtistFixture.builder()
+                .name("베토벤")
+                .build());
             아이유 = artistRepository.save(ArtistFixture.builder()
                 .name("아이유")
                 .build());
@@ -77,7 +85,7 @@ class AdminArtistV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
 
             assertThat(response.getContent())
                 .map(AdminArtistV1Response::name)
-                .containsExactly(소녀시대.getName(), 아이유.getName(), 에픽하이.getName());
+                .containsExactly(베토벤.getName(), 벤.getName(), 소녀시대.getName(), 아이유.getName(), 에픽하이.getName());
         }
 
         @Test
@@ -109,6 +117,20 @@ class AdminArtistV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
         }
 
         @Test
+        void 이름으로_검색할때_한_글자이면_동등_검색이_되어야_한다() {
+            // given
+            Pageable pageable = Pageable.ofSize(10);
+            SearchCondition searchCondition = new SearchCondition("name", "벤", pageable);
+
+            // when
+            var response = adminArtistV1QueryService.findAll(searchCondition);
+
+            assertThat(response.getContent())
+                .map(AdminArtistV1Response::name)
+                .containsExactly(벤.getName());
+        }
+
+        @Test
         void 검색_필터가_비어있으면_필터링이_적용되지_않는다() {
             // given
             Pageable pageable = Pageable.ofSize(10);
@@ -118,7 +140,7 @@ class AdminArtistV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             var response = adminArtistV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
-                .hasSize(3);
+                .hasSize(5);
         }
 
         @Test
@@ -131,7 +153,7 @@ class AdminArtistV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             var response = adminArtistV1QueryService.findAll(searchCondition);
 
             assertThat(response.getContent())
-                .hasSize(3);
+                .hasSize(5);
         }
 
         @Test
@@ -146,8 +168,8 @@ class AdminArtistV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
             // then
             assertSoftly(softly -> {
                 softly.assertThat(response.getSize()).isEqualTo(2);
-                softly.assertThat(response.getTotalPages()).isEqualTo(2);
-                softly.assertThat(response.getTotalElements()).isEqualTo(3);
+                softly.assertThat(response.getTotalPages()).isEqualTo(3);
+                softly.assertThat(response.getTotalElements()).isEqualTo(5);
             });
         }
     }

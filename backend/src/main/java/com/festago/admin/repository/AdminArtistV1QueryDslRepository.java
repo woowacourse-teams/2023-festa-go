@@ -44,7 +44,13 @@ public class AdminArtistV1QueryDslRepository extends QueryDslRepositorySupport {
     private BooleanExpression containSearchFilter(String searchFilter, String searchKeyword) {
         return switch (searchFilter) {
             case "id" -> eqId(searchKeyword);
-            case "name" -> containsName(searchKeyword);
+            case "name" -> {
+                // avoid NPE
+                if (searchKeyword != null && searchKeyword.length() == 1) {
+                    yield eqName(searchKeyword);
+                }
+                yield containsName(searchKeyword);
+            }
             default -> null;
         };
     }
@@ -59,6 +65,13 @@ public class AdminArtistV1QueryDslRepository extends QueryDslRepositorySupport {
     private BooleanExpression containsName(String name) {
         if (StringUtils.hasText(name)) {
             return artist.name.contains(name);
+        }
+        return null;
+    }
+
+    private BooleanExpression eqName(String name) {
+        if (StringUtils.hasText(name)) {
+            return artist.name.eq(name);
         }
         return null;
     }
