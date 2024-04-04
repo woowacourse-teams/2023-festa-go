@@ -1,38 +1,12 @@
 package com.festago.stage.repository;
 
 import com.festago.stage.domain.Stage;
-import java.lang.reflect.Field;
+import com.festago.support.AbstractMemoryRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
-import lombok.SneakyThrows;
 
-public class MemoryStageRepository implements StageRepository {
-
-    private final ConcurrentHashMap<Long, Stage> memory = new ConcurrentHashMap<>();
-    private final AtomicLong autoIncrement = new AtomicLong();
-
-    public void clear() {
-        memory.clear();
-    }
-
-    @Override
-    @SneakyThrows
-    public Stage save(Stage stage) {
-        Field idField = stage.getClass()
-            .getDeclaredField("id");
-        idField.setAccessible(true);
-        idField.set(stage, autoIncrement.incrementAndGet());
-        memory.put(stage.getId(), stage);
-        return stage;
-    }
-
-    @Override
-    public Optional<Stage> findById(Long stageId) {
-        return Optional.ofNullable(memory.get(stageId));
-    }
+public class MemoryStageRepository extends AbstractMemoryRepository<Stage> implements StageRepository {
 
     @Override
     public void deleteById(Long stageId) {
