@@ -2,33 +2,11 @@ package com.festago.member.repository;
 
 import com.festago.auth.domain.SocialType;
 import com.festago.member.domain.Member;
-import java.lang.reflect.Field;
+import com.festago.support.AbstractMemoryRepository;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
-import lombok.SneakyThrows;
 
-public class MemoryMemberRepository implements MemberRepository {
-
-    private final ConcurrentHashMap<Long, Member> memory = new ConcurrentHashMap<>();
-    private final AtomicLong autoIncrement = new AtomicLong();
-
-    @Override
-    @SneakyThrows
-    public Member save(Member member) {
-        Field idField = member.getClass()
-            .getDeclaredField("id");
-        idField.setAccessible(true);
-        idField.set(member, autoIncrement.incrementAndGet());
-        memory.put(member.getId(), member);
-        return member;
-    }
-
-    @Override
-    public Optional<Member> findById(Long id) {
-        return Optional.ofNullable(memory.get(id));
-    }
+public class MemoryMemberRepository extends AbstractMemoryRepository<Member> implements MemberRepository {
 
     @Override
     public void delete(Member member) {
