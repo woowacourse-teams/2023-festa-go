@@ -1,4 +1,4 @@
-package com.festago.festival.application.command;
+package com.festago.festival.application.integration.command;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
+import com.festago.festival.application.command.FestivalDeleteService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.repository.FestivalInfoRepository;

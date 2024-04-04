@@ -1,4 +1,4 @@
-package com.festago.festival.application.integration;
+package com.festago.festival.application.integration.query;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
