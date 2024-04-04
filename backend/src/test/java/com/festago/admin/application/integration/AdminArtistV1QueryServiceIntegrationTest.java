@@ -42,7 +42,8 @@ class AdminArtistV1QueryServiceIntegrationTest extends ApplicationIntegrationTes
         assertSoftly(softly -> {
             softly.assertThat(actual.id()).isEqualTo(expected.getId());
             softly.assertThat(actual.name()).isEqualTo(expected.getName());
-            softly.assertThat(actual.profileImage()).isEqualTo(expected.getProfileImage());
+            softly.assertThat(actual.profileImageUrl()).isEqualTo(expected.getProfileImage());
+            softly.assertThat(actual.backgroundImageUrl()).isEqualTo(expected.getBackgroundImageUrl());
         });
     }
 

@@ -30,7 +30,8 @@ public class AdminArtistV1QueryDslRepository extends QueryDslRepositorySupport {
                     new QAdminArtistV1Response(
                         artist.id,
                         artist.name,
-                        artist.profileImage
+                        artist.profileImage,
+                        artist.backgroundImageUrl
                     ))
                 .from(artist)
                 .where(containSearchFilter(searchFilter, searchKeyword))
@@ -81,7 +82,8 @@ public class AdminArtistV1QueryDslRepository extends QueryDslRepositorySupport {
                 new QAdminArtistV1Response(
                     artist.id,
                     artist.name,
-                    artist.profileImage
+                    artist.profileImage,
+                    artist.backgroundImageUrl
                 ))
             .from(artist)
             .where(artist.id.eq(artistId)));

@@ -5,7 +5,8 @@ import com.querydsl.core.annotations.QueryProjection;
 public record AdminArtistV1Response(
     Long id,
     String name,
-    String profileImage
+    String profileImageUrl,
+    String backgroundImageUrl
 ) {
 
     @QueryProjection
