@@ -23,8 +23,6 @@ public class AdminArtistV1QueryDslRepository extends QueryDslRepositorySupport {
 
     public Page<AdminArtistV1Response> findAll(SearchCondition searchCondition) {
         Pageable pageable = searchCondition.pageable();
-        String searchFilter = searchCondition.searchFilter();
-        String searchKeyword = searchCondition.searchKeyword();
         return applyPagination(pageable,
             queryFactory -> queryFactory.select(
                     new QAdminArtistV1Response(
@@ -34,24 +32,20 @@ public class AdminArtistV1QueryDslRepository extends QueryDslRepositorySupport {
                         artist.backgroundImageUrl
                     ))
                 .from(artist)
-                .where(containSearchFilter(searchFilter, searchKeyword))
+                .where(applySearch(searchCondition))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize()),
             queryFactory -> queryFactory.select(artist.count())
-                .where(containSearchFilter(searchFilter, searchKeyword))
+                .where(applySearch(searchCondition))
                 .from(artist));
     }
 
-    private BooleanExpression containSearchFilter(String searchFilter, String searchKeyword) {
+    private BooleanExpression applySearch(SearchCondition searchCondition) {
+        String searchFilter = searchCondition.searchFilter();
+        String searchKeyword = searchCondition.searchKeyword();
         return switch (searchFilter) {
             case "id" -> eqId(searchKeyword);
-            case "name" -> {
-                // avoid NPE
-                if (searchKeyword != null && searchKeyword.length() == 1) {
-                    yield eqName(searchKeyword);
-                }
-                yield containsName(searchKeyword);
-            }
+            case "name" -> searchKeyword.length() == 1 ? eqName(searchKeyword) : containsName(searchKeyword);
             default -> null;
         };
     }
@@ -63,16 +57,16 @@ public class AdminArtistV1QueryDslRepository extends QueryDslRepositorySupport {
         return null;
     }
 
-    private BooleanExpression containsName(String name) {
+    private BooleanExpression eqName(String name) {
         if (StringUtils.hasText(name)) {
-            return artist.name.contains(name);
+            return artist.name.eq(name);
         }
         return null;
     }
 
-    private BooleanExpression eqName(String name) {
+    private BooleanExpression containsName(String name) {
         if (StringUtils.hasText(name)) {
-            return artist.name.eq(name);
+            return artist.name.contains(name);
         }
         return null;
     }
