@@ -15,14 +15,17 @@ import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.stage.domain.Stage;
-import com.festago.stage.domain.StageArtist;
 import com.festago.stage.repository.StageArtistRepository;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.ApplicationIntegrationTest;
+import com.festago.support.fixture.ArtistFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StageArtistFixture;
+import com.festago.support.fixture.StageFixture;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -64,24 +67,60 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
         LocalDate nowDate = LocalDate.now();
         LocalDateTime nowDateTime = LocalDateTime.now();
 
-        School 부산_학교 = schoolRepository.save(new School("domain1", "부산 학교", SchoolRegion.부산));
-        School 서울_학교 = schoolRepository.save(new School("domain2", "서울 학교", SchoolRegion.서울));
-        School 대구_학교 = schoolRepository.save(new School("domain3", "대구 학교", SchoolRegion.대구));
+        School 부산_학교 = schoolRepository.save(SchoolFixture.builder()
+            .domain("domain1")
+            .name("부산 학교")
+            .region(SchoolRegion.부산)
+            .build());
+        School 서울_학교 = schoolRepository.save(SchoolFixture.builder()
+            .domain("domain2")
+            .name("서울 학교")
+            .region(SchoolRegion.서울)
+            .build());
+        School 대구_학교 = schoolRepository.save(SchoolFixture.builder()
+            .domain("domain3")
+            .name("대구 학교")
+            .region(SchoolRegion.대구)
+            .build());
 
-        Festival 부산_축제 = festivalRepository.save(
-            new Festival("부산대학교 축제", nowDate.minusDays(5), nowDate.minusDays(1), 부산_학교));
-        Festival 서울_축제 = festivalRepository.save(
-            new Festival("서울대학교 축제", nowDate.minusDays(1), nowDate.plusDays(3), 서울_학교));
-        Festival 대구_축제 = festivalRepository.save(
-            new Festival("대구대학교 축제", nowDate.plusDays(1), nowDate.plusDays(5), 대구_학교));
+        Festival 부산_축제 = festivalRepository.save(FestivalFixture.builder()
+            .name("부산대학교 축제")
+            .startDate(nowDate.minusDays(5))
+            .endDate(nowDate.minusDays(1))
+            .school(부산_학교)
+            .build());
+        Festival 서울_축제 = festivalRepository.save(FestivalFixture.builder()
+            .name("서울대학교 축제")
+            .startDate(nowDate.minusDays(1))
+            .endDate(nowDate.plusDays(3))
+            .school(서울_학교)
+            .build());
+        Festival 대구_축제 = festivalRepository.save(FestivalFixture.builder()
+            .name("대구대학교 축제")
+            .startDate(nowDate.plusDays(1))
+            .endDate(nowDate.plusDays(5))
+            .school(대구_학교)
+            .build());
 
         festivalInfoRepository.save(FestivalQueryInfo.create(부산_축제.getId()));
         festivalInfoRepository.save(FestivalQueryInfo.create(서울_축제.getId()));
         festivalInfoRepository.save(FestivalQueryInfo.create(대구_축제.getId()));
 
-        부산_공연 = stageRepository.save(new Stage(nowDateTime.minusDays(5L), nowDateTime.minusDays(6L), 부산_축제));
-        서울_공연 = stageRepository.save(new Stage(nowDateTime.minusDays(1L), nowDateTime.minusDays(2L), 서울_축제));
-        대구_공연 = stageRepository.save(new Stage(nowDateTime.plusDays(1L), nowDateTime, 대구_축제));
+        부산_공연 = stageRepository.save(StageFixture.builder()
+            .startTime(nowDateTime.minusDays(5L))
+            .ticketOpenTime(nowDateTime.minusDays(6L))
+            .festival(부산_축제)
+            .build());
+        서울_공연 = stageRepository.save(StageFixture.builder()
+            .startTime(nowDateTime.minusDays(1L))
+            .ticketOpenTime(nowDateTime.minusDays(2L))
+            .festival(서울_축제)
+            .build());
+        대구_공연 = stageRepository.save(StageFixture.builder()
+            .startTime(nowDateTime.plusDays(1L))
+            .ticketOpenTime(nowDateTime)
+            .festival(대구_축제)
+            .build());
     }
 
     @Nested
@@ -127,17 +166,23 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             @Test
             void 키워드가_두_글자_이상일_때_해당_키워드를_가진_아티스트의_정보를_반환한다() {
                 // given
-                Artist 오리 = artistRepository.save(new Artist("오리", "image.jpg"));
-                Artist 우푸우 = artistRepository.save(new Artist("우푸우", "image.jpg"));
-                Artist 글렌 = artistRepository.save(new Artist("글렌", "image.jpg"));
+                Artist 오리 = artistRepository.save(ArtistFixture.builder()
+                    .name("오리")
+                    .build());
+                Artist 우푸우 = artistRepository.save(ArtistFixture.builder()
+                    .name("우푸우")
+                    .build());
+                Artist 글렌 = artistRepository.save(ArtistFixture.builder()
+                    .name("글렌")
+                    .build());
 
-                stageArtistRepository.save(new StageArtist(부산_공연.getId(), 오리.getId()));
-                stageArtistRepository.save(new StageArtist(부산_공연.getId(), 우푸우.getId()));
+                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 오리.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 우푸우.getId()).build());
 
-                stageArtistRepository.save(new StageArtist(서울_공연.getId(), 오리.getId()));
-                stageArtistRepository.save(new StageArtist(서울_공연.getId(), 글렌.getId()));
+                stageArtistRepository.save(StageArtistFixture.builder(서울_공연.getId(), 오리.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(서울_공연.getId(), 글렌.getId()).build());
 
-                stageArtistRepository.save(new StageArtist(대구_공연.getId(), 우푸우.getId()));
+                stageArtistRepository.save(StageArtistFixture.builder(대구_공연.getId(), 우푸우.getId()).build());
 
                 // when
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("푸우");
@@ -153,17 +198,23 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             @Test
             void 해당하는_키워드의_아티스트가_없으면_빈_리스트을_반환한다() {
                 // given
-                Artist 오리 = artistRepository.save(new Artist("오리", "image.jpg"));
-                Artist 우푸우 = artistRepository.save(new Artist("우푸우", "image.jpg"));
-                Artist 글렌 = artistRepository.save(new Artist("글렌", "image.jpg"));
+                Artist 오리 = artistRepository.save(ArtistFixture.builder()
+                    .name("오리")
+                    .build());
+                Artist 우푸우 = artistRepository.save(ArtistFixture.builder()
+                    .name("우푸우")
+                    .build());
+                Artist 글렌 = artistRepository.save(ArtistFixture.builder()
+                    .name("글렌")
+                    .build());
 
-                stageArtistRepository.save(new StageArtist(부산_공연.getId(), 오리.getId()));
-                stageArtistRepository.save(new StageArtist(부산_공연.getId(), 우푸우.getId()));
+                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 오리.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 우푸우.getId()).build());
 
-                stageArtistRepository.save(new StageArtist(서울_공연.getId(), 오리.getId()));
-                stageArtistRepository.save(new StageArtist(서울_공연.getId(), 글렌.getId()));
+                stageArtistRepository.save(StageArtistFixture.builder(서울_공연.getId(), 오리.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(서울_공연.getId(), 글렌.getId()).build());
 
-                stageArtistRepository.save(new StageArtist(대구_공연.getId(), 우푸우.getId()));
+                stageArtistRepository.save(StageArtistFixture.builder(대구_공연.getId(), 우푸우.getId()).build());
 
                 // when
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("렌글");
@@ -175,7 +226,9 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             @Test
             void 아티스트가_공연에_참여하고_있지_않으면_빈_리스트가_반환된다() {
                 // given
-                Artist 우푸우 = artistRepository.save(new Artist("우푸우", "image.jpg"));
+                artistRepository.save(ArtistFixture.builder()
+                    .name("우푸우")
+                    .build());
 
                 // when
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("우푸");
@@ -192,13 +245,17 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             @Test
             void 두_글자_이상_아티스트와_함께_검색되지_않는다() {
                 // given
-                Artist 푸우 = artistRepository.save(new Artist("푸우", "image.jpg"));
-                Artist 푸 = artistRepository.save(new Artist("푸", "image.jpg"));
+                Artist 푸우 = artistRepository.save(ArtistFixture.builder()
+                    .name("푸우")
+                    .build());
+                Artist 푸 = artistRepository.save(ArtistFixture.builder()
+                    .name("푸")
+                    .build());
 
-                stageArtistRepository.save(new StageArtist(부산_공연.getId(), 푸우.getId()));
-                stageArtistRepository.save(new StageArtist(부산_공연.getId(), 푸.getId()));
+                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 푸우.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 푸.getId()).build());
 
-                stageArtistRepository.save(new StageArtist(서울_공연.getId(), 푸.getId()));
+                stageArtistRepository.save(StageArtistFixture.builder(서울_공연.getId(), 푸.getId()).build());
 
                 // when
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("푸");
@@ -214,13 +271,19 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             @Test
             void 해당하는_키워드의_아티스트가_없으면_빈_리스트를_반환한다() {
                 // given
-                Artist 푸우 = artistRepository.save(new Artist("푸우", "image.jpg"));
-                Artist 푸푸푸푸 = artistRepository.save(new Artist("푸푸푸푸", "image.jpg"));
-                Artist 글렌 = artistRepository.save(new Artist("글렌", "image.jpg"));
+                Artist 푸우 = artistRepository.save(ArtistFixture.builder()
+                    .name("푸우")
+                    .build());
+                Artist 푸푸푸푸 = artistRepository.save(ArtistFixture.builder()
+                    .name("푸푸푸푸")
+                    .build());
+                Artist 글렌 = artistRepository.save(ArtistFixture.builder()
+                    .name("글렌")
+                    .build());
 
-                stageArtistRepository.save(new StageArtist(부산_공연.getId(), 푸우.getId()));
-                stageArtistRepository.save(new StageArtist(부산_공연.getId(), 푸푸푸푸.getId()));
-                stageArtistRepository.save(new StageArtist(부산_공연.getId(), 글렌.getId()));
+                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 푸우.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 푸푸푸푸.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 글렌.getId()).build());
 
                 // when
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("푸");
@@ -232,7 +295,9 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             @Test
             void 아티스트가_공연에_참여하고_있지_않으면_빈_리스트를_반환한다() {
                 // given
-                Artist 우푸우 = artistRepository.save(new Artist("우푸우", "image.jpg"));
+                artistRepository.save(ArtistFixture.builder()
+                    .name("우푸우")
+                    .build());
 
                 // when
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("우푸");
