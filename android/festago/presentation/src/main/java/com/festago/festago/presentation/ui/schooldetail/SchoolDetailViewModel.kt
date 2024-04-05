@@ -12,8 +12,11 @@ import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiSt
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +29,9 @@ class SchoolDetailViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<SchoolDetailUiState>(SchoolDetailUiState.Loading)
     val uiState: StateFlow<SchoolDetailUiState> = _uiState.asStateFlow()
+
+    private val _event: MutableSharedFlow<SchoolDetailEvent> = MutableSharedFlow()
+    val event: SharedFlow<SchoolDetailEvent> = _event.asSharedFlow()
 
     fun loadSchoolDetail(schoolId: Long) {
         viewModelScope.launch {
@@ -62,8 +68,22 @@ class SchoolDetailViewModel @Inject constructor(
             name = school.name,
         ),
         artists = artists.map { artist ->
-            ArtistUiState(artist.id, artist.name, artist.imageUrl)
+            ArtistUiState(
+                id = artist.id,
+                name = artist.name,
+                imageUrl = artist.imageUrl,
+                onArtistDetailClick = { id ->
+                    viewModelScope.launch {
+                        _event.emit(SchoolDetailEvent.ShowArtistDetail(id))
+                    }
+                }
+            )
         },
+        onFestivalDetailClick = { id ->
+            viewModelScope.launch {
+                _event.emit(SchoolDetailEvent.ShowFestivalDetail(id))
+            }
+        }
     )
 
     companion object {
