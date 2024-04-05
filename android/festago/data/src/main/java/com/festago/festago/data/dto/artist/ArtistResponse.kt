@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 data class ArtistResponse(
     val id: Long,
     val name: String,
-    val profileImage: String,
+    val profileImageUrl: String,
 ) {
     fun toDomain() = Artist(
         id = id,
         name = name,
-        imageUrl = profileImage,
+        imageUrl = profileImageUrl,
     )
 }

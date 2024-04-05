@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
-import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.model.recentsearch.RecentSearchQuery
 import com.festago.festago.domain.model.search.ArtistSearch
+import com.festago.festago.domain.model.search.FestivalSearch
 import com.festago.festago.domain.model.search.SchoolSearch
 import com.festago.festago.domain.repository.RecentSearchRepository
 import com.festago.festago.domain.repository.SearchRepository
@@ -17,7 +17,6 @@ import com.festago.festago.presentation.ui.search.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.search.uistate.FestivalSearchItemUiState
 import com.festago.festago.presentation.ui.search.uistate.RecentSearchItemUiState
 import com.festago.festago.presentation.ui.search.uistate.SchoolSearchItemUiState
-import com.festago.festago.presentation.ui.search.uistate.SchoolUiState
 import com.festago.festago.presentation.ui.search.uistate.SearchUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -102,16 +101,12 @@ class SearchViewModel @Inject constructor(
         onRecentSearchDeleted = ::deleteRecentSearch,
     )
 
-    private fun Festival.toUiState() = FestivalSearchItemUiState(
+    private fun FestivalSearch.toUiState() = FestivalSearchItemUiState(
         id = id,
         name = name,
         startDate = startDate,
         endDate = endDate,
         imageUrl = imageUrl,
-        schoolUiState = SchoolUiState(
-            id = school.id,
-            name = school.name,
-        ),
         artists = artists.map { artist ->
             ArtistUiState(artist.id, artist.name, artist.imageUrl, ::showArtistDetail)
         },

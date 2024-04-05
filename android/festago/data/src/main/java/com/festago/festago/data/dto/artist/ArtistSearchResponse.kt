@@ -9,13 +9,13 @@ data class ArtistSearchResponse(
     val name: String,
     val profileImageUrl: String,
     val todayStage: Int,
-    val upcomingStage: Int,
+    val plannedStage: Int,
 ) {
     fun toDomain() = ArtistSearch(
         id = id,
         name = name,
         profileImageUrl = profileImageUrl,
         todayStage = todayStage,
-        upcomingStage = upcomingStage,
+        upcomingStage = plannedStage,
     )
 }
