@@ -41,6 +41,7 @@ public enum ErrorCode {
     BOOKMARK_LIMIT_EXCEEDED("최대 북마크 갯수를 초과했습니다"),
     BROAD_SEARCH_KEYWORD("더 자세한 검색어로 입력해야합니다."),
     INVALID_KEYWORD("유효하지 않은 키워드 입니다."),
+    DUPLICATE_SOCIAL_MEDIA("이미 존재하는 소셜미디어 입니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
