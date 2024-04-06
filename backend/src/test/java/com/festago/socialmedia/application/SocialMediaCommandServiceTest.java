@@ -110,14 +110,10 @@ class SocialMediaCommandServiceTest {
                 "https://image.com/logo.png",
                 "https://instagram.com/tecodaehak"
             );
-            socialMediaCommandService.createSocialMedia(command);
+            Long socialMediaId = socialMediaCommandService.createSocialMedia(command);
 
             // then
-            assertThat(socialMediaRepository.existsByOwnerIdAndOwnerTypeAndMediaType(
-                테코대학교.getId(),
-                OwnerType.SCHOOL,
-                SocialMediaType.INSTAGRAM
-            )).isTrue();
+            assertThat(socialMediaRepository.findById(socialMediaId)).isPresent();
         }
     }
 
