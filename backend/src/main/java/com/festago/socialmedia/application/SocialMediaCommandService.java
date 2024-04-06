@@ -52,4 +52,8 @@ public class SocialMediaCommandService {
         socialMedia.changeLogoUrl(command.logoUrl());
         socialMedia.changeUrl(command.url());
     }
+
+    public void deleteSocialMedia(Long socialMediaId) {
+        socialMediaRepository.deleteById(socialMediaId);
+    }
 }

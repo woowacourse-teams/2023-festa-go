@@ -20,4 +20,5 @@ public interface SocialMediaRepository extends Repository<SocialMedia, Long> {
 
     boolean existsByOwnerIdAndOwnerTypeAndMediaType(Long ownerId, OwnerType ownerType, SocialMediaType mediaType);
 
+    void deleteById(Long socialMediaId);
 }

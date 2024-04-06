@@ -44,4 +44,9 @@ public class MemorySocialMediaRepository implements SocialMediaRepository {
             .filter(it -> it.getOwnerType() == ownerType)
             .anyMatch(it -> it.getMediaType() == mediaType);
     }
+
+    @Override
+    public void deleteById(Long socialMediaId) {
+        memory.remove(socialMediaId);
+    }
 }

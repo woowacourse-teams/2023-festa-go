@@ -3,6 +3,7 @@ package com.festago.socialmedia.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.artist.repository.MemoryArtistRepository;
@@ -159,6 +160,34 @@ class SocialMediaCommandServiceTest {
                 softly.assertThat(actual.getUrl()).isEqualTo(command.url());
                 softly.assertThat(actual.getLogoUrl()).isEqualTo(command.logoUrl());
             });
+        }
+    }
+
+    @Nested
+    class deleteSocialMedia {
+
+        @Test
+        void 삭제하려는_소셜미디어가_존재하지_않아도_예외가_발생하지_않는다() {
+            // when & then
+            assertDoesNotThrow(() -> socialMediaCommandService.deleteSocialMedia(4885L));
+        }
+
+        @Test
+        void 소셜미디어의_식별자로_삭제할_수_있다() {
+            // given
+            School 테코대학교 = schoolRepository.save(SchoolFixture.builder().name("테코대학교").build());
+
+            SocialMedia socialMedia = socialMediaRepository.save(SocialMediaFixture.builder()
+                .ownerId(테코대학교.getId())
+                .ownerType(OwnerType.SCHOOL)
+                .mediaType(SocialMediaType.INSTAGRAM)
+                .build());
+
+            // when
+            socialMediaCommandService.deleteSocialMedia(socialMedia.getId());
+
+            // then
+            assertThat(socialMediaRepository.findById(socialMedia.getId())).isEmpty();
         }
     }
 }
