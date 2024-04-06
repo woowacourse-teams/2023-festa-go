@@ -2,6 +2,7 @@ package com.festago.socialmedia.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.artist.repository.MemoryArtistRepository;
@@ -15,6 +16,7 @@ import com.festago.socialmedia.domain.OwnerType;
 import com.festago.socialmedia.domain.SocialMedia;
 import com.festago.socialmedia.domain.SocialMediaType;
 import com.festago.socialmedia.dto.command.SocialMediaCreateCommand;
+import com.festago.socialmedia.dto.command.SocialMediaUpdateCommand;
 import com.festago.socialmedia.repository.MemorySocialMediaRepository;
 import com.festago.socialmedia.repository.SocialMediaRepository;
 import com.festago.support.fixture.SchoolFixture;
@@ -116,6 +118,51 @@ class SocialMediaCommandServiceTest {
                 OwnerType.SCHOOL,
                 SocialMediaType.INSTAGRAM
             )).isTrue();
+        }
+    }
+
+    @Nested
+    class updateSocialMedia {
+
+        @Test
+        void 소셜미디어의_식별자에_대한_소셜미디어가_존재하지_않으면_예외() {
+            // when & then
+            var command = new SocialMediaUpdateCommand(
+                "테코대학교 인스타그램",
+                "https://instagram.com/tecodaehak",
+                "https://image.com/logo.png"
+            );
+            assertThatThrownBy(() -> socialMediaCommandService.updateSocialMedia(4885L, command))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(ErrorCode.SOCIAL_MEDIA_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        void 성공하면_소셜미디어의_정보가_변경된다() {
+            // given
+            School 테코대학교 = schoolRepository.save(SchoolFixture.builder().name("테코대학교").build());
+
+            SocialMedia socialMedia = socialMediaRepository.save(SocialMediaFixture.builder()
+                .ownerId(테코대학교.getId())
+                .ownerType(OwnerType.SCHOOL)
+                .mediaType(SocialMediaType.INSTAGRAM)
+                .build());
+
+            // when
+            var command = new SocialMediaUpdateCommand(
+                "테코대학교 인스타그램",
+                "https://instagram.com/tecodaehak",
+                "https://image.com/logo.png"
+            );
+            socialMediaCommandService.updateSocialMedia(socialMedia.getId(), command);
+
+            // then
+            SocialMedia actual = socialMediaRepository.getOrThrow(socialMedia.getId());
+            assertSoftly(softly -> {
+                softly.assertThat(actual.getName()).isEqualTo(command.name());
+                softly.assertThat(actual.getUrl()).isEqualTo(command.url());
+                softly.assertThat(actual.getLogoUrl()).isEqualTo(command.logoUrl());
+            });
         }
     }
 }

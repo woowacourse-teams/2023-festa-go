@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.SneakyThrows;
 
@@ -25,6 +26,11 @@ public class MemorySocialMediaRepository implements SocialMediaRepository {
         idField.set(socialMedia, autoIncrement.incrementAndGet());
         memory.put(socialMedia.getId(), socialMedia);
         return socialMedia;
+    }
+
+    @Override
+    public Optional<SocialMedia> findById(Long id) {
+        return Optional.ofNullable(memory.get(id));
     }
 
     @Override

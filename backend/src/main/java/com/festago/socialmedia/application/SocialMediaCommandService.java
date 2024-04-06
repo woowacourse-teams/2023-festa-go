@@ -9,6 +9,7 @@ import com.festago.socialmedia.domain.OwnerType;
 import com.festago.socialmedia.domain.SocialMedia;
 import com.festago.socialmedia.domain.SocialMediaType;
 import com.festago.socialmedia.dto.command.SocialMediaCreateCommand;
+import com.festago.socialmedia.dto.command.SocialMediaUpdateCommand;
 import com.festago.socialmedia.repository.SocialMediaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,5 +44,12 @@ public class SocialMediaCommandService {
         if (ownerType == OwnerType.SCHOOL && !schoolRepository.existsById(ownerId)) {
             throw new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND);
         }
+    }
+
+    public void updateSocialMedia(Long socialMediaId, SocialMediaUpdateCommand command) {
+        SocialMedia socialMedia = socialMediaRepository.getOrThrow(socialMediaId);
+        socialMedia.changeName(command.name());
+        socialMedia.changeLogoUrl(command.logoUrl());
+        socialMedia.changeUrl(command.url());
     }
 }

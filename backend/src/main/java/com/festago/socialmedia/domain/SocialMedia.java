@@ -64,6 +64,18 @@ public class SocialMedia extends BaseTimeEntity {
         this(null, ownerId, ownerType, mediaType, name, logoUrl, url);
     }
 
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changeUrl(String url) {
+        this.url = url;
+    }
+
+    public void changeLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+    }
+
     public Long getId() {
         return id;
     }
