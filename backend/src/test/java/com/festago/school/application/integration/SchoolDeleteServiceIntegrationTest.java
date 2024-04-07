@@ -15,10 +15,10 @@ import com.festago.school.repository.SchoolRepository;
 import com.festago.student.domain.Student;
 import com.festago.student.repository.StudentRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.FestivalFixture;
-import com.festago.support.MemberFixture;
-import com.festago.support.SchoolFixture;
-import com.festago.support.StudentFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StudentFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -58,14 +58,14 @@ class SchoolDeleteServiceIntegrationTest extends ApplicationIntegrationTest {
 
         @BeforeEach
         void setUp() {
-            school = schoolRepository.save(SchoolFixture.school().build());
+            school = schoolRepository.save(SchoolFixture.builder().build());
         }
 
         @Test
         void 학교에_등록된_축제가_있으면_삭제에_실패한다() {
             // given
             Long schoolId = school.getId();
-            Festival festival = FestivalFixture.festival().school(school).build();
+            Festival festival = FestivalFixture.builder().school(school).build();
             festivalRepository.save(festival);
 
             // when & then
@@ -78,8 +78,8 @@ class SchoolDeleteServiceIntegrationTest extends ApplicationIntegrationTest {
         void 학교에_등록된_학생이_있으면_삭제에_실패한다() {
             // given
             Long schoolId = school.getId();
-            Member member = memberRepository.save(MemberFixture.member().build());
-            Student student = StudentFixture.student().member(member).school(school).build();
+            Member member = memberRepository.save(MemberFixture.builder().build());
+            Student student = StudentFixture.builder().member(member).school(school).build();
             studentRepository.save(student);
 
             // when & then

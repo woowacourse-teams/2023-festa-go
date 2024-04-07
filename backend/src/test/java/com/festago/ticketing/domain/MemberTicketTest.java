@@ -11,11 +11,11 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.festival.domain.Festival;
 import com.festago.member.domain.Member;
 import com.festago.stage.domain.Stage;
-import com.festago.support.FestivalFixture;
-import com.festago.support.MemberFixture;
-import com.festago.support.MemberTicketFixture;
-import com.festago.support.StageFixture;
-import com.festago.support.TicketFixture;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.MemberTicketFixture;
+import com.festago.support.fixture.StageFixture;
+import com.festago.support.fixture.TicketFixture;
 import com.festago.ticket.domain.ReservationSequence;
 import com.festago.ticket.domain.Ticket;
 import java.time.LocalDateTime;
@@ -38,19 +38,19 @@ class MemberTicketTest {
             // given
             LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
             LocalDateTime now = stageStartTime.plusHours(1);
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(stageStartTime.toLocalDate())
                 .endDate(stageStartTime.toLocalDate())
                 .build();
-            Stage stage = StageFixture.stage()
+            Stage stage = StageFixture.builder()
                 .startTime(stageStartTime)
                 .ticketOpenTime(stageStartTime.minusDays(1))
                 .festival(festival)
                 .build();
-            Ticket ticket = TicketFixture.ticket()
+            Ticket ticket = TicketFixture.builder()
                 .stage(stage)
                 .build();
-            Member member = MemberFixture.member()
+            Member member = MemberFixture.builder()
                 .id(1L)
                 .build();
 
@@ -68,19 +68,19 @@ class MemberTicketTest {
             // given
             LocalDateTime stageStartTime = LocalDateTime.parse("2022-08-12T18:00:00");
             LocalDateTime now = stageStartTime.minusHours(6);
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(stageStartTime.toLocalDate())
                 .endDate(stageStartTime.toLocalDate())
                 .build();
-            Stage stage = StageFixture.stage()
+            Stage stage = StageFixture.builder()
                 .startTime(stageStartTime)
                 .ticketOpenTime(stageStartTime.minusDays(1))
                 .festival(festival)
                 .build();
-            Ticket ticket = TicketFixture.ticket()
+            Ticket ticket = TicketFixture.builder()
                 .stage(stage)
                 .build();
-            Member member = MemberFixture.member()
+            Member member = MemberFixture.builder()
                 .id(1L)
                 .build();
 
@@ -107,7 +107,7 @@ class MemberTicketTest {
             LocalDateTime entryTime = LocalDateTime.now();
             LocalDateTime time = entryTime.minusMinutes(10);
 
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .entryTime(entryTime)
                 .build();
 
@@ -121,7 +121,7 @@ class MemberTicketTest {
             LocalDateTime entryTime = LocalDateTime.now();
             LocalDateTime time = entryTime.plusHours(24);
 
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .entryTime(entryTime)
                 .build();
 
@@ -134,16 +134,16 @@ class MemberTicketTest {
         void 입장_가능(LocalDateTime time) {
             // given
             LocalDateTime entryTime = LocalDateTime.parse("2023-07-27T18:00:00");
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(entryTime.toLocalDate())
                 .endDate(entryTime.plusDays(4).toLocalDate())
                 .build();
-            Stage stage = StageFixture.stage()
+            Stage stage = StageFixture.builder()
                 .startTime(entryTime.plusHours(4))
                 .ticketOpenTime(entryTime.minusWeeks(1))
                 .festival(festival)
                 .build();
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .stage(stage)
                 .entryTime(entryTime)
                 .build();
@@ -162,7 +162,7 @@ class MemberTicketTest {
             LocalDateTime entryTime = LocalDateTime.now();
             LocalDateTime time = entryTime.plusHours(1);
 
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .entryTime(entryTime)
                 .build();
 
@@ -175,15 +175,15 @@ class MemberTicketTest {
             // given
             LocalDateTime entryTime = LocalDateTime.now();
             LocalDateTime time = entryTime.minusHours(12).plusSeconds(1);
-            Festival festival = FestivalFixture.festival()
+            Festival festival = FestivalFixture.builder()
                 .startDate(entryTime.toLocalDate())
                 .endDate(entryTime.plusDays(4).toLocalDate())
                 .build();
-            Stage stage = StageFixture.stage()
+            Stage stage = StageFixture.builder()
                 .startTime(entryTime.plusHours(4))
                 .festival(festival)
                 .build();
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .stage(stage)
                 .entryTime(entryTime)
                 .build();
@@ -199,7 +199,7 @@ class MemberTicketTest {
         @Test
         void 상태_변경시_기존의_상태와_다르면_기존_상태가_유지된다() {
             // given
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket().build();
+            MemberTicket memberTicket = MemberTicketFixture.builder().build();
 
             // when
             memberTicket.changeState(AFTER_ENTRY);
@@ -211,7 +211,7 @@ class MemberTicketTest {
         @Test
         void 출입_전_상태에서_상태를_변경하면_출입_후_상태로_변경() {
             // given
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket().build();
+            MemberTicket memberTicket = MemberTicketFixture.builder().build();
 
             // when
             memberTicket.changeState(BEFORE_ENTRY);
@@ -223,7 +223,7 @@ class MemberTicketTest {
         @Test
         void 출입_후_상태에서_상태를_변경하면_외출_상태로_변경() {
             // given
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket().build();
+            MemberTicket memberTicket = MemberTicketFixture.builder().build();
             memberTicket.changeState(BEFORE_ENTRY);
 
             // when
@@ -236,7 +236,7 @@ class MemberTicketTest {
         @Test
         void 외출_상태에서_상태를_변경하면_출입_후_상태로_변경() {
             // given
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket().build();
+            MemberTicket memberTicket = MemberTicketFixture.builder().build();
             memberTicket.changeState(BEFORE_ENTRY);
             memberTicket.changeState(AFTER_ENTRY);
 
@@ -256,7 +256,7 @@ class MemberTicketTest {
             // given
             Long memberId = 1L;
             Member member = new Member(memberId);
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .owner(member)
                 .build();
 
@@ -270,7 +270,7 @@ class MemberTicketTest {
             Long memberId = 1L;
             Long ownerId = 2L;
             Member owner = new Member(ownerId);
-            MemberTicket memberTicket = MemberTicketFixture.memberTicket()
+            MemberTicket memberTicket = MemberTicketFixture.builder()
                 .owner(owner)
                 .build();
 

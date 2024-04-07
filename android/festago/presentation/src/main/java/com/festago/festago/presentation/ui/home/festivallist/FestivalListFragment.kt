@@ -9,28 +9,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.festago.festago.presentation.R
+import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
-import com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment
-import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailFragment
+import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragmentDirections.actionFestivalListFragmentToSearchFragment
+import com.festago.festago.presentation.ui.home.festivallist.bottomsheet.RegionBottomSheetDialogFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
+import com.festago.festago.presentation.ui.home.festivallist.uistate.SchoolRegionUiState
 import com.festago.festago.presentation.ui.notificationlist.NotificationListActivity
-import com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FestivalListFragment : Fragment() {
-
     private var _binding: FragmentFestivalListBinding? = null
     private val binding get() = _binding!!
 
@@ -96,13 +94,12 @@ class FestivalListFragment : Fragment() {
 
     private fun initViewPager() {
         festivalListAdapter = FestivalListAdapter(
-            // TODO: Navigation으로 변경
             onArtistClick = { artistId ->
-                requireActivity().supportFragmentManager.commit {
-                    add(R.id.fcvHomeContainer, ArtistDetailFragment.newInstance(artistId))
-                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
-                    addToBackStack(null)
-                }
+                findNavController().navigate(
+                    FestivalListFragmentDirections.actionFestivalListFragmentToArtistDetailFragment(
+                        artistId,
+                    ),
+                )
             },
         )
         binding.rvFestivalList.adapter = festivalListAdapter
@@ -120,13 +117,17 @@ class FestivalListFragment : Fragment() {
 
                 val festivalListUiState = vm.uiState.value as? FestivalListUiState.Success ?: return
                 if (festivalListUiState.isLastPage) return
+                if (festivalListUiState.festivals.isEmpty()) return
 
                 val lastVisibleItemPosition =
                     (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
 
                 val itemTotalCount = recyclerView.adapter!!.itemCount - 1
                 if (lastVisibleItemPosition == itemTotalCount) {
-                    vm.loadFestivals()
+                    vm.loadFestivals(
+                        schoolRegion = festivalListUiState.schoolRegion,
+                        isLoadMore = true,
+                    )
                 }
             }
         })
@@ -168,11 +169,11 @@ class FestivalListFragment : Fragment() {
     private fun handleEvent(event: FestivalListEvent) {
         when (event) {
             is FestivalListEvent.ShowFestivalDetail -> {
-                requireActivity().supportFragmentManager.commit {
-                    add(R.id.fcvHomeContainer, FestivalDetailFragment.newInstance(event.festivalId))
-                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
-                    addToBackStack(null)
-                }
+                findNavController().navigate(
+                    FestivalListFragmentDirections.actionFestivalListFragmentToFestivalDetailFragment(
+                        event.festivalId,
+                    ),
+                )
             }
         }
     }
@@ -180,24 +181,52 @@ class FestivalListFragment : Fragment() {
     private fun handleSuccess(uiState: FestivalListUiState.Success) {
         val items = uiState.getItems()
         festivalListAdapter.submitList(items)
+        binding.rvFestivalList.itemAnimator = null
     }
 
     private fun FestivalListUiState.Success.getItems(): List<Any> {
+        val schoolRegions = SchoolRegion.values().map {
+            SchoolRegionUiState(it, it == this.schoolRegion)
+        }
+        val dialog = createRegionDialog(schoolRegions)
+
         return mutableListOf<Any>().apply {
             if (popularFestivalUiState.festivals.isNotEmpty()) {
                 add(popularFestivalUiState)
             }
-            add(FestivalTabUiState(festivalFilter) { vm.loadFestivals(it) })
+            add(
+                FestivalTabUiState(
+                    selectedFilter = festivalFilter,
+                    selectedRegion = schoolRegion,
+                    onFilterSelected = { vm.loadFestivals(it, schoolRegion) },
+                ) {
+                    dialog.show(
+                        parentFragmentManager,
+                        RegionBottomSheetDialogFragment::class.java.name,
+                    )
+                },
+            )
             addAll(festivals)
             if (!isLastPage) add(FestivalMoreItemUiState)
         }.toList()
     }
 
+    private fun FestivalListUiState.Success.createRegionDialog(
+        schoolRegions: List<SchoolRegionUiState>,
+    ) = RegionBottomSheetDialogFragment.newInstance(
+        items = schoolRegions,
+        listener = object : RegionBottomSheetDialogFragment.OnRegionSelectListener {
+            override fun onRegionSelect(region: SchoolRegion) {
+                vm.loadFestivals(
+                    festivalFilterUiState = festivalFilter,
+                    schoolRegion = if (region == schoolRegion) null else region,
+                )
+            }
+        },
+    )
+
     private fun showSchoolDetail() {
-        activity?.supportFragmentManager!!.beginTransaction()
-            .add(R.id.fcvHomeContainer, SchoolDetailFragment.newInstance(0))
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(actionFestivalListFragmentToSearchFragment())
     }
 
     private fun showNotificationList() {

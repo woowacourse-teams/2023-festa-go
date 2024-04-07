@@ -36,7 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/background_gray_02"
+            android:background="@drawable/bg_festival_list_festival"
             android:paddingVertical="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

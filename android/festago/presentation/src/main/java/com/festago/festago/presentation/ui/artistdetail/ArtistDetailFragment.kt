@@ -7,10 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
-import com.festago.festago.presentation.R
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.databinding.FragmentArtistDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.artistdetail.adapter.festival.ArtistDetailAdapter
@@ -25,14 +24,9 @@ class ArtistDetailFragment : Fragment() {
 
     private val vm: ArtistDetailViewModel by viewModels()
 
-    private val adapter = ArtistDetailAdapter { artistId ->
-        // TODO: Navigation으로 변경
-        requireActivity().supportFragmentManager.commit {
-            add(R.id.fcvHomeContainer, newInstance(artistId))
-            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
-            addToBackStack(null)
-        }
-    }
+    private val args: ArtistDetailFragmentArgs by navArgs()
+
+    private val adapter = ArtistDetailAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,8 +39,7 @@ class ArtistDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val id = requireArguments().getLong(KEY_ID)
-        initView(id)
+        initView(args.artistId)
         initObserve()
     }
 
@@ -68,6 +61,11 @@ class ArtistDetailFragment : Fragment() {
         repeatOnStarted(viewLifecycleOwner) {
             vm.uiState.collect {
                 updateUi(it)
+            }
+        }
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect {
+                handleEvent(it)
             }
         }
     }
@@ -95,6 +93,22 @@ class ArtistDetailFragment : Fragment() {
         }
     }
 
+    private fun handleEvent(event: ArtistDetailEvent) = when (event) {
+        is ArtistDetailEvent.ShowArtistDetail -> {
+            findNavController().navigate(
+                ArtistDetailFragmentDirections.actionArtistDetailFragmentSelf(event.artistId),
+            )
+        }
+
+        is ArtistDetailEvent.ShowFestivalDetail -> {
+            findNavController().navigate(
+                ArtistDetailFragmentDirections.actionArtistDetailFragmentToFestivalDetailFragment(
+                    event.festivalId,
+                ),
+            )
+        }
+    }
+
     private fun startBrowser(url: String) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(url)
@@ -104,17 +118,5 @@ class ArtistDetailFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    companion object {
-        private const val KEY_ID = "ID"
-
-        fun newInstance(
-            id: Long,
-        ) = ArtistDetailFragment().apply {
-            arguments = Bundle().apply {
-                putLong(KEY_ID, id)
-            }
-        }
     }
 }

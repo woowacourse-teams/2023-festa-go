@@ -11,8 +11,8 @@ import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.stage.domain.Stage;
 import com.festago.student.repository.StudentRepository;
-import com.festago.support.MemberFixture;
-import com.festago.support.TicketFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.TicketFixture;
 import com.festago.ticket.domain.TicketType;
 import com.festago.ticket.repository.TicketAmountRepository;
 import com.festago.ticket.repository.TicketRepository;
@@ -60,12 +60,12 @@ class TicketingServiceTest {
         // given
         TicketingRequest request = new TicketingRequest(1L);
         given(memberRepository.findById(anyLong()))
-            .willReturn(Optional.of(MemberFixture.member().build()));
+            .willReturn(Optional.of(MemberFixture.builder().build()));
         given(memberTicketRepository.existsByOwnerAndStage(any(Member.class), any(Stage.class)))
             .willReturn(false);
 
         given(ticketRepository.findByIdWithFetch(anyLong()))
-            .willReturn(Optional.of(TicketFixture.ticket().ticketType(TicketType.STUDENT).build()));
+            .willReturn(Optional.of(TicketFixture.builder().ticketType(TicketType.STUDENT).build()));
         given(studentRepository.existsByMemberAndSchoolId(any(Member.class), anyLong()))
             .willReturn(false);
 

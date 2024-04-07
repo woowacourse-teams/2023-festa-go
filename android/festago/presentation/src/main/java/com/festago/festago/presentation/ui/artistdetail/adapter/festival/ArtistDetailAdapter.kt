@@ -5,11 +5,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.ui.artistdetail.uistate.FestivalItemUiState
 
-class ArtistDetailAdapter(
-    private val onArtistClick: (Long) -> Unit,
-) : ListAdapter<FestivalItemUiState, ArtistDetailFestivalViewHolder>(diffUtil) {
+class ArtistDetailAdapter : ListAdapter<FestivalItemUiState, ArtistDetailFestivalViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistDetailFestivalViewHolder {
-        return ArtistDetailFestivalViewHolder.of(parent, onArtistClick)
+        return ArtistDetailFestivalViewHolder.of(parent)
     }
 
     override fun onBindViewHolder(holder: ArtistDetailFestivalViewHolder, position: Int) {

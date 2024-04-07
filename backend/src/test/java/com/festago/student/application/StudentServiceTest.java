@@ -30,10 +30,10 @@ import com.festago.student.infrastructure.MockMailClient;
 import com.festago.student.infrastructure.RandomVerificationCodeProvider;
 import com.festago.student.repository.StudentCodeRepository;
 import com.festago.student.repository.StudentRepository;
-import com.festago.support.MemberFixture;
-import com.festago.support.SchoolFixture;
 import com.festago.support.SetUpMockito;
-import com.festago.support.StudentFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StudentFixture;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -85,8 +85,8 @@ class StudentServiceTest {
         @BeforeEach
         void setUp() {
             request = new StudentSendMailRequest("ash", 1L);
-            Member member = MemberFixture.member().id(1L).build();
-            School school = SchoolFixture.school().id(1L).build();
+            Member member = MemberFixture.builder().id(1L).build();
+            School school = SchoolFixture.builder().id(1L).build();
 
             SetUpMockito
                 .given(memberRepository.findById(anyLong()))
@@ -183,7 +183,7 @@ class StudentServiceTest {
             Long memberId = 1L;
             StudentVerificateRequest request = new StudentVerificateRequest("123456");
             given(memberRepository.findById(anyLong()))
-                .willReturn(Optional.of(MemberFixture.member().build()));
+                .willReturn(Optional.of(MemberFixture.builder().build()));
             given(studentCodeRepository.findByCodeAndMember(any(), any()))
                 .willReturn(Optional.empty());
 
@@ -198,7 +198,7 @@ class StudentServiceTest {
             // given
             Long memberId = 1L;
             StudentVerificateRequest request = new StudentVerificateRequest("123456");
-            Member member = MemberFixture.member().build();
+            Member member = MemberFixture.builder().build();
             given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(member));
             given(studentCodeRepository.findByCodeAndMember(any(), any()))
@@ -223,8 +223,8 @@ class StudentServiceTest {
         void 학생_인증된_멤버의_경우() {
             // given
             Long memberId = 1L;
-            School school = SchoolFixture.school().id(2L).build();
-            Student student = StudentFixture.student().id(3L).school(school).build();
+            School school = SchoolFixture.builder().id(2L).build();
+            Student student = StudentFixture.builder().id(3L).school(school).build();
             given(studentRepository.findByMemberIdWithFetch(memberId))
                 .willReturn(Optional.of(student));
 
