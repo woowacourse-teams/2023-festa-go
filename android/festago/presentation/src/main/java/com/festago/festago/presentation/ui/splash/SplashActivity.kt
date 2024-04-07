@@ -3,6 +3,7 @@ package com.festago.festago.presentation.ui.splash
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -55,34 +56,61 @@ class SplashActivity : ComponentActivity() {
     private fun checkAppUpdate() {
         firebaseRemoteConfig.fetchAndActivate().addOnCompleteListener(this) {
             if (it.isSuccessful) {
-                val isCurrentVersion = firebaseRemoteConfig.getBoolean(KEY_IS_CURRENT_VERSION)
-                if (isCurrentVersion) {
+                val currentVersion = try {
+                    packageManager.getPackageInfo(packageName, 0).longVersionCode
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    handleError()
+                    return@addOnCompleteListener
+                }
+                val latestVersion = firebaseRemoteConfig.getLong(KEY_LATEST_VERSION)
+                if (latestVersion == currentVersion) {
                     navigateToHome()
                     return@addOnCompleteListener
                 }
                 splashScreen.setKeepOnScreenCondition { false }
-                requestUpdate()
+                requestUpdate(latestVersion)
             }
         }
     }
 
-    private fun requestUpdate() {
-        val forceUpdate = firebaseRemoteConfig.getBoolean(KEY_FORCE_UPDATE_REQUIRED)
-        val currentVersionDescription =
-            firebaseRemoteConfig.getString(KEY_CURRENT_VERSION_DESCRIPTION)
-        if (forceUpdate) {
-            requestForceUpdate(message = currentVersionDescription)
+    private fun requestUpdate(latestVersion: Long) {
+        val isForceUpdateVersion = firebaseRemoteConfig.getBoolean(KEY_FORCE_UPDATE_REQUIRED)
+        val latestVersionDescription =
+            firebaseRemoteConfig.getString(KEY_LATEST_VERSION_DESCRIPTION)
+        if (isForceUpdateVersion) {
+            requestForceUpdate(message = latestVersionDescription)
             return
         }
-        requestOptionalUpdate(message = currentVersionDescription)
-    }
-
-    private fun requestOptionalUpdate(message: String) {
-        alertUpdate(update = ::handleUpdate, cancel = ::navigateToHome, message)
+        requestOptionalUpdate(latestVersion = latestVersion, message = latestVersionDescription)
     }
 
     private fun requestForceUpdate(message: String) {
-        alertUpdate(update = ::handleUpdate, cancel = ::handleCancelForceUpdate, message)
+        alertUpdate(message = message, update = ::handleUpdate, cancel = ::handleCancelForceUpdate)
+    }
+
+    private fun requestOptionalUpdate(latestVersion: Long, message: String) {
+        val sharedPref = getPreferences(MODE_PRIVATE) ?: return
+        val storedLatestVersion = sharedPref.getLong(KEY_STORED_LATEST_VERSION, 0L)
+        if (latestVersion == storedLatestVersion) {
+            navigateToHome()
+            return
+        }
+        alertUpdate(message = message, update = ::handleUpdate) {
+            handleOptionalUpdateCancel(sharedPref, latestVersion)
+        }
+    }
+
+    private fun handleOptionalUpdateCancel(sharedPref: SharedPreferences, latestVersion: Long) {
+        updateStoredLatestVersion(sharedPref, latestVersion)
+        navigateToHome()
+    }
+
+    private fun updateStoredLatestVersion(sharedPref: SharedPreferences, latestVersion: Long) {
+        with(sharedPref.edit()) {
+            putLong(KEY_STORED_LATEST_VERSION, latestVersion)
+            apply()
+        }
     }
 
     private fun handleUpdate() {
@@ -100,7 +128,16 @@ class SplashActivity : ComponentActivity() {
         finish()
     }
 
-    private fun alertUpdate(update: () -> Unit, cancel: () -> Unit, message: String) {
+    private fun handleError() {
+        Toast.makeText(
+            this@SplashActivity,
+            getString(R.string.splash_app_default_error_message),
+            Toast.LENGTH_SHORT,
+        ).show()
+        finish()
+    }
+
+    private fun alertUpdate(message: String, update: () -> Unit, cancel: () -> Unit) {
         AlertDialog.Builder(this).apply {
             setTitle(getString(R.string.splash_app_update_request_dialog_title))
             setMessage(message)
@@ -120,10 +157,11 @@ class SplashActivity : ComponentActivity() {
     }
 
     companion object {
+        private const val KEY_STORED_LATEST_VERSION = "KEY_STORED_LATEST_VERSION"
         private const val DEBUG_REMOTE_CONFIG_FETCH_INTERVAL = 0L
         private const val RELEASE_REMOTE_CONFIG_FETCH_INTERVAL = 3600L
         private const val KEY_FORCE_UPDATE_REQUIRED = "FORCE_UPDATE_REQUIRED"
-        private const val KEY_IS_CURRENT_VERSION = "IS_CURRENT_VERSION"
-        private const val KEY_CURRENT_VERSION_DESCRIPTION = "CURRENT_VERSION_DESCRIPTION"
+        private const val KEY_LATEST_VERSION = "LATEST_VERSION"
+        private const val KEY_LATEST_VERSION_DESCRIPTION = "LATEST_VERSION_DESCRIPTION"
     }
 }
