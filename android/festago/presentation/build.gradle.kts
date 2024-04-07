@@ -24,8 +24,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("Boolean", "DEBUG_MODE", "true")
+        }
+
         release {
             isMinifyEnabled = false
+            buildConfigField("Boolean", "DEBUG_MODE", "false")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -58,6 +63,7 @@ dependencies {
     // Feature module Support
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("com.google.firebase:firebase-config-ktx:21.6.3")
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")

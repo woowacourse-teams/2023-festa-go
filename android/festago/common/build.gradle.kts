@@ -14,8 +14,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("Boolean", "DEBUG_MODE", "true")
+        }
         release {
             isMinifyEnabled = false
+            buildConfigField("Boolean", "DEBUG_MODE", "false")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -42,5 +46,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-messaging-ktx:23.2.1")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
+    implementation("com.google.firebase:firebase-config:21.6.3")
 }
