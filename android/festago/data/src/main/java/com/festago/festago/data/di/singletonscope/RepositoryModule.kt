@@ -22,7 +22,7 @@ interface RepositoryModule {
 
     @Binds
     @Singleton
-    fun bindsFestivalDefaultRepository(festivalRepository: DefaultFestivalRepository): FestivalRepository
+    fun bindsFestivalRepository(festivalRepository: DefaultFestivalRepository): FestivalRepository
 
     @Binds
     @Singleton
