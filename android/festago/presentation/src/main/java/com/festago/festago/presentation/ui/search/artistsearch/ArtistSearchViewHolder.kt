@@ -34,7 +34,7 @@ class ArtistSearchViewHolder(
         text = SpannableString(stageCountText).apply {
             getPartialColorText(
                 start = COLOR_INDEX,
-                end = COLOR_INDEX + 1,
+                end = COLOR_INDEX + count.toString().length,
                 color = context.getColor(R.color.secondary_pink_01),
             )
         }

@@ -8,6 +8,5 @@ data class FestivalItemUiState(
     val startDate: LocalDate,
     val endDate: LocalDate,
     val imageUrl: String,
-    val schoolUiState: SchoolUiState,
     val artists: List<ArtistUiState>,
 )

@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 data class SchoolResponse(
     val id: Long,
     val name: String,
-    val imageUrl: String = "",
+    val profileImageUrl: String = "",
 ) {
     fun toDomain() = School(
         id = id,
         name = name,
-        imageUrl = imageUrl,
+        imageUrl = profileImageUrl,
     )
 }
