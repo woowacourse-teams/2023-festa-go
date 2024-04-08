@@ -31,4 +31,16 @@ public abstract class AbstractMemoryRepository<T> {
     final public Optional<T> findById(Long id) {
         return Optional.ofNullable(memory.get(id));
     }
+
+    final public boolean existsById(Long id) {
+        return memory.containsKey(id);
+    }
+
+    final public void deleteById(Long id) {
+        memory.remove(id);
+    }
+
+    final public long count() {
+        return memory.size();
+    }
 }

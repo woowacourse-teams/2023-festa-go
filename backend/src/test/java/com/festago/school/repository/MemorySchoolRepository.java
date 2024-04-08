@@ -7,16 +7,6 @@ import java.util.Optional;
 public class MemorySchoolRepository extends AbstractMemoryRepository<School> implements SchoolRepository {
 
     @Override
-    public void deleteById(Long id) {
-        memory.remove(id);
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return memory.get(id) != null;
-    }
-
-    @Override
     public boolean existsByDomain(String domain) {
         return memory.values().stream()
             .anyMatch(it -> it.getDomain().equals(domain));

@@ -11,14 +11,4 @@ public class MemoryFestivalRepository extends AbstractMemoryRepository<Festival>
         return memory.values().stream()
             .anyMatch(festival -> Objects.equals(festival.getSchool().getId(), schoolId));
     }
-
-    @Override
-    public void deleteById(Long festivalId) {
-        memory.remove(festivalId);
-    }
-
-    @Override
-    public boolean existsById(Long festivalId) {
-        return memory.containsKey(festivalId);
-    }
 }

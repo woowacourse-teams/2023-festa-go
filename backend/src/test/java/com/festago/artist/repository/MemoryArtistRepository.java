@@ -8,11 +8,6 @@ import java.util.List;
 public class MemoryArtistRepository extends AbstractMemoryRepository<Artist> implements ArtistRepository {
 
     @Override
-    public void deleteById(Long artistId) {
-        memory.remove(artistId);
-    }
-
-    @Override
     public long countByIdIn(List<Long> artistIds) {
         return memory.values().stream()
             .filter(artist -> artistIds.contains(artist.getId()))
@@ -24,10 +19,5 @@ public class MemoryArtistRepository extends AbstractMemoryRepository<Artist> imp
         return memory.values().stream()
             .filter(artist -> artistIds.contains(artist.getId()))
             .toList();
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return memory.containsKey(id);
     }
 }

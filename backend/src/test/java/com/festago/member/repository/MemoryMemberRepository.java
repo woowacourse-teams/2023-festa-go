@@ -14,16 +14,6 @@ public class MemoryMemberRepository extends AbstractMemoryRepository<Member> imp
     }
 
     @Override
-    public boolean existsById(Long id) {
-        return memory.containsKey(id);
-    }
-
-    @Override
-    public long count() {
-        return memory.size();
-    }
-
-    @Override
     public Optional<Member> findBySocialIdAndSocialType(String socialId, SocialType socialType) {
         return memory.values().stream()
             .filter(member -> Objects.equals(member.getSocialId(), socialId))

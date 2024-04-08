@@ -8,10 +8,6 @@ import java.util.Optional;
 
 public class MemoryStageRepository extends AbstractMemoryRepository<Stage> implements StageRepository {
 
-    @Override
-    public void deleteById(Long stageId) {
-        memory.remove(stageId);
-    }
 
     @Override
     public void flush() {

@@ -9,11 +9,6 @@ import java.util.Optional;
 public class MemoryBookmarkRepository extends AbstractMemoryRepository<Bookmark> implements BookmarkRepository {
 
     @Override
-    public void deleteById(Long id) {
-        memory.remove(id);
-    }
-
-    @Override
     public boolean existsByBookmarkTypeAndMemberIdAndResourceId(
         BookmarkType bookmarkType,
         Long memberId,
