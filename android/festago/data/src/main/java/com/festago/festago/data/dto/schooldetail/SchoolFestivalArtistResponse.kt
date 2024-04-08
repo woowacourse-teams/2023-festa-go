@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class SchoolFestivalArtistResponse(
     val id: Int,
     val name: String,
-    val profileImageUrl: String
+    val profileImageUrl: String,
 ) {
     fun toDomain() = Artist(
         id = id.toLong(),

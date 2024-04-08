@@ -47,7 +47,7 @@ class ArtistDetailFestivalViewHolder(private val binding: ItemArtistDetailFestiv
                 )
             }
 
-            LocalDate.now() == item.startDate.minusDays(1) -> {
+            LocalDate.now() >= item.startDate.minusDays(7) -> {
                 dDayView.text = context.getString(
                     R.string.artist_detail_tv_dday_format,
                     item.startDate.compareTo(LocalDate.now()).toString(),

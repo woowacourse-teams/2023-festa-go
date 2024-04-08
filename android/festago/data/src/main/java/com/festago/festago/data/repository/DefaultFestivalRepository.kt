@@ -12,7 +12,7 @@ import com.festago.festago.domain.repository.FestivalRepository
 import java.time.LocalDate
 import javax.inject.Inject
 
-class FestivalDefaultRepository @Inject constructor(
+class DefaultFestivalRepository @Inject constructor(
     private val festivalRetrofitService: FestivalRetrofitService,
 ) : FestivalRepository {
 

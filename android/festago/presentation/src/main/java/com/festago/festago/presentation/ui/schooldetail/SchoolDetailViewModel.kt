@@ -9,7 +9,6 @@ import com.festago.festago.domain.repository.SchoolRepository
 import com.festago.festago.presentation.ui.schooldetail.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.FestivalItemUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
-import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +38,7 @@ class SchoolDetailViewModel @Inject constructor(
                 _uiState.value = SchoolDetailUiState.Success(
                     schoolInfo = schoolInfo,
                     festivals = festivalPage.festivals.map { it.toUiState() },
-                    isLast = festivalPage.isLastPage
+                    isLast = festivalPage.isLastPage,
                 )
             }.onFailure {
                 _uiState.value = SchoolDetailUiState.Error
@@ -57,10 +56,6 @@ class SchoolDetailViewModel @Inject constructor(
         startDate = startDate,
         endDate = endDate,
         imageUrl = imageUrl,
-        schoolUiState = SchoolUiState(
-            id = school.id,
-            name = school.name,
-        ),
         artists = artists.map { artist ->
             ArtistUiState(artist.id, artist.name, artist.imageUrl)
         },
