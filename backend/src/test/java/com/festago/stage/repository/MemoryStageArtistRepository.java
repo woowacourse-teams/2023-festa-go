@@ -3,33 +3,12 @@ package com.festago.stage.repository;
 import static java.util.stream.Collectors.toUnmodifiableSet;
 
 import com.festago.stage.domain.StageArtist;
-import java.lang.reflect.Field;
+import com.festago.support.AbstractMemoryRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
-import lombok.SneakyThrows;
 
-public class MemoryStageArtistRepository implements StageArtistRepository {
-
-    private final ConcurrentHashMap<Long, StageArtist> memory = new ConcurrentHashMap<>();
-    private final AtomicLong autoIncrement = new AtomicLong();
-
-    public void clear() {
-        memory.clear();
-    }
-
-    @Override
-    @SneakyThrows
-    public StageArtist save(StageArtist stageArtist) {
-        Field idField = stageArtist.getClass()
-            .getDeclaredField("id");
-        idField.setAccessible(true);
-        idField.set(stageArtist, autoIncrement.incrementAndGet());
-        memory.put(stageArtist.getId(), stageArtist);
-        return stageArtist;
-    }
+public class MemoryStageArtistRepository extends AbstractMemoryRepository<StageArtist> implements StageArtistRepository {
 
     @Override
     public Set<Long> findAllArtistIdByStageId(Long stageId) {
