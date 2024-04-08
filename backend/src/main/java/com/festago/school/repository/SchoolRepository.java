@@ -10,7 +10,7 @@ public interface SchoolRepository extends Repository<School, Long> {
 
     School save(School school);
 
-    Optional<School> findById(Long schoolId);
+    Optional<School> findById(Long id);
 
     void deleteById(Long id);
 
