@@ -1,4 +1,4 @@
-package com.festago.festival.application.integration;
+package com.festago.festival.application.integration.query;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -15,12 +15,12 @@ import com.festago.school.application.SchoolCommandService;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
 import com.festago.socialmedia.domain.OwnerType;
-import com.festago.socialmedia.domain.SocialMedia;
 import com.festago.socialmedia.domain.SocialMediaType;
 import com.festago.socialmedia.repository.SocialMediaRepository;
 import com.festago.stage.application.command.StageCreateService;
 import com.festago.stage.dto.command.StageCreateCommand;
 import com.festago.support.ApplicationIntegrationTest;
+import com.festago.support.fixture.SocialMediaFixture;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -95,12 +95,23 @@ class FestivalDetailV1QueryServiceIntegrationTest extends ApplicationIntegration
             우테대학교_축제_식별자, now.atTime(18, 0), ticketOpenTime, List.of(아티스트_식별자)
         ));
 
-        socialMediaRepository.save(
-            new SocialMedia(테코대학교_식별자, OwnerType.SCHOOL, SocialMediaType.INSTAGRAM, "총학생회 인스타그램",
-                "https://logo.com/instagram.png", "https://instagram.com/테코대학교_총학생회"));
-        socialMediaRepository.save(
-            new SocialMedia(테코대학교_식별자, OwnerType.SCHOOL, SocialMediaType.FACEBOOK, "총학생회 페이스북",
-                "https://logo.com/facebook.png", "https://facebook.com/테코대학교_총학생회"));
+        socialMediaRepository.save(SocialMediaFixture.builder()
+            .ownerId(테코대학교_식별자)
+            .ownerType(OwnerType.SCHOOL)
+            .mediaType(SocialMediaType.INSTAGRAM)
+            .name("총학생회 인스타그램")
+            .logoUrl("https://logo.com/instagram.png")
+            .url("https://instagram.com/테코대학교_총학생회")
+            .build());
+        socialMediaRepository.save(SocialMediaFixture.builder()
+            .ownerId(테코대학교_식별자)
+            .ownerType(OwnerType.SCHOOL)
+            .mediaType(SocialMediaType.FACEBOOK)
+            .name("총학생회 페이스북")
+            .logoUrl("https://logo.com/instagram.png")
+            .url("https://facebook.com/테코대학교_총학생회")
+            .build()
+        );
     }
 
     private Long createArtist(String artistName) {

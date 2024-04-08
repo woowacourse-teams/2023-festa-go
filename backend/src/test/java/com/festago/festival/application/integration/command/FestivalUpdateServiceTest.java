@@ -1,8 +1,9 @@
-package com.festago.festival.application.command;
+package com.festago.festival.application.integration.command;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.given;
 
+import com.festago.festival.application.command.FestivalUpdateService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.command.FestivalUpdateCommand;
 import com.festago.festival.repository.FestivalRepository;
