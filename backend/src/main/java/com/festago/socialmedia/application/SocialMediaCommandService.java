@@ -25,12 +25,12 @@ public class SocialMediaCommandService {
     private final ArtistRepository artistRepository;
 
     public Long createSocialMedia(SocialMediaCreateCommand command) {
-        validate(command);
+        validateCreate(command);
         SocialMedia socialMedia = socialMediaRepository.save(command.toEntity());
         return socialMedia.getId();
     }
 
-    private void validate(SocialMediaCreateCommand command) {
+    private void validateCreate(SocialMediaCreateCommand command) {
         Long ownerId = command.ownerId();
         OwnerType ownerType = command.ownerType();
         SocialMediaType socialMediaType = command.socialMediaType();
