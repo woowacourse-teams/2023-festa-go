@@ -13,6 +13,8 @@ import com.festago.festival.domain.FestivalIdStageArtistsResolver;
 import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.MemoryFestivalQueryInfoRepository;
+import com.festago.support.fixture.ArtistFixture;
+import com.festago.support.fixture.FestivalQueryInfoFixture;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -23,9 +25,6 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class FestivalQueryInfoArtistRenewServiceTest {
-
-    private static final String PROFILE_IMAGE_URL = "https://image.com/profileImage.png";
-    private static final String BACKGROUND_IMAGE_URL = "https://image.com/backgroundImage.png";
 
     FestivalInfoRepository festivalInfoRepository;
     FestivalIdStageArtistsResolver festivalIdStageArtistsResolver = mock();
@@ -49,13 +48,14 @@ class FestivalQueryInfoArtistRenewServiceTest {
     class renewArtistInfo {
 
         private final Long festivalId = 1L;
-        private final Artist 뉴진스 = new Artist(1L, "뉴진스", PROFILE_IMAGE_URL, BACKGROUND_IMAGE_URL);
-        private final Artist 소녀시대 = new Artist(2L, "소녀시대", PROFILE_IMAGE_URL, BACKGROUND_IMAGE_URL);
+
+        private final Artist 뉴진스 = ArtistFixture.builder().id(1L).name("뉴진스").build();
+        private final Artist 소녀시대 = ArtistFixture.builder().id(2L).name("소녀시대").build();
         FestivalQueryInfo festivalQueryInfo;
 
         @BeforeEach
         void setUp() {
-            festivalQueryInfo = festivalInfoRepository.save(FestivalQueryInfo.create(festivalId));
+            festivalQueryInfo = festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(festivalId).build());
         }
 
         @Test

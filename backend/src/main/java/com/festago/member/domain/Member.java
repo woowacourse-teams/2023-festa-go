@@ -63,10 +63,6 @@ public class Member extends BaseTimeEntity {
 
     private LocalDateTime deletedAt = null;
 
-    public Member(Long id) {
-        this.id = id;
-    }
-
     public Member(String socialId, SocialType socialType, String nickname, String profileImage) {
         this(null, socialId, socialType, nickname, profileImage);
     }

@@ -7,7 +7,6 @@ import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.application.FestivalSearchV1QueryService;
 import com.festago.festival.domain.Festival;
-import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.dto.FestivalSearchV1Response;
 import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalRepository;
@@ -20,6 +19,7 @@ import com.festago.stage.repository.StageRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.fixture.ArtistFixture;
 import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.FestivalQueryInfoFixture;
 import com.festago.support.fixture.SchoolFixture;
 import com.festago.support.fixture.StageArtistFixture;
 import com.festago.support.fixture.StageFixture;
@@ -102,9 +102,9 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
             .school(대구_학교)
             .build());
 
-        festivalInfoRepository.save(FestivalQueryInfo.create(부산_축제.getId()));
-        festivalInfoRepository.save(FestivalQueryInfo.create(서울_축제.getId()));
-        festivalInfoRepository.save(FestivalQueryInfo.create(대구_축제.getId()));
+        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(부산_축제.getId()).build());
+        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(서울_축제.getId()).build());
+        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(대구_축제.getId()).build());
 
         부산_공연 = stageRepository.save(StageFixture.builder()
             .startTime(nowDateTime.minusDays(5L))

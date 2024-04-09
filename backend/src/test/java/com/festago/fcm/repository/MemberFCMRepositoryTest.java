@@ -2,11 +2,11 @@ package com.festago.fcm.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.auth.domain.SocialType;
 import com.festago.fcm.domain.MemberFCM;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.support.RepositoryTest;
+import com.festago.support.fixture.MemberFixture;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ class MemberFCMRepositoryTest {
     @Test
     void member의_모든_fcmToken_조회() {
         // given
-        Member member = memberRepository.save(new Member("socialId", SocialType.FESTAGO, "nickname", "image.jpg"));
+        Member member = memberRepository.save(MemberFixture.builder().build());
         Long memberId = member.getId();
         MemberFCM expect1 = memberFCMRepository.save(new MemberFCM(memberId, "fcmToken"));
         MemberFCM expect2 = memberFCMRepository.save(new MemberFCM(memberId, "fcmToken2"));

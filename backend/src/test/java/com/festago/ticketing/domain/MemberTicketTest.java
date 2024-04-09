@@ -255,7 +255,7 @@ class MemberTicketTest {
         void 티켓_주인이다() {
             // given
             Long memberId = 1L;
-            Member member = new Member(memberId);
+            Member member = MemberFixture.builder().id(memberId).build();
             MemberTicket memberTicket = MemberTicketFixture.builder()
                 .owner(member)
                 .build();
@@ -269,7 +269,7 @@ class MemberTicketTest {
             // given
             Long memberId = 1L;
             Long ownerId = 2L;
-            Member owner = new Member(ownerId);
+            Member owner = MemberFixture.builder().id(ownerId).build();
             MemberTicket memberTicket = MemberTicketFixture.builder()
                 .owner(owner)
                 .build();
