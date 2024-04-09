@@ -14,12 +14,12 @@ import com.festago.school.dto.v1.SchoolFestivalV1Response;
 import com.festago.school.repository.SchoolRepository;
 import com.festago.school.repository.v1.SchoolFestivalV1SearchCondition;
 import com.festago.socialmedia.domain.OwnerType;
-import com.festago.socialmedia.domain.SocialMedia;
 import com.festago.socialmedia.domain.SocialMediaType;
 import com.festago.socialmedia.repository.SocialMediaRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.fixture.FestivalFixture;
 import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.SocialMediaFixture;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,8 +103,11 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
         private void saveSocialMedia(Long ownerId, OwnerType ownerType, SocialMediaType mediaType) {
             socialMediaRepository.save(
-                new SocialMedia(ownerId, ownerType, mediaType,
-                    "defaultName", "www.profileImageUrl.com", "www.url.com")
+                SocialMediaFixture.builder()
+                    .ownerId(ownerId)
+                    .ownerType(ownerType)
+                    .mediaType(mediaType)
+                    .build()
             );
         }
     }

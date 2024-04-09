@@ -1,4 +1,4 @@
-package com.festago.school.application.integration;
+package com.festago.school.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -7,30 +7,32 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
-import com.festago.school.application.SchoolCommandService;
 import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
 import com.festago.school.dto.SchoolCreateCommand;
 import com.festago.school.dto.SchoolUpdateCommand;
+import com.festago.school.repository.MemorySchoolRepository;
 import com.festago.school.repository.SchoolRepository;
-import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.fixture.SchoolFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class SchoolCommandServiceIntegrationTest extends ApplicationIntegrationTest {
+class SchoolCommandServiceTest {
 
-    @Autowired
     SchoolCommandService schoolCommandService;
 
-    @Autowired
     SchoolRepository schoolRepository;
+
+    @BeforeEach
+    void setUp() {
+        schoolRepository = new MemorySchoolRepository();
+        schoolCommandService = new SchoolCommandService(schoolRepository);
+    }
 
     @Nested
     class createSchool {

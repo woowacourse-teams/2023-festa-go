@@ -19,6 +19,10 @@ springBoot {
     buildInfo()
 }
 
+configurations.all {
+    exclude(group = "commons-logging", module = "commons-logging")
+}
+
 val swaggerVersion = "2.0.2"
 val restAssuredVersion = "5.3.0"
 val jjwtVersion = "0.11.5"
