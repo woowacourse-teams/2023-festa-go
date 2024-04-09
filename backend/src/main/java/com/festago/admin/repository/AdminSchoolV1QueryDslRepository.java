@@ -31,7 +31,11 @@ public class AdminSchoolV1QueryDslRepository extends QueryDslRepositorySupport {
                         school.id,
                         school.domain,
                         school.name,
-                        school.region
+                        school.region,
+                        school.logoUrl,
+                        school.backgroundUrl,
+                        school.createdAt,
+                        school.updatedAt
                     ))
                 .from(school)
                 .where(containSearchFilter(searchFilter, searchKeyword))
@@ -86,7 +90,11 @@ public class AdminSchoolV1QueryDslRepository extends QueryDslRepositorySupport {
                     school.id,
                     school.domain,
                     school.name,
-                    school.region
+                    school.region,
+                    school.logoUrl,
+                    school.backgroundUrl,
+                    school.createdAt,
+                    school.updatedAt
                 ))
             .from(school)
             .where(school.id.eq(schoolId)));
