@@ -65,9 +65,12 @@ class AdminSocialMediaV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_200_응답이_반환된다() throws Exception {
                 // given
+                Long ownerId = 1L;
                 given(adminSocialMediaV1QueryService.findById(anyLong()))
                     .willReturn(new AdminSocialMediaV1Response(
-                        1L,
+                        socialMediaId,
+                        ownerId,
+                        OwnerType.SCHOOL,
                         SocialMediaType.INSTAGRAM,
                         "테코대학교 총학생회 인스타그램",
                         "https://image.com/logo.png",
@@ -112,10 +115,14 @@ class AdminSocialMediaV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_200_응답이_반환된다() throws Exception {
                 // given
+                Long socialMediaId = 1L;
+                Long ownerId = 1L;
                 given(adminSocialMediaV1QueryService.findByOwnerIdAndOwnerType(anyLong(), any(OwnerType.class)))
                     .willReturn(List.of(
                         new AdminSocialMediaV1Response(
-                            1L,
+                            socialMediaId,
+                            ownerId,
+                            OwnerType.SCHOOL,
                             SocialMediaType.INSTAGRAM,
                             "테코대학교 총학생회 인스타그램",
                             "https://image.com/logo.png",

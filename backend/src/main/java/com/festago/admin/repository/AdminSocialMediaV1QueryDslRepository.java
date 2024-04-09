@@ -21,6 +21,8 @@ public class AdminSocialMediaV1QueryDslRepository extends QueryDslRepositorySupp
     public Optional<AdminSocialMediaV1Response> findById(Long socialMediaId) {
         return fetchOne(query -> query.select(new QAdminSocialMediaV1Response(
                     socialMedia.id,
+                    socialMedia.ownerId,
+                    socialMedia.ownerType,
                     socialMedia.mediaType,
                     socialMedia.name,
                     socialMedia.logoUrl,
@@ -35,6 +37,8 @@ public class AdminSocialMediaV1QueryDslRepository extends QueryDslRepositorySupp
     public List<AdminSocialMediaV1Response> findByOwnerIdAndOwnerType(Long ownerId, OwnerType ownerType) {
         return select(new QAdminSocialMediaV1Response(
             socialMedia.id,
+            socialMedia.ownerId,
+            socialMedia.ownerType,
             socialMedia.mediaType,
             socialMedia.name,
             socialMedia.logoUrl,
