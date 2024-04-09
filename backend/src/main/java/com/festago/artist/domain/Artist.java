@@ -1,5 +1,6 @@
 package com.festago.artist.domain;
 
+import com.festago.common.domain.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Artist {
+public class Artist extends BaseTimeEntity {
 
     private static final String DEFAULT_URL = "https://picsum.photos/536/354";
 
