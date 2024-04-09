@@ -19,7 +19,6 @@ import com.festago.support.fixture.FestivalFixture;
 import com.festago.support.fixture.SchoolFixture;
 import com.festago.support.fixture.StageArtistFixture;
 import com.festago.support.fixture.StageFixture;
-import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,9 +50,6 @@ class ArtistSearchStageCountV1QueryServiceIntegrationTest extends ApplicationInt
 
     @Autowired
     SchoolRepository schoolRepository;
-
-    @Autowired
-    Clock clock;
 
     @Nested
     class 검색 {
