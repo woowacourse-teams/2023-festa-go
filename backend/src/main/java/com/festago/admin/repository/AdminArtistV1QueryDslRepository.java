@@ -29,7 +29,9 @@ public class AdminArtistV1QueryDslRepository extends QueryDslRepositorySupport {
                         artist.id,
                         artist.name,
                         artist.profileImage,
-                        artist.backgroundImageUrl
+                        artist.backgroundImageUrl,
+                        artist.createdAt,
+                        artist.updatedAt
                     ))
                 .from(artist)
                 .where(applySearch(searchCondition))
@@ -77,7 +79,9 @@ public class AdminArtistV1QueryDslRepository extends QueryDslRepositorySupport {
                     artist.id,
                     artist.name,
                     artist.profileImage,
-                    artist.backgroundImageUrl
+                    artist.backgroundImageUrl,
+                    artist.createdAt,
+                    artist.updatedAt
                 ))
             .from(artist)
             .where(artist.id.eq(artistId)));
