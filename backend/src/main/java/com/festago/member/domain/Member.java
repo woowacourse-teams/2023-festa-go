@@ -22,7 +22,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.util.StringUtils;
 
 @Entity
-@SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image = '', social_id = null WHERE id=?")
+@SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image_url = '', social_id = null WHERE id=?")
 @Where(clause = "deleted_at is null")
 @Table(
     uniqueConstraints = {
