@@ -1,7 +1,7 @@
 package com.festago.festago.data.service
 
 import com.festago.festago.data.dto.artist.ArtistSearchResponse
-import com.festago.festago.data.dto.festival.FestivalResponse
+import com.festago.festago.data.dto.festival.FestivalSearchResponse
 import com.festago.festago.data.dto.school.SchoolSearchResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -11,7 +11,7 @@ interface SearchRetrofitService {
     @GET("api/v1/search/festivals")
     suspend fun searchFestivals(
         @Query("keyword") keyword: String,
-    ): Response<List<FestivalResponse>>
+    ): Response<List<FestivalSearchResponse>>
 
     @GET("api/v1/search/artists")
     suspend fun searchArtists(

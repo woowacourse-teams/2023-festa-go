@@ -1,9 +1,11 @@
 package com.festago.festago.domain.model.artist
 
+import com.festago.festago.domain.model.social.SocialMedia
+
 data class ArtistDetail(
     val id: Int,
     val artistName: String,
-    val logoUrl: String,
+    val profileUrl: String,
     val backgroundUrl: String,
-    val artistMedia: List<ArtistMedia>,
+    val artistMedia: List<SocialMedia>,
 )

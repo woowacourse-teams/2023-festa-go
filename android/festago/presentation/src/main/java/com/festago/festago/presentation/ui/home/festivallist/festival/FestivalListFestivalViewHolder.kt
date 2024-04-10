@@ -49,7 +49,7 @@ class FestivalListFestivalViewHolder(
                 )
             }
 
-            LocalDate.now() == item.startDate.minusDays(1) -> {
+            LocalDate.now() >= item.startDate.minusDays(7) -> {
                 dDayView.setTextColor(context.getColor(R.color.background_gray_01))
                 dDayView.text = context.getString(
                     R.string.festival_list_tv_dday_format,

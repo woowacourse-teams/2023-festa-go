@@ -9,7 +9,7 @@ import com.festago.festago.domain.repository.SchoolRepository
 import java.time.LocalDate
 import javax.inject.Inject
 
-class SchoolDefaultRepository @Inject constructor(
+class DefaultSchoolRepository @Inject constructor(
     private val schoolRetrofitService: SchoolRetrofitService
 ) : SchoolRepository {
     override suspend fun loadSchoolInfo(schoolId: Long): Result<SchoolInfo> {
