@@ -5,6 +5,7 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.util.Validator;
 import com.festago.school.domain.School;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -42,6 +43,7 @@ public class Festival extends BaseTimeEntity {
 
     @NotNull
     @Size(max = MAX_THUMBNAIL_LENGTH)
+    @Column(name = "poster_image_url")
     private String thumbnail;
 
     @NotNull

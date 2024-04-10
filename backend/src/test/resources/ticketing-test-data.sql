@@ -1,7 +1,7 @@
 insert into school (domain, name)
 values ('festago.com', '페스타고 대학교');
 
-insert into festival (school_id, end_date, name, start_date, thumbnail)
+insert into festival (school_id, end_date, name, start_date, poster_image_url)
 values (1, '2023-07-30', '테코 대학교', '2023-08-02', '');
 
 insert into stage (festival_id, start_time, ticket_open_time)
