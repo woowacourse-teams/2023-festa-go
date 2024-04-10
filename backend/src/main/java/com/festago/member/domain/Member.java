@@ -3,6 +3,7 @@ package com.festago.member.domain;
 import com.festago.auth.domain.SocialType;
 import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.util.Validator;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,10 +27,9 @@ import org.springframework.util.StringUtils;
 @Table(
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "SOCIAL_UNIQUE",
             columnNames = {
-                "socialId",
-                "socialType"
+                "social_id",
+                "social_type"
             }
         )
     }
@@ -47,10 +47,12 @@ public class Member extends BaseTimeEntity {
     private Long id;
 
     @Size(max = MAX_SOCIAL_ID_LENGTH)
+    @Column(name = "social_id")
     private String socialId;
 
     @NotNull
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "social_type")
     private SocialType socialType;
 
     @NotNull
@@ -59,6 +61,7 @@ public class Member extends BaseTimeEntity {
 
     @NotNull
     @Size(max = MAX_PROFILE_IMAGE_LENGTH)
+    @Column(name = "profile_image_url")
     private String profileImage;
 
     private LocalDateTime deletedAt = null;

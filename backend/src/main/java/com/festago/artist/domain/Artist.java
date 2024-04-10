@@ -1,5 +1,6 @@
 package com.festago.artist.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +20,7 @@ public class Artist {
 
     private String name;
 
+    @Column(name = "profile_image_url")
     private String profileImage;
 
     private String backgroundImageUrl;
