@@ -23,6 +23,7 @@ import com.festago.common.querydsl.SearchCondition;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import jakarta.servlet.http.Cookie;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -191,7 +192,14 @@ class AdminArtistV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_200_응답과_body가_반환된다() throws Exception {
                 // given
-                var expected = new AdminArtistV1Response(1L, "윤하", "https://image.com/image.png", "https://image.com/background.png");
+                var expected = new AdminArtistV1Response(
+                    1L,
+                    "윤하",
+                    "https://image.com/image1.png",
+                    "https://image.com/background1.png",
+                    LocalDateTime.now(),
+                    LocalDateTime.now()
+                );
                 given(adminArtistV1QueryService.findById(anyLong()))
                     .willReturn(expected);
 
@@ -235,8 +243,14 @@ class AdminArtistV1ControllerTest {
             void 요청을_보내면_200_응답과_body가_반환된다() throws Exception {
                 // given
                 var expected = List.of(
-                    new AdminArtistV1Response(1L, "윤하", "https://image.com/image1.png", "https://image.com/background1.png"),
-                    new AdminArtistV1Response(2L, "고윤하", "https://image.com/image2.png", "https://image.com/background2.png")
+                    new AdminArtistV1Response(
+                        1L,
+                        "윤하",
+                        "https://image.com/image1.png",
+                        "https://image.com/background1.png",
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                    )
                 );
                 given(adminArtistV1QueryService.findAll(any(SearchCondition.class)))
                     .willReturn(new PageImpl<>(expected));

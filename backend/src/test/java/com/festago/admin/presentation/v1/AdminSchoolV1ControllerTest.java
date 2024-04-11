@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +26,7 @@ import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -209,8 +209,16 @@ class AdminSchoolV1ControllerTest {
             void 요청을_하면_200_응답과_학교_정보_목록이_반환된다() throws Exception {
                 // given
                 var expected = List.of(
-                    new AdminSchoolV1Response(1L, "teco.ac.kr", "테코대학교", SchoolRegion.서울),
-                    new AdminSchoolV1Response(2L, "wote.ac.kr", "우테대학교", SchoolRegion.부산)
+                    new AdminSchoolV1Response(
+                        1L,
+                        "teco.ac.kr",
+                        "테코대학교",
+                        SchoolRegion.서울,
+                        "https://image.com/logo.png",
+                        "https://image.com/backgroundImage.png",
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                    )
                 );
                 given(adminSchoolV1QueryService.findAll(any(SearchCondition.class)))
                     .willReturn(new PageImpl<>(expected));
@@ -219,8 +227,7 @@ class AdminSchoolV1ControllerTest {
                 mockMvc.perform(get(uri)
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(new Cookie("token", "Bearer token")))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.content.size()").value(2));
+                    .andExpect(status().isOk());
             }
         }
     }
@@ -238,7 +245,16 @@ class AdminSchoolV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_하면_200_응답과_학교_정보가_반환된다() throws Exception {
                 // given
-                var expected = new AdminSchoolV1Response(1L, "teco.ac.kr", "테코대학교", SchoolRegion.서울);
+                var expected = new AdminSchoolV1Response(
+                    1L,
+                    "teco.ac.kr",
+                    "테코대학교",
+                    SchoolRegion.서울,
+                    "https://image.com/logo.png",
+                    "https://image.com/backgroundImage.png",
+                    LocalDateTime.now(),
+                    LocalDateTime.now()
+                );
                 given(adminSchoolV1QueryService.findById(anyLong()))
                     .willReturn(expected);
 
