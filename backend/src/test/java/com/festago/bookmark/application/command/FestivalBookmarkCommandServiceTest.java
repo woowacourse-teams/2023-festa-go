@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
 import com.festago.bookmark.repository.BookmarkRepository;
 import com.festago.bookmark.repository.MemoryBookmarkRepository;
@@ -14,6 +13,7 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.festival.repository.MemoryFestivalRepository;
+import com.festago.support.fixture.BookmarkFixture;
 import com.festago.support.fixture.FestivalFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -58,7 +58,13 @@ class FestivalBookmarkCommandServiceTest {
             // given
             for (long i = 1; i <= 12; i++) {
                 Festival festival = festivalRepository.save(FestivalFixture.builder().build());
-                bookmarkRepository.save(new Bookmark(BookmarkType.FESTIVAL, festival.getId(), 회원_식별자));
+                bookmarkRepository.save(
+                    BookmarkFixture.builder()
+                        .bookmarkType(BookmarkType.FESTIVAL)
+                        .resourceId(festival.getId())
+                        .memberId(회원_식별자)
+                        .build()
+                );
             }
 
             // when & then

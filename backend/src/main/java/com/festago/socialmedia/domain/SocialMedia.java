@@ -19,8 +19,7 @@ import lombok.NoArgsConstructor;
     name = "social_media",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "UNIQUE_OWNERTYPE_OWNERID",
-            columnNames = {"owner_id", "owner_type", "media_type"}
+            columnNames= {"owner_id", "owner_type", "media_type"}
         )
     }
 )

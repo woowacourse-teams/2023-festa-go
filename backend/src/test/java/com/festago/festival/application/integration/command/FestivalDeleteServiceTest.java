@@ -8,7 +8,6 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.festival.application.command.FestivalDeleteService;
 import com.festago.festival.domain.Festival;
-import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.repository.FestivalInfoRepository;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
@@ -17,6 +16,7 @@ import com.festago.stage.repository.StageRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.TimeInstantProvider;
 import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.FestivalQueryInfoFixture;
 import com.festago.support.fixture.SchoolFixture;
 import com.festago.support.fixture.StageFixture;
 import java.time.Clock;
@@ -92,7 +92,7 @@ class FestivalDeleteServiceTest extends ApplicationIntegrationTest {
         @Test
         void 축제를_삭제하면_FestivalQueryInfo도_삭제된다() {
             // given
-            festivalInfoRepository.save(FestivalQueryInfo.create(festivalId));
+            festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(festivalId).build());
 
             // when
             festivalDeleteService.deleteFestival(festivalId);

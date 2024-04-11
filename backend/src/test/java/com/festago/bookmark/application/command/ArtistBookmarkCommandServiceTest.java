@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.festago.artist.domain.Artist;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.artist.repository.MemoryArtistRepository;
-import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
 import com.festago.bookmark.repository.BookmarkRepository;
 import com.festago.bookmark.repository.MemoryBookmarkRepository;
@@ -14,6 +13,7 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.support.fixture.ArtistFixture;
+import com.festago.support.fixture.BookmarkFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -61,7 +61,13 @@ class ArtistBookmarkCommandServiceTest {
             // given
             for (int i = 0; i < 12; i++) {
                 Artist artist = artistRepository.save(ArtistFixture.builder().build());
-                bookmarkRepository.save(new Bookmark(BookmarkType.ARTIST, artist.getId(), 회원_식별자));
+                bookmarkRepository.save(
+                    BookmarkFixture.builder()
+                        .bookmarkType(BookmarkType.ARTIST)
+                        .resourceId(artist.getId())
+                        .memberId(회원_식별자)
+                        .build()
+                );
             }
 
             // when & then
@@ -100,7 +106,11 @@ class ArtistBookmarkCommandServiceTest {
         @Test
         void 북마크를_삭제한다() {
             // given
-            bookmarkRepository.save(new Bookmark(BookmarkType.ARTIST, 브라운.getId(), 회원_식별자));
+            bookmarkRepository.save(BookmarkFixture.builder()
+                .bookmarkType(BookmarkType.ARTIST)
+                .resourceId(브라운.getId())
+                .memberId(회원_식별자)
+                .build());
 
             // when
             artistBookmarkCommandService.delete(브라운.getId(), 회원_식별자);

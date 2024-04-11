@@ -40,6 +40,7 @@ public class School extends BaseTimeEntity {
 
     private String logoUrl;
 
+    @Column(name = "background_image_url")
     private String backgroundUrl;
 
     @Enumerated(EnumType.STRING)

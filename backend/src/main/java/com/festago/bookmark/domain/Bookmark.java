@@ -16,10 +16,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-    name = "bookmark",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "UNIQUE_BOOKMARK_TYPE_RESOURCE_ID_MEMBER_ID",
             columnNames = {"bookmark_type", "resource_id", "member_id"}
         )
     }

@@ -44,11 +44,8 @@ jobs:
           username: ${{ vars.DOCKER_HUB_DEV_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_DEV_LOGIN_TOKEN }}
 
-      - name: Build Docker images
-        run: docker build -t ${{ vars.DOCKER_DEV_TAG }} .
-
-      - name: Push Docker images
-        run: docker push ${{ vars.DOCKER_DEV_TAG }}
+      - name: Build And Push docker image
+        run: docker build --platform linux/arm64/v8 --push --tag ${{ vars.DOCKER_DEV_TAG }} .
 
       - name: run application use ssh
         uses: appleboy/ssh-action@master

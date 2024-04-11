@@ -3,7 +3,6 @@ package com.festago.bookmark.application.command;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.festago.bookmark.domain.Bookmark;
 import com.festago.bookmark.domain.BookmarkType;
 import com.festago.bookmark.repository.BookmarkRepository;
 import com.festago.bookmark.repository.MemoryBookmarkRepository;
@@ -13,6 +12,7 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.school.domain.School;
 import com.festago.school.repository.MemorySchoolRepository;
 import com.festago.school.repository.SchoolRepository;
+import com.festago.support.fixture.BookmarkFixture;
 import com.festago.support.fixture.SchoolFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -53,7 +53,13 @@ class SchoolBookmarkCommandServiceTest {
             // given
             for (long i = 0; i < 12; i++) {
                 School school = schoolRepository.save(SchoolFixture.builder().build());
-                bookmarkRepository.save(new Bookmark(BookmarkType.SCHOOL, school.getId(), 회원_식별자));
+                bookmarkRepository.save(
+                    BookmarkFixture.builder()
+                        .bookmarkType(BookmarkType.SCHOOL)
+                        .resourceId(school.getId())
+                        .memberId(회원_식별자)
+                        .build()
+                );
             }
 
             Long schoolId = schoolRepository.save(SchoolFixture.builder().build()).getId();
@@ -68,7 +74,13 @@ class SchoolBookmarkCommandServiceTest {
         void 이미_해당하는_북마크가_저장됐다면_예외() {
             // given
             Long schoolId = schoolRepository.save(SchoolFixture.builder().build()).getId();
-            bookmarkRepository.save(new Bookmark(BookmarkType.SCHOOL, schoolId, 회원_식별자));
+            bookmarkRepository.save(
+                BookmarkFixture.builder()
+                    .bookmarkType(BookmarkType.SCHOOL)
+                    .resourceId(schoolId)
+                    .memberId(회원_식별자)
+                    .build()
+            );
 
             // when
             schoolBookmarkCommandService.save(schoolId, 회원_식별자);
@@ -96,7 +108,13 @@ class SchoolBookmarkCommandServiceTest {
     void 북마크를_삭제한다() {
         // given
         Long schoolId = schoolRepository.save(SchoolFixture.builder().build()).getId();
-        bookmarkRepository.save(new Bookmark(BookmarkType.SCHOOL, schoolId, 회원_식별자));
+        bookmarkRepository.save(
+            BookmarkFixture.builder()
+                .bookmarkType(BookmarkType.SCHOOL)
+                .resourceId(schoolId)
+                .memberId(회원_식별자)
+                .build()
+        );
 
         // when
         schoolBookmarkCommandService.delete(schoolId, 회원_식별자);

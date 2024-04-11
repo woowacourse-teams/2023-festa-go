@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
@@ -50,6 +51,11 @@ class SchoolDetailFragment : Fragment() {
                 updateUi(it)
             }
         }
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect {
+                handleEvent(it)
+            }
+        }
     }
 
     private fun initView(schoolId: Long) {
@@ -86,6 +92,24 @@ class SchoolDetailFragment : Fragment() {
                 ivImage.setOnClickListener { startBrowser(media.url) }
                 binding.llcSchoolSocialMedia.addView(ivImage)
             }
+        }
+    }
+
+    private fun handleEvent(event: SchoolDetailEvent) = when (event) {
+        is SchoolDetailEvent.ShowArtistDetail -> {
+            findNavController().navigate(
+                SchoolDetailFragmentDirections.actionSchoolDetailFragmentToArtistDetailFragment(
+                    event.artistId
+                )
+            )
+        }
+
+        is SchoolDetailEvent.ShowFestivalDetail -> {
+            findNavController().navigate(
+                SchoolDetailFragmentDirections.actionSchoolDetailFragmentToFestivalDetailFragment(
+                    event.festivalId
+                )
+            )
         }
     }
 

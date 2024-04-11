@@ -70,6 +70,12 @@
         <argument
             android:name="schoolId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_schoolDetailFragment_to_festivalDetailFragment"
+            app:destination="@id/festivalDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+
     </fragment>
     <fragment
         android:id="@+id/festivalDetailFragment"
