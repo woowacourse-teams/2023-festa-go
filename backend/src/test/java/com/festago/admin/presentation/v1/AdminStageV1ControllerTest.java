@@ -3,6 +3,7 @@ package com.festago.admin.presentation.v1;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -46,6 +47,44 @@ class AdminStageV1ControllerTest {
     StageCommandFacadeService stageCommandFacadeService;
 
     @Nested
+    class 공연_단건_조회 {
+
+        final String uri = "/admin/api/v1/stages/{stageId}";
+
+        @Nested
+        @DisplayName("GET " + uri)
+        class 올바른_주소로 {
+
+            Long stageId = 1L;
+
+            @Test
+            @WithMockAuth(role = Role.ADMIN)
+            void 요청을_보내면_200_응답이_반환된다() throws Exception {
+                mockMvc.perform(get(uri, stageId)
+                        .cookie(TOKEN_COOKIE)
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+            }
+
+            @Test
+            void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri, 1))
+                    .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockAuth(role = Role.MEMBER)
+            void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
+                // when & then
+                mockMvc.perform(get(uri, 1)
+                        .cookie(TOKEN_COOKIE))
+                    .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
     class 공연_생성 {
 
         final String uri = "/admin/api/v1/stages";
@@ -58,7 +97,8 @@ class AdminStageV1ControllerTest {
             LocalDateTime startTime = LocalDateTime.parse("2077-06-30T18:00:00");
             LocalDateTime ticketOpenTime = LocalDateTime.parse("2077-06-23T00:00:00");
             List<Long> artistIds = List.of(1L, 2L, 3L);
-            StageV1CreateRequest request = new StageV1CreateRequest(festivalId, startTime, ticketOpenTime, artistIds);
+            StageV1CreateRequest request = new StageV1CreateRequest(festivalId, startTime, ticketOpenTime,
+                artistIds);
 
             @Test
             @WithMockAuth(role = Role.ADMIN)
@@ -172,4 +212,5 @@ class AdminStageV1ControllerTest {
             }
         }
     }
+
 }
