@@ -41,6 +41,7 @@ public enum ErrorCode {
     BOOKMARK_LIMIT_EXCEEDED("최대 북마크 갯수를 초과했습니다"),
     BROAD_SEARCH_KEYWORD("더 자세한 검색어로 입력해야합니다."),
     INVALID_KEYWORD("유효하지 않은 키워드 입니다."),
+    DUPLICATE_SOCIAL_MEDIA("이미 존재하는 소셜미디어 입니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
@@ -61,6 +62,7 @@ public enum ErrorCode {
     TICKET_NOT_FOUND("존재하지 않는 티켓입니다."),
     SCHOOL_NOT_FOUND("존재하지 않는 학교입니다."),
     ARTIST_NOT_FOUND("존재하지 않는 아티스트입니다."),
+    SOCIAL_MEDIA_NOT_FOUND("존재하지 않는 소셜미디어입니다."),
 
     // 429
     TOO_FREQUENT_REQUESTS("너무 잦은 요청입니다. 잠시 후 다시 시도해주세요."),
