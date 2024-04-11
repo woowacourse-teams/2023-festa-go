@@ -29,7 +29,6 @@ android {
     buildTypes {
         debug {
             buildConfigField("Boolean", "DEBUG_MODE", "true")
-            buildConfigField("Boolean", "DEBUG_MODE", "false")
         }
 
         release {
