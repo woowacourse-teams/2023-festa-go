@@ -12,6 +12,7 @@ import com.festago.admin.dto.stage.QAdminStageV1Response;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.stage.domain.Stage;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -42,5 +43,31 @@ public class AdminStageV1QueryDslRepository extends QueryDslRepositorySupport {
                     )
                 )
             );
+    }
+
+    public Optional<AdminStageV1Response> findById(Long stageId) {
+        List<AdminStageV1Response> response = selectFrom(stage)
+            .leftJoin(stageArtist).on(stageArtist.stageId.eq(stageId))
+            .leftJoin(artist).on(artist.id.eq(stageArtist.artistId))
+            .where(stage.id.eq(stageId))
+            .transform(
+                groupBy(stage.id).list(
+                    new QAdminStageV1Response(
+                        stage.id,
+                        stage.startTime,
+                        stage.ticketOpenTime,
+                        list(new QAdminStageArtistV1Response(
+                            artist.id,
+                            artist.name
+                        )),
+                        stage.createdAt,
+                        stage.updatedAt
+                    )
+                )
+            );
+        if (response.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(response.get(0));
     }
 }
