@@ -75,7 +75,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@null"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_foreground" />
+                tools:src="@color/background_gray_03"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView

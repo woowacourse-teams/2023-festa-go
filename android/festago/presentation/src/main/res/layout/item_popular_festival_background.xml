@@ -22,5 +22,5 @@
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1:1"
-        tools:src="@drawable/ic_launcher_background" />
+        tools:src="@color/background_gray_03" />
 </layout>

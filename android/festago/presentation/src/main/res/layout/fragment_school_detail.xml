@@ -46,15 +46,17 @@
                 imageUrl="@{successUiState.schoolInfo.backgroundUrl}"
                 android:layout_width="match_parent"
                 android:layout_height="136dp"
+                android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_launcher_background" />
+                tools:src="@color/background_gray_02" />
 
             <ImageView
                 android:id="@+id/ivBack"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_back"
                 app:layout_constraintBottom_toBottomOf="@id/ivSchoolBackground"
                 app:layout_constraintStart_toStartOf="@id/ivSchoolBackground"
@@ -77,8 +79,9 @@
                     imageUrl="@{successUiState.schoolInfo.logoUrl}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
                     android:scaleType="centerCrop"
-                    tools:src="@drawable/ic_launcher_foreground" />
+                    tools:src="@color/background_gray_03" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
