@@ -108,7 +108,7 @@ class AdminStageV1ControllerTest {
                     .willReturn(1L);
 
                 // when & then
-                mockMvc.perform(post(uri, 1)
+                mockMvc.perform(post(uri)
                         .cookie(TOKEN_COOKIE)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -119,7 +119,7 @@ class AdminStageV1ControllerTest {
             @Test
             void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
                 // when & then
-                mockMvc.perform(post(uri, 1))
+                mockMvc.perform(post(uri))
                     .andExpect(status().isUnauthorized());
             }
 
@@ -127,7 +127,7 @@ class AdminStageV1ControllerTest {
             @WithMockAuth(role = Role.MEMBER)
             void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
                 // when & then
-                mockMvc.perform(post(uri, 1)
+                mockMvc.perform(post(uri)
                         .cookie(TOKEN_COOKIE))
                     .andExpect(status().isNotFound());
             }
@@ -152,7 +152,7 @@ class AdminStageV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_200_응답이_반환된다() throws Exception {
                 // when & then
-                mockMvc.perform(patch(uri, 1, 1)
+                mockMvc.perform(patch(uri, 1)
                         .cookie(TOKEN_COOKIE)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -162,7 +162,7 @@ class AdminStageV1ControllerTest {
             @Test
             void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
                 // when & then
-                mockMvc.perform(patch(uri, 1, 1))
+                mockMvc.perform(patch(uri, 1))
                     .andExpect(status().isUnauthorized());
             }
 
@@ -170,7 +170,7 @@ class AdminStageV1ControllerTest {
             @WithMockAuth(role = Role.MEMBER)
             void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
                 // when & then
-                mockMvc.perform(patch(uri, 1, 1)
+                mockMvc.perform(patch(uri, 1)
                         .cookie(TOKEN_COOKIE))
                     .andExpect(status().isNotFound());
             }
@@ -190,7 +190,7 @@ class AdminStageV1ControllerTest {
             @WithMockAuth(role = Role.ADMIN)
             void 요청을_보내면_204_응답이_반환된다() throws Exception {
                 // when & then
-                mockMvc.perform(delete(uri, 1, 1)
+                mockMvc.perform(delete(uri, 1)
                         .cookie(TOKEN_COOKIE))
                     .andExpect(status().isNoContent());
             }
@@ -198,7 +198,7 @@ class AdminStageV1ControllerTest {
             @Test
             void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
                 // when & then
-                mockMvc.perform(delete(uri, 1, 1))
+                mockMvc.perform(delete(uri, 1))
                     .andExpect(status().isUnauthorized());
             }
 
@@ -206,7 +206,7 @@ class AdminStageV1ControllerTest {
             @WithMockAuth(role = Role.MEMBER)
             void 토큰의_권한이_Admin이_아니면_404_응답이_반환된다() throws Exception {
                 // when & then
-                mockMvc.perform(delete(uri, 1, 1)
+                mockMvc.perform(delete(uri, 1)
                         .cookie(TOKEN_COOKIE))
                     .andExpect(status().isNotFound());
             }
