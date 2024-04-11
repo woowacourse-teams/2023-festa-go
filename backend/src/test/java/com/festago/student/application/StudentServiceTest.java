@@ -204,7 +204,7 @@ class StudentServiceTest {
             given(studentCodeRepository.findByCodeAndMember(any(), any()))
                 .willReturn(Optional.of(new StudentCode(
                     new VerificationCode("123456"),
-                    new School("snu.ac.kr", "서울대학교", SchoolRegion.서울),
+                    SchoolFixture.builder().domain("snu.ac.kr").name("서울대학교").region(SchoolRegion.서울).build(),
                     member,
                     "ohs",
                     LocalDateTime.now()
