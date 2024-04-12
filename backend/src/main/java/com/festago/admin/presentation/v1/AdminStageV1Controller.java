@@ -29,7 +29,7 @@ public class AdminStageV1Controller {
     private final AdminStageV1QueryService adminStageV1QueryService;
 
     @GetMapping("/{stageId}")
-    public ResponseEntity<AdminStageV1Response> findStageById(
+    public ResponseEntity<AdminStageV1Response> findById(
         @PathVariable  Long stageId
     ) {
         return ResponseEntity.ok()
