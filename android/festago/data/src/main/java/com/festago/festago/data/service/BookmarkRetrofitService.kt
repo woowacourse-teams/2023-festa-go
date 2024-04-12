@@ -1,6 +1,5 @@
 package com.festago.festago.data.service
 
-import com.festago.festago.data.dto.artist.ArtistDetailResponse
 import com.festago.festago.data.dto.bookmark.ArtistBookmarkResponse
 import com.festago.festago.data.dto.bookmark.FestivalBookmarkResponse
 import com.festago.festago.data.dto.bookmark.SchoolBookmarkResponse

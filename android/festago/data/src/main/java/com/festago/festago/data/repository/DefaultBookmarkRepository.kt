@@ -9,6 +9,7 @@ import com.festago.festago.domain.model.bookmark.FestivalBookmark
 import com.festago.festago.domain.model.bookmark.FestivalBookmarkOrder
 import com.festago.festago.domain.model.bookmark.SchoolBookmark
 import com.festago.festago.domain.repository.BookmarkRepository
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class DefaultBookmarkRepository @Inject constructor(
@@ -72,9 +73,12 @@ class DefaultBookmarkRepository @Inject constructor(
 
     override suspend fun getArtistBookmarks(): Result<List<ArtistBookmark>> {
         return runCatchingResponse {
+            delay(1000L)
             bookmarkRetrofitService.getArtistBookmarks()
         }.onSuccessOrCatch {
             it.map { artist -> artist.toDomain() }
+        }.onFailure {
+            it.printStackTrace()
         }
     }
 

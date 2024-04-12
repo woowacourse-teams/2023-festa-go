@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -23,7 +24,6 @@ annotation class BaseUrlQualifier
 @InstallIn(SingletonComponent::class)
 @Module
 object ApiModule {
-
     @Provides
     @Singleton
     fun provideRetrofitConverterFactory(): retrofit2.Converter.Factory {
@@ -41,6 +41,20 @@ object ApiModule {
         converterFactory: retrofit2.Converter.Factory,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
+        .client(
+            okhttp3.OkHttpClient.Builder()
+                .addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    },
+                )
+                .addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.HEADERS
+                    },
+                )
+                .build(),
+        )
         .addConverterFactory(converterFactory)
         .build()
 
