@@ -1,17 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/rvArtistBookmarkList"
-        android:name="com.festago.festago.presentation.ItemFragment"
+    <data>
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark.ArtistBookmarkListUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ItemFragment"
-        tools:listitem="@layout/fragment_artist_bookmark_item" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvArtistBookmarkList"
+            android:name="com.festago.festago.presentation.ItemFragment"
+            visibility="@{uiState.shouldShowSuccess}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            tools:context=".ItemFragment"
+            tools:listitem="@layout/fragment_artist_bookmark_item" />
+
+        <TextView
+            visibility="@{uiState.shouldShowEmpty}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="북마크한 아티스트가 없습니다."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            visibility="@{uiState.shouldShowError}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="통신이 월할하지 않습니다."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

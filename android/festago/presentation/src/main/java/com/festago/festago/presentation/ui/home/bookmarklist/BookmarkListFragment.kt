@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.festago.festago.presentation.databinding.FragmentBookmarkListBinding
 import com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark.ArtistBookmarkFragment
+import com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark.ArtistBookmarkViewModel
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,8 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class BookmarkListFragment : Fragment() {
     private var _binding: FragmentBookmarkListBinding? = null
     private val binding get() = _binding!!
-
-    private val vm: BookmarkListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,15 +36,5 @@ class BookmarkListFragment : Fragment() {
 
     private fun initView() {
         binding.vpBookmarkList.adapter = BookmarkFragmentStateAdapter(this)
-    }
-}
-class BookmarkFragmentStateAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
-    override fun getItemCount(): Int = 1
-
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> ArtistBookmarkFragment()
-            else -> throw IllegalArgumentException("Invalid position")
-        }
     }
 }
