@@ -19,8 +19,8 @@ public class StageDeleteService {
 
     public void deleteStage(Long stageId) {
         stageRepository.findByIdWithFetch(stageId).ifPresent(stage -> {
-            stageRepository.deleteById(stageId);
             stageArtistRepository.deleteByStageId(stageId);
+            stageRepository.deleteById(stageId);
             eventPublisher.publishEvent(new StageDeletedEvent(stage));
         });
     }
