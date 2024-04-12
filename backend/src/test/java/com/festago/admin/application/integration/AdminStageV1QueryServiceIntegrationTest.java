@@ -102,7 +102,7 @@ class AdminStageV1QueryServiceIntegrationTest extends ApplicationIntegrationTest
          * 6월 15일 공연에는 아티스트A, 아티스트B가 참여한다.<p> 6월 16일 공연에는 아티스트C가 참여한다.
          */
         @Nested
-        class 특정_축제의_공연_목록과_참여하는_아티스트를_조회할_수_있어야_한다 {
+        class 축제에_공연이_있으면 {
 
             Long 아티스트A_식별자;
             Long 아티스트B_식별자;
