@@ -5,16 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.festago.festago.presentation.R
+import androidx.fragment.app.viewModels
+import com.festago.festago.presentation.databinding.FragmentBookmarkListBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BookmarkListFragment : Fragment() {
+    private var _binding: FragmentBookmarkListBinding? = null
+    private val binding get() = _binding!!
+
+    private val vm: BookmarkListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bookmark_list, container, false)
+    ): View {
+        _binding = FragmentBookmarkListBinding.inflate(inflater)
+        return binding.root
     }
 }
