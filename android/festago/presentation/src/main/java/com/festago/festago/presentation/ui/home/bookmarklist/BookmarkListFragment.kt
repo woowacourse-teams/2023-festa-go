@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.festago.festago.presentation.databinding.FragmentBookmarkListBinding
+import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,6 +24,14 @@ class BookmarkListFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentBookmarkListBinding.inflate(inflater)
+        binding.root.setOnApplyWindowInsetsCompatListener { view, windowInsets ->
+            val statusBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.setPadding(0, statusBarInsets.top, 0, 0)
+            windowInsets
+        }
         return binding.root
+    }
+
+    private fun initView() {
     }
 }
