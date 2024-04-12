@@ -1,8 +1,11 @@
 package com.festago.festago.data.service
 
 import com.festago.festago.data.dto.artist.ArtistDetailResponse
+import com.festago.festago.data.dto.bookmark.ArtistBookmarkResponse
+import com.festago.festago.data.dto.bookmark.FestivalBookmarkResponse
 import com.festago.festago.data.dto.bookmark.SchoolBookmarkResponse
-import com.festago.festago.data.dto.festival.FestivalsResponse
+import com.festago.festago.domain.model.bookmark.BookmarkType
+import com.festago.festago.domain.model.bookmark.FestivalBookmarkOrder
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -23,7 +26,7 @@ interface BookmarkRetrofitService {
     ): Response<Unit>
 
     @GET("api/v1/bookmarks/schools")
-    suspend fun getSchoolBookmarks(): Response<SchoolBookmarkResponse>
+    suspend fun getSchoolBookmarks(): Response<List<SchoolBookmarkResponse>>
 
     @GET("api/v1/bookmarks/festivals/ids")
     suspend fun getFestivalBookmarkIds(): Response<List<Long>>
@@ -32,19 +35,8 @@ interface BookmarkRetrofitService {
     suspend fun getFestivalBookmarks(
         @Query("festivalIds") festivalIds: List<Long>,
         @Query("festivalBookmarkOrder") festivalBookmarkOrder: FestivalBookmarkOrder,
-    ): Response<FestivalsResponse>
+    ): Response<List<FestivalBookmarkResponse>>
 
     @GET("api/v1/bookmarks/artists")
-    suspend fun getBookmarks(): Response<ArtistDetailResponse>
-}
-
-enum class FestivalBookmarkOrder {
-    BOOKMARK,
-    FESTIVAL,
-}
-
-enum class BookmarkType {
-    ARTIST,
-    FESTIVAL,
-    SCHOOL,
+    suspend fun getArtistBookmarks(): Response<List<ArtistBookmarkResponse>>
 }
