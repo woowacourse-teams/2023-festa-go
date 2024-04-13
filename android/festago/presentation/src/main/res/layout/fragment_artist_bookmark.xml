@@ -5,6 +5,12 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="refreshListener"
+            type="kotlin.jvm.functions.Function0" />
+
         <variable
             name="uiState"
             type="com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark.ArtistBookmarkListUiState" />
@@ -39,16 +45,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            visibility="@{uiState.shouldShowError}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="통신이 월할하지 않습니다."
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ProgressBar
             android:id="@+id/pbLoading"
             visibility="@{uiState.shouldShowLoading}"
@@ -58,6 +54,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/includeError"
+            layout="@layout/layout_network_error"
+            refreshListener="@{refreshListener}"
+            visibility="@{uiState.shouldShowError}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

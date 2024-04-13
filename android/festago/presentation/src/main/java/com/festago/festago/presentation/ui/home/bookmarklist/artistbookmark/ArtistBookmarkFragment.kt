@@ -32,6 +32,8 @@ class ArtistBookmarkFragment : Fragment() {
     private fun initView() {
         binding.uiState = vm.uiState.value
 
+        binding.refreshListener =  { vm.fetchBookmarkList() }
+
         binding.rvArtistBookmarkList.adapter = MyItemRecyclerViewAdapter(
             listOf(
                 ArtistBookmarkViewHolder.of(binding.rvArtistBookmarkList).apply {
@@ -60,7 +62,7 @@ class ArtistBookmarkFragment : Fragment() {
                                 ArtistBookmarkViewHolder.of(binding.rvArtistBookmarkList).apply {
                                     bind(
                                         artistBookmark.artist.name,
-                                        artistBookmark.artist.profileImageUrl
+                                        artistBookmark.artist.profileImageUrl,
                                     )
                                 }
                             },

@@ -65,4 +65,9 @@
     <string name="ok_dialog_btn_update">업데이트</string>
     <string name="ok_dialog_btn_cancel">취소</string>
 
+    <!-- Strings related to network error -->
+    <string name="layout_network_error_refresh">새로고침하기</string>
+    <string name="layout_network_error_retry">잠시 후에 다시 시도해주세요</string>
+    <string name="layout_network_error_not_work">현재 접속이 원할하지 않아요</string>
+
 </resources>
