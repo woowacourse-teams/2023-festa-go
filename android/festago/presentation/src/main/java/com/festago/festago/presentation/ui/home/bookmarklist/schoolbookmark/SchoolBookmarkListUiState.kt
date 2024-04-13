@@ -1,12 +1,10 @@
 package com.festago.festago.presentation.ui.home.bookmarklist.schoolbookmark
 
-import com.festago.festago.domain.model.bookmark.SchoolBookmark
-
 interface SchoolBookmarkListUiState {
     object NotLoggedIn : SchoolBookmarkListUiState
     object Loading : SchoolBookmarkListUiState
 
-    data class Success(val schoolBookmarks: List<SchoolBookmark>) : SchoolBookmarkListUiState
+    data class Success(val schoolBookmarks: List<SchoolBookmarkUiState>) : SchoolBookmarkListUiState
 
     object Error : SchoolBookmarkListUiState
 

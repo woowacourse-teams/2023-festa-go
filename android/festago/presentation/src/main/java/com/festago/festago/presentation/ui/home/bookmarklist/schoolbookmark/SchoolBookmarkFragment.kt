@@ -17,6 +17,8 @@ class SchoolBookmarkFragment : Fragment() {
 
     private val vm: SchoolBookmarkViewModel by viewModels()
 
+    private lateinit var schoolBookmarkAdapter: SchoolBookmarkAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,24 +34,15 @@ class SchoolBookmarkFragment : Fragment() {
     private fun initView() {
         binding.uiState = vm.uiState.value
 
-        binding.refreshListener =  { vm.fetchBookmarkList() }
+        binding.refreshListener = { vm.fetchBookmarkList() }
 
-        binding.rvSchoolBookmarkList.adapter = SchoolBookmarkAdapter(
-            listOf(
-                SchoolBookmarkViewHolder.of(binding.rvSchoolBookmarkList).apply {
-                    bind("1", "School 1")
-                },
-                SchoolBookmarkViewHolder.of(binding.rvSchoolBookmarkList).apply {
-                    bind("1", "School 1")
-                },
-            ),
-        )
+        schoolBookmarkAdapter = SchoolBookmarkAdapter()
+        binding.rvSchoolBookmarkList.adapter = schoolBookmarkAdapter
     }
 
     private fun initObserve() {
         repeatOnStarted(this) {
             vm.uiState.collect { uiState ->
-                println("uiState: $uiState")
                 binding.uiState = uiState
                 when (uiState) {
                     is SchoolBookmarkListUiState.Loading -> {
@@ -57,16 +50,7 @@ class SchoolBookmarkFragment : Fragment() {
                     }
 
                     is SchoolBookmarkListUiState.Success -> {
-                        binding.rvSchoolBookmarkList.adapter = SchoolBookmarkAdapter(
-                            uiState.schoolBookmarks.map { schoolBookmark ->
-                                SchoolBookmarkViewHolder.of(binding.rvSchoolBookmarkList).apply {
-                                    bind(
-                                        schoolBookmark.school.name,
-                                        schoolBookmark.school.logoUrl,
-                                    )
-                                }
-                            },
-                        )
+                        schoolBookmarkAdapter.submitList(uiState.schoolBookmarks)
                     }
 
                     is SchoolBookmarkListUiState.Error -> {

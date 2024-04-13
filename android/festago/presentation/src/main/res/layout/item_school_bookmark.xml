@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="artist"
-            type="com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark.ArtistBookmarkUiState" />
+            name="school"
+            type="com.festago.festago.presentation.ui.home.bookmarklist.schoolbookmark.SchoolBookmarkUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,7 @@
 
             <ImageView
                 android:id="@+id/ivFestivalImage"
-                imageUrl="@{artist.imageUrl}"
+                imageUrl="@{school.imageUrl}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/festival_list_iv_image"
@@ -45,9 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_marginTop="8dp"
-            android:gravity="center|top"
+            android:gravity="center"
             android:lineHeight="16dp"
-            android:text="@{artist.name}"
+            android:text="@{school.name}"
             android:textColor="@color/contents_gray_07"
             app:layout_constraintEnd_toEndOf="@id/cvFestivalImage"
             app:layout_constraintStart_toStartOf="@id/cvFestivalImage"

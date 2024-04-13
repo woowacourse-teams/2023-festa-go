@@ -2,6 +2,7 @@ package com.festago.festago.presentation.ui.home.bookmarklist.schoolbookmark
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.festago.festago.domain.model.bookmark.SchoolBookmark
 import com.festago.festago.domain.repository.BookmarkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,10 +23,19 @@ class SchoolBookmarkViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = SchoolBookmarkListUiState.Loading
             bookmarkRepository.getSchoolBookmarks().onSuccess { schoolBookmarks ->
-                _uiState.value = SchoolBookmarkListUiState.Success(schoolBookmarks)
+                _uiState.value = SchoolBookmarkListUiState.Success(
+                    schoolBookmarks.map { it.toUiState() },
+                )
             }.onFailure {
                 _uiState.value = SchoolBookmarkListUiState.Error
             }
         }
+    }
+
+    private fun SchoolBookmark.toUiState(): SchoolBookmarkUiState {
+        return SchoolBookmarkUiState(
+            name = school.name,
+            imageUrl = school.logoUrl,
+        )
     }
 }
