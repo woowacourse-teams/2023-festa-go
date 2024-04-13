@@ -6,9 +6,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.databinding.FragmentArtistBookmarkItemBinding
 
-class MyItemRecyclerViewAdapter(
+class ArtistBookmarkAdapter(
     private val values: List<ArtistBookmarkViewHolder>,
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ArtistBookmarkAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             FragmentArtistBookmarkItemBinding.inflate(

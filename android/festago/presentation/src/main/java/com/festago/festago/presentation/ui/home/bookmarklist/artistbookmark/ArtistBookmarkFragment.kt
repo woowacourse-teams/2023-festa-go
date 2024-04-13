@@ -34,7 +34,7 @@ class ArtistBookmarkFragment : Fragment() {
 
         binding.refreshListener =  { vm.fetchBookmarkList() }
 
-        binding.rvArtistBookmarkList.adapter = MyItemRecyclerViewAdapter(
+        binding.rvArtistBookmarkList.adapter = ArtistBookmarkAdapter(
             listOf(
                 ArtistBookmarkViewHolder.of(binding.rvArtistBookmarkList).apply {
                     bind("1", "Artist 1")
@@ -57,7 +57,7 @@ class ArtistBookmarkFragment : Fragment() {
                     }
 
                     is ArtistBookmarkListUiState.Success -> {
-                        binding.rvArtistBookmarkList.adapter = MyItemRecyclerViewAdapter(
+                        binding.rvArtistBookmarkList.adapter = ArtistBookmarkAdapter(
                             uiState.artistBookmarks.map { artistBookmark ->
                                 ArtistBookmarkViewHolder.of(binding.rvArtistBookmarkList).apply {
                                     bind(
