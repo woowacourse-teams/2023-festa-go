@@ -93,7 +93,7 @@ class FakeBookmarkRepository @Inject constructor() : BookmarkRepository {
 
     override suspend fun getArtistBookmarks(): Result<List<ArtistBookmark>> {
         delay(1000)
-        return Result.failure(Exception("Failed to get artist bookmarks"))
+//        return Result.failure(Exception("Failed to get artist bookmarks"))
         return Result.success(
             listOf(
                 ArtistBookmark(
@@ -103,6 +103,63 @@ class FakeBookmarkRepository @Inject constructor() : BookmarkRepository {
                     ),
                     LocalDateTime.now(),
                 ),
+                ArtistBookmark(
+                    ArtistBookmarkInfo(
+                        name = "Artist 1",
+                        profileImageUrl = "https://picsum.photos/200/300",
+                    ),
+                    LocalDateTime.now(),
+                ),
+                ArtistBookmark(
+                    ArtistBookmarkInfo(
+                        name = "Artist 1",
+                        profileImageUrl = "https://picsum.photos/200/300",
+                    ),
+                    LocalDateTime.now(),
+                ),
+                ArtistBookmark(
+                    ArtistBookmarkInfo(
+                        name = "Artist 1",
+                        profileImageUrl = "https://picsum.photos/200/300",
+                    ),
+                    LocalDateTime.now(),
+                ),
+                ArtistBookmark(
+                    ArtistBookmarkInfo(
+                        name = "Artist 1",
+                        profileImageUrl = "https://picsum.photos/200/300",
+                    ),
+                    LocalDateTime.now(),
+                ),
+                ArtistBookmark(
+                    ArtistBookmarkInfo(
+                        name = "Artist 1",
+                        profileImageUrl = "https://picsum.photos/200/300",
+                    ),
+                    LocalDateTime.now(),
+                ),
+                ArtistBookmark(
+                    ArtistBookmarkInfo(
+                        name = "Artist 1",
+                        profileImageUrl = "https://picsum.photos/200/300",
+                    ),
+                    LocalDateTime.now(),
+                ),
+                ArtistBookmark(
+                    ArtistBookmarkInfo(
+                        name = "Artist 1",
+                        profileImageUrl = "https://picsum.photos/200/300",
+                    ),
+                    LocalDateTime.now(),
+                ),
+                ArtistBookmark(
+                    ArtistBookmarkInfo(
+                        name = "Artist 1",
+                        profileImageUrl = "https://picsum.photos/200/300",
+                    ),
+                    LocalDateTime.now(),
+                ),
+
             ),
         )
     }

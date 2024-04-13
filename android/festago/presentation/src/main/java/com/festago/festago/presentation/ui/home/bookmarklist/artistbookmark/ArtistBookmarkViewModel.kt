@@ -2,6 +2,7 @@ package com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.festago.festago.domain.model.bookmark.ArtistBookmark
 import com.festago.festago.domain.repository.BookmarkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,10 +23,18 @@ class ArtistBookmarkViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = ArtistBookmarkListUiState.Loading
             bookmarkRepository.getArtistBookmarks().onSuccess { artistBookmarks ->
-                _uiState.value = ArtistBookmarkListUiState.Success(artistBookmarks)
+                _uiState.value = ArtistBookmarkListUiState.Success(
+                    artistBookmarks.map { it.toUiState() })
             }.onFailure {
                 _uiState.value = ArtistBookmarkListUiState.Error
             }
         }
+    }
+
+    private fun ArtistBookmark.toUiState(): ArtistBookmarkUiState {
+        return ArtistBookmarkUiState(
+            name = artist.name,
+            imageUrl = artist.profileImageUrl,
+        )
     }
 }

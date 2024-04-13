@@ -17,6 +17,8 @@ class ArtistBookmarkFragment : Fragment() {
 
     private val vm: ArtistBookmarkViewModel by viewModels()
 
+    private lateinit var artistBookmarkAdapter: ArtistBookmarkAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,24 +34,15 @@ class ArtistBookmarkFragment : Fragment() {
     private fun initView() {
         binding.uiState = vm.uiState.value
 
-        binding.refreshListener =  { vm.fetchBookmarkList() }
+        binding.refreshListener = { vm.fetchBookmarkList() }
 
-        binding.rvArtistBookmarkList.adapter = ArtistBookmarkAdapter(
-            listOf(
-                ArtistBookmarkViewHolder.of(binding.rvArtistBookmarkList).apply {
-                    bind("1", "Artist 1")
-                },
-                ArtistBookmarkViewHolder.of(binding.rvArtistBookmarkList).apply {
-                    bind("1", "Artist 1")
-                },
-            ),
-        )
+        artistBookmarkAdapter = ArtistBookmarkAdapter()
+        binding.rvArtistBookmarkList.adapter = artistBookmarkAdapter
     }
 
     private fun initObserve() {
         repeatOnStarted(this) {
             vm.uiState.collect { uiState ->
-                println("uiState: $uiState")
                 binding.uiState = uiState
                 when (uiState) {
                     is ArtistBookmarkListUiState.Loading -> {
@@ -57,16 +50,7 @@ class ArtistBookmarkFragment : Fragment() {
                     }
 
                     is ArtistBookmarkListUiState.Success -> {
-                        binding.rvArtistBookmarkList.adapter = ArtistBookmarkAdapter(
-                            uiState.artistBookmarks.map { artistBookmark ->
-                                ArtistBookmarkViewHolder.of(binding.rvArtistBookmarkList).apply {
-                                    bind(
-                                        artistBookmark.artist.name,
-                                        artistBookmark.artist.profileImageUrl,
-                                    )
-                                }
-                            },
-                        )
+                        artistBookmarkAdapter.submitList(uiState.artistBookmarks)
                     }
 
                     is ArtistBookmarkListUiState.Error -> {

@@ -6,7 +6,7 @@ interface ArtistBookmarkListUiState {
     object NotLoggedIn : ArtistBookmarkListUiState
     object Loading : ArtistBookmarkListUiState
 
-    data class Success(val artistBookmarks: List<ArtistBookmark>) : ArtistBookmarkListUiState
+    data class Success(val artistBookmarks: List<ArtistBookmarkUiState>) : ArtistBookmarkListUiState
 
     object Error : ArtistBookmarkListUiState
 

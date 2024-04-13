@@ -68,16 +68,14 @@ class FestivalBookmarkFragment : Fragment() {
             vm.uiEvent.collect { event ->
                 when (event) {
                     is FestivalBookmarkEvent.ShowFestivalDetail -> {
-                        println("FestivalBookmarkFragment: ShowFestivalDetail")
                         findNavController().navigate(
                             BookmarkListFragmentDirections.actionBookmarkListFragmentToFestivalDetailFragment(
                                 event.festivalId,
-                            )
+                            ),
                         )
                     }
 
                     is FestivalBookmarkEvent.ShowArtistDetail -> {
-                        println("FestivalBookmarkFragment: ShowArtistDetail")
                         findNavController().navigate(
                             BookmarkListFragmentDirections.actionBookmarkListFragmentToFestivalDetailFragment(
                                 event.artistId,
