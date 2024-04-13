@@ -1,20 +1,16 @@
 package com.festago.mock;
 
-import com.festago.artist.application.ArtistCommandService;
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.command.ArtistCreateCommand;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.festival.application.command.FestivalCommandFacadeService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.command.FestivalCreateCommand;
+import com.festago.mock.domain.MockDataInitializer;
 import com.festago.mock.repository.ForMockArtistRepository;
 import com.festago.mock.repository.ForMockFestivalRepository;
 import com.festago.mock.repository.ForMockSchoolRepository;
-import com.festago.school.application.SchoolCommandService;
 import com.festago.school.domain.School;
-import com.festago.school.domain.SchoolRegion;
-import com.festago.school.dto.SchoolCreateCommand;
 import com.festago.stage.application.command.StageCommandFacadeService;
 import com.festago.stage.dto.command.StageCreateCommand;
 import java.time.LocalDate;
@@ -37,7 +33,6 @@ public class MockDataService {
     public static final int STAGE_ARTIST_COUNT = 3;
     private static final AtomicLong festivalSequence = new AtomicLong();
     private static final int STAGE_START_HOUR = 19;
-    private static final int SCHOOL_PER_REGION = 3;
     private static final int DATE_OFFSET = 1;
 
     private final MockFestivalDateGenerator mockFestivalDateGenerator;
@@ -46,64 +41,13 @@ public class MockDataService {
     private final ForMockFestivalRepository festivalRepository;
     private final FestivalCommandFacadeService festivalCommandFacadeService;
     private final StageCommandFacadeService stageCommandFacadeService;
-    private final ArtistCommandService artistCommandService;
-    private final SchoolCommandService schoolCommandService;
+    private final List<MockDataInitializer> mockDataInitializers;
 
     public void initialize() {
-        if (alreadyInitialized()) {
-            return;
-        }
-        initializeData();
-    }
-
-    private boolean alreadyInitialized() {
-        return !schoolRepository.findAll().isEmpty();
-    }
-
-    private void initializeData() {
-        initializeSchool();
-        initializeArtist();
-    }
-
-    private void initializeSchool() {
-        for (SchoolRegion schoolRegion : SchoolRegion.values()) {
-            if (SchoolRegion.ANY.equals(schoolRegion)) {
-                continue;
+        for (MockDataInitializer mockDataInitializer : mockDataInitializers) {
+            if (mockDataInitializer.canInitialize()) {
+                mockDataInitializer.initialize();
             }
-            makeRegionSchools(schoolRegion);
-        }
-    }
-
-    /**
-     * 각 지역 별로 3개의 학교를 만듭니다. ex) 서울1대학교 서울2대학교 서울3대학교
-     */
-    private void makeRegionSchools(SchoolRegion schoolRegion) {
-        for (int i = 0; i < SCHOOL_PER_REGION; i++) {
-            String schoolName = String.format("%s%d대학교", schoolRegion.name(), i + 1);
-            String schoolEmail = String.format("%s%d.com", schoolRegion.name(), i + 1);
-            crateSchool(schoolRegion, schoolName, schoolEmail);
-        }
-    }
-
-    private void crateSchool(SchoolRegion schoolRegion, String schoolName, String schoolEmail) {
-        schoolCommandService.createSchool(new SchoolCreateCommand(
-                schoolName,
-                schoolEmail,
-                schoolRegion,
-                null,
-                null
-            )
-        );
-    }
-
-    private void initializeArtist() {
-        for (MockArtist artist : MockArtist.values()) {
-            artistCommandService.save(new ArtistCreateCommand(
-                    artist.name(),
-                    artist.getProfileImage(),
-                    artist.getBackgroundImageUrl()
-                )
-            );
         }
     }
 
