@@ -1,0 +1,31 @@
+package com.festago.festago.presentation.ui.home.bookmarklist.schoolbookmark
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.festago.festago.domain.repository.BookmarkRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class SchoolBookmarkViewModel @Inject constructor(
+    private val bookmarkRepository: BookmarkRepository,
+) : ViewModel() {
+    private val _uiState =
+        MutableStateFlow<SchoolBookmarkListUiState>(SchoolBookmarkListUiState.Loading)
+    val uiState: StateFlow<SchoolBookmarkListUiState> = _uiState.asStateFlow()
+
+    fun fetchBookmarkList() {
+        viewModelScope.launch {
+            _uiState.value = SchoolBookmarkListUiState.Loading
+            bookmarkRepository.getSchoolBookmarks().onSuccess { schoolBookmarks ->
+                _uiState.value = SchoolBookmarkListUiState.Success(schoolBookmarks)
+            }.onFailure {
+                _uiState.value = SchoolBookmarkListUiState.Error
+            }
+        }
+    }
+}

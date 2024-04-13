@@ -47,6 +47,7 @@ class BookmarkListFragment : Fragment() {
                     0 -> binding.tlBookmarkListTab.getTabAt(0)?.select()
 
                     1 -> binding.tlBookmarkListTab.getTabAt(1)?.select()
+                    2 -> binding.tlBookmarkListTab.getTabAt(2)?.select()
                 }
             }
         })
@@ -61,13 +62,9 @@ class BookmarkListFragment : Fragment() {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
-                    0 -> {
-                        binding.vpBookmarkList.currentItem = 0
-                    }
-
-                    1 -> {
-                        binding.vpBookmarkList.currentItem = 1
-                    }
+                    0 -> binding.vpBookmarkList.currentItem = 0
+                    1 -> binding.vpBookmarkList.currentItem = 1
+                    2 -> binding.vpBookmarkList.currentItem = 2
                 }
             }
         })

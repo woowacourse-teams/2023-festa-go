@@ -5,6 +5,7 @@ import com.festago.festago.domain.model.bookmark.ArtistBookmarkInfo
 import com.festago.festago.domain.model.bookmark.FestivalBookmark
 import com.festago.festago.domain.model.bookmark.FestivalBookmarkOrder
 import com.festago.festago.domain.model.bookmark.SchoolBookmark
+import com.festago.festago.domain.model.bookmark.SchoolBookmarkInfo
 import com.festago.festago.domain.repository.BookmarkRepository
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
@@ -51,7 +52,35 @@ class FakeBookmarkRepository @Inject constructor() : BookmarkRepository {
     }
 
     override suspend fun getSchoolBookmarks(): Result<List<SchoolBookmark>> {
-        TODO("Not yet implemented")
+        delay(1000)
+        return Result.success(
+            listOf(
+                SchoolBookmark(
+                    school = SchoolBookmarkInfo(
+                        id = 1,
+                        name = "School 1",
+                        logoUrl = "https://picsum.photos/200/300",
+                    ),
+                    createdAt = LocalDateTime.now(),
+                ),
+                SchoolBookmark(
+                    school = SchoolBookmarkInfo(
+                        id = 2,
+                        name = "School 2",
+                        logoUrl = "https://picsum.photos/200/300",
+                    ),
+                    createdAt = LocalDateTime.now(),
+                ),
+                SchoolBookmark(
+                    school = SchoolBookmarkInfo(
+                        id = 3,
+                        name = "School 3",
+                        logoUrl = "https://picsum.photos/200/300",
+                    ),
+                    createdAt = LocalDateTime.now(),
+                ),
+            ),
+        )
     }
 
     override suspend fun deleteSchoolBookmark(schoolId: Long): Result<Unit> {
