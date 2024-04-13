@@ -12,6 +12,7 @@ import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmen
 import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.adapater.FestivalBookmarkViewAdapter
 import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate.FestivalBookmarkUiState
 import com.festago.festago.presentation.util.repeatOnStarted
+import com.festago.festago.presentation.util.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -68,7 +69,7 @@ class FestivalBookmarkFragment : Fragment() {
             vm.uiEvent.collect { event ->
                 when (event) {
                     is FestivalBookmarkEvent.ShowFestivalDetail -> {
-                        findNavController().navigate(
+                        findNavController().safeNavigate(
                             BookmarkListFragmentDirections.actionBookmarkListFragmentToFestivalDetailFragment(
                                 event.festivalId,
                             ),
@@ -76,8 +77,8 @@ class FestivalBookmarkFragment : Fragment() {
                     }
 
                     is FestivalBookmarkEvent.ShowArtistDetail -> {
-                        findNavController().navigate(
-                            BookmarkListFragmentDirections.actionBookmarkListFragmentToFestivalDetailFragment(
+                        findNavController().safeNavigate(
+                            BookmarkListFragmentDirections.actionBookmarkListFragmentToArtistDetailFragment(
                                 event.artistId,
                             ),
                         )
