@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.festago.festago.presentation.databinding.FragmentSchoolBookmarkBinding
+import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmentDirections
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -55,6 +57,19 @@ class SchoolBookmarkFragment : Fragment() {
 
                     is SchoolBookmarkListUiState.Error -> {
                         // Handle error
+                    }
+                }
+            }
+        }
+        repeatOnStarted(this) {
+            vm.uiEvent.collect { event ->
+                when (event) {
+                    is SchoolBookmarkEvent.ShowSchoolDetail -> {
+                        findNavController().navigate(
+                            BookmarkListFragmentDirections.actionBookmarkListFragmentToFestivalDetailFragment(
+                                event.festivalId,
+                            ),
+                        )
                     }
                 }
             }

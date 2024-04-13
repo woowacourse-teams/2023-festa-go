@@ -105,7 +105,7 @@ class FakeBookmarkRepository @Inject constructor() : BookmarkRepository {
                 ),
                 ArtistBookmark(
                     ArtistBookmarkInfo(
-                        name = "Artist 1",
+                        name = "Artist 1\n두줄",
                         profileImageUrl = "https://picsum.photos/200/300",
                     ),
                     LocalDateTime.now(),
@@ -154,7 +154,7 @@ class FakeBookmarkRepository @Inject constructor() : BookmarkRepository {
                 ),
                 ArtistBookmark(
                     ArtistBookmarkInfo(
-                        name = "Artist 1",
+                        name = "Artist 1\nasdasd",
                         profileImageUrl = "https://picsum.photos/200/300",
                     ),
                     LocalDateTime.now(),
