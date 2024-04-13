@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public interface MockFestivalDateGenerator {
 
-    LocalDate makeRandomStartDate(int festivalDuration, LocalDate now);
+    LocalDate generateStartDate(int festivalDuration, LocalDate now);
 
-    LocalDate makeRandomEndDate(int festivalDuration, LocalDate now, LocalDate startDate);
+    LocalDate generateEndDate(int festivalDuration, LocalDate now, LocalDate startDate);
 }

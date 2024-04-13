@@ -15,12 +15,12 @@ public class RandomMockFestivalDateGenerator implements MockFestivalDateGenerato
     private final Random random = ThreadLocalRandom.current();
 
     @Override
-    public LocalDate makeRandomStartDate(int festivalDuration, LocalDate now) {
+    public LocalDate generateStartDate(int festivalDuration, LocalDate now) {
         return now.plusDays(random.nextInt(festivalDuration));
     }
 
     @Override
-    public LocalDate makeRandomEndDate(int festivalDuration, LocalDate now, LocalDate startDate) {
+    public LocalDate generateEndDate(int festivalDuration, LocalDate now, LocalDate startDate) {
         long timeUntilFestivalStart = startDate.until(now, ChronoUnit.DAYS);
         long maxAvailableEndDateFromStartDate =
             festivalDuration - (timeUntilFestivalStart + COUNT_FIRST_DAY_AS_DURATION_ONE);

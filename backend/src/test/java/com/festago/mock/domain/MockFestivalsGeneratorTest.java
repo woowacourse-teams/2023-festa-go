@@ -41,9 +41,9 @@ class MockFestivalsGeneratorTest {
         LocalDate now = LocalDate.parse("2077-06-30");
         given(clock.instant())
             .willReturn(TimeInstantProvider.from(now));
-        given(mockFestivalDateGenerator.makeRandomStartDate(anyInt(), any(LocalDate.class)))
+        given(mockFestivalDateGenerator.generateStartDate(anyInt(), any(LocalDate.class)))
             .willReturn(now);
-        given(mockFestivalDateGenerator.makeRandomEndDate(anyInt(), any(LocalDate.class), any(LocalDate.class)))
+        given(mockFestivalDateGenerator.generateEndDate(anyInt(), any(LocalDate.class), any(LocalDate.class)))
             .willReturn(now);
         List<School> schools = IntStream.rangeClosed(1, 10)
             .mapToObj(i -> SchoolFixture.builder().build())

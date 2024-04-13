@@ -22,8 +22,8 @@ public class MockFestivalsGenerator {
         LocalDate now = LocalDate.now(clock);
         return schools.stream()
             .map(school -> {
-                LocalDate startDate = festivalDateGenerator.makeRandomStartDate(duration, now);
-                LocalDate endDate = festivalDateGenerator.makeRandomEndDate(duration, now, startDate);
+                LocalDate startDate = festivalDateGenerator.generateStartDate(duration, now);
+                LocalDate endDate = festivalDateGenerator.generateEndDate(duration, now, startDate);
                 return new Festival(
                     school.getName() + " 축제 " + festivalSequence.incrementAndGet(),
                     startDate,

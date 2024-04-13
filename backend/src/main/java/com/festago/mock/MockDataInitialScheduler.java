@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 @Profile({"dev"})
 @Component
 @RequiredArgsConstructor
-public class MockScheduler {
+public class MockDataInitialScheduler {
 
     private static final long SCHEDULER_CYCLE = 7;
     private final MockDataService mockDataService;
 
     @Scheduled(initialDelay = SCHEDULER_CYCLE, fixedDelay = SCHEDULER_CYCLE, timeUnit = TimeUnit.SECONDS)
-    public void run() {
+    public void createMockFestivals() {
         mockDataService.makeMockFestivals((int) SCHEDULER_CYCLE);
     }
 }
