@@ -1,7 +1,6 @@
 package com.festago.mock.domain;
 
 import com.festago.festival.domain.Festival;
-import com.festago.mock.MockFestivalDateGenerator;
 import com.festago.school.domain.School;
 import java.time.Clock;
 import java.time.LocalDate;

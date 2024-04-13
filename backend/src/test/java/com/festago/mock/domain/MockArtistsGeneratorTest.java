@@ -3,7 +3,6 @@ package com.festago.mock.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.festago.artist.domain.Artist;
-import com.festago.mock.MockArtist;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;

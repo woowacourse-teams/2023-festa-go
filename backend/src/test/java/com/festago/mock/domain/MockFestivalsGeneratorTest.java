@@ -8,7 +8,6 @@ import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.spy;
 
 import com.festago.festival.domain.Festival;
-import com.festago.mock.MockFestivalDateGenerator;
 import com.festago.school.domain.School;
 import com.festago.support.TimeInstantProvider;
 import com.festago.support.fixture.SchoolFixture;

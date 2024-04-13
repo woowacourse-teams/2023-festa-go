@@ -1,7 +1,6 @@
 package com.festago.mock.domain;
 
 import com.festago.artist.domain.Artist;
-import com.festago.mock.MockArtist;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.stereotype.Component;

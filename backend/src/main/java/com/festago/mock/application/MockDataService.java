@@ -1,4 +1,4 @@
-package com.festago.mock;
+package com.festago.mock.application;
 
 import com.festago.artist.domain.Artist;
 import com.festago.festival.domain.Festival;
