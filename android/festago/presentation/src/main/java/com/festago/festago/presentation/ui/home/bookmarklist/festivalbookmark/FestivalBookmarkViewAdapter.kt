@@ -11,8 +11,6 @@ class FestivalBookmarkViewAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FestivalBookmarkViewHolder {
         return FestivalBookmarkViewHolder.of(
             parent = parent,
-            onArtistClick = { id ->
-            },
         )
     }
 

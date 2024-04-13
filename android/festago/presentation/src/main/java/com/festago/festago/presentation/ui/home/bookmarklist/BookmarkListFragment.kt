@@ -21,6 +21,8 @@ class BookmarkListFragment : Fragment() {
     private var _binding: FragmentBookmarkListBinding? = null
     private val binding get() = _binding!!
 
+    private val vm: ArtistBookmarkViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

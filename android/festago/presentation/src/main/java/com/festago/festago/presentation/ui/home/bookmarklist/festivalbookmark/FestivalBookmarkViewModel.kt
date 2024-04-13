@@ -7,8 +7,10 @@ import com.festago.festago.domain.model.bookmark.FestivalBookmark
 import com.festago.festago.domain.model.bookmark.FestivalBookmarkOrder
 import com.festago.festago.domain.repository.BookmarkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,14 +23,17 @@ class FestivalBookmarkViewModel @Inject constructor(
         MutableStateFlow<FestivalBookmarkUiState>(FestivalBookmarkUiState.Loading)
     val uiState: StateFlow<FestivalBookmarkUiState> = _uiState.asStateFlow()
 
+    private val _uiEvent = MutableSharedFlow<FestivalBookmarkEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
+
     fun fetchBookmarkList() {
         viewModelScope.launch {
             _uiState.value = FestivalBookmarkUiState.Loading
             bookmarkRepository.getFestivalBookmarkIds().onSuccess { bookmarkIds ->
                 bookmarkRepository.getFestivalBookmarks(bookmarkIds, FestivalBookmarkOrder.FESTIVAL)
-                    .onSuccess { FestivalBookmarks ->
+                    .onSuccess { festivalBookmarks ->
                         _uiState.value =
-                            FestivalBookmarkUiState.Success(FestivalBookmarks.map { it.toUiState() })
+                            FestivalBookmarkUiState.Success(festivalBookmarks.map { it.toUiState() })
                     }.onFailure {
                         _uiState.value = FestivalBookmarkUiState.Error
                     }
@@ -47,6 +52,9 @@ class FestivalBookmarkViewModel @Inject constructor(
             endDate = festival.endDate,
             artists = festival.artists.map { it.toUiState() },
             onFestivalDetail = { festivalId ->
+                viewModelScope.launch {
+                    _uiEvent.emit(FestivalBookmarkEvent.ShowFestivalDetail(festivalId))
+                }
             },
         )
     }
@@ -56,6 +64,11 @@ class FestivalBookmarkViewModel @Inject constructor(
             id = id,
             name = name,
             imageUrl = imageUrl,
+            onArtistDetail = { artistId ->
+                viewModelScope.launch {
+                    _uiEvent.emit(FestivalBookmarkEvent.ShowArtistDetail(artistId))
+                }
+            },
         )
     }
 }

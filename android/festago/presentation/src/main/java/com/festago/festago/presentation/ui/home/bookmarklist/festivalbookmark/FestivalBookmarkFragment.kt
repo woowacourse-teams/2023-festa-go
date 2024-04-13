@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.festago.festago.presentation.databinding.FragmentFestivalBookmarkBinding
+import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmentDirections
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,7 +45,6 @@ class FestivalBookmarkFragment : Fragment() {
     private fun initObserve() {
         repeatOnStarted(this) {
             vm.uiState.collect { uiState ->
-                println("uiState: $uiState")
                 binding.uiState = uiState
                 when (uiState) {
                     is FestivalBookmarkUiState.Loading -> {
@@ -56,6 +57,30 @@ class FestivalBookmarkFragment : Fragment() {
 
                     is FestivalBookmarkUiState.Error -> {
                         // Handle error
+                    }
+                }
+            }
+        }
+
+        repeatOnStarted(this) {
+            vm.uiEvent.collect { event ->
+                when (event) {
+                    is FestivalBookmarkEvent.ShowFestivalDetail -> {
+                        println("FestivalBookmarkFragment: ShowFestivalDetail")
+                        findNavController().navigate(
+                            BookmarkListFragmentDirections.actionBookmarkListFragmentToFestivalDetailFragment(
+                                event.festivalId,
+                            )
+                        )
+                    }
+
+                    is FestivalBookmarkEvent.ShowArtistDetail -> {
+                        println("FestivalBookmarkFragment: ShowArtistDetail")
+                        findNavController().navigate(
+                            BookmarkListFragmentDirections.actionBookmarkListFragmentToFestivalDetailFragment(
+                                event.artistId,
+                            ),
+                        )
                     }
                 }
             }

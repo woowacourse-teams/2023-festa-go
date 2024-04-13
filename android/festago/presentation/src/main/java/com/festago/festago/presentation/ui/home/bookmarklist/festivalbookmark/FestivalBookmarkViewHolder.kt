@@ -15,10 +15,9 @@ import java.time.LocalDate
 
 class FestivalBookmarkViewHolder(
     val binding: ItemFestivalBookmarkBinding,
-    onArtistClick: (Long) -> Unit
 ) :
     RecyclerView.ViewHolder(binding.root) {
-    private val artistAdapter = ArtistAdapter(onArtistClick)
+    private val artistAdapter = ArtistAdapter()
 
     init {
         binding.rvFestivalArtists.adapter = artistAdapter
@@ -87,16 +86,13 @@ class FestivalBookmarkViewHolder(
     }
 
     companion object {
-        fun of(
-            parent: ViewGroup,
-            onArtistClick: (Long) -> Unit,
-        ): FestivalBookmarkViewHolder {
+        fun of(parent: ViewGroup): FestivalBookmarkViewHolder {
             val binding = ItemFestivalBookmarkBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return FestivalBookmarkViewHolder(binding, onArtistClick)
+            return FestivalBookmarkViewHolder(binding)
         }
     }
 }

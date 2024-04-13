@@ -5,28 +5,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.databinding.ItemFestivalBookmarkArtistBinding
 
-class ArtistViewHolder(
-    private val binding: ItemFestivalBookmarkArtistBinding,
-    onArtistClick: (Long) -> Unit,
-) : RecyclerView.ViewHolder(binding.root) {
-    init {
+class ArtistViewHolder(private val binding: ItemFestivalBookmarkArtistBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: ArtistUiState) {
+        binding.artist = item
         binding.root.setOnClickListener {
-            onArtistClick(binding.artist!!.id)
+            item.onArtistDetail(binding.artist!!.id)
         }
     }
 
-    fun bind(item: ArtistUiState) {
-        binding.artist = item
-    }
-
     companion object {
-        fun of(parent: ViewGroup, onArtistClick: (Long) -> Unit): ArtistViewHolder {
+        fun of(parent: ViewGroup): ArtistViewHolder {
             val binding = ItemFestivalBookmarkArtistBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return ArtistViewHolder(binding, onArtistClick)
+            return ArtistViewHolder(binding)
         }
     }
 }
