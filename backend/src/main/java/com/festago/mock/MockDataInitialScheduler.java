@@ -15,7 +15,7 @@ public class MockDataInitialScheduler {
     private static final long SCHEDULER_CYCLE = 7;
     private final MockDataService mockDataService;
 
-    @Scheduled(initialDelay = SCHEDULER_CYCLE, fixedDelay = SCHEDULER_CYCLE, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(initialDelay = SCHEDULER_CYCLE, fixedDelay = SCHEDULER_CYCLE, timeUnit = TimeUnit.DAYS)
     public void createMockFestivals() {
         mockDataService.makeMockFestivals((int) SCHEDULER_CYCLE);
     }
