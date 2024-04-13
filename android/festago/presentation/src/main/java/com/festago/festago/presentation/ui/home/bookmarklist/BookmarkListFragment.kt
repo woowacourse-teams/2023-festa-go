@@ -6,10 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.festago.festago.presentation.databinding.FragmentBookmarkListBinding
-import com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark.ArtistBookmarkViewModel
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,8 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class BookmarkListFragment : Fragment() {
     private var _binding: FragmentBookmarkListBinding? = null
     private val binding get() = _binding!!
-
-    private val vm: ArtistBookmarkViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

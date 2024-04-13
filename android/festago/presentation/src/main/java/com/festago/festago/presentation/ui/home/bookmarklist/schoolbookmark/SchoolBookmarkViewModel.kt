@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.domain.model.bookmark.SchoolBookmark
 import com.festago.festago.domain.repository.BookmarkRepository
-import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.FestivalBookmarkEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

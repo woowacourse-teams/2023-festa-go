@@ -1,9 +1,8 @@
 package com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark
 
-import com.festago.festago.domain.model.bookmark.ArtistBookmark
-
 interface ArtistBookmarkListUiState {
     object NotLoggedIn : ArtistBookmarkListUiState
+
     object Loading : ArtistBookmarkListUiState
 
     data class Success(val artistBookmarks: List<ArtistBookmarkUiState>) : ArtistBookmarkListUiState

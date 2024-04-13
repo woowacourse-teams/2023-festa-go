@@ -24,7 +24,8 @@ class ArtistBookmarkViewModel @Inject constructor(
             _uiState.value = ArtistBookmarkListUiState.Loading
             bookmarkRepository.getArtistBookmarks().onSuccess { artistBookmarks ->
                 _uiState.value = ArtistBookmarkListUiState.Success(
-                    artistBookmarks.map { it.toUiState() })
+                    artistBookmarks.map { it.toUiState() },
+                )
             }.onFailure {
                 _uiState.value = ArtistBookmarkListUiState.Error
             }

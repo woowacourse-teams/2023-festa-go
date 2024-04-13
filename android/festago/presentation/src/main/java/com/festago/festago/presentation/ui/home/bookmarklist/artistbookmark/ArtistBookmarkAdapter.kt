@@ -1,14 +1,8 @@
 package com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ListView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.festago.festago.presentation.databinding.ItemArtistBookmarkBinding
-import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate.FestivalBookmarkItemUiState
 
 class ArtistBookmarkAdapter : ListAdapter<ArtistBookmarkUiState, ArtistBookmarkViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistBookmarkViewHolder {
