@@ -1,12 +1,11 @@
-package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark
-
-import com.festago.festago.domain.model.bookmark.FestivalBookmark
+package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate
 
 interface FestivalBookmarkUiState {
     object NotLoggedIn : FestivalBookmarkUiState
     object Loading : FestivalBookmarkUiState
 
-    data class Success(val festivalBookmarks: List<FestivalBookmarkItemUiState>) : FestivalBookmarkUiState
+    data class Success(val festivalBookmarks: List<FestivalBookmarkItemUiState>) :
+        FestivalBookmarkUiState
 
     object Error : FestivalBookmarkUiState
 

@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark
+package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.adapater
 
 import android.content.res.Resources
 import android.graphics.Rect
@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ItemFestivalBookmarkBinding
+import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate.FestivalBookmarkItemUiState
+import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.artistadapter.ArtistAdapter
 import java.time.LocalDate
 
 class FestivalBookmarkViewHolder(

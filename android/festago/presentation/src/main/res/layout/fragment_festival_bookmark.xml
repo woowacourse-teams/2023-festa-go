@@ -17,7 +17,7 @@
 
         <variable
             name="uiState"
-            type="com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.FestivalBookmarkUiState" />
+            type="com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate.FestivalBookmarkUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

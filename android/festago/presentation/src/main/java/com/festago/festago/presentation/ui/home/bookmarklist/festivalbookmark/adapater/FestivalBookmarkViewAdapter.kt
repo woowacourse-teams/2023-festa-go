@@ -1,10 +1,9 @@
-package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark
+package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.adapater
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.festago.festago.presentation.databinding.ItemFestivalBookmarkBinding
+import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate.FestivalBookmarkItemUiState
 
 class FestivalBookmarkViewAdapter :
     ListAdapter<FestivalBookmarkItemUiState, FestivalBookmarkViewHolder>(diffUtil) {

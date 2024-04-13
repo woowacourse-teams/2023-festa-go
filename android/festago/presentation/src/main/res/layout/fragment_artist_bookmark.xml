@@ -37,7 +37,7 @@
             app:layout_constraintTop_toTopOf="parent"
 
             tools:context=".ItemFragment"
-            tools:listitem="@layout/fragment_artist_bookmark_item" />
+            tools:listitem="@layout/item_artist_bookmark" />
 
         <include
             android:id="@+id/includeRequireLogin"

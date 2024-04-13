@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark
+package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.artistadapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

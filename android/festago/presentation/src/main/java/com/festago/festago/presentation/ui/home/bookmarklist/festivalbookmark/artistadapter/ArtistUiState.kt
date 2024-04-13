@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark
+package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.artistadapter
 
 data class ArtistUiState(
     val id: Long,
