@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Profile("dev")
+@Profile({"dev"})
 @Component
 @RequiredArgsConstructor
 public class MockScheduler {
@@ -14,7 +14,7 @@ public class MockScheduler {
     private static final long SCHEDULER_CYCLE = 7;
     private final MockDataService mockDataService;
 
-    @Scheduled(fixedDelay = SCHEDULER_CYCLE, timeUnit = TimeUnit.DAYS)
+    @Scheduled(initialDelay = SCHEDULER_CYCLE, fixedDelay = SCHEDULER_CYCLE, timeUnit = TimeUnit.SECONDS)
     public void run() {
         mockDataService.makeMockFestivals((int) SCHEDULER_CYCLE);
     }

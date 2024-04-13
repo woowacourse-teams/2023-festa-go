@@ -26,11 +26,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Profile({"dev"})
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -51,12 +49,11 @@ public class MockDataService {
     private final ArtistCommandService artistCommandService;
     private final SchoolCommandService schoolCommandService;
 
-    public boolean initialize() {
+    public void initialize() {
         if (alreadyInitialized()) {
-            return false;
+            return;
         }
         initializeData();
-        return true;
     }
 
     private boolean alreadyInitialized() {

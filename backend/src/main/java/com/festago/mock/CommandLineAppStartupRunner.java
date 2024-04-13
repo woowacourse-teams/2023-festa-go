@@ -10,13 +10,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CommandLineAppStartupRunner implements CommandLineRunner {
 
+    private static final int AVAILABLE_FESTIVAL_DURATION = 7;
     private final MockDataService mockDataService;
-    private final MockScheduler mockScheduler;
 
     @Override
     public void run(String... args) {
-        if (mockDataService.initialize()) {
-            mockScheduler.run();
-        }
+        mockDataService.initialize();
+        mockDataService.makeMockFestivals(AVAILABLE_FESTIVAL_DURATION);
     }
 }

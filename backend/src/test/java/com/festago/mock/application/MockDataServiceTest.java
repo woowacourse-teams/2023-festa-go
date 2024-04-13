@@ -12,7 +12,6 @@ import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.mock.MockArtist;
 import com.festago.mock.MockDataService;
 import com.festago.mock.MockFestivalDateGenerator;
-import com.festago.mock.config.MockDataConfig;
 import com.festago.mock.repository.ForMockArtistRepository;
 import com.festago.mock.repository.ForMockFestivalInfoRepository;
 import com.festago.mock.repository.ForMockFestivalRepository;
@@ -34,7 +33,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -42,12 +40,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Import(MockDataConfig.class)
 class MockDataServiceTest extends ApplicationIntegrationTest {
 
     private static final int INCLUDE_FIRST_DATE = 1;
