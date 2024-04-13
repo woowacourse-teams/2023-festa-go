@@ -17,6 +17,8 @@ class FestivalBookmarkFragment : Fragment() {
 
     private val vm: FestivalBookmarkViewModel by viewModels()
 
+    private lateinit var festivalBookmarkViewAdapter: FestivalBookmarkViewAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,20 +32,12 @@ class FestivalBookmarkFragment : Fragment() {
     }
 
     private fun initView() {
+        festivalBookmarkViewAdapter = FestivalBookmarkViewAdapter()
+        binding.rvFestivalBookmarkList.adapter = festivalBookmarkViewAdapter
+
         binding.uiState = vm.uiState.value
 
-        binding.refreshListener =  { vm.fetchBookmarkList() }
-
-        binding.rvFestivalBookmarkList.adapter = FestivalBookmarkViewAdapter(
-            listOf(
-                FestivalBookmarkViewHolder.of(binding.rvFestivalBookmarkList).apply {
-                    bind("1", "Festival 1")
-                },
-                FestivalBookmarkViewHolder.of(binding.rvFestivalBookmarkList).apply {
-                    bind("1", "Festival 1")
-                },
-            ),
-        )
+        binding.refreshListener = { vm.fetchBookmarkList() }
     }
 
     private fun initObserve() {
@@ -52,24 +46,15 @@ class FestivalBookmarkFragment : Fragment() {
                 println("uiState: $uiState")
                 binding.uiState = uiState
                 when (uiState) {
-                    is FestivalBookmarkListUiState.Loading -> {
+                    is FestivalBookmarkUiState.Loading -> {
                         // Handle loading
                     }
 
-                    is FestivalBookmarkListUiState.Success -> {
-                        binding.rvFestivalBookmarkList.adapter = FestivalBookmarkViewAdapter(
-                            uiState.FestivalBookmarks.map { FestivalBookmark ->
-                                FestivalBookmarkViewHolder.of(binding.rvFestivalBookmarkList).apply {
-                                    bind(
-                                        FestivalBookmark.festival.name,
-                                        FestivalBookmark.festival.imageUrl,
-                                    )
-                                }
-                            },
-                        )
+                    is FestivalBookmarkUiState.Success -> {
+                        festivalBookmarkViewAdapter.submitList(uiState.festivalBookmarks)
                     }
 
-                    is FestivalBookmarkListUiState.Error -> {
+                    is FestivalBookmarkUiState.Error -> {
                         // Handle error
                     }
                 }

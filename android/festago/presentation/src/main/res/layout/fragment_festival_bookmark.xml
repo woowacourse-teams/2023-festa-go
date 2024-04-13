@@ -17,7 +17,7 @@
 
         <variable
             name="uiState"
-            type="com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.FestivalBookmarkListUiState" />
+            type="com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.FestivalBookmarkUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +37,7 @@
             app:layout_constraintTop_toTopOf="parent"
 
             tools:context=".ItemFragment"
-            tools:listitem="@layout/fragment_festival_bookmark_item" />
+            tools:listitem="@layout/item_festival_bookmark" />
 
         <include
             android:id="@+id/includeRequireLogin"

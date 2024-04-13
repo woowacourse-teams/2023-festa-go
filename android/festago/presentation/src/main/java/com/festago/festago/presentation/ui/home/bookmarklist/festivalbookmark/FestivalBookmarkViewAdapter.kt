@@ -2,37 +2,39 @@ package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
-import com.festago.festago.presentation.databinding.FragmentFestivalBookmarkItemBinding
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import com.festago.festago.presentation.databinding.ItemFestivalBookmarkBinding
 
-class FestivalBookmarkViewAdapter(
-    private val values: List<FestivalBookmarkViewHolder>,
-) : RecyclerView.Adapter<FestivalBookmarkViewAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            FragmentFestivalBookmarkItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-            ),
+class FestivalBookmarkViewAdapter :
+    ListAdapter<FestivalBookmarkItemUiState, FestivalBookmarkViewHolder>(diffUtil) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FestivalBookmarkViewHolder {
+        return FestivalBookmarkViewHolder.of(
+            parent = parent,
+            onArtistClick = { id ->
+            },
         )
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+    override fun onBindViewHolder(holder: FestivalBookmarkViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int = values.size
+    companion object {
+        private val diffUtil = object : DiffUtil.ItemCallback<FestivalBookmarkItemUiState>() {
+            override fun areItemsTheSame(
+                oldItem: FestivalBookmarkItemUiState,
+                newItem: FestivalBookmarkItemUiState,
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
 
-    inner class ViewHolder(binding: FragmentFestivalBookmarkItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
-
-        override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
+            override fun areContentsTheSame(
+                oldItem: FestivalBookmarkItemUiState,
+                newItem: FestivalBookmarkItemUiState,
+            ): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }
