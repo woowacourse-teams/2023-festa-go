@@ -19,11 +19,27 @@ class FakeBookmarkRepository @Inject constructor() : BookmarkRepository {
         festivalIds: List<Long>,
         festivalBookmarkOrder: FestivalBookmarkOrder,
     ): Result<List<FestivalBookmark>> {
-        TODO("Not yet implemented")
+        delay(1000)
+        return Result.success(
+            listOf(
+                FestivalBookmark(
+                    festival = FakeFestivals.plannedFestivals[0],
+                    createdAt = LocalDateTime.now(),
+                ),
+                FestivalBookmark(
+                    festival = FakeFestivals.plannedFestivals[1],
+                    createdAt = LocalDateTime.now(),
+                ),
+                FestivalBookmark(
+                    festival = FakeFestivals.plannedFestivals[2],
+                    createdAt = LocalDateTime.now(),
+                ),
+            ),
+        )
     }
 
     override suspend fun getFestivalBookmarkIds(): Result<List<Long>> {
-        TODO("Not yet implemented")
+        return Result.success(listOf(1, 2, 3))
     }
 
     override suspend fun deleteFestivalBookmark(festivalId: Long): Result<Unit> {
