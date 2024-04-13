@@ -1,7 +1,6 @@
 package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.data.repository.DefaultArtistRepository
-import com.festago.festago.data.repository.DefaultBookmarkRepository
 import com.festago.festago.data.repository.DefaultFestivalRepository
 import com.festago.festago.data.repository.DefaultRecentSearchRepository
 import com.festago.festago.data.repository.DefaultSchoolRepository
@@ -22,7 +21,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 interface RepositoryModule {
-
     @Binds
     @Singleton
     fun bindsFestivalRepository(festivalRepository: DefaultFestivalRepository): FestivalRepository

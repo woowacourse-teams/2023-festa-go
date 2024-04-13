@@ -1,7 +1,6 @@
 package com.festago.festago.data.dto.bookmark
 
 import com.festago.festago.domain.model.bookmark.ArtistBookmark
-import com.festago.festago.domain.model.bookmark.ArtistBookmarkInfo
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 

@@ -4,5 +4,5 @@ import java.time.LocalDateTime
 
 data class ArtistBookmark(
     val artist: ArtistBookmarkInfo,
-    val createdAt: LocalDateTime
-) 
+    val createdAt: LocalDateTime,
+)
