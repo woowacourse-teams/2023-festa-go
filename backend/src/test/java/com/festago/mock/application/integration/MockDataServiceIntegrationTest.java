@@ -4,9 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.mock.application.MockDataService;
-import com.festago.mock.repository.ForMockSchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.fixture.SchoolFixture;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -23,34 +21,15 @@ class MockDataServiceIntegrationTest extends ApplicationIntegrationTest {
     MockDataService mockDataService;
 
     @Autowired
-    ForMockSchoolRepository schoolRepository;
-
-    @Autowired
     EntityManager em;
-
-    @Nested
-    class initialize {
-
-        @Test
-        void 만약_하나의_학교라도_존재하면_초기화되지_않는다() {
-            // given
-            schoolRepository.save(SchoolFixture.builder().build());
-
-            // when
-            mockDataService.initialize();
-            long schoolCount = schoolRepository.count();
-
-            // then
-            assertThat(schoolCount).isEqualTo(1);
-        }
-    }
 
     @Nested
     class makeMockFestivals {
 
         @BeforeEach
         void setUp() {
-            mockDataService.initialize();
+            mockDataService.makeMockSchools();
+            mockDataService.makeMockArtist();
         }
 
         @Test

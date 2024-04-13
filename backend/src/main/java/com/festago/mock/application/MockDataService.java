@@ -40,11 +40,12 @@ public class MockDataService {
     private final ForMockStageArtistRepository stageArtistRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    public void initialize() {
-        if (schoolRepository.count() == 0) {
-            artistRepository.saveAll(mockArtistsGenerator.generate());
-            schoolRepository.saveAll(mockSchoolsGenerator.generate());
-        }
+    public void makeMockArtist() {
+        artistRepository.saveAll(mockArtistsGenerator.generate());
+    }
+
+    public void makeMockSchools() {
+        schoolRepository.saveAll(mockSchoolsGenerator.generate());
     }
 
     public void makeMockFestivals(int availableFestivalDuration) {
