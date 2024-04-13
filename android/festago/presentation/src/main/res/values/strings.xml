@@ -70,4 +70,8 @@
     <string name="layout_network_error_retry">잠시 후에 다시 시도해주세요</string>
     <string name="layout_network_error_not_work">현재 접속이 원할하지 않아요</string>
 
+    <!-- Strings related to require login -->
+    <string name="layout_require_login_description">로그인하면 북마크 할 수 있어요</string>
+    <string name="layout_require_login_go_to_login">로그인 하러 가기</string>
+
 </resources>

@@ -3,11 +3,14 @@ package com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark
 import com.festago.festago.domain.model.bookmark.ArtistBookmark
 
 interface ArtistBookmarkListUiState {
+    object NotLoggedIn : ArtistBookmarkListUiState
     object Loading : ArtistBookmarkListUiState
 
     data class Success(val artistBookmarks: List<ArtistBookmark>) : ArtistBookmarkListUiState
 
     object Error : ArtistBookmarkListUiState
+
+    val shouldShowNotLoggedIn get() = this is NotLoggedIn
 
     val shouldShowSuccess get() = this is Success && artistBookmarks.isNotEmpty()
     val shouldShowEmpty get() = this is Success && artistBookmarks.isEmpty()

@@ -12,6 +12,10 @@
             type="kotlin.jvm.functions.Function0" />
 
         <variable
+            name="loginListener"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
             name="uiState"
             type="com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark.ArtistBookmarkListUiState" />
     </data>
@@ -35,11 +39,18 @@
             tools:context=".ItemFragment"
             tools:listitem="@layout/fragment_artist_bookmark_item" />
 
+        <include
+            android:id="@+id/includeRequireLogin"
+            layout="@layout/layout_require_login"
+            loginListener="@{loginListener}"
+            visibility="@{uiState.shouldShowNotLoggedIn}" />
+
         <TextView
+            style="@style/H5Bold14Lh16"
             visibility="@{uiState.shouldShowEmpty}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="북마크한 아티스트가 없습니다."
+            android:text="관심있는 아티스트를 북마크 할 수 있어요."
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -48,6 +48,7 @@ class FakeBookmarkRepository @Inject constructor() : BookmarkRepository {
 
     override suspend fun getArtistBookmarks(): Result<List<ArtistBookmark>> {
         delay(1000)
+        return Result.failure(Exception("Failed to get artist bookmarks"))
         return Result.success(
             listOf(
                 ArtistBookmark(
