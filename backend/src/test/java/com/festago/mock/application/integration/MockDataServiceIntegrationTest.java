@@ -34,16 +34,14 @@ class MockDataServiceIntegrationTest extends ApplicationIntegrationTest {
 
         @Test
         void 쿼리_최적화_정보가_생성되어야_한다() {
-            // given
+            // when
             mockDataService.makeMockFestivals(7);
 
-            // when
+            // then
             Long stageQueryInfoCount = em.createQuery("select count(*) from StageQueryInfo sqi", Long.class)
                 .getSingleResult();
             Long festivalQueryInfoCount = em.createQuery("select count(*) from FestivalQueryInfo fqi", Long.class)
                 .getSingleResult();
-
-            // then
             assertSoftly(softly -> {
                 assertThat(stageQueryInfoCount).isNotZero();
                 assertThat(festivalQueryInfoCount).isNotZero();
