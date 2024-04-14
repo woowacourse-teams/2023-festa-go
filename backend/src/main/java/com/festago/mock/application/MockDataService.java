@@ -40,7 +40,7 @@ public class MockDataService {
     private final ForMockStageArtistRepository stageArtistRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    public void makeMockArtist() {
+    public void makeMockArtists() {
         artistRepository.saveAll(mockArtistsGenerator.generate());
     }
 

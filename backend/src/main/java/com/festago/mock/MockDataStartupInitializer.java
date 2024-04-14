@@ -22,7 +22,7 @@ public class MockDataStartupInitializer {
     @EventListener(ApplicationReadyEvent.class)
     public void initialize() {
         if (forMockSchoolRepository.count() == 0) {
-            mockDataService.makeMockArtist();
+            mockDataService.makeMockArtists();
             mockDataService.makeMockSchools();
             mockDataService.makeMockFestivals(AVAILABLE_FESTIVAL_DURATION);
         }

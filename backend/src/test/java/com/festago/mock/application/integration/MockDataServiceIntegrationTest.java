@@ -29,7 +29,7 @@ class MockDataServiceIntegrationTest extends ApplicationIntegrationTest {
         @BeforeEach
         void setUp() {
             mockDataService.makeMockSchools();
-            mockDataService.makeMockArtist();
+            mockDataService.makeMockArtists();
         }
 
         @Test
