@@ -23,8 +23,8 @@ public class MockSchoolsGenerator {
     private Stream<School> crateSchools(SchoolRegion schoolRegion) {
         return IntStream.rangeClosed(1, SCHOOL_PER_REGION)
             .mapToObj(i -> {
-                String schoolName = String.format("%s%d대학교", schoolRegion.name(), i + 1);
-                String schoolEmail = String.format("%s%d.com", schoolRegion.name(), i + 1);
+                String schoolName = String.format("%s%d대학교", schoolRegion.name(), i);
+                String schoolEmail = String.format("%s%d.com", schoolRegion.name(), i);
                 return crateSchool(schoolRegion, schoolName, schoolEmail);
             });
     }
