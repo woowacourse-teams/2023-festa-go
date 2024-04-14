@@ -4,8 +4,8 @@ import com.festago.festival.domain.Festival;
 import com.festago.school.domain.School;
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MockFestivalsGenerator {
 
-    private static final AtomicLong festivalSequence = new AtomicLong();
-
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
     private final Clock clock;
     private final MockFestivalDateGenerator festivalDateGenerator;
 
@@ -25,7 +24,7 @@ public class MockFestivalsGenerator {
                 LocalDate startDate = festivalDateGenerator.generateStartDate(duration, now);
                 LocalDate endDate = festivalDateGenerator.generateEndDate(duration, now, startDate);
                 return new Festival(
-                    school.getName() + " 축제 " + festivalSequence.incrementAndGet(),
+                    school.getName() + " " + startDate.format(DATE_TIME_FORMATTER) + " 축제",
                     startDate,
                     endDate,
                     school
