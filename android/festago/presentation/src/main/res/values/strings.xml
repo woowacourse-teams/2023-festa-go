@@ -65,4 +65,9 @@
     <string name="ok_dialog_btn_update">업데이트</string>
     <string name="ok_dialog_btn_cancel">취소</string>
 
+    <!-- String related to signIn -->
+    <string name="sign_in_tv_festago_flag">페스타고,\n대학축제를\n더욱 즐겁게!</string>
+    <string name="sign_in_tv_kakao_login">카카오로 로그인하기</string>
+    <string name="sign_in_tv_without_login">로그인하지 않고 둘러보기</string>
+
 </resources>
