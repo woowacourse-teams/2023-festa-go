@@ -7,7 +7,8 @@ import org.springframework.test.context.TestExecutionListeners;
 @SpringBootTest
 @TestExecutionListeners(value = {
     ResetMockTestExecutionListener.class,
-    DatabaseClearTestExecutionListener.class
+    DatabaseClearTestExecutionListener.class,
+    CacheClearTestExecutionListener.class
 }, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 @Import({TestTimeConfig.class})
 public abstract class ApplicationIntegrationTest {
