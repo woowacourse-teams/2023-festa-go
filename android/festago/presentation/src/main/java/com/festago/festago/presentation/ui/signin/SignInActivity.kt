@@ -18,9 +18,10 @@ import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListene
 import com.festago.festago.presentation.util.setStatusBarMode
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
-import kotlinx.coroutines.flow.collect
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SignInActivity : AppCompatActivity() {
 
     private val binding: ActivitySignInBinding by lazy {

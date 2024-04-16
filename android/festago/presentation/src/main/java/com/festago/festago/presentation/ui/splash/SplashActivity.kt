@@ -90,6 +90,8 @@ class SplashActivity : ComponentActivity() {
                 }
                 splashScreen.setKeepOnScreenCondition { false }
                 requestUpdate(latestVersion)
+            } else {
+                handleError()
             }
         }
     }
