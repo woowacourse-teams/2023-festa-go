@@ -8,12 +8,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.festago.festago.presentation.BuildConfig
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivitySplashBinding
 import com.festago.festago.presentation.ui.home.HomeActivity
+import com.festago.festago.presentation.ui.signin.SignInActivity
+import com.festago.festago.presentation.util.repeatOnStarted
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.kakao.sdk.common.KakaoSdk
@@ -31,6 +34,7 @@ class SplashActivity : ComponentActivity() {
             .setMinimumFetchIntervalInSeconds(if (BuildConfig.DEBUG) DEBUG_REMOTE_CONFIG_FETCH_INTERVAL else RELEASE_REMOTE_CONFIG_FETCH_INTERVAL)
             .build()
     }
+    private val vm: SplashViewModel by viewModels()
 
     init {
         firebaseRemoteConfig.setConfigSettingsAsync(configSettings)
@@ -38,9 +42,9 @@ class SplashActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition { true }
+        initSplashScreen()
         initKakaoSdk()
+        initObserve()
         setContentView(binding.root)
     }
 
@@ -49,8 +53,24 @@ class SplashActivity : ComponentActivity() {
         checkAppUpdate()
     }
 
+    private fun initSplashScreen() {
+        splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { true }
+    }
+
     private fun initKakaoSdk() {
         KakaoSdk.init(this.applicationContext, BuildConfig.KAKAO_NATIVE_APP_KEY)
+    }
+
+    private fun initObserve() {
+        repeatOnStarted(this) {
+            vm.event.collect {
+                when (it) {
+                    is SplashEvent.ShowHome -> navigateToHome()
+                    is SplashEvent.ShowSignIn -> navigateToSignIn()
+                }
+            }
+        }
     }
 
     private fun checkAppUpdate() {
@@ -65,7 +85,7 @@ class SplashActivity : ComponentActivity() {
                 }
                 val latestVersion = firebaseRemoteConfig.getLong(KEY_LATEST_VERSION)
                 if (latestVersion == currentVersion) {
-                    navigateToHome()
+                    vm.checkSignIn()
                     return@addOnCompleteListener
                 }
                 splashScreen.setKeepOnScreenCondition { false }
@@ -93,7 +113,7 @@ class SplashActivity : ComponentActivity() {
         val sharedPref = getPreferences(MODE_PRIVATE) ?: return
         val storedLatestVersion = sharedPref.getLong(KEY_STORED_LATEST_VERSION, 0L)
         if (latestVersion == storedLatestVersion) {
-            navigateToHome()
+            vm.checkSignIn()
             return
         }
         alertUpdate(message = message, update = ::handleUpdate) {
@@ -103,7 +123,7 @@ class SplashActivity : ComponentActivity() {
 
     private fun handleOptionalUpdateCancel(sharedPref: SharedPreferences, latestVersion: Long) {
         updateStoredLatestVersion(sharedPref, latestVersion)
-        navigateToHome()
+        vm.checkSignIn()
     }
 
     private fun updateStoredLatestVersion(sharedPref: SharedPreferences, latestVersion: Long) {
@@ -120,6 +140,11 @@ class SplashActivity : ComponentActivity() {
 
     private fun navigateToHome() {
         startActivity(HomeActivity.getIntent(this))
+        finish()
+    }
+
+    private fun navigateToSignIn() {
+        startActivity(SignInActivity.getIntent(this))
         finish()
     }
 
