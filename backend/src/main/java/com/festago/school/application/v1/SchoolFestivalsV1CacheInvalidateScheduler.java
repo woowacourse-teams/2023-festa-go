@@ -1,15 +1,12 @@
-package com.festago.school.infrastructure;
+package com.festago.school.application.v1;
 
 import com.festago.common.cache.CacheInvalidator;
-import com.festago.school.application.v1.SchoolFestivalsV1QueryService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class SchoolFestivalsV1CacheInvalidateScheduler {
 
     private final CacheInvalidator cacheInvalidator;
