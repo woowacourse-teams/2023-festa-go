@@ -69,5 +69,6 @@
     <string name="sign_in_tv_festago_flag">페스타고,\n대학축제를\n더욱 즐겁게!</string>
     <string name="sign_in_tv_kakao_login">카카오로 로그인하기</string>
     <string name="sign_in_tv_without_login">로그인하지 않고 둘러보기</string>
+    <string name="sign_in_default_error_message">로그인 할 수 없습니다. 다시 로그인 하거나 앱을 재실행 해주세요.</string>
 
 </resources>
