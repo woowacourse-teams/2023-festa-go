@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.festival.repository.FestivalRepository;
-import com.festago.school.application.v2.SchoolFestivalsV2QueryService;
+import com.festago.school.application.v1.SchoolFestivalsV1QueryService;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
-import com.festago.school.repository.v2.SchoolFestivalsV2QueryDslRepository;
+import com.festago.school.repository.v1.SchoolFestivalsV1QueryDslRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.TimeInstantProvider;
 import com.festago.support.fixture.FestivalFixture;
@@ -23,13 +23,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class SchoolFestivalsV2CacheConfigTest extends ApplicationIntegrationTest {
+class SchoolFestivalsV1CacheConfigTest extends ApplicationIntegrationTest {
 
     @Autowired
-    SchoolFestivalsV2QueryService schoolFestivalsV2QueryService;
+    SchoolFestivalsV1QueryService schoolFestivalsV1QueryService;
 
     @Autowired
-    SchoolFestivalsV2QueryDslRepository schoolFestivalsV2QueryDslRepository;
+    SchoolFestivalsV1QueryDslRepository schoolFestivalsV1QueryDslRepository;
 
     @Autowired
     SchoolRepository schoolRepository;
@@ -60,13 +60,13 @@ class SchoolFestivalsV2CacheConfigTest extends ApplicationIntegrationTest {
             // given
             given(clock.instant())
                 .willReturn(TimeInstantProvider.from(_6월_15일));
-            var expect = schoolFestivalsV2QueryService.findFestivalsBySchoolId(테코대학교.getId());
+            var expect = schoolFestivalsV1QueryService.findFestivalsBySchoolId(테코대학교.getId());
 
             // when
             festivalRepository.save(
                 FestivalFixture.builder().startDate(_6월_15일).endDate(_6월_15일).school(테코대학교).build()
             );
-            var actual = schoolFestivalsV2QueryService.findFestivalsBySchoolId(테코대학교.getId());
+            var actual = schoolFestivalsV1QueryService.findFestivalsBySchoolId(테코대학교.getId());
 
             // then
             assertThat(actual).isEqualTo(expect);
@@ -81,13 +81,13 @@ class SchoolFestivalsV2CacheConfigTest extends ApplicationIntegrationTest {
             // given
             given(clock.instant())
                 .willReturn(TimeInstantProvider.from(_6월_16일));
-            var expect = schoolFestivalsV2QueryService.findPastFestivalsBySchoolId(테코대학교.getId());
+            var expect = schoolFestivalsV1QueryService.findPastFestivalsBySchoolId(테코대학교.getId());
 
             // when
             festivalRepository.save(
                 FestivalFixture.builder().startDate(_6월_15일).endDate(_6월_15일).school(테코대학교).build()
             );
-            var actual = schoolFestivalsV2QueryService.findPastFestivalsBySchoolId(테코대학교.getId());
+            var actual = schoolFestivalsV1QueryService.findPastFestivalsBySchoolId(테코대학교.getId());
 
             // then
             assertThat(actual).isEqualTo(expect);
