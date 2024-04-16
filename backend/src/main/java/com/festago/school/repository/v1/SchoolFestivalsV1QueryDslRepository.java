@@ -1,4 +1,4 @@
-package com.festago.school.repository.v2;
+package com.festago.school.repository.v1;
 
 import static com.festago.festival.domain.QFestival.festival;
 import static com.festago.festival.domain.QFestivalQueryInfo.festivalQueryInfo;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class SchoolFestivalsV2QueryDslRepository {
+public class SchoolFestivalsV1QueryDslRepository {
 
     private final QueryDslHelper queryDslHelper;
 

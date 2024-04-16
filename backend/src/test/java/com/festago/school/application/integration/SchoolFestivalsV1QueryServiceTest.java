@@ -1,10 +1,11 @@
-package com.festago.school.application.v2;
+package com.festago.school.application.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.application.v1.SchoolFestivalsV1QueryService;
 import com.festago.school.domain.School;
 import com.festago.school.dto.v1.SchoolFestivalV1Response;
 import com.festago.school.repository.SchoolRepository;
@@ -23,10 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class SchoolFestivalsV2QueryServiceTest extends ApplicationIntegrationTest {
+class SchoolFestivalsV1QueryServiceTest extends ApplicationIntegrationTest {
 
     @Autowired
-    SchoolFestivalsV2QueryService schoolFestivalsV2QueryService;
+    SchoolFestivalsV1QueryService schoolFestivalsV1QueryService;
 
     @Autowired
     SchoolRepository schoolRepository;
@@ -83,7 +84,7 @@ class SchoolFestivalsV2QueryServiceTest extends ApplicationIntegrationTest {
                 .willReturn(TimeInstantProvider.from(_6월_15일));
 
             // when
-            var actual = schoolFestivalsV2QueryService.findFestivalsBySchoolId(우테대학교.getId());
+            var actual = schoolFestivalsV1QueryService.findFestivalsBySchoolId(우테대학교.getId());
 
             // then
             assertThat(actual).isEmpty();
@@ -96,7 +97,7 @@ class SchoolFestivalsV2QueryServiceTest extends ApplicationIntegrationTest {
                 .willReturn(TimeInstantProvider.from(_6월_15일));
 
             // when
-            var actual = schoolFestivalsV2QueryService.findFestivalsBySchoolId(테코대학교.getId());
+            var actual = schoolFestivalsV1QueryService.findFestivalsBySchoolId(테코대학교.getId());
 
             // then
             assertThat(actual)
@@ -116,7 +117,7 @@ class SchoolFestivalsV2QueryServiceTest extends ApplicationIntegrationTest {
                 .willReturn(TimeInstantProvider.from(_6월_18일));
 
             // when
-            var actual = schoolFestivalsV2QueryService.findFestivalsBySchoolId(테코대학교.getId());
+            var actual = schoolFestivalsV1QueryService.findFestivalsBySchoolId(테코대학교.getId());
 
             // then
             assertThat(actual)
@@ -138,7 +139,7 @@ class SchoolFestivalsV2QueryServiceTest extends ApplicationIntegrationTest {
                 .willReturn(TimeInstantProvider.from(_6월_15일));
 
             // when
-            var actual = schoolFestivalsV2QueryService.findPastFestivalsBySchoolId(우테대학교.getId());
+            var actual = schoolFestivalsV1QueryService.findPastFestivalsBySchoolId(우테대학교.getId());
 
             // then
             assertThat(actual).isEmpty();
@@ -151,7 +152,7 @@ class SchoolFestivalsV2QueryServiceTest extends ApplicationIntegrationTest {
                 .willReturn(TimeInstantProvider.from(_6월_21일));
 
             // when
-            var actual = schoolFestivalsV2QueryService.findPastFestivalsBySchoolId(테코대학교.getId());
+            var actual = schoolFestivalsV1QueryService.findPastFestivalsBySchoolId(테코대학교.getId());
 
             // then
             assertThat(actual)
@@ -171,7 +172,7 @@ class SchoolFestivalsV2QueryServiceTest extends ApplicationIntegrationTest {
                 .willReturn(TimeInstantProvider.from(_6월_18일));
 
             // when
-            var actual = schoolFestivalsV2QueryService.findPastFestivalsBySchoolId(테코대학교.getId());
+            var actual = schoolFestivalsV1QueryService.findPastFestivalsBySchoolId(테코대학교.getId());
 
             // then
             assertThat(actual)
