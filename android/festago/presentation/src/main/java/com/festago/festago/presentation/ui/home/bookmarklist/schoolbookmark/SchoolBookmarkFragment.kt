@@ -67,7 +67,7 @@ class SchoolBookmarkFragment : Fragment() {
                 when (event) {
                     is SchoolBookmarkEvent.ShowSchoolDetail -> {
                         findNavController().safeNavigate(
-                            BookmarkListFragmentDirections.actionBookmarkListFragmentToFestivalDetailFragment(
+                            BookmarkListFragmentDirections.actionBookmarkListFragmentToSchoolDetailFragment(
                                 event.festivalId,
                             ),
                         )
