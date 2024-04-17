@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.databinding.ItemArtistBookmarkBinding
 
-class ArtistBookmarkViewHolder(val binding: ItemArtistBookmarkBinding) :
+class ArtistBookmarkViewHolder(private val binding: ItemArtistBookmarkBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ArtistBookmarkUiState) {
         binding.artist = item
