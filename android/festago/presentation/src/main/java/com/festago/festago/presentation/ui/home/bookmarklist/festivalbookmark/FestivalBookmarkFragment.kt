@@ -50,17 +50,11 @@ class FestivalBookmarkFragment : Fragment() {
             vm.uiState.collect { uiState ->
                 binding.uiState = uiState
                 when (uiState) {
-                    is FestivalBookmarkUiState.Loading -> {
-                        // Handle loading
-                    }
+                    is FestivalBookmarkUiState.Loading,
+                    is FestivalBookmarkUiState.Error -> Unit
 
-                    is FestivalBookmarkUiState.Success -> {
+                    is FestivalBookmarkUiState.Success ->
                         festivalBookmarkViewAdapter.submitList(uiState.festivalBookmarks)
-                    }
-
-                    is FestivalBookmarkUiState.Error -> {
-                        // Handle error
-                    }
                 }
             }
         }
