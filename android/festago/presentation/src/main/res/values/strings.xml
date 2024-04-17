@@ -75,6 +75,8 @@
     <string name="layout_require_login_go_to_login">로그인 하러 가기</string>
 
     <!-- Strings related to bookmark -->
-    <string name="fragmentl_bookmark_bookmark">관심있는 아티스트를 북마크 할 수 있어요.</string>
+    <string name="fragmentl_bookmark_artist_bookmark">관심있는 아티스트를 북마크 할 수 있어요</string>
+    <string name="fragmentl_bookmark_festival_bookmark">관심있는 축제를 북마크 할 수 있어요</string>
+    <string name="fragmentl_bookmark_school_bookmark">관심있는 학교를 북마크 할 수 있어요</string>
 
 </resources>

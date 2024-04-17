@@ -50,7 +50,7 @@
             visibility="@{uiState.shouldShowEmpty}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/fragmentl_bookmark_bookmark"
+            android:text="@string/fragmentl_bookmark_school_bookmark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
