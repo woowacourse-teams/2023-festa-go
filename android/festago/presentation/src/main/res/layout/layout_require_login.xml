@@ -59,7 +59,7 @@
                     android:layout_height="16dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="4dp"
-                    android:src="@drawable/ic_refresh" />
+                    android:src="@drawable/ic_next" />
             </LinearLayout>
 
         </LinearLayout>
