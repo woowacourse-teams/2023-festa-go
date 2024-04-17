@@ -28,33 +28,31 @@ class MockStageArtistsGeneratorTest {
     @Test
     void 각_공연에_stagePerArtist_만큼_StageArtist를_생성한다() {
         // given
-        int stagePerArtist = 3;
         int stageCount = 3;
         int artistCount = 12;
         List<Stage> stages = createStages(stageCount);
         List<Artist> artists = createArtists(artistCount);
 
         // when
-        List<StageArtist> actual = mockStageArtistsGenerator.generate(stagePerArtist, stages, artists);
+        List<StageArtist> actual = mockStageArtistsGenerator.generate(stages, artists);
 
         // then
         Map<Long, Long> stageIdToArtistCount = actual.stream()
             .collect(groupingBy(StageArtist::getStageId, counting()));
         assertThat(stageIdToArtistCount.values())
-            .containsOnly((long) stagePerArtist);
+            .containsOnly(3L);
     }
 
     @Test
     void 생성된_StageArtist에는_중복된_Artist가_존재하지_않는다() {
         // given
-        int stagePerArtist = 5;
-        int stageCount = 2;
-        int artistCount = 10;
+        int stageCount = 3;
+        int artistCount = 9;
         List<Stage> stages = createStages(stageCount);
         List<Artist> artists = createArtists(artistCount);
 
         // when
-        long actual = mockStageArtistsGenerator.generate(stagePerArtist, stages, artists)
+        long actual = mockStageArtistsGenerator.generate(stages, artists)
             .stream()
             .map(StageArtist::getArtistId)
             .distinct()
@@ -79,14 +77,13 @@ class MockStageArtistsGeneratorTest {
     @Test
     void 공연의_개수가_아티스트의_개수를_초과하면_예외() {
         // given
-        int stagePerArtist = 3;
         int stageCount = 11;
         int artistCount = 10;
         List<Stage> stages = createStages(stageCount);
         List<Artist> artists = createArtists(artistCount);
 
         // when & then
-        assertThatThrownBy(() -> mockStageArtistsGenerator.generate(stagePerArtist, stages, artists))
+        assertThatThrownBy(() -> mockStageArtistsGenerator.generate(stages, artists))
             .isInstanceOf(UnexpectedException.class);
     }
 
@@ -96,14 +93,13 @@ class MockStageArtistsGeneratorTest {
         @Test
         void 각_공연마다_아티스트가_참여하는_것을_보장한다() {
             // given
-            int stagePerArtist = 3;
             int stageCount = 10;
             int artistCount = 10;
             List<Stage> stages = createStages(stageCount);
             List<Artist> artists = createArtists(artistCount);
 
             // when
-            List<StageArtist> actual = mockStageArtistsGenerator.generate(stagePerArtist, stages, artists);
+            List<StageArtist> actual = mockStageArtistsGenerator.generate(stages, artists);
 
             // then
             Map<Long, Long> stageIdToArtistCount = actual.stream()

@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MockDataService {
 
-    private static final int STAGE_PER_ARTIST = 3;
     private final MockArtistsGenerator mockArtistsGenerator;
     private final MockSchoolsGenerator mockSchoolsGenerator;
     private final MockFestivalsGenerator mockFestivalsGenerator;
@@ -48,15 +47,15 @@ public class MockDataService {
         schoolRepository.saveAll(mockSchoolsGenerator.generate());
     }
 
-    public void makeMockFestivals(int availableFestivalDuration) {
+    public void makeMockFestivals() {
         List<Artist> artists = artistRepository.findAll();
         List<School> schools = schoolRepository.findAll();
         List<Festival> festivals = festivalRepository.saveAll(
-            mockFestivalsGenerator.generate(schools, availableFestivalDuration)
+            mockFestivalsGenerator.generate(schools)
         );
         for (Festival festival : festivals) {
             List<Stage> stages = stageRepository.saveAll(mockStagesGenerator.generate(festival));
-            stageArtistRepository.saveAll(mockStageArtistsGenerator.generate(STAGE_PER_ARTIST, stages, artists));
+            stageArtistRepository.saveAll(mockStageArtistsGenerator.generate(stages, artists));
             eventPublisher.publishEvent(new FestivalCreatedEvent(festival.getId()));
             for (Stage stage : stages) {
                 eventPublisher.publishEvent(new StageCreatedEvent(stage));

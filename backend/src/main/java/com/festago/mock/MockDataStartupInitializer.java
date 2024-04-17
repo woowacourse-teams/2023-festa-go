@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MockDataStartupInitializer {
 
-    private static final int AVAILABLE_FESTIVAL_DURATION = 7;
     private final ForMockSchoolRepository forMockSchoolRepository;
     private final MockDataService mockDataService;
 
@@ -24,7 +23,7 @@ public class MockDataStartupInitializer {
         if (forMockSchoolRepository.count() == 0) {
             mockDataService.makeMockArtists();
             mockDataService.makeMockSchools();
-            mockDataService.makeMockFestivals(AVAILABLE_FESTIVAL_DURATION);
+            mockDataService.makeMockFestivals();
         }
     }
 }

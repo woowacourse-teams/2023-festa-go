@@ -35,7 +35,7 @@ class MockDataServiceIntegrationTest extends ApplicationIntegrationTest {
         @Test
         void 쿼리_최적화_정보가_생성되어야_한다() {
             // when
-            mockDataService.makeMockFestivals(7);
+            mockDataService.makeMockFestivals();
 
             // then
             Long stageQueryInfoCount = em.createQuery("select count(*) from StageQueryInfo sqi", Long.class)
