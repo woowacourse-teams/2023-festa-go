@@ -60,4 +60,9 @@ class ArtistBookmarkFragment : Fragment() {
             }
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

@@ -67,4 +67,9 @@ class BookmarkListFragment : Fragment() {
             },
         )
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
