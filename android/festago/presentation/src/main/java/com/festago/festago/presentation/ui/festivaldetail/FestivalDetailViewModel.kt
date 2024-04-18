@@ -59,6 +59,7 @@ class FestivalDetailViewModel @Inject constructor(
                 endDate = endDate,
                 posterImageUrl = posterImageUrl,
                 school = school,
+                onSchoolClick = ::showSchoolDetail,
                 socialMedias = socialMedias,
             ),
             stages = stages.map { it.toUiState() },
@@ -80,6 +81,12 @@ class FestivalDetailViewModel @Inject constructor(
     private fun showArtistDetail(artistId: Long) {
         viewModelScope.launch {
             _event.emit(FestivalDetailEvent.ShowArtistDetail(artistId))
+        }
+    }
+
+    private fun showSchoolDetail(schoolId: Long) {
+        viewModelScope.launch {
+            _event.emit(FestivalDetailEvent.ShowSchoolDetail(schoolId))
         }
     }
 
