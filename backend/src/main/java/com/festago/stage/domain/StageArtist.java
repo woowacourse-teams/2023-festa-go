@@ -1,5 +1,6 @@
 package com.festago.stage.domain;
 
+import com.festago.common.util.Validator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,9 +23,15 @@ public class StageArtist {
     }
 
     public StageArtist(Long id, Long stageId, Long artistId) {
+        validate(stageId, artistId);
         this.id = id;
         this.stageId = stageId;
         this.artistId = artistId;
+    }
+
+    private void validate(Long stageId, Long artistId) {
+        Validator.notNull(stageId, "stageId");
+        Validator.notNull(artistId, "artistId");
     }
 
     public Long getId() {
