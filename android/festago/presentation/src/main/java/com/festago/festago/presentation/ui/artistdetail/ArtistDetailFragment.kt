@@ -60,6 +60,7 @@ class ArtistDetailFragment : Fragment() {
     private fun initObserve() {
         repeatOnStarted(viewLifecycleOwner) {
             vm.uiState.collect {
+                binding.uiState = it
                 updateUi(it)
             }
         }
@@ -79,8 +80,8 @@ class ArtistDetailFragment : Fragment() {
     }
 
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
-        binding.uiState = uiState
-        adapter.submitList(uiState.stages)
+        binding.successUiState = uiState
+        adapter.submitList(uiState.festivals)
 
         binding.llcArtistMedia.removeAllViews()
 

@@ -9,6 +9,8 @@ sealed interface ArtistDetailUiState {
 
     data class Success(
         val artist: ArtistDetail,
-        val stages: List<FestivalItemUiState>,
+        val festivals: List<FestivalItemUiState>,
     ) : ArtistDetailUiState
+
+    val shouldShowEmptyFestivals get() = this is Success && festivals.isEmpty()
 }
