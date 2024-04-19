@@ -27,8 +27,9 @@ public class FestivalCreateService {
 
     public Long createFestival(FestivalCreateCommand command) {
         School school = schoolRepository.getOrThrow(command.schoolId());
-        Festival festival = festivalRepository.save(command.toEntity(school));
+        Festival festival = command.toEntity(school);
         validate(festival);
+        festivalRepository.save(festival);
         eventPublisher.publishEvent(new FestivalCreatedEvent(festival.getId()));
         return festival.getId();
     }
