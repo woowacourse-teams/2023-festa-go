@@ -68,7 +68,7 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
                     festival.name,
                     festival.festivalDuration.startDate,
                     festival.festivalDuration.endDate,
-                    festival.thumbnail,
+                    festival.posterImageUrl,
                     festivalQueryInfo.artistInfo
                 )
             )

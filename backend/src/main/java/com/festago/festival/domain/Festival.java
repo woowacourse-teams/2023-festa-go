@@ -3,7 +3,6 @@ package com.festago.festival.domain;
 import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.util.Validator;
 import com.festago.school.domain.School;
-import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,9 +21,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Festival extends BaseTimeEntity {
 
-    private static final String DEFAULT_THUMBNAIL = "https://picsum.photos/536/354";
+    private static final String DEFAULT_POSTER_IMAGE_URL = "https://picsum.photos/536/354";
     private static final int MAX_NAME_LENGTH = 50;
-    private static final int MAX_THUMBNAIL_LENGTH = 255;
+    private static final int MAX_POSTER_IMAGE_URL_LENGTH = 255;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,31 +37,30 @@ public class Festival extends BaseTimeEntity {
     private FestivalDuration festivalDuration;
 
     @NotNull
-    @Size(max = MAX_THUMBNAIL_LENGTH)
-    @Column(name = "poster_image_url")
-    private String thumbnail;
+    @Size(max = MAX_POSTER_IMAGE_URL_LENGTH)
+    private String posterImageUrl;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private School school;
 
     public Festival(String name, FestivalDuration festivalDuration, School school) {
-        this(null, name, festivalDuration, DEFAULT_THUMBNAIL, school);
+        this(null, name, festivalDuration, DEFAULT_POSTER_IMAGE_URL, school);
     }
 
-    public Festival(String name, FestivalDuration festivalDuration, String thumbnail, School school) {
-        this(null, name, festivalDuration, thumbnail, school);
+    public Festival(String name, FestivalDuration festivalDuration, String posterImageUrl, School school) {
+        this(null, name, festivalDuration, posterImageUrl, school);
     }
 
-    public Festival(Long id, String name, FestivalDuration festivalDuration, String thumbnail, School school) {
+    public Festival(Long id, String name, FestivalDuration festivalDuration, String posterImageUrl, School school) {
         validateName(name);
         validateFestivalDuration(festivalDuration);
-        validateThumbnail(thumbnail);
+        validatePosterImageUrl(posterImageUrl);
         validateSchool(school);
         this.id = id;
         this.name = name;
         this.festivalDuration = festivalDuration;
-        this.thumbnail = thumbnail;
+        this.posterImageUrl = posterImageUrl;
         this.school = school;
     }
 
@@ -72,10 +70,10 @@ public class Festival extends BaseTimeEntity {
         Validator.maxLength(name, MAX_NAME_LENGTH, fieldName);
     }
 
-    private void validateThumbnail(String thumbnail) {
-        String fieldName = "thumbnail";
-        Validator.notBlank(thumbnail, fieldName);
-        Validator.maxLength(thumbnail, MAX_THUMBNAIL_LENGTH, fieldName);
+    private void validatePosterImageUrl(String posterImageUrl) {
+        String fieldName = "posterImageUrl";
+        Validator.notBlank(posterImageUrl, fieldName);
+        Validator.maxLength(posterImageUrl, MAX_POSTER_IMAGE_URL_LENGTH, fieldName);
     }
 
     private void validateFestivalDuration(FestivalDuration festivalDuration) {
@@ -99,14 +97,9 @@ public class Festival extends BaseTimeEntity {
         this.name = name;
     }
 
-    public void changeThumbnail(String thumbnail) {
-        validateThumbnail(thumbnail);
-        this.thumbnail = thumbnail;
-    }
-
-    @Deprecated(forRemoval = true)
-    public void changeDate(LocalDate startDate, LocalDate endDate) {
-        this.festivalDuration = new FestivalDuration(startDate, endDate);
+    public void changePosterImageUrl(String posterImageUrl) {
+        validatePosterImageUrl(posterImageUrl);
+        this.posterImageUrl = posterImageUrl;
     }
 
     public void changeFestivalDuration(FestivalDuration festivalDuration) {
@@ -130,8 +123,8 @@ public class Festival extends BaseTimeEntity {
         return festivalDuration.getEndDate();
     }
 
-    public String getThumbnail() {
-        return thumbnail;
+    public String getPosterImageUrl() {
+        return posterImageUrl;
     }
 
     public School getSchool() {

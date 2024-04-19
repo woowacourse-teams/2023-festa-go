@@ -53,7 +53,7 @@ public class FestivalDetailV1QueryDslRepository extends QueryDslRepositorySuppor
                         ),
                         festival.festivalDuration.startDate,
                         festival.festivalDuration.endDate,
-                        festival.thumbnail,
+                        festival.posterImageUrl,
                         sortedSet(new QSocialMediaV1Response(
                             socialMedia.mediaType,
                             socialMedia.name,

@@ -77,8 +77,8 @@ class AdminFestivalV1ControllerTest {
             String name = "테코대학교 축제";
             LocalDate startDate = LocalDate.parse("2024-01-31");
             LocalDate endDate = LocalDate.parse("2024-02-01");
-            String thumbnail = "https://image.com/image.png";
-            FestivalV1CreateRequest request = new FestivalV1CreateRequest(name, startDate, endDate, thumbnail, 1L);
+            String posterImageUrl = "https://image.com/image.png";
+            FestivalV1CreateRequest request = new FestivalV1CreateRequest(name, startDate, endDate, posterImageUrl, 1L);
 
             @Test
             @WithMockAuth(role = Role.ADMIN)
@@ -126,8 +126,8 @@ class AdminFestivalV1ControllerTest {
             String name = "테코대학교 축제";
             LocalDate startDate = LocalDate.parse("2024-01-31");
             LocalDate endDate = LocalDate.parse("2024-02-01");
-            String thumbnail = "https://image.com/image.png";
-            FestivalV1UpdateRequest request = new FestivalV1UpdateRequest(name, startDate, endDate, thumbnail);
+            String posterImageUrl = "https://image.com/image.png";
+            FestivalV1UpdateRequest request = new FestivalV1UpdateRequest(name, startDate, endDate, posterImageUrl);
 
             @Test
             @WithMockAuth(role = Role.ADMIN)

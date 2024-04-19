@@ -43,7 +43,7 @@ public class FestivalBookmarkV1QueryDslRepository extends QueryDslRepositorySupp
                     festival.name,
                     festival.festivalDuration.startDate,
                     festival.festivalDuration.endDate,
-                    festival.thumbnail,
+                    festival.posterImageUrl,
                     new QSchoolV1Response(
                         school.id,
                         school.name

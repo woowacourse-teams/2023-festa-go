@@ -25,7 +25,7 @@ public class AdminFestivalDetailV1QueryDslRepository extends QueryDslRepositoryS
                         school.name,
                         festival.festivalDuration.startDate,
                         festival.festivalDuration.endDate,
-                        festival.thumbnail,
+                        festival.posterImageUrl,
                         festival.createdAt,
                         festival.updatedAt
                     )

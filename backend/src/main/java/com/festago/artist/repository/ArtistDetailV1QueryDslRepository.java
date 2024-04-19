@@ -98,7 +98,7 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
                 festival.name,
                 festival.festivalDuration.startDate,
                 festival.festivalDuration.endDate,
-                festival.thumbnail,
+                festival.posterImageUrl,
                 festivalQueryInfo.artistInfo))
             .from(stageArtist)
             .innerJoin(stage).on(stageArtist.artistId.eq(artistId).and(stage.id.eq(stageArtist.stageId)))

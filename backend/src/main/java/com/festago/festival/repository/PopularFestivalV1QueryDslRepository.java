@@ -30,7 +30,7 @@ public class PopularFestivalV1QueryDslRepository extends QueryDslRepositorySuppo
             festival.name,
             festival.festivalDuration.startDate,
             festival.festivalDuration.endDate,
-            festival.thumbnail,
+            festival.posterImageUrl,
             new QSchoolV1Response(
                 school.id,
                 school.name
