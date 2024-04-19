@@ -37,6 +37,7 @@
     <string name="festival_detail_tv_dday_in_progress">진행 중</string>
     <string name="festival_detail_tv_dday_format">D%1$s</string>
     <string name="festival_detail_tv_dday_end">종료</string>
+    <string name="festival_detail_tv_empty_stages">아직 라인업이 공개되지 않았어요</string>
 
     <!-- String related to region bottom sheet -->
     <string name="region_bottom_sheet_tv_region">지역별</string>
