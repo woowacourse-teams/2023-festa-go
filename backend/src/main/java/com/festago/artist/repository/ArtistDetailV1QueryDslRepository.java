@@ -96,8 +96,8 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
             new QArtistFestivalDetailV1Response(
                 festival.id,
                 festival.name,
-                festival.startDate,
-                festival.endDate,
+                festival.festivalDuration.startDate,
+                festival.festivalDuration.endDate,
                 festival.thumbnail,
                 festivalQueryInfo.artistInfo))
             .from(stageArtist)
@@ -124,26 +124,26 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
 
     private BooleanExpression getCursorBasedWhere(boolean isPast, LocalDate lastStartDate, Long lastFestivalId) {
         if (isPast) {
-            return festival.startDate.lt(lastStartDate)
-                .or(festival.startDate.eq(lastStartDate)
+            return festival.festivalDuration.startDate.lt(lastStartDate)
+                .or(festival.festivalDuration.startDate.eq(lastStartDate)
                     .and(festival.id.gt(lastFestivalId)));
         }
-        return festival.startDate.gt(lastStartDate)
-            .or(festival.startDate.eq(lastStartDate)
+        return festival.festivalDuration.startDate.gt(lastStartDate)
+            .or(festival.festivalDuration.startDate.eq(lastStartDate)
                 .and(festival.id.gt(lastFestivalId)));
     }
 
     private BooleanExpression getDefaultWhere(boolean isPast, LocalDate currentTime) {
         if (isPast) {
-            return festival.endDate.lt(currentTime);
+            return festival.festivalDuration.endDate.lt(currentTime);
         }
-        return festival.endDate.goe(currentTime);
+        return festival.festivalDuration.endDate.goe(currentTime);
     }
 
     private OrderSpecifier<LocalDate>[] getDynamicOrderBy(Boolean isPast) {
         if (isPast) {
-            return new OrderSpecifier[]{festival.endDate.desc()};
+            return new OrderSpecifier[]{festival.festivalDuration.endDate.desc()};
         }
-        return new OrderSpecifier[]{festival.startDate.asc(), festival.id.asc()};
+        return new OrderSpecifier[]{festival.festivalDuration.startDate.asc(), festival.id.asc()};
     }
 }

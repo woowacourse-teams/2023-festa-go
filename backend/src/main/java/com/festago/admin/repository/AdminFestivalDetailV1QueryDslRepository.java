@@ -23,8 +23,8 @@ public class AdminFestivalDetailV1QueryDslRepository extends QueryDslRepositoryS
                         festival.name,
                         school.id,
                         school.name,
-                        festival.startDate,
-                        festival.endDate,
+                        festival.festivalDuration.startDate,
+                        festival.festivalDuration.endDate,
                         festival.thumbnail,
                         festival.createdAt,
                         festival.updatedAt

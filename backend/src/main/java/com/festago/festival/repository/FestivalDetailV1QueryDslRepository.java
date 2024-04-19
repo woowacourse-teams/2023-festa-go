@@ -51,8 +51,8 @@ public class FestivalDetailV1QueryDslRepository extends QueryDslRepositorySuppor
                             school.id,
                             school.name
                         ),
-                        festival.startDate,
-                        festival.endDate,
+                        festival.festivalDuration.startDate,
+                        festival.festivalDuration.endDate,
                         festival.thumbnail,
                         sortedSet(new QSocialMediaV1Response(
                             socialMedia.mediaType,

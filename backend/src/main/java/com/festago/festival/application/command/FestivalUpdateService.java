@@ -1,6 +1,7 @@
 package com.festago.festival.application.command;
 
 import com.festago.festival.domain.Festival;
+import com.festago.festival.domain.FestivalDuration;
 import com.festago.festival.domain.validator.FestivalUpdateValidator;
 import com.festago.festival.dto.command.FestivalUpdateCommand;
 import com.festago.festival.repository.FestivalRepository;
@@ -24,7 +25,7 @@ public class FestivalUpdateService {
         Festival festival = festivalRepository.getOrThrow(festivalId);
         festival.changeName(command.name());
         festival.changeThumbnail(command.posterImageUrl());
-        festival.changeDate(command.startDate(), command.endDate());
+        festival.changeFestivalDuration(new FestivalDuration(command.startDate(), command.endDate()));
         validators.forEach(validator -> validator.validate(festival));
     }
 }

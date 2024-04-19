@@ -66,8 +66,8 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         List<SchoolFestivalV1Response> result =
             select(new QSchoolFestivalV1Response(festival.id,
                     festival.name,
-                    festival.startDate,
-                    festival.endDate,
+                    festival.festivalDuration.startDate,
+                    festival.festivalDuration.endDate,
                     festival.thumbnail,
                     festivalQueryInfo.artistInfo
                 )
@@ -87,21 +87,21 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
 
     private BooleanExpression addPhaseOption(boolean isPast, LocalDate today) {
         if (isPast) {
-            return festival.endDate.lt(today);
+            return festival.festivalDuration.endDate.lt(today);
         }
 
-        return festival.endDate.goe(today);
+        return festival.festivalDuration.endDate.goe(today);
     }
 
     private BooleanExpression addPagingOption(Long lastFestivalId, LocalDate lastStartDate, boolean isPast) {
         if (isNotFirstPage(lastFestivalId, lastStartDate)) {
             if (isPast) {
-                return festival.startDate.lt(lastStartDate)
-                    .or(festival.startDate.eq(lastStartDate)
+                return festival.festivalDuration.startDate.lt(lastStartDate)
+                    .or(festival.festivalDuration.startDate.eq(lastStartDate)
                         .and(festival.id.gt(lastFestivalId)));
             }
-            return festival.startDate.gt(lastStartDate)
-                .or(festival.startDate.eq(lastStartDate)
+            return festival.festivalDuration.startDate.gt(lastStartDate)
+                .or(festival.festivalDuration.startDate.eq(lastStartDate)
                     .and(festival.id.gt(lastFestivalId)));
         }
 
@@ -114,10 +114,10 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
 
     private OrderSpecifier<LocalDate> addOrderOption(boolean isPast) {
         if (isPast) {
-            return festival.endDate.desc();
+            return festival.festivalDuration.endDate.desc();
         }
 
-        return festival.startDate.asc();
+        return festival.festivalDuration.startDate.asc();
     }
 
     private Slice<SchoolFestivalV1Response> createResponse(

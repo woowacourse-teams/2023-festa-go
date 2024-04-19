@@ -1,11 +1,10 @@
 package com.festago.festival.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.common.exception.BadRequestException;
-import com.festago.common.exception.ErrorCode;
 import com.festago.common.util.Validator;
 import com.festago.school.domain.School;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,11 +34,8 @@ public class Festival extends BaseTimeEntity {
     @Size(max = MAX_NAME_LENGTH)
     private String name;
 
-    @NotNull
-    private LocalDate startDate;
-
-    @NotNull
-    private LocalDate endDate;
+    @Embedded
+    private FestivalDuration festivalDuration;
 
     @NotNull
     @Size(max = MAX_THUMBNAIL_LENGTH)
@@ -50,28 +46,26 @@ public class Festival extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private School school;
 
-    public Festival(String name, LocalDate startDate, LocalDate endDate, School school) {
-        this(null, name, startDate, endDate, DEFAULT_THUMBNAIL, school);
+    public Festival(String name, FestivalDuration festivalDuration, School school) {
+        this(null, name, festivalDuration, DEFAULT_THUMBNAIL, school);
     }
 
-    public Festival(String name, LocalDate startDate, LocalDate endDate, String thumbnail, School school) {
-        this(null, name, startDate, endDate, thumbnail, school);
+    public Festival(String name, FestivalDuration festivalDuration, String thumbnail, School school) {
+        this(null, name, festivalDuration, thumbnail, school);
     }
 
-    public Festival(Long id, String name, LocalDate startDate, LocalDate endDate, String thumbnail, School school) {
-        validate(name, startDate, endDate, thumbnail);
+    public Festival(Long id, String name, FestivalDuration festivalDuration, String thumbnail, School school) {
+        validate(name, thumbnail);
         this.id = id;
         this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.festivalDuration = festivalDuration;
         this.thumbnail = thumbnail;
         this.school = school;
     }
 
-    private void validate(String name, LocalDate startDate, LocalDate endDate, String thumbnail) {
+    private void validate(String name, String thumbnail) {
         validateName(name);
         validateThumbnail(thumbnail);
-        validateDate(startDate, endDate);
     }
 
     private void validateName(String name) {
@@ -86,21 +80,13 @@ public class Festival extends BaseTimeEntity {
         Validator.maxLength(thumbnail, MAX_THUMBNAIL_LENGTH, fieldName);
     }
 
-    private void validateDate(LocalDate startDate, LocalDate endDate) {
-        Validator.notNull(startDate, "startDate");
-        Validator.notNull(endDate, "endDate");
-        if (startDate.isAfter(endDate)) {
-            throw new BadRequestException(ErrorCode.INVALID_FESTIVAL_DURATION);
-        }
-    }
-
     public boolean isBeforeStartDate(LocalDate currentDate) {
-        return startDate.isBefore(currentDate);
+        return festivalDuration.isBeforeStartDate(currentDate);
     }
 
     public boolean isNotInDuration(LocalDateTime time) {
         LocalDate date = time.toLocalDate();
-        return date.isBefore(startDate) || date.isAfter(endDate);
+        return festivalDuration.isNotInDuration(date);
     }
 
     public void changeName(String name) {
@@ -113,10 +99,14 @@ public class Festival extends BaseTimeEntity {
         this.thumbnail = thumbnail;
     }
 
+    @Deprecated(forRemoval = true)
     public void changeDate(LocalDate startDate, LocalDate endDate) {
-        validateDate(startDate, endDate);
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.festivalDuration = new FestivalDuration(startDate, endDate);
+    }
+
+    public void changeFestivalDuration(FestivalDuration festivalDuration) {
+        Validator.notNull(festivalDuration, "festivalDuration");
+        this.festivalDuration = festivalDuration;
     }
 
     public Long getId() {
@@ -128,11 +118,11 @@ public class Festival extends BaseTimeEntity {
     }
 
     public LocalDate getStartDate() {
-        return startDate;
+        return festivalDuration.getStartDate();
     }
 
     public LocalDate getEndDate() {
-        return endDate;
+        return festivalDuration.getEndDate();
     }
 
     public String getThumbnail() {

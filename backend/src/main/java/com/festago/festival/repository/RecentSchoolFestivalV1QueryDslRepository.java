@@ -24,10 +24,10 @@ public class RecentSchoolFestivalV1QueryDslRepository extends QueryDslRepository
         return select(
             new QSchoolSearchUpcomingFestivalV1Response(
                 festival.school.id,
-                festival.startDate.min()
+                festival.festivalDuration.startDate.min()
             ))
             .from(festival)
-            .where(festival.school.id.in(schoolIds).and(festival.endDate.goe(now)))
+            .where(festival.school.id.in(schoolIds).and(festival.festivalDuration.endDate.goe(now)))
             .groupBy(festival.school.id)
             .fetch();
     }
