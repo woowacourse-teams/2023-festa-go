@@ -29,7 +29,7 @@ public class FestivalDuration {
         }
     }
 
-    public boolean isBeforeStartDate(LocalDate date) {
+    public boolean isStartDateBeforeTo(LocalDate date) {
         return startDate.isBefore(date);
     }
 

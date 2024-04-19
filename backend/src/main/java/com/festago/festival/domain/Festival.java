@@ -55,17 +55,15 @@ public class Festival extends BaseTimeEntity {
     }
 
     public Festival(Long id, String name, FestivalDuration festivalDuration, String thumbnail, School school) {
-        validate(name, thumbnail);
+        validateName(name);
+        validateFestivalDuration(festivalDuration);
+        validateThumbnail(thumbnail);
+        validateSchool(school);
         this.id = id;
         this.name = name;
         this.festivalDuration = festivalDuration;
         this.thumbnail = thumbnail;
         this.school = school;
-    }
-
-    private void validate(String name, String thumbnail) {
-        validateName(name);
-        validateThumbnail(thumbnail);
     }
 
     private void validateName(String name) {
@@ -80,13 +78,20 @@ public class Festival extends BaseTimeEntity {
         Validator.maxLength(thumbnail, MAX_THUMBNAIL_LENGTH, fieldName);
     }
 
-    public boolean isBeforeStartDate(LocalDate currentDate) {
-        return festivalDuration.isBeforeStartDate(currentDate);
+    private void validateFestivalDuration(FestivalDuration festivalDuration) {
+        Validator.notNull(festivalDuration, "festivalDuration");
     }
 
-    public boolean isNotInDuration(LocalDateTime time) {
-        LocalDate date = time.toLocalDate();
-        return festivalDuration.isNotInDuration(date);
+    private void validateSchool(School school) {
+        Validator.notNull(school, "school");
+    }
+
+    public boolean isStartDateBeforeTo(LocalDate date) {
+        return festivalDuration.isStartDateBeforeTo(date);
+    }
+
+    public boolean isNotInDuration(LocalDateTime dateTime) {
+        return festivalDuration.isNotInDuration(dateTime.toLocalDate());
     }
 
     public void changeName(String name) {
@@ -105,7 +110,7 @@ public class Festival extends BaseTimeEntity {
     }
 
     public void changeFestivalDuration(FestivalDuration festivalDuration) {
-        Validator.notNull(festivalDuration, "festivalDuration");
+        validateFestivalDuration(festivalDuration);
         this.festivalDuration = festivalDuration;
     }
 
