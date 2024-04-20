@@ -47,7 +47,6 @@ class ArtistDetailAdapter : ListAdapter<Any, ArtistDetailViewHolder>(diffUtil) {
 
                 else -> false
             }
-
         }
     }
 }
