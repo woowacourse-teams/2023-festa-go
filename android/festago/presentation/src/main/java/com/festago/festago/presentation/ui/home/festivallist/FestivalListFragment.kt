@@ -83,8 +83,8 @@ class FestivalListFragment : Fragment() {
             binding.srlFestivalList.isRefreshing = false
         }
         binding.srlFestivalList.setDistanceToTriggerSync(400)
-        binding.ivSearch.setOnClickListener { // 임시 연결
-            showSchoolDetail()
+        binding.ivSearch.setOnClickListener {
+            showSearch()
         }
         binding.ivAlarm.setOnClickListener {
             showNotificationList()
@@ -206,7 +206,7 @@ class FestivalListFragment : Fragment() {
         },
     )
 
-    private fun showSchoolDetail() {
+    private fun showSearch() {
         findNavController().navigate(actionFestivalListFragmentToSearchFragment())
     }
 
