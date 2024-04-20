@@ -56,6 +56,25 @@ class SchoolDetailViewModel @Inject constructor(
         }
     }
 
+    fun loadMoreSchoolFestivals(schoolId: Long) {
+        val successUiState = uiState.value as? SchoolDetailUiState.Success ?: return
+
+        viewModelScope.launch {
+            val currentFestivals = successUiState.festivals
+
+            schoolRepository.loadSchoolFestivals(
+                schoolId = schoolId,
+                lastFestivalId = currentFestivals.lastOrNull()?.id?.toInt(),
+                lastStartDate = currentFestivals.lastOrNull()?.startDate
+            ).onSuccess { festivalsPage ->
+                _uiState.value = successUiState.copy(
+                    festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
+                    isLast = festivalsPage.isLastPage
+                )
+            }
+        }
+    }
+
     private fun Festival.toUiState() = FestivalItemUiState(
         id = id,
         name = name,
