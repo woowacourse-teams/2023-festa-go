@@ -1,6 +1,7 @@
 package com.festago.support.fixture;
 
 import com.festago.festival.domain.Festival;
+import com.festago.festival.domain.FestivalDuration;
 import com.festago.school.domain.School;
 import java.time.LocalDate;
 
@@ -51,6 +52,7 @@ public class FestivalFixture extends BaseFixture {
     }
 
     public Festival build() {
-        return new Festival(id, uniqueValue("페스타고 대학교 축제", name), startDate, endDate, posterImageUrl, school);
+        return new Festival(id, uniqueValue("페스타고 대학교 축제", name), new FestivalDuration(startDate, endDate),
+            posterImageUrl, school);
     }
 }

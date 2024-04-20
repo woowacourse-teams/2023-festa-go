@@ -23,12 +23,9 @@ public class MockFestivalsGenerator {
         return schools.stream()
             .map(school -> {
                 FestivalDuration festivalDuration = festivalDurationGenerator.generateFestivalDuration(now);
-                LocalDate startDate = festivalDuration.getStartDate();
-                LocalDate endDate = festivalDuration.getEndDate();
                 return new Festival(
-                    school.getName() + " " + startDate.format(DATE_TIME_FORMATTER) + " 축제",
-                    startDate,
-                    endDate,
+                    school.getName() + " " + festivalDuration.getStartDate().format(DATE_TIME_FORMATTER) + " 축제",
+                    festivalDuration,
                     school
                 );
             })

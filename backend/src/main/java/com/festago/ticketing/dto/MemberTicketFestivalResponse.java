@@ -11,6 +11,6 @@ public record MemberTicketFestivalResponse(
         return new MemberTicketFestivalResponse(
             festival.getId(),
             festival.getName(),
-            festival.getThumbnail());
+            festival.getPosterImageUrl());
     }
 }

@@ -63,12 +63,12 @@ class FestivalCreateServiceTest extends ApplicationIntegrationTest {
             String festivalName = "테코대학교 축제";
             LocalDate startDate = now.minusDays(1);
             LocalDate endDate = now.plusDays(3);
-            String thumbnail = "https://image.com/image.png";
+            String posterImageUrl = "https://image.com/image.png";
             var command = new FestivalCreateCommand(
                 festivalName,
                 startDate,
                 endDate,
-                thumbnail,
+                posterImageUrl,
                 schoolId
             );
 
@@ -84,12 +84,12 @@ class FestivalCreateServiceTest extends ApplicationIntegrationTest {
             String festivalName = "테코대학교 축제";
             LocalDate startDate = now.plusDays(1);
             LocalDate endDate = now.plusDays(3);
-            String thumbnail = "https://image.com/image.png";
+            String posterImageUrl = "https://image.com/image.png";
             var command = new FestivalCreateCommand(
                 festivalName,
                 startDate,
                 endDate,
-                thumbnail,
+                posterImageUrl,
                 schoolId
             );
 
