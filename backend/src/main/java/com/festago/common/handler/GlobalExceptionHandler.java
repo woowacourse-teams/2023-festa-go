@@ -16,6 +16,7 @@ import com.festago.common.exception.dto.ValidErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -31,6 +32,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private static final Logger log = LoggerFactory.getLogger("ErrorLogger");
     private static final String LOG_FORMAT_INFO = "\n[🔵INFO] - ({} {})\n(id: {}, role: {})\n{}\n {}: {}";
     private static final String LOG_FORMAT_WARN = "\n[🟠WARN] - ({} {})\n(id: {}, role: {})";
     private static final String LOG_FORMAT_ERROR = "\n[🔴ERROR] - ({} {})\n(id: {}, role: {})";
@@ -60,7 +62,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
 
     private final AuthenticateContext authenticateContext;
-    private final Logger errorLogger;
 
     @ExceptionHandler(InvalidMediaTypeException.class)
     public ResponseEntity<ErrorResponse> handle(InvalidMediaTypeException e) {
@@ -133,23 +134,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private void logInfo(FestaGoException e, HttpServletRequest request) {
-        if (errorLogger.isInfoEnabled()) {
-            errorLogger.info(LOG_FORMAT_INFO, request.getMethod(), request.getRequestURI(), authenticateContext.getId(),
-                authenticateContext.getRole(), e.getErrorCode(), e.getClass().getName(), e.getMessage());
-        }
+        log.info(LOG_FORMAT_INFO, request.getMethod(), request.getRequestURI(), authenticateContext.getId(),
+            authenticateContext.getRole(), e.getErrorCode(), e.getClass().getName(), e.getMessage());
     }
 
     private void logWarn(FestaGoException e, HttpServletRequest request) {
-        if (errorLogger.isWarnEnabled()) {
-            errorLogger.warn(LOG_FORMAT_WARN, request.getMethod(), request.getRequestURI(),
-                authenticateContext.getId(), authenticateContext.getRole(), e);
-        }
+        log.warn(LOG_FORMAT_WARN, request.getMethod(), request.getRequestURI(),
+            authenticateContext.getId(), authenticateContext.getRole(), e);
     }
 
     private void logError(Exception e, HttpServletRequest request) {
-        if (errorLogger.isErrorEnabled()) {
-            errorLogger.error(LOG_FORMAT_ERROR, request.getMethod(), request.getRequestURI(),
-                authenticateContext.getId(), authenticateContext.getRole(), e);
-        }
+        log.error(LOG_FORMAT_ERROR, request.getMethod(), request.getRequestURI(),
+            authenticateContext.getId(), authenticateContext.getRole(), e);
     }
 }
