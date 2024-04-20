@@ -9,6 +9,7 @@ class FestivalListMoreItemViewHolder(val binding: ItemFestivalListMoreItemBindin
     FestivalListViewHolder(binding) {
 
     fun bind(festivalMoreItemUiState: FestivalMoreItemUiState) {
+        festivalMoreItemUiState.requestMoreItem()
     }
 
     companion object {

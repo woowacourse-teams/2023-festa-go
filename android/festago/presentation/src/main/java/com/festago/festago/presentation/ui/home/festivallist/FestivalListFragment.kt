@@ -11,7 +11,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
@@ -74,7 +73,7 @@ class FestivalListFragment : Fragment() {
     private fun initView() {
         vm.initFestivalList()
         initViewPager()
-        initRecyclerView()
+        initRecyclerViewDecoration()
         initRefresh()
     }
 
@@ -105,35 +104,7 @@ class FestivalListFragment : Fragment() {
         binding.rvFestivalList.adapter = festivalListAdapter
     }
 
-    private fun initRecyclerView() {
-        initScrollEvent()
-        initDecoration()
-    }
-
-    private fun initScrollEvent() {
-        binding.rvFestivalList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val festivalListUiState = vm.uiState.value as? FestivalListUiState.Success ?: return
-                if (festivalListUiState.isLastPage) return
-                if (festivalListUiState.festivals.isEmpty()) return
-
-                val lastVisibleItemPosition =
-                    (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
-
-                val itemTotalCount = recyclerView.adapter!!.itemCount - 1
-                if (lastVisibleItemPosition == itemTotalCount) {
-                    vm.loadFestivals(
-                        schoolRegion = festivalListUiState.schoolRegion,
-                        isLoadMore = true,
-                    )
-                }
-            }
-        })
-    }
-
-    private fun initDecoration() {
+    private fun initRecyclerViewDecoration() {
         binding.rvFestivalList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
@@ -207,8 +178,18 @@ class FestivalListFragment : Fragment() {
                 },
             )
             addAll(festivals)
-            if (!isLastPage) add(FestivalMoreItemUiState)
+            if (!isLastPage) add(FestivalMoreItemUiState(::requestMoreFestival))
         }.toList()
+    }
+
+    private fun requestMoreFestival() {
+        val festivalListUiState = vm.uiState.value as? FestivalListUiState.Success ?: return
+        if (festivalListUiState.isLastPage) return
+        if (festivalListUiState.festivals.isEmpty()) return
+        vm.loadFestivals(
+            schoolRegion = festivalListUiState.schoolRegion,
+            isLoadMore = true,
+        )
     }
 
     private fun FestivalListUiState.Success.createRegionDialog(
