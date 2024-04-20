@@ -26,15 +26,15 @@ public class SchoolFestivalsV1QueryDslRepository {
                 new QSchoolFestivalV1Response(
                     festival.id,
                     festival.name,
-                    festival.startDate,
-                    festival.endDate,
-                    festival.thumbnail,
+                    festival.festivalDuration.startDate,
+                    festival.festivalDuration.endDate,
+                    festival.posterImageUrl,
                     festivalQueryInfo.artistInfo
                 )
             )
             .from(festival)
             .leftJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
-            .where(festival.school.id.eq(schoolId).and(festival.endDate.goe(today)))
+            .where(festival.school.id.eq(schoolId).and(festival.festivalDuration.endDate.goe(today)))
             .stream()
             .sorted(Comparator.comparing(SchoolFestivalV1Response::startDate))
             .toList();
@@ -48,15 +48,15 @@ public class SchoolFestivalsV1QueryDslRepository {
                 new QSchoolFestivalV1Response(
                     festival.id,
                     festival.name,
-                    festival.startDate,
-                    festival.endDate,
-                    festival.thumbnail,
+                    festival.festivalDuration.startDate,
+                    festival.festivalDuration.endDate,
+                    festival.posterImageUrl,
                     festivalQueryInfo.artistInfo
                 )
             )
             .from(festival)
             .leftJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
-            .where(festival.school.id.eq(schoolId).and(festival.endDate.lt(today)))
+            .where(festival.school.id.eq(schoolId).and(festival.festivalDuration.endDate.lt(today)))
             .stream()
             .sorted(Comparator.comparing(SchoolFestivalV1Response::endDate).reversed())
             .toList();
