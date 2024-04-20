@@ -124,12 +124,12 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         Pageable pageable,
         List<SchoolFestivalV1Response> content
     ) {
-        boolean hasNext = true;
+        boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {
             content.remove(content.size() - 1);
-            hasNext = false;
+            hasNext = true;
         }
 
-        return new SliceImpl(content, pageable, hasNext);
+        return new SliceImpl<>(content, pageable, hasNext);
     }
 }
