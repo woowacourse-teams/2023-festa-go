@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
+import com.festago.festago.presentation.ui.schooldetail.uistate.MoreItemUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,7 +84,14 @@ class SchoolDetailFragment : Fragment() {
     private fun handleSuccess(uiState: SchoolDetailUiState.Success) {
         binding.successUiState = uiState
         binding.ivSchoolBackground.setColorFilter(Color.parseColor("#66000000"))
-        adapter.submitList(uiState.festivals)
+
+        val items: List<Any> = if (uiState.isLast) {
+            uiState.festivals
+        } else {
+            uiState.festivals + MoreItemUiState { vm.loadMoreSchoolFestivals(args.schoolId) }
+        }
+        adapter.submitList(items)
+
         binding.llcSchoolSocialMedia.removeAllViews()
 
         uiState.schoolInfo.socialMedia.forEach { media ->
