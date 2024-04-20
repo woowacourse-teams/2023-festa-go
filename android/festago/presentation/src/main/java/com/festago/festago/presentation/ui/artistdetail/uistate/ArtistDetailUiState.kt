@@ -10,5 +10,6 @@ sealed interface ArtistDetailUiState {
     data class Success(
         val artist: ArtistDetail,
         val stages: List<FestivalItemUiState>,
+        val isLast: Boolean,
     ) : ArtistDetailUiState
 }
