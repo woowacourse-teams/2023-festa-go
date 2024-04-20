@@ -51,7 +51,6 @@ class SchoolFestivalListAdapter : ListAdapter<Any, SchoolDetailViewHolder>(diffU
 
                 else -> false
             }
-
         }
     }
 }
