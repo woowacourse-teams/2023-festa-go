@@ -16,8 +16,12 @@ public class AdminStepDefinitions {
 
     @Given("어드민 계정으로 로그인한다.")
     public void loginAdmin() {
-        adminAuthCommandService.initializeRootAdmin("1234");
         var adminLoginResult = adminAuthCommandService.login(new AdminLoginCommand("admin", "1234"));
         cucumberClient.setToken(adminLoginResult.accessToken());
+    }
+
+    @Given("어드민 계정을 활성화한다.")
+    public void initializeAdmin() {
+        adminAuthCommandService.initializeRootAdmin("1234");
     }
 }

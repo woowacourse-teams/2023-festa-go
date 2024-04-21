@@ -10,9 +10,11 @@ import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
 import com.festago.auth.dto.LoginResponse;
+import com.festago.auth.dto.v1.TokenResponse;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
 import com.festago.member.domain.Member;
 import com.festago.support.fixture.MemberFixture;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -49,7 +51,7 @@ class AuthFacadeServiceTest {
             .build();
 
         given(authProvider.provide(any(AuthPayload.class)))
-            .willReturn("Bearer token");
+            .willReturn(new TokenResponse("Bearer token", LocalDateTime.now().plusWeeks(1)));
 
         given(authService.login(any(UserInfo.class)))
             .willReturn(new LoginMemberDto(false, member.getId(), member.getNickname()));

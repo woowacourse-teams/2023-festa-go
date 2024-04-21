@@ -6,6 +6,7 @@ import com.festago.auth.application.OAuth2Client;
 import com.festago.auth.application.OAuth2Clients;
 import com.festago.auth.infrastructure.JwtAuthExtractor;
 import com.festago.auth.infrastructure.JwtAuthProvider;
+import java.time.Clock;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,13 +33,13 @@ public class AuthConfig {
     }
 
     @Bean
-    public AuthProvider authProvider() {
-        return new JwtAuthProvider(secretKey, EXPIRATION_MINUTES);
+    public AuthProvider authProvider(Clock clock) {
+        return new JwtAuthProvider(secretKey, EXPIRATION_MINUTES, clock);
     }
 
     @Bean
-    public AuthExtractor authExtractor() {
-        return new JwtAuthExtractor(secretKey);
+    public AuthExtractor authExtractor(Clock clock) {
+        return new JwtAuthExtractor(secretKey, clock);
     }
 
     @Bean

@@ -31,7 +31,7 @@ public class AdminAuthCommandService {
     public AdminLoginResult login(AdminLoginCommand command) {
         Admin admin = findAdminWithAuthenticate(command);
         AuthPayload authPayload = new AuthPayload(admin.getId(), Role.ADMIN);
-        String accessToken = authProvider.provide(authPayload);
+        String accessToken = authProvider.provide(authPayload).token();
         return new AdminLoginResult(
             admin.getUsername(),
             getAuthType(admin),

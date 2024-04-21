@@ -14,6 +14,9 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,9 +28,10 @@ public class JwtAuthExtractor implements AuthExtractor {
 
     private final JwtParser jwtParser;
 
-    public JwtAuthExtractor(String secretKey) {
+    public JwtAuthExtractor(String secretKey, Clock clock) {
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         this.jwtParser = Jwts.parserBuilder()
+            .setClock(() -> Timestamp.valueOf(LocalDateTime.now(clock)))
             .setSigningKey(key)
             .build();
     }
