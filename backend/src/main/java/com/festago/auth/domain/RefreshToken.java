@@ -1,0 +1,45 @@
+package com.festago.auth.domain;
+
+import com.festago.common.domain.BaseTimeEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import java.time.LocalDateTime;
+import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Persistable;
+
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class RefreshToken extends BaseTimeEntity implements Persistable<UUID> {
+
+    @Id
+    private UUID id;
+
+    private Long memberId;
+
+    private LocalDateTime expiredAt;
+
+    public RefreshToken(Long memberId, LocalDateTime expiredAt) {
+        this.id = UUID.randomUUID();
+        this.memberId = memberId;
+        this.expiredAt = expiredAt;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
+    public boolean isNew() {
+        return getCreatedAt() == null;
+    }
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public LocalDateTime getExpiredAt() {
+        return expiredAt;
+    }
+}
