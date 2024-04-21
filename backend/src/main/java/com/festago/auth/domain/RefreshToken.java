@@ -13,6 +13,8 @@ import org.springframework.data.domain.Persistable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshToken extends BaseTimeEntity implements Persistable<UUID> {
 
+    private static final long EXPIRED_OFFSET_DAY = 7;
+
     @Id
     private UUID id;
 
@@ -24,6 +26,10 @@ public class RefreshToken extends BaseTimeEntity implements Persistable<UUID> {
         this.id = UUID.randomUUID();
         this.memberId = memberId;
         this.expiredAt = expiredAt;
+    }
+
+    public static RefreshToken of(Long memberId, LocalDateTime now) {
+        return new RefreshToken(memberId, now.plusDays(EXPIRED_OFFSET_DAY));
     }
 
     public UUID getId() {
