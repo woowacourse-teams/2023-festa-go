@@ -42,6 +42,7 @@ public enum ErrorCode {
     BROAD_SEARCH_KEYWORD("더 자세한 검색어로 입력해야합니다."),
     INVALID_KEYWORD("유효하지 않은 키워드 입니다."),
     DUPLICATE_SOCIAL_MEDIA("이미 존재하는 소셜미디어 입니다."),
+    OAUTH2_INVALID_CODE("잘못된 OAuth2 Code 입니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
@@ -73,6 +74,7 @@ public enum ErrorCode {
     FOR_TEST_ERROR("테스트용 에러입니다."),
     FAIL_SEND_FCM_MESSAGE("FCM Message 전송에 실패했습니다."),
     TICKET_SEQUENCE_DATA_ERROR("입장 순서 값의 데이터 정합성에 문제가 발생했습니다."),
+    OAUTH2_INVALID_REQUEST("알 수 없는 OAuth2 에러가 발생했습니다.")
     ;
 
     private final String message;
