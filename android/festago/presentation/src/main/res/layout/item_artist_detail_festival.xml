@@ -79,8 +79,8 @@
             android:maxLines="1"
             android:text="@{item.name}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ivFestivalImage"
-            app:layout_constraintTop_toTopOf="@+id/ivFestivalImage"
+            app:layout_constraintStart_toEndOf="@id/ivFestivalImage"
+            app:layout_constraintTop_toTopOf="@id/ivFestivalImage"
             tools:text="중앙대학교 청진난만 중앙대학교 천진난만" />
 
         <TextView
@@ -89,8 +89,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{@string/festival_list_tv_date_range_format(item.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),item.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
-            app:layout_constraintStart_toStartOf="@+id/tvFestivalName"
-            app:layout_constraintTop_toBottomOf="@+id/tvFestivalName"
+            app:layout_constraintStart_toStartOf="@id/tvFestivalName"
+            app:layout_constraintTop_toBottomOf="@id/tvFestivalName"
             tools:text="21.10.10 ~ 21.10.12" />
 
         <androidx.recyclerview.widget.RecyclerView

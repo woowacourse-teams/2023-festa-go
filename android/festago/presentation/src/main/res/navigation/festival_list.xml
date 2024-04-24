@@ -13,23 +13,31 @@
         <action
             android:id="@+id/action_festivalListFragment_to_schoolDetailFragment"
             app:destination="@id/schoolDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_festivalListFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_festivalListFragment_to_festivalDetailFragment"
             app:destination="@id/festivalDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_festivalListFragment_to_searchFragment"
             app:destination="@id/searchFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/artistDetailFragment"
@@ -42,20 +50,24 @@
         <action
             android:id="@+id/action_artistDetailFragment_to_schoolDetailFragment"
             app:destination="@id/schoolDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_artistDetailFragment_self"
             app:destination="@id/artistDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"
-            app:popUpToSaveState="true"
-            app:restoreState="true" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_artistDetailFragment_to_festivalDetailFragment"
             app:destination="@id/festivalDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
     <fragment
         android:id="@+id/schoolDetailFragment"
@@ -65,16 +77,20 @@
         <action
             android:id="@+id/action_schoolDetailFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
         <argument
             android:name="schoolId"
             app:argType="long" />
         <action
             android:id="@+id/action_schoolDetailFragment_to_festivalDetailFragment"
             app:destination="@id/festivalDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
 
     </fragment>
     <fragment
@@ -88,8 +104,10 @@
         <action
             android:id="@+id/action_festivalDetailFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -99,18 +117,24 @@
         <action
             android:id="@+id/action_searchFragment_to_schoolDetailFragment"
             app:destination="@id/schoolDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_searchFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_searchFragment_to_festivalDetailFragment"
             app:destination="@id/festivalDetailFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
 
 </navigation>
