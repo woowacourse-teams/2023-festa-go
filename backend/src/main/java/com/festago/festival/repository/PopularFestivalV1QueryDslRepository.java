@@ -28,9 +28,9 @@ public class PopularFestivalV1QueryDslRepository extends QueryDslRepositorySuppo
         return select(new QFestivalV1Response(
             festival.id,
             festival.name,
-            festival.startDate,
-            festival.endDate,
-            festival.thumbnail,
+            festival.festivalDuration.startDate,
+            festival.festivalDuration.endDate,
+            festival.posterImageUrl,
             new QSchoolV1Response(
                 school.id,
                 school.name

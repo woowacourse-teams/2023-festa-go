@@ -13,7 +13,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
 import org.slf4j.event.Level;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -31,14 +30,12 @@ public class LogRequestBodyAspect {
 
     private final Map<Level, BiConsumer<String, String>> loggerMap = new EnumMap<>(Level.class);
     private final ObjectMapper objectMapper;
-    private final Logger errorLogger;
 
-    public LogRequestBodyAspect(ObjectMapper objectMapper, Logger errorLogger) {
+    public LogRequestBodyAspect(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-        this.errorLogger = errorLogger;
-        loggerMap.put(Level.INFO, this.errorLogger::info);
-        loggerMap.put(Level.WARN, this.errorLogger::warn);
-        loggerMap.put(Level.ERROR, this.errorLogger::error);
+        loggerMap.put(Level.INFO, log::info);
+        loggerMap.put(Level.WARN, log::warn);
+        loggerMap.put(Level.ERROR, log::error);
     }
 
     @Around("@annotation(LogRequestBody)")
@@ -49,7 +46,7 @@ public class LogRequestBodyAspect {
         Level level = annotation.level();
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
-        if (attributes == null || !errorLogger.isEnabledForLevel(level)) {
+        if (attributes == null || !log.isEnabledForLevel(level)) {
             return pjp.proceed();
         }
         HttpServletRequest request = attributes.getRequest();

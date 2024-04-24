@@ -45,9 +45,9 @@ public class FestivalV1QueryDslRepository extends QueryDslRepositorySupport {
         return select(new QFestivalV1Response(
             festival.id,
             festival.name,
-            festival.startDate,
-            festival.endDate,
-            festival.thumbnail,
+            festival.festivalDuration.startDate,
+            festival.festivalDuration.endDate,
+            festival.posterImageUrl,
             new QSchoolV1Response(
                 school.id,
                 school.name
@@ -94,16 +94,16 @@ public class FestivalV1QueryDslRepository extends QueryDslRepositorySupport {
         LocalDate lastStartDate
     ) {
         return switch (filter) {
-            case PLANNED -> festival.startDate.gt(lastStartDate)
-                .or(festival.startDate.eq(lastStartDate)
+            case PLANNED -> festival.festivalDuration.startDate.gt(lastStartDate)
+                .or(festival.festivalDuration.startDate.eq(lastStartDate)
                     .and(festival.id.gt(lastFestivalId)));
 
-            case PROGRESS -> festival.startDate.lt(lastStartDate)
-                .or(festival.startDate.eq(lastStartDate)
+            case PROGRESS -> festival.festivalDuration.startDate.lt(lastStartDate)
+                .or(festival.festivalDuration.startDate.eq(lastStartDate)
                     .and(festival.id.gt(lastFestivalId)))
-                .and(festival.endDate.goe(currentTime));
+                .and(festival.festivalDuration.endDate.goe(currentTime));
 
-            case END -> festival.endDate.lt(currentTime);
+            case END -> festival.festivalDuration.endDate.lt(currentTime);
         };
     }
 
@@ -112,12 +112,12 @@ public class FestivalV1QueryDslRepository extends QueryDslRepositorySupport {
         LocalDate currentTime
     ) {
         return switch (filter) {
-            case PLANNED -> festival.startDate.gt(currentTime);
+            case PLANNED -> festival.festivalDuration.startDate.gt(currentTime);
 
-            case PROGRESS -> festival.startDate.loe(currentTime)
-                .and(festival.endDate.goe(currentTime));
+            case PROGRESS -> festival.festivalDuration.startDate.loe(currentTime)
+                .and(festival.festivalDuration.endDate.goe(currentTime));
 
-            case END -> festival.endDate.lt(currentTime);
+            case END -> festival.festivalDuration.endDate.lt(currentTime);
         };
     }
 
@@ -130,9 +130,9 @@ public class FestivalV1QueryDslRepository extends QueryDslRepositorySupport {
 
     private OrderSpecifier<LocalDate>[] dynamicOrderBy(FestivalFilter filter) {
         return switch (filter) {
-            case PLANNED -> new OrderSpecifier[]{festival.startDate.asc(), festival.id.asc()};
-            case PROGRESS -> new OrderSpecifier[]{festival.startDate.desc(), festival.id.asc()};
-            case END -> new OrderSpecifier[]{festival.endDate.desc()};
+            case PLANNED -> new OrderSpecifier[]{festival.festivalDuration.startDate.asc(), festival.id.asc()};
+            case PROGRESS -> new OrderSpecifier[]{festival.festivalDuration.startDate.desc(), festival.id.asc()};
+            case END -> new OrderSpecifier[]{festival.festivalDuration.endDate.desc()};
         };
     }
 

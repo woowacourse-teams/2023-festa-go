@@ -59,12 +59,12 @@ class FestivalUpdateServiceTest extends ApplicationIntegrationTest {
             String newFestivalName = "변경된 축제";
             LocalDate newStartDate = now.minusDays(1);
             LocalDate newEndDate = now.plusDays(1);
-            String newThumbnail = "https://image.com/new-image.png";
+            String newPosterImageUrl = "https://image.com/new-image.png";
             var command = new FestivalUpdateCommand(
                 newFestivalName,
                 newStartDate,
                 newEndDate,
-                newThumbnail
+                newPosterImageUrl
             );
 
             // when
@@ -76,7 +76,7 @@ class FestivalUpdateServiceTest extends ApplicationIntegrationTest {
                 softly.assertThat(updatedFestival.getName()).isEqualTo(newFestivalName);
                 softly.assertThat(updatedFestival.getStartDate()).isEqualTo(newStartDate);
                 softly.assertThat(updatedFestival.getEndDate()).isEqualTo(newEndDate);
-                softly.assertThat(updatedFestival.getThumbnail()).isEqualTo(newThumbnail);
+                softly.assertThat(updatedFestival.getPosterImageUrl()).isEqualTo(newPosterImageUrl);
             });
         }
 
@@ -86,12 +86,12 @@ class FestivalUpdateServiceTest extends ApplicationIntegrationTest {
             String newFestivalName = "변경된 축제";
             LocalDate newStartDate = now.plusDays(1);
             LocalDate newEndDate = now.plusDays(1);
-            String newThumbnail = "https://image.com/new-image.png";
+            String newPosterImageUrl = "https://image.com/new-image.png";
             var command = new FestivalUpdateCommand(
                 newFestivalName,
                 newStartDate,
                 newEndDate,
-                newThumbnail
+                newPosterImageUrl
             );
 
             // when
@@ -103,7 +103,7 @@ class FestivalUpdateServiceTest extends ApplicationIntegrationTest {
                 softly.assertThat(updatedFestival.getName()).isEqualTo(newFestivalName);
                 softly.assertThat(updatedFestival.getStartDate()).isEqualTo(newStartDate);
                 softly.assertThat(updatedFestival.getEndDate()).isEqualTo(newEndDate);
-                softly.assertThat(updatedFestival.getThumbnail()).isEqualTo(newThumbnail);
+                softly.assertThat(updatedFestival.getPosterImageUrl()).isEqualTo(newPosterImageUrl);
             });
         }
     }

@@ -14,7 +14,7 @@ public class ArtistBookmarkV1QueryService {
 
     private final ArtistBookmarkV1QueryDslRepository artistBookmarkV1QueryDslRepository;
 
-    public List<ArtistBookmarkV1Response> findArtistBookmarksByMemberId(Long memberid){
-        return artistBookmarkV1QueryDslRepository.findByMemberId(memberid);
+    public List<ArtistBookmarkV1Response> findArtistBookmarksByMemberId(Long memberId){
+        return artistBookmarkV1QueryDslRepository.findByMemberId(memberId);
     }
 }

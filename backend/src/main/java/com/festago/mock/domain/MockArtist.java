@@ -1,4 +1,4 @@
-package com.festago.mock;
+package com.festago.mock.domain;
 
 public enum MockArtist {
     윤하("https://i.namu.wiki/i/GXgnzRzEe4tq0YmevyZdmLNTPmVK2fzRyZtiCMA-0QSO8vbau9tah4rgP3qNokmT33-El0fx2PauysBruWpTk8B6MLu73gDgVnC3tvFeBnm3Lwo9oRreHM6slID3ilDTyFjpV2eKMO80Jf5u5E920g.webp",

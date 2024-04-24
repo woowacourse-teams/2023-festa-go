@@ -29,9 +29,9 @@ public class SchoolFestivalSearchV1QueryDslRepository extends QueryDslRepository
             new QFestivalSearchV1Response(
                 festival.id,
                 festival.name,
-                festival.startDate,
-                festival.endDate,
-                festival.thumbnail,
+                festival.festivalDuration.startDate,
+                festival.festivalDuration.endDate,
+                festival.posterImageUrl,
                 festivalQueryInfo.artistInfo))
             .from(festival)
             .innerJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId))
