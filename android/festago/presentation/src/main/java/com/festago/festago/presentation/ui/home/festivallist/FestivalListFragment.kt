@@ -180,13 +180,8 @@ class FestivalListFragment : Fragment() {
             )
             addAll(festivals)
             if (!isLastPage) {
-                add(
-                    com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState(
-                        ::requestMoreFestival
-                    )
-                )
+                add(FestivalMoreItemUiState(::requestMoreFestival))
             } else if (festivals.isEmpty()) add(FestivalEmptyItemUiState(festivalFilter.tabPosition))
-
         }.toList()
     }
 
