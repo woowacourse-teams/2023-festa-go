@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.festago.festago.presentation.databinding.FragmentArtistBookmarkBinding
+import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmentDirections
 import com.festago.festago.presentation.util.repeatOnStarted
+import com.festago.festago.presentation.util.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -60,6 +63,19 @@ class ArtistBookmarkFragment : Fragment() {
 
                     is ArtistBookmarkListUiState.Error -> {
                         // Handle error
+                    }
+                }
+            }
+        }
+        repeatOnStarted(this) {
+            vm.uiEvent.collect { event ->
+                when (event) {
+                    is ArtistBookmarkEvent.ShowArtistDetail -> {
+                        findNavController().safeNavigate(
+                            BookmarkListFragmentDirections.actionBookmarkListFragmentToArtistDetailFragment(
+                                event.artistId,
+                            ),
+                        )
                     }
                 }
             }
