@@ -8,10 +8,105 @@
     <fragment
         android:id="@+id/bookmarkListFragment"
         android:name="com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragment"
-        android:label="@string/home_bottom_nav_bookmark"
-        tools:layout="@layout/fragment_bookmark_list" >
+        android:label="BookmarkListFragment"
+        tools:layout="@layout/fragment_bookmark_list">
         <action
-            android:id="@+id/action_bookmarkListFragment_self"
-            app:destination="@id/bookmarkListFragment" />
+            android:id="@+id/action_bookmarkListFragment_to_festivalDetailFragment"
+            app:destination="@id/festivalDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_bookmarkListFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_bookmarkListFragment_to_schoolDetailFragment"
+            app:destination="@id/schoolDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
+
+    <fragment
+        android:id="@+id/artistDetailFragment"
+        android:name="com.festago.festago.presentation.ui.artistdetail.ArtistDetailFragment"
+        android:label="ArtistDetailFragment"
+        tools:layout="@layout/fragment_artist_detail">
+        <argument
+            android:name="artistId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_artistDetailFragment_to_schoolDetailFragment"
+            app:destination="@id/schoolDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_artistDetailFragment_self"
+            app:destination="@id/artistDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpToSaveState="true"
+            app:restoreState="true" />
+        <action
+            android:id="@+id/action_artistDetailFragment_to_festivalDetailFragment"
+            app:destination="@id/festivalDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/schoolDetailFragment"
+        android:name="com.festago.festago.presentation.ui.schooldetail.SchoolDetailFragment"
+        android:label="SchoolDetailFragment"
+        tools:layout="@layout/fragment_school_detail">
+        <action
+            android:id="@+id/action_schoolDetailFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <argument
+            android:name="schoolId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_schoolDetailFragment_to_festivalDetailFragment"
+            app:destination="@id/festivalDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/festivalDetailFragment"
+        android:name="com.festago.festago.presentation.ui.festivaldetail.FestivalDetailFragment"
+        android:label="FestivalDetailFragment"
+        tools:layout="@layout/fragment_festival_detail">
+        <argument
+            android:name="festivalId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_festivalDetailFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.festago.festago.presentation.ui.search.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_schoolDetailFragment"
+            app:destination="@id/schoolDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_festivalDetailFragment"
+            app:destination="@id/festivalDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
 </navigation>

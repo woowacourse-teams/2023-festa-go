@@ -23,7 +23,6 @@ annotation class BaseUrlQualifier
 @InstallIn(SingletonComponent::class)
 @Module
 object ApiModule {
-
     @Provides
     @Singleton
     fun provideRetrofitConverterFactory(): retrofit2.Converter.Factory {
