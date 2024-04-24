@@ -35,7 +35,13 @@ public class MemberAuthCommandService {
             .orElseGet(() -> signUp(userInfo));
         refreshTokenRepository.deleteByMemberId(member.getId());
         RefreshToken refreshToken = saveRefreshToken(member.getId());
-        return new LoginResult(member.getId(), member.getNickname(), refreshToken.getId(), refreshToken.getExpiredAt());
+        return new LoginResult(
+            member.getId(),
+            member.getNickname(),
+            member.getProfileImage(),
+            refreshToken.getId(),
+            refreshToken.getExpiredAt()
+        );
     }
 
     private Member signUp(UserInfo userInfo) {
