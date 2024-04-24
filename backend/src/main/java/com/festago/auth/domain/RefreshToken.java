@@ -32,6 +32,10 @@ public class RefreshToken extends BaseTimeEntity implements Persistable<UUID> {
         return new RefreshToken(memberId, now.plusDays(EXPIRED_OFFSET_DAY));
     }
 
+    public boolean isExpired(LocalDateTime now) {
+        return expiredAt.isBefore(now);
+    }
+
     public UUID getId() {
         return id;
     }

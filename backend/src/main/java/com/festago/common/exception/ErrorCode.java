@@ -52,6 +52,7 @@ public enum ErrorCode {
     INCORRECT_PASSWORD_OR_ACCOUNT("비밀번호가 틀렸거나, 해당 계정이 없습니다."),
     DUPLICATE_ACCOUNT_USERNAME("해당 계정이 존재합니다."),
     INVALID_REFRESH_TOKEN("존재하지 않은 리프래쉬 토큰으로 재발급 요청을 했습니다."),
+    EXPIRED_REFRESH_TOKEN("만료된 리프래쉬 토큰입니다."),
 
     // 403
     NOT_ENOUGH_PERMISSION("해당 권한이 없습니다."),

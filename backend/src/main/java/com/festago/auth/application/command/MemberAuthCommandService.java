@@ -4,7 +4,7 @@ import com.festago.auth.domain.RefreshToken;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.event.MemberDeletedEvent;
 import com.festago.auth.dto.v1.LoginResult;
-import com.festago.auth.dto.v1.TokenResponse;
+import com.festago.auth.dto.v1.RefreshTokenResult;
 import com.festago.auth.repository.RefreshTokenRepository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
@@ -56,18 +56,19 @@ public class MemberAuthCommandService {
         refreshTokenRepository.deleteByMemberId(memberId);
     }
 
-    public TokenResponse refresh(Long memberId, UUID oldFreshToken) {
-        refreshTokenRepository.findById(oldFreshToken).ifPresentOrElse(
-            refreshToken -> {
-                refreshTokenRepository.deleteByMemberId(memberId);
-            },
-            () -> {
-                // 회원이 해커에게 정보가 털린 경우
-                throw new UnauthorizedException(ErrorCode.INVALID_REFRESH_TOKEN);
-            }
-        );
-        RefreshToken newRefreshToken = saveRefreshToken(memberId);
-        return new TokenResponse(
+    public RefreshTokenResult refresh(UUID refreshTokenId) {
+        RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenId)
+            .orElseThrow(() -> {
+                log.warn("탈취 가능성이 있는 리프래쉬 토큰이 있습니다. token={}", refreshTokenId);
+                return new UnauthorizedException(ErrorCode.INVALID_REFRESH_TOKEN);
+            });
+        if (refreshToken.isExpired(LocalDateTime.now(clock))) {
+            log.info("만료된 리프래쉬 토큰이 있습니다. token={}", refreshTokenId);
+            throw new UnauthorizedException(ErrorCode.EXPIRED_REFRESH_TOKEN);
+        }
+        RefreshToken newRefreshToken = saveRefreshToken(refreshToken.getMemberId());
+        return new RefreshTokenResult(
+            newRefreshToken.getMemberId(),
             newRefreshToken.getId().toString(),
             newRefreshToken.getExpiredAt()
         );

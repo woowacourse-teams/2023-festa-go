@@ -9,7 +9,6 @@ import static org.mockito.BDDMockito.spy;
 import com.festago.auth.domain.RefreshToken;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
-import com.festago.auth.dto.v1.TokenResponse;
 import com.festago.auth.repository.MemoryRefreshTokenRepository;
 import com.festago.auth.repository.RefreshTokenRepository;
 import com.festago.common.exception.ErrorCode;
@@ -21,6 +20,7 @@ import com.festago.member.repository.MemoryMemberRepository;
 import com.festago.support.fixture.MemberFixture;
 import com.festago.support.fixture.RefreshTokenFixture;
 import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -112,7 +112,7 @@ class MemberAuthCommandServiceTest {
                 RefreshTokenFixture.builder().memberId(member.getId()).build());
 
             // when
-            TokenResponse actual = memberAuthCommandService.refresh(member.getId(), originToken.getId());
+            var actual = memberAuthCommandService.refresh(originToken.getId());
 
             // then
             assertThat(refreshTokenRepository.findById(originToken.getId())).isEmpty();
@@ -121,13 +121,24 @@ class MemberAuthCommandServiceTest {
 
         @Test
         void 기존_리프래쉬_토큰이_없으면_예외가_발생한다() {
-            // given
-            Member member = memberRepository.save(MemberFixture.builder().build());
-
             // when & then
-            assertThatThrownBy(() -> memberAuthCommandService.refresh(member.getId(), UUID.randomUUID()))
+            assertThatThrownBy(() -> memberAuthCommandService.refresh(UUID.randomUUID()))
                 .isInstanceOf(UnauthorizedException.class)
                 .hasMessage(ErrorCode.INVALID_REFRESH_TOKEN.getMessage());
+        }
+
+        @Test
+        void 리프래쉬를_요청한_리프래쉬_토큰이_만료되면_예외가_발생한다() {
+            // given
+            Member member = memberRepository.save(MemberFixture.builder().build());
+            LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+            RefreshToken expiredToken = refreshTokenRepository.save(
+                RefreshTokenFixture.builder().memberId(member.getId()).expiredAt(yesterday).build());
+
+            // when & then
+            assertThatThrownBy(() -> memberAuthCommandService.refresh(expiredToken.getId()))
+                .isInstanceOf(UnauthorizedException.class)
+                .hasMessage(ErrorCode.EXPIRED_REFRESH_TOKEN.getMessage());
         }
     }
 
