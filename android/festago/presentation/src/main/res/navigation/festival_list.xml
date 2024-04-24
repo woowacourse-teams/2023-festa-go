@@ -108,6 +108,13 @@
             app:exitAnim="@anim/no_anim"
             app:popEnterAnim="@anim/no_anim"
             app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_festivalDetailFragment_to_schoolDetailFragment"
+            app:destination="@id/schoolDetailFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

@@ -17,6 +17,7 @@ import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragmentDirections.actionFestivalListFragmentToSearchFragment
 import com.festago.festago.presentation.ui.home.festivallist.bottomsheet.RegionBottomSheetDialogFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalEmptyItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalListUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
@@ -178,7 +179,9 @@ class FestivalListFragment : Fragment() {
                 },
             )
             addAll(festivals)
-            if (!isLastPage) add(FestivalMoreItemUiState(::requestMoreFestival))
+            if (!isLastPage) {
+                add(FestivalMoreItemUiState(::requestMoreFestival))
+            } else if (festivals.isEmpty()) add(FestivalEmptyItemUiState(festivalFilter.tabPosition))
         }.toList()
     }
 
