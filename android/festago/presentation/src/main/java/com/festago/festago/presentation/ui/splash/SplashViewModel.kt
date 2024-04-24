@@ -2,7 +2,7 @@ package com.festago.festago.presentation.ui.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.festago.festago.domain.repository.AuthRepository
+import com.festago.festago.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private val _event: MutableSharedFlow<SplashEvent> = MutableSharedFlow()
@@ -21,8 +21,8 @@ class SplashViewModel @Inject constructor(
     fun checkSignIn() {
         viewModelScope.launch {
             when {
-                authRepository.isSigned -> _event.emit(SplashEvent.ShowHome)
-                authRepository.shouldSign.not() -> _event.emit(SplashEvent.ShowHome)
+                userRepository.isSigned() -> _event.emit(SplashEvent.ShowHome)
+                userRepository.isSignRejected() -> _event.emit(SplashEvent.ShowHome)
                 else -> _event.emit(SplashEvent.ShowSignIn)
             }
         }

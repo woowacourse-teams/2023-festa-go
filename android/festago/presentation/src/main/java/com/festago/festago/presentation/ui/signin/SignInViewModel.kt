@@ -2,7 +2,7 @@ package com.festago.festago.presentation.ui.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.festago.festago.domain.repository.AuthRepository
+import com.festago.festago.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private val _event: MutableSharedFlow<SignInEvent> = MutableSharedFlow()
@@ -20,7 +20,7 @@ class SignInViewModel @Inject constructor(
 
     fun signIn(authCode: String) {
         viewModelScope.launch {
-            authRepository.signIn(authCode)
+            userRepository.signIn(authCode)
                 .onSuccess {
                     _event.emit(SignInEvent.ShowHome)
                 }.onFailure {
@@ -31,7 +31,7 @@ class SignInViewModel @Inject constructor(
 
     fun rejectSignIn() {
         viewModelScope.launch {
-            authRepository.rejectSignIn()
+            userRepository.rejectSignIn()
             _event.emit(SignInEvent.ShowHome)
         }
     }
