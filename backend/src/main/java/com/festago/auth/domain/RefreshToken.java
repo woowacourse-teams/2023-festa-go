@@ -1,6 +1,7 @@
 package com.festago.auth.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ public class RefreshToken extends BaseTimeEntity implements Persistable<UUID> {
         return expiredAt.isBefore(now);
     }
 
+    @Nonnull
     public UUID getId() {
         return id;
     }
