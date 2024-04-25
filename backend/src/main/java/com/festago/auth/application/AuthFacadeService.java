@@ -9,6 +9,7 @@ import com.festago.auth.dto.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@Deprecated(forRemoval = true)
 @Service
 @RequiredArgsConstructor
 public class AuthFacadeService {
