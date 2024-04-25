@@ -11,7 +11,5 @@ public interface RefreshTokenRepository extends Repository<RefreshToken, UUID> {
 
     Optional<RefreshToken> findById(UUID id);
 
-    void deleteByMemberId(Long memberId);
-
     void deleteById(UUID id);
 }

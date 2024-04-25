@@ -2,7 +2,6 @@ package com.festago.auth.repository;
 
 import com.festago.auth.domain.RefreshToken;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,11 +18,6 @@ public class MemoryRefreshTokenRepository implements RefreshTokenRepository {
     @Override
     public Optional<RefreshToken> findById(UUID id) {
         return Optional.ofNullable(memory.get(id));
-    }
-
-    @Override
-    public void deleteByMemberId(Long memberId) {
-        memory.entrySet().removeIf(it -> Objects.equals(it.getValue().getMemberId(), memberId));
     }
 
     @Override
