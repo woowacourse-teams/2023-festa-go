@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CookieTokenExtractorTest {
 
-    CookieTokenExtractor cookieTokenExtractor = new CookieTokenExtractor();
+    CookieHttpRequestTokenExtractor cookieTokenExtractor = new CookieHttpRequestTokenExtractor();
 
     @Mock
     HttpServletRequest request;

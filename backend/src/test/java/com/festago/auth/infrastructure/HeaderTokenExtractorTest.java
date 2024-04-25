@@ -20,7 +20,7 @@ import org.springframework.http.HttpHeaders;
 @ExtendWith(MockitoExtension.class)
 class HeaderTokenExtractorTest {
 
-    HeaderTokenExtractor headerTokenExtractor = new HeaderTokenExtractor();
+    HeaderHttpRequestTokenExtractor headerTokenExtractor = new HeaderHttpRequestTokenExtractor();
 
     @Mock
     HttpServletRequest request;

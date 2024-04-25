@@ -6,8 +6,8 @@ import com.festago.auth.RoleArgumentResolver;
 import com.festago.auth.annotation.MemberAuth;
 import com.festago.auth.application.AuthTokenExtractor;
 import com.festago.auth.domain.Role;
-import com.festago.auth.infrastructure.CookieTokenExtractor;
-import com.festago.auth.infrastructure.HeaderTokenExtractor;
+import com.festago.auth.infrastructure.CookieHttpRequestTokenExtractor;
+import com.festago.auth.infrastructure.HeaderHttpRequestTokenExtractor;
 import com.festago.common.interceptor.AnnotationDelegateInterceptor;
 import com.festago.common.interceptor.HttpMethodDelegateInterceptor;
 import java.util.List;
@@ -57,7 +57,7 @@ public class LoginConfig implements WebMvcConfigurer {
     public AuthInterceptor adminAuthInterceptor() {
         return AuthInterceptor.builder()
             .authExtractor(authTokenExtractor)
-            .tokenExtractor(new CookieTokenExtractor())
+            .tokenExtractor(new CookieHttpRequestTokenExtractor())
             .authenticateContext(authenticateContext)
             .role(Role.ADMIN)
             .build();
@@ -67,7 +67,7 @@ public class LoginConfig implements WebMvcConfigurer {
     public AuthInterceptor memberAuthInterceptor() {
         return AuthInterceptor.builder()
             .authExtractor(authTokenExtractor)
-            .tokenExtractor(new HeaderTokenExtractor())
+            .tokenExtractor(new HeaderHttpRequestTokenExtractor())
             .authenticateContext(authenticateContext)
             .role(Role.MEMBER)
             .build();

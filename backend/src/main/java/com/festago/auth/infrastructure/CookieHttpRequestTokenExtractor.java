@@ -1,12 +1,12 @@
 package com.festago.auth.infrastructure;
 
-import com.festago.auth.application.TokenExtractor;
+import com.festago.auth.application.HttpRequestTokenExtractor;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.Optional;
 
-public class CookieTokenExtractor implements TokenExtractor {
+public class CookieHttpRequestTokenExtractor implements HttpRequestTokenExtractor {
 
     private static final String TOKEN = "token";
 

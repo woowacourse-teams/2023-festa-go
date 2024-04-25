@@ -1,13 +1,13 @@
 package com.festago.auth.infrastructure;
 
-import com.festago.auth.application.TokenExtractor;
+import com.festago.auth.application.HttpRequestTokenExtractor;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 
-public class HeaderTokenExtractor implements TokenExtractor {
+public class HeaderHttpRequestTokenExtractor implements HttpRequestTokenExtractor {
 
     private static final String BEARER_TOKEN_PREFIX = "Bearer ";
 

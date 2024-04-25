@@ -1,7 +1,7 @@
 package com.festago.auth;
 
 import com.festago.auth.application.AuthTokenExtractor;
-import com.festago.auth.application.TokenExtractor;
+import com.festago.auth.application.HttpRequestTokenExtractor;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.Role;
 import com.festago.common.exception.ErrorCode;
@@ -15,18 +15,18 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class AuthInterceptor implements HandlerInterceptor {
 
     private final AuthTokenExtractor authTokenExtractor;
-    private final TokenExtractor tokenExtractor;
+    private final HttpRequestTokenExtractor httpRequestTokenExtractor;
     private final AuthenticateContext authenticateContext;
     private final Role role;
 
-    private AuthInterceptor(AuthTokenExtractor authTokenExtractor, TokenExtractor tokenExtractor,
+    private AuthInterceptor(AuthTokenExtractor authTokenExtractor, HttpRequestTokenExtractor httpRequestTokenExtractor,
                             AuthenticateContext authenticateContext, Role role) {
         Assert.notNull(authTokenExtractor, "The authExtractor must not be null");
-        Assert.notNull(tokenExtractor, "The tokenExtractor must not be null");
+        Assert.notNull(httpRequestTokenExtractor, "The tokenExtractor must not be null");
         Assert.notNull(authenticateContext, "The authenticateContext must not be null");
         Assert.notNull(role, "The role must not be null");
         this.authTokenExtractor = authTokenExtractor;
-        this.tokenExtractor = tokenExtractor;
+        this.httpRequestTokenExtractor = httpRequestTokenExtractor;
         this.authenticateContext = authenticateContext;
         this.role = role;
     }
@@ -38,7 +38,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
         throws Exception {
-        String token = tokenExtractor.extract(request)
+        String token = httpRequestTokenExtractor.extract(request)
             .orElseThrow(() -> new UnauthorizedException(ErrorCode.NEED_AUTH_TOKEN));
         AuthPayload payload = authTokenExtractor.extract(token);
         if (payload.getRole() != this.role) {
@@ -51,7 +51,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     public static class AuthInterceptorBuilder {
 
         private AuthTokenExtractor authTokenExtractor;
-        private TokenExtractor tokenExtractor;
+        private HttpRequestTokenExtractor httpRequestTokenExtractor;
         private AuthenticateContext authenticateContext;
         private Role role;
 
@@ -65,8 +65,8 @@ public class AuthInterceptor implements HandlerInterceptor {
             return this;
         }
 
-        public AuthInterceptorBuilder tokenExtractor(TokenExtractor tokenExtractor) {
-            this.tokenExtractor = tokenExtractor;
+        public AuthInterceptorBuilder tokenExtractor(HttpRequestTokenExtractor httpRequestTokenExtractor) {
+            this.httpRequestTokenExtractor = httpRequestTokenExtractor;
             return this;
         }
 
@@ -76,7 +76,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         public AuthInterceptor build() {
-            return new AuthInterceptor(authTokenExtractor, tokenExtractor, authenticateContext, role);
+            return new AuthInterceptor(authTokenExtractor, httpRequestTokenExtractor, authenticateContext, role);
         }
     }
 }
