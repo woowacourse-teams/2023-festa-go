@@ -3,6 +3,7 @@ package com.festago.festago.presentation.ui.home.festivallist.festival
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalEmptyItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTabUiState
@@ -18,6 +19,7 @@ class FestivalListAdapter(
             2 -> FestivalListFestivalViewHolder.of(parent, onArtistClick)
             3 -> FestivalListTabViewHolder.of(parent)
             4 -> FestivalListMoreItemViewHolder.of(parent)
+            5 -> FestivalListEmptyItemViewHolder.of(parent)
             else -> throw IllegalArgumentException("Invalid viewType")
         }
     }
@@ -29,6 +31,7 @@ class FestivalListAdapter(
             is FestivalListFestivalViewHolder -> holder.bind(item as FestivalItemUiState)
             is FestivalListTabViewHolder -> holder.bind(item as FestivalTabUiState)
             is FestivalListMoreItemViewHolder -> holder.bind(item as FestivalMoreItemUiState)
+            is FestivalListEmptyItemViewHolder -> holder.bind(item as FestivalEmptyItemUiState)
         }
     }
 
@@ -38,6 +41,7 @@ class FestivalListAdapter(
             is FestivalItemUiState -> 2
             is FestivalTabUiState -> 3
             is FestivalMoreItemUiState -> 4
+            is FestivalEmptyItemUiState -> 5
             else -> throw IllegalArgumentException("Invalid item")
         }
     }
@@ -49,6 +53,7 @@ class FestivalListAdapter(
                 oldItem is FestivalItemUiState && newItem is FestivalItemUiState -> oldItem.id == newItem.id
                 oldItem is FestivalTabUiState && newItem is FestivalTabUiState -> oldItem.selectedRegion == newItem.selectedRegion
                 oldItem is FestivalMoreItemUiState && newItem is FestivalMoreItemUiState -> true
+                oldItem is FestivalEmptyItemUiState && newItem is FestivalEmptyItemUiState -> oldItem.tabPosition == newItem.tabPosition
                 else -> false
             }
 
@@ -64,6 +69,7 @@ class FestivalListAdapter(
 
                 oldItem is FestivalMoreItemUiState && newItem is FestivalMoreItemUiState -> true
 
+                oldItem is FestivalEmptyItemUiState && newItem is FestivalEmptyItemUiState -> oldItem as FestivalEmptyItemUiState == newItem
                 else -> false
             }
         }

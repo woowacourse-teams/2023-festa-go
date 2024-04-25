@@ -101,7 +101,8 @@
             app:tabGravity="center"
             app:tabIndicatorHeight="0dp"
             app:tabPaddingEnd="8dp"
-            app:tabPaddingStart="8dp" />
+            app:tabPaddingStart="8dp"
+            app:tabRippleColor="@null" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

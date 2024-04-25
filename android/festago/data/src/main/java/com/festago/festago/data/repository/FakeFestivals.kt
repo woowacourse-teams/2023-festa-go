@@ -279,7 +279,7 @@ object FakeFestivals {
             school = School(id = 1L, name = "고려대", imageUrl = ""),
             artists = listOf(
                 Artist(
-                    id = 6L,
+                    id = 1L,
                     name = "뉴진스",
                     imageUrl = "https://cdn.mediatoday.co.kr/news/photo/202311/313885_438531_4716.jpg",
                 ),

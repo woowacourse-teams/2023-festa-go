@@ -41,9 +41,9 @@ public class FestivalBookmarkV1QueryDslRepository extends QueryDslRepositorySupp
                 new QFestivalV1Response(
                     festival.id,
                     festival.name,
-                    festival.startDate,
-                    festival.endDate,
-                    festival.thumbnail,
+                    festival.festivalDuration.startDate,
+                    festival.festivalDuration.endDate,
+                    festival.posterImageUrl,
                     new QSchoolV1Response(
                         school.id,
                         school.name
@@ -65,7 +65,7 @@ public class FestivalBookmarkV1QueryDslRepository extends QueryDslRepositorySupp
     private OrderSpecifier<?> dynamicOrder(FestivalBookmarkOrder festivalBookmarkOrder) {
         return switch (festivalBookmarkOrder) {
             case BOOKMARK -> bookmark.id.desc();
-            case FESTIVAL -> festival.startDate.asc();
+            case FESTIVAL -> festival.festivalDuration.startDate.asc();
         };
     }
 }

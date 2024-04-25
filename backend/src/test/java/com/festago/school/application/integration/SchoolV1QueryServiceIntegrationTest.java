@@ -256,11 +256,11 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
                 searchCondition);
 
             // then
-            assertThat(actual.hasNext()).isFalse();
+            assertThat(actual.hasNext()).isTrue();
         }
 
         @Test
-        void 다음_페이지가_존재하지않는다() {
+        void 다음_페이지가_존재하지_않는다() {
             // given
             saveFestival(today, today.plusDays(1));
             var searchCondition = new SchoolFestivalV1SearchCondition(null, null, false, Pageable.ofSize(1));
@@ -270,7 +270,7 @@ class SchoolV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
                 school.getId(), today, searchCondition);
 
             // then
-            assertThat(actual.hasNext()).isTrue();
+            assertThat(actual.hasNext()).isFalse();
         }
 
         private Festival saveFestival(LocalDate startDate, LocalDate endDate) {

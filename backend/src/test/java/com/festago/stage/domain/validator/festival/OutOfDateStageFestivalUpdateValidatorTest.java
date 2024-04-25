@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.festival.domain.Festival;
+import com.festago.festival.domain.FestivalDuration;
 import com.festago.stage.repository.MemoryStageRepository;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.fixture.FestivalFixture;
@@ -62,7 +63,8 @@ class OutOfDateStageFestivalUpdateValidatorTest {
             // given
             LocalDate startDate = festivalStartDate.minusDays(1);
             LocalDate endDate = festivalEndDate.plusDays(1);
-            축제.changeDate(startDate, endDate);
+            
+            축제.changeFestivalDuration(new FestivalDuration(startDate, endDate));
 
             // when & then
             assertDoesNotThrow(() -> validator.validate(축제));
@@ -73,7 +75,7 @@ class OutOfDateStageFestivalUpdateValidatorTest {
             // given
             LocalDate startDate = festivalStartDate.plusDays(1);
             LocalDate endDate = festivalEndDate;
-            축제.changeDate(startDate, endDate);
+            축제.changeFestivalDuration(new FestivalDuration(startDate, endDate));
 
             // when & then
             assertThatThrownBy(() -> validator.validate(축제))
@@ -86,7 +88,7 @@ class OutOfDateStageFestivalUpdateValidatorTest {
             // given
             LocalDate startDate = festivalStartDate;
             LocalDate endDate = festivalEndDate.minusDays(1);
-            축제.changeDate(startDate, endDate);
+            축제.changeFestivalDuration(new FestivalDuration(startDate, endDate));
 
             // when & then
             assertThatThrownBy(() -> validator.validate(축제))
@@ -103,7 +105,7 @@ class OutOfDateStageFestivalUpdateValidatorTest {
             // given
             LocalDate startDate = festivalStartDate.minusDays(1);
             LocalDate endDate = festivalEndDate.plusDays(1);
-            축제.changeDate(startDate, endDate);
+            축제.changeFestivalDuration(new FestivalDuration(startDate, endDate));
 
             // when & then
             assertDoesNotThrow(() -> validator.validate(축제));
@@ -114,7 +116,7 @@ class OutOfDateStageFestivalUpdateValidatorTest {
             // given
             LocalDate startDate = festivalStartDate.plusDays(1);
             LocalDate endDate = festivalEndDate;
-            축제.changeDate(startDate, endDate);
+            축제.changeFestivalDuration(new FestivalDuration(startDate, endDate));
 
             // when & then
             assertDoesNotThrow(() -> validator.validate(축제));
@@ -125,7 +127,7 @@ class OutOfDateStageFestivalUpdateValidatorTest {
             // given
             LocalDate startDate = festivalStartDate;
             LocalDate endDate = festivalEndDate.minusDays(1);
-            축제.changeDate(startDate, endDate);
+            축제.changeFestivalDuration(new FestivalDuration(startDate, endDate));
 
             // when & then
             assertDoesNotThrow(() -> validator.validate(축제));

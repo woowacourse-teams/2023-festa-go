@@ -157,6 +157,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tvFestivalsEmpty"
+            style="@style/H5Bold14Lh16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/school_detail_tv_empty_festivals"
+            android:textColor="@color/contents_gray_06"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{uiState.shouldShowEmptyFestivals}" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

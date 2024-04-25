@@ -61,6 +61,7 @@ class ArtistDetailFragment : Fragment() {
     private fun initObserve() {
         repeatOnStarted(viewLifecycleOwner) {
             vm.uiState.collect {
+                binding.uiState = it
                 updateUi(it)
             }
         }
@@ -80,12 +81,12 @@ class ArtistDetailFragment : Fragment() {
     }
 
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
-        binding.uiState = uiState
+        binding.successUiState = uiState
 
         val items: List<Any> = if (uiState.isLast) {
-            uiState.stages
+            uiState.festivals
         } else {
-            uiState.stages + MoreItemUiState { vm.loadMoreArtistFestivals(args.artistId) }
+            uiState.festivals + MoreItemUiState { vm.loadMoreArtistFestivals(args.artistId) }
         }
         adapter.submitList(items)
 
