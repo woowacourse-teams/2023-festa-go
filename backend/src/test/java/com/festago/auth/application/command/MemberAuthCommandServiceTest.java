@@ -68,7 +68,7 @@ class MemberAuthCommandServiceTest {
         }
 
         @Test
-        void 기존_회원으로_로그인하면_기존_리프레쉬_토큰이_삭제된다() {
+        void 기존_회원으로_로그인해도_기존_리프레쉬_토큰이_삭제되지_않는다() {
             // given
             Member member = memberRepository.save(MemberFixture.builder().build());
             RefreshToken originToken = refreshTokenRepository.save(
@@ -78,7 +78,7 @@ class MemberAuthCommandServiceTest {
             var actual = memberAuthCommandService.oauth2Login(getUserInfo(member.getSocialId()));
 
             // then
-            assertThat(refreshTokenRepository.findById(originToken.getId())).isEmpty();
+            assertThat(refreshTokenRepository.findById(originToken.getId())).isPresent();
             assertThat(refreshTokenRepository.findById(actual.refreshToken())).isPresent();
         }
     }

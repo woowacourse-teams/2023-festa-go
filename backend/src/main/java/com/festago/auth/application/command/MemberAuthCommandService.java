@@ -33,7 +33,6 @@ public class MemberAuthCommandService {
     public LoginResult oauth2Login(UserInfo userInfo) {
         Member member = memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
             .orElseGet(() -> signUp(userInfo));
-        refreshTokenRepository.deleteByMemberId(member.getId());
         RefreshToken refreshToken = saveRefreshToken(member.getId());
         return new LoginResult(
             member.getId(),
