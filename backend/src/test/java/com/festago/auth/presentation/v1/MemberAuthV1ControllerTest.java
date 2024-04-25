@@ -69,10 +69,12 @@ class MemberAuthV1ControllerTest {
             @WithMockAuth
             void 요청을_보내면_200_응답이_반환된다() throws Exception {
                 // given
+                var request = new RefreshTokenV1Request(UUID.randomUUID().toString());
 
                 // when & then
                 mockMvc.perform(get(uri)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer 12312")
+                        .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
             }

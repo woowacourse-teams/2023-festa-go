@@ -43,8 +43,8 @@ public class MemberAuthFacadeService {
         );
     }
 
-    public void logout(Long memberId) {
-        memberAuthCommandService.logout(memberId);
+    public void logout(Long memberId, UUID refreshTokenId) {
+        memberAuthCommandService.logout(memberId, refreshTokenId);
     }
 
     public TokenRefreshV1Response refresh(UUID refreshTokenId) {

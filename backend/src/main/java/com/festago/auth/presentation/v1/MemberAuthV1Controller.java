@@ -4,6 +4,7 @@ import com.festago.auth.annotation.Member;
 import com.festago.auth.annotation.MemberAuth;
 import com.festago.auth.application.command.MemberAuthFacadeService;
 import com.festago.auth.dto.v1.LoginV1Response;
+import com.festago.auth.dto.v1.LogoutV1Request;
 import com.festago.auth.dto.v1.OAuth2LoginV1Request;
 import com.festago.auth.dto.v1.RefreshTokenV1Request;
 import com.festago.auth.dto.v1.TokenRefreshV1Response;
@@ -35,8 +36,11 @@ public class MemberAuthV1Controller {
 
     @MemberAuth
     @GetMapping("/logout")
-    public ResponseEntity<Void> logout(@Member Long memberId) {
-        memberAuthFacadeService.logout(memberId);
+    public ResponseEntity<Void> logout(
+        @Member Long memberId,
+        @RequestBody @Valid LogoutV1Request request
+        ) {
+        memberAuthFacadeService.logout(memberId, UUID.fromString(request.refreshToken()));
         return ResponseEntity.ok().build();
     }
 

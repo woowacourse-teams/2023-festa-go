@@ -94,10 +94,25 @@ class MemberAuthCommandServiceTest {
                 RefreshTokenFixture.builder().memberId(member.getId()).build());
 
             // when
-            memberAuthCommandService.logout(member.getId());
+            memberAuthCommandService.logout(member.getId(), originToken.getId());
 
             // then
             assertThat(refreshTokenRepository.findById(originToken.getId())).isEmpty();
+        }
+
+        @Test
+        void 다른_회원의_리프래쉬_토큰으로_로그아웃하면_해당_리프래쉬_토큰은_삭제되지_않는다() {
+            // given
+            Member 회원A = memberRepository.save(MemberFixture.builder().build());
+            Member 회원B = memberRepository.save(MemberFixture.builder().build());
+            RefreshToken 회원A_리프래쉬_토큰 = refreshTokenRepository.save(
+                RefreshTokenFixture.builder().memberId(회원A.getId()).build());
+
+            // when
+            memberAuthCommandService.logout(회원B.getId(), 회원A_리프래쉬_토큰.getId());
+
+            // then
+            assertThat(refreshTokenRepository.findById(회원A_리프래쉬_토큰.getId())).isPresent();
         }
     }
 

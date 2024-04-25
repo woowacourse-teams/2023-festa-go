@@ -5,6 +5,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,10 @@ public class RefreshToken extends BaseTimeEntity implements Persistable<UUID> {
 
     public boolean isExpired(LocalDateTime now) {
         return expiredAt.isBefore(now);
+    }
+
+    public boolean isOwner(Long memberId) {
+        return Objects.equals(this.memberId, memberId);
     }
 
     @Nonnull

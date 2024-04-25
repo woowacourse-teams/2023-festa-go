@@ -51,8 +51,13 @@ public class MemberAuthCommandService {
         return refreshTokenRepository.save(RefreshToken.of(memberId, LocalDateTime.now(clock)));
     }
 
-    public void logout(Long memberId) {
-        refreshTokenRepository.deleteByMemberId(memberId);
+    public void logout(Long memberId, UUID refreshTokenId) {
+        refreshTokenRepository.findById(refreshTokenId)
+            .ifPresent(refreshToken -> {
+                if (refreshToken.isOwner(memberId)) {
+                    refreshTokenRepository.deleteById(refreshTokenId);
+                }
+            });
     }
 
     public RefreshTokenResult refresh(UUID refreshTokenId) {
