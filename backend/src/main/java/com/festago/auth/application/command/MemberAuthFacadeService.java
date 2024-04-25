@@ -29,7 +29,7 @@ public class MemberAuthFacadeService {
         String oAuth2AccessToken = oAuth2Client.getAccessToken(code);
         UserInfo userInfo = oAuth2Client.getUserInfo(oAuth2AccessToken);
 
-        LoginResult loginResult = memberAuthCommandService.oauth2Login(userInfo);
+        LoginResult loginResult = memberAuthCommandService.oAuth2Login(userInfo);
 
         TokenResponse accessToken = authProvider.provide(new AuthPayload(loginResult.memberId(), Role.MEMBER));
         return new LoginV1Response(

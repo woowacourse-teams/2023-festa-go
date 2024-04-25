@@ -30,7 +30,7 @@ public class MemberAuthCommandService {
     private final ApplicationEventPublisher eventPublisher;
     private final Clock clock;
 
-    public LoginResult oauth2Login(UserInfo userInfo) {
+    public LoginResult oAuth2Login(UserInfo userInfo) {
         Member member = memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
             .orElseGet(() -> signUp(userInfo));
         RefreshToken refreshToken = saveRefreshToken(member.getId());

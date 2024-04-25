@@ -60,7 +60,7 @@ class MemberAuthCommandServiceTest {
         @Test
         void 신규_회원으로_로그인하면_회원과_리프래쉬_토큰이_저장된다() {
             // when
-            var actual = memberAuthCommandService.oauth2Login(getUserInfo("1"));
+            var actual = memberAuthCommandService.oAuth2Login(getUserInfo("1"));
 
             // then
             assertThat(memberRepository.findById(actual.memberId())).isPresent();
@@ -75,7 +75,7 @@ class MemberAuthCommandServiceTest {
                 RefreshTokenFixture.builder().memberId(member.getId()).build());
 
             // when
-            var actual = memberAuthCommandService.oauth2Login(getUserInfo(member.getSocialId()));
+            var actual = memberAuthCommandService.oAuth2Login(getUserInfo(member.getSocialId()));
 
             // then
             assertThat(refreshTokenRepository.findById(originToken.getId())).isPresent();
