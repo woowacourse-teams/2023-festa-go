@@ -25,4 +25,9 @@ public class MemoryRefreshTokenRepository implements RefreshTokenRepository {
     public void deleteByMemberId(Long memberId) {
         memory.entrySet().removeIf(it -> Objects.equals(it.getValue().getMemberId(), memberId));
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        memory.remove(id);
+    }
 }

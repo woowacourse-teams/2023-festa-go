@@ -66,6 +66,7 @@ public class MemberAuthCommandService {
             log.info("만료된 리프래쉬 토큰이 있습니다. token={}", refreshTokenId);
             throw new UnauthorizedException(ErrorCode.EXPIRED_REFRESH_TOKEN);
         }
+        refreshTokenRepository.deleteById(refreshTokenId);
         RefreshToken newRefreshToken = saveRefreshToken(refreshToken.getMemberId());
         return new RefreshTokenResult(
             newRefreshToken.getMemberId(),
