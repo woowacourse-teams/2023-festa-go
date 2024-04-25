@@ -14,6 +14,7 @@ import com.festago.festago.presentation.databinding.FragmentArtistDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.artistdetail.adapter.festival.ArtistDetailAdapter
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
+import com.festago.festago.presentation.ui.artistdetail.uistate.MoreItemUiState
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -81,7 +82,13 @@ class ArtistDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
         binding.successUiState = uiState
-        adapter.submitList(uiState.festivals)
+
+        val items: List<Any> = if (uiState.isLast) {
+            uiState.festivals
+        } else {
+            uiState.festivals + MoreItemUiState { vm.loadMoreArtistFestivals(args.artistId) }
+        }
+        adapter.submitList(items)
 
         binding.llcArtistMedia.removeAllViews()
 

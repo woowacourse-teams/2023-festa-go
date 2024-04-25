@@ -15,8 +15,9 @@ import com.festago.festago.presentation.ui.artistdetail.adapter.artistlist.Artis
 import com.festago.festago.presentation.ui.artistdetail.uistate.FestivalItemUiState
 import java.time.LocalDate
 
-class ArtistDetailFestivalViewHolder(private val binding: ItemArtistDetailFestivalBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class ArtistDetailFestivalViewHolder(
+    private val binding: ItemArtistDetailFestivalBinding
+) : ArtistDetailViewHolder(binding) {
     private val artistAdapter = ArtistAdapter()
 
     init {
