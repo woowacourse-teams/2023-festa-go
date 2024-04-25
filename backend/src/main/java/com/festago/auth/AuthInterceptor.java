@@ -1,6 +1,6 @@
 package com.festago.auth;
 
-import com.festago.auth.application.AuthExtractor;
+import com.festago.auth.application.AuthTokenExtractor;
 import com.festago.auth.application.TokenExtractor;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.Role;
@@ -14,18 +14,18 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 public class AuthInterceptor implements HandlerInterceptor {
 
-    private final AuthExtractor authExtractor;
+    private final AuthTokenExtractor authTokenExtractor;
     private final TokenExtractor tokenExtractor;
     private final AuthenticateContext authenticateContext;
     private final Role role;
 
-    private AuthInterceptor(AuthExtractor authExtractor, TokenExtractor tokenExtractor,
+    private AuthInterceptor(AuthTokenExtractor authTokenExtractor, TokenExtractor tokenExtractor,
                             AuthenticateContext authenticateContext, Role role) {
-        Assert.notNull(authExtractor, "The authExtractor must not be null");
+        Assert.notNull(authTokenExtractor, "The authExtractor must not be null");
         Assert.notNull(tokenExtractor, "The tokenExtractor must not be null");
         Assert.notNull(authenticateContext, "The authenticateContext must not be null");
         Assert.notNull(role, "The role must not be null");
-        this.authExtractor = authExtractor;
+        this.authTokenExtractor = authTokenExtractor;
         this.tokenExtractor = tokenExtractor;
         this.authenticateContext = authenticateContext;
         this.role = role;
@@ -40,7 +40,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         throws Exception {
         String token = tokenExtractor.extract(request)
             .orElseThrow(() -> new UnauthorizedException(ErrorCode.NEED_AUTH_TOKEN));
-        AuthPayload payload = authExtractor.extract(token);
+        AuthPayload payload = authTokenExtractor.extract(token);
         if (payload.getRole() != this.role) {
             throw new ForbiddenException(ErrorCode.NOT_ENOUGH_PERMISSION);
         }
@@ -50,13 +50,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     public static class AuthInterceptorBuilder {
 
-        private AuthExtractor authExtractor;
+        private AuthTokenExtractor authTokenExtractor;
         private TokenExtractor tokenExtractor;
         private AuthenticateContext authenticateContext;
         private Role role;
 
-        public AuthInterceptorBuilder authExtractor(AuthExtractor authExtractor) {
-            this.authExtractor = authExtractor;
+        public AuthInterceptorBuilder authExtractor(AuthTokenExtractor authTokenExtractor) {
+            this.authTokenExtractor = authTokenExtractor;
             return this;
         }
 
@@ -76,7 +76,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         public AuthInterceptor build() {
-            return new AuthInterceptor(authExtractor, tokenExtractor, authenticateContext, role);
+            return new AuthInterceptor(authTokenExtractor, tokenExtractor, authenticateContext, role);
         }
     }
 }

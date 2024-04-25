@@ -1,6 +1,6 @@
 package com.festago.auth.application.command;
 
-import com.festago.auth.application.AuthProvider;
+import com.festago.auth.application.AuthTokenProvider;
 import com.festago.auth.application.OAuth2Client;
 import com.festago.auth.application.OAuth2Clients;
 import com.festago.auth.domain.AuthPayload;
@@ -22,7 +22,7 @@ public class MemberAuthFacadeService {
 
     private final OAuth2Clients oAuth2Clients;
     private final MemberAuthCommandService memberAuthCommandService;
-    private final AuthProvider authProvider;
+    private final AuthTokenProvider authTokenProvider;
 
     public LoginV1Response oAuth2Login(SocialType socialType, String code) {
         OAuth2Client oAuth2Client = oAuth2Clients.getClient(socialType);
@@ -31,7 +31,7 @@ public class MemberAuthFacadeService {
 
         LoginResult loginResult = memberAuthCommandService.oAuth2Login(userInfo);
 
-        TokenResponse accessToken = authProvider.provide(new AuthPayload(loginResult.memberId(), Role.MEMBER));
+        TokenResponse accessToken = authTokenProvider.provide(new AuthPayload(loginResult.memberId(), Role.MEMBER));
         return new LoginV1Response(
             loginResult.nickname(),
             loginResult.profileImageUrl(),
@@ -50,7 +50,7 @@ public class MemberAuthFacadeService {
     public TokenRefreshV1Response refresh(UUID refreshTokenId) {
         RefreshTokenResult refreshTokenResult = memberAuthCommandService.refresh(refreshTokenId);
         Long memberId = refreshTokenResult.memberId();
-        TokenResponse accessToken = authProvider.provide(new AuthPayload(memberId, Role.MEMBER));
+        TokenResponse accessToken = authTokenProvider.provide(new AuthPayload(memberId, Role.MEMBER));
         return new TokenRefreshV1Response(
             accessToken,
             new TokenResponse(

@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 import com.festago.admin.domain.Admin;
 import com.festago.admin.repository.AdminRepository;
 import com.festago.admin.repository.MemoryAdminRepository;
-import com.festago.auth.application.AuthProvider;
+import com.festago.auth.application.AuthTokenProvider;
 import com.festago.auth.dto.command.AdminLoginCommand;
 import com.festago.auth.dto.command.AdminSignupCommand;
 import com.festago.auth.dto.v1.TokenResponse;
@@ -35,16 +35,16 @@ class AdminAuthCommandServiceTest {
 
     AdminRepository adminRepository;
 
-    AuthProvider authProvider;
+    AuthTokenProvider authTokenProvider;
 
     AdminAuthCommandService adminAuthCommandService;
 
     @BeforeEach
     void setUp() {
         adminRepository = new MemoryAdminRepository();
-        authProvider = mock(AuthProvider.class);
+        authTokenProvider = mock(AuthTokenProvider.class);
         adminAuthCommandService = new AdminAuthCommandService(
-            authProvider,
+            authTokenProvider,
             adminRepository,
             PasswordEncoderFactories.createDelegatingPasswordEncoder()
         );
@@ -87,7 +87,7 @@ class AdminAuthCommandServiceTest {
                 .password("{noop}password")
                 .build());
             var command = new AdminLoginCommand("admin", "password");
-            given(authProvider.provide(any()))
+            given(authTokenProvider.provide(any()))
                 .willReturn(new TokenResponse("token", LocalDateTime.now().plusWeeks(1)));
 
             // when

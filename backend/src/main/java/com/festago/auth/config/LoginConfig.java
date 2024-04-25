@@ -4,7 +4,7 @@ import com.festago.auth.AuthInterceptor;
 import com.festago.auth.AuthenticateContext;
 import com.festago.auth.RoleArgumentResolver;
 import com.festago.auth.annotation.MemberAuth;
-import com.festago.auth.application.AuthExtractor;
+import com.festago.auth.application.AuthTokenExtractor;
 import com.festago.auth.domain.Role;
 import com.festago.auth.infrastructure.CookieTokenExtractor;
 import com.festago.auth.infrastructure.HeaderTokenExtractor;
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class LoginConfig implements WebMvcConfigurer {
 
-    private final AuthExtractor authExtractor;
+    private final AuthTokenExtractor authTokenExtractor;
     private final AuthenticateContext authenticateContext;
 
     @Override
@@ -57,7 +57,7 @@ public class LoginConfig implements WebMvcConfigurer {
     @Bean
     public AuthInterceptor adminAuthInterceptor() {
         return AuthInterceptor.builder()
-            .authExtractor(authExtractor)
+            .authExtractor(authTokenExtractor)
             .tokenExtractor(new CookieTokenExtractor())
             .authenticateContext(authenticateContext)
             .role(Role.ADMIN)
@@ -67,7 +67,7 @@ public class LoginConfig implements WebMvcConfigurer {
     @Bean
     public AuthInterceptor memberAuthInterceptor() {
         return AuthInterceptor.builder()
-            .authExtractor(authExtractor)
+            .authExtractor(authTokenExtractor)
             .tokenExtractor(new HeaderTokenExtractor())
             .authenticateContext(authenticateContext)
             .role(Role.MEMBER)

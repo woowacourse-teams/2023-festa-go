@@ -1,6 +1,6 @@
 package com.festago.auth.infrastructure;
 
-import com.festago.auth.application.AuthProvider;
+import com.festago.auth.application.AuthTokenProvider;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.dto.v1.TokenResponse;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +12,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import javax.crypto.SecretKey;
 
-public class JwtAuthProvider implements AuthProvider {
+public class JwtAuthTokenProvider implements AuthTokenProvider {
 
     private static final String MEMBER_ID_KEY = "memberId";
     private static final String ROLE_ID_KEY = "role";
@@ -21,7 +21,7 @@ public class JwtAuthProvider implements AuthProvider {
     private final long expirationMinutes;
     private final Clock clock;
 
-    public JwtAuthProvider(String secretKey, long expirationMinutes, Clock clock) {
+    public JwtAuthTokenProvider(String secretKey, long expirationMinutes, Clock clock) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         this.expirationMinutes = expirationMinutes;
         this.clock = clock;

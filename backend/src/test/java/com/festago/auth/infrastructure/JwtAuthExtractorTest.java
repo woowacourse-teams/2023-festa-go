@@ -29,7 +29,7 @@ class JwtAuthExtractorTest {
     private static final String SECRET_KEY = "1231231231231231223131231231231231231212312312";
     private static final Key KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
-    JwtAuthExtractor jwtAuthExtractor = new JwtAuthExtractor(SECRET_KEY, Clock.systemDefaultZone());
+    JwtAuthTokenExtractor jwtAuthExtractor = new JwtAuthTokenExtractor(SECRET_KEY, Clock.systemDefaultZone());
 
     @Test
     void JWT_토큰의_형식이_아니면_예외() {

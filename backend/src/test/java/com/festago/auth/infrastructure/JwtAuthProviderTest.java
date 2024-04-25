@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 class JwtAuthProviderTest {
 
     private static final String SECRET_KEY = "1231231231231231223131231231231231231212312312";
-    JwtAuthProvider jwtAuthProvider = new JwtAuthProvider(SECRET_KEY, 360, Clock.systemDefaultZone());
+    JwtAuthTokenProvider jwtAuthProvider = new JwtAuthTokenProvider(SECRET_KEY, 360, Clock.systemDefaultZone());
 
     @Test
     void 토큰_생성_성공() {

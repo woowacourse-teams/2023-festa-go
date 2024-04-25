@@ -15,7 +15,7 @@ public class AuthFacadeService {
 
     private final AuthService authService;
     private final OAuth2Clients oAuth2Clients;
-    private final AuthProvider authProvider;
+    private final AuthTokenProvider authTokenProvider;
 
     public LoginResponse login(SocialType socialType, String oAuthToken) {
         UserInfo userInfo = getUserInfo(socialType, oAuthToken);
@@ -25,7 +25,7 @@ public class AuthFacadeService {
     }
 
     private String getAccessToken(Long memberId) {
-        return authProvider.provide(new AuthPayload(memberId, Role.MEMBER)).token();
+        return authTokenProvider.provide(new AuthPayload(memberId, Role.MEMBER)).token();
     }
 
     private UserInfo getUserInfo(SocialType socialType, String oAuthToken) {

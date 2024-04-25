@@ -31,7 +31,7 @@ class AuthFacadeServiceTest {
 
     AuthService authService;
 
-    AuthProvider authProvider;
+    AuthTokenProvider authTokenProvider;
 
     @BeforeEach
     void setUp() {
@@ -39,9 +39,9 @@ class AuthFacadeServiceTest {
         OAuth2Clients oAuth2Clients = OAuth2Clients.builder()
             .add(new FestagoOAuth2Client())
             .build();
-        authProvider = mock(AuthProvider.class);
+        authTokenProvider = mock(AuthTokenProvider.class);
 
-        authFacadeService = new AuthFacadeService(authService, oAuth2Clients, authProvider);
+        authFacadeService = new AuthFacadeService(authService, oAuth2Clients, authTokenProvider);
     }
 
     @Test
@@ -50,7 +50,7 @@ class AuthFacadeServiceTest {
             .id(1L)
             .build();
 
-        given(authProvider.provide(any(AuthPayload.class)))
+        given(authTokenProvider.provide(any(AuthPayload.class)))
             .willReturn(new TokenResponse("Bearer token", LocalDateTime.now().plusWeeks(1)));
 
         given(authService.login(any(UserInfo.class)))
