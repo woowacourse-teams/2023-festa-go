@@ -53,7 +53,7 @@ class ArtistDetailViewModel @Inject constructor(
         val successUiState = uiState.value as? ArtistDetailUiState.Success ?: return
 
         viewModelScope.launch {
-            val currentFestivals = successUiState.stages
+            val currentFestivals = successUiState.festivals
 
             artistRepository.loadArtistFestivals(
                 id = artistId,
@@ -61,7 +61,7 @@ class ArtistDetailViewModel @Inject constructor(
                 lastStartDate = currentFestivals.lastOrNull()?.startDate,
             ).onSuccess { festivalsPage ->
                 _uiState.value = successUiState.copy(
-                    stages = currentFestivals + festivalsPage.toUiState(),
+                    festivals = currentFestivals + festivalsPage.toUiState(),
                     isLast = festivalsPage.isLastPage
                 )
             }
