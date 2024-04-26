@@ -1,16 +1,19 @@
 package com.festago.auth.infrastructure;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 import java.io.IOException;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.HttpStatusCodeException;
 
+@Slf4j
 public class KakaoOAuth2AccessTokenErrorHandler extends DefaultResponseErrorHandler {
 
     @Override
@@ -34,6 +37,7 @@ public class KakaoOAuth2AccessTokenErrorHandler extends DefaultResponseErrorHand
 
     private void handleErrorCode(KakaoOAuth2ErrorResponse errorResponse) {
         handleKOE320Error(errorResponse);
+        log.warn("{}", errorResponse);
         throw new InternalServerException(ErrorCode.OAUTH2_INVALID_REQUEST);
     }
 
@@ -49,10 +53,11 @@ public class KakaoOAuth2AccessTokenErrorHandler extends DefaultResponseErrorHand
         }
     }
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record KakaoOAuth2ErrorResponse(
         String error,
-        @JsonProperty("error_description") String errorDescription,
-        @JsonProperty("error_code") String errorCode
+        String errorDescription,
+        String errorCode
     ) {
 
         public boolean isErrorCodeKOE320() {
