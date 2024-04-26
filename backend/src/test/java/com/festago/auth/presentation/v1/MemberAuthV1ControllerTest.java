@@ -57,6 +57,29 @@ class MemberAuthV1ControllerTest {
     }
 
     @Nested
+    class 회원_로그인_withPath {
+
+        final String uri = "/api/v1/auth/login/oauth2/{socialType}";
+
+        @Nested
+        @DisplayName("GET " + uri)
+        class 올바른_주소로 {
+
+            @Test
+            void 요청을_보내면_200_응답과_로그인_응답이_반환된다() throws Exception {
+                // given
+                String code = "1";
+
+                // when & then
+                mockMvc.perform(get(uri, "festago")
+                        .queryParam("code", code)
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+            }
+        }
+    }
+
+    @Nested
     class 회원_로그아웃 {
 
         final String uri = "/api/v1/auth/logout";

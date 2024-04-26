@@ -3,6 +3,7 @@ package com.festago.auth.presentation.v1;
 import com.festago.auth.annotation.Member;
 import com.festago.auth.annotation.MemberAuth;
 import com.festago.auth.application.command.MemberAuthFacadeService;
+import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.v1.LoginV1Response;
 import com.festago.auth.dto.v1.LogoutV1Request;
 import com.festago.auth.dto.v1.OAuth2LoginV1Request;
@@ -14,9 +15,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,12 +37,21 @@ public class MemberAuthV1Controller {
             .body(memberAuthFacadeService.oAuth2Login(request.socialType(), request.code()));
     }
 
+    @GetMapping("/login/oauth2/{socialType}")
+    public ResponseEntity<LoginV1Response> oauth2LoginWithPath(
+        @PathVariable SocialType socialType,
+        @RequestParam String code
+    ) {
+        return ResponseEntity.ok()
+            .body(memberAuthFacadeService.oAuth2Login(socialType, code));
+    }
+
     @MemberAuth
     @GetMapping("/logout")
     public ResponseEntity<Void> logout(
         @Member Long memberId,
         @RequestBody @Valid LogoutV1Request request
-        ) {
+    ) {
         memberAuthFacadeService.logout(memberId, UUID.fromString(request.refreshToken()));
         return ResponseEntity.ok().build();
     }
