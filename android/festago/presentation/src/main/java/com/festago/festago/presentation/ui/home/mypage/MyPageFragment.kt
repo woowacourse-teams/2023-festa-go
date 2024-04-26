@@ -6,13 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
+import androidx.fragment.app.viewModels
 import com.festago.festago.presentation.databinding.FragmentMyPageBinding
+import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
+
+    private val vm: MyPageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +29,29 @@ class MyPageFragment : Fragment() {
             windowInsets
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initView()
+        initObserve()
+    }
+
+    private fun initView() {
+        binding.uiState = vm.uiState.value
+    }
+
+    private fun initObserve() {
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.uiState.collect { uiState ->
+                binding.uiState = uiState
+                binding.errorUiState = when (uiState) {
+                    is MyPageUiState.Error -> uiState
+                    else -> null
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

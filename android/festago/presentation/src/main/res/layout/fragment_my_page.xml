@@ -5,6 +5,13 @@
 
     <data>
 
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState" />
+
+        <variable
+            name="errorUiState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState.Error" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,6 +19,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -60,6 +68,7 @@
         </LinearLayout>
 
         <LinearLayout
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -130,5 +139,21 @@
                 android:text="@string/my_page_unregister"
                 android:textColor="@color/contents_gray_05" />
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/includeError"
+            layout="@layout/layout_network_error"
+            refreshListener="@{errorUiState.refresh}"
+            visibility="@{uiState.shouldShowError}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
