@@ -7,9 +7,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
-import java.sql.Timestamp;
 import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import javax.crypto.SecretKey;
 
 public class JwtAuthTokenProvider implements AuthTokenProvider {
@@ -29,15 +31,15 @@ public class JwtAuthTokenProvider implements AuthTokenProvider {
 
     @Override
     public TokenResponse provide(AuthPayload authPayload) {
-        LocalDateTime now = LocalDateTime.now(clock);
-        LocalDateTime expiredAt = now.plusMinutes(expirationMinutes);
+        Instant now = clock.instant();
+        Instant expiredAt = now.plus(expirationMinutes, ChronoUnit.MINUTES);
         String accessToken = Jwts.builder()
             .claim(MEMBER_ID_KEY, authPayload.getMemberId())
             .claim(ROLE_ID_KEY, authPayload.getRole())
-            .setIssuedAt(Timestamp.valueOf(now))
-            .setExpiration(Timestamp.valueOf(expiredAt))
+            .setIssuedAt(Date.from(now))
+            .setExpiration(Date.from(expiredAt))
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
-        return new TokenResponse(accessToken, expiredAt);
+        return new TokenResponse(accessToken, LocalDateTime.ofInstant(expiredAt, clock.getZone()));
     }
 }
