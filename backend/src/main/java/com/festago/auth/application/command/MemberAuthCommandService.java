@@ -4,7 +4,7 @@ import com.festago.auth.domain.RefreshToken;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.event.MemberDeletedEvent;
 import com.festago.auth.dto.v1.LoginResult;
-import com.festago.auth.dto.v1.RefreshTokenResult;
+import com.festago.auth.dto.v1.TokenRefreshResult;
 import com.festago.auth.repository.RefreshTokenRepository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
@@ -60,7 +60,7 @@ public class MemberAuthCommandService {
             });
     }
 
-    public RefreshTokenResult refresh(UUID refreshTokenId) {
+    public TokenRefreshResult refresh(UUID refreshTokenId) {
         RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenId)
             .orElseThrow(() -> {
                 log.warn("탈취 가능성이 있는 리프래쉬 토큰이 있습니다. token={}", refreshTokenId);
@@ -72,7 +72,7 @@ public class MemberAuthCommandService {
         }
         refreshTokenRepository.deleteById(refreshTokenId);
         RefreshToken newRefreshToken = saveRefreshToken(refreshToken.getMemberId());
-        return new RefreshTokenResult(
+        return new TokenRefreshResult(
             newRefreshToken.getMemberId(),
             newRefreshToken.getId().toString(),
             newRefreshToken.getExpiredAt()

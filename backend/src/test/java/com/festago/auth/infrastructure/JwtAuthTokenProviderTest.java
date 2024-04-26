@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JwtAuthProviderTest {
+class JwtAuthTokenProviderTest {
 
     private static final String SECRET_KEY = "1231231231231231223131231231231231231212312312";
     JwtAuthTokenProvider jwtAuthProvider = new JwtAuthTokenProvider(SECRET_KEY, 360, Clock.systemDefaultZone());

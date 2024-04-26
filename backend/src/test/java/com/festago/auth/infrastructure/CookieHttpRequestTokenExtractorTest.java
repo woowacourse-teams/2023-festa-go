@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @ExtendWith(MockitoExtension.class)
-class CookieTokenExtractorTest {
+class CookieHttpRequestTokenExtractorTest {
 
     CookieHttpRequestTokenExtractor cookieTokenExtractor = new CookieHttpRequestTokenExtractor();
 

@@ -9,7 +9,7 @@ import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.v1.LoginResult;
 import com.festago.auth.dto.v1.LoginV1Response;
-import com.festago.auth.dto.v1.RefreshTokenResult;
+import com.festago.auth.dto.v1.TokenRefreshResult;
 import com.festago.auth.dto.v1.TokenRefreshV1Response;
 import com.festago.auth.dto.v1.TokenResponse;
 import java.util.UUID;
@@ -48,14 +48,14 @@ public class MemberAuthFacadeService {
     }
 
     public TokenRefreshV1Response refresh(UUID refreshTokenId) {
-        RefreshTokenResult refreshTokenResult = memberAuthCommandService.refresh(refreshTokenId);
-        Long memberId = refreshTokenResult.memberId();
+        TokenRefreshResult tokenRefreshResult = memberAuthCommandService.refresh(refreshTokenId);
+        Long memberId = tokenRefreshResult.memberId();
         TokenResponse accessToken = authTokenProvider.provide(new AuthPayload(memberId, Role.MEMBER));
         return new TokenRefreshV1Response(
             accessToken,
             new TokenResponse(
-                refreshTokenResult.token(),
-                refreshTokenResult.expiredAt()
+                tokenRefreshResult.token(),
+                tokenRefreshResult.expiredAt()
             )
         );
     }

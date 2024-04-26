@@ -18,7 +18,7 @@ import org.springframework.http.HttpHeaders;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @ExtendWith(MockitoExtension.class)
-class HeaderTokenExtractorTest {
+class HeaderHttpRequestTokenExtractorTest {
 
     HeaderHttpRequestTokenExtractor headerTokenExtractor = new HeaderHttpRequestTokenExtractor();
 

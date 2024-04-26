@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JwtAuthExtractorTest {
+class JwtAuthTokenExtractorTest {
 
     private static final String MEMBER_ID_KEY = "memberId";
     private static final String ROLE_ID_KEY = "role";
