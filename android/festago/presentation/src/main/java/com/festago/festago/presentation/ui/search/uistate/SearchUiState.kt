@@ -13,7 +13,7 @@ sealed interface SearchUiState {
         val searchedSchools: List<SchoolSearchItemUiState>,
     ) : SearchUiState
 
-    class Error(val refresh: () -> Unit) : SearchUiState
+    class Error(val refresh: (searchQuery: String) -> Unit) : SearchUiState
 
     val shouldShowNotEmptyRecentSearchSuccess get() = this is RecentSearchSuccess && recentSearchQueries.isNotEmpty()
     val shouldShowEmptyRecentSearchSuccess get() = this is RecentSearchSuccess && recentSearchQueries.isEmpty()

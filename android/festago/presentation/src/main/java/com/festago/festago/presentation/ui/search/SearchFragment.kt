@@ -161,7 +161,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun handleError(uiState: SearchUiState.Error) {
-        binding.refreshListener = uiState.refresh
+        binding.refreshListener = { uiState.refresh.invoke(binding.etSearch.text.toString()) }
     }
 
     private fun initSearchTab() {
