@@ -8,7 +8,7 @@
     <string name="home_bottom_nav_my_page">마이페이지</string>
     <string name="home_back_pressed">한 번 더 누르면 앱이 종료됩니다</string>
 
-    <!-- Strings related to festival fist -->
+    <!-- Strings related to festival list -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="festival_list_tv_popular_festival_title">요즘 뜨는 축제</string>
     <string name="festival_list_tv_date_range_format">%s - %s</string>
@@ -20,8 +20,13 @@
     <string name="festival_list_tv_dday_in_progress">진행 중</string>
     <string name="festival_list_tv_dday_format">D%1$s</string>
 
+    <string name="festival_list_tv_festivals_empty_progress">진행 중인 축제가 없어요</string>
+    <string name="festival_list_tv_festivals_empty_upcoming">진행 예정인 축제가 없어요</string>
+    <string name="festival_list_tv_festivals_empty">축제가 없어요</string>
+
     <!-- String related to artist detail -->
     <string name="artist_detail_tv_dday_format">D%1$s</string>
+    <string name="artist_detail_tv_empty_festivals">아직 축제가 없어요</string>
 
     <!-- String related to notification list-->
     <string name="notification_list_tv_notification_app_bar">알림</string>
@@ -32,9 +37,13 @@
     <string name="festival_detail_tv_dday_in_progress">진행 중</string>
     <string name="festival_detail_tv_dday_format">D%1$s</string>
     <string name="festival_detail_tv_dday_end">종료</string>
+    <string name="festival_detail_tv_empty_stages">아직 라인업이 공개되지 않았어요</string>
 
     <!-- String related to region bottom sheet -->
     <string name="region_bottom_sheet_tv_region">지역별</string>
+
+    <!-- String related to artist detail -->
+    <string name="school_detail_tv_empty_festivals">아직 축제가 없어요</string>
 
     <!-- String related to search -->
     <string name="search_et_search_hint">학교명, 아티스트명, 축제명으로 입력하세요.</string>
@@ -64,6 +73,20 @@
     <string name="ok_dialog_btn_ok">확인</string>
     <string name="ok_dialog_btn_update">업데이트</string>
     <string name="ok_dialog_btn_cancel">취소</string>
+
+    <!-- Strings related to network error -->
+    <string name="layout_network_error_refresh">새로고침하기</string>
+    <string name="layout_network_error_retry">잠시 후에 다시 시도해주세요</string>
+    <string name="layout_network_error_not_work">현재 접속이 원활하지 않아요</string>
+
+    <!-- Strings related to require login -->
+    <string name="layout_require_login_description">로그인하면 북마크 할 수 있어요</string>
+    <string name="layout_require_login_go_to_login">로그인 하러 가기</string>
+
+    <!-- Strings related to bookmark -->
+    <string name="fragmentl_bookmark_artist_bookmark">관심있는 아티스트를 북마크 할 수 있어요</string>
+    <string name="fragmentl_bookmark_festival_bookmark">관심있는 축제를 북마크 할 수 있어요</string>
+    <string name="fragmentl_bookmark_school_bookmark">관심있는 학교를 북마크 할 수 있어요</string>
 
     <!-- String related to signIn -->
     <string name="sign_in_tv_festago_flag">페스타고,\n대학축제를\n더욱 즐겁게!</string>

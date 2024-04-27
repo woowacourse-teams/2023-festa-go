@@ -90,6 +90,9 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+
+    // logging httpLoggingInterceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 }
 
 fun getSecretKey(propertyKey: String): String {

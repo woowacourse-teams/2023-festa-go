@@ -125,6 +125,36 @@
                 app:layout_constraintTop_toBottomOf="@id/ivFestivalBackground"
                 tools:text="홍익대학교 와우페스티벌 2023" />
 
+            <LinearLayout
+                android:id="@+id/llSchoolLocation"
+                onSingleClick="@{() -> successUiState.festival.onSchoolClick.invoke(successUiState.festival.school.id)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="@id/tvFestivalSchedule"
+                app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule">
+
+                <ImageView
+                    android:id="@+id/ivSchoolLocation"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_pin_location"
+                    app:layout_constraintStart_toStartOf="@id/tvFestivalSchedule"
+                    app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule" />
+
+                <TextView
+                    android:id="@+id/tvSchoolLocation"
+                    style="@style/B2Medium14Lh20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@{successUiState.festival.school.name}"
+                    android:textColor="@color/contents_gray_07"
+                    tools:text="홍익대학교" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tvFestivalSchedule"
                 style="@style/B1Medium16Lh20"
@@ -147,8 +177,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/mdDivider"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tvFestivalSchedule"
-                app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule"
+                app:layout_constraintStart_toStartOf="@id/llSchoolLocation"
+                app:layout_constraintTop_toBottomOf="@id/llSchoolLocation"
                 app:singleLine="true">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -156,6 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal" />
+
             </HorizontalScrollView>
 
             <com.google.android.material.divider.MaterialDivider
@@ -189,6 +220,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvFestivalsEmpty"
+            style="@style/H5Bold14Lh16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/festival_detail_tv_empty_stages"
+            android:textColor="@color/contents_gray_06"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{uiState.shouldShowEmptyStages}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

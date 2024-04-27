@@ -16,7 +16,7 @@ import java.time.LocalDate
 
 class SchoolDetailFestivalViewHolder(
     private val binding: ItemSchoolDetailFestivalBinding,
-) : RecyclerView.ViewHolder(binding.root) {
+) : SchoolDetailViewHolder(binding) {
     private val artistAdapter = ArtistAdapter()
 
     init {

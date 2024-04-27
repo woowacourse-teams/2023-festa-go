@@ -34,8 +34,8 @@ public class AdminFestivalV1QueryDslRepository {
                         festival.id,
                         festival.name,
                         school.name,
-                        festival.startDate,
-                        festival.endDate,
+                        festival.festivalDuration.startDate,
+                        festival.festivalDuration.endDate,
                         stage.count()
                     ))
                 .from(festival)
@@ -88,8 +88,8 @@ public class AdminFestivalV1QueryDslRepository {
                 case "id" -> OrderSpecifierUtils.of(it.getDirection(), festival.id);
                 case "name" -> OrderSpecifierUtils.of(it.getDirection(), festival.name);
                 case "schoolName" -> OrderSpecifierUtils.of(it.getDirection(), school.name);
-                case "startDate" -> OrderSpecifierUtils.of(it.getDirection(), festival.startDate);
-                case "endDate" -> OrderSpecifierUtils.of(it.getDirection(), festival.endDate);
+                case "startDate" -> OrderSpecifierUtils.of(it.getDirection(), festival.festivalDuration.startDate);
+                case "endDate" -> OrderSpecifierUtils.of(it.getDirection(), festival.festivalDuration.endDate);
                 default -> OrderSpecifierUtils.NULL;
             })
             .orElse(OrderSpecifierUtils.NULL);

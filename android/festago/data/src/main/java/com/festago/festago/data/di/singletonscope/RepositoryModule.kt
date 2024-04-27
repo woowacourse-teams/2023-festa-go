@@ -5,8 +5,10 @@ import com.festago.festago.data.repository.DefaultFestivalRepository
 import com.festago.festago.data.repository.DefaultRecentSearchRepository
 import com.festago.festago.data.repository.DefaultSchoolRepository
 import com.festago.festago.data.repository.DefaultSearchRepository
+import com.festago.festago.data.repository.FakeBookmarkRepository
 import com.festago.festago.data.repository.FakeUserRepository
 import com.festago.festago.domain.repository.ArtistRepository
+import com.festago.festago.domain.repository.BookmarkRepository
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.domain.repository.RecentSearchRepository
 import com.festago.festago.domain.repository.SchoolRepository
@@ -21,7 +23,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 interface RepositoryModule {
-
     @Binds
     @Singleton
     fun bindsFestivalRepository(festivalRepository: DefaultFestivalRepository): FestivalRepository
@@ -41,6 +42,10 @@ interface RepositoryModule {
     @Binds
     @Singleton
     fun bindsSearchRepository(searchRepository: DefaultSearchRepository): SearchRepository
+
+    @Binds
+    @Singleton
+    fun bindsBookmarkRepository(bookmarkRepository: FakeBookmarkRepository): BookmarkRepository
 
     @Binds
     @Singleton

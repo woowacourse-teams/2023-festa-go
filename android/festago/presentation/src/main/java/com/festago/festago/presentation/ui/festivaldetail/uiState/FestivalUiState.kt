@@ -12,4 +12,5 @@ data class FestivalUiState(
     val posterImageUrl: String,
     val school: School,
     val socialMedias: List<SocialMedia>,
+    val onSchoolClick: (Long) -> Unit,
 )

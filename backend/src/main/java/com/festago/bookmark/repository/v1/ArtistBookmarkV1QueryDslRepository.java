@@ -23,6 +23,7 @@ public class ArtistBookmarkV1QueryDslRepository extends QueryDslRepositorySuppor
         return select(
             new QArtistBookmarkV1Response(
                 new QArtistBookmarkInfoV1Response(
+                    artist.id,
                     artist.name,
                     artist.profileImage
                 ),
