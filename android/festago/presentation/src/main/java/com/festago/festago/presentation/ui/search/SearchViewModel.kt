@@ -72,7 +72,10 @@ class SearchViewModel @Inject constructor(
                     deferredSchools.await().getOrThrow().map { it.toUiState() },
                 )
             }.onFailure {
-                _uiState.value = SearchUiState.Error
+                _uiState.value = SearchUiState.Error {
+                    _uiState.value = SearchUiState.Loading
+                    loadRecentSearch()
+                }
                 analyticsHelper.logNetworkFailure(
                     key = KEY_SEARCH,
                     value = it.message.toString(),
