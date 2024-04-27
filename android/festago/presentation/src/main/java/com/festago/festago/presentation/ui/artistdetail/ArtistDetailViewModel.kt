@@ -2,6 +2,8 @@ package com.festago.festago.presentation.ui.artistdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.festago.festago.common.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.logNetworkFailure
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.repository.ArtistRepository
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
@@ -21,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ArtistDetailViewModel @Inject constructor(
     private val artistRepository: ArtistRepository,
+    private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _event: MutableSharedFlow<ArtistDetailEvent> = MutableSharedFlow()
     val event: SharedFlow<ArtistDetailEvent> = _event.asSharedFlow()
@@ -44,7 +47,7 @@ class ArtistDetailViewModel @Inject constructor(
                     festivalPage.isLastPage
                 )
             }.onFailure {
-                _uiState.value = ArtistDetailUiState.Error
+                handleFailure(key = KEY_LOAD_ARTIST_DETAIL, throwable = it)
             }
         }
     }
@@ -64,8 +67,21 @@ class ArtistDetailViewModel @Inject constructor(
                     festivals = currentFestivals + festivalsPage.toUiState(),
                     isLast = festivalsPage.isLastPage
                 )
+            }.onFailure {
+                handleFailure(key = KEY_LOAD_MORE_ARTIST_FESTIVAL, throwable = it)
             }
         }
+    }
+
+    private fun handleFailure(key: String, throwable: Throwable) {
+        _uiState.value = ArtistDetailUiState.Error {
+            _uiState.value = ArtistDetailUiState.Loading
+            loadArtistDetail(it)
+        }
+        analyticsHelper.logNetworkFailure(
+            key = key,
+            value = throwable.message.toString()
+        )
     }
 
     private fun FestivalsPage.toUiState() = festivals.map {
@@ -93,5 +109,10 @@ class ArtistDetailViewModel @Inject constructor(
                 }
             },
         )
+    }
+
+    companion object {
+        private const val KEY_LOAD_ARTIST_DETAIL = "KEY_LOAD_ARTIST_DETAIL"
+        private const val KEY_LOAD_MORE_ARTIST_FESTIVAL = "KEY_LOAD_MORE_ARTIST_FESTIVAL"
     }
 }

@@ -12,6 +12,10 @@
         <variable
             name="successUiState"
             type="com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState.Success" />
+
+        <variable
+            name="refreshListener"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
 
@@ -169,6 +173,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/layout_network_error"
+            refreshListener="@{refreshListener}"
+            visibility="@{uiState.shouldShowError}" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-
