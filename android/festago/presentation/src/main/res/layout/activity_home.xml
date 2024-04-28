@@ -6,6 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/contents_gray_07"
         tools:context=".ui.home.HomeActivity">
 
         <androidx.fragment.app.FragmentContainerView
@@ -23,7 +24,7 @@
             style="@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="#00000000"
+            android:background="@color/background_gray_01"
             app:itemIconTint="@drawable/selector_menu_color"
             app:labelVisibilityMode="unlabeled"
             app:layout_constraintBottom_toBottomOf="parent"

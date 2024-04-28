@@ -4,12 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -43,14 +46,22 @@ class HomeActivity : AppCompatActivity() {
         binding.root.setOnApplyWindowInsetsCompatListener { view, windowInsets ->
             val navigationInsets = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars())
             view.setPadding(0, 0, 0, navigationInsets.bottom)
-            window.navigationBarColor = Color.TRANSPARENT
             window.statusBarColor = Color.TRANSPARENT
             windowInsets
         }
 
+        setNavColor()
+
         binding.nvHome.setOnApplyWindowInsetsCompatListener { _, windowInsets ->
             windowInsets
         }
+    }
+
+    private fun setNavColor() {
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.white)
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars =
+            true
     }
 
     private fun initBinding() {
