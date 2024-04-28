@@ -1,6 +1,6 @@
 package com.festago.auth.infrastructure;
 
-import com.festago.auth.application.AuthExtractor;
+import com.festago.auth.application.AuthTokenExtractor;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.Role;
 import com.festago.common.exception.ErrorCode;
@@ -14,20 +14,23 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;
+import java.time.Clock;
+import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class JwtAuthExtractor implements AuthExtractor {
+public class JwtAuthTokenExtractor implements AuthTokenExtractor {
 
     private static final String MEMBER_ID_KEY = "memberId";
     private static final String ROLE_ID_KEY = "role";
 
     private final JwtParser jwtParser;
 
-    public JwtAuthExtractor(String secretKey) {
+    public JwtAuthTokenExtractor(String secretKey, Clock clock) {
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         this.jwtParser = Jwts.parserBuilder()
+            .setClock(() -> Date.from(clock.instant()))
             .setSigningKey(key)
             .build();
     }

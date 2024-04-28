@@ -17,3 +17,9 @@ festago:
   qr-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
   auth-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
   cors-allow-origins: http://localhost:3000
+  oauth2:
+    kakao:
+      grant-type: grant-type
+      client-id: client-id
+      redirect-uri: redirect-uri
+      client-secret: client-secret

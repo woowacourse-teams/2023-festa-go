@@ -13,6 +13,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.time.Clock;
 import java.util.Date;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -21,14 +22,14 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JwtAuthExtractorTest {
+class JwtAuthTokenExtractorTest {
 
     private static final String MEMBER_ID_KEY = "memberId";
     private static final String ROLE_ID_KEY = "role";
     private static final String SECRET_KEY = "1231231231231231223131231231231231231212312312";
     private static final Key KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
-    JwtAuthExtractor jwtAuthExtractor = new JwtAuthExtractor(SECRET_KEY);
+    JwtAuthTokenExtractor jwtAuthExtractor = new JwtAuthTokenExtractor(SECRET_KEY, Clock.systemDefaultZone());
 
     @Test
     void JWT_토큰의_형식이_아니면_예외() {

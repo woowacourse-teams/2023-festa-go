@@ -10,9 +10,11 @@ import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.LoginMemberDto;
 import com.festago.auth.dto.LoginResponse;
+import com.festago.auth.dto.v1.TokenResponse;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
 import com.festago.member.domain.Member;
 import com.festago.support.fixture.MemberFixture;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -20,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+@Deprecated(forRemoval = true)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +32,7 @@ class AuthFacadeServiceTest {
 
     AuthService authService;
 
-    AuthProvider authProvider;
+    AuthTokenProvider authTokenProvider;
 
     @BeforeEach
     void setUp() {
@@ -37,9 +40,9 @@ class AuthFacadeServiceTest {
         OAuth2Clients oAuth2Clients = OAuth2Clients.builder()
             .add(new FestagoOAuth2Client())
             .build();
-        authProvider = mock(AuthProvider.class);
+        authTokenProvider = mock(AuthTokenProvider.class);
 
-        authFacadeService = new AuthFacadeService(authService, oAuth2Clients, authProvider);
+        authFacadeService = new AuthFacadeService(authService, oAuth2Clients, authTokenProvider);
     }
 
     @Test
@@ -48,8 +51,8 @@ class AuthFacadeServiceTest {
             .id(1L)
             .build();
 
-        given(authProvider.provide(any(AuthPayload.class)))
-            .willReturn("Bearer token");
+        given(authTokenProvider.provide(any(AuthPayload.class)))
+            .willReturn(new TokenResponse("Bearer token", LocalDateTime.now().plusWeeks(1)));
 
         given(authService.login(any(UserInfo.class)))
             .willReturn(new LoginMemberDto(false, member.getId(), member.getNickname()));
