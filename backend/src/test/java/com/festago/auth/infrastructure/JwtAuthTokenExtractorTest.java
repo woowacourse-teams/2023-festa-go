@@ -9,7 +9,6 @@ import com.festago.auth.domain.Role;
 import com.festago.common.exception.UnauthorizedException;
 import com.festago.common.exception.UnexpectedException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -47,8 +46,8 @@ class JwtAuthTokenExtractorTest {
         //given
         String token = Jwts.builder()
             .claim(MEMBER_ID_KEY, 1L)
-            .setExpiration(new Date(new Date().getTime() - 1000))
-            .signWith(KEY, SignatureAlgorithm.HS256)
+            .expiration(new Date(new Date().getTime() - 1000))
+            .signWith(KEY)
             .compact();
 
         // when & then
@@ -64,8 +63,8 @@ class JwtAuthTokenExtractorTest {
 
         String token = Jwts.builder()
             .claim(MEMBER_ID_KEY, 1L)
-            .setExpiration(new Date(new Date().getTime() + 10000))
-            .signWith(otherKey, SignatureAlgorithm.HS256)
+            .expiration(new Date(new Date().getTime() + 10000))
+            .signWith(otherKey)
             .compact();
 
         // when & then
@@ -79,8 +78,8 @@ class JwtAuthTokenExtractorTest {
         // given
         String token = Jwts.builder()
             .claim(MEMBER_ID_KEY, 1)
-            .setExpiration(new Date(new Date().getTime() + 10000))
-            .signWith(KEY, SignatureAlgorithm.HS256)
+            .expiration(new Date(new Date().getTime() + 10000))
+            .signWith(KEY)
             .compact();
 
         // when & then
@@ -104,8 +103,8 @@ class JwtAuthTokenExtractorTest {
         String token = Jwts.builder()
             .claim(MEMBER_ID_KEY, memberId)
             .claim(ROLE_ID_KEY, Role.MEMBER)
-            .setExpiration(new Date(new Date().getTime() + 10000))
-            .signWith(KEY, SignatureAlgorithm.HS256)
+            .expiration(new Date(new Date().getTime() + 10000))
+            .signWith(KEY)
             .compact();
 
         // when

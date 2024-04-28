@@ -29,9 +29,9 @@ public class JwtAuthTokenExtractor implements AuthTokenExtractor {
 
     public JwtAuthTokenExtractor(String secretKey, Clock clock) {
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        this.jwtParser = Jwts.parserBuilder()
-            .setClock(() -> Date.from(clock.instant()))
-            .setSigningKey(key)
+        this.jwtParser = Jwts.parser()
+            .clock(() -> Date.from(clock.instant()))
+            .verifyWith(key)
             .build();
     }
 
@@ -45,8 +45,8 @@ public class JwtAuthTokenExtractor implements AuthTokenExtractor {
 
     private Claims getClaims(String code) {
         try {
-            return jwtParser.parseClaimsJws(code)
-                .getBody();
+            return jwtParser.parseSignedClaims(code)
+                .getPayload();
         } catch (ExpiredJwtException e) {
             throw new UnauthorizedException(ErrorCode.EXPIRED_AUTH_TOKEN);
         } catch (SignatureException | IllegalArgumentException | MalformedJwtException | UnsupportedJwtException e) {

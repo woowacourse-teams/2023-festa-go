@@ -23,7 +23,7 @@ class JwtAuthTokenProviderTest {
     void 토큰_생성_성공() {
         // given
         AuthPayload authPayload = new AuthPayload(1L, Role.MEMBER);
-        JwtParser parser = Jwts.parserBuilder()
+        JwtParser parser = Jwts.parser()
             .setSigningKey(SECRET_KEY.getBytes())
             .build();
 

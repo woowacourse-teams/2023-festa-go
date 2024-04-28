@@ -4,7 +4,6 @@ import com.festago.auth.application.AuthTokenProvider;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.dto.v1.TokenResponse;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.time.Clock;
@@ -36,9 +35,9 @@ public class JwtAuthTokenProvider implements AuthTokenProvider {
         String accessToken = Jwts.builder()
             .claim(MEMBER_ID_KEY, authPayload.getMemberId())
             .claim(ROLE_ID_KEY, authPayload.getRole())
-            .setIssuedAt(Date.from(now))
-            .setExpiration(Date.from(expiredAt))
-            .signWith(key, SignatureAlgorithm.HS256)
+            .issuedAt(Date.from(now))
+            .expiration(Date.from(expiredAt))
+            .signWith(key)
             .compact();
         return new TokenResponse(accessToken, LocalDateTime.ofInstant(expiredAt, clock.getZone()));
     }
