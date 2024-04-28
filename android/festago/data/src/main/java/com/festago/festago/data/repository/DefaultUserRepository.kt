@@ -12,7 +12,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class DefaultUserRepository @Inject constructor(
-    private val userRetrofitService: UserRetrofitService,
+    private val authRetrofitService: AuthRetrofitService,
     private val tokenDataSource: TokenDataSource,
     @ApplicationContext context: Context,
 ) : UserRepository {
@@ -77,7 +77,7 @@ class DefaultUserRepository @Inject constructor(
 
     private suspend fun refresh(refreshToken: Token): Result<Unit> {
         return runCatchingResponse {
-            userRetrofitService.refresh(refreshToken.token)
+            authRetrofitService.refresh(RefreshRequest(refreshToken.token))
         }.onSuccessOrCatch { refreshTokenResponse ->
             tokenDataSource.accessToken = refreshTokenResponse.accessToken.toEntity()
         }

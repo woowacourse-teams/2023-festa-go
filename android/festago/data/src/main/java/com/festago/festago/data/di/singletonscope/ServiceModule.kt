@@ -1,6 +1,7 @@
 package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.data.service.ArtistRetrofitService
+import com.festago.festago.data.service.AuthRetrofitService
 import com.festago.festago.data.service.BookmarkRetrofitService
 import com.festago.festago.data.service.FestivalRetrofitService
 import com.festago.festago.data.service.SchoolRetrofitService
@@ -53,5 +54,13 @@ object ServiceModule {
         @NormalRetrofitQualifier retrofit: Retrofit,
     ): BookmarkRetrofitService {
         return retrofit.create(BookmarkRetrofitService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesAuthRetrofitService(
+        @NormalRetrofitQualifier retrofit: Retrofit,
+    ): AuthRetrofitService {
+        return retrofit.create(AuthRetrofitService::class.java)
     }
 }
