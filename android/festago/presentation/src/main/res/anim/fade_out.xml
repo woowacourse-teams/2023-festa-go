@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<alpha xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="@android:integer/config_longAnimTime"
-    android:fromAlpha="1"
-    android:interpolator="@android:anim/decelerate_interpolator"
-    android:toAlpha="0" />
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/decelerate_interpolator">
+    <alpha
+        android:duration="@android:integer/config_mediumAnimTime"
+        android:fromAlpha="1"
+        android:toAlpha="0.5" />
+    <scale
+        android:duration="@android:integer/config_mediumAnimTime"
+        android:fromXScale="100%"
+        android:fromYScale="100%"
+        android:toXScale="98%"
+        android:toYScale="98%" />
+
+    <translate
+        android:duration="@android:integer/config_mediumAnimTime"
+        android:fromXDelta="0%"
+        android:fromYDelta="0%"
+        android:toXDelta="2%"
+        android:toYDelta="3%" />
+</set>
