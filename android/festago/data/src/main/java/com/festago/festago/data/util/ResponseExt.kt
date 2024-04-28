@@ -1,5 +1,6 @@
 package com.festago.festago.data.util
 
+import com.festago.festago.domain.exception.UnauthorizedException
 import retrofit2.Response
 
 suspend fun <T> runCatchingResponse(
@@ -9,6 +10,10 @@ suspend fun <T> runCatchingResponse(
         val response = block()
         if (response.isSuccessful && response.body() != null) {
             return Result.success(response.body()!!)
+        }
+
+        if (response.code() == 401) {
+            throw UnauthorizedException()
         }
 
         return Result.failure(
