@@ -7,13 +7,6 @@
         android:iconTint="@color/contents_gray_07"
         android:menuCategory="secondary"
         android:title="@string/home_bottom_nav_festival" />
-    <item
-        android:id="@+id/ticketList"
-        android:enabled="true"
-        android:icon="@drawable/ic_bottom_nav_ticket"
-        android:iconTint="@color/contents_gray_07"
-        android:menuCategory="secondary"
-        android:title="@string/home_bottom_nav_ticket" />
 
     <item
         android:id="@+id/search"
