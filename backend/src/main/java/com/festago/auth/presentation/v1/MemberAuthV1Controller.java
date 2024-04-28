@@ -47,7 +47,7 @@ public class MemberAuthV1Controller {
     }
 
     @MemberAuth
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public ResponseEntity<Void> logout(
         @Member Long memberId,
         @RequestBody @Valid LogoutV1Request request

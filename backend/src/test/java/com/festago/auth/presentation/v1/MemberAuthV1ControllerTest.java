@@ -85,7 +85,7 @@ class MemberAuthV1ControllerTest {
         final String uri = "/api/v1/auth/logout";
 
         @Nested
-        @DisplayName("GET " + uri)
+        @DisplayName("POST " + uri)
         class 올바른_주소로 {
 
             @Test
@@ -95,7 +95,7 @@ class MemberAuthV1ControllerTest {
                 var request = new RefreshTokenV1Request(UUID.randomUUID().toString());
 
                 // when & then
-                mockMvc.perform(get(uri)
+                mockMvc.perform(post(uri)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer 12312")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -105,7 +105,7 @@ class MemberAuthV1ControllerTest {
             @Test
             void 토큰_없이_보내면_401_응답이_반환된다() throws Exception {
                 // when & then
-                mockMvc.perform(get(uri))
+                mockMvc.perform(post(uri))
                     .andExpect(status().isUnauthorized());
             }
         }
