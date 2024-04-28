@@ -3,7 +3,10 @@ package com.festago.festago.data.repository
 import android.content.Context
 import android.content.SharedPreferences
 import com.festago.festago.data.datasource.TokenDataSource
-import com.festago.festago.data.service.UserRetrofitService
+import com.festago.festago.data.dto.user.RefreshRequest
+import com.festago.festago.data.dto.user.SignInRequest
+import com.festago.festago.data.service.AuthRetrofitService
+import com.festago.festago.data.util.format
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.domain.model.token.Token
@@ -17,17 +20,17 @@ class DefaultUserRepository @Inject constructor(
     @ApplicationContext context: Context,
 ) : UserRepository {
 
-    private val sharedPreference: SharedPreferences by lazy {
+    private val authPref: SharedPreferences by lazy {
         context.getSharedPreferences(AUTH_PREF, Context.MODE_PRIVATE)
     }
 
     override suspend fun isSigned() = getRefreshToken().isSuccess
 
-    override suspend fun isSignRejected() = sharedPreference.getBoolean(IS_SIGN_REJECTED, false)
+    override suspend fun isSignRejected() = authPref.getBoolean(IS_SIGN_REJECTED, false)
 
     override suspend fun getAccessToken(): Result<Token> {
         val token = tokenDataSource.accessToken?.toDomain()
-            ?: return Result.failure(Throwable("Access token is null"))
+            ?: return Result.failure(NullPointerException("Access token is null"))
 
         if (!token.isExpired()) {
             return Result.success(token)
@@ -44,35 +47,45 @@ class DefaultUserRepository @Inject constructor(
 
     override suspend fun getRefreshToken(): Result<Token> {
         val refreshToken = tokenDataSource.refreshToken?.toDomain()
-            ?: return Result.failure(Throwable("Refresh token is null"))
+            ?: return Result.failure(NullPointerException("Refresh token is null"))
 
-        return if (refreshToken.isExpired()) {
-            Result.failure(Throwable("Refresh token is expired"))
-        } else {
-            Result.success(refreshToken)
+        if (refreshToken.isExpired()) {
+            return Result.failure(Exception("Refresh token is expired"))
         }
+
+        return Result.success(refreshToken)
     }
 
     override suspend fun signIn(code: String): Result<Unit> {
         return runCatchingResponse {
-            userRetrofitService.signIn(code)
+            authRetrofitService.signIn(SignInRequest(SOCIAL_TYPE, code))
         }.onSuccessOrCatch { signInResponse ->
             tokenDataSource.accessToken = signInResponse.accessToken.toEntity()
-            tokenDataSource.accessToken = signInResponse.refreshToken.toEntity()
+            tokenDataSource.refreshToken = signInResponse.refreshToken.toEntity()
         }
     }
 
     override suspend fun rejectSignIn() {
         if (isSigned() || isSignRejected()) return
-        sharedPreference.edit().putBoolean(IS_SIGN_REJECTED, true).apply()
+        authPref.edit().putBoolean(IS_SIGN_REJECTED, true).apply()
     }
 
     override suspend fun signOut(): Result<Unit> {
-        TODO("Not yet implemented")
+        return runCatchingResponse {
+            authRetrofitService.signOut(getAccessToken().getOrThrow().format())
+        }.onSuccessOrCatch {
+            tokenDataSource.accessToken = null
+            tokenDataSource.refreshToken = null
+        }
     }
 
     override suspend fun deleteAccount(): Result<Unit> {
-        TODO("Not yet implemented")
+        return runCatchingResponse {
+            authRetrofitService.deleteAccount(getAccessToken().getOrThrow().format())
+        }.onSuccessOrCatch {
+            tokenDataSource.accessToken = null
+            tokenDataSource.refreshToken = null
+        }
     }
 
     private suspend fun refresh(refreshToken: Token): Result<Unit> {
@@ -84,6 +97,7 @@ class DefaultUserRepository @Inject constructor(
     }
 
     companion object {
+        private const val SOCIAL_TYPE = "KAKAO"
         private const val AUTH_PREF = "auth_pref"
         private const val IS_SIGN_REJECTED = "is_sign_rejected"
     }
