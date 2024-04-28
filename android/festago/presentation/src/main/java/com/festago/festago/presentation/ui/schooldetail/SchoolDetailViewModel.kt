@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,6 +47,9 @@ class SchoolDetailViewModel @Inject constructor(
                     festivals = festivalPage.festivals.map { it.toUiState() },
                     isLast = festivalPage.isLastPage,
                 )
+                if (festivalPage.festivals.isEmpty()) {
+                    loadMoreSchoolFestivals(schoolId)
+                }
             }.onFailure {
                 _uiState.value = SchoolDetailUiState.Error
                 analyticsHelper.logNetworkFailure(
@@ -61,15 +65,22 @@ class SchoolDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentFestivals = successUiState.festivals
-
+            val lastItem = successUiState.festivals.lastOrNull()
+            val isPast = when {
+                lastItem == null -> true
+                lastItem.endDate > LocalDate.now() -> true
+                successUiState.isLast -> true
+                else -> false
+            }
             schoolRepository.loadSchoolFestivals(
                 schoolId = schoolId,
                 lastFestivalId = currentFestivals.lastOrNull()?.id?.toInt(),
-                lastStartDate = currentFestivals.lastOrNull()?.startDate
+                lastStartDate = currentFestivals.lastOrNull()?.startDate,
+                isPast = isPast,
             ).onSuccess { festivalsPage ->
                 _uiState.value = successUiState.copy(
                     festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
-                    isLast = festivalsPage.isLastPage
+                    isLast = festivalsPage.isLastPage,
                 )
             }
         }
@@ -90,14 +101,14 @@ class SchoolDetailViewModel @Inject constructor(
                     viewModelScope.launch {
                         _event.emit(SchoolDetailEvent.ShowArtistDetail(id))
                     }
-                }
+                },
             )
         },
         onFestivalDetailClick = { id ->
             viewModelScope.launch {
                 _event.emit(SchoolDetailEvent.ShowFestivalDetail(id))
             }
-        }
+        },
     )
 
     companion object {
