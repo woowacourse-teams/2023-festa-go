@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.v1.OAuth2LoginV1Request;
+import com.festago.auth.dto.v1.OpenIdLoginV1Request;
 import com.festago.auth.dto.v1.RefreshTokenV1Request;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
@@ -73,6 +74,29 @@ class MemberAuthV1ControllerTest {
                 // when & then
                 mockMvc.perform(get(uri, "festago")
                         .queryParam("code", code)
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+            }
+        }
+    }
+
+    @Nested
+    class OpenId_회원_로그인 {
+
+        final String uri = "/api/v1/auth/login/open-id";
+
+        @Nested
+        @DisplayName("POST " + uri)
+        class 올바른_주소로 {
+
+            @Test
+            void 요청을_보내면_200_응답과_로그인_응답이_반환된다() throws Exception {
+                // given
+                var request = new OpenIdLoginV1Request(SocialType.FESTAGO, "token");
+
+                // when & then
+                mockMvc.perform(post(uri)
+                        .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
             }

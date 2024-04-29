@@ -4,6 +4,8 @@ import com.festago.auth.application.AuthTokenProvider;
 import com.festago.auth.application.OAuth2Client;
 import com.festago.auth.application.OAuth2Clients;
 import com.festago.auth.domain.AuthPayload;
+import com.festago.auth.domain.OpenIdClient;
+import com.festago.auth.domain.OpenIdClients;
 import com.festago.auth.domain.Role;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class MemberAuthFacadeService {
 
     private final OAuth2Clients oAuth2Clients;
+    private final OpenIdClients openIdClients;
     private final MemberAuthCommandService memberAuthCommandService;
     private final AuthTokenProvider authTokenProvider;
 
@@ -28,7 +31,10 @@ public class MemberAuthFacadeService {
         OAuth2Client oAuth2Client = oAuth2Clients.getClient(socialType);
         String oAuth2AccessToken = oAuth2Client.getAccessToken(code);
         UserInfo userInfo = oAuth2Client.getUserInfo(oAuth2AccessToken);
+        return login(userInfo);
+    }
 
+    private LoginV1Response login(UserInfo userInfo) {
         LoginResult loginResult = memberAuthCommandService.oAuth2Login(userInfo);
 
         TokenResponse accessToken = authTokenProvider.provide(new AuthPayload(loginResult.memberId(), Role.MEMBER));
@@ -41,6 +47,12 @@ public class MemberAuthFacadeService {
                 loginResult.refreshTokenExpiredAt()
             )
         );
+    }
+
+    public LoginV1Response openIdLogin(SocialType socialType, String idToken) {
+        OpenIdClient openIdClient = openIdClients.getClient(socialType);
+        UserInfo userInfo = openIdClient.getUserInfo(idToken);
+        return login(userInfo);
     }
 
     public void logout(Long memberId, UUID refreshTokenId) {
