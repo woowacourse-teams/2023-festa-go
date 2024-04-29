@@ -34,19 +34,20 @@ class FestivalDetailViewModel @Inject constructor(
     private val _event = MutableSharedFlow<FestivalDetailEvent>()
     val event: SharedFlow<FestivalDetailEvent> = _event.asSharedFlow()
 
-    fun loadFestivalDetail(festivalId: Long, refresh: Boolean = false) {
+    fun loadFestivalDetail(festivalId: Long, delayTimeMillis: Long, refresh: Boolean = false) {
         if (!refresh && _uiState.value is FestivalDetailUiState.Success) return
 
         viewModelScope.launch {
-            festivalRepository.loadFestivalDetail(festivalId).onSuccess { festivalDetail ->
-                _uiState.value = festivalDetail.toSuccessUiState()
-            }.onFailure {
-                _uiState.value = FestivalDetailUiState.Error
-                analyticsHelper.logNetworkFailure(
-                    key = KEY_LOAD_FESTIVAL_DETAIL,
-                    value = it.message.toString(),
-                )
-            }
+            festivalRepository.loadFestivalDetail(festivalId, delayTimeMillis)
+                .onSuccess { festivalDetail ->
+                    _uiState.value = festivalDetail.toSuccessUiState()
+                }.onFailure {
+                    _uiState.value = FestivalDetailUiState.Error
+                    analyticsHelper.logNetworkFailure(
+                        key = KEY_LOAD_FESTIVAL_DETAIL,
+                        value = it.message.toString(),
+                    )
+                }
         }
     }
 

@@ -13,7 +13,7 @@ import javax.inject.Inject
 class FakeArtistRepository @Inject constructor() : ArtistRepository {
     var index = 0
 
-    override suspend fun loadArtistDetail(id: Long): Result<ArtistDetail> =
+    override suspend fun loadArtistDetail(id: Long, delayTimeMillis: Long): Result<ArtistDetail> =
         Result.success(
             ArtistDetail(
                 1,

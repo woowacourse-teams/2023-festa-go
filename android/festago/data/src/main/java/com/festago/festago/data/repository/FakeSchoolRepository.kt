@@ -7,7 +7,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class FakeSchoolRepository @Inject constructor() : SchoolRepository {
-    override suspend fun loadSchoolInfo(schoolId: Long): Result<SchoolInfo> {
+    override suspend fun loadSchoolInfo(schoolId: Long, delayTimeMillis: Long): Result<SchoolInfo> {
         return Result.success(FakeSchool.googleSchool)
     }
 
@@ -16,13 +16,13 @@ class FakeSchoolRepository @Inject constructor() : SchoolRepository {
         size: Int?,
         isPast: Boolean?,
         lastFestivalId: Int?,
-        lastStartDate: LocalDate?
+        lastStartDate: LocalDate?,
     ): Result<FestivalsPage> {
         return Result.success(
             FestivalsPage(
                 isLastPage = true,
                 festivals = FakeFestivals.progressFestivals,
-            )
+            ),
         )
     }
 }

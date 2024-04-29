@@ -32,9 +32,10 @@ class SchoolDetailViewModel @Inject constructor(
     private val _event: MutableSharedFlow<SchoolDetailEvent> = MutableSharedFlow()
     val event: SharedFlow<SchoolDetailEvent> = _event.asSharedFlow()
 
-    fun loadSchoolDetail(schoolId: Long) {
+    fun loadSchoolDetail(schoolId: Long, delayTimeMillis: Long) {
         viewModelScope.launch {
-            val deferredSchoolInfo = async { schoolRepository.loadSchoolInfo(schoolId) }
+            val deferredSchoolInfo =
+                async { schoolRepository.loadSchoolInfo(schoolId, delayTimeMillis) }
             val deferredFestivalPage = async { schoolRepository.loadSchoolFestivals(schoolId) }
 
             runCatching {
@@ -65,11 +66,11 @@ class SchoolDetailViewModel @Inject constructor(
             schoolRepository.loadSchoolFestivals(
                 schoolId = schoolId,
                 lastFestivalId = currentFestivals.lastOrNull()?.id?.toInt(),
-                lastStartDate = currentFestivals.lastOrNull()?.startDate
+                lastStartDate = currentFestivals.lastOrNull()?.startDate,
             ).onSuccess { festivalsPage ->
                 _uiState.value = successUiState.copy(
                     festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
-                    isLast = festivalsPage.isLastPage
+                    isLast = festivalsPage.isLastPage,
                 )
             }
         }
@@ -90,14 +91,14 @@ class SchoolDetailViewModel @Inject constructor(
                     viewModelScope.launch {
                         _event.emit(SchoolDetailEvent.ShowArtistDetail(id))
                     }
-                }
+                },
             )
         },
         onFestivalDetailClick = { id ->
             viewModelScope.launch {
                 _event.emit(SchoolDetailEvent.ShowFestivalDetail(id))
             }
-        }
+        },
     )
 
     companion object {

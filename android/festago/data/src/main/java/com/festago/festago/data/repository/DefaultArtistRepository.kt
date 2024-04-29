@@ -6,6 +6,7 @@ import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.domain.model.artist.ArtistDetail
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.repository.ArtistRepository
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -13,7 +14,8 @@ class DefaultArtistRepository @Inject constructor(
     private val artistRetrofitService: ArtistRetrofitService,
 ) : ArtistRepository {
 
-    override suspend fun loadArtistDetail(id: Long): Result<ArtistDetail> {
+    override suspend fun loadArtistDetail(id: Long, delayTimeMillis: Long): Result<ArtistDetail> {
+        delay(delayTimeMillis)
         return runCatchingResponse { artistRetrofitService.getArtistDetail(id) }
             .onSuccessOrCatch { it.toDomain() }
     }

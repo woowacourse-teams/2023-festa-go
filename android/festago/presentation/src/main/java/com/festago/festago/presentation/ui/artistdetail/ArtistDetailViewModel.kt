@@ -29,19 +29,19 @@ class ArtistDetailViewModel @Inject constructor(
         MutableStateFlow(ArtistDetailUiState.Loading)
     val uiState: StateFlow<ArtistDetailUiState> = _uiState.asStateFlow()
 
-    fun loadArtistDetail(id: Long, refresh: Boolean = false) {
+    fun loadArtistDetail(id: Long, delayTimeMillis: Long, refresh: Boolean = false) {
         if (!refresh && _uiState.value is ArtistDetailUiState.Success) return
 
         viewModelScope.launch {
             runCatching {
-                val deferredArtistDetail = async { artistRepository.loadArtistDetail(id) }
+                val deferredArtistDetail = async { artistRepository.loadArtistDetail(id, delayTimeMillis) }
                 val deferredFestivals = async { artistRepository.loadArtistFestivals(id, 10) }
                 val festivalPage = deferredFestivals.await().getOrThrow()
 
                 _uiState.value = ArtistDetailUiState.Success(
                     deferredArtistDetail.await().getOrThrow(),
                     festivalPage.toUiState(),
-                    festivalPage.isLastPage
+                    festivalPage.isLastPage,
                 )
             }.onFailure {
                 _uiState.value = ArtistDetailUiState.Error
@@ -62,7 +62,7 @@ class ArtistDetailViewModel @Inject constructor(
             ).onSuccess { festivalsPage ->
                 _uiState.value = successUiState.copy(
                     festivals = currentFestivals + festivalsPage.toUiState(),
-                    isLast = festivalsPage.isLastPage
+                    isLast = festivalsPage.isLastPage,
                 )
             }
         }
