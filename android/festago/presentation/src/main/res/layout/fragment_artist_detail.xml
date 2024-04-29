@@ -27,7 +27,6 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivBackgroundImage"
             imageUrl="@{successUiState.artist.backgroundUrl}"
-            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="match_parent"
             android:layout_height="136dp"
             android:adjustViewBounds="true"
@@ -41,7 +40,6 @@
 
         <View
             android:id="@+id/tvFestivalDDayEnd"
-            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="#40000000"
@@ -65,7 +63,6 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvProfileImage"
-            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="16dp"
@@ -77,7 +74,6 @@
             <ImageView
                 android:id="@+id/ivProfileImage"
                 imageUrl="@{successUiState.artist.profileUrl}"
-                visibility="@{uiState.shouldShowSuccess}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
@@ -88,7 +84,6 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvBookmark"
-            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="28dp"
             android:layout_height="28dp"
             app:cardCornerRadius="1000dp"
@@ -110,7 +105,6 @@
         <TextView
             android:id="@+id/tvArtistName"
             style="@style/H2Bold20Lh24"
-            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -122,7 +116,6 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/llcArtistMedia"
-            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_marginTop="8dp"

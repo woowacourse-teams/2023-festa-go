@@ -49,10 +49,22 @@ class FestivalDetailFragment : Fragment() {
     }
 
     private fun initView() {
-        val id = args.festivalId
+        loadFestivalDetail(args.festivalId)
+        initStageAdapter()
+        initButton()
+    }
+
+    private fun loadFestivalDetail(id: Long) {
+        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
+        vm.loadFestivalDetail(id, delayTimeMillis)
+    }
+
+    private fun initStageAdapter() {
         adapter = StageListAdapter()
         binding.rvStageList.adapter = adapter
-        vm.loadFestivalDetail(id)
+    }
+
+    private fun initButton() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -88,7 +100,6 @@ class FestivalDetailFragment : Fragment() {
     private fun handleSuccess(uiState: FestivalDetailUiState.Success) {
         binding.successUiState = uiState
         binding.tvFestivalDDay.setFestivalDDay(uiState.festival.startDate, uiState.festival.endDate)
-        binding.ivFestivalBackground.setColorFilter(Color.parseColor("#66000000"))
         adapter.submitList(uiState.stages)
         binding.llcFestivalSocialMedia.removeAllViews()
         uiState.festival.socialMedias.forEach { media ->

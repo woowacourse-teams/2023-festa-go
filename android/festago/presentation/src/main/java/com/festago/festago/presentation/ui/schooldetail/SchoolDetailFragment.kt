@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.schooldetail.uistate.MoreItemUiState
@@ -62,7 +63,8 @@ class SchoolDetailFragment : Fragment() {
     private fun initView(schoolId: Long) {
         adapter = SchoolFestivalListAdapter()
         binding.rvFestivalList.adapter = adapter
-        vm.loadSchoolDetail(schoolId)
+        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
+        vm.loadSchoolDetail(schoolId, delayTimeMillis)
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -83,7 +85,6 @@ class SchoolDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: SchoolDetailUiState.Success) {
         binding.successUiState = uiState
-        binding.ivSchoolBackground.setColorFilter(Color.parseColor("#66000000"))
 
         val items: List<Any> = if (uiState.isLast) {
             uiState.festivals
@@ -107,16 +108,16 @@ class SchoolDetailFragment : Fragment() {
         is SchoolDetailEvent.ShowArtistDetail -> {
             findNavController().navigate(
                 SchoolDetailFragmentDirections.actionSchoolDetailFragmentToArtistDetailFragment(
-                    event.artistId
-                )
+                    event.artistId,
+                ),
             )
         }
 
         is SchoolDetailEvent.ShowFestivalDetail -> {
             findNavController().navigate(
                 SchoolDetailFragmentDirections.actionSchoolDetailFragmentToFestivalDetailFragment(
-                    event.festivalId
-                )
+                    event.festivalId,
+                ),
             )
         }
     }

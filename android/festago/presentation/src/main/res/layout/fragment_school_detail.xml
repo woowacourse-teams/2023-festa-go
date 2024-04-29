@@ -35,7 +35,6 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clSchoolInfo"
-            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background_gray_01"
@@ -50,6 +49,16 @@
                 android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@color/background_gray_02" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#40000000"
+                app:layout_constraintBottom_toBottomOf="@id/ivSchoolBackground"
+                app:layout_constraintEnd_toEndOf="@id/ivSchoolBackground"
+                app:layout_constraintStart_toStartOf="@id/ivSchoolBackground"
+                app:layout_constraintTop_toTopOf="@id/ivSchoolBackground" />
+
 
             <ImageView
                 android:id="@+id/ivBack"

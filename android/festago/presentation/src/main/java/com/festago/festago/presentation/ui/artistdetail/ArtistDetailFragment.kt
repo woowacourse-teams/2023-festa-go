@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentArtistDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.artistdetail.adapter.festival.ArtistDetailAdapter
@@ -45,7 +46,8 @@ class ArtistDetailFragment : Fragment() {
     }
 
     private fun initView(id: Long) {
-        vm.loadArtistDetail(id)
+        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
+        vm.loadArtistDetail(id, delayTimeMillis)
 
         binding.rvToDoList.adapter = adapter
 

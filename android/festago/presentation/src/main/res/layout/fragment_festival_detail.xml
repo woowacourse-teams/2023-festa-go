@@ -27,7 +27,6 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clFestivalInfo"
-            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/background_gray_01"
@@ -44,6 +43,15 @@
                 android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@color/background_gray_02" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#40000000"
+                app:layout_constraintBottom_toBottomOf="@id/ivFestivalBackground"
+                app:layout_constraintEnd_toEndOf="@id/ivFestivalBackground"
+                app:layout_constraintStart_toStartOf="@id/ivFestivalBackground"
+                app:layout_constraintTop_toTopOf="@id/ivFestivalBackground" />
 
             <ImageView
                 android:id="@+id/ivBack"
@@ -73,6 +81,7 @@
             <TextView
                 android:id="@+id/tvFestivalDDay"
                 style="@style/H5Bold14Lh16"
+                visibility="@{uiState.shouldShowSuccess}"
                 android:layout_width="56dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
@@ -128,6 +137,7 @@
             <LinearLayout
                 android:id="@+id/llSchoolLocation"
                 onSingleClick="@{() -> successUiState.festival.onSchoolClick.invoke(successUiState.festival.school.id)}"
+                visibility="@{uiState.shouldShowSuccess}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -152,12 +162,12 @@
                     android:text="@{successUiState.festival.school.name}"
                     android:textColor="@color/contents_gray_07"
                     tools:text="홍익대학교" />
-
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tvFestivalSchedule"
                 style="@style/B1Medium16Lh20"
+                visibility="@{uiState.shouldShowSuccess}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
