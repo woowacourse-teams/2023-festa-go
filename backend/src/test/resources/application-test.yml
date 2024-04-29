@@ -8,6 +8,9 @@ spring:
     open-in-view: false
   flyway:
     enabled: false
+management:
+  server:
+    port: 8090
 
 logging:
   file:

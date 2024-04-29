@@ -66,6 +66,7 @@ public enum ErrorCode {
     SCHOOL_NOT_FOUND("존재하지 않는 학교입니다."),
     ARTIST_NOT_FOUND("존재하지 않는 아티스트입니다."),
     SOCIAL_MEDIA_NOT_FOUND("존재하지 않는 소셜미디어입니다."),
+    ACTUATOR_NOT_FOUND("존재하지 않는 Actuator 경로입니다."),
 
     // 429
     TOO_FREQUENT_REQUESTS("너무 잦은 요청입니다. 잠시 후 다시 시도해주세요."),
