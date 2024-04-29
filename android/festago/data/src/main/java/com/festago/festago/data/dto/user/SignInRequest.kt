@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 class SignInRequest(
     val socialType: String,
-    val code: String,
+    val idToken: String,
 )

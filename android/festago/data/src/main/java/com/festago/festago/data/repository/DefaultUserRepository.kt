@@ -56,9 +56,9 @@ class DefaultUserRepository @Inject constructor(
         return Result.success(refreshToken)
     }
 
-    override suspend fun signIn(code: String): Result<Unit> {
+    override suspend fun signIn(idToken: String): Result<Unit> {
         return runCatchingResponse {
-            authRetrofitService.signIn(SignInRequest(SOCIAL_TYPE, code))
+            authRetrofitService.signIn(SignInRequest(SOCIAL_TYPE, idToken))
         }.onSuccessOrCatch { signInResponse ->
             tokenDataSource.accessToken = signInResponse.accessToken.toEntity()
             tokenDataSource.refreshToken = signInResponse.refreshToken.toEntity()

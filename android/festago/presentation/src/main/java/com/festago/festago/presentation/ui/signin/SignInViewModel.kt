@@ -18,9 +18,9 @@ class SignInViewModel @Inject constructor(
     private val _event: MutableSharedFlow<SignInEvent> = MutableSharedFlow()
     val event: SharedFlow<SignInEvent> = _event.asSharedFlow()
 
-    fun signIn(authCode: String) {
+    fun signIn(idToken: String) {
         viewModelScope.launch {
-            userRepository.signIn(authCode)
+            userRepository.signIn(idToken)
                 .onSuccess {
                     _event.emit(SignInEvent.ShowHome)
                 }.onFailure {

@@ -10,14 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.festago.festago.domain.model.nonce.NonceGenerator
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivitySignInBinding
 import com.festago.festago.presentation.ui.home.HomeActivity
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListener
 import com.festago.festago.presentation.util.setStatusBarMode
-import com.kakao.sdk.common.model.ClientError
-import com.kakao.sdk.common.model.ClientErrorCause
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -69,12 +68,10 @@ class SignInActivity : AppCompatActivity() {
     private fun initKakaoLogin() {
         binding.btnKakaoLogin.setOnClickListener {
             lifecycleScope.launch {
-                KakaoAuthorization().getAuthCode(this@SignInActivity)
-                    .onSuccess { authCode ->
-                        vm.signIn(authCode)
+                KakaoAuthorization(NonceGenerator()).getIdToken(this@SignInActivity)
+                    .onSuccess { idToken ->
+                        vm.signIn(idToken)
                     }.onFailure { error ->
-                        // 카카오 로그인 취소 시에는 예외를 던지지 않고 처리
-                        if (error is ClientError && error.reason == ClientErrorCause.Cancelled) return@launch
                         handleSignInFailure()
                     }
             }

@@ -23,7 +23,7 @@ class FakeUserRepository @Inject constructor() : UserRepository {
         return Result.success(Token("", LocalDateTime.now()))
     }
 
-    override suspend fun signIn(code: String): Result<Unit> {
+    override suspend fun signIn(idToken: String): Result<Unit> {
         return Result.success(Unit)
     }
 
