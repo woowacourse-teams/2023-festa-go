@@ -36,12 +36,34 @@ class ArtistDetailViewModel @Inject constructor(
             runCatching {
                 val deferredArtistDetail = async { artistRepository.loadArtistDetail(id) }
                 val deferredFestivals = async { artistRepository.loadArtistFestivals(id, 10) }
+                val festivalPage = deferredFestivals.await().getOrThrow()
+
                 _uiState.value = ArtistDetailUiState.Success(
                     deferredArtistDetail.await().getOrThrow(),
-                    deferredFestivals.await().getOrThrow().toUiState(),
+                    festivalPage.toUiState(),
+                    festivalPage.isLastPage
                 )
             }.onFailure {
                 _uiState.value = ArtistDetailUiState.Error
+            }
+        }
+    }
+
+    fun loadMoreArtistFestivals(artistId: Long) {
+        val successUiState = uiState.value as? ArtistDetailUiState.Success ?: return
+
+        viewModelScope.launch {
+            val currentFestivals = successUiState.festivals
+
+            artistRepository.loadArtistFestivals(
+                id = artistId,
+                lastFestivalId = currentFestivals.lastOrNull()?.id,
+                lastStartDate = currentFestivals.lastOrNull()?.startDate,
+            ).onSuccess { festivalsPage ->
+                _uiState.value = successUiState.copy(
+                    festivals = currentFestivals + festivalsPage.toUiState(),
+                    isLast = festivalsPage.isLastPage
+                )
             }
         }
     }

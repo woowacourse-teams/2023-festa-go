@@ -2,6 +2,7 @@ package com.festago.auth.dto;
 
 import com.festago.member.domain.Member;
 
+@Deprecated(forRemoval = true)
 public record LoginMemberDto(
     boolean isNew,
     Long memberId,

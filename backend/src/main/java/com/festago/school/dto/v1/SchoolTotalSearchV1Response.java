@@ -10,15 +10,4 @@ public record SchoolTotalSearchV1Response(
     @Nullable LocalDate upcomingFestivalStartDate
 ) {
 
-    public static SchoolTotalSearchV1Response of(
-        SchoolSearchV1Response schoolSearchV1Response,
-        SchoolSearchUpcomingFestivalV1Response schoolSearchUpcomingFestivalV1Response
-    ) {
-        return new SchoolTotalSearchV1Response(
-            schoolSearchV1Response.id(),
-            schoolSearchV1Response.name(),
-            schoolSearchV1Response.logoUrl(),
-            schoolSearchUpcomingFestivalV1Response.startDate()
-        );
-    }
 }

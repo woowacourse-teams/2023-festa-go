@@ -150,6 +150,14 @@ class FestivalDetailFragment : Fragment() {
                     ),
                 )
             }
+
+            is FestivalDetailEvent.ShowSchoolDetail -> {
+                findNavController().navigate(
+                    FestivalDetailFragmentDirections.actionFestivalDetailFragmentToSchoolDetailFragment(
+                        event.schoolId,
+                    ),
+                )
+            }
         }
     }
 

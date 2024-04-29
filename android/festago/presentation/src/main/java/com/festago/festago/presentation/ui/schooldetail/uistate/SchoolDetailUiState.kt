@@ -16,4 +16,5 @@ sealed interface SchoolDetailUiState {
     val shouldShowSuccess get() = this is Success
     val shouldShowLoading get() = this is Loading
     val shouldShowError get() = this is Error
+    val shouldShowEmptyFestivals get() = this is Success && festivals.isEmpty()
 }

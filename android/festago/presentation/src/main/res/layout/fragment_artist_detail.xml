@@ -7,6 +7,10 @@
 
         <variable
             name="uiState"
+            type="com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState" />
+
+        <variable
+            name="successUiState"
             type="com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState.Success" />
     </data>
 
@@ -22,7 +26,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivBackgroundImage"
-            imageUrl="@{uiState.artist.backgroundUrl}"
+            imageUrl="@{successUiState.artist.backgroundUrl}"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="match_parent"
             android:layout_height="136dp"
             android:adjustViewBounds="true"
@@ -36,6 +41,7 @@
 
         <View
             android:id="@+id/tvFestivalDDayEnd"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="#40000000"
@@ -59,6 +65,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvProfileImage"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="16dp"
@@ -69,17 +76,19 @@
 
             <ImageView
                 android:id="@+id/ivProfileImage"
-                imageUrl="@{uiState.artist.profileUrl}"
+                imageUrl="@{successUiState.artist.profileUrl}"
+                visibility="@{uiState.shouldShowSuccess}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:contentDescription="@null"
                 android:scaleType="centerCrop"
-                tools:src="@color/background_gray_03"/>
+                tools:src="@color/background_gray_03" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvBookmark"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="28dp"
             android:layout_height="28dp"
             app:cardCornerRadius="1000dp"
@@ -101,17 +110,19 @@
         <TextView
             android:id="@+id/tvArtistName"
             style="@style/H2Bold20Lh24"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@{uiState.artist.artistName}"
+            android:text="@{successUiState.artist.artistName}"
             app:layout_constraintBottom_toBottomOf="@+id/cvProfileImage"
             app:layout_constraintStart_toEndOf="@id/cvProfileImage"
             tools:text="뉴진스" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/llcArtistMedia"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_marginTop="8dp"
@@ -123,6 +134,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvToDoList"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="24dp"
@@ -133,6 +145,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/llcArtistMedia"
             app:layout_constraintVertical_weight="1" />
+
+        <TextView
+            android:id="@+id/tvFestivalsEmpty"
+            style="@style/H5Bold14Lh16"
+            visibility="@{uiState.shouldShowEmptyFestivals}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/artist_detail_tv_empty_festivals"
+            android:textColor="@color/contents_gray_06"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -9,6 +9,7 @@ import com.festago.auth.application.OAuth2Client;
 import com.festago.auth.application.OAuth2Clients;
 import com.festago.auth.application.OAuth2Clients.OAuth2ClientsBuilder;
 import com.festago.auth.infrastructure.FestagoOAuth2Client;
+import com.festago.auth.infrastructure.KakaoOAuth2AccessTokenClient;
 import com.festago.auth.infrastructure.KakaoOAuth2Client;
 import com.festago.auth.infrastructure.KakaoOAuth2UserInfoClient;
 import com.festago.common.exception.BadRequestException;
@@ -53,6 +54,7 @@ class OAuth2ClientsTest {
         // given
         FestagoOAuth2Client festagoOAuth2Client = new FestagoOAuth2Client();
         KakaoOAuth2Client kakaoOAuth2Client = new KakaoOAuth2Client(
+            mock(KakaoOAuth2AccessTokenClient.class),
             mock(KakaoOAuth2UserInfoClient.class)
         );
 

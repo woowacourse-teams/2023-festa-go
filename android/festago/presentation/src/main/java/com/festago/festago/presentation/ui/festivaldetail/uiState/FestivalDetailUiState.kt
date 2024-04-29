@@ -11,6 +11,7 @@ interface FestivalDetailUiState {
     object Error : FestivalDetailUiState
 
     val shouldShowSuccess get() = this is Success
+    val shouldShowEmptyStages get() = shouldShowSuccess && (this as Success).stages.isEmpty()
     val shouldShowLoading get() = this is Loading
     val shouldShowError get() = this is Error
 }
