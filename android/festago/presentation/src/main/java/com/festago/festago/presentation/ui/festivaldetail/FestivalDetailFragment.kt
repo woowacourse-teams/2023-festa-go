@@ -103,7 +103,7 @@ class FestivalDetailFragment : Fragment() {
     private fun TextView.setFestivalDDay(startDate: LocalDate, endDate: LocalDate) {
         when {
             LocalDate.now() in startDate..endDate -> {
-                text = context.getString(R.string.festival_detail_tv_dday_in_progress)
+                text = context.getString(R.string.tv_dday_in_progress)
                 setTextColor(context.getColor(R.color.secondary_pink_01))
                 background = AppCompatResources.getDrawable(
                     context,
@@ -120,7 +120,7 @@ class FestivalDetailFragment : Fragment() {
                 }
                 setBackgroundColor(backgroundColor)
                 setTextColor(context.getColor(R.color.background_gray_01))
-                text = context.getString(R.string.festival_detail_tv_dday_format, dDay.toString())
+                text = context.getString(R.string.tv_dday_format, dDay.toString())
             }
 
             else -> {
@@ -130,7 +130,7 @@ class FestivalDetailFragment : Fragment() {
                     context,
                     R.drawable.bg_festival_detail_dday_end,
                 )
-                text = context.getString(R.string.festival_detail_tv_dday_end)
+                text = context.getString(R.string.tv_dday_end)
             }
         }
     }
