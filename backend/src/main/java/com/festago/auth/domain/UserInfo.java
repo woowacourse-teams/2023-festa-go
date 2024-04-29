@@ -1,7 +1,9 @@
 package com.festago.auth.domain;
 
 import com.festago.member.domain.Member;
+import lombok.Builder;
 
+@Builder
 public record UserInfo(
     String socialId,
     SocialType socialType,
