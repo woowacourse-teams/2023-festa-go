@@ -62,7 +62,7 @@ class ArtistDetailViewModel @Inject constructor(
             val lastItem = successUiState.festivals.lastOrNull()
             val isPast = when {
                 lastItem == null -> true
-                lastItem.endDate > LocalDate.now() -> true
+                lastItem.endDate < LocalDate.now() -> true
                 successUiState.isLast -> true
                 else -> false
             }
