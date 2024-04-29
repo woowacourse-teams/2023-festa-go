@@ -27,8 +27,8 @@ public class JwtEntryCodeExtractor implements EntryCodeExtractor {
 
     public JwtEntryCodeExtractor(String secretKey) {
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        this.jwtParser = Jwts.parserBuilder()
-            .setSigningKey(key)
+        this.jwtParser = Jwts.parser()
+            .verifyWith(key)
             .build();
     }
 
@@ -43,8 +43,8 @@ public class JwtEntryCodeExtractor implements EntryCodeExtractor {
 
     private Claims getClaims(String code) {
         try {
-            return jwtParser.parseClaimsJws(code)
-                .getBody();
+            return jwtParser.parseSignedClaims(code)
+                .getPayload();
         } catch (ExpiredJwtException e) {
             throw new BadRequestException(ErrorCode.EXPIRED_ENTRY_CODE);
         } catch (SignatureException | IllegalArgumentException | MalformedJwtException | UnsupportedJwtException e) {
