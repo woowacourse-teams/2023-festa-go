@@ -35,7 +35,7 @@ public class AuthConfig {
     }
 
     @Bean
-    public OpenIdClients oAuth2OpenIdClients(List<OpenIdClient> openIdClients) {
+    public OpenIdClients openIdClients(List<OpenIdClient> openIdClients) {
         return OpenIdClients.builder()
             .addAll(openIdClients)
             .build();
