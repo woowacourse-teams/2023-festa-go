@@ -11,9 +11,9 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 fun ImageView.setImage(imageUrl: String?) {
     Glide.with(context)
         .load(imageUrl)
-        .placeholder(R.color.background_gray_03)
-        .error(R.color.background_gray_03)
-        .fallback(R.color.background_gray_03)
+        .placeholder(R.drawable.bg_festago_default)
+        .error(R.drawable.bg_festago_default)
+        .fallback(R.drawable.bg_festago_default)
         .into(this)
 }
 
@@ -22,9 +22,9 @@ fun ImageView.setBlurImage(imageUrl: String?, blurRadius: Int, blurSampling: Int
     val transformation = BlurTransformation(blurRadius, blurSampling)
     Glide.with(context)
         .load(imageUrl)
-        .placeholder(R.color.background_gray_03)
+        .placeholder(R.drawable.bg_festago_default)
         .apply(RequestOptions.bitmapTransform(transformation))
-        .error(R.color.background_gray_03)
-        .fallback(R.color.background_gray_03)
+        .error(R.drawable.bg_festago_default)
+        .fallback(R.drawable.bg_festago_default)
         .into(this)
 }
