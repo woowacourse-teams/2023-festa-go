@@ -1,7 +1,10 @@
 package com.festago.festago.presentation.ui.schooldetail
 
-sealed interface SchoolDetailEvent {
-    class ShowArtistDetail(val artistId: Long) : SchoolDetailEvent
+import com.festago.festago.presentation.ui.schooldetail.uistate.ArtistUiState
+import com.festago.festago.presentation.ui.schooldetail.uistate.FestivalItemUiState
 
-    class ShowFestivalDetail(val festivalId: Long) : SchoolDetailEvent
+sealed interface SchoolDetailEvent {
+    class ShowArtistDetail(val artist: ArtistUiState) : SchoolDetailEvent
+
+    class ShowFestivalDetail(val festival: FestivalItemUiState) : SchoolDetailEvent
 }

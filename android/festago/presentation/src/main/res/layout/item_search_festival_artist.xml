@@ -11,7 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        onSingleClick="@{() -> item.onArtistDetailClick.invoke(item.id) }"
+        onSingleClick="@{() -> item.onArtistDetailClick.invoke(item) }"
         android:layout_width="66dp"
         android:layout_height="66dp">
 

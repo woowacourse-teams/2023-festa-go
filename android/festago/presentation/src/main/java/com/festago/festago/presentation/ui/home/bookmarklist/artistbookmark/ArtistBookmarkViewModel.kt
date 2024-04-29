@@ -42,9 +42,9 @@ class ArtistBookmarkViewModel @Inject constructor(
             id = artist.id,
             name = artist.name,
             imageUrl = artist.profileImageUrl,
-            onArtistDetail = { artistId ->
+            onArtistDetail = { artist ->
                 viewModelScope.launch {
-                    _uiEvent.emit(ArtistBookmarkEvent.ShowArtistDetail(artistId))
+                    _uiEvent.emit(ArtistBookmarkEvent.ShowArtistDetail(artist))
                 }
             },
         )

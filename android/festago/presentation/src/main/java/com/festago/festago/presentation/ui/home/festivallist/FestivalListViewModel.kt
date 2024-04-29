@@ -157,9 +157,9 @@ class FestivalListViewModel @Inject constructor(
         ::showFestivalDetail,
     )
 
-    private fun showFestivalDetail(festivalId: Long) {
+    private fun showFestivalDetail(festival: FestivalItemUiState) {
         viewModelScope.launch {
-            _event.emit(FestivalListEvent.ShowFestivalDetail(festivalId))
+            _event.emit(FestivalListEvent.ShowFestivalDetail(festival))
         }
     }
 

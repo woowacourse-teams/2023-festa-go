@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.festago.festago.presentation.databinding.FragmentSchoolBookmarkBinding
 import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmentDirections
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailArgs
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,7 +74,7 @@ class SchoolBookmarkFragment : Fragment() {
                     is SchoolBookmarkEvent.ShowSchoolDetail -> {
                         findNavController().safeNavigate(
                             BookmarkListFragmentDirections.actionBookmarkListFragmentToSchoolDetailFragment(
-                                event.schoolId,
+                                with(event.school) { SchoolDetailArgs(id, name, imageUrl) },
                             ),
                         )
                     }

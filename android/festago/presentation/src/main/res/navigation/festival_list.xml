@@ -45,8 +45,8 @@
         android:label="ArtistDetailFragment"
         tools:layout="@layout/fragment_artist_detail">
         <argument
-            android:name="artistId"
-            app:argType="long" />
+            android:name="artist"
+            app:argType="com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs" />
         <action
             android:id="@+id/action_artistDetailFragment_to_schoolDetailFragment"
             app:destination="@id/schoolDetailFragment"
@@ -82,8 +82,8 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out" />
         <argument
-            android:name="schoolId"
-            app:argType="long" />
+            android:name="school"
+            app:argType="com.festago.festago.presentation.ui.schooldetail.SchoolDetailArgs" />
         <action
             android:id="@+id/action_schoolDetailFragment_to_festivalDetailFragment"
             app:destination="@id/festivalDetailFragment"
@@ -99,15 +99,15 @@
         android:label="FestivalDetailFragment"
         tools:layout="@layout/fragment_festival_detail">
         <argument
-            android:name="festivalId"
-            app:argType="long" />
+            android:name="festival"
+            app:argType="com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs" />
         <action
             android:id="@+id/action_festivalDetailFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment"
             app:enterAnim="@anim/slide_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_out"/>
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_festivalDetailFragment_to_schoolDetailFragment"
             app:destination="@id/schoolDetailFragment"
@@ -141,7 +141,7 @@
             app:enterAnim="@anim/slide_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_out"/>
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
 
 </navigation>

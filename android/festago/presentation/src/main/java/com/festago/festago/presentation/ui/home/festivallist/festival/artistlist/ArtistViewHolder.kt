@@ -8,11 +8,11 @@ import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiSta
 
 class ArtistViewHolder(
     private val binding: ItemFestivalListArtistBinding,
-    onArtistClick: (Long) -> Unit,
+    onArtistClick: (ArtistUiState) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     init {
         binding.root.setOnClickListener {
-            onArtistClick(binding.artist!!.id)
+            onArtistClick(binding.artist!!)
         }
     }
 
@@ -21,7 +21,7 @@ class ArtistViewHolder(
     }
 
     companion object {
-        fun of(parent: ViewGroup, onArtistClick: (Long) -> Unit): ArtistViewHolder {
+        fun of(parent: ViewGroup, onArtistClick: (ArtistUiState) -> Unit): ArtistViewHolder {
             val binding = ItemFestivalListArtistBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,

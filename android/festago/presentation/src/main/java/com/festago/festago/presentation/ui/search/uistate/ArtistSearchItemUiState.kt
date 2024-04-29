@@ -6,5 +6,12 @@ data class ArtistSearchItemUiState(
     val profileImageUrl: String,
     val todayStage: Int,
     val upcomingStage: Int,
-    val onArtistDetailClick: (Long) -> Unit,
-)
+    val onArtistDetailClick: (ArtistUiState) -> Unit,
+) {
+    fun toArtistUiState() = ArtistUiState(
+        id,
+        name,
+        profileImageUrl,
+        onArtistDetailClick,
+    )
+}

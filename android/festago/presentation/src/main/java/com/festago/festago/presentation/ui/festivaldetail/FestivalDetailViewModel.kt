@@ -6,6 +6,7 @@ import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
 import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.festival.FestivalDetail
+import com.festago.festago.domain.model.school.School
 import com.festago.festago.domain.model.stage.Stage
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.presentation.ui.festivaldetail.uiState.ArtistItemUiState
@@ -79,15 +80,15 @@ class FestivalDetailViewModel @Inject constructor(
         onArtistDetail = ::showArtistDetail,
     )
 
-    private fun showArtistDetail(artistId: Long) {
+    private fun showArtistDetail(artist: ArtistItemUiState) {
         viewModelScope.launch {
-            _event.emit(FestivalDetailEvent.ShowArtistDetail(artistId))
+            _event.emit(FestivalDetailEvent.ShowArtistDetail(artist))
         }
     }
 
-    private fun showSchoolDetail(schoolId: Long) {
+    private fun showSchoolDetail(school: School) {
         viewModelScope.launch {
-            _event.emit(FestivalDetailEvent.ShowSchoolDetail(schoolId))
+            _event.emit(FestivalDetailEvent.ShowSchoolDetail(school))
         }
     }
 

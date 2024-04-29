@@ -54,9 +54,9 @@ class FestivalBookmarkViewModel @Inject constructor(
             startDate = festival.startDate,
             endDate = festival.endDate,
             artists = festival.artists.map { it.toUiState() },
-            onFestivalDetail = { festivalId ->
+            onFestivalDetail = { festival ->
                 viewModelScope.launch {
-                    _uiEvent.emit(FestivalBookmarkEvent.ShowFestivalDetail(festivalId))
+                    _uiEvent.emit(FestivalBookmarkEvent.ShowFestivalDetail(festival))
                 }
             },
         )
@@ -67,9 +67,9 @@ class FestivalBookmarkViewModel @Inject constructor(
             id = id,
             name = name,
             imageUrl = imageUrl,
-            onArtistDetail = { artistId ->
+            onArtistDetail = { artist ->
                 viewModelScope.launch {
-                    _uiEvent.emit(FestivalBookmarkEvent.ShowArtistDetail(artistId))
+                    _uiEvent.emit(FestivalBookmarkEvent.ShowArtistDetail(artist))
                 }
             },
         )

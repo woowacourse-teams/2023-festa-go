@@ -42,9 +42,9 @@ class SchoolBookmarkViewModel @Inject constructor(
             id = school.id,
             name = school.name,
             imageUrl = school.logoUrl,
-            onSchoolDetail = { schoolId ->
+            onSchoolDetail = { school ->
                 viewModelScope.launch {
-                    _uiEvent.emit(SchoolBookmarkEvent.ShowSchoolDetail(schoolId))
+                    _uiEvent.emit(SchoolBookmarkEvent.ShowSchoolDetail(school))
                 }
             },
         )

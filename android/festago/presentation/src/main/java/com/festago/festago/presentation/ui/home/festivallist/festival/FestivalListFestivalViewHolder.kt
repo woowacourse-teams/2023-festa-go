@@ -12,12 +12,13 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ItemFestivalListFestivalBinding
 import com.festago.festago.presentation.ui.home.festivallist.festival.artistlist.ArtistAdapter
+import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 import java.time.LocalDate
 
 class FestivalListFestivalViewHolder(
     private val binding: ItemFestivalListFestivalBinding,
-    onArtistClick: (Long) -> Unit,
+    onArtistClick: (ArtistUiState) -> Unit,
 ) :
     FestivalListViewHolder(binding) {
     private val artistAdapter = ArtistAdapter(onArtistClick)
@@ -91,7 +92,7 @@ class FestivalListFestivalViewHolder(
     companion object {
         fun of(
             parent: ViewGroup,
-            onArtistClick: (Long) -> Unit,
+            onArtistClick: (ArtistUiState) -> Unit,
         ): FestivalListFestivalViewHolder {
             val binding = ItemFestivalListFestivalBinding.inflate(
                 LayoutInflater.from(parent.context),

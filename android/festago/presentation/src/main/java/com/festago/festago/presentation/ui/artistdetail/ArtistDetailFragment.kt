@@ -16,6 +16,8 @@ import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.artistdetail.adapter.festival.ArtistDetailAdapter
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.MoreItemUiState
+import com.festago.festago.presentation.ui.bindingadapter.setImage
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,16 +43,24 @@ class ArtistDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView(args.artistId)
+        initView()
         initObserve()
     }
 
-    private fun initView(id: Long) {
-        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
-        vm.loadArtistDetail(id, delayTimeMillis)
-
+    private fun initView() {
+        loadArtistDetail()
         binding.rvToDoList.adapter = adapter
+        initButton()
+    }
 
+    private fun loadArtistDetail() {
+        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
+        vm.loadArtistDetail(args.artist.id, delayTimeMillis)
+        binding.tvArtistName.text = args.artist.name
+        binding.ivProfileImage.setImage(args.artist.profileUrl)
+    }
+
+    private fun initButton() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -84,11 +94,12 @@ class ArtistDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
         binding.successUiState = uiState
-
+        binding.tvArtistName.text = uiState.artist.artistName
+        binding.ivProfileImage.setImage(uiState.artist.profileUrl)
         val items: List<Any> = if (uiState.isLast) {
             uiState.festivals
         } else {
-            uiState.festivals + MoreItemUiState { vm.loadMoreArtistFestivals(args.artistId) }
+            uiState.festivals + MoreItemUiState { vm.loadMoreArtistFestivals(args.artist.id) }
         }
         adapter.submitList(items)
 
@@ -106,14 +117,16 @@ class ArtistDetailFragment : Fragment() {
     private fun handleEvent(event: ArtistDetailEvent) = when (event) {
         is ArtistDetailEvent.ShowArtistDetail -> {
             findNavController().navigate(
-                ArtistDetailFragmentDirections.actionArtistDetailFragmentSelf(event.artistId),
+                ArtistDetailFragmentDirections.actionArtistDetailFragmentSelf(
+                    with(event.artist) { ArtistDetailArgs(id, name, imageUrl) },
+                ),
             )
         }
 
         is ArtistDetailEvent.ShowFestivalDetail -> {
             findNavController().navigate(
                 ArtistDetailFragmentDirections.actionArtistDetailFragmentToFestivalDetailFragment(
-                    event.festivalId,
+                    with(event.festival) { FestivalDetailArgs(id, name, imageUrl) },
                 ),
             )
         }

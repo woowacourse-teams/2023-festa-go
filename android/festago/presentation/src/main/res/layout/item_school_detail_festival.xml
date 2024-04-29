@@ -17,7 +17,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        onSingleClick="@{() -> item.onFestivalDetailClick.invoke(item.id)}"
+        onSingleClick="@{() -> item.onFestivalDetailClick.invoke(item)}"
         android:layout_width="match_parent"
         android:layout_height="132dp"
         android:layout_marginHorizontal="16dp"

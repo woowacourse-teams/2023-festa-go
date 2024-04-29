@@ -34,7 +34,8 @@ class ArtistDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             runCatching {
-                val deferredArtistDetail = async { artistRepository.loadArtistDetail(id, delayTimeMillis) }
+                val deferredArtistDetail =
+                    async { artistRepository.loadArtistDetail(id, delayTimeMillis) }
                 val deferredFestivals = async { artistRepository.loadArtistFestivals(id, 10) }
                 val festivalPage = deferredFestivals.await().getOrThrow()
 
@@ -80,16 +81,16 @@ class ArtistDetailViewModel @Inject constructor(
                     id = artist.id,
                     name = artist.name,
                     imageUrl = artist.imageUrl,
-                    onArtistDetailClick = { id ->
+                    onArtistDetailClick = { artistDetail ->
                         viewModelScope.launch {
-                            _event.emit(ArtistDetailEvent.ShowArtistDetail(id))
+                            _event.emit(ArtistDetailEvent.ShowArtistDetail(artistDetail))
                         }
                     },
                 )
             },
-            onFestivalDetailClick = { id ->
+            onFestivalDetailClick = { festivalDetail ->
                 viewModelScope.launch {
-                    _event.emit(ArtistDetailEvent.ShowFestivalDetail(id))
+                    _event.emit(ArtistDetailEvent.ShowFestivalDetail(festivalDetail))
                 }
             },
         )

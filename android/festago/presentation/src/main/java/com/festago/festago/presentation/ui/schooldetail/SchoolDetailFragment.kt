@@ -1,7 +1,6 @@
 package com.festago.festago.presentation.ui.schooldetail
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +13,9 @@ import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs
+import com.festago.festago.presentation.ui.bindingadapter.setImage
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs
 import com.festago.festago.presentation.ui.schooldetail.uistate.MoreItemUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -42,7 +44,7 @@ class SchoolDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView(args.schoolId)
+        initView()
         initObserve()
     }
 
@@ -60,11 +62,13 @@ class SchoolDetailFragment : Fragment() {
         }
     }
 
-    private fun initView(schoolId: Long) {
+    private fun initView() {
         adapter = SchoolFestivalListAdapter()
         binding.rvFestivalList.adapter = adapter
         val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
-        vm.loadSchoolDetail(schoolId, delayTimeMillis)
+        vm.loadSchoolDetail(args.school.id, delayTimeMillis)
+        binding.tvSchoolName.text = args.school.name
+        binding.ivSchoolLogoImage.setImage(args.school.profileImageUrl)
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -85,11 +89,12 @@ class SchoolDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: SchoolDetailUiState.Success) {
         binding.successUiState = uiState
-
+        binding.tvSchoolName.text = uiState.schoolInfo.schoolName
+        binding.ivSchoolLogoImage.setImage(uiState.schoolInfo.logoUrl)
         val items: List<Any> = if (uiState.isLast) {
             uiState.festivals
         } else {
-            uiState.festivals + MoreItemUiState { vm.loadMoreSchoolFestivals(args.schoolId) }
+            uiState.festivals + MoreItemUiState { vm.loadMoreSchoolFestivals(args.school.id) }
         }
         adapter.submitList(items)
 
@@ -108,7 +113,7 @@ class SchoolDetailFragment : Fragment() {
         is SchoolDetailEvent.ShowArtistDetail -> {
             findNavController().navigate(
                 SchoolDetailFragmentDirections.actionSchoolDetailFragmentToArtistDetailFragment(
-                    event.artistId,
+                    with(event.artist) { ArtistDetailArgs(id, name, imageUrl) },
                 ),
             )
         }
@@ -116,7 +121,7 @@ class SchoolDetailFragment : Fragment() {
         is SchoolDetailEvent.ShowFestivalDetail -> {
             findNavController().navigate(
                 SchoolDetailFragmentDirections.actionSchoolDetailFragmentToFestivalDetailFragment(
-                    event.festivalId,
+                    with(event.festival) { FestivalDetailArgs(id, name, imageUrl) },
                 ),
             )
         }

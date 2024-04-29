@@ -4,5 +4,5 @@ data class SchoolBookmarkUiState(
     val id: Long,
     val name: String,
     val imageUrl: String,
-    val onSchoolDetail: (schoolId: Long) -> Unit,
+    val onSchoolDetail: (school: SchoolBookmarkUiState) -> Unit,
 )

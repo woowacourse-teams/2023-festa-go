@@ -17,6 +17,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentSearchBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailArgs
 import com.festago.festago.presentation.ui.search.recentsearch.RecentSearchAdapter
 import com.festago.festago.presentation.ui.search.screen.ItemSearchScreenUiState
 import com.festago.festago.presentation.ui.search.screen.ItemSearchScreenUiState.ArtistSearchScreen
@@ -173,7 +176,7 @@ class SearchFragment : Fragment() {
             is SearchEvent.ShowFestivalDetail -> {
                 findNavController().navigate(
                     SearchFragmentDirections.actionSearchFragmentToFestivalDetailFragment(
-                        event.festivalId,
+                        with(event.festival) { FestivalDetailArgs(id, name, imageUrl) },
                     ),
                 )
             }
@@ -181,7 +184,7 @@ class SearchFragment : Fragment() {
             is SearchEvent.ShowArtistDetail -> {
                 findNavController().navigate(
                     SearchFragmentDirections.actionSearchFragmentToArtistDetailFragment(
-                        event.artistId,
+                        with(event.artist) { ArtistDetailArgs(id, name, imageUrl) },
                     ),
                 )
             }
@@ -189,7 +192,7 @@ class SearchFragment : Fragment() {
             is SearchEvent.ShowSchoolDetail -> {
                 findNavController().navigate(
                     SearchFragmentDirections.actionSearchFragmentToSchoolDetailFragment(
-                        event.schoolId,
+                        with(event.school) { SchoolDetailArgs(id, name, logoUrl) },
                     ),
                 )
             }

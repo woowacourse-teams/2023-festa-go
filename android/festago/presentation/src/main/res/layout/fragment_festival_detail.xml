@@ -36,7 +36,6 @@
 
             <ImageView
                 android:id="@+id/ivFestivalBackground"
-                imageUrl="@{successUiState.festival.posterImageUrl}"
                 android:layout_width="match_parent"
                 android:layout_height="136dp"
                 android:importantForAccessibility="no"
@@ -66,7 +65,6 @@
 
             <ImageView
                 android:id="@+id/ivFestivalPoster"
-                imageUrl="@{successUiState.festival.posterImageUrl}"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="16dp"
@@ -127,7 +125,6 @@
                 android:gravity="start"
                 android:includeFontPadding="false"
                 android:maxLines="2"
-                android:text="@{successUiState.festival.name}"
                 android:textColor="@color/contents_gray_07"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivFestivalPoster"
@@ -136,7 +133,7 @@
 
             <LinearLayout
                 android:id="@+id/llSchoolLocation"
-                onSingleClick="@{() -> successUiState.festival.onSchoolClick.invoke(successUiState.festival.school.id)}"
+                onSingleClick="@{() -> successUiState.festival.onSchoolClick.invoke(successUiState.festival.school)}"
                 visibility="@{uiState.shouldShowSuccess}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -16,8 +16,11 @@ import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs
+import com.festago.festago.presentation.ui.bindingadapter.setImage
 import com.festago.festago.presentation.ui.festivaldetail.adapter.stage.StageListAdapter
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailArgs
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -49,14 +52,17 @@ class FestivalDetailFragment : Fragment() {
     }
 
     private fun initView() {
-        loadFestivalDetail(args.festivalId)
+        loadFestivalDetail()
         initStageAdapter()
         initButton()
     }
 
-    private fun loadFestivalDetail(id: Long) {
+    private fun loadFestivalDetail() {
         val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
-        vm.loadFestivalDetail(id, delayTimeMillis)
+        binding.ivFestivalPoster.setImage(args.festival.posterImageUrl)
+        binding.ivFestivalBackground.setImage(args.festival.posterImageUrl)
+        binding.tvFestivalName.text = args.festival.name
+        vm.loadFestivalDetail(args.festival.id, delayTimeMillis)
     }
 
     private fun initStageAdapter() {
@@ -100,6 +106,9 @@ class FestivalDetailFragment : Fragment() {
     private fun handleSuccess(uiState: FestivalDetailUiState.Success) {
         binding.successUiState = uiState
         binding.tvFestivalDDay.setFestivalDDay(uiState.festival.startDate, uiState.festival.endDate)
+        binding.ivFestivalPoster.setImage(uiState.festival.posterImageUrl)
+        binding.ivFestivalBackground.setImage(uiState.festival.posterImageUrl)
+        binding.tvFestivalName.text = uiState.festival.name
         adapter.submitList(uiState.stages)
         binding.llcFestivalSocialMedia.removeAllViews()
         uiState.festival.socialMedias.forEach { media ->
@@ -157,7 +166,7 @@ class FestivalDetailFragment : Fragment() {
             is FestivalDetailEvent.ShowArtistDetail -> {
                 findNavController().navigate(
                     FestivalDetailFragmentDirections.actionFestivalDetailFragmentToArtistDetailFragment(
-                        event.artistId,
+                        with(event.artist) { ArtistDetailArgs(id, name, imageUrl) },
                     ),
                 )
             }
@@ -165,7 +174,7 @@ class FestivalDetailFragment : Fragment() {
             is FestivalDetailEvent.ShowSchoolDetail -> {
                 findNavController().navigate(
                     FestivalDetailFragmentDirections.actionFestivalDetailFragmentToSchoolDetailFragment(
-                        event.schoolId,
+                        with(event.school) { SchoolDetailArgs(id, name, imageUrl) },
                     ),
                 )
             }

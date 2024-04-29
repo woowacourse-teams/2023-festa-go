@@ -87,16 +87,16 @@ class SchoolDetailViewModel @Inject constructor(
                 id = artist.id,
                 name = artist.name,
                 imageUrl = artist.imageUrl,
-                onArtistDetailClick = { id ->
+                onArtistDetailClick = { artistUiState ->
                     viewModelScope.launch {
-                        _event.emit(SchoolDetailEvent.ShowArtistDetail(id))
+                        _event.emit(SchoolDetailEvent.ShowArtistDetail(artistUiState))
                     }
                 },
             )
         },
-        onFestivalDetailClick = { id ->
+        onFestivalDetailClick = { festivalUiState ->
             viewModelScope.launch {
-                _event.emit(SchoolDetailEvent.ShowFestivalDetail(id))
+                _event.emit(SchoolDetailEvent.ShowFestivalDetail(festivalUiState))
             }
         },
     )

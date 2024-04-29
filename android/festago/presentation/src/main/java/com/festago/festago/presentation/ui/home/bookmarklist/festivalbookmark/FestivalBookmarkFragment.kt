@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.festago.festago.presentation.databinding.FragmentFestivalBookmarkBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs
 import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmentDirections
 import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.adapater.FestivalBookmarkViewAdapter
 import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate.FestivalBookmarkUiState
@@ -56,7 +58,8 @@ class FestivalBookmarkFragment : Fragment() {
                 binding.uiState = uiState
                 when (uiState) {
                     is FestivalBookmarkUiState.Loading,
-                    is FestivalBookmarkUiState.Error -> Unit
+                    is FestivalBookmarkUiState.Error,
+                    -> Unit
 
                     is FestivalBookmarkUiState.Success ->
                         festivalBookmarkViewAdapter.submitList(uiState.festivalBookmarks)
@@ -70,7 +73,7 @@ class FestivalBookmarkFragment : Fragment() {
                     is FestivalBookmarkEvent.ShowFestivalDetail -> {
                         findNavController().safeNavigate(
                             BookmarkListFragmentDirections.actionBookmarkListFragmentToFestivalDetailFragment(
-                                event.festivalId,
+                                with(event.festival) { FestivalDetailArgs(id, name, imageUrl) },
                             ),
                         )
                     }
@@ -78,7 +81,7 @@ class FestivalBookmarkFragment : Fragment() {
                     is FestivalBookmarkEvent.ShowArtistDetail -> {
                         findNavController().safeNavigate(
                             BookmarkListFragmentDirections.actionBookmarkListFragmentToArtistDetailFragment(
-                                event.artistId,
+                                with(event.artist) { ArtistDetailArgs(id, name, imageUrl) },
                             ),
                         )
                     }

@@ -16,7 +16,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvFestivalImage"
-            onSingleClick="@{()-> item.onArtistDetail.invoke(item.id) }"
+            onSingleClick="@{()-> item.onArtistDetail.invoke(item) }"
             android:layout_width="66dp"
             android:layout_height="66dp"
             android:layout_marginHorizontal="8dp"

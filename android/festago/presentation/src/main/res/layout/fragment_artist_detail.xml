@@ -73,7 +73,6 @@
 
             <ImageView
                 android:id="@+id/ivProfileImage"
-                imageUrl="@{successUiState.artist.profileUrl}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
@@ -109,7 +108,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@{successUiState.artist.artistName}"
             app:layout_constraintBottom_toBottomOf="@+id/cvProfileImage"
             app:layout_constraintStart_toEndOf="@id/cvProfileImage"
             tools:text="뉴진스" />

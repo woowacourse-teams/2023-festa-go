@@ -9,9 +9,6 @@ class ArtistViewHolder(private val binding: ItemFestivalBookmarkArtistBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ArtistUiState) {
         binding.artist = item
-        binding.root.setOnClickListener {
-            item.onArtistDetail(binding.artist!!.id)
-        }
     }
 
     companion object {
