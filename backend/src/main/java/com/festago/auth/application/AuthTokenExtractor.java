@@ -2,7 +2,7 @@ package com.festago.auth.application;
 
 import com.festago.auth.domain.AuthPayload;
 
-public interface AuthExtractor {
+public interface AuthTokenExtractor {
 
     AuthPayload extract(String token);
 }

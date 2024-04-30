@@ -52,11 +52,11 @@ class JwtEntryCodeProviderTest {
         String code = entryCodeProvider.provide(entryCodePayload, expiredAt);
 
         // then
-        Claims claims = Jwts.parserBuilder()
+        Claims claims = Jwts.parser()
             .setSigningKey(SECRET_KEY.getBytes())
             .build()
-            .parseClaimsJws(code)
-            .getBody();
+            .parseSignedClaims(code)
+            .getPayload();
 
         Long actualMemberTicketId = claims.get("ticketId", Long.class);
         Date actualExpiredAt = claims.getExpiration();

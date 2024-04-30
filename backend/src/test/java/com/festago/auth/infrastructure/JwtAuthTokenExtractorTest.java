@@ -9,10 +9,10 @@ import com.festago.auth.domain.Role;
 import com.festago.common.exception.UnauthorizedException;
 import com.festago.common.exception.UnexpectedException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.time.Clock;
 import java.util.Date;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -21,14 +21,14 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JwtAuthExtractorTest {
+class JwtAuthTokenExtractorTest {
 
     private static final String MEMBER_ID_KEY = "memberId";
     private static final String ROLE_ID_KEY = "role";
     private static final String SECRET_KEY = "1231231231231231223131231231231231231212312312";
     private static final Key KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
-    JwtAuthExtractor jwtAuthExtractor = new JwtAuthExtractor(SECRET_KEY);
+    JwtAuthTokenExtractor jwtAuthExtractor = new JwtAuthTokenExtractor(SECRET_KEY, Clock.systemDefaultZone());
 
     @Test
     void JWT_토큰의_형식이_아니면_예외() {
@@ -46,8 +46,8 @@ class JwtAuthExtractorTest {
         //given
         String token = Jwts.builder()
             .claim(MEMBER_ID_KEY, 1L)
-            .setExpiration(new Date(new Date().getTime() - 1000))
-            .signWith(KEY, SignatureAlgorithm.HS256)
+            .expiration(new Date(new Date().getTime() - 1000))
+            .signWith(KEY)
             .compact();
 
         // when & then
@@ -63,8 +63,8 @@ class JwtAuthExtractorTest {
 
         String token = Jwts.builder()
             .claim(MEMBER_ID_KEY, 1L)
-            .setExpiration(new Date(new Date().getTime() + 10000))
-            .signWith(otherKey, SignatureAlgorithm.HS256)
+            .expiration(new Date(new Date().getTime() + 10000))
+            .signWith(otherKey)
             .compact();
 
         // when & then
@@ -78,8 +78,8 @@ class JwtAuthExtractorTest {
         // given
         String token = Jwts.builder()
             .claim(MEMBER_ID_KEY, 1)
-            .setExpiration(new Date(new Date().getTime() + 10000))
-            .signWith(KEY, SignatureAlgorithm.HS256)
+            .expiration(new Date(new Date().getTime() + 10000))
+            .signWith(KEY)
             .compact();
 
         // when & then
@@ -103,8 +103,8 @@ class JwtAuthExtractorTest {
         String token = Jwts.builder()
             .claim(MEMBER_ID_KEY, memberId)
             .claim(ROLE_ID_KEY, Role.MEMBER)
-            .setExpiration(new Date(new Date().getTime() + 10000))
-            .signWith(KEY, SignatureAlgorithm.HS256)
+            .expiration(new Date(new Date().getTime() + 10000))
+            .signWith(KEY)
             .compact();
 
         // when

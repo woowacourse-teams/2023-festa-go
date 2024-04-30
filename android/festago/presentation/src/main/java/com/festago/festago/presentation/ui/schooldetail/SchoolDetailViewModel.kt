@@ -47,11 +47,7 @@ class SchoolDetailViewModel @Inject constructor(
                     isLast = festivalPage.isLastPage,
                 )
             }.onFailure {
-                _uiState.value = SchoolDetailUiState.Error
-                analyticsHelper.logNetworkFailure(
-                    key = KEY_LOAD_SCHOOL_DETAIL,
-                    value = it.message.toString(),
-                )
+                handleFailure(key = KEY_LOAD_SCHOOL_DETAIL, throwable = it)
             }
         }
     }
@@ -71,8 +67,21 @@ class SchoolDetailViewModel @Inject constructor(
                     festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
                     isLast = festivalsPage.isLastPage
                 )
+            }.onFailure {
+                handleFailure(key = KEY_LOAD_MORE_SCHOOL_FESTIVALS, throwable = it)
             }
         }
+    }
+
+    private fun handleFailure(key: String, throwable: Throwable) {
+        _uiState.value = SchoolDetailUiState.Error {
+            _uiState.value = SchoolDetailUiState.Loading
+            loadSchoolDetail(it)
+        }
+        analyticsHelper.logNetworkFailure(
+            key = key,
+            value = throwable.message.toString()
+        )
     }
 
     private fun Festival.toUiState() = FestivalItemUiState(
@@ -102,5 +111,6 @@ class SchoolDetailViewModel @Inject constructor(
 
     companion object {
         private const val KEY_LOAD_SCHOOL_DETAIL = "KEY_LOAD_SCHOOL_DETAIL"
+        private const val KEY_LOAD_MORE_SCHOOL_FESTIVALS = "KEY_LOAD_MORE_SCHOOL_FESTIVALS"
     }
 }

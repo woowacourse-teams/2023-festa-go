@@ -13,7 +13,7 @@ sealed interface FestivalListUiState {
         val schoolRegion: SchoolRegion? = null,
     ) : FestivalListUiState
 
-    object Error : FestivalListUiState
+    class Error(val refresh: () -> Unit) : FestivalListUiState
 
     val shouldShowSuccess get() = this is Success
     val shouldShowLoading get() = this is Loading

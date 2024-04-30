@@ -2,7 +2,7 @@ package com.festago.auth.application.command;
 
 import com.festago.admin.domain.Admin;
 import com.festago.admin.repository.AdminRepository;
-import com.festago.auth.application.AuthProvider;
+import com.festago.auth.application.AuthTokenProvider;
 import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.AuthType;
 import com.festago.auth.domain.Role;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminAuthCommandService {
 
-    private final AuthProvider authProvider;
+    private final AuthTokenProvider authTokenProvider;
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -31,7 +31,7 @@ public class AdminAuthCommandService {
     public AdminLoginResult login(AdminLoginCommand command) {
         Admin admin = findAdminWithAuthenticate(command);
         AuthPayload authPayload = new AuthPayload(admin.getId(), Role.ADMIN);
-        String accessToken = authProvider.provide(authPayload);
+        String accessToken = authTokenProvider.provide(authPayload).token();
         return new AdminLoginResult(
             admin.getUsername(),
             getAuthType(admin),

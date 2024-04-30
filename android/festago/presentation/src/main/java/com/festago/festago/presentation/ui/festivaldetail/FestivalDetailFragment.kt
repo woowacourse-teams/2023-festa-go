@@ -77,11 +77,9 @@ class FestivalDetailFragment : Fragment() {
 
     private fun updateUi(uiState: FestivalDetailUiState) {
         when (uiState) {
-            is FestivalDetailUiState.Loading,
-            is FestivalDetailUiState.Error,
-            -> Unit
-
+            is FestivalDetailUiState.Loading -> Unit
             is FestivalDetailUiState.Success -> handleSuccess(uiState)
+            is FestivalDetailUiState.Error -> handleError(uiState)
         }
     }
 
@@ -98,6 +96,10 @@ class FestivalDetailFragment : Fragment() {
                 binding.llcFestivalSocialMedia.addView(ivImage)
             }
         }
+    }
+
+    private fun handleError(uiState: FestivalDetailUiState.Error) {
+        binding.refreshListener = { uiState.refresh(args.festivalId) }
     }
 
     private fun TextView.setFestivalDDay(startDate: LocalDate, endDate: LocalDate) {

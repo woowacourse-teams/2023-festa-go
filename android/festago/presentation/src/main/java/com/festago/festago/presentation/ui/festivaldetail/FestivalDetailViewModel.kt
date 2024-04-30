@@ -41,7 +41,10 @@ class FestivalDetailViewModel @Inject constructor(
             festivalRepository.loadFestivalDetail(festivalId).onSuccess { festivalDetail ->
                 _uiState.value = festivalDetail.toSuccessUiState()
             }.onFailure {
-                _uiState.value = FestivalDetailUiState.Error
+                _uiState.value = FestivalDetailUiState.Error { festivalId ->
+                    _uiState.value = FestivalDetailUiState.Loading
+                    loadFestivalDetail(festivalId)
+                }
                 analyticsHelper.logNetworkFailure(
                     key = KEY_LOAD_FESTIVAL_DETAIL,
                     value = it.message.toString(),
