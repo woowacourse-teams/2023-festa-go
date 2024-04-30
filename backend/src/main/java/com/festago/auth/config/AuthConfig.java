@@ -4,6 +4,8 @@ import com.festago.auth.application.AuthTokenExtractor;
 import com.festago.auth.application.AuthTokenProvider;
 import com.festago.auth.application.OAuth2Client;
 import com.festago.auth.application.OAuth2Clients;
+import com.festago.auth.domain.OpenIdClient;
+import com.festago.auth.domain.OpenIdClients;
 import com.festago.auth.infrastructure.JwtAuthTokenExtractor;
 import com.festago.auth.infrastructure.JwtAuthTokenProvider;
 import java.time.Clock;
@@ -29,6 +31,13 @@ public class AuthConfig {
     public OAuth2Clients oAuth2Clients(List<OAuth2Client> oAuth2Clients) {
         return OAuth2Clients.builder()
             .addAll(oAuth2Clients)
+            .build();
+    }
+
+    @Bean
+    public OpenIdClients openIdClients(List<OpenIdClient> openIdClients) {
+        return OpenIdClients.builder()
+            .addAll(openIdClients)
             .build();
     }
 

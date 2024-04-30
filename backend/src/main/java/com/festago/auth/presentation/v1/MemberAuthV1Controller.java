@@ -7,6 +7,7 @@ import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.v1.LoginV1Response;
 import com.festago.auth.dto.v1.LogoutV1Request;
 import com.festago.auth.dto.v1.OAuth2LoginV1Request;
+import com.festago.auth.dto.v1.OpenIdLoginV1Request;
 import com.festago.auth.dto.v1.RefreshTokenV1Request;
 import com.festago.auth.dto.v1.TokenRefreshV1Response;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -50,6 +51,15 @@ public class MemberAuthV1Controller {
     ) {
         return ResponseEntity.ok()
             .body(memberAuthFacadeService.oAuth2Login(socialType, code));
+    }
+
+    @PostMapping("/login/open-id")
+    @Operation(description = "OpenID Id Token을 받아 로그인/회원가입을 한다.", summary = "OpenID Id Token 로그인")
+    public ResponseEntity<LoginV1Response> openIdLogin(
+        @Valid @RequestBody OpenIdLoginV1Request request
+    ) {
+        return ResponseEntity.ok()
+            .body(memberAuthFacadeService.openIdLogin(request.socialType(), request.idToken()));
     }
 
     @MemberAuth
