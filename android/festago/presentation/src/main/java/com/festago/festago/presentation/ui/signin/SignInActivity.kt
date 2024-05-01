@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.festago.festago.domain.model.nonce.NonceGenerator
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivitySignInBinding
 import com.festago.festago.presentation.ui.home.HomeActivity
@@ -68,7 +67,7 @@ class SignInActivity : AppCompatActivity() {
     private fun initKakaoLogin() {
         binding.btnKakaoLogin.setOnClickListener {
             lifecycleScope.launch {
-                KakaoAuthorization(NonceGenerator()).getIdToken(this@SignInActivity)
+                KakaoAuthorization().getIdToken(this@SignInActivity)
                     .onSuccess { idToken ->
                         vm.signIn(idToken)
                     }.onFailure { error ->

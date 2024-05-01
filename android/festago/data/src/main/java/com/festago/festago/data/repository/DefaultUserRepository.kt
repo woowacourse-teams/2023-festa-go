@@ -10,8 +10,13 @@ import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.domain.model.token.Token
 import com.festago.festago.domain.repository.UserRepository
+import com.kakao.sdk.auth.TokenManagerProvider
+import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class DefaultUserRepository @Inject constructor(
     private val authRetrofitService: AuthRetrofitService,
@@ -75,6 +80,7 @@ class DefaultUserRepository @Inject constructor(
                 AUTHORIZATION_TOKEN_FORMAT.format(getAccessToken().getOrThrow()),
             )
         }.onSuccessOrCatch {
+            logoutKakao()
             tokenDataSource.accessToken = null
             tokenDataSource.refreshToken = null
         }
@@ -86,6 +92,7 @@ class DefaultUserRepository @Inject constructor(
                 AUTHORIZATION_TOKEN_FORMAT.format(getAccessToken().getOrThrow()),
             )
         }.onSuccessOrCatch {
+            deleteKakaoAccount()
             tokenDataSource.accessToken = null
             tokenDataSource.refreshToken = null
         }
@@ -96,6 +103,24 @@ class DefaultUserRepository @Inject constructor(
             authRetrofitService.refresh(RefreshRequest(refreshToken.token))
         }.onSuccessOrCatch { refreshTokenResponse ->
             tokenDataSource.accessToken = refreshTokenResponse.accessToken.toEntity()
+        }
+    }
+
+    private fun logoutKakao() {
+        UserApiClient.instance.logout {}
+    }
+
+    private suspend fun deleteKakaoAccount(): Result<Unit> {
+        return suspendCoroutine<Result<Unit>> { continuation ->
+            TokenManagerProvider.instance.manager.getToken()?.let {
+                UserApiClient.instance.unlink { error ->
+                    if (error == null) {
+                        continuation.resume(Result.success(Unit))
+                    } else {
+                        continuation.resumeWithException(error)
+                    }
+                }
+            } ?: continuation.resume(Result.success(Unit))
         }
     }
 

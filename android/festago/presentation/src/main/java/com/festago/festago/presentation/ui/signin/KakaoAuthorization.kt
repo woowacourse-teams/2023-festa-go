@@ -10,11 +10,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class KakaoAuthorization(private val nonceGenerator: NonceGenerator) {
+class KakaoAuthorization {
 
     suspend fun getIdToken(context: Context): Result<String> {
         return runCatching {
-            val nonce = nonceGenerator.generate()
+            val nonce = NonceGenerator().generate()
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
                 try {
                     loginWithKakaoTalk(context, nonce)
