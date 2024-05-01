@@ -33,7 +33,7 @@ public class JsonArtistsSerializer implements ArtistsSerializer {
     /**
      * 쿼리에서 사용되는 모델이므로, 필드를 추가해도 필드명은 변경되면 절대로 안 됨!!!
      */
-    private record ArtistQueryModel(
+    public record ArtistQueryModel(
         Long id,
         String name,
         String profileImageUrl,
