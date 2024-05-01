@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SignInResponse(
-    val nickName: String,
+    val nickname: String,
     val profileImageUrl: String,
     val accessToken: TokenResponse,
     val refreshToken: TokenResponse,

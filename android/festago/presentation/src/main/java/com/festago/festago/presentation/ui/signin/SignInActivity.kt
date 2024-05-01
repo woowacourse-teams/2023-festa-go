@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.festago.festago.common.kakao.KakaoAuthorization
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ActivitySignInBinding
 import com.festago.festago.presentation.ui.home.HomeActivity
@@ -18,6 +19,7 @@ import com.festago.festago.presentation.util.setOnApplyWindowInsetsCompatListene
 import com.festago.festago.presentation.util.setStatusBarMode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignInActivity : AppCompatActivity() {
@@ -25,6 +27,9 @@ class SignInActivity : AppCompatActivity() {
     private val binding: ActivitySignInBinding by lazy {
         ActivitySignInBinding.inflate(layoutInflater)
     }
+
+    @Inject
+    lateinit var kakaoAuthorization: KakaoAuthorization
 
     private val vm: SignInViewModel by viewModels()
 
@@ -67,7 +72,7 @@ class SignInActivity : AppCompatActivity() {
     private fun initKakaoLogin() {
         binding.btnKakaoLogin.setOnClickListener {
             lifecycleScope.launch {
-                KakaoAuthorization().getIdToken(this@SignInActivity)
+                kakaoAuthorization.getIdToken(this@SignInActivity)
                     .onSuccess { idToken ->
                         vm.signIn(idToken)
                     }.onFailure { error ->
