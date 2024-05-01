@@ -1,4 +1,4 @@
-package com.festago.festago.presentation.ui.signin
+package com.festago.festago.common.kakao
 
 import android.content.Context
 import com.festago.festago.domain.model.nonce.NonceGenerator
@@ -6,11 +6,12 @@ import com.kakao.sdk.auth.TokenManagerProvider
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class KakaoAuthorization {
+class KakaoAuthorization @Inject constructor() {
 
     suspend fun getIdToken(context: Context): Result<String> {
         return runCatching {

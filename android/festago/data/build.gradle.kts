@@ -49,6 +49,7 @@ kotlin.jvmToolchain(17)
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":common"))
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.50")
@@ -67,9 +68,6 @@ dependencies {
 
     // Encrypted SharedPreference
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
-
-    // kakao login
-    implementation("com.kakao.sdk:v2-user:2.12.0")
 
     // junit4
     testImplementation("junit:junit:4.13.2")
@@ -93,6 +91,9 @@ dependencies {
 
     // logging httpLoggingInterceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    // gson
+    implementation("com.google.code.gson:gson:2.9.0")
 }
 
 fun getSecretKey(propertyKey: String): String {

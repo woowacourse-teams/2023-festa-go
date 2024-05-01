@@ -38,9 +38,14 @@ android {
 kotlin.jvmToolchain(17)
 
 dependencies {
+    // common
+    implementation(project(":domain"))
     // hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+    // kakao login
+    implementation("com.kakao.sdk:v2-user:2.12.0")
 
     // firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
