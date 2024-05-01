@@ -20,6 +20,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -38,7 +40,8 @@ class KakaoOpenIdUserInfoProviderTest {
         keyLocator = mock();
         clock = spy(Clock.systemDefaultZone());
         kakaoOpenIdUserInfoProvider = new KakaoOpenIdUserInfoProvider(
-            "client-id",
+            "restApiKey",
+            "nativeAppKey",
             keyLocator,
             new NoopOpenIdNonceValidator(),
             clock
@@ -149,7 +152,30 @@ class KakaoOpenIdUserInfoProviderTest {
         given(keyLocator.locate(any()))
             .willReturn(key);
         String idToken = Jwts.builder()
-            .audience().add("client-id")
+            .audience().add("restApiKey")
+            .and()
+            .issuer("https://kauth.kakao.com")
+            .signWith(key)
+            .subject(socialId)
+            .expiration(Date.from(clock.instant().plus(1, ChronoUnit.DAYS)))
+            .compact();
+
+        // when
+        var expect = kakaoOpenIdUserInfoProvider.provide(idToken);
+
+        // then
+        assertThat(expect.socialId()).isEqualTo(socialId);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"restApiKey", "nativeAppKey"})
+    void audience_값은_restApiKey_nativeAppKey_둘_중_하나라도_매칭되면_성공(String audience) {
+        // given
+        String socialId = "12345";
+        given(keyLocator.locate(any()))
+            .willReturn(key);
+        String idToken = Jwts.builder()
+            .audience().add(audience)
             .and()
             .issuer("https://kauth.kakao.com")
             .signWith(key)

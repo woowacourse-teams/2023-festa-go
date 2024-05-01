@@ -21,7 +21,7 @@ public class KakaoOAuth2AccessTokenClient {
 
     public KakaoOAuth2AccessTokenClient(
         @Value("${festago.oauth2.kakao.grant-type}") String grantType,
-        @Value("${festago.oauth2.kakao.client-id}") String clientId,
+        @Value("${festago.oauth2.kakao.rest-api-key}") String clientId,
         @Value("${festago.oauth2.kakao.redirect-uri}") String redirectUri,
         @Value("${festago.oauth2.kakao.client-secret}") String clientSecret,
         RestTemplateBuilder restTemplateBuilder

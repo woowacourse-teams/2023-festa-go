@@ -7,11 +7,10 @@ import com.festago.auth.domain.UserInfo;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import java.time.Clock;
 import java.util.Date;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,27 +21,30 @@ public class KakaoOpenIdUserInfoProvider implements OpenIdUserInfoProvider {
 
     private static final String ISSUER = "https://kauth.kakao.com";
     private final OpenIdNonceValidator openIdNonceValidator;
-    private final JwtParser jwtParser;
+    private final OpenIdIdTokenParser idTokenParser;
+    private final Set<String> appKeys;
 
     public KakaoOpenIdUserInfoProvider(
-        @Value("${festago.oauth2.kakao.client-id}") String clientId,
+        @Value("${festago.oauth2.kakao.rest-api-key}") String restApiKey,
+        @Value("${festago.oauth2.kakao.native-app-key}") String nativeAppKey,
         KakaoOpenIdPublicKeyLocator kakaoOpenIdPublicKeyLocator,
         OpenIdNonceValidator openIdNonceValidator,
         Clock clock
     ) {
+        this.appKeys = Set.of(restApiKey, nativeAppKey);
         this.openIdNonceValidator = openIdNonceValidator;
-        this.jwtParser = Jwts.parser()
+        this.idTokenParser = new OpenIdIdTokenParser(Jwts.parser()
             .keyLocator(kakaoOpenIdPublicKeyLocator)
             .requireIssuer(ISSUER)
-            .requireAudience(clientId)
             .clock(() -> Date.from(clock.instant()))
-            .build();
+            .build());
     }
 
     @Override
     public UserInfo provide(String idToken) {
-        Claims payload = getPayload(idToken);
+        Claims payload = idTokenParser.parse(idToken);
         openIdNonceValidator.validate(payload.get("nonce", String.class), payload.getExpiration());
+        validateAudience(payload.getAudience());
         return UserInfo.builder()
             .socialType(SocialType.KAKAO)
             .socialId(payload.getSubject())
@@ -51,15 +53,13 @@ public class KakaoOpenIdUserInfoProvider implements OpenIdUserInfoProvider {
             .build();
     }
 
-    private Claims getPayload(String idToken) {
-        try {
-            return jwtParser.parseSignedClaims(idToken)
-                .getPayload();
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new UnauthorizedException(ErrorCode.OPEN_ID_INVALID_TOKEN);
-        } catch (Exception e) {
-            log.error("JWT 토큰 파싱 중에 문제가 발생했습니다.", e);
-            throw e;
+    private void validateAudience(Set<String> audiences) {
+        for (String audience : audiences) {
+            if (appKeys.contains(audience)) {
+                return;
+            }
         }
+        log.info("허용되지 않는 id 토큰의 audience 값이 요청되었습니다. audiences={}", audiences);
+        throw new UnauthorizedException(ErrorCode.OPEN_ID_INVALID_TOKEN);
     }
 }
