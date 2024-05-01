@@ -24,18 +24,18 @@ public class ArtistFestivalSearchV1QueryDslRepository extends QueryDslRepository
     }
 
     public List<FestivalSearchV1Response> executeSearch(String keyword) {
+        return searchByExpression(getBooleanExpressionByKeyword(keyword));
+    }
+
+    private BooleanExpression getBooleanExpressionByKeyword(String keyword) {
         int keywordLength = keyword.length();
         if (keywordLength == 0) {
             throw new BadRequestException(ErrorCode.INVALID_KEYWORD);
         }
         if (keywordLength == 1) {
-            return searchByEqual(keyword);
+            return artist.name.eq(keyword);
         }
-        return searchByLike(keyword);
-    }
-
-    private List<FestivalSearchV1Response> searchByEqual(String keyword) {
-        return searchByExpression(artist.name.eq(keyword));
+        return artist.name.contains(keyword);
     }
 
     private List<FestivalSearchV1Response> searchByExpression(BooleanExpression expression) {
@@ -56,7 +56,14 @@ public class ArtistFestivalSearchV1QueryDslRepository extends QueryDslRepository
             .fetch();
     }
 
-    private List<FestivalSearchV1Response> searchByLike(String keyword) {
-        return searchByExpression(artist.name.contains(keyword));
+    public boolean existsByName(String keyword) {
+        return existsByExpression(getBooleanExpressionByKeyword(keyword));
+    }
+
+    private boolean existsByExpression(BooleanExpression expression) {
+        return !selectFrom(artist)
+            .where(expression)
+            .fetch()
+            .isEmpty();
     }
 }

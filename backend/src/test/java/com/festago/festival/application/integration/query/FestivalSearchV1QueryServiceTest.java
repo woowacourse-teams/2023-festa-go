@@ -58,68 +58,79 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
     @Autowired
     FestivalSearchV1QueryService festivalSearchV1QueryService;
 
-    Stage 부산_공연;
-    Stage 서울_공연;
-    Stage 대구_공연;
+    School 부산_학교;
+    School 서울_학교;
+    School 대구_학교;
+
+    Festival 부산대_종료_축제;
+    Festival 서울대_진행_축제;
+    Festival 대구대_예정_축제;
+
+    Stage 부산대_종료_공연;
+    Stage 서울_진행_공연;
+    Stage 대구_예정_공연;
+
+    LocalDate nowDate;
+    LocalDateTime nowDateTime;
 
     @BeforeEach
     void setting() {
-        LocalDate nowDate = LocalDate.now();
-        LocalDateTime nowDateTime = LocalDateTime.now();
+        nowDate = LocalDate.now();
+        nowDateTime = LocalDateTime.now();
 
-        School 부산_학교 = schoolRepository.save(SchoolFixture.builder()
+        부산_학교 = schoolRepository.save(SchoolFixture.builder()
             .domain("domain1")
             .name("부산 학교")
             .region(SchoolRegion.부산)
             .build());
-        School 서울_학교 = schoolRepository.save(SchoolFixture.builder()
+        서울_학교 = schoolRepository.save(SchoolFixture.builder()
             .domain("domain2")
             .name("서울 학교")
             .region(SchoolRegion.서울)
             .build());
-        School 대구_학교 = schoolRepository.save(SchoolFixture.builder()
+        대구_학교 = schoolRepository.save(SchoolFixture.builder()
             .domain("domain3")
             .name("대구 학교")
             .region(SchoolRegion.대구)
             .build());
 
-        Festival 부산_축제 = festivalRepository.save(FestivalFixture.builder()
+        부산대_종료_축제 = festivalRepository.save(FestivalFixture.builder()
             .name("부산대학교 축제")
             .startDate(nowDate.minusDays(5))
             .endDate(nowDate.minusDays(1))
             .school(부산_학교)
             .build());
-        Festival 서울_축제 = festivalRepository.save(FestivalFixture.builder()
+        서울대_진행_축제 = festivalRepository.save(FestivalFixture.builder()
             .name("서울대학교 축제")
             .startDate(nowDate.minusDays(1))
             .endDate(nowDate.plusDays(3))
             .school(서울_학교)
             .build());
-        Festival 대구_축제 = festivalRepository.save(FestivalFixture.builder()
+        대구대_예정_축제 = festivalRepository.save(FestivalFixture.builder()
             .name("대구대학교 축제")
             .startDate(nowDate.plusDays(1))
             .endDate(nowDate.plusDays(5))
             .school(대구_학교)
             .build());
 
-        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(부산_축제.getId()).build());
-        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(서울_축제.getId()).build());
-        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(대구_축제.getId()).build());
+        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(부산대_종료_축제.getId()).build());
+        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(서울대_진행_축제.getId()).build());
+        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(대구대_예정_축제.getId()).build());
 
-        부산_공연 = stageRepository.save(StageFixture.builder()
+        부산대_종료_공연 = stageRepository.save(StageFixture.builder()
             .startTime(nowDateTime.minusDays(5L))
             .ticketOpenTime(nowDateTime.minusDays(6L))
-            .festival(부산_축제)
+            .festival(부산대_종료_축제)
             .build());
-        서울_공연 = stageRepository.save(StageFixture.builder()
+        서울_진행_공연 = stageRepository.save(StageFixture.builder()
             .startTime(nowDateTime.minusDays(1L))
             .ticketOpenTime(nowDateTime.minusDays(2L))
-            .festival(서울_축제)
+            .festival(서울대_진행_축제)
             .build());
-        대구_공연 = stageRepository.save(StageFixture.builder()
+        대구_예정_공연 = stageRepository.save(StageFixture.builder()
             .startTime(nowDateTime.plusDays(1L))
             .ticketOpenTime(nowDateTime)
-            .festival(대구_축제)
+            .festival(대구대_예정_축제)
             .build());
     }
 
@@ -155,6 +166,55 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
                 softly.assertThat(actual.get(0).name()).contains(keyword);
             });
         }
+
+        @Test
+        void 학교_이름만_으로_검색_가능하다() {
+            // given
+            String keyword = "부산";
+
+            // when
+            List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search(keyword);
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(actual).hasSize(1);
+                softly.assertThat(actual.get(0).name()).contains(keyword);
+            });
+        }
+
+        @Test
+        void 검색은_진행_예정_종료로_정렬된다() {
+            // given
+            String keyword = "부산";
+
+            Festival 부산대학교_예정_축제 = festivalRepository.save(FestivalFixture.builder()
+                .name("부산대학교 예정 축제")
+                .startDate(nowDate.plusDays(1))
+                .endDate(nowDate.plusDays(3))
+                .school(부산_학교)
+                .build());
+
+            Festival 부산대학교_진행_축제 = festivalRepository.save(FestivalFixture.builder()
+                .name("부산대학교 진행 축제")
+                .startDate(nowDate.minusDays(5))
+                .endDate(nowDate.plusDays(1))
+                .school(부산_학교)
+                .build());
+
+            festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(부산대학교_예정_축제.getId()).build());
+            festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(부산대학교_진행_축제.getId()).build());
+
+            // when
+            List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search(keyword);
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(actual).hasSize(3);
+                softly.assertThat(actual)
+                    .map(festivalSearchV1Response -> festivalSearchV1Response.name())
+                    .containsExactly(부산대학교_진행_축제.getName(), 부산대학교_예정_축제.getName(), 부산대_종료_축제.getName());
+            });
+        }
     }
 
     @Nested
@@ -176,13 +236,13 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
                     .name("글렌")
                     .build());
 
-                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 오리.getId()).build());
-                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 우푸우.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_종료_공연.getId(), 오리.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_종료_공연.getId(), 우푸우.getId()).build());
 
-                stageArtistRepository.save(StageArtistFixture.builder(서울_공연.getId(), 오리.getId()).build());
-                stageArtistRepository.save(StageArtistFixture.builder(서울_공연.getId(), 글렌.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(서울_진행_공연.getId(), 오리.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(서울_진행_공연.getId(), 글렌.getId()).build());
 
-                stageArtistRepository.save(StageArtistFixture.builder(대구_공연.getId(), 우푸우.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(대구_예정_공연.getId(), 우푸우.getId()).build());
 
                 // when
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("푸우");
@@ -190,8 +250,8 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
                 // then
                 assertSoftly(softly -> {
                     softly.assertThat(actual).hasSize(2);
-                    softly.assertThat(actual.get(0).name()).isEqualTo("부산대학교 축제");
-                    softly.assertThat(actual.get(1).name()).isEqualTo("대구대학교 축제");
+                    softly.assertThat(actual.get(0).name()).isEqualTo("대구대학교 축제");
+                    softly.assertThat(actual.get(1).name()).isEqualTo("부산대학교 축제");
                 });
             }
 
@@ -208,13 +268,13 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
                     .name("글렌")
                     .build());
 
-                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 오리.getId()).build());
-                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 우푸우.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_종료_공연.getId(), 오리.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_종료_공연.getId(), 우푸우.getId()).build());
 
-                stageArtistRepository.save(StageArtistFixture.builder(서울_공연.getId(), 오리.getId()).build());
-                stageArtistRepository.save(StageArtistFixture.builder(서울_공연.getId(), 글렌.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(서울_진행_공연.getId(), 오리.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(서울_진행_공연.getId(), 글렌.getId()).build());
 
-                stageArtistRepository.save(StageArtistFixture.builder(대구_공연.getId(), 우푸우.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(대구_예정_공연.getId(), 우푸우.getId()).build());
 
                 // when
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("렌글");
@@ -252,10 +312,10 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
                     .name("푸")
                     .build());
 
-                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 푸우.getId()).build());
-                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 푸.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_종료_공연.getId(), 푸우.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_종료_공연.getId(), 푸.getId()).build());
 
-                stageArtistRepository.save(StageArtistFixture.builder(서울_공연.getId(), 푸.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(서울_진행_공연.getId(), 푸.getId()).build());
 
                 // when
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("푸");
@@ -263,8 +323,8 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
                 // then
                 assertSoftly(softly -> {
                     softly.assertThat(actual).hasSize(2);
-                    softly.assertThat(actual.get(0).name()).isEqualTo("부산대학교 축제");
-                    softly.assertThat(actual.get(1).name()).isEqualTo("서울대학교 축제");
+                    softly.assertThat(actual.get(0).name()).isEqualTo("서울대학교 축제");
+                    softly.assertThat(actual.get(1).name()).isEqualTo("부산대학교 축제");
                 });
             }
 
@@ -281,9 +341,9 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
                     .name("글렌")
                     .build());
 
-                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 푸우.getId()).build());
-                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 푸푸푸푸.getId()).build());
-                stageArtistRepository.save(StageArtistFixture.builder(부산_공연.getId(), 글렌.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_종료_공연.getId(), 푸우.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_종료_공연.getId(), 푸푸푸푸.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_종료_공연.getId(), 글렌.getId()).build());
 
                 // when
                 List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search("푸");
@@ -304,6 +364,60 @@ class FestivalSearchV1QueryServiceTest extends ApplicationIntegrationTest {
 
                 // then
                 assertThat(actual).isEmpty();
+            }
+
+            @Test
+            void 검색은_진행_예정_종료로_정렬된다() {
+                // given
+                String keyword = "푸";
+
+                Festival 부산대학교_예정_축제 = festivalRepository.save(FestivalFixture.builder()
+                    .name("부산대학교 예정 축제")
+                    .startDate(nowDate.plusDays(1))
+                    .endDate(nowDate.plusDays(3))
+                    .school(부산_학교)
+                    .build());
+
+                Festival 부산대학교_진행_축제 = festivalRepository.save(FestivalFixture.builder()
+                    .name("부산대학교 진행 축제")
+                    .startDate(nowDate.minusDays(5))
+                    .endDate(nowDate.plusDays(1))
+                    .school(부산_학교)
+                    .build());
+
+                Artist 푸 = artistRepository.save(ArtistFixture.builder()
+                    .name("푸")
+                    .build());
+
+                Stage 부산대_예정_공연 = stageRepository.save(StageFixture.builder()
+                    .startTime(nowDateTime.plusDays(2L))
+                    .ticketOpenTime(nowDateTime.plusMinutes(1L))
+                    .festival(부산대학교_예정_축제)
+                    .build());
+
+                Stage 부산대_진행_공연 = stageRepository.save(StageFixture.builder()
+                    .startTime(nowDateTime.minusDays(4L))
+                    .ticketOpenTime(nowDateTime.minusDays(6L))
+                    .festival(부산대학교_진행_축제)
+                    .build());
+
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_종료_공연.getId(), 푸.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_예정_공연.getId(), 푸.getId()).build());
+                stageArtistRepository.save(StageArtistFixture.builder(부산대_진행_공연.getId(), 푸.getId()).build());
+
+                festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(부산대학교_예정_축제.getId()).build());
+                festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(부산대학교_진행_축제.getId()).build());
+
+                // when
+                List<FestivalSearchV1Response> actual = festivalSearchV1QueryService.search(keyword);
+
+                // then
+                assertSoftly(softly -> {
+                    softly.assertThat(actual).hasSize(3);
+                    softly.assertThat(actual)
+                        .map(festivalSearchV1Response -> festivalSearchV1Response.name())
+                        .containsExactly(부산대학교_진행_축제.getName(), 부산대학교_예정_축제.getName(), 부산대_종료_축제.getName());
+                });
             }
         }
     }
