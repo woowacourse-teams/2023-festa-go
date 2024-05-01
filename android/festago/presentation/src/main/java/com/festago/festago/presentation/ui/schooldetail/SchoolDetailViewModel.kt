@@ -7,6 +7,7 @@ import com.festago.festago.common.analytics.logNetworkFailure
 import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.repository.BookmarkRepository
 import com.festago.festago.domain.repository.SchoolRepository
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailEvent.FailedToFetchBookmarkList
 import com.festago.festago.presentation.ui.schooldetail.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.FestivalItemUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
@@ -88,9 +89,11 @@ class SchoolDetailViewModel @Inject constructor(
             if (uiState.bookmarked) {
                 bookmarkRepository.deleteSchoolBookmark(schoolId.toLong())
                     .onSuccess { _uiState.value = uiState.copy(bookmarked = false) }
+                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
             } else {
                 bookmarkRepository.addSchoolBookmark(uiState.schoolInfo.id.toLong())
                     .onSuccess { _uiState.value = uiState.copy(bookmarked = true) }
+                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
             }
         }
     }

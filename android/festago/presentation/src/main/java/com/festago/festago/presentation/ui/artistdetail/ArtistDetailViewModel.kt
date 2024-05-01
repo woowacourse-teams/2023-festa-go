@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.repository.ArtistRepository
 import com.festago.festago.domain.repository.BookmarkRepository
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailEvent.FailedToFetchBookmarkList
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.FestivalItemUiState
@@ -82,9 +83,11 @@ class ArtistDetailViewModel @Inject constructor(
             if (uiState.bookMarked) {
                 bookmarkRepository.deleteArtistBookmark(artistId.toLong())
                     .onSuccess { _uiState.value = uiState.copy(bookMarked = false) }
+                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
             } else {
                 bookmarkRepository.addArtistBookmark(artistId.toLong())
                     .onSuccess { _uiState.value = uiState.copy(bookMarked = true) }
+                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
             }
         }
     }

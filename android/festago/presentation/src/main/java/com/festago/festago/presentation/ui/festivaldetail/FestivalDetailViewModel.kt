@@ -9,6 +9,7 @@ import com.festago.festago.domain.model.festival.FestivalDetail
 import com.festago.festago.domain.model.stage.Stage
 import com.festago.festago.domain.repository.BookmarkRepository
 import com.festago.festago.domain.repository.FestivalRepository
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailEvent.FailedToFetchBookmarkList
 import com.festago.festago.presentation.ui.festivaldetail.uiState.ArtistItemUiState
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalUiState
@@ -85,9 +86,13 @@ class FestivalDetailViewModel @Inject constructor(
             if (uiState.bookmarked) {
                 bookmarkRepository.deleteFestivalBookmark(festivalId)
                     .onSuccess { _uiState.value = uiState.copy(bookmarked = false) }
+                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
+
             } else {
                 bookmarkRepository.addFestivalBookmark(festivalId)
                     .onSuccess { _uiState.value = uiState.copy(bookmarked = true) }
+                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
+
             }
         }
     }
