@@ -87,6 +87,7 @@ class FestivalDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: FestivalDetailUiState.Success) {
         binding.successUiState = uiState
+        binding.ivBookmark.isSelected = uiState.bookmarked
         binding.tvFestivalDDay.setFestivalDDay(uiState.festival.startDate, uiState.festival.endDate)
         binding.ivFestivalBackground.setColorFilter(Color.parseColor("#66000000"))
         adapter.submitList(uiState.stages)

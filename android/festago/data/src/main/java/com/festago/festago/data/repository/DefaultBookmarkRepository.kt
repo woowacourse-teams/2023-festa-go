@@ -39,10 +39,11 @@ class DefaultBookmarkRepository @Inject constructor(
     }
 
     override suspend fun deleteFestivalBookmark(festivalId: Long): Result<Unit> {
-        return runCatchingResponse {
+        val result = runCatchingResponse {
             bookmarkRetrofitService.deleteBookmark(festivalId, BookmarkType.FESTIVAL)
         }
-
+        result.onFailure { if (it.message?.contains("204") == true) return Result.success(Unit) }
+        return result
     }
 
     override suspend fun addSchoolBookmark(schoolId: Long): Result<Unit> {
