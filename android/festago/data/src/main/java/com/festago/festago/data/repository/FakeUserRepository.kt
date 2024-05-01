@@ -1,6 +1,7 @@
 package com.festago.festago.data.repository
 
-import com.festago.festago.domain.model.token.Token
+import com.festago.festago.domain.model.user.Token
+import com.festago.festago.domain.model.user.UserInfo
 import com.festago.festago.domain.repository.UserRepository
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -37,5 +38,9 @@ class FakeUserRepository @Inject constructor() : UserRepository {
 
     override suspend fun deleteAccount(): Result<Unit> {
         return Result.success(Unit)
+    }
+
+    override suspend fun getUserInfo(): Result<UserInfo> {
+        return Result.success(UserInfo("", ""))
     }
 }

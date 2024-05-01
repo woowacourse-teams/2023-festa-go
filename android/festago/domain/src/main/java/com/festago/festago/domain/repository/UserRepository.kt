@@ -1,6 +1,7 @@
 package com.festago.festago.domain.repository
 
-import com.festago.festago.domain.model.token.Token
+import com.festago.festago.domain.model.user.Token
+import com.festago.festago.domain.model.user.UserInfo
 
 interface UserRepository {
     suspend fun isSignRejected(): Boolean
@@ -11,4 +12,5 @@ interface UserRepository {
     suspend fun signOut(): Result<Unit>
     suspend fun deleteAccount(): Result<Unit>
     suspend fun rejectSignIn()
+    suspend fun getUserInfo(): Result<UserInfo>
 }

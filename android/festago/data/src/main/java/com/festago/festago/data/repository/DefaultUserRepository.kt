@@ -4,12 +4,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.festago.festago.common.kakao.KakaoAuthorization
 import com.festago.festago.data.datasource.token.TokenDataSource
+import com.festago.festago.data.datasource.userinfo.UserInfoDataSource
 import com.festago.festago.data.dto.user.RefreshRequest
 import com.festago.festago.data.dto.user.SignInRequest
+import com.festago.festago.data.model.UserInfoEntity
 import com.festago.festago.data.service.AuthRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
-import com.festago.festago.domain.model.token.Token
+import com.festago.festago.domain.model.user.Token
+import com.festago.festago.domain.model.user.UserInfo
 import com.festago.festago.domain.repository.UserRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -18,6 +21,7 @@ class DefaultUserRepository @Inject constructor(
     private val authRetrofitService: AuthRetrofitService,
     private val tokenDataSource: TokenDataSource,
     private val kakaoAuthorization: KakaoAuthorization,
+    private val userInfoDataSource: UserInfoDataSource,
     @ApplicationContext context: Context,
 ) : UserRepository {
 
@@ -61,6 +65,8 @@ class DefaultUserRepository @Inject constructor(
         return runCatchingResponse {
             authRetrofitService.signIn(SignInRequest(SOCIAL_TYPE, idToken))
         }.onSuccessOrCatch { signInResponse ->
+            userInfoDataSource.userInfo =
+                UserInfoEntity(signInResponse.nickname, signInResponse.profileImageUrl)
             tokenDataSource.accessToken = signInResponse.accessToken.toEntity()
             tokenDataSource.refreshToken = signInResponse.refreshToken.toEntity()
         }
@@ -101,6 +107,11 @@ class DefaultUserRepository @Inject constructor(
         }.onSuccessOrCatch { refreshTokenResponse ->
             tokenDataSource.accessToken = refreshTokenResponse.accessToken.toEntity()
         }
+    }
+
+    override suspend fun getUserInfo(): Result<UserInfo> {
+        return userInfoDataSource.userInfo?.toDomain()?.let { Result.success(it) }
+            ?: Result.failure(NullPointerException("User info is null"))
     }
 
     companion object {

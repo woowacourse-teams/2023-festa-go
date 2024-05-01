@@ -1,7 +1,7 @@
 package com.festago.festago.data.dto.user
 
 import com.festago.festago.data.model.TokenEntity
-import com.festago.festago.domain.model.token.Token
+import com.festago.festago.domain.model.user.Token
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
