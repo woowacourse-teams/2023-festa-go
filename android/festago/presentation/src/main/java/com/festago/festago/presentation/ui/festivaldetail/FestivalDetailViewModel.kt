@@ -60,27 +60,24 @@ class FestivalDetailViewModel @Inject constructor(
                     value = it.message.toString(),
                 )
             }
-
-
         }
     }
 
-    private fun FestivalDetail.toSuccessUiState() =
-        FestivalDetailUiState.Success(
-            festival = FestivalUiState(
-                id = id,
-                name = name,
-                startDate = startDate,
-                endDate = endDate,
-                posterImageUrl = posterImageUrl,
-                school = school,
-                onSchoolClick = ::showSchoolDetail,
-                socialMedias = socialMedias,
-            ),
-            bookmarked = false,
-            stages = stages.map { it.toUiState() },
-            onBookmarkClick = { festivalId -> toggleFestivalBookmark(festivalId) },
-        )
+    private fun FestivalDetail.toSuccessUiState() = FestivalDetailUiState.Success(
+        festival = FestivalUiState(
+            id = id,
+            name = name,
+            startDate = startDate,
+            endDate = endDate,
+            posterImageUrl = posterImageUrl,
+            school = school,
+            onSchoolClick = ::showSchoolDetail,
+            socialMedias = socialMedias,
+        ),
+        bookmarked = false,
+        stages = stages.map { it.toUiState() },
+        onBookmarkClick = { festivalId -> toggleFestivalBookmark(festivalId) },
+    )
 
     private fun toggleFestivalBookmark(festivalId: Long) {
         viewModelScope.launch {
@@ -90,12 +87,10 @@ class FestivalDetailViewModel @Inject constructor(
                 bookmarkRepository.deleteFestivalBookmark(festivalId)
                     .onSuccess { _uiState.value = uiState.copy(bookmarked = false) }
                     .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
-
             } else {
                 bookmarkRepository.addFestivalBookmark(festivalId)
                     .onSuccess { _uiState.value = uiState.copy(bookmarked = true) }
                     .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
-
             }
         }
     }
