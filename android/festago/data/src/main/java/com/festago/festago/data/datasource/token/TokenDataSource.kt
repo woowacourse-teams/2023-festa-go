@@ -1,4 +1,4 @@
-package com.festago.festago.data.datasource
+package com.festago.festago.data.datasource.token
 
 import com.festago.festago.data.model.TokenEntity
 

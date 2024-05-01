@@ -1,7 +1,7 @@
 package com.festago.festago.data.di.singletonscope
 
-import com.festago.festago.data.datasource.TokenDataSource
-import com.festago.festago.data.datasource.TokenLocalDataSource
+import com.festago.festago.data.datasource.token.TokenDataSource
+import com.festago.festago.data.datasource.token.TokenLocalDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
