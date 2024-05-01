@@ -54,10 +54,10 @@ class ArtistDetailFragment : Fragment() {
     }
 
     private fun loadArtistDetail() {
-        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
-        vm.loadArtistDetail(args.artist.id, delayTimeMillis)
         binding.tvArtistName.text = args.artist.name
         binding.ivProfileImage.setImage(args.artist.profileUrl)
+        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
+        vm.loadArtistDetail(args.artist.id, delayTimeMillis)
     }
 
     private fun initButton() {

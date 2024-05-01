@@ -65,10 +65,18 @@ class SchoolDetailFragment : Fragment() {
     private fun initView() {
         adapter = SchoolFestivalListAdapter()
         binding.rvFestivalList.adapter = adapter
-        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
-        vm.loadSchoolDetail(args.school.id, delayTimeMillis)
+        loadSchoolDetail()
+        initButton()
+    }
+
+    private fun loadSchoolDetail() {
         binding.tvSchoolName.text = args.school.name
         binding.ivSchoolLogoImage.setImage(args.school.profileImageUrl)
+        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
+        vm.loadSchoolDetail(args.school.id, delayTimeMillis)
+    }
+
+    private fun initButton() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }

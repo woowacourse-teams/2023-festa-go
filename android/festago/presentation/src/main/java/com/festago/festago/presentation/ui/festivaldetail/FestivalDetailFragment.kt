@@ -58,10 +58,10 @@ class FestivalDetailFragment : Fragment() {
     }
 
     private fun loadFestivalDetail() {
-        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
         binding.ivFestivalPoster.setImage(args.festival.posterImageUrl)
         binding.ivFestivalBackground.setImage(args.festival.posterImageUrl)
         binding.tvFestivalName.text = args.festival.name
+        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
         vm.loadFestivalDetail(args.festival.id, delayTimeMillis)
     }
 
