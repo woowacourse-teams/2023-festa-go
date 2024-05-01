@@ -5,8 +5,6 @@ import com.festago.festago.domain.model.artist.ArtistDetail
 sealed interface ArtistDetailUiState {
     object Loading : ArtistDetailUiState
 
-    object Error : ArtistDetailUiState
-
     data class Success(
         val artist: ArtistDetail,
         val bookMarked: Boolean,
@@ -14,6 +12,8 @@ sealed interface ArtistDetailUiState {
         val isLast: Boolean,
         val onBookmarkClick: (Int) -> Unit,
     ) : ArtistDetailUiState
+
+    class Error(val refresh: (id: Long) -> Unit) : ArtistDetailUiState
 
     val shouldShowSuccess get() = this is Success
     val shouldShowEmptyFestivals get() = this is Success && festivals.isEmpty()

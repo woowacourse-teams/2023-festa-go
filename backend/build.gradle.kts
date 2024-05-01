@@ -25,7 +25,7 @@ configurations.all {
 
 val swaggerVersion = "2.0.2"
 val restAssuredVersion = "5.3.0"
-val jjwtVersion = "0.11.5"
+val jjwtVersion = "0.12.5"
 val logbackSlackAppenderVersion = "1.4.0"
 val cucumberVersion = "7.13.0"
 val firebaseVersion = "8.1.0"

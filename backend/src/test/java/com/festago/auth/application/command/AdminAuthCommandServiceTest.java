@@ -12,14 +12,16 @@ import static org.mockito.Mockito.mock;
 import com.festago.admin.domain.Admin;
 import com.festago.admin.repository.AdminRepository;
 import com.festago.admin.repository.MemoryAdminRepository;
-import com.festago.auth.application.AuthProvider;
+import com.festago.auth.application.AuthTokenProvider;
 import com.festago.auth.dto.command.AdminLoginCommand;
 import com.festago.auth.dto.command.AdminSignupCommand;
+import com.festago.auth.dto.v1.TokenResponse;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.ForbiddenException;
 import com.festago.common.exception.UnauthorizedException;
 import com.festago.support.fixture.AdminFixture;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -33,16 +35,16 @@ class AdminAuthCommandServiceTest {
 
     AdminRepository adminRepository;
 
-    AuthProvider authProvider;
+    AuthTokenProvider authTokenProvider;
 
     AdminAuthCommandService adminAuthCommandService;
 
     @BeforeEach
     void setUp() {
         adminRepository = new MemoryAdminRepository();
-        authProvider = mock(AuthProvider.class);
+        authTokenProvider = mock(AuthTokenProvider.class);
         adminAuthCommandService = new AdminAuthCommandService(
-            authProvider,
+            authTokenProvider,
             adminRepository,
             PasswordEncoderFactories.createDelegatingPasswordEncoder()
         );
@@ -85,8 +87,8 @@ class AdminAuthCommandServiceTest {
                 .password("{noop}password")
                 .build());
             var command = new AdminLoginCommand("admin", "password");
-            given(authProvider.provide(any()))
-                .willReturn("token");
+            given(authTokenProvider.provide(any()))
+                .willReturn(new TokenResponse("token", LocalDateTime.now().plusWeeks(1)));
 
             // when
             var result = adminAuthCommandService.login(command);

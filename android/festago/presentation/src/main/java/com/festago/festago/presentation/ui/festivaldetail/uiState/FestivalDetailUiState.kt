@@ -10,7 +10,7 @@ interface FestivalDetailUiState {
         val onBookmarkClick: (Long) -> Unit,
     ) : FestivalDetailUiState
 
-    object Error : FestivalDetailUiState
+    class Error(val refresh: (id: Long) -> Unit) : FestivalDetailUiState
 
     val shouldShowSuccess get() = this is Success
     val shouldShowEmptyStages get() = shouldShowSuccess && (this as Success).stages.isEmpty()

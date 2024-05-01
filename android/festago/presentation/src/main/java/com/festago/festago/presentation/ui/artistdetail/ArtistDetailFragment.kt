@@ -72,11 +72,9 @@ class ArtistDetailFragment : Fragment() {
     }
 
     private fun updateUi(uiState: ArtistDetailUiState) = when (uiState) {
-        is ArtistDetailUiState.Loading,
-        is ArtistDetailUiState.Error,
-        -> Unit
-
+        is ArtistDetailUiState.Loading -> Unit
         is ArtistDetailUiState.Success -> handleSuccess(uiState)
+        is ArtistDetailUiState.Error -> handleError(uiState)
     }
 
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
@@ -100,6 +98,10 @@ class ArtistDetailFragment : Fragment() {
                 binding.llcArtistMedia.addView(ivImage)
             }
         }
+    }
+
+    private fun handleError(uiState: ArtistDetailUiState.Error) {
+        binding.refreshListener = { uiState.refresh(args.artistId) }
     }
 
     private fun handleEvent(event: ArtistDetailEvent) = when (event) {

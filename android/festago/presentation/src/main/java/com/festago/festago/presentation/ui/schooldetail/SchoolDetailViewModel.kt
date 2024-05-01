@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,12 +54,11 @@ class SchoolDetailViewModel @Inject constructor(
                     isLast = festivalPage.isLastPage,
                     onBookmarkClick = { schoolId -> toggleSchoolBookmark(schoolId) },
                 )
+                if (festivalPage.festivals.isEmpty()) {
+                    loadMoreSchoolFestivals(schoolId)
+                }
             }.onFailure {
-                _uiState.value = SchoolDetailUiState.Error
-                analyticsHelper.logNetworkFailure(
-                    key = KEY_LOAD_SCHOOL_DETAIL,
-                    value = it.message.toString(),
-                )
+                handleFailure(key = KEY_LOAD_SCHOOL_DETAIL, throwable = it)
             }
         }
     }
@@ -68,16 +68,25 @@ class SchoolDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentFestivals = successUiState.festivals
-
+            val lastItem = successUiState.festivals.lastOrNull()
+            val isPast = when {
+                lastItem == null -> true
+                lastItem.endDate > LocalDate.now() -> true
+                successUiState.isLast -> true
+                else -> false
+            }
             schoolRepository.loadSchoolFestivals(
                 schoolId = schoolId,
                 lastFestivalId = currentFestivals.lastOrNull()?.id?.toInt(),
-                lastStartDate = currentFestivals.lastOrNull()?.startDate
+                lastStartDate = currentFestivals.lastOrNull()?.startDate,
+                isPast = isPast,
             ).onSuccess { festivalsPage ->
                 _uiState.value = successUiState.copy(
                     festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
-                    isLast = festivalsPage.isLastPage
+                    isLast = festivalsPage.isLastPage,
                 )
+            }.onFailure {
+                handleFailure(key = KEY_LOAD_MORE_SCHOOL_FESTIVALS, throwable = it)
             }
         }
     }
@@ -98,6 +107,17 @@ class SchoolDetailViewModel @Inject constructor(
         }
     }
 
+    private fun handleFailure(key: String, throwable: Throwable) {
+        _uiState.value = SchoolDetailUiState.Error {
+            _uiState.value = SchoolDetailUiState.Loading
+            loadSchoolDetail(it)
+        }
+        analyticsHelper.logNetworkFailure(
+            key = key,
+            value = throwable.message.toString()
+        )
+    }
+
     private fun Festival.toUiState() = FestivalItemUiState(
         id = id,
         name = name,
@@ -113,17 +133,18 @@ class SchoolDetailViewModel @Inject constructor(
                     viewModelScope.launch {
                         _event.emit(SchoolDetailEvent.ShowArtistDetail(id))
                     }
-                }
+                },
             )
         },
         onFestivalDetailClick = { id ->
             viewModelScope.launch {
                 _event.emit(SchoolDetailEvent.ShowFestivalDetail(id))
             }
-        }
+        },
     )
 
     companion object {
         private const val KEY_LOAD_SCHOOL_DETAIL = "KEY_LOAD_SCHOOL_DETAIL"
+        private const val KEY_LOAD_MORE_SCHOOL_FESTIVALS = "KEY_LOAD_MORE_SCHOOL_FESTIVALS"
     }
 }

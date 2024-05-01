@@ -8,6 +8,10 @@
         <variable
             name="uiState"
             type="com.festago.festago.presentation.ui.search.uistate.SearchUiState" />
+
+        <variable
+            name="refreshListener"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -174,6 +178,11 @@
             app:layout_constraintTop_toBottomOf="@id/tvRecentSearchEmpty"
             app:visibility="@{uiState.shouldShowEmptyRecentSearchSuccess}" />
 
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/layout_network_error"
+            refreshListener="@{refreshListener}"
+            visibility="@{uiState.shouldShowError}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

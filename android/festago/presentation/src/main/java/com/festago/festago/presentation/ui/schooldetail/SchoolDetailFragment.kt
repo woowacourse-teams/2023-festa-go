@@ -71,11 +71,9 @@ class SchoolDetailFragment : Fragment() {
 
     private fun updateUi(uiState: SchoolDetailUiState) {
         when (uiState) {
-            is SchoolDetailUiState.Loading,
-            is SchoolDetailUiState.Error,
-            -> Unit
-
+            is SchoolDetailUiState.Loading -> Unit
             is SchoolDetailUiState.Success -> handleSuccess(uiState)
+            is SchoolDetailUiState.Error -> handleError(uiState)
         }
     }
 
@@ -102,6 +100,10 @@ class SchoolDetailFragment : Fragment() {
                 binding.llcSchoolSocialMedia.addView(ivImage)
             }
         }
+    }
+
+    private fun handleError(uiState: SchoolDetailUiState.Error) {
+        binding.refreshListener = { uiState.refresh(args.schoolId) }
     }
 
     private fun handleEvent(event: SchoolDetailEvent) = when (event) {

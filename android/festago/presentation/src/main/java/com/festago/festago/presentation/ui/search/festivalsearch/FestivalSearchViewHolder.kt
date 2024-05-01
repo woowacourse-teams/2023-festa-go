@@ -54,7 +54,7 @@ class FestivalSearchViewHolder(
                 }
                 setBackgroundColor(backgroundColor)
                 setTextColor(context.getColor(R.color.background_gray_01))
-                text = context.getString(R.string.festival_detail_tv_dday_format, dDay.toString())
+                text = context.getString(R.string.tv_dday_format, dDay.toString())
             }
         }
     }

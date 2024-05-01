@@ -1,5 +1,6 @@
 package com.festago.auth.dto;
 
+@Deprecated(forRemoval = true)
 public record LoginResponse(
     String accessToken,
     String nickname,

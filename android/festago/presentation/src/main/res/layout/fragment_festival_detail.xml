@@ -16,6 +16,10 @@
         <variable
             name="successUiState"
             type="com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState.Success" />
+
+        <variable
+            name="refreshListener"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -234,6 +238,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:visibility="@{uiState.shouldShowEmptyStages}" />
+
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/layout_network_error"
+            refreshListener="@{refreshListener}"
+            visibility="@{uiState.shouldShowError}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
