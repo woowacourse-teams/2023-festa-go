@@ -83,6 +83,9 @@ class SchoolDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: SchoolDetailUiState.Success) {
         binding.successUiState = uiState
+
+        binding.cvBookmark.isSelected = uiState.bookmarked
+
         binding.ivSchoolBackground.setColorFilter(Color.parseColor("#66000000"))
 
         val items: List<Any> = if (uiState.isLast) {

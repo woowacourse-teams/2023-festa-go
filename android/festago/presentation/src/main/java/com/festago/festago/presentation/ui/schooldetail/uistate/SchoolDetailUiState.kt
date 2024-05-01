@@ -7,8 +7,10 @@ sealed interface SchoolDetailUiState {
 
     data class Success(
         val schoolInfo: SchoolInfo,
+        val bookmarked: Boolean,
         val festivals: List<FestivalItemUiState>,
         val isLast: Boolean,
+        val onBookmarkClick: (Int) -> Unit,
     ) : SchoolDetailUiState
 
     object Error : SchoolDetailUiState
