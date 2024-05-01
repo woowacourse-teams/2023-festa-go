@@ -54,9 +54,6 @@ class ArtistDetailFragment : Fragment() {
         }
 
         binding.cvBookmark.isSelected
-        binding.cvBookmark.setOnClickListener {
-            binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
-        }
     }
 
     private fun initObserve() {
@@ -84,7 +81,7 @@ class ArtistDetailFragment : Fragment() {
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
         binding.successUiState = uiState
 
-        binding.cvBookmark.isSelected = uiState.bookMarked
+        binding.ivBookmark.isSelected = uiState.bookMarked
 
         val items: List<Any> = if (uiState.isLast) {
             uiState.festivals

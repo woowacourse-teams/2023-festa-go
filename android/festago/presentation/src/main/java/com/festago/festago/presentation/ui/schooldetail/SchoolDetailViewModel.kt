@@ -85,13 +85,12 @@ class SchoolDetailViewModel @Inject constructor(
         val uiState = uiState.value as? SchoolDetailUiState.Success ?: return
 
         viewModelScope.launch {
-            val bookmarked = uiState.bookmarked
-            if (bookmarked) {
+            if (uiState.bookmarked) {
                 bookmarkRepository.deleteSchoolBookmark(schoolId.toLong())
-                    .onSuccess { _uiState.value = uiState.copy(bookmarked = true) }
+                    .onSuccess { _uiState.value = uiState.copy(bookmarked = false) }
             } else {
                 bookmarkRepository.addSchoolBookmark(uiState.schoolInfo.id.toLong())
-                    .onSuccess { _uiState.value = uiState.copy(bookmarked = false) }
+                    .onSuccess { _uiState.value = uiState.copy(bookmarked = true) }
             }
         }
     }

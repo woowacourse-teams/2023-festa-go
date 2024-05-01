@@ -66,9 +66,6 @@ class SchoolDetailFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-        binding.cvBookmark.setOnClickListener {
-            binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
-        }
     }
 
     private fun updateUi(uiState: SchoolDetailUiState) {
@@ -84,7 +81,7 @@ class SchoolDetailFragment : Fragment() {
     private fun handleSuccess(uiState: SchoolDetailUiState.Success) {
         binding.successUiState = uiState
 
-        binding.cvBookmark.isSelected = uiState.bookmarked
+        binding.ivBookmark.isSelected = uiState.bookmarked
 
         binding.ivSchoolBackground.setColorFilter(Color.parseColor("#66000000"))
 

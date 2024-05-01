@@ -88,6 +88,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvBookmark"
+            onSingleClick="@{() -> successUiState.onBookmarkClick.invoke(successUiState.artist.id)}"
             visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -97,7 +98,6 @@
 
             <ImageView
                 android:id="@+id/ivBookmark"
-                onSingleClick="@{() -> successUiState.onBookmarkClick.invoke(successUiState.artist.id)}"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_gravity="center"

@@ -56,9 +56,6 @@ class FestivalDetailFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-        binding.cvBookmark.setOnClickListener {
-            binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
-        }
     }
 
     private fun initObserve() {
