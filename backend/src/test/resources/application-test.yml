@@ -23,6 +23,7 @@ festago:
   oauth2:
     kakao:
       grant-type: grant-type
-      client-id: client-id
+      rest-api-key: rest-api-key
+      native-app-key: native-app-key
       redirect-uri: redirect-uri
       client-secret: client-secret
