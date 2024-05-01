@@ -53,6 +53,7 @@ class ArtistDetailFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
+        binding.cvBookmark.isSelected
         binding.cvBookmark.setOnClickListener {
             binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
         }
@@ -82,6 +83,8 @@ class ArtistDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
         binding.successUiState = uiState
+
+        binding.cvBookmark.isSelected = uiState.bookMarked
 
         val items: List<Any> = if (uiState.isLast) {
             uiState.festivals

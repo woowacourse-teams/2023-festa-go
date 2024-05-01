@@ -81,8 +81,10 @@ class DefaultBookmarkRepository @Inject constructor(
     }
 
     override suspend fun deleteArtistBookmark(artistId: Long): Result<Unit> {
-        return runCatchingResponse {
+        val result = runCatchingResponse {
             bookmarkRetrofitService.deleteBookmark(artistId, BookmarkType.ARTIST)
         }
+        result.onFailure { if (it.message?.contains("204") == true) return Result.success(Unit) }
+        return result
     }
 }
