@@ -11,7 +11,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AuthRetrofitService {
-    @POST("api/v1/auth/login/oauth2")
+    @POST("api/v1/auth/login/open-id")
     suspend fun signIn(
         @Body signInRequest: SignInRequest,
     ): Response<SignInResponse>
