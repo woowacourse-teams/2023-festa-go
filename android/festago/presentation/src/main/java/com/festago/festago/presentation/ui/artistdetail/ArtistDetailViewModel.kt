@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,8 +45,12 @@ class ArtistDetailViewModel @Inject constructor(
                 _uiState.value = ArtistDetailUiState.Success(
                     deferredArtistDetail.await().getOrThrow(),
                     festivalPage.toUiState(),
-                    festivalPage.isLastPage
+                    festivalPage.isLastPage,
                 )
+
+                if (festivalPage.festivals.isEmpty()) {
+                    loadMoreArtistFestivals(id)
+                }
             }.onFailure {
                 handleFailure(key = KEY_LOAD_ARTIST_DETAIL, throwable = it)
             }
@@ -57,15 +62,22 @@ class ArtistDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentFestivals = successUiState.festivals
-
+            val lastItem = successUiState.festivals.lastOrNull()
+            val isPast = when {
+                lastItem == null -> true
+                lastItem.endDate < LocalDate.now() -> true
+                successUiState.isLast -> true
+                else -> false
+            }
             artistRepository.loadArtistFestivals(
                 id = artistId,
                 lastFestivalId = currentFestivals.lastOrNull()?.id,
                 lastStartDate = currentFestivals.lastOrNull()?.startDate,
+                isPast = isPast,
             ).onSuccess { festivalsPage ->
                 _uiState.value = successUiState.copy(
                     festivals = currentFestivals + festivalsPage.toUiState(),
-                    isLast = festivalsPage.isLastPage
+                    isLast = festivalsPage.isLastPage,
                 )
             }.onFailure {
                 handleFailure(key = KEY_LOAD_MORE_ARTIST_FESTIVAL, throwable = it)
