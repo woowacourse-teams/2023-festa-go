@@ -6,7 +6,6 @@ import com.festago.festago.data.datasource.TokenDataSource
 import com.festago.festago.data.dto.user.RefreshRequest
 import com.festago.festago.data.dto.user.SignInRequest
 import com.festago.festago.data.service.AuthRetrofitService
-import com.festago.festago.data.util.format
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.domain.model.token.Token
@@ -72,7 +71,9 @@ class DefaultUserRepository @Inject constructor(
 
     override suspend fun signOut(): Result<Unit> {
         return runCatchingResponse {
-            authRetrofitService.signOut(getAccessToken().getOrThrow().format())
+            authRetrofitService.signOut(
+                AUTHORIZATION_TOKEN_FORMAT.format(getAccessToken().getOrThrow()),
+            )
         }.onSuccessOrCatch {
             tokenDataSource.accessToken = null
             tokenDataSource.refreshToken = null
@@ -81,7 +82,9 @@ class DefaultUserRepository @Inject constructor(
 
     override suspend fun deleteAccount(): Result<Unit> {
         return runCatchingResponse {
-            authRetrofitService.deleteAccount(getAccessToken().getOrThrow().format())
+            authRetrofitService.deleteAccount(
+                AUTHORIZATION_TOKEN_FORMAT.format(getAccessToken().getOrThrow()),
+            )
         }.onSuccessOrCatch {
             tokenDataSource.accessToken = null
             tokenDataSource.refreshToken = null
@@ -100,5 +103,6 @@ class DefaultUserRepository @Inject constructor(
         private const val SOCIAL_TYPE = "KAKAO"
         private const val AUTH_PREF = "auth_pref"
         private const val IS_SIGN_REJECTED = "is_sign_rejected"
+        private const val AUTHORIZATION_TOKEN_FORMAT = "Bearer %s"
     }
 }
