@@ -20,7 +20,7 @@ class AuthInterceptor(private val userRepository: UserRepository) : Interceptor 
             .addHeader(
                 HEADER_AUTHORIZATION,
                 AUTHORIZATION_TOKEN_FORMAT.format(
-                    userRepository.getAccessToken().getOrNull() ?: "TokenIsNull",
+                    userRepository.getAccessToken().getOrNull()?.token ?: "TokenIsNull",
                 ),
             )
             .build()
