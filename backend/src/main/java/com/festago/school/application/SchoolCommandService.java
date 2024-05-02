@@ -5,9 +5,12 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.school.domain.School;
 import com.festago.school.dto.SchoolCreateCommand;
 import com.festago.school.dto.SchoolUpdateCommand;
+import com.festago.school.dto.evnet.SchoolCreatedEvent;
+import com.festago.school.dto.evnet.SchoolUpdatedEvent;
 import com.festago.school.repository.SchoolRepository;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,10 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class SchoolCommandService {
 
     private final SchoolRepository schoolRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Long createSchool(SchoolCreateCommand command) {
         validateCreate(command);
         School school = schoolRepository.save(command.toDomain());
+        eventPublisher.publishEvent(new SchoolCreatedEvent(school));
         return school.getId();
     }
 
@@ -46,6 +51,7 @@ public class SchoolCommandService {
         school.changeRegion(command.region());
         school.changeLogoUrl(command.logoUrl());
         school.changeBackgroundImageUrl(command.backgroundImageUrl());
+        eventPublisher.publishEvent(new SchoolUpdatedEvent(school));
     }
 
     private void validateUpdate(School school, SchoolUpdateCommand command) {
