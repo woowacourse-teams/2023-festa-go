@@ -39,9 +39,11 @@ class DefaultBookmarkRepository @Inject constructor(
     }
 
     override suspend fun deleteFestivalBookmark(festivalId: Long): Result<Unit> {
-        return runCatchingResponse {
+        val result = runCatchingResponse {
             bookmarkRetrofitService.deleteBookmark(festivalId, BookmarkType.FESTIVAL)
         }
+        result.onFailure { if (it.message?.contains("204") == true) return Result.success(Unit) }
+        return result
     }
 
     override suspend fun addSchoolBookmark(schoolId: Long): Result<Unit> {
@@ -59,9 +61,11 @@ class DefaultBookmarkRepository @Inject constructor(
     }
 
     override suspend fun deleteSchoolBookmark(schoolId: Long): Result<Unit> {
-        return runCatchingResponse {
+        val result = runCatchingResponse {
             bookmarkRetrofitService.deleteBookmark(schoolId, BookmarkType.SCHOOL)
         }
+        result.onFailure { if (it.message?.contains("204") == true) return Result.success(Unit) }
+        return result
     }
 
     override suspend fun addArtistBookmark(artistId: Long): Result<Unit> {
@@ -81,8 +85,10 @@ class DefaultBookmarkRepository @Inject constructor(
     }
 
     override suspend fun deleteArtistBookmark(artistId: Long): Result<Unit> {
-        return runCatchingResponse {
+        val result = runCatchingResponse {
             bookmarkRetrofitService.deleteBookmark(artistId, BookmarkType.ARTIST)
         }
+        result.onFailure { if (it.message?.contains("204") == true) return Result.success(Unit) }
+        return result
     }
 }

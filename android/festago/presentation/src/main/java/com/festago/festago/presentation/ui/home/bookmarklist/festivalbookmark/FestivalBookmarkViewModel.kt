@@ -32,17 +32,21 @@ class FestivalBookmarkViewModel @Inject constructor(
     fun fetchBookmarkList() {
         viewModelScope.launch {
             _uiState.value = FestivalBookmarkUiState.Loading
-            bookmarkRepository.getFestivalBookmarkIds().onSuccess { bookmarkIds ->
-                bookmarkRepository.getFestivalBookmarks(bookmarkIds, FestivalBookmarkOrder.FESTIVAL)
-                    .onSuccess { festivalBookmarks ->
-                        _uiState.value =
-                            FestivalBookmarkUiState.Success(festivalBookmarks.map { it.toUiState() })
-                    }.onFailure {
-                        _uiState.value = FestivalBookmarkUiState.Error
-                    }
-            }.onFailure {
-                _uiState.value = FestivalBookmarkUiState.Error
+            val bookmarkIds = bookmarkRepository.getFestivalBookmarkIds()
+                .getOrElse { _uiState.value = FestivalBookmarkUiState.Error; return@launch }
+
+            if (bookmarkIds.isEmpty()) {
+                _uiState.value = FestivalBookmarkUiState.Success(emptyList())
+                return@launch
             }
+
+            bookmarkRepository.getFestivalBookmarks(bookmarkIds, FestivalBookmarkOrder.FESTIVAL)
+                .onSuccess { festivalBookmarks ->
+                    _uiState.value =
+                        FestivalBookmarkUiState.Success(festivalBookmarks.map { it.toUiState() })
+                }.onFailure {
+                    _uiState.value = FestivalBookmarkUiState.Error
+                }
         }
     }
 

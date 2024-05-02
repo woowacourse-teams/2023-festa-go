@@ -51,7 +51,7 @@ object ServiceModule {
     @Provides
     @Singleton
     fun providesBookmarkRetrofitService(
-        @NormalRetrofitQualifier retrofit: Retrofit,
+        @AuthRetrofitQualifier retrofit: Retrofit,
     ): BookmarkRetrofitService {
         return retrofit.create(BookmarkRetrofitService::class.java)
     }

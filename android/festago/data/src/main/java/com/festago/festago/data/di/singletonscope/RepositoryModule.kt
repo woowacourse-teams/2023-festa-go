@@ -1,12 +1,12 @@
 package com.festago.festago.data.di.singletonscope
 
 import com.festago.festago.data.repository.DefaultArtistRepository
+import com.festago.festago.data.repository.DefaultBookmarkRepository
 import com.festago.festago.data.repository.DefaultFestivalRepository
 import com.festago.festago.data.repository.DefaultRecentSearchRepository
 import com.festago.festago.data.repository.DefaultSchoolRepository
 import com.festago.festago.data.repository.DefaultSearchRepository
 import com.festago.festago.data.repository.DefaultUserRepository
-import com.festago.festago.data.repository.FakeBookmarkRepository
 import com.festago.festago.domain.repository.ArtistRepository
 import com.festago.festago.domain.repository.BookmarkRepository
 import com.festago.festago.domain.repository.FestivalRepository
@@ -45,7 +45,7 @@ interface RepositoryModule {
 
     @Binds
     @Singleton
-    fun bindsBookmarkRepository(bookmarkRepository: FakeBookmarkRepository): BookmarkRepository
+    fun bindsBookmarkRepository(bookmarkRepository: DefaultBookmarkRepository): BookmarkRepository
 
     @Binds
     @Singleton

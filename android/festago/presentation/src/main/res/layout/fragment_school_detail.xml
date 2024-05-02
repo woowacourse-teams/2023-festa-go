@@ -90,6 +90,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvBookmark"
+                onSingleClick="@{() -> successUiState.onBookmarkClick.invoke(successUiState.schoolInfo.id)}"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 app:cardCornerRadius="1000dp"

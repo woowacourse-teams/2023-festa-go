@@ -7,8 +7,10 @@ sealed interface ArtistDetailUiState {
 
     data class Success(
         val artist: ArtistDetail,
+        val bookMarked: Boolean,
         val festivals: List<FestivalItemUiState>,
         val isLast: Boolean,
+        val onBookmarkClick: (Int) -> Unit,
     ) : ArtistDetailUiState
 
     class Error(val refresh: (id: Long) -> Unit) : ArtistDetailUiState

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -66,9 +67,6 @@ class SchoolDetailFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-        binding.cvBookmark.setOnClickListener {
-            binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
-        }
     }
 
     private fun updateUi(uiState: SchoolDetailUiState) {
@@ -81,6 +79,9 @@ class SchoolDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: SchoolDetailUiState.Success) {
         binding.successUiState = uiState
+
+        binding.ivBookmark.isSelected = uiState.bookmarked
+
         binding.ivSchoolBackground.setColorFilter(Color.parseColor("#66000000"))
 
         val items: List<Any> = if (uiState.isLast) {
@@ -120,6 +121,10 @@ class SchoolDetailFragment : Fragment() {
                     event.festivalId
                 )
             )
+        }
+
+        is SchoolDetailEvent.FailedToFetchBookmarkList -> {
+            Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
         }
     }
 
