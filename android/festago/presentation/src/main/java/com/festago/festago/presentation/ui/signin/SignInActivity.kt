@@ -89,8 +89,8 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun navigateToHome() {
+        finishAffinity()
         startActivity(HomeActivity.getIntent(this))
-        finish()
     }
 
     private fun handleSignInFailure() {

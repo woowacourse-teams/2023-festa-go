@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.ui.home.bookmarklist.schoolbookmark
 
-interface SchoolBookmarkListUiState {
+sealed interface SchoolBookmarkListUiState {
     object NotLoggedIn : SchoolBookmarkListUiState
     object Loading : SchoolBookmarkListUiState
 

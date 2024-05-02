@@ -13,6 +13,7 @@ import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs
 import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmentDirections
 import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.adapater.FestivalBookmarkViewAdapter
 import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate.FestivalBookmarkUiState
+import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,13 +51,15 @@ class FestivalBookmarkFragment : Fragment() {
         binding.uiState = vm.uiState.value
 
         binding.refreshListener = { vm.fetchBookmarkList() }
+        binding.loginListener = { vm.logIn() }
     }
 
     private fun initObserve() {
-        repeatOnStarted(this) {
+        repeatOnStarted(viewLifecycleOwner) {
             vm.uiState.collect { uiState ->
                 binding.uiState = uiState
                 when (uiState) {
+                    is FestivalBookmarkUiState.NotLoggedIn,
                     is FestivalBookmarkUiState.Loading,
                     is FestivalBookmarkUiState.Error,
                     -> Unit
@@ -67,8 +70,8 @@ class FestivalBookmarkFragment : Fragment() {
             }
         }
 
-        repeatOnStarted(this) {
-            vm.uiEvent.collect { event ->
+        repeatOnStarted(viewLifecycleOwner) {
+            vm.event.collect { event ->
                 when (event) {
                     is FestivalBookmarkEvent.ShowFestivalDetail -> {
                         findNavController().safeNavigate(
@@ -84,6 +87,10 @@ class FestivalBookmarkFragment : Fragment() {
                                 with(event.artist) { ArtistDetailArgs(id, name, imageUrl) },
                             ),
                         )
+                    }
+
+                    is FestivalBookmarkEvent.ShowSignIn -> {
+                        startActivity(SignInActivity.getIntent(requireContext()))
                     }
                 }
             }

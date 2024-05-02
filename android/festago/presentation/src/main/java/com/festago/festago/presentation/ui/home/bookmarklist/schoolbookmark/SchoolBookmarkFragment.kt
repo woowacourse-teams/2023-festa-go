@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.festago.festago.presentation.databinding.FragmentSchoolBookmarkBinding
 import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmentDirections
 import com.festago.festago.presentation.ui.schooldetail.SchoolDetailArgs
+import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,31 +45,28 @@ class SchoolBookmarkFragment : Fragment() {
         binding.uiState = vm.uiState.value
 
         binding.refreshListener = { vm.fetchBookmarkList() }
-
+        binding.loginListener = { vm.logIn() }
         schoolBookmarkAdapter = SchoolBookmarkAdapter()
         binding.rvSchoolBookmarkList.adapter = schoolBookmarkAdapter
     }
 
     private fun initObserve() {
-        repeatOnStarted(this) {
+        repeatOnStarted(viewLifecycleOwner) {
             vm.uiState.collect { uiState ->
                 binding.uiState = uiState
                 when (uiState) {
-                    is SchoolBookmarkListUiState.Loading -> {
-                        // Handle loading
-                    }
+                    is SchoolBookmarkListUiState.Loading,
+                    is SchoolBookmarkListUiState.Error,
+                    is SchoolBookmarkListUiState.NotLoggedIn,
+                    -> Unit
 
                     is SchoolBookmarkListUiState.Success -> {
                         schoolBookmarkAdapter.submitList(uiState.schoolBookmarks)
                     }
-
-                    is SchoolBookmarkListUiState.Error -> {
-                        // Handle error
-                    }
                 }
             }
         }
-        repeatOnStarted(this) {
+        repeatOnStarted(viewLifecycleOwner) {
             vm.uiEvent.collect { event ->
                 when (event) {
                     is SchoolBookmarkEvent.ShowSchoolDetail -> {
@@ -77,6 +75,10 @@ class SchoolBookmarkFragment : Fragment() {
                                 with(event.school) { SchoolDetailArgs(id, name, imageUrl) },
                             ),
                         )
+                    }
+
+                    is SchoolBookmarkEvent.ShowSignIn -> {
+                        startActivity(SignInActivity.getIntent(requireContext()))
                     }
                 }
             }

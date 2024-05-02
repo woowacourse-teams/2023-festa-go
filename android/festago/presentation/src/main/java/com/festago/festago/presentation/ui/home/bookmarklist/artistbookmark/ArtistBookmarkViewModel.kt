@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.domain.model.bookmark.ArtistBookmark
 import com.festago.festago.domain.repository.BookmarkRepository
+import com.festago.festago.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ArtistBookmarkViewModel @Inject constructor(
     private val bookmarkRepository: BookmarkRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     private val _uiState =
         MutableStateFlow<ArtistBookmarkListUiState>(ArtistBookmarkListUiState.Loading)
@@ -27,6 +29,12 @@ class ArtistBookmarkViewModel @Inject constructor(
     fun fetchBookmarkList() {
         viewModelScope.launch {
             _uiState.value = ArtistBookmarkListUiState.Loading
+
+            if (!userRepository.isSigned()) {
+                _uiState.value = ArtistBookmarkListUiState.NotLoggedIn(::logIn)
+                return@launch
+            }
+
             bookmarkRepository.getArtistBookmarks().onSuccess { artistBookmarks ->
                 _uiState.value = ArtistBookmarkListUiState.Success(
                     artistBookmarks.map { it.toUiState() },
@@ -34,6 +42,12 @@ class ArtistBookmarkViewModel @Inject constructor(
             }.onFailure {
                 _uiState.value = ArtistBookmarkListUiState.Error
             }
+        }
+    }
+
+    fun logIn() {
+        viewModelScope.launch {
+            _uiEvent.emit(ArtistBookmarkEvent.ShowSignIn)
         }
     }
 

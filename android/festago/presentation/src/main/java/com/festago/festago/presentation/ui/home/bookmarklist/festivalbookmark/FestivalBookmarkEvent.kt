@@ -6,4 +6,5 @@ import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.ui
 sealed interface FestivalBookmarkEvent {
     class ShowFestivalDetail(val festival: FestivalBookmarkItemUiState) : FestivalBookmarkEvent
     class ShowArtistDetail(val artist: ArtistUiState) : FestivalBookmarkEvent
+    object ShowSignIn : FestivalBookmarkEvent
 }
