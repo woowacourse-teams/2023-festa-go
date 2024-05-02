@@ -10,9 +10,10 @@ import com.festago.festival.repository.FestivalFilter;
 import com.festago.festival.repository.SchoolFestivalSearchV1QueryDslRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,15 +39,18 @@ public class FestivalSearchV1QueryService {
     }
 
     private List<FestivalSearchV1Response> sortFestival(List<FestivalSearchV1Response> festivals) {
-        EnumMap<FestivalFilter, List<FestivalSearchV1Response>> festivalByStatus = divideByStatus(festivals);
+        Map<FestivalFilter, List<FestivalSearchV1Response>> festivalByStatus = divideByStatus(festivals);
         List<FestivalSearchV1Response> result = new ArrayList<>();
-        result.addAll(sortByStatus(PROGRESS, festivalByStatus.get(PROGRESS)));
-        result.addAll(sortByStatus(PLANNED, festivalByStatus.get(PLANNED)));
-        result.addAll(sortByStatus(END, festivalByStatus.get(END)));
+        for (FestivalFilter festivalFilter : determineFestivalOrder()) {
+            List<FestivalSearchV1Response> festivalsByFilter = festivalByStatus.getOrDefault(festivalFilter,
+                new ArrayList<>());
+            sortByStatus(festivalFilter, festivalsByFilter);
+            result.addAll(festivalsByFilter);
+        }
         return result;
     }
 
-    private EnumMap<FestivalFilter, List<FestivalSearchV1Response>> divideByStatus(
+    private Map<FestivalFilter, List<FestivalSearchV1Response>> divideByStatus(
         List<FestivalSearchV1Response> festivals) {
         return festivals.stream()
             .collect(Collectors.groupingBy(
@@ -67,57 +71,17 @@ public class FestivalSearchV1QueryService {
         return PROGRESS;
     }
 
-    private List<FestivalSearchV1Response> sortByStatus(
+    private List<FestivalFilter> determineFestivalOrder() {
+        return List.of(PROGRESS, PLANNED, END);
+    }
+
+    private void sortByStatus(
         FestivalFilter status,
         List<FestivalSearchV1Response> festivals) {
-        if (festivals == null) {
-            return Collections.emptyList();
-        }
-        if (status == END) {
-            sortEndFestival(festivals);
-        }
-        if (status == PROGRESS) {
-            sortProgressFestival(festivals);
-        }
-        if (status == PLANNED) {
-            sortPlannedFestival(festivals);
-        }
-        return festivals;
-    }
 
-    private void sortEndFestival(List<FestivalSearchV1Response> festivals) {
-        festivals.sort((festival1, festival2) -> {
-            if (festival1.endDate().isAfter(festival2.endDate())) {
-                return 1;
-            }
-            if (festival1.endDate().isEqual(festival2.endDate())) {
-                return 0;
-            }
-            return -1;
-        });
-    }
-
-    private void sortProgressFestival(List<FestivalSearchV1Response> festivals) {
-        festivals.sort((festival1, festival2) -> {
-            if (festival1.startDate().isBefore(festival2.endDate())) {
-                return 1;
-            }
-            if (festival1.startDate().isEqual(festival2.startDate())) {
-                return 0;
-            }
-            return -1;
-        });
-    }
-
-    private void sortPlannedFestival(List<FestivalSearchV1Response> festivals) {
-        festivals.sort((festival1, festival2) -> {
-            if (festival1.startDate().isBefore(festival2.endDate())) {
-                return 1;
-            }
-            if (festival1.startDate().isEqual(festival2.startDate())) {
-                return 0;
-            }
-            return -1;
-        });
+        switch (status) {
+            case END -> festivals.sort(Comparator.comparing(FestivalSearchV1Response::endDate).reversed());
+            case PROGRESS, PLANNED -> festivals.sort(Comparator.comparing(FestivalSearchV1Response::startDate));
+        }
     }
 }
