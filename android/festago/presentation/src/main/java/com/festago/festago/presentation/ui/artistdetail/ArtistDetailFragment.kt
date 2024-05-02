@@ -136,7 +136,7 @@ class ArtistDetailFragment : Fragment() {
         }
 
         is ArtistDetailEvent.FailedToFetchBookmarkList -> {
-            Toast.makeText(requireContext(), "최대 북마크 갯수를 초과했습니다", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT)
                 .show()
         }
     }

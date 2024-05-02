@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
+import com.festago.festago.domain.model.bookmark.BookmarkType
 import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.repository.BookmarkRepository
 import com.festago.festago.domain.repository.SchoolRepository
+import com.festago.festago.domain.repository.UserRepository
 import com.festago.festago.presentation.ui.schooldetail.SchoolDetailEvent.FailedToFetchBookmarkList
 import com.festago.festago.presentation.ui.schooldetail.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.FestivalItemUiState
@@ -27,6 +29,7 @@ import javax.inject.Inject
 class SchoolDetailViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository,
     private val bookmarkRepository: BookmarkRepository,
+    private val userRepository: UserRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
@@ -41,16 +44,20 @@ class SchoolDetailViewModel @Inject constructor(
             val deferredSchoolInfo =
                 async { schoolRepository.loadSchoolInfo(schoolId, delayTimeMillis) }
             val deferredFestivalPage = async { schoolRepository.loadSchoolFestivals(schoolId) }
-            val deferredBookmarks = async { bookmarkRepository.getSchoolBookmarks() }
 
             runCatching {
                 val schoolInfo = deferredSchoolInfo.await().getOrThrow()
                 val festivalPage = deferredFestivalPage.await().getOrThrow()
-                val schoolBookmarks = deferredBookmarks.await().getOrThrow()
+
+                val isBookmarked = if (userRepository.isSigned()) {
+                    bookmarkRepository.isBookmarked(schoolId, BookmarkType.SCHOOL)
+                } else {
+                    false
+                }
 
                 _uiState.value = SchoolDetailUiState.Success(
                     schoolInfo = schoolInfo,
-                    bookmarked = schoolBookmarks.firstOrNull { it.school.id == schoolInfo.id.toLong() } != null,
+                    bookmarked = isBookmarked,
                     festivals = festivalPage.festivals.map { it.toUiState() },
                     isLast = festivalPage.isLastPage,
                     onBookmarkClick = { schoolId -> toggleSchoolBookmark(schoolId) },
@@ -96,6 +103,10 @@ class SchoolDetailViewModel @Inject constructor(
         val uiState = uiState.value as? SchoolDetailUiState.Success ?: return
 
         viewModelScope.launch {
+            if (!userRepository.isSigned()) {
+                _event.emit(FailedToFetchBookmarkList("로그인이 필요합니다"))
+                return@launch
+            }
             if (uiState.bookmarked) {
                 bookmarkRepository.deleteSchoolBookmark(schoolId.toLong())
                     .onSuccess { _uiState.value = uiState.copy(bookmarked = false) }

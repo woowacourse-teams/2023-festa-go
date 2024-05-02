@@ -89,7 +89,6 @@
 
                 <ImageView
                     android:id="@+id/ivSchoolLogoImage"
-                    imageUrl="@{successUiState.schoolInfo.logoUrl}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:importantForAccessibility="no"
@@ -100,6 +99,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvBookmark"
                 onSingleClick="@{() -> successUiState.onBookmarkClick.invoke(successUiState.schoolInfo.id)}"
+                visibility="@{uiState.shouldShowSuccess}"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 app:cardCornerRadius="1000dp"

@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
+import com.festago.festago.domain.model.bookmark.BookmarkType
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.repository.ArtistRepository
 import com.festago.festago.domain.repository.BookmarkRepository
+import com.festago.festago.domain.repository.UserRepository
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailEvent.FailedToFetchBookmarkList
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistUiState
@@ -27,6 +29,7 @@ import javax.inject.Inject
 class ArtistDetailViewModel @Inject constructor(
     private val artistRepository: ArtistRepository,
     private val bookmarkRepository: BookmarkRepository,
+    private val userRepository: UserRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _event: MutableSharedFlow<ArtistDetailEvent> = MutableSharedFlow()
@@ -44,16 +47,20 @@ class ArtistDetailViewModel @Inject constructor(
                 val deferredArtistDetail =
                     async { artistRepository.loadArtistDetail(id, delayTimeMillis) }
                 val deferredFestivals = async { artistRepository.loadArtistFestivals(id, 10) }
-                val deferredBookmarks = async { bookmarkRepository.getArtistBookmarks() }
                 val artist = deferredArtistDetail.await().getOrThrow()
                 val festivalPage = deferredFestivals.await().getOrThrow()
-                val artistBookmarks = deferredBookmarks.await().getOrThrow()
+
+                val isBookmarked = if (userRepository.isSigned()) {
+                    bookmarkRepository.isBookmarked(id, BookmarkType.ARTIST)
+                } else {
+                    false
+                }
 
                 _uiState.value = ArtistDetailUiState.Success(
                     artist = artist,
-                    bookMarked = artistBookmarks.firstOrNull { it.artist.id == artist.id.toLong() } != null,
+                    bookMarked = isBookmarked,
                     festivals = festivalPage.toUiState(),
-                    isLast = festivalPage.isLastPage,
+                    userRepository.isSigned(),
                     onBookmarkClick = ::toggleArtistBookmark,
                 )
 
@@ -97,6 +104,11 @@ class ArtistDetailViewModel @Inject constructor(
     private fun toggleArtistBookmark(artistId: Int) {
         viewModelScope.launch {
             val uiState = uiState.value as? ArtistDetailUiState.Success ?: return@launch
+
+            if (!userRepository.isSigned()) {
+                _event.emit(FailedToFetchBookmarkList("로그인이 필요합니다"))
+                return@launch
+            }
 
             if (uiState.bookMarked) {
                 bookmarkRepository.deleteArtistBookmark(artistId.toLong())

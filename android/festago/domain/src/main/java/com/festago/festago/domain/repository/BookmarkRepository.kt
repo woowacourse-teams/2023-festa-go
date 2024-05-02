@@ -1,6 +1,7 @@
 package com.festago.festago.domain.repository
 
 import com.festago.festago.domain.model.bookmark.ArtistBookmark
+import com.festago.festago.domain.model.bookmark.BookmarkType
 import com.festago.festago.domain.model.bookmark.FestivalBookmark
 import com.festago.festago.domain.model.bookmark.FestivalBookmarkOrder
 import com.festago.festago.domain.model.bookmark.SchoolBookmark
@@ -31,4 +32,6 @@ interface BookmarkRepository {
     suspend fun getArtistBookmarks(): Result<List<ArtistBookmark>>
 
     suspend fun deleteArtistBookmark(artistId: Long): Result<Unit>
+
+    fun isBookmarked(id: Long, type: BookmarkType): Boolean
 }
