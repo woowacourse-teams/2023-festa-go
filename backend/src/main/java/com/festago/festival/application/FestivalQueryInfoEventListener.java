@@ -22,7 +22,7 @@ public class FestivalQueryInfoEventListener {
     @EventListener
     @Transactional(propagation = Propagation.MANDATORY)
     public void festivalCreatedEventHandler(FestivalCreatedEvent event) {
-        FestivalQueryInfo festivalQueryInfo = FestivalQueryInfo.create(event.festivalId());
+        FestivalQueryInfo festivalQueryInfo = FestivalQueryInfo.create(event.festival().getId());
         festivalInfoRepository.save(festivalQueryInfo);
     }
 

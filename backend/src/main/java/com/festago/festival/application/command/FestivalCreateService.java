@@ -30,7 +30,7 @@ public class FestivalCreateService {
         Festival festival = command.toEntity(school);
         validate(festival);
         festivalRepository.save(festival);
-        eventPublisher.publishEvent(new FestivalCreatedEvent(festival.getId()));
+        eventPublisher.publishEvent(new FestivalCreatedEvent(festival));
         return festival.getId();
     }
 
