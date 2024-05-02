@@ -1,6 +1,6 @@
 package com.festago.artist.dto.event;
 
-public record ArtistDeleteEvent(
+public record ArtistDeletedEvent(
     Long artistId
 ) {
 
