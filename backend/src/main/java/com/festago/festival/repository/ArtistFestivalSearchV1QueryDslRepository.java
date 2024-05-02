@@ -24,7 +24,21 @@ public class ArtistFestivalSearchV1QueryDslRepository extends QueryDslRepository
     }
 
     public List<FestivalSearchV1Response> executeSearch(String keyword) {
-        return searchByExpression(getBooleanExpressionByKeyword(keyword));
+        return select(new QFestivalSearchV1Response(
+            festival.id,
+            festival.name,
+            festival.festivalDuration.startDate,
+            festival.festivalDuration.endDate,
+            festival.posterImageUrl,
+            festivalQueryInfo.artistInfo)
+        )
+            .from(artist)
+            .innerJoin(stageArtist).on(stageArtist.artistId.eq(artist.id))
+            .innerJoin(stage).on(stage.id.eq(stageArtist.stageId))
+            .innerJoin(festival).on(festival.id.eq(stage.festival.id))
+            .innerJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId))
+            .where(getBooleanExpressionByKeyword(keyword))
+            .fetch();
     }
 
     private BooleanExpression getBooleanExpressionByKeyword(String keyword) {
@@ -38,31 +52,9 @@ public class ArtistFestivalSearchV1QueryDslRepository extends QueryDslRepository
         return artist.name.contains(keyword);
     }
 
-    private List<FestivalSearchV1Response> searchByExpression(BooleanExpression expression) {
-        return select(
-            new QFestivalSearchV1Response(
-                festival.id,
-                festival.name,
-                festival.festivalDuration.startDate,
-                festival.festivalDuration.endDate,
-                festival.posterImageUrl,
-                festivalQueryInfo.artistInfo))
-            .from(artist)
-            .innerJoin(stageArtist).on(expression.and(stageArtist.artistId.eq(artist.id)))
-            .innerJoin(stage).on(stage.id.eq(stageArtist.stageId))
-            .innerJoin(festival).on(festival.id.eq(stage.festival.id))
-            .innerJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId))
-            .where(expression)
-            .fetch();
-    }
-
     public boolean existsByName(String keyword) {
-        return existsByExpression(getBooleanExpressionByKeyword(keyword));
-    }
-
-    private boolean existsByExpression(BooleanExpression expression) {
         return !selectFrom(artist)
-            .where(expression)
+            .where(getBooleanExpressionByKeyword(keyword))
             .fetch()
             .isEmpty();
     }
