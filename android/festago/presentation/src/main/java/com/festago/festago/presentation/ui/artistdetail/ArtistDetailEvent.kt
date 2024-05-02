@@ -6,5 +6,4 @@ sealed interface ArtistDetailEvent {
     class ShowFestivalDetail(val festivalId: Long) : ArtistDetailEvent
 
     class FailedToFetchBookmarkList(val message: String) : ArtistDetailEvent
-
 }
