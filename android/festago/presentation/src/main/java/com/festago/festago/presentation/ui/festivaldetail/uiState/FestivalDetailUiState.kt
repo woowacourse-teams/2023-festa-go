@@ -5,10 +5,12 @@ interface FestivalDetailUiState {
 
     data class Success(
         val festival: FestivalUiState,
+        val bookmarked: Boolean,
         val stages: List<StageItemUiState>,
+        val onBookmarkClick: (Long) -> Unit,
     ) : FestivalDetailUiState
 
-    object Error : FestivalDetailUiState
+    class Error(val refresh: (id: Long) -> Unit) : FestivalDetailUiState
 
     val shouldShowSuccess get() = this is Success
     val shouldShowEmptyStages get() = shouldShowSuccess && (this as Success).stages.isEmpty()

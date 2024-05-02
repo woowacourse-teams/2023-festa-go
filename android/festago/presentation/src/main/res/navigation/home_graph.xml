@@ -5,7 +5,7 @@
     app:startDestination="@id/festivalList">
 
     <include app:graph="@navigation/festival_list" />
-    <include app:graph="@navigation/ticket_list" />
+    <include app:graph="@navigation/search" />
     <include app:graph="@navigation/book_mark" />
     <include app:graph="@navigation/my_page" />
 

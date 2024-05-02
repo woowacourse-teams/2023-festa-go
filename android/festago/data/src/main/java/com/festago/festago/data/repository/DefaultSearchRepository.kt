@@ -26,8 +26,15 @@ class DefaultSearchRepository @Inject constructor(
     }
 
     override suspend fun searchSchools(searchQuery: String): Result<List<SchoolSearch>> {
+        if (searchQuery.length <= MIN_SCHOOL_SEARCH_QUERY_LENGTH) {
+            return Result.success(emptyList())
+        }
         return runCatchingResponse {
             searchRetrofitService.searchSchools(searchQuery)
         }.onSuccessOrCatch { schoolSearchResponses -> schoolSearchResponses.map { it.toDomain() } }
+    }
+
+    companion object {
+        const val MIN_SCHOOL_SEARCH_QUERY_LENGTH = 1
     }
 }

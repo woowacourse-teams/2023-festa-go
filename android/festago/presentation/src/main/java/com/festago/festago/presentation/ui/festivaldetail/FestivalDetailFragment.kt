@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -74,9 +75,6 @@ class FestivalDetailFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-        binding.cvBookmark.setOnClickListener {
-            binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
-        }
     }
 
     private fun initObserve() {
@@ -95,16 +93,15 @@ class FestivalDetailFragment : Fragment() {
 
     private fun updateUi(uiState: FestivalDetailUiState) {
         when (uiState) {
-            is FestivalDetailUiState.Loading,
-            is FestivalDetailUiState.Error,
-            -> Unit
-
+            is FestivalDetailUiState.Loading -> Unit
             is FestivalDetailUiState.Success -> handleSuccess(uiState)
+            is FestivalDetailUiState.Error -> handleError(uiState)
         }
     }
 
     private fun handleSuccess(uiState: FestivalDetailUiState.Success) {
         binding.successUiState = uiState
+        binding.ivBookmark.isSelected = uiState.bookmarked
         binding.tvFestivalDDay.setFestivalDDay(uiState.festival.startDate, uiState.festival.endDate)
         binding.ivFestivalPoster.setImage(uiState.festival.posterImageUrl)
         binding.ivFestivalBackground.setImage(uiState.festival.posterImageUrl)
@@ -120,10 +117,14 @@ class FestivalDetailFragment : Fragment() {
         }
     }
 
+    private fun handleError(uiState: FestivalDetailUiState.Error) {
+        binding.refreshListener = { uiState.refresh(args.festival.id) }
+    }
+
     private fun TextView.setFestivalDDay(startDate: LocalDate, endDate: LocalDate) {
         when {
             LocalDate.now() in startDate..endDate -> {
-                text = context.getString(R.string.festival_detail_tv_dday_in_progress)
+                text = context.getString(R.string.tv_dday_in_progress)
                 setTextColor(context.getColor(R.color.secondary_pink_01))
                 background = AppCompatResources.getDrawable(
                     context,
@@ -140,7 +141,7 @@ class FestivalDetailFragment : Fragment() {
                 }
                 setBackgroundColor(backgroundColor)
                 setTextColor(context.getColor(R.color.background_gray_01))
-                text = context.getString(R.string.festival_detail_tv_dday_format, dDay.toString())
+                text = context.getString(R.string.tv_dday_format, dDay.toString())
             }
 
             else -> {
@@ -150,7 +151,7 @@ class FestivalDetailFragment : Fragment() {
                     context,
                     R.drawable.bg_festival_detail_dday_end,
                 )
-                text = context.getString(R.string.festival_detail_tv_dday_end)
+                text = context.getString(R.string.tv_dday_end)
             }
         }
     }
@@ -177,6 +178,10 @@ class FestivalDetailFragment : Fragment() {
                         with(event.school) { SchoolDetailArgs(id, name, imageUrl) },
                     ),
                 )
+            }
+
+            is FestivalDetailEvent.FailedToFetchBookmarkList -> {
+                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

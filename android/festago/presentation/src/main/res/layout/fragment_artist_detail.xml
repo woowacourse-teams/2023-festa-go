@@ -12,6 +12,10 @@
         <variable
             name="successUiState"
             type="com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState.Success" />
+
+        <variable
+            name="refreshListener"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
 
@@ -83,6 +87,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvBookmark"
+            onSingleClick="@{() -> successUiState.onBookmarkClick.invoke(successUiState.artist.id)}"
+            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="28dp"
             android:layout_height="28dp"
             app:cardCornerRadius="1000dp"
@@ -160,6 +166,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/layout_network_error"
+            refreshListener="@{refreshListener}"
+            visibility="@{uiState.shouldShowError}" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-

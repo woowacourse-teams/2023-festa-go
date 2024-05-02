@@ -10,12 +10,12 @@ public record KakaoUserInfo(
 ) {
 
     public UserInfo toUserInfo() {
-        return new UserInfo(
-            id,
-            SocialType.KAKAO,
-            kakaoAccount.profile.nickname,
-            kakaoAccount.profile.thumbnailImageUrl
-        );
+        return UserInfo.builder()
+            .socialId(id)
+            .socialType(SocialType.KAKAO)
+            .nickname(kakaoAccount.profile.nickname)
+            .profileImage(kakaoAccount.profile.thumbnailImageUrl)
+            .build();
     }
 
     public record KakaoAccount(

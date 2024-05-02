@@ -132,11 +132,9 @@ class FestivalListFragment : Fragment() {
 
     private fun updateUi(uiState: FestivalListUiState) {
         when (uiState) {
-            is FestivalListUiState.Loading,
-            is FestivalListUiState.Error,
-            -> Unit
-
+            is FestivalListUiState.Loading -> Unit
             is FestivalListUiState.Success -> handleSuccess(uiState)
+            is FestivalListUiState.Error -> handleError(uiState)
         }
     }
 
@@ -185,6 +183,10 @@ class FestivalListFragment : Fragment() {
                 add(FestivalMoreItemUiState(::requestMoreFestival))
             } else if (festivals.isEmpty()) add(FestivalEmptyItemUiState(festivalFilter.tabPosition))
         }.toList()
+    }
+
+    private fun handleError(uiState: FestivalListUiState.Error) {
+        binding.refreshListener = uiState.refresh
     }
 
     private fun requestMoreFestival() {

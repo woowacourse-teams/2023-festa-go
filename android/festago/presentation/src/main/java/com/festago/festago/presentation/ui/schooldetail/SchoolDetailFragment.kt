@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -80,23 +81,19 @@ class SchoolDetailFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-        binding.cvBookmark.setOnClickListener {
-            binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
-        }
     }
 
     private fun updateUi(uiState: SchoolDetailUiState) {
         when (uiState) {
-            is SchoolDetailUiState.Loading,
-            is SchoolDetailUiState.Error,
-            -> Unit
-
+            is SchoolDetailUiState.Loading -> Unit
             is SchoolDetailUiState.Success -> handleSuccess(uiState)
+            is SchoolDetailUiState.Error -> handleError(uiState)
         }
     }
 
     private fun handleSuccess(uiState: SchoolDetailUiState.Success) {
         binding.successUiState = uiState
+        binding.ivBookmark.isSelected = uiState.bookmarked
         binding.tvSchoolName.text = uiState.schoolInfo.schoolName
         binding.ivSchoolLogoImage.setImage(uiState.schoolInfo.logoUrl)
         val items: List<Any> = if (uiState.isLast) {
@@ -117,6 +114,10 @@ class SchoolDetailFragment : Fragment() {
         }
     }
 
+    private fun handleError(uiState: SchoolDetailUiState.Error) {
+        binding.refreshListener = { uiState.refresh(args.school.id) }
+    }
+
     private fun handleEvent(event: SchoolDetailEvent) = when (event) {
         is SchoolDetailEvent.ShowArtistDetail -> {
             findNavController().navigate(
@@ -132,6 +133,10 @@ class SchoolDetailFragment : Fragment() {
                     with(event.festival) { FestivalDetailArgs(id, name, imageUrl) },
                 ),
             )
+        }
+
+        is SchoolDetailEvent.FailedToFetchBookmarkList -> {
+            Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
         }
     }
 

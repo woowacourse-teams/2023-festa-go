@@ -7,11 +7,13 @@ sealed interface SchoolDetailUiState {
 
     data class Success(
         val schoolInfo: SchoolInfo,
+        val bookmarked: Boolean,
         val festivals: List<FestivalItemUiState>,
         val isLast: Boolean,
+        val onBookmarkClick: (Int) -> Unit,
     ) : SchoolDetailUiState
 
-    object Error : SchoolDetailUiState
+    class Error(val refresh: (schoolId: Long) -> Unit) : SchoolDetailUiState
 
     val shouldShowSuccess get() = this is Success
     val shouldShowLoading get() = this is Loading

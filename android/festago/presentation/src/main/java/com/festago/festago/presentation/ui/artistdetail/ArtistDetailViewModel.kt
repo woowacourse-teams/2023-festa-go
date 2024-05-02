@@ -2,8 +2,12 @@ package com.festago.festago.presentation.ui.artistdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.festago.festago.common.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.logNetworkFailure
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.repository.ArtistRepository
+import com.festago.festago.domain.repository.BookmarkRepository
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailEvent.FailedToFetchBookmarkList
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.FestivalItemUiState
@@ -16,11 +20,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class ArtistDetailViewModel @Inject constructor(
     private val artistRepository: ArtistRepository,
+    private val bookmarkRepository: BookmarkRepository,
+    private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _event: MutableSharedFlow<ArtistDetailEvent> = MutableSharedFlow()
     val event: SharedFlow<ArtistDetailEvent> = _event.asSharedFlow()
@@ -37,15 +44,24 @@ class ArtistDetailViewModel @Inject constructor(
                 val deferredArtistDetail =
                     async { artistRepository.loadArtistDetail(id, delayTimeMillis) }
                 val deferredFestivals = async { artistRepository.loadArtistFestivals(id, 10) }
+                val deferredBookmarks = async { bookmarkRepository.getArtistBookmarks() }
+                val artist = deferredArtistDetail.await().getOrThrow()
                 val festivalPage = deferredFestivals.await().getOrThrow()
+                val artistBookmarks = deferredBookmarks.await().getOrThrow()
 
                 _uiState.value = ArtistDetailUiState.Success(
-                    deferredArtistDetail.await().getOrThrow(),
-                    festivalPage.toUiState(),
-                    festivalPage.isLastPage,
+                    artist = artist,
+                    bookMarked = artistBookmarks.firstOrNull { it.artist.id == artist.id.toLong() } != null,
+                    festivals = festivalPage.toUiState(),
+                    isLast = festivalPage.isLastPage,
+                    onBookmarkClick = ::toggleArtistBookmark,
                 )
+
+                if (festivalPage.festivals.isEmpty()) {
+                    loadMoreArtistFestivals(id)
+                }
             }.onFailure {
-                _uiState.value = ArtistDetailUiState.Error
+                handleFailure(key = KEY_LOAD_ARTIST_DETAIL, throwable = it)
             }
         }
     }
@@ -55,18 +71,54 @@ class ArtistDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentFestivals = successUiState.festivals
-
+            val lastItem = successUiState.festivals.lastOrNull()
+            val isPast = when {
+                lastItem == null -> true
+                lastItem.endDate < LocalDate.now() -> true
+                successUiState.isLast -> true
+                else -> false
+            }
             artistRepository.loadArtistFestivals(
                 id = artistId,
                 lastFestivalId = currentFestivals.lastOrNull()?.id,
                 lastStartDate = currentFestivals.lastOrNull()?.startDate,
+                isPast = isPast,
             ).onSuccess { festivalsPage ->
                 _uiState.value = successUiState.copy(
                     festivals = currentFestivals + festivalsPage.toUiState(),
                     isLast = festivalsPage.isLastPage,
                 )
+            }.onFailure {
+                handleFailure(key = KEY_LOAD_MORE_ARTIST_FESTIVAL, throwable = it)
             }
         }
+    }
+
+    private fun toggleArtistBookmark(artistId: Int) {
+        viewModelScope.launch {
+            val uiState = uiState.value as? ArtistDetailUiState.Success ?: return@launch
+
+            if (uiState.bookMarked) {
+                bookmarkRepository.deleteArtistBookmark(artistId.toLong())
+                    .onSuccess { _uiState.value = uiState.copy(bookMarked = false) }
+                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
+            } else {
+                bookmarkRepository.addArtistBookmark(artistId.toLong())
+                    .onSuccess { _uiState.value = uiState.copy(bookMarked = true) }
+                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
+            }
+        }
+    }
+
+    private fun handleFailure(key: String, throwable: Throwable) {
+        _uiState.value = ArtistDetailUiState.Error {
+            _uiState.value = ArtistDetailUiState.Loading
+            loadArtistDetail(it, 0L)
+        }
+        analyticsHelper.logNetworkFailure(
+            key = key,
+            value = throwable.message.toString(),
+        )
     }
 
     private fun FestivalsPage.toUiState() = festivals.map {
@@ -94,5 +146,10 @@ class ArtistDetailViewModel @Inject constructor(
                 }
             },
         )
+    }
+
+    companion object {
+        private const val KEY_LOAD_ARTIST_DETAIL = "KEY_LOAD_ARTIST_DETAIL"
+        private const val KEY_LOAD_MORE_ARTIST_FESTIVAL = "KEY_LOAD_MORE_ARTIST_FESTIVAL"
     }
 }

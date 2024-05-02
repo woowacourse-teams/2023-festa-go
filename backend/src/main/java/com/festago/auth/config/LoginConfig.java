@@ -4,10 +4,10 @@ import com.festago.auth.AuthInterceptor;
 import com.festago.auth.AuthenticateContext;
 import com.festago.auth.RoleArgumentResolver;
 import com.festago.auth.annotation.MemberAuth;
-import com.festago.auth.application.AuthExtractor;
+import com.festago.auth.application.AuthTokenExtractor;
 import com.festago.auth.domain.Role;
-import com.festago.auth.infrastructure.CookieTokenExtractor;
-import com.festago.auth.infrastructure.HeaderTokenExtractor;
+import com.festago.auth.infrastructure.CookieHttpRequestTokenExtractor;
+import com.festago.auth.infrastructure.HeaderHttpRequestTokenExtractor;
 import com.festago.common.interceptor.AnnotationDelegateInterceptor;
 import com.festago.common.interceptor.HttpMethodDelegateInterceptor;
 import java.util.List;
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class LoginConfig implements WebMvcConfigurer {
 
-    private final AuthExtractor authExtractor;
+    private final AuthTokenExtractor authTokenExtractor;
     private final AuthenticateContext authenticateContext;
 
     @Override
@@ -39,8 +39,7 @@ public class LoginConfig implements WebMvcConfigurer {
                 .interceptor(adminAuthInterceptor())
                 .build())
             .addPathPatterns("/admin/**")
-            .excludePathPatterns("/admin/api/login", "/admin/api/initialize", "/admin/api/v1/auth/login",
-                "/admin/api/v1/auth/initialize"); // TODO #797 이슈 해결되면 레거시 API 경로 삭제할 것
+            .excludePathPatterns("/admin/api/v1/auth/login", "/admin/api/v1/auth/initialize");
         registry.addInterceptor(HttpMethodDelegateInterceptor.builder()
                 .allowMethod(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT, HttpMethod.PATCH)
                 .interceptor(memberAuthInterceptor())
@@ -57,8 +56,8 @@ public class LoginConfig implements WebMvcConfigurer {
     @Bean
     public AuthInterceptor adminAuthInterceptor() {
         return AuthInterceptor.builder()
-            .authExtractor(authExtractor)
-            .tokenExtractor(new CookieTokenExtractor())
+            .authExtractor(authTokenExtractor)
+            .tokenExtractor(new CookieHttpRequestTokenExtractor())
             .authenticateContext(authenticateContext)
             .role(Role.ADMIN)
             .build();
@@ -67,8 +66,8 @@ public class LoginConfig implements WebMvcConfigurer {
     @Bean
     public AuthInterceptor memberAuthInterceptor() {
         return AuthInterceptor.builder()
-            .authExtractor(authExtractor)
-            .tokenExtractor(new HeaderTokenExtractor())
+            .authExtractor(authTokenExtractor)
+            .tokenExtractor(new HeaderHttpRequestTokenExtractor())
             .authenticateContext(authenticateContext)
             .role(Role.MEMBER)
             .build();

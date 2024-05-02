@@ -42,6 +42,9 @@ public enum ErrorCode {
     BROAD_SEARCH_KEYWORD("더 자세한 검색어로 입력해야합니다."),
     INVALID_KEYWORD("유효하지 않은 키워드 입니다."),
     DUPLICATE_SOCIAL_MEDIA("이미 존재하는 소셜미디어 입니다."),
+    OAUTH2_INVALID_CODE("잘못된 OAuth2 Code 입니다."),
+    OPEN_ID_NOT_SUPPORTED_SOCIAL_TYPE("해당 OpenId 제공자는 지원되지 않습니다."),
+    OPEN_ID_INVALID_TOKEN("잘못된 OpenID 토큰입니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
@@ -50,6 +53,8 @@ public enum ErrorCode {
     NEED_AUTH_TOKEN("로그인이 필요한 서비스입니다."),
     INCORRECT_PASSWORD_OR_ACCOUNT("비밀번호가 틀렸거나, 해당 계정이 없습니다."),
     DUPLICATE_ACCOUNT_USERNAME("해당 계정이 존재합니다."),
+    INVALID_REFRESH_TOKEN("존재하지 않은 리프래쉬 토큰으로 재발급 요청을 했습니다."),
+    EXPIRED_REFRESH_TOKEN("만료된 리프래쉬 토큰입니다."),
 
     // 403
     NOT_ENOUGH_PERMISSION("해당 권한이 없습니다."),
@@ -63,6 +68,7 @@ public enum ErrorCode {
     SCHOOL_NOT_FOUND("존재하지 않는 학교입니다."),
     ARTIST_NOT_FOUND("존재하지 않는 아티스트입니다."),
     SOCIAL_MEDIA_NOT_FOUND("존재하지 않는 소셜미디어입니다."),
+    ACTUATOR_NOT_FOUND("존재하지 않는 Actuator 경로입니다."),
 
     // 429
     TOO_FREQUENT_REQUESTS("너무 잦은 요청입니다. 잠시 후 다시 시도해주세요."),
@@ -73,6 +79,8 @@ public enum ErrorCode {
     FOR_TEST_ERROR("테스트용 에러입니다."),
     FAIL_SEND_FCM_MESSAGE("FCM Message 전송에 실패했습니다."),
     TICKET_SEQUENCE_DATA_ERROR("입장 순서 값의 데이터 정합성에 문제가 발생했습니다."),
+    OAUTH2_INVALID_REQUEST("알 수 없는 OAuth2 에러가 발생했습니다."),
+    OPEN_ID_PROVIDER_NOT_RESPONSE("OpenID 제공자 서버에 문제가 발생했습니다."),
     ;
 
     private final String message;

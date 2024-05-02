@@ -79,12 +79,10 @@ class SearchFragment : Fragment() {
 
     private fun updateUi(uiState: SearchUiState) {
         when (uiState) {
-            is SearchUiState.Loading,
-            is SearchUiState.Error,
-            -> Unit
-
+            is SearchUiState.Loading -> Unit
             is SearchUiState.RecentSearchSuccess -> handleRecentSearchSuccess(uiState)
             is SearchUiState.SearchSuccess -> handleSuccessSearch(uiState)
+            is SearchUiState.Error -> handleError(uiState)
         }
     }
 
@@ -163,6 +161,10 @@ class SearchFragment : Fragment() {
             ),
         )
         initSearchTab()
+    }
+
+    private fun handleError(uiState: SearchUiState.Error) {
+        binding.refreshListener = { uiState.refresh.invoke(binding.etSearch.text.toString()) }
     }
 
     private fun initSearchTab() {

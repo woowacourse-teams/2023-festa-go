@@ -12,6 +12,10 @@
         <variable
             name="successUiState"
             type="com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState.Success" />
+
+        <variable
+            name="refreshListener"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -95,6 +99,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvBookmark"
+                onSingleClick="@{() -> successUiState.onBookmarkClick.invoke(successUiState.schoolInfo.id)}"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 app:cardCornerRadius="1000dp"
@@ -179,6 +184,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:visibility="@{uiState.shouldShowEmptyFestivals}" />
 
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/layout_network_error"
+            refreshListener="@{refreshListener}"
+            visibility="@{uiState.shouldShowError}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

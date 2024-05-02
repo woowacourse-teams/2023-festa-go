@@ -63,11 +63,7 @@ class FestivalListViewModel @Inject constructor(
                     schoolRegion = schoolRegion,
                 )
             }.onFailure {
-                _uiState.value = FestivalListUiState.Error
-                analyticsHelper.logNetworkFailure(
-                    key = KEY_LOAD_FESTIVAL,
-                    value = it.message.toString(),
-                )
+                handleFailure(key = KEY_INIT_FESTIVALS, throwable = it)
             }
         }
     }
@@ -108,8 +104,21 @@ class FestivalListViewModel @Inject constructor(
                     schoolRegion = schoolRegion,
                     isLastPage = festivalsPage.isLastPage,
                 )
+            }.onFailure {
+                handleFailure(key = KEY_LOAD_FESTIVALS, throwable = it)
             }
         }
+    }
+
+    private fun handleFailure(key: String, throwable: Throwable) {
+        _uiState.value = FestivalListUiState.Error {
+            _uiState.value = FestivalListUiState.Loading
+            initFestivalList()
+        }
+        analyticsHelper.logNetworkFailure(
+            key = key,
+            value = throwable.message.toString(),
+        )
     }
 
     private fun updateFestivalsState(
@@ -164,6 +173,7 @@ class FestivalListViewModel @Inject constructor(
     }
 
     companion object {
-        private const val KEY_LOAD_FESTIVAL = "KEY_LOAD_FESTIVAL"
+        private const val KEY_INIT_FESTIVALS = "KEY_INIT_FESTIVALS"
+        private const val KEY_LOAD_FESTIVALS = "KEY_LOAD_FESTIVALS"
     }
 }

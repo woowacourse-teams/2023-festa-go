@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -65,9 +66,7 @@ class ArtistDetailFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.cvBookmark.setOnClickListener {
-            binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
-        }
+        binding.cvBookmark.isSelected
     }
 
     private fun initObserve() {
@@ -85,17 +84,18 @@ class ArtistDetailFragment : Fragment() {
     }
 
     private fun updateUi(uiState: ArtistDetailUiState) = when (uiState) {
-        is ArtistDetailUiState.Loading,
-        is ArtistDetailUiState.Error,
-        -> Unit
-
+        is ArtistDetailUiState.Loading -> Unit
         is ArtistDetailUiState.Success -> handleSuccess(uiState)
+        is ArtistDetailUiState.Error -> handleError(uiState)
     }
 
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
         binding.successUiState = uiState
         binding.tvArtistName.text = uiState.artist.artistName
         binding.ivProfileImage.setImage(uiState.artist.profileUrl)
+
+        binding.ivBookmark.isSelected = uiState.bookMarked
+
         val items: List<Any> = if (uiState.isLast) {
             uiState.festivals
         } else {
@@ -114,6 +114,10 @@ class ArtistDetailFragment : Fragment() {
         }
     }
 
+    private fun handleError(uiState: ArtistDetailUiState.Error) {
+        binding.refreshListener = { uiState.refresh(args.artist.id) }
+    }
+
     private fun handleEvent(event: ArtistDetailEvent) = when (event) {
         is ArtistDetailEvent.ShowArtistDetail -> {
             findNavController().navigate(
@@ -129,6 +133,11 @@ class ArtistDetailFragment : Fragment() {
                     with(event.festival) { FestivalDetailArgs(id, name, imageUrl) },
                 ),
             )
+        }
+
+        is ArtistDetailEvent.FailedToFetchBookmarkList -> {
+            Toast.makeText(requireContext(), "최대 북마크 갯수를 초과했습니다", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 

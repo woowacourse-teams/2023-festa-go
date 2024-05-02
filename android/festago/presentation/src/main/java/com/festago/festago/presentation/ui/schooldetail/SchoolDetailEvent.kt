@@ -7,4 +7,6 @@ sealed interface SchoolDetailEvent {
     class ShowArtistDetail(val artist: ArtistUiState) : SchoolDetailEvent
 
     class ShowFestivalDetail(val festival: FestivalItemUiState) : SchoolDetailEvent
+
+    class FailedToFetchBookmarkList(val message: String) : SchoolDetailEvent
 }
