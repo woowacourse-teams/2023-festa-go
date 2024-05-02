@@ -75,6 +75,7 @@ public class UploadFileFixture {
 
     public UploadFile buildAbandoned() {
         UploadFile uploadFile = build();
+        uploadFile.changeAttached(ownerId, ownerType);
         uploadFile.changeAbandoned();
         return uploadFile;
     }

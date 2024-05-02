@@ -3,7 +3,6 @@ package com.festago.upload.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-import com.festago.common.exception.UnexpectedException;
 import com.festago.common.exception.ValidException;
 import com.festago.support.fixture.UploadFileFixture;
 import java.net.URI;
@@ -87,10 +86,12 @@ class UploadFileTest {
 
         @ParameterizedTest(name = "{1}")
         @MethodSource("uploadFilesWithoutUploaded")
-        void UPLOADED_상태가_아닌_UploadFile을_ASSIGNED_상태로_변경을_시도하면_예외가_발생한다(UploadFile uploadFile, UploadStatus status) {
-            // when & then
-            assertThatThrownBy(() -> uploadFile.changeAssigned(1L, FileOwnerType.FESTIVAL))
-                .isInstanceOf(UnexpectedException.class);
+        void UPLOADED_상태가_아닌_UploadFile은_ASSIGNED_상태로_변하지_않는다(UploadFile uploadFile, UploadStatus status) {
+            // when
+            uploadFile.changeAssigned(1L, FileOwnerType.FESTIVAL);
+
+            // then
+            assertThat(uploadFile.getStatus()).isEqualTo(status);
         }
 
         public static Stream<Arguments> uploadFilesWithoutUploaded() {
@@ -115,10 +116,12 @@ class UploadFileTest {
 
         @ParameterizedTest(name = "{1}")
         @MethodSource("uploadFilesWithoutUploaded")
-        void UPLOADED_상태가_아닌_UploadFile을_ATTACHED_상태로_변경을_시도하면_예외가_발생한다(UploadFile uploadFile, UploadStatus status) {
-            // when & then
-            assertThatThrownBy(() -> uploadFile.changeAttached(1L, FileOwnerType.FESTIVAL))
-                .isInstanceOf(UnexpectedException.class);
+        void UPLOADED_상태가_아닌_UploadFile은_ATTACHED_상태로_변하지_않는다(UploadFile uploadFile, UploadStatus status) {
+            // when
+            uploadFile.changeAttached(1L, FileOwnerType.FESTIVAL);
+
+            // then
+            assertThat(uploadFile.getStatus()).isEqualTo(status);
         }
 
         @ParameterizedTest(name = "{1}")
@@ -150,7 +153,7 @@ class UploadFileTest {
             UploadFile uploadFile = UploadFileFixture.builder().build();
 
             // when
-            uploadFile.renewalStatus(Set.of(uploadFile.getId()));
+            uploadFile.renewalStatus(1L, FileOwnerType.FESTIVAL, Set.of(uploadFile.getId()));
 
             // then
             assertThat(uploadFile.getStatus()).isEqualTo(UploadStatus.UPLOADED);
@@ -159,10 +162,13 @@ class UploadFileTest {
         @Test
         void ABANDONED_상태의_파일은_상태가_변경되지_않는다() {
             // given
-            UploadFile uploadFile = UploadFileFixture.builder().buildAbandoned();
+            UploadFile uploadFile = UploadFileFixture.builder()
+                .ownerId(1L)
+                .ownerType(FileOwnerType.FESTIVAL)
+                .buildAbandoned();
 
             // when
-            uploadFile.renewalStatus(Set.of(uploadFile.getId()));
+            uploadFile.renewalStatus(1L, FileOwnerType.FESTIVAL, Set.of(uploadFile.getId()));
 
             // then
             assertThat(uploadFile.getStatus()).isEqualTo(UploadStatus.ABANDONED);
@@ -171,10 +177,13 @@ class UploadFileTest {
         @Test
         void ATTACHED_상태의_파일이고_식별자_목록에_자신이_포함되면_상태가_변하지_않는다() {
             // given
-            UploadFile uploadFile = UploadFileFixture.builder().buildAttached();
+            UploadFile uploadFile = UploadFileFixture.builder()
+                .ownerId(1L)
+                .ownerType(FileOwnerType.FESTIVAL)
+                .buildAttached();
 
             // when
-            uploadFile.renewalStatus(Set.of(uploadFile.getId()));
+            uploadFile.renewalStatus(1L, FileOwnerType.FESTIVAL, Set.of(uploadFile.getId()));
 
             // then
             assertThat(uploadFile.getStatus()).isEqualTo(UploadStatus.ATTACHED);
@@ -183,10 +192,13 @@ class UploadFileTest {
         @Test
         void ATTACHED_상태의_파일이고_식별자_목록에_자신이_포함되지_않으면_ABANDONED_상태로_변경된다() {
             // given
-            UploadFile uploadFile = UploadFileFixture.builder().buildAttached();
+            UploadFile uploadFile = UploadFileFixture.builder()
+                .ownerId(1L)
+                .ownerType(FileOwnerType.FESTIVAL)
+                .buildAttached();
 
             // when
-            uploadFile.renewalStatus(Collections.emptySet());
+            uploadFile.renewalStatus(1L, FileOwnerType.FESTIVAL, Collections.emptySet());
 
             // then
             assertThat(uploadFile.getStatus()).isEqualTo(UploadStatus.ABANDONED);
@@ -195,10 +207,13 @@ class UploadFileTest {
         @Test
         void ASSIGNED_상태의_파일이고_식별자_목록에_자신이_포함되면_ATTACHED_상태로_변경된다() {
             // given
-            UploadFile uploadFile = UploadFileFixture.builder().buildAssigned();
+            UploadFile uploadFile = UploadFileFixture.builder()
+                .ownerId(1L)
+                .ownerType(FileOwnerType.FESTIVAL)
+                .buildAssigned();
 
             // when
-            uploadFile.renewalStatus(Set.of(uploadFile.getId()));
+            uploadFile.renewalStatus(1L, FileOwnerType.FESTIVAL, Set.of(uploadFile.getId()));
 
             // then
             assertThat(uploadFile.getStatus()).isEqualTo(UploadStatus.ATTACHED);
@@ -207,13 +222,46 @@ class UploadFileTest {
         @Test
         void ASSIGNED_상태의_파일이고_식별자_목록에_자신이_포함되지_않으면_ABANDONED_상태로_변경된다() {
             // given
-            UploadFile uploadFile = UploadFileFixture.builder().buildAssigned();
+            UploadFile uploadFile = UploadFileFixture.builder()
+                .ownerId(1L)
+                .ownerType(FileOwnerType.FESTIVAL)
+                .buildAssigned();
 
             // when
-            uploadFile.renewalStatus(Collections.emptySet());
+            uploadFile.renewalStatus(1L, FileOwnerType.FESTIVAL, Collections.emptySet());
 
             // then
             assertThat(uploadFile.getStatus()).isEqualTo(UploadStatus.ABANDONED);
+        }
+
+        @Test
+        void 주인의_타입은_같아도_식별자가_다르면_상태가_변경되지_않는다() {
+            // given
+            UploadFile uploadFile = UploadFileFixture.builder()
+                .ownerId(2L)
+                .ownerType(FileOwnerType.FESTIVAL)
+                .buildAssigned();
+
+            // when
+            uploadFile.renewalStatus(1L, FileOwnerType.FESTIVAL, Set.of(uploadFile.getId()));
+
+            // then
+            assertThat(uploadFile.getStatus()).isEqualTo(UploadStatus.ASSIGNED);
+        }
+
+        @Test
+        void 주인의_식별자는_같아도_타입이_다르면_상태가_변경되지_않는다() {
+            // given
+            UploadFile uploadFile = UploadFileFixture.builder()
+                .ownerId(1L)
+                .ownerType(FileOwnerType.SCHOOL)
+                .buildAssigned();
+
+            // when
+            uploadFile.renewalStatus(1L, FileOwnerType.FESTIVAL, Set.of(uploadFile.getId()));
+
+            // then
+            assertThat(uploadFile.getStatus()).isEqualTo(UploadStatus.ASSIGNED);
         }
     }
 
