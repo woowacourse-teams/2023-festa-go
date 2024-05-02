@@ -14,22 +14,11 @@ import software.amazon.awssdk.services.s3.S3Client;
 @Configuration
 public class R2Config {
 
-    private final String accessKey;
-    private final String secretKey;
-    private final String endpoint;
-
-    public R2Config(
-        @Value("${festago.r2.access-key}") String accessKey,
-        @Value("${festago.r2.secret-key}") String secretKey,
-        @Value("${festago.r2.endpoint}") String endpoint
-    ) {
-        this.accessKey = accessKey;
-        this.secretKey = secretKey;
-        this.endpoint = endpoint;
-    }
-
     @Bean
     public R2StorageClient r2UploadClient(
+        @Value("${festago.r2.access-key}") String accessKey,
+        @Value("${festago.r2.secret-key}") String secretKey,
+        @Value("${festago.r2.endpoint}") String endpoint,
         @Value("${festago.r2.bucket}") String bucket,
         @Value("${festago.r2.url}") String uri,
         Clock clock
