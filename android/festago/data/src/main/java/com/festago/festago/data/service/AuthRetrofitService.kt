@@ -4,6 +4,7 @@ import com.festago.festago.data.dto.user.RefreshRequest
 import com.festago.festago.data.dto.user.RefreshResponse
 import com.festago.festago.data.dto.user.SignInRequest
 import com.festago.festago.data.dto.user.SignInResponse
+import com.festago.festago.data.dto.user.SignOutRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -24,6 +25,7 @@ interface AuthRetrofitService {
     @POST("api/v1/auth/logout")
     suspend fun signOut(
         @Header("Authorization") token: String,
+        @Body signOutRequest: SignOutRequest,
     ): Response<Unit>
 
     @DELETE("api/v1/auth")

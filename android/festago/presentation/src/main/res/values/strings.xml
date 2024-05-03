@@ -106,9 +106,14 @@
     <string name="my_page_go_to_login">로그인 하러 가기</string>
     <string name="my_page_contact_us">문의하기</string>
     <string name="my_page_faq">FAQ</string>
-    <string name="my_page_open_source_licenses">오픈소스 라이센스</string>
+    <string name="my_page_personal_info_policy">개인정보 처리방침</string>
     <string name="my_page_app_version">앱버전</string>
     <string name="my_page_logout">로그아웃</string>
     <string name="my_page_unregister">회원탈퇴</string>
+    <string name="my_page_logout_alert_title">로그아웃</string>
+    <string name="my_page_logout_alert_message">정말 로그아웃 하시겠습니까?</string>
+    <string name="my_page_delete_account_alert_title">회원 탈퇴</string>
+    <string name="my_page_delete_account_alert_message">정말 탈퇴 하시겠습니까? 다시 되돌릴 수 없습니다.</string>
+    <string name="my_page_app_version_format">버전 : %s</string>
 
 </resources>

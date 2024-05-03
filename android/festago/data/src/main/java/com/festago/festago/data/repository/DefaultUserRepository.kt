@@ -7,6 +7,7 @@ import com.festago.festago.data.datasource.token.TokenDataSource
 import com.festago.festago.data.datasource.userinfo.UserInfoDataSource
 import com.festago.festago.data.dto.user.RefreshRequest
 import com.festago.festago.data.dto.user.SignInRequest
+import com.festago.festago.data.dto.user.SignOutRequest
 import com.festago.festago.data.model.UserInfoEntity
 import com.festago.festago.data.service.AuthRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
@@ -80,7 +81,8 @@ class DefaultUserRepository @Inject constructor(
     override suspend fun signOut(): Result<Unit> {
         return runCatchingResponse {
             authRetrofitService.signOut(
-                AUTHORIZATION_TOKEN_FORMAT.format(getAccessToken().getOrThrow()),
+                AUTHORIZATION_TOKEN_FORMAT.format(getAccessToken().getOrThrow().token),
+                SignOutRequest(getRefreshToken().getOrThrow().token),
             )
         }.onSuccessOrCatch {
             kakaoAuthorization.signOut()
@@ -92,7 +94,7 @@ class DefaultUserRepository @Inject constructor(
     override suspend fun deleteAccount(): Result<Unit> {
         return runCatchingResponse {
             authRetrofitService.deleteAccount(
-                AUTHORIZATION_TOKEN_FORMAT.format(getAccessToken().getOrThrow()),
+                AUTHORIZATION_TOKEN_FORMAT.format(getAccessToken().getOrThrow().token),
             )
         }.onSuccessOrCatch {
             kakaoAuthorization.deleteAccount()
