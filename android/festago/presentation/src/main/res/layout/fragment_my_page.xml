@@ -1,14 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.home.mypage.MyPageFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState" />
+
+        <variable
+            name="errorUiState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState.Error" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/home_bottom_nav_my_page" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <LinearLayout
+            visibility="@{uiState.shouldShowSuccess}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".ui.home.mypage.MyPageFragment">
+
+            <TextView
+                style="@style/H2Bold20Lh24"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical|start"
+                android:text="@string/home_bottom_nav_my_page"
+                android:textColor="@color/contents_gray_07" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="16dp">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_profile_default" />
+
+                <TextView
+                    style="@style/H4Bold16Lh20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/my_page_go_to_login"
+                    android:textColor="@color/contents_gray_07" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="4dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_next"
+                    app:tint="@color/contents_gray_07" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            visibility="@{uiState.shouldShowSuccess}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:context=".ui.home.mypage.MyPageFragment">
+
+            <TextView
+                style="@style/B2Medium14Lh20"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:text="@string/my_page_faq"
+                android:textColor="@color/contents_gray_05" />
+
+            <TextView
+                style="@style/B2Medium14Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_page_contact_us"
+                android:textColor="@color/contents_gray_05" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/contents_gray_05" />
+
+            <TextView
+                style="@style/B2Medium14Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_page_open_source_licenses"
+                android:textColor="@color/contents_gray_05" />
+
+            <TextView
+                style="@style/B2Medium14Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_page_app_version"
+                android:textColor="@color/contents_gray_05" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/contents_gray_05" />
+
+            <TextView
+                style="@style/B2Medium14Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_page_logout"
+                android:textColor="@color/contents_gray_05" />
+
+            <TextView
+                style="@style/B2Medium14Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_page_unregister"
+                android:textColor="@color/contents_gray_05" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/includeError"
+            layout="@layout/layout_network_error"
+            refreshListener="@{errorUiState.refresh}"
+            visibility="@{uiState.shouldShowError}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
