@@ -1,10 +1,12 @@
 package com.festago.festival.dto;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
+import com.festago.artist.infrastructure.JsonArtistsSerializer;
 import com.querydsl.core.annotations.QueryProjection;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
-//TODO: 아티스트 필드명을 변경할려면 JsonRawValue 형식이라 DB에 저장할 필드이름을 다르게 해야함
 public record FestivalV1Response(
     Long id,
     String name,
@@ -12,7 +14,10 @@ public record FestivalV1Response(
     LocalDate endDate,
     String posterImageUrl,
     SchoolV1Response school,
-    @JsonRawValue String artists) {
+    @JsonRawValue
+    @ArraySchema(schema = @Schema(implementation = JsonArtistsSerializer.ArtistQueryModel.class))
+    String artists
+) {
 
     @QueryProjection
     public FestivalV1Response {
