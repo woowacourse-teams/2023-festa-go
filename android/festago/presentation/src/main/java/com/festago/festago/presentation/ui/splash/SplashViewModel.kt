@@ -2,7 +2,6 @@ package com.festago.festago.presentation.ui.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.festago.festago.domain.repository.BookmarkRepository
 import com.festago.festago.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,23 +13,10 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val bookmarkRepository: BookmarkRepository,
 ) : ViewModel() {
 
     private val _event: MutableSharedFlow<SplashEvent> = MutableSharedFlow()
     val event: SharedFlow<SplashEvent> = _event.asSharedFlow()
-
-    init {
-        viewModelScope.launch {
-            bookmarkRepository.getArtistBookmarks()
-        }
-        viewModelScope.launch {
-            bookmarkRepository.getSchoolBookmarks()
-        }
-        viewModelScope.launch {
-            bookmarkRepository.getFestivalBookmarkIds()
-        }
-    }
 
     fun checkSignIn() {
         viewModelScope.launch {

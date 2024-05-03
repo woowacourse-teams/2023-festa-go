@@ -34,27 +34,33 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
-        navController =
-            (supportFragmentManager.findFragmentById(R.id.fcvHomeContainer) as NavHostFragment).navController
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.nvHome)
-        bottomNavigationView.setupWithNavController(navController)
+        initView()
+        initNavigation()
 
         initBackPressedDispatcher()
         initDestinationChangedListener()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
 
+    private fun initView() {
+        vm.initBookmark()
         binding.root.setOnApplyWindowInsetsCompatListener { view, windowInsets ->
             val navigationInsets = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars())
             view.setPadding(0, 0, 0, navigationInsets.bottom)
             window.statusBarColor = Color.TRANSPARENT
             windowInsets
         }
-
-        setNavColor()
-
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         binding.nvHome.setOnApplyWindowInsetsCompatListener { _, windowInsets ->
             windowInsets
         }
+    }
+
+    private fun initNavigation() {
+        navController =
+            (supportFragmentManager.findFragmentById(R.id.fcvHomeContainer) as NavHostFragment).navController
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.nvHome)
+        bottomNavigationView.setupWithNavController(navController)
+        setNavColor()
     }
 
     private fun setNavColor() {
