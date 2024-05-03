@@ -22,13 +22,10 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
-
-    private static final int NEXT_PAGE_CHECK_NUMBER = 1;
 
     public SchoolV1QueryDslRepository() {
         super(School.class);
@@ -61,28 +58,33 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         return Optional.of(response.get(0));
     }
 
-    public Slice<SchoolFestivalV1Response> findFestivalsBySchoolId(Long schoolId, LocalDate today,
-                                                                   SchoolFestivalV1SearchCondition searchCondition) {
-        List<SchoolFestivalV1Response> result =
-            select(new QSchoolFestivalV1Response(festival.id,
-                    festival.name,
-                    festival.festivalDuration.startDate,
-                    festival.festivalDuration.endDate,
-                    festival.posterImageUrl,
-                    festivalQueryInfo.artistInfo
+    public Slice<SchoolFestivalV1Response> findFestivalsBySchoolId(
+        Long schoolId,
+        LocalDate today,
+        SchoolFestivalV1SearchCondition searchCondition
+    ) {
+        Pageable pageable = searchCondition.pageable();
+        return applySlice(
+            pageable,
+            query -> query.select(new QSchoolFestivalV1Response(festival.id,
+                        festival.name,
+                        festival.festivalDuration.startDate,
+                        festival.festivalDuration.endDate,
+                        festival.posterImageUrl,
+                        festivalQueryInfo.artistInfo
+                    )
                 )
-            )
                 .from(festival)
                 .leftJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
                 .where(festival.school.id.eq(schoolId),
                     addPhaseOption(searchCondition.isPast(), today),
-                    addPagingOption(searchCondition.lastFestivalId(), searchCondition.lastStartDate(),
-                        searchCondition.isPast()))
+                    addPagingOption(
+                        searchCondition.lastFestivalId(),
+                        searchCondition.lastStartDate(),
+                        searchCondition.isPast()
+                    ))
                 .orderBy(addOrderOption(searchCondition.isPast()))
-                .limit(searchCondition.pageable().getPageSize() + NEXT_PAGE_CHECK_NUMBER)
-                .fetch();
-
-        return createResponse(searchCondition.pageable(), result);
+        );
     }
 
     private BooleanExpression addPhaseOption(boolean isPast, LocalDate today) {
@@ -104,7 +106,6 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
                 .or(festival.festivalDuration.startDate.eq(lastStartDate)
                     .and(festival.id.gt(lastFestivalId)));
         }
-
         return null;
     }
 
@@ -116,20 +117,6 @@ public class SchoolV1QueryDslRepository extends QueryDslRepositorySupport {
         if (isPast) {
             return festival.festivalDuration.endDate.desc();
         }
-
         return festival.festivalDuration.startDate.asc();
-    }
-
-    private Slice<SchoolFestivalV1Response> createResponse(
-        Pageable pageable,
-        List<SchoolFestivalV1Response> content
-    ) {
-        boolean hasNext = false;
-        if (content.size() > pageable.getPageSize()) {
-            content.remove(content.size() - 1);
-            hasNext = true;
-        }
-
-        return new SliceImpl<>(content, pageable, hasNext);
     }
 }

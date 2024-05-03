@@ -4,7 +4,8 @@ import static com.festago.festival.domain.QFestival.festival;
 import static com.festago.festival.domain.QFestivalQueryInfo.festivalQueryInfo;
 import static com.festago.school.domain.QSchool.school;
 
-import com.festago.common.querydsl.QueryDslHelper;
+import com.festago.common.querydsl.QueryDslRepositorySupport;
+import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.FestivalV1Response;
 import com.festago.festival.dto.QFestivalV1Response;
 import com.festago.festival.dto.QSchoolV1Response;
@@ -12,21 +13,21 @@ import com.festago.school.domain.SchoolRegion;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.time.LocalDate;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor
-public class FestivalV1QueryDslRepository {
+public class FestivalV1QueryDslRepository extends QueryDslRepositorySupport {
 
-    private final QueryDslHelper queryDslHelper;
+    public FestivalV1QueryDslRepository() {
+        super(Festival.class);
+    }
 
     public Slice<FestivalV1Response> findBy(FestivalSearchCondition searchCondition) {
         FestivalFilter filter = searchCondition.filter();
         Pageable pageable = searchCondition.pageable();
-        return queryDslHelper.applySlice(
+        return applySlice(
             pageable,
             query -> query.select(new QFestivalV1Response(
                     festival.id,
