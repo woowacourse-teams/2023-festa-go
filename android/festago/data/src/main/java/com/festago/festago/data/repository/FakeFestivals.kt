@@ -39,7 +39,7 @@ object FakeFestivals {
                 artists = listOf(
                     Artist(
                         id = 1L,
-                        name = "뉴진스뉴진스뉴진스뉴진스뉴진스",
+                        name = "뉴진스뉴진스",
                         imageUrl = "https://i.namu.wiki/i/gpgJvt_C2vKJS4VA4K_Vm57Y5WoS83ofshxhJlQaT4P9Tu0N96vZ2OcdeAN7ZtRAM26UyyQs3sualkKk6i_SrRMvwVKrU015XJqzJ7wKRbOub_oUAxPSFre_8D5De3oy-fCxL0uZ-HGvsWxIX57yrw.webp",
                     ),
                     Artist(
@@ -70,7 +70,7 @@ object FakeFestivals {
                 artists = listOf(
                     Artist(
                         id = 3L,
-                        name = "뉴진스뉴진스뉴진스뉴진스뉴진스",
+                        name = "뉴진스뉴진스",
                         imageUrl = "https://i.namu.wiki/i/-GuxB5nI9Q-a5W_nAJEapwdUzCLyFShWJfmUfZk04cW_fFC485TRD6UlzGQCBnFpJegXBaa4WO-PThNom_7wlosOiXgb-k3-wgUr3PkyX89PU3RCschmgQ0FmS1ClOK3ph4ztAd55YWWlhk7Gm114w.webp",
                     ),
                     Artist(
@@ -162,7 +162,7 @@ object FakeFestivals {
             artists = listOf(
                 Artist(
                     id = 6L,
-                    name = "뉴진스뉴진스뉴진스뉴진스뉴진스",
+                    name = "뉴진스뉴진스",
                     imageUrl = "https://cdn.mediatoday.co.kr/news/photo/202311/313885_438531_4716.jpg",
                 ),
             ),
@@ -177,7 +177,7 @@ object FakeFestivals {
             artists = listOf(
                 Artist(
                     id = 1L,
-                    name = "뉴진스뉴진스뉴진스뉴진스뉴진스",
+                    name = "뉴진스뉴진스",
                     imageUrl = "https://cdn.mediatoday.co.kr/news/photo/202311/313885_438531_4716.jpg",
                 ),
                 Artist(
@@ -280,7 +280,7 @@ object FakeFestivals {
             artists = listOf(
                 Artist(
                     id = 1L,
-                    name = "뉴진스뉴진스뉴진스뉴진스뉴진스",
+                    name = "뉴진스뉴진스",
                     imageUrl = "https://cdn.mediatoday.co.kr/news/photo/202311/313885_438531_4716.jpg",
                 ),
             ),

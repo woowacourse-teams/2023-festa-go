@@ -72,7 +72,6 @@
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="10dp"
             android:ellipsize="end"
-            android:includeFontPadding="false"
             android:maxLines="1"
             android:text="@{item.name}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -93,14 +92,13 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFestivalArtists"
             android:layout_width="0dp"
-            android:layout_height="66dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="@id/tvFestivalSchedule"
             app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule"
             tools:listitem="@layout/item_festival_list_artist" />

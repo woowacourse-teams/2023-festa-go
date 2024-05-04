@@ -85,6 +85,7 @@
             style="@style/B3Medium14Lh14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:includeFontPadding="false"
             android:text="@{@string/festival_list_tv_date_range_format(item.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),item.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
             app:layout_constraintStart_toStartOf="@+id/tvFestivalName"
             app:layout_constraintTop_toBottomOf="@+id/tvFestivalName"
@@ -93,7 +94,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFestivalArtists"
             android:layout_width="0dp"
-            android:layout_height="66dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:orientation="horizontal"

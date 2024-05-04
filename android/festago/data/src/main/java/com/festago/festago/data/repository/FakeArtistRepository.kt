@@ -63,7 +63,7 @@ class FakeArtistRepository @Inject constructor() : ArtistRepository {
                             listOf(
                                 Artist(
                                     101,
-                                    "뉴진스뉴진스뉴진스뉴진스뉴진스",
+                                    "뉴진스뉴진스",
                                     "https://static.wikia.nocookie.net/witchers/images/d/d9/New_Jeans_Cover.png/revision/latest?cb=20220801091438",
                                 ),
                                 Artist(
