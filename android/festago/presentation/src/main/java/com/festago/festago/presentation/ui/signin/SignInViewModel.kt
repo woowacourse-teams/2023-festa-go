@@ -22,7 +22,7 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch {
             userRepository.signIn(idToken)
                 .onSuccess {
-                    _event.emit(SignInEvent.ShowHome)
+                    _event.emit(SignInEvent.SignInSuccess)
                 }.onFailure {
                     _event.emit(SignInEvent.SignInFailure)
                 }
