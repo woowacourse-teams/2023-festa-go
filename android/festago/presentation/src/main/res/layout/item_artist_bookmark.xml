@@ -48,6 +48,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center|top"
             android:lineHeight="16dp"
+            android:ellipsize="end"
             android:text="@{artist.name}"
             android:textColor="@color/contents_gray_07"
             app:layout_constraintEnd_toEndOf="@id/cvFestivalImage"

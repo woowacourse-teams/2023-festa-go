@@ -41,16 +41,18 @@
 
         <TextView
             android:id="@+id/tvFestivalName"
-            style="@style/B4Medium12Lh14"
+            style="@style/B4Medium12Lh14dp"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@{item.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/cvArtistProfile"
             app:layout_constraintStart_toStartOf="@id/cvArtistProfile"
             app:layout_constraintTop_toBottomOf="@id/cvArtistProfile"
             app:layout_constraintVertical_weight="18"
-            tools:text="윤하" />
+            tools:text="윤하윤하윤하윤" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -34,7 +34,10 @@ class FestivalSearchViewHolder(
 
     private fun TextView.bindFestivalDday(item: FestivalSearchItemUiState) {
         when {
-            LocalDate.now() > item.endDate -> Unit
+            LocalDate.now() > item.endDate -> {
+                binding.tvFestivalDDay.visibility = View.GONE
+                binding.tvFestivalDDayEnd.visibility = View.VISIBLE
+            }
 
             LocalDate.now() >= item.startDate -> {
                 text = context.getString(R.string.festival_list_tv_dday_in_progress)
@@ -43,6 +46,8 @@ class FestivalSearchViewHolder(
                     context,
                     R.drawable.bg_festival_list_dday_in_progress,
                 )
+                binding.tvFestivalDDay.visibility = View.VISIBLE
+                binding.tvFestivalDDayEnd.visibility = View.GONE
             }
 
             else -> {
@@ -55,6 +60,8 @@ class FestivalSearchViewHolder(
                 setBackgroundColor(backgroundColor)
                 setTextColor(context.getColor(R.color.background_gray_01))
                 text = context.getString(R.string.tv_dday_format, dDay.toString())
+                binding.tvFestivalDDay.visibility = View.VISIBLE
+                binding.tvFestivalDDayEnd.visibility = View.GONE
             }
         }
     }

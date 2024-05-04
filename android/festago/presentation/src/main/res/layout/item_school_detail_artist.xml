@@ -40,9 +40,11 @@
 
         <TextView
             android:id="@+id/tvFestivalName"
-            style="@style/B4Medium12Lh14"
+            style="@style/B4Medium12Lh14dp"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@{artist.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/cvFestivalImage"

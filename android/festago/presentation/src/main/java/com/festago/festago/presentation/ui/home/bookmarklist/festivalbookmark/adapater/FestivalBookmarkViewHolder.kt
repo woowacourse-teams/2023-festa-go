@@ -37,7 +37,10 @@ class FestivalBookmarkViewHolder(
 
         val dDayView = binding.tvFestivalDDay
         when {
-            LocalDate.now() > item.endDate -> Unit
+            LocalDate.now() > item.endDate -> {
+                binding.tvFestivalDDay.visibility = View.GONE
+                binding.tvFestivalDDayEnd.visibility = View.VISIBLE
+            }
 
             LocalDate.now() >= item.startDate -> {
                 dDayView.text = context.getString(R.string.festival_list_tv_dday_in_progress)
@@ -46,9 +49,13 @@ class FestivalBookmarkViewHolder(
                     context,
                     R.drawable.bg_festival_list_dday_in_progress,
                 )
+                binding.tvFestivalDDay.visibility = View.VISIBLE
+                binding.tvFestivalDDayEnd.visibility = View.GONE
             }
 
             LocalDate.now() >= item.startDate.minusDays(7) -> {
+                binding.tvFestivalDDay.visibility = View.VISIBLE
+                binding.tvFestivalDDayEnd.visibility = View.GONE
                 dDayView.setTextColor(context.getColor(R.color.background_gray_01))
                 dDayView.text = context.getString(
                     R.string.festival_list_tv_dday_format,
@@ -58,6 +65,8 @@ class FestivalBookmarkViewHolder(
             }
 
             else -> binding.tvFestivalDDay.apply {
+                binding.tvFestivalDDay.visibility = View.VISIBLE
+                binding.tvFestivalDDayEnd.visibility = View.GONE
                 dDayView.setTextColor(context.getColor(R.color.background_gray_01))
                 dDayView.text = context.getString(
                     R.string.festival_list_tv_dday_format,
