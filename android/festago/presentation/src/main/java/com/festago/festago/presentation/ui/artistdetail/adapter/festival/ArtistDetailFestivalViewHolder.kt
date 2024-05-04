@@ -1,7 +1,6 @@
 package com.festago.festago.presentation.ui.artistdetail.adapter.festival
 
 import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.Rect
 import android.util.TypedValue
 import android.view.LayoutInflater
