@@ -144,7 +144,6 @@ class MyPageFragment : Fragment() {
             vm.event.collect { event ->
                 when (event) {
                     MyPageEvent.ShowSignIn -> {
-                        requireActivity().finishAffinity()
                         startActivity(SignInActivity.getIntent(requireContext()))
                     }
                 }
