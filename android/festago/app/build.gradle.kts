@@ -16,7 +16,7 @@ android {
         applicationId = "com.festago.festago"
         minSdk = 28
         targetSdk = 34
-        versionCode = 9
+        versionCode = 10
         versionName = "2.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
