@@ -13,6 +13,8 @@ import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.data.jpa.repository.support.Querydsl;
@@ -22,6 +24,7 @@ import org.springframework.util.Assert;
 
 public abstract class QueryDslRepositorySupport {
 
+    private static final int NEXT_PAGE_OFFSET = 1;
     private final Class<?> domainClass;
     private Querydsl querydsl;
     private JPAQueryFactory queryFactory;
@@ -65,5 +68,23 @@ public abstract class QueryDslRepositorySupport {
         List<T> content = querydsl.applyPagination(pageable, contentQuery).fetch();
         JPAQuery<Long> countQuery = countQueryFunction.apply(queryFactory);
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    protected <T> Slice<T> applySlice(
+        Pageable pageable,
+        Function<JPAQueryFactory, JPAQuery<T>> contentQueryFunction
+    ) {
+        List<T> content = contentQueryFunction.apply(queryFactory)
+            .limit(pageable.getPageSize() + (long) NEXT_PAGE_OFFSET)
+            .fetch();
+        if (content.size() > pageable.getPageSize()) {
+            removeTemporaryContent(content);
+            return new SliceImpl<>(content, pageable, true);
+        }
+        return new SliceImpl<>(content, pageable, false);
+    }
+
+    private <T> void removeTemporaryContent(List<T> content) {
+        content.remove(content.size() - NEXT_PAGE_OFFSET);
     }
 }

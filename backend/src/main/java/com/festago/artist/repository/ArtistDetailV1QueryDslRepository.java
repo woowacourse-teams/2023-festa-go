@@ -19,19 +19,15 @@ import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.socialmedia.domain.OwnerType;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport {
-
-    private static final int NEXT_PAGE_DATA_TEMP_COUNT = 1;
 
     public ArtistDetailV1QueryDslRepository() {
         super(Artist.class);
@@ -48,12 +44,14 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
                         artist.name,
                         artist.profileImage,
                         artist.backgroundImageUrl,
-                        list(new QArtistMediaV1Response(
-                            socialMedia.mediaType.stringValue(),
-                            socialMedia.name,
-                            socialMedia.logoUrl,
-                            socialMedia.url
-                        ).skipNulls())
+                        list(
+                            new QArtistMediaV1Response(
+                                socialMedia.mediaType.stringValue(),
+                                socialMedia.name,
+                                socialMedia.logoUrl,
+                                socialMedia.url
+                            ).skipNulls()
+                        )
                     )
                 )
             );
@@ -66,44 +64,26 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
     }
 
     public Slice<ArtistFestivalDetailV1Response> findArtistFestivals(ArtistFestivalSearchCondition condition) {
-        List<ArtistFestivalDetailV1Response> response =
-            selectArtistDetailResponse(condition.artistId())
+        Pageable pageable = condition.pageable();
+        Long artistId = condition.artistId();
+        return applySlice(
+            pageable,
+            query -> query.select(new QArtistFestivalDetailV1Response(
+                    festival.id,
+                    festival.name,
+                    festival.festivalDuration.startDate,
+                    festival.festivalDuration.endDate,
+                    festival.posterImageUrl,
+                    festivalQueryInfo.artistInfo
+                ))
+                .from(stageArtist)
+                .innerJoin(stage).on(stageArtist.artistId.eq(artistId).and(stage.id.eq(stageArtist.stageId)))
+                .innerJoin(festival).on(festival.id.eq(stage.festival.id))
+                .leftJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId))
                 .where(getDynamicWhere(condition.isPast(), condition.lastStartDate(), condition.lastFestivalId(),
                     condition.currentTime()))
-                .limit(condition.pageable().getPageSize() + NEXT_PAGE_DATA_TEMP_COUNT)
                 .orderBy(getDynamicOrderBy(condition.isPast()))
-                .fetch();
-
-        return makeResponse(condition, response);
-    }
-
-    private SliceImpl<ArtistFestivalDetailV1Response> makeResponse(
-        ArtistFestivalSearchCondition condition, List<ArtistFestivalDetailV1Response> content) {
-        Pageable pageable = condition.pageable();
-        if (content.size() > pageable.getPageSize()) {
-            removeTemporaryContent(content);
-            return new SliceImpl<>(content, pageable, true);
-        }
-        return new SliceImpl<>(content, condition.pageable(), false);
-    }
-
-    private void removeTemporaryContent(List<ArtistFestivalDetailV1Response> content) {
-        content.remove(content.size() - NEXT_PAGE_DATA_TEMP_COUNT);
-    }
-
-    private JPAQuery<ArtistFestivalDetailV1Response> selectArtistDetailResponse(Long artistId) {
-        return select(
-            new QArtistFestivalDetailV1Response(
-                festival.id,
-                festival.name,
-                festival.festivalDuration.startDate,
-                festival.festivalDuration.endDate,
-                festival.posterImageUrl,
-                festivalQueryInfo.artistInfo))
-            .from(stageArtist)
-            .innerJoin(stage).on(stageArtist.artistId.eq(artistId).and(stage.id.eq(stageArtist.stageId)))
-            .innerJoin(festival).on(festival.id.eq(stage.festival.id))
-            .leftJoin(festivalQueryInfo).on(festival.id.eq(festivalQueryInfo.festivalId));
+        );
     }
 
     private BooleanExpression getDynamicWhere(
@@ -140,7 +120,7 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
         return festival.festivalDuration.endDate.goe(currentTime);
     }
 
-    private OrderSpecifier<LocalDate>[] getDynamicOrderBy(Boolean isPast) {
+    private OrderSpecifier<LocalDate>[] getDynamicOrderBy(boolean isPast) {
         if (isPast) {
             return new OrderSpecifier[]{festival.festivalDuration.endDate.desc()};
         }

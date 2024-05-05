@@ -9,7 +9,7 @@ public record FestivalSearchCondition(
     SchoolRegion region,
     LocalDate lastStartDate,
     Long lastFestivalId,
-    Pageable page,
+    Pageable pageable,
     LocalDate currentTime
 ) {
 
