@@ -6,13 +6,15 @@ import com.festago.festago.data.util.runCatchingResponse
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.school.SchoolInfo
 import com.festago.festago.domain.repository.SchoolRepository
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 import javax.inject.Inject
 
 class DefaultSchoolRepository @Inject constructor(
-    private val schoolRetrofitService: SchoolRetrofitService
+    private val schoolRetrofitService: SchoolRetrofitService,
 ) : SchoolRepository {
-    override suspend fun loadSchoolInfo(schoolId: Long): Result<SchoolInfo> {
+    override suspend fun loadSchoolInfo(schoolId: Long, delayTimeMillis: Long): Result<SchoolInfo> {
+        delay(delayTimeMillis)
         return runCatchingResponse {
             schoolRetrofitService.getSchool(schoolId)
         }.onSuccessOrCatch { it.toDomain() }
@@ -23,7 +25,7 @@ class DefaultSchoolRepository @Inject constructor(
         size: Int?,
         isPast: Boolean?,
         lastFestivalId: Int?,
-        lastStartDate: LocalDate?
+        lastStartDate: LocalDate?,
     ): Result<FestivalsPage> {
         return runCatchingResponse {
             schoolRetrofitService.getSchoolFestivals(

@@ -17,8 +17,11 @@ import androidx.navigation.fragment.navArgs
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentFestivalDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs
+import com.festago.festago.presentation.ui.bindingadapter.setImage
 import com.festago.festago.presentation.ui.festivaldetail.adapter.stage.StageListAdapter
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailArgs
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -50,10 +53,25 @@ class FestivalDetailFragment : Fragment() {
     }
 
     private fun initView() {
-        val id = args.festivalId
+        loadFestivalDetail()
+        initStageAdapter()
+        initButton()
+    }
+
+    private fun loadFestivalDetail() {
+        binding.ivFestivalPoster.setImage(args.festival.posterImageUrl)
+        binding.ivFestivalBackground.setImage(args.festival.posterImageUrl)
+        binding.tvFestivalName.text = args.festival.name
+        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
+        vm.loadFestivalDetail(args.festival.id, delayTimeMillis)
+    }
+
+    private fun initStageAdapter() {
         adapter = StageListAdapter()
         binding.rvStageList.adapter = adapter
-        vm.loadFestivalDetail(id)
+    }
+
+    private fun initButton() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -85,7 +103,9 @@ class FestivalDetailFragment : Fragment() {
         binding.successUiState = uiState
         binding.ivBookmark.isSelected = uiState.bookmarked
         binding.tvFestivalDDay.setFestivalDDay(uiState.festival.startDate, uiState.festival.endDate)
-        binding.ivFestivalBackground.setColorFilter(Color.parseColor("#66000000"))
+        binding.ivFestivalPoster.setImage(uiState.festival.posterImageUrl)
+        binding.ivFestivalBackground.setImage(uiState.festival.posterImageUrl)
+        binding.tvFestivalName.text = uiState.festival.name
         adapter.submitList(uiState.stages)
         binding.llcFestivalSocialMedia.removeAllViews()
         uiState.festival.socialMedias.forEach { media ->
@@ -98,7 +118,7 @@ class FestivalDetailFragment : Fragment() {
     }
 
     private fun handleError(uiState: FestivalDetailUiState.Error) {
-        binding.refreshListener = { uiState.refresh(args.festivalId) }
+        binding.refreshListener = { uiState.refresh(args.festival.id) }
     }
 
     private fun TextView.setFestivalDDay(startDate: LocalDate, endDate: LocalDate) {
@@ -147,7 +167,7 @@ class FestivalDetailFragment : Fragment() {
             is FestivalDetailEvent.ShowArtistDetail -> {
                 findNavController().navigate(
                     FestivalDetailFragmentDirections.actionFestivalDetailFragmentToArtistDetailFragment(
-                        event.artistId,
+                        with(event.artist) { ArtistDetailArgs(id, name, imageUrl) },
                     ),
                 )
             }
@@ -155,12 +175,24 @@ class FestivalDetailFragment : Fragment() {
             is FestivalDetailEvent.ShowSchoolDetail -> {
                 findNavController().navigate(
                     FestivalDetailFragmentDirections.actionFestivalDetailFragmentToSchoolDetailFragment(
-                        event.schoolId,
+                        with(event.school) { SchoolDetailArgs(id, name, imageUrl) },
                     ),
                 )
             }
 
-            is FestivalDetailEvent.FailedToFetchBookmarkList -> {
+            is FestivalDetailEvent.BookmarkSuccess -> {
+                Toast.makeText(
+                    requireContext(),
+                    if (event.isBookmarked) {
+                        getString(R.string.festival_detail_bookmark_success)
+                    } else {
+                        getString(R.string.festival_detail_bookmark_cancel)
+                    },
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+
+            is FestivalDetailEvent.BookmarkFailure -> {
                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
             }
         }

@@ -1,7 +1,6 @@
 package com.festago.festago.presentation.ui.schooldetail
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs
+import com.festago.festago.presentation.ui.bindingadapter.setImage
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs
 import com.festago.festago.presentation.ui.schooldetail.uistate.MoreItemUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
 import com.festago.festago.presentation.util.repeatOnStarted
@@ -42,7 +45,7 @@ class SchoolDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView(args.schoolId)
+        initView()
         initObserve()
     }
 
@@ -60,10 +63,21 @@ class SchoolDetailFragment : Fragment() {
         }
     }
 
-    private fun initView(schoolId: Long) {
+    private fun initView() {
         adapter = SchoolFestivalListAdapter()
         binding.rvFestivalList.adapter = adapter
-        vm.loadSchoolDetail(schoolId)
+        loadSchoolDetail()
+        initButton()
+    }
+
+    private fun loadSchoolDetail() {
+        binding.tvSchoolName.text = args.school.name
+        binding.ivSchoolLogoImage.setImage(args.school.profileImageUrl)
+        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
+        vm.loadSchoolDetail(args.school.id, delayTimeMillis)
+    }
+
+    private fun initButton() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -79,15 +93,13 @@ class SchoolDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: SchoolDetailUiState.Success) {
         binding.successUiState = uiState
-
         binding.ivBookmark.isSelected = uiState.bookmarked
-
-        binding.ivSchoolBackground.setColorFilter(Color.parseColor("#66000000"))
-
+        binding.tvSchoolName.text = uiState.schoolInfo.schoolName
+        binding.ivSchoolLogoImage.setImage(uiState.schoolInfo.logoUrl)
         val items: List<Any> = if (uiState.isLast) {
             uiState.festivals
         } else {
-            uiState.festivals + MoreItemUiState { vm.loadMoreSchoolFestivals(args.schoolId) }
+            uiState.festivals + MoreItemUiState { vm.loadMoreSchoolFestivals(args.school.id) }
         }
         adapter.submitList(items)
 
@@ -103,27 +115,39 @@ class SchoolDetailFragment : Fragment() {
     }
 
     private fun handleError(uiState: SchoolDetailUiState.Error) {
-        binding.refreshListener = { uiState.refresh(args.schoolId) }
+        binding.refreshListener = { uiState.refresh(args.school.id) }
     }
 
     private fun handleEvent(event: SchoolDetailEvent) = when (event) {
         is SchoolDetailEvent.ShowArtistDetail -> {
             findNavController().navigate(
                 SchoolDetailFragmentDirections.actionSchoolDetailFragmentToArtistDetailFragment(
-                    event.artistId
-                )
+                    with(event.artist) { ArtistDetailArgs(id, name, imageUrl) },
+                ),
             )
         }
 
         is SchoolDetailEvent.ShowFestivalDetail -> {
             findNavController().navigate(
                 SchoolDetailFragmentDirections.actionSchoolDetailFragmentToFestivalDetailFragment(
-                    event.festivalId
-                )
+                    with(event.festival) { FestivalDetailArgs(id, name, imageUrl) },
+                ),
             )
         }
 
-        is SchoolDetailEvent.FailedToFetchBookmarkList -> {
+        is SchoolDetailEvent.BookmarkSuccess -> {
+            Toast.makeText(
+                requireContext(),
+                if (event.isBookmarked) {
+                    getString(R.string.school_detail_bookmark_success)
+                } else {
+                    getString(R.string.school_detail_bookmark_cancel)
+                },
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
+
+        is SchoolDetailEvent.BookmarkFailure -> {
             Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
         }
     }

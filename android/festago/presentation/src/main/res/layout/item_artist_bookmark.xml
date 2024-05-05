@@ -11,10 +11,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{()->artist.onArtistDetail.invoke(artist)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="14dp"
-        onSingleClick="@{()->artist.onArtistDetail.invoke(artist.id)}"
         android:layout_marginTop="16dp">
 
         <androidx.cardview.widget.CardView
@@ -48,6 +48,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center|top"
             android:lineHeight="16dp"
+            android:ellipsize="end"
             android:text="@{artist.name}"
             android:textColor="@color/contents_gray_07"
             app:layout_constraintEnd_toEndOf="@id/cvFestivalImage"

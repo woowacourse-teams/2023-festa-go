@@ -4,10 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
+import com.festago.festago.domain.model.bookmark.BookmarkType
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.repository.ArtistRepository
 import com.festago.festago.domain.repository.BookmarkRepository
-import com.festago.festago.presentation.ui.artistdetail.ArtistDetailEvent.FailedToFetchBookmarkList
+import com.festago.festago.domain.repository.UserRepository
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailEvent.BookmarkFailure
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailEvent.BookmarkSuccess
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailEvent.ShowArtistDetail
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailEvent.ShowFestivalDetail
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.FestivalItemUiState
@@ -27,6 +32,7 @@ import javax.inject.Inject
 class ArtistDetailViewModel @Inject constructor(
     private val artistRepository: ArtistRepository,
     private val bookmarkRepository: BookmarkRepository,
+    private val userRepository: UserRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _event: MutableSharedFlow<ArtistDetailEvent> = MutableSharedFlow()
@@ -36,23 +42,28 @@ class ArtistDetailViewModel @Inject constructor(
         MutableStateFlow(ArtistDetailUiState.Loading)
     val uiState: StateFlow<ArtistDetailUiState> = _uiState.asStateFlow()
 
-    fun loadArtistDetail(id: Long, refresh: Boolean = false) {
+    fun loadArtistDetail(id: Long, delayTimeMillis: Long, refresh: Boolean = false) {
         if (!refresh && _uiState.value is ArtistDetailUiState.Success) return
 
         viewModelScope.launch {
             runCatching {
-                val deferredArtistDetail = async { artistRepository.loadArtistDetail(id) }
+                val deferredArtistDetail =
+                    async { artistRepository.loadArtistDetail(id, delayTimeMillis) }
                 val deferredFestivals = async { artistRepository.loadArtistFestivals(id, 10) }
-                val deferredBookmarks = async { bookmarkRepository.getArtistBookmarks() }
                 val artist = deferredArtistDetail.await().getOrThrow()
                 val festivalPage = deferredFestivals.await().getOrThrow()
-                val artistBookmarks = deferredBookmarks.await().getOrThrow()
+
+                val isBookmarked = if (userRepository.isSigned()) {
+                    bookmarkRepository.isBookmarked(id, BookmarkType.ARTIST)
+                } else {
+                    false
+                }
 
                 _uiState.value = ArtistDetailUiState.Success(
                     artist = artist,
-                    bookMarked = artistBookmarks.firstOrNull { it.artist.id == artist.id.toLong() } != null,
+                    bookMarked = isBookmarked,
                     festivals = festivalPage.toUiState(),
-                    isLast = festivalPage.isLastPage,
+                    userRepository.isSigned(),
                     onBookmarkClick = ::toggleArtistBookmark,
                 )
 
@@ -97,25 +108,39 @@ class ArtistDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val uiState = uiState.value as? ArtistDetailUiState.Success ?: return@launch
 
+            if (!userRepository.isSigned()) {
+                _event.emit(BookmarkFailure("로그인이 필요합니다"))
+                return@launch
+            }
+
             if (uiState.bookMarked) {
+                _uiState.value = uiState.copy(bookMarked = false)
                 bookmarkRepository.deleteArtistBookmark(artistId.toLong())
-                    .onSuccess { _uiState.value = uiState.copy(bookMarked = false) }
-                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
+                    .onSuccess { _event.emit(BookmarkSuccess(false)) }
+                    .onFailure {
+                        _uiState.value = uiState.copy(bookMarked = true)
+                        _event.emit(BookmarkFailure("북마크를 해제할 수 없습니다. 인터넷 연결을 확인해주세요"))
+                    }
             } else {
+                _uiState.value = uiState.copy(bookMarked = true)
                 bookmarkRepository.addArtistBookmark(artistId.toLong())
-                    .onSuccess { _uiState.value = uiState.copy(bookMarked = true) }
-                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
+                    .onSuccess { _event.emit(BookmarkSuccess(true)) }
+                    .onFailure {
+                        _uiState.value = uiState.copy(bookMarked = false)
+                        _event.emit(BookmarkFailure("다른 북마크를 해제하거나 인터넷 연결을 확인해주세요"))
+                    }
             }
         }
     }
+
     private fun handleFailure(key: String, throwable: Throwable) {
         _uiState.value = ArtistDetailUiState.Error {
             _uiState.value = ArtistDetailUiState.Loading
-            loadArtistDetail(it)
+            loadArtistDetail(it, 0L)
         }
         analyticsHelper.logNetworkFailure(
             key = key,
-            value = throwable.message.toString()
+            value = throwable.message.toString(),
         )
     }
 
@@ -131,16 +156,16 @@ class ArtistDetailViewModel @Inject constructor(
                     id = artist.id,
                     name = artist.name,
                     imageUrl = artist.imageUrl,
-                    onArtistDetailClick = { id ->
+                    onArtistDetailClick = { artistDetail ->
                         viewModelScope.launch {
-                            _event.emit(ArtistDetailEvent.ShowArtistDetail(id))
+                            _event.emit(ShowArtistDetail(artistDetail))
                         }
                     },
                 )
             },
-            onFestivalDetailClick = { id ->
+            onFestivalDetailClick = { festivalDetail ->
                 viewModelScope.launch {
-                    _event.emit(ArtistDetailEvent.ShowFestivalDetail(id))
+                    _event.emit(ShowFestivalDetail(festivalDetail))
                 }
             },
         )

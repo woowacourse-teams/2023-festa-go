@@ -50,6 +50,7 @@ class SignInActivity : AppCompatActivity() {
         repeatOnStarted(this) {
             vm.event.collect {
                 when (it) {
+                    SignInEvent.SignInSuccess -> handleSignInSuccess()
                     SignInEvent.ShowHome -> navigateToHome()
                     SignInEvent.SignInFailure -> handleSignInFailure()
                 }
@@ -88,9 +89,18 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleSignInSuccess() {
+        Toast.makeText(
+            this,
+            getString(R.string.sign_in_success),
+            Toast.LENGTH_SHORT,
+        ).show()
+        navigateToHome()
+    }
+
     private fun navigateToHome() {
+        finishAffinity()
         startActivity(HomeActivity.getIntent(this))
-        finish()
     }
 
     private fun handleSignInFailure() {

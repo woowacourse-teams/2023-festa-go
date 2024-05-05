@@ -4,10 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
+import com.festago.festago.domain.model.bookmark.BookmarkType
 import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.repository.BookmarkRepository
 import com.festago.festago.domain.repository.SchoolRepository
-import com.festago.festago.presentation.ui.schooldetail.SchoolDetailEvent.FailedToFetchBookmarkList
+import com.festago.festago.domain.repository.UserRepository
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailEvent.BookmarkFailure
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailEvent.BookmarkSuccess
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailEvent.ShowArtistDetail
+import com.festago.festago.presentation.ui.schooldetail.SchoolDetailEvent.ShowFestivalDetail
 import com.festago.festago.presentation.ui.schooldetail.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.FestivalItemUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
@@ -27,6 +32,7 @@ import javax.inject.Inject
 class SchoolDetailViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository,
     private val bookmarkRepository: BookmarkRepository,
+    private val userRepository: UserRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
@@ -36,20 +42,25 @@ class SchoolDetailViewModel @Inject constructor(
     private val _event: MutableSharedFlow<SchoolDetailEvent> = MutableSharedFlow()
     val event: SharedFlow<SchoolDetailEvent> = _event.asSharedFlow()
 
-    fun loadSchoolDetail(schoolId: Long) {
+    fun loadSchoolDetail(schoolId: Long, delayTimeMillis: Long) {
         viewModelScope.launch {
-            val deferredSchoolInfo = async { schoolRepository.loadSchoolInfo(schoolId) }
+            val deferredSchoolInfo =
+                async { schoolRepository.loadSchoolInfo(schoolId, delayTimeMillis) }
             val deferredFestivalPage = async { schoolRepository.loadSchoolFestivals(schoolId) }
-            val deferredBookmarks = async { bookmarkRepository.getSchoolBookmarks() }
 
             runCatching {
                 val schoolInfo = deferredSchoolInfo.await().getOrThrow()
                 val festivalPage = deferredFestivalPage.await().getOrThrow()
-                val schoolBookmarks = deferredBookmarks.await().getOrThrow()
+
+                val isBookmarked = if (userRepository.isSigned()) {
+                    bookmarkRepository.isBookmarked(schoolId, BookmarkType.SCHOOL)
+                } else {
+                    false
+                }
 
                 _uiState.value = SchoolDetailUiState.Success(
                     schoolInfo = schoolInfo,
-                    bookmarked = schoolBookmarks.firstOrNull { it.school.id == schoolInfo.id.toLong() } != null,
+                    bookmarked = isBookmarked,
                     festivals = festivalPage.festivals.map { it.toUiState() },
                     isLast = festivalPage.isLastPage,
                     onBookmarkClick = { schoolId -> toggleSchoolBookmark(schoolId) },
@@ -95,14 +106,26 @@ class SchoolDetailViewModel @Inject constructor(
         val uiState = uiState.value as? SchoolDetailUiState.Success ?: return
 
         viewModelScope.launch {
+            if (!userRepository.isSigned()) {
+                _event.emit(BookmarkFailure("로그인이 필요합니다"))
+                return@launch
+            }
             if (uiState.bookmarked) {
+                _uiState.value = uiState.copy(bookmarked = false)
                 bookmarkRepository.deleteSchoolBookmark(schoolId.toLong())
-                    .onSuccess { _uiState.value = uiState.copy(bookmarked = false) }
-                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
+                    .onSuccess { _event.emit(BookmarkSuccess(false)) }
+                    .onFailure {
+                        _uiState.value = uiState.copy(bookmarked = true)
+                        _event.emit(BookmarkFailure("북마크를 해제할 수 없습니다. 인터넷 연결을 확인해주세요"))
+                    }
             } else {
+                _uiState.value = uiState.copy(bookmarked = true)
                 bookmarkRepository.addSchoolBookmark(uiState.schoolInfo.id.toLong())
-                    .onSuccess { _uiState.value = uiState.copy(bookmarked = true) }
-                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
+                    .onSuccess { _event.emit(BookmarkSuccess(true)) }
+                    .onFailure {
+                        _uiState.value = uiState.copy(bookmarked = false)
+                        _event.emit(BookmarkFailure("다른 북마크를 해제하거나 인터넷 연결을 확인해주세요"))
+                    }
             }
         }
     }
@@ -110,11 +133,11 @@ class SchoolDetailViewModel @Inject constructor(
     private fun handleFailure(key: String, throwable: Throwable) {
         _uiState.value = SchoolDetailUiState.Error {
             _uiState.value = SchoolDetailUiState.Loading
-            loadSchoolDetail(it)
+            loadSchoolDetail(it, 0L)
         }
         analyticsHelper.logNetworkFailure(
             key = key,
-            value = throwable.message.toString()
+            value = throwable.message.toString(),
         )
     }
 
@@ -129,16 +152,16 @@ class SchoolDetailViewModel @Inject constructor(
                 id = artist.id,
                 name = artist.name,
                 imageUrl = artist.imageUrl,
-                onArtistDetailClick = { id ->
+                onArtistDetailClick = { artistUiState ->
                     viewModelScope.launch {
-                        _event.emit(SchoolDetailEvent.ShowArtistDetail(id))
+                        _event.emit(ShowArtistDetail(artistUiState))
                     }
                 },
             )
         },
-        onFestivalDetailClick = { id ->
+        onFestivalDetailClick = { festivalUiState ->
             viewModelScope.launch {
-                _event.emit(SchoolDetailEvent.ShowFestivalDetail(id))
+                _event.emit(ShowFestivalDetail(festivalUiState))
             }
         },
     )

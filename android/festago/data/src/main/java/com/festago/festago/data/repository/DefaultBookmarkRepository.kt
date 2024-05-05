@@ -1,5 +1,6 @@
 package com.festago.festago.data.repository
 
+import com.festago.festago.data.datasource.bookmark.BookmarkDataSource
 import com.festago.festago.data.service.BookmarkRetrofitService
 import com.festago.festago.data.util.onSuccessOrCatch
 import com.festago.festago.data.util.runCatchingResponse
@@ -13,10 +14,13 @@ import javax.inject.Inject
 
 class DefaultBookmarkRepository @Inject constructor(
     private val bookmarkRetrofitService: BookmarkRetrofitService,
+    private val bookmarkDataSource: BookmarkDataSource,
 ) : BookmarkRepository {
     override suspend fun addFestivalBookmark(festivalId: Long): Result<Unit> {
         return runCatchingResponse {
             bookmarkRetrofitService.addBookmark(festivalId, BookmarkType.FESTIVAL)
+        }.onSuccessOrCatch {
+            bookmarkDataSource.addBookmark(festivalId, BookmarkType.FESTIVAL)
         }
     }
 
@@ -29,19 +33,27 @@ class DefaultBookmarkRepository @Inject constructor(
                 festivalIds = festivalIds,
                 festivalBookmarkOrder = festivalBookmarkOrder,
             )
-        }.onSuccessOrCatch { it.map { festival -> festival.toDomain() } }
+        }.onSuccessOrCatch { response ->
+            response.map { festival -> festival.toDomain() }.also { festivalBookmarks ->
+                bookmarkDataSource.setBookmarks(
+                    BookmarkType.FESTIVAL,
+                    festivalBookmarks.map { it.festival.id },
+                )
+            }
+        }
     }
 
     override suspend fun getFestivalBookmarkIds(): Result<List<Long>> {
         return runCatchingResponse {
             bookmarkRetrofitService.getFestivalBookmarkIds()
-        }
+        }.onSuccessOrCatch { it.also { festivalIds -> storeFestivalBookmarks(festivalIds) } }
     }
 
     override suspend fun deleteFestivalBookmark(festivalId: Long): Result<Unit> {
         val result = runCatchingResponse {
             bookmarkRetrofitService.deleteBookmark(festivalId, BookmarkType.FESTIVAL)
         }
+        result.onSuccess { bookmarkDataSource.deleteBookmark(festivalId, BookmarkType.FESTIVAL) }
         result.onFailure { if (it.message?.contains("204") == true) return Result.success(Unit) }
         return result
     }
@@ -49,14 +61,17 @@ class DefaultBookmarkRepository @Inject constructor(
     override suspend fun addSchoolBookmark(schoolId: Long): Result<Unit> {
         return runCatchingResponse {
             bookmarkRetrofitService.addBookmark(schoolId, BookmarkType.SCHOOL)
+        }.onSuccessOrCatch {
+            bookmarkDataSource.addBookmark(schoolId, BookmarkType.SCHOOL)
         }
     }
 
     override suspend fun getSchoolBookmarks(): Result<List<SchoolBookmark>> {
         return runCatchingResponse {
             bookmarkRetrofitService.getSchoolBookmarks()
-        }.onSuccessOrCatch {
-            it.map { school -> school.toDomain() }
+        }.onSuccessOrCatch { response ->
+            response.map { schools -> schools.toDomain() }
+                .also { schoolBookmarks -> storeSchoolBookmarks(schoolBookmarks) }
         }
     }
 
@@ -64,6 +79,7 @@ class DefaultBookmarkRepository @Inject constructor(
         val result = runCatchingResponse {
             bookmarkRetrofitService.deleteBookmark(schoolId, BookmarkType.SCHOOL)
         }
+        result.onSuccess { bookmarkDataSource.deleteBookmark(schoolId, BookmarkType.SCHOOL) }
         result.onFailure { if (it.message?.contains("204") == true) return Result.success(Unit) }
         return result
     }
@@ -71,7 +87,7 @@ class DefaultBookmarkRepository @Inject constructor(
     override suspend fun addArtistBookmark(artistId: Long): Result<Unit> {
         return runCatchingResponse {
             bookmarkRetrofitService.addBookmark(artistId, BookmarkType.ARTIST)
-        }
+        }.onSuccessOrCatch { bookmarkDataSource.addBookmark(artistId, BookmarkType.ARTIST) }
     }
 
     override suspend fun getArtistBookmarks(): Result<List<ArtistBookmark>> {
@@ -79,6 +95,7 @@ class DefaultBookmarkRepository @Inject constructor(
             bookmarkRetrofitService.getArtistBookmarks()
         }.onSuccessOrCatch {
             it.map { artist -> artist.toDomain() }
+                .also { artistBookmarks -> storeArtistBookmarks(artistBookmarks) }
         }.onFailure {
             it.printStackTrace()
         }
@@ -88,7 +105,30 @@ class DefaultBookmarkRepository @Inject constructor(
         val result = runCatchingResponse {
             bookmarkRetrofitService.deleteBookmark(artistId, BookmarkType.ARTIST)
         }
+        result.onSuccess { bookmarkDataSource.deleteBookmark(artistId, BookmarkType.ARTIST) }
         result.onFailure { if (it.message?.contains("204") == true) return Result.success(Unit) }
         return result
+    }
+
+    override fun isBookmarked(id: Long, type: BookmarkType): Boolean {
+        return bookmarkDataSource.isBookmarked(id, type)
+    }
+
+    private fun storeSchoolBookmarks(schoolBookmarks: List<SchoolBookmark>) {
+        bookmarkDataSource.setBookmarks(
+            BookmarkType.SCHOOL,
+            schoolBookmarks.map { it.school.id },
+        )
+    }
+
+    private fun storeArtistBookmarks(artistBookmarks: List<ArtistBookmark>) {
+        bookmarkDataSource.setBookmarks(
+            BookmarkType.ARTIST,
+            artistBookmarks.map { it.artist.id },
+        )
+    }
+
+    private fun storeFestivalBookmarks(festivalBookmarks: List<Long>) {
+        bookmarkDataSource.setBookmarks(BookmarkType.FESTIVAL, festivalBookmarks)
     }
 }

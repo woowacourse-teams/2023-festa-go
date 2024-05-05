@@ -11,10 +11,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{()-> artist.onArtistDetailClick.invoke(artist)}"
         android:layout_width="66dp"
-        android:layout_height="66dp"
-        onSingleClick="@{()-> artist.onArtistDetailClick.invoke(artist.id)}"
-        >
+        android:layout_height="66dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvFestivalImage"
@@ -42,15 +41,19 @@
         <TextView
             android:id="@+id/tvFestivalName"
             style="@style/B4Medium12Lh14"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
             android:text="@{artist.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/cvFestivalImage"
             app:layout_constraintStart_toStartOf="@id/cvFestivalImage"
             app:layout_constraintTop_toBottomOf="@id/cvFestivalImage"
             app:layout_constraintVertical_weight="18"
-            tools:text="윤하" />
+            tools:text="뉴진스뉴진스" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

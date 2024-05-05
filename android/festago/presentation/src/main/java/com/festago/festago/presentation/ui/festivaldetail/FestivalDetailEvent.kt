@@ -1,7 +1,11 @@
 package com.festago.festago.presentation.ui.festivaldetail
 
+import com.festago.festago.domain.model.school.School
+import com.festago.festago.presentation.ui.festivaldetail.uiState.ArtistItemUiState
+
 sealed interface FestivalDetailEvent {
-    class ShowArtistDetail(val artistId: Long) : FestivalDetailEvent
-    class ShowSchoolDetail(val schoolId: Long) : FestivalDetailEvent
-    class FailedToFetchBookmarkList(val message: String) : FestivalDetailEvent
+    class ShowArtistDetail(val artist: ArtistItemUiState) : FestivalDetailEvent
+    class ShowSchoolDetail(val school: School) : FestivalDetailEvent
+    class BookmarkSuccess(val isBookmarked: Boolean) : FestivalDetailEvent
+    class BookmarkFailure(val message: String) : FestivalDetailEvent
 }

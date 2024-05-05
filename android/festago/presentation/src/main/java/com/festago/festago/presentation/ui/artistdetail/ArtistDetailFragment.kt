@@ -11,11 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentArtistDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.artistdetail.adapter.festival.ArtistDetailAdapter
 import com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState
 import com.festago.festago.presentation.ui.artistdetail.uistate.MoreItemUiState
+import com.festago.festago.presentation.ui.bindingadapter.setImage
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs
 import com.festago.festago.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,15 +44,24 @@ class ArtistDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView(args.artistId)
+        initView()
         initObserve()
     }
 
-    private fun initView(id: Long) {
-        vm.loadArtistDetail(id)
-
+    private fun initView() {
+        loadArtistDetail()
         binding.rvToDoList.adapter = adapter
+        initButton()
+    }
 
+    private fun loadArtistDetail() {
+        binding.tvArtistName.text = args.artist.name
+        binding.ivProfileImage.setImage(args.artist.profileUrl)
+        val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
+        vm.loadArtistDetail(args.artist.id, delayTimeMillis)
+    }
+
+    private fun initButton() {
         binding.ivBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -79,13 +91,15 @@ class ArtistDetailFragment : Fragment() {
 
     private fun handleSuccess(uiState: ArtistDetailUiState.Success) {
         binding.successUiState = uiState
+        binding.tvArtistName.text = uiState.artist.artistName
+        binding.ivProfileImage.setImage(uiState.artist.profileUrl)
 
         binding.ivBookmark.isSelected = uiState.bookMarked
 
         val items: List<Any> = if (uiState.isLast) {
             uiState.festivals
         } else {
-            uiState.festivals + MoreItemUiState { vm.loadMoreArtistFestivals(args.artistId) }
+            uiState.festivals + MoreItemUiState { vm.loadMoreArtistFestivals(args.artist.id) }
         }
         adapter.submitList(items)
 
@@ -101,26 +115,40 @@ class ArtistDetailFragment : Fragment() {
     }
 
     private fun handleError(uiState: ArtistDetailUiState.Error) {
-        binding.refreshListener = { uiState.refresh(args.artistId) }
+        binding.refreshListener = { uiState.refresh(args.artist.id) }
     }
 
     private fun handleEvent(event: ArtistDetailEvent) = when (event) {
         is ArtistDetailEvent.ShowArtistDetail -> {
             findNavController().navigate(
-                ArtistDetailFragmentDirections.actionArtistDetailFragmentSelf(event.artistId),
+                ArtistDetailFragmentDirections.actionArtistDetailFragmentSelf(
+                    with(event.artist) { ArtistDetailArgs(id, name, imageUrl) },
+                ),
             )
         }
 
         is ArtistDetailEvent.ShowFestivalDetail -> {
             findNavController().navigate(
                 ArtistDetailFragmentDirections.actionArtistDetailFragmentToFestivalDetailFragment(
-                    event.festivalId,
+                    with(event.festival) { FestivalDetailArgs(id, name, imageUrl) },
                 ),
             )
         }
 
-        is ArtistDetailEvent.FailedToFetchBookmarkList -> {
-            Toast.makeText(requireContext(), "최대 북마크 갯수를 초과했습니다", Toast.LENGTH_SHORT)
+        is ArtistDetailEvent.BookmarkSuccess -> {
+            Toast.makeText(
+                requireContext(),
+                if (event.isBookmarked) {
+                    getString(R.string.artist_detail_bookmark_success)
+                } else {
+                    getString(R.string.artist_detail_bookmark_cancel)
+                },
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
+
+        is ArtistDetailEvent.BookmarkFailure -> {
+            Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT)
                 .show()
         }
     }

@@ -1,7 +1,6 @@
 package com.festago.festago.presentation.ui.home.festivallist.festival
 
 import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.Rect
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -13,12 +12,13 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.ItemFestivalListFestivalBinding
 import com.festago.festago.presentation.ui.home.festivallist.festival.artistlist.ArtistAdapter
+import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 import java.time.LocalDate
 
 class FestivalListFestivalViewHolder(
     private val binding: ItemFestivalListFestivalBinding,
-    onArtistClick: (Long) -> Unit,
+    onArtistClick: (ArtistUiState) -> Unit,
 ) :
     FestivalListViewHolder(binding) {
     private val artistAdapter = ArtistAdapter(onArtistClick)
@@ -46,6 +46,8 @@ class FestivalListFestivalViewHolder(
                     context,
                     R.drawable.bg_festival_list_dday_in_progress,
                 )
+                binding.tvFestivalDDay.visibility = View.VISIBLE
+                binding.tvFestivalDDayEnd.visibility = View.GONE
             }
 
             LocalDate.now() < item.startDate -> {
@@ -59,17 +61,13 @@ class FestivalListFestivalViewHolder(
                 binding.tvFestivalDDay.setTextColor(context.getColor(R.color.background_gray_01))
                 binding.tvFestivalDDay.text =
                     context.getString(R.string.tv_dday_format, dDay.toString())
+                binding.tvFestivalDDay.visibility = View.VISIBLE
+                binding.tvFestivalDDayEnd.visibility = View.GONE
             }
 
             else -> {
-                binding.tvFestivalDDay.setBackgroundColor(Color.TRANSPARENT)
-                binding.tvFestivalDDay.setTextColor(context.getColor(R.color.background_gray_01))
-                binding.tvFestivalDDay.background = AppCompatResources.getDrawable(
-                    context,
-                    R.drawable.bg_festival_detail_dday_end,
-                )
-                binding.tvFestivalDDay.text =
-                    context.getString(R.string.tv_dday_end)
+                binding.tvFestivalDDay.visibility = View.GONE
+                binding.tvFestivalDDayEnd.visibility = View.VISIBLE
             }
         }
     }
@@ -96,7 +94,7 @@ class FestivalListFestivalViewHolder(
     companion object {
         fun of(
             parent: ViewGroup,
-            onArtistClick: (Long) -> Unit,
+            onArtistClick: (ArtistUiState) -> Unit,
         ): FestivalListFestivalViewHolder {
             val binding = ItemFestivalListFestivalBinding.inflate(
                 LayoutInflater.from(parent.context),

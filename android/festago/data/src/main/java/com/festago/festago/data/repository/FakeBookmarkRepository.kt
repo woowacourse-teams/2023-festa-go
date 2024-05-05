@@ -2,6 +2,7 @@ package com.festago.festago.data.repository
 
 import com.festago.festago.domain.model.bookmark.ArtistBookmark
 import com.festago.festago.domain.model.bookmark.ArtistBookmarkInfo
+import com.festago.festago.domain.model.bookmark.BookmarkType
 import com.festago.festago.domain.model.bookmark.FestivalBookmark
 import com.festago.festago.domain.model.bookmark.FestivalBookmarkOrder
 import com.festago.festago.domain.model.bookmark.SchoolBookmark
@@ -110,5 +111,9 @@ class FakeBookmarkRepository @Inject constructor() : BookmarkRepository {
 
     override suspend fun deleteArtistBookmark(artistId: Long): Result<Unit> {
         TODO("Not yet implemented")
+    }
+
+    override fun isBookmarked(id: Long, type: BookmarkType): Boolean {
+        return false
     }
 }

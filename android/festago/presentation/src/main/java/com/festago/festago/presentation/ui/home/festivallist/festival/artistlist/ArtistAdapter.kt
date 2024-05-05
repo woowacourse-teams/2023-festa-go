@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState
 
 class ArtistAdapter(
-    private val onArtistClick: (Long) -> Unit,
+    private val onArtistClick: (ArtistUiState) -> Unit,
 ) : ListAdapter<ArtistUiState, ArtistViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
         return ArtistViewHolder.of(parent, onArtistClick)

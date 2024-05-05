@@ -14,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.presentation.databinding.FragmentFestivalListBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs
 import com.festago.festago.presentation.ui.home.festivallist.FestivalListFragmentDirections.actionFestivalListFragmentToSearchFragment
 import com.festago.festago.presentation.ui.home.festivallist.bottomsheet.RegionBottomSheetDialogFragment
 import com.festago.festago.presentation.ui.home.festivallist.festival.FestivalListAdapter
@@ -94,10 +96,10 @@ class FestivalListFragment : Fragment() {
 
     private fun initViewPager() {
         festivalListAdapter = FestivalListAdapter(
-            onArtistClick = { artistId ->
+            onArtistClick = { artist ->
                 findNavController().navigate(
                     FestivalListFragmentDirections.actionFestivalListFragmentToArtistDetailFragment(
-                        artistId,
+                        with(artist) { ArtistDetailArgs(id, name, imageUrl) },
                     ),
                 )
             },
@@ -141,7 +143,7 @@ class FestivalListFragment : Fragment() {
             is FestivalListEvent.ShowFestivalDetail -> {
                 findNavController().navigate(
                     FestivalListFragmentDirections.actionFestivalListFragmentToFestivalDetailFragment(
-                        event.festivalId,
+                        with(event.festival) { FestivalDetailArgs(id, name, imageUrl) },
                     ),
                 )
             }

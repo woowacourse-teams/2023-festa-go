@@ -133,21 +133,21 @@ class SearchViewModel @Inject constructor(
         onSchoolSearchClick = ::showSchoolDetail,
     )
 
-    private fun showFestivalDetail(festivalId: Long) {
+    private fun showFestivalDetail(festival: FestivalSearchItemUiState) {
         viewModelScope.launch {
-            _event.emit(SearchEvent.ShowFestivalDetail(festivalId))
+            _event.emit(SearchEvent.ShowFestivalDetail(festival))
         }
     }
 
-    private fun showArtistDetail(artistId: Long) {
+    private fun showArtistDetail(artist: ArtistUiState) {
         viewModelScope.launch {
-            _event.emit(SearchEvent.ShowArtistDetail(artistId))
+            _event.emit(SearchEvent.ShowArtistDetail(artist))
         }
     }
 
-    private fun showSchoolDetail(schoolId: Long) {
+    private fun showSchoolDetail(school: SchoolSearchItemUiState) {
         viewModelScope.launch {
-            _event.emit(SearchEvent.ShowSchoolDetail(schoolId))
+            _event.emit(SearchEvent.ShowSchoolDetail(school))
         }
     }
 

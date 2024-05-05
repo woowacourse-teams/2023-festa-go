@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.festago.festago.presentation.databinding.FragmentArtistBookmarkBinding
+import com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs
 import com.festago.festago.presentation.ui.home.bookmarklist.BookmarkListFragmentDirections
+import com.festago.festago.presentation.ui.signin.SignInActivity
 import com.festago.festago.presentation.util.repeatOnStarted
 import com.festago.festago.presentation.util.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,39 +45,43 @@ class ArtistBookmarkFragment : Fragment() {
         binding.uiState = vm.uiState.value
 
         binding.refreshListener = { vm.fetchBookmarkList() }
+        binding.loginListener = { vm.logIn() }
 
         artistBookmarkAdapter = ArtistBookmarkAdapter()
         binding.rvArtistBookmarkList.adapter = artistBookmarkAdapter
     }
 
     private fun initObserve() {
-        repeatOnStarted(this) {
+        repeatOnStarted(viewLifecycleOwner) {
             vm.uiState.collect { uiState ->
                 binding.uiState = uiState
                 when (uiState) {
-                    is ArtistBookmarkListUiState.Loading -> {
-                        // Handle loading
-                    }
+                    is ArtistBookmarkListUiState.NotLoggedIn,
+                    is ArtistBookmarkListUiState.Loading,
+                    is ArtistBookmarkListUiState.Error,
+                    -> Unit
 
                     is ArtistBookmarkListUiState.Success -> {
                         artistBookmarkAdapter.submitList(uiState.artistBookmarks)
                     }
-
-                    is ArtistBookmarkListUiState.Error -> {
-                        // Handle error
-                    }
                 }
             }
         }
-        repeatOnStarted(this) {
+        repeatOnStarted(viewLifecycleOwner) {
             vm.uiEvent.collect { event ->
                 when (event) {
                     is ArtistBookmarkEvent.ShowArtistDetail -> {
                         findNavController().safeNavigate(
                             BookmarkListFragmentDirections.actionBookmarkListFragmentToArtistDetailFragment(
-                                event.artistId,
+                                with(event.artist) {
+                                    ArtistDetailArgs(id, name, imageUrl)
+                                },
                             ),
                         )
+                    }
+
+                    is ArtistBookmarkEvent.ShowSignIn -> {
+                        startActivity(SignInActivity.getIntent(requireContext()))
                     }
                 }
             }

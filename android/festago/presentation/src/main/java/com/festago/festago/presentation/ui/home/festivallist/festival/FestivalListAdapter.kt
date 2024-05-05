@@ -3,6 +3,7 @@ package com.festago.festago.presentation.ui.home.festivallist.festival
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalEmptyItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalMoreItemUiState
@@ -10,7 +11,7 @@ import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalTab
 import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalUiState
 
 class FestivalListAdapter(
-    private val onArtistClick: (Long) -> Unit,
+    private val onArtistClick: (ArtistUiState) -> Unit,
 ) : ListAdapter<Any, FestivalListViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FestivalListViewHolder {

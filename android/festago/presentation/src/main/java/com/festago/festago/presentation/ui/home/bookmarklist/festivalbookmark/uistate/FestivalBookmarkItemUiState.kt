@@ -10,5 +10,5 @@ data class FestivalBookmarkItemUiState(
     val endDate: LocalDate,
     val imageUrl: String,
     val artists: List<ArtistUiState>,
-    val onFestivalDetail: (festivalId: Long) -> Unit,
+    val onFestivalDetail: (festival: FestivalBookmarkItemUiState) -> Unit,
 )

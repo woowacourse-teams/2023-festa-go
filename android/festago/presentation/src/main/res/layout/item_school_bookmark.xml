@@ -11,10 +11,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{()->school.onSchoolDetail.invoke(school)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="14dp"
-        onSingleClick="@{()->school.onSchoolDetail.invoke(school.id)}"
         android:layout_marginTop="16dp">
 
         <androidx.cardview.widget.CardView
@@ -46,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_marginTop="8dp"
+            android:ellipsize="end"
             android:gravity="center"
             android:lineHeight="16dp"
             android:text="@{school.name}"

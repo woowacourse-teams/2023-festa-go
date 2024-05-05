@@ -2,6 +2,8 @@ package com.festago.festago.presentation.ui.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.festago.festago.common.analytics.AnalyticsHelper
+import com.festago.festago.common.analytics.logNetworkFailure
 import com.festago.festago.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
     private val _event: MutableSharedFlow<SignInEvent> = MutableSharedFlow()
@@ -22,9 +25,13 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch {
             userRepository.signIn(idToken)
                 .onSuccess {
-                    _event.emit(SignInEvent.ShowHome)
+                    _event.emit(SignInEvent.SignInSuccess)
                 }.onFailure {
                     _event.emit(SignInEvent.SignInFailure)
+                    analyticsHelper.logNetworkFailure(
+                        key = KEY_SIGN_IN,
+                        value = it.message.toString(),
+                    )
                 }
         }
     }
@@ -34,5 +41,9 @@ class SignInViewModel @Inject constructor(
             userRepository.rejectSignIn()
             _event.emit(SignInEvent.ShowHome)
         }
+    }
+
+    companion object {
+        private const val KEY_SIGN_IN = "KEY_SIGN_IN"
     }
 }

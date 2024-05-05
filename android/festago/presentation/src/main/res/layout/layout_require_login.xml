@@ -15,53 +15,50 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+
+        <TextView
+            android:id="@+id/tvNetworkError"
+            style="@style/H5Bold14Lh16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/layout_require_login_description"
+            android:textColor="@color/contents_gray_06"
+            app:layout_constraintBottom_toTopOf="@id/llLogin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/llLogin"
+            onSingleClick="@{()->loginListener.invoke()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_btn_refresh"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <TextView
-                android:id="@+id/tvNetworkError"
                 style="@style/H5Bold14Lh16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                android:text="@string/layout_require_login_description"
-                android:textColor="@color/contents_gray_06"
-                android:textSize="20sp" />
+                android:text="@string/layout_require_login_go_to_login"
+                android:textColor="@color/primary_blue_07" />
 
-            <LinearLayout
-                onSingleClick="@{()->loginListener.invoke()}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/bg_btn_refresh"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    style="@style/H5Bold14Lh16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/layout_require_login_go_to_login"
-                    android:textColor="@color/primary_blue_07" />
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="4dp"
-                    android:src="@drawable/ic_next" />
-            </LinearLayout>
-
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_next" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

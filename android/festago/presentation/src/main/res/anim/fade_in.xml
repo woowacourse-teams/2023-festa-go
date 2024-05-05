@@ -1,6 +1,21 @@
-<!-- res/anim/fade_in.xml -->
-<alpha xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="@android:integer/config_longAnimTime"
-    android:fromAlpha="0"
-    android:interpolator="@android:anim/decelerate_interpolator"
-    android:toAlpha="1" />
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/decelerate_interpolator">
+    <alpha
+        android:duration="@integer/nav_Anim_time"
+        android:fromAlpha="0.5"
+        android:toAlpha="1" />
+    <scale
+        android:duration="@integer/nav_Anim_time"
+        android:fromXScale="98%"
+        android:fromYScale="98%"
+        android:toXScale="100%"
+        android:toYScale="100%" />
+
+    <translate
+        android:duration="@integer/nav_Anim_time"
+        android:fromXDelta="2%"
+        android:fromYDelta="2%"
+        android:toXDelta="0%"
+        android:toYDelta="0%" />
+</set>

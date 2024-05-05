@@ -28,6 +28,8 @@
     <!-- String related to artist detail -->
     <string name="artist_detail_tv_dday_format">D%1$s</string>
     <string name="artist_detail_tv_empty_festivals">아직 축제가 없어요</string>
+    <string name="artist_detail_bookmark_success">아티스트를 북마크 했습니다</string>
+    <string name="artist_detail_bookmark_cancel">북마크를 취소했습니다</string>
 
     <!-- String related to notification list-->
     <string name="notification_list_tv_notification_app_bar">알림</string>
@@ -36,7 +38,8 @@
 
     <!-- String related to festival detail -->
     <string name="festival_detail_tv_empty_stages">아직 라인업이 공개되지 않았어요</string>
-
+    <string name="festival_detail_bookmark_success">축제를 북마크 했습니다</string>
+    <string name="festival_detail_bookmark_cancel">북마크를 취소했습니다</string>
 
     <!-- String related to festival dday -->
     <string name="tv_dday_in_progress">진행 중</string>
@@ -46,8 +49,10 @@
     <!-- String related to region bottom sheet -->
     <string name="region_bottom_sheet_tv_region">지역별</string>
 
-    <!-- String related to artist detail -->
+    <!-- String related to school detail -->
     <string name="school_detail_tv_empty_festivals">아직 축제가 없어요</string>
+    <string name="school_detail_bookmark_success">학교를 북마크 했습니다</string>
+    <string name="school_detail_bookmark_cancel">북마크를 취소했습니다</string>
 
     <!-- String related to search -->
     <string name="search_et_search_hint">학교명, 아티스트명, 축제명으로 입력하세요.</string>
@@ -71,7 +76,7 @@
     <string name="splash_app_update_request_dialog_title">업데이트 알림</string>
     <string name="splash_app_update_request_dialog_message">새로운 페스타고를 사용하기 위해 업데이트 해주세요!</string>
     <string name="splash_app_update_denied">업데이트 후 정상 사용가능합니다.</string>
-    <string name="splash_app_default_error_message">페스타고 실행 중 문제가 발생했습니다. 페스타고로 문의해주세요.</string>
+    <string name="splash_app_default_error_message">인터넷 연결 및 최신 버전을 확인해주세요</string>
 
     <!-- Strings related to ok dialog -->
     <string name="ok_dialog_btn_ok">확인</string>
@@ -88,14 +93,33 @@
     <string name="layout_require_login_go_to_login">로그인 하러 가기</string>
 
     <!-- Strings related to bookmark -->
-    <string name="fragmentl_bookmark_artist_bookmark">관심있는 아티스트를 북마크 할 수 있어요</string>
-    <string name="fragmentl_bookmark_festival_bookmark">관심있는 축제를 북마크 할 수 있어요</string>
-    <string name="fragmentl_bookmark_school_bookmark">관심있는 학교를 북마크 할 수 있어요</string>
+    <string name="bookmark_list_tv_artist_bookmark">관심있는 아티스트를 북마크 할 수 있어요</string>
+    <string name="bookmark_list_tv_festival_bookmark">관심있는 축제를 북마크 할 수 있어요</string>
+    <string name="bookmark_list_tv_school_bookmark">관심있는 학교를 북마크 할 수 있어요</string>
+    <string name="bookmark_list_tv_festival">축제</string>
+    <string name="bookmark_list_tv_artist">아티스트</string>
+    <string name="bookmark_list_tv_school">학교</string>
 
     <!-- String related to signIn -->
     <string name="sign_in_tv_festago_flag">페스타고,\n대학축제를\n더욱 즐겁게!</string>
     <string name="sign_in_tv_kakao_login">카카오로 로그인하기</string>
     <string name="sign_in_tv_without_login">로그인하지 않고 둘러보기</string>
     <string name="sign_in_default_error_message">로그인 할 수 없습니다. 다시 로그인 하거나 앱을 재실행 해주세요.</string>
+    <string name="sign_in_success">로그인에 성공했습니다</string>
+
+
+    <!-- Strings related to my page -->
+    <string name="my_page_go_to_login">로그인 하러 가기</string>
+    <string name="my_page_contact_us">문의하기</string>
+    <string name="my_page_faq">FAQ</string>
+    <string name="my_page_personal_info_policy">개인정보 처리방침</string>
+    <string name="my_page_app_version">앱버전</string>
+    <string name="my_page_logout">로그아웃</string>
+    <string name="my_page_unregister">회원탈퇴</string>
+    <string name="my_page_logout_alert_title">로그아웃</string>
+    <string name="my_page_logout_alert_message">정말 로그아웃 하시겠습니까?</string>
+    <string name="my_page_delete_account_alert_title">회원 탈퇴</string>
+    <string name="my_page_delete_account_alert_message">정말 탈퇴 하시겠습니까? 다시 되돌릴 수 없습니다.</string>
+    <string name="my_page_app_version_format">버전 : %s</string>
 
 </resources>

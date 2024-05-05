@@ -6,6 +6,7 @@ import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.bookmark.FestivalBookmark
 import com.festago.festago.domain.model.bookmark.FestivalBookmarkOrder
 import com.festago.festago.domain.repository.BookmarkRepository
+import com.festago.festago.domain.repository.UserRepository
 import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.artistadapter.ArtistUiState
 import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate.FestivalBookmarkItemUiState
 import com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate.FestivalBookmarkUiState
@@ -21,19 +22,29 @@ import javax.inject.Inject
 @HiltViewModel
 class FestivalBookmarkViewModel @Inject constructor(
     private val bookmarkRepository: BookmarkRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     private val _uiState =
         MutableStateFlow<FestivalBookmarkUiState>(FestivalBookmarkUiState.Loading)
     val uiState: StateFlow<FestivalBookmarkUiState> = _uiState.asStateFlow()
 
-    private val _uiEvent = MutableSharedFlow<FestivalBookmarkEvent>()
-    val uiEvent = _uiEvent.asSharedFlow()
+    private val _event = MutableSharedFlow<FestivalBookmarkEvent>()
+    val event = _event.asSharedFlow()
 
     fun fetchBookmarkList() {
         viewModelScope.launch {
             _uiState.value = FestivalBookmarkUiState.Loading
+
+            if (!userRepository.isSigned()) {
+                _uiState.value = FestivalBookmarkUiState.NotLoggedIn
+                return@launch
+            }
+
             val bookmarkIds = bookmarkRepository.getFestivalBookmarkIds()
-                .getOrElse { _uiState.value = FestivalBookmarkUiState.Error; return@launch }
+                .getOrElse {
+                    _uiState.value = FestivalBookmarkUiState.Error
+                    return@launch
+                }
 
             if (bookmarkIds.isEmpty()) {
                 _uiState.value = FestivalBookmarkUiState.Success(emptyList())
@@ -50,6 +61,12 @@ class FestivalBookmarkViewModel @Inject constructor(
         }
     }
 
+    fun logIn() {
+        viewModelScope.launch {
+            _event.emit(FestivalBookmarkEvent.ShowSignIn)
+        }
+    }
+
     private fun FestivalBookmark.toUiState(): FestivalBookmarkItemUiState {
         return FestivalBookmarkItemUiState(
             id = festival.id,
@@ -58,9 +75,9 @@ class FestivalBookmarkViewModel @Inject constructor(
             startDate = festival.startDate,
             endDate = festival.endDate,
             artists = festival.artists.map { it.toUiState() },
-            onFestivalDetail = { festivalId ->
+            onFestivalDetail = { festival ->
                 viewModelScope.launch {
-                    _uiEvent.emit(FestivalBookmarkEvent.ShowFestivalDetail(festivalId))
+                    _event.emit(FestivalBookmarkEvent.ShowFestivalDetail(festival))
                 }
             },
         )
@@ -71,9 +88,9 @@ class FestivalBookmarkViewModel @Inject constructor(
             id = id,
             name = name,
             imageUrl = imageUrl,
-            onArtistDetail = { artistId ->
+            onArtistDetail = { artist ->
                 viewModelScope.launch {
-                    _uiEvent.emit(FestivalBookmarkEvent.ShowArtistDetail(artistId))
+                    _event.emit(FestivalBookmarkEvent.ShowArtistDetail(artist))
                 }
             },
         )

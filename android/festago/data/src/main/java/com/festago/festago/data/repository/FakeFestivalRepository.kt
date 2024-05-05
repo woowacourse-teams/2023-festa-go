@@ -95,7 +95,10 @@ class FakeFestivalRepository @Inject constructor() : FestivalRepository {
         }
     }
 
-    override suspend fun loadFestivalDetail(id: Long): Result<FestivalDetail> {
+    override suspend fun loadFestivalDetail(
+        id: Long,
+        delayTimeMillis: Long,
+    ): Result<FestivalDetail> {
         return Result.success(FakeFestivals.festivalDetail)
     }
 

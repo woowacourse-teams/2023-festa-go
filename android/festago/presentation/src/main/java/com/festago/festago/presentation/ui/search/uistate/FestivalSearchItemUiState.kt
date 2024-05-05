@@ -9,5 +9,5 @@ data class FestivalSearchItemUiState(
     val endDate: LocalDate,
     val imageUrl: String,
     val artists: List<ArtistUiState>,
-    val onFestivalSearchClick: (festivalId: Long) -> Unit,
+    val onFestivalSearchClick: (festival: FestivalSearchItemUiState) -> Unit,
 )

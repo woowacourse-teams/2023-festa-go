@@ -28,7 +28,7 @@ class FakeSearchRepository @Inject constructor() : SearchRepository {
             listOf(
                 ArtistSearch(
                     id = 6L,
-                    name = "뉴진스",
+                    name = "뉴진스뉴진스뉴진스뉴진스뉴진스",
                     profileImageUrl = "https://cdn.mediatoday.co.kr/news/photo/202311/313885_438531_4716.jpg",
                     todayStage = 2,
                     upcomingStage = 1,

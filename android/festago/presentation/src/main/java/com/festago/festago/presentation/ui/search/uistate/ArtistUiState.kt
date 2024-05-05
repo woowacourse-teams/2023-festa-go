@@ -4,5 +4,5 @@ data class ArtistUiState(
     val id: Long,
     val name: String,
     val imageUrl: String,
-    val onArtistDetailClick: (Long) -> Unit,
+    val onArtistDetailClick: (artist: ArtistUiState) -> Unit,
 )

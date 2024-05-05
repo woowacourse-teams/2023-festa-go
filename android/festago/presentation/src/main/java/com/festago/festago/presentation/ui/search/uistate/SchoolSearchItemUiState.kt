@@ -7,5 +7,5 @@ data class SchoolSearchItemUiState(
     val name: String,
     val logoUrl: String,
     val upcomingFestivalStartDate: LocalDate?,
-    val onSchoolSearchClick: (schoolId: Long) -> Unit,
+    val onSchoolSearchClick: (school: SchoolSearchItemUiState) -> Unit,
 )

@@ -1,6 +1,6 @@
 package com.festago.festago.presentation.ui.home.bookmarklist.festivalbookmark.uistate
 
-interface FestivalBookmarkUiState {
+sealed interface FestivalBookmarkUiState {
     object NotLoggedIn : FestivalBookmarkUiState
     object Loading : FestivalBookmarkUiState
 

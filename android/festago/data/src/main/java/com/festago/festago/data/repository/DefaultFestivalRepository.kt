@@ -9,6 +9,7 @@ import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.festival.PopularFestivals
 import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.domain.repository.FestivalRepository
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -40,7 +41,11 @@ class DefaultFestivalRepository @Inject constructor(
         }.onSuccessOrCatch { it.toDomain() }
     }
 
-    override suspend fun loadFestivalDetail(id: Long): Result<FestivalDetail> {
+    override suspend fun loadFestivalDetail(
+        id: Long,
+        delayTimeMillis: Long,
+    ): Result<FestivalDetail> {
+        delay(delayTimeMillis)
         return runCatchingResponse {
             festivalRetrofitService.getFestivalDetail(id)
         }.onSuccessOrCatch { it.toDomain() }

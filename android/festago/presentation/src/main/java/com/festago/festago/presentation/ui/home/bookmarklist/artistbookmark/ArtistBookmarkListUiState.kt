@@ -1,7 +1,7 @@
 package com.festago.festago.presentation.ui.home.bookmarklist.artistbookmark
 
-interface ArtistBookmarkListUiState {
-    object NotLoggedIn : ArtistBookmarkListUiState
+sealed interface ArtistBookmarkListUiState {
+    class NotLoggedIn(val logIn: () -> Unit) : ArtistBookmarkListUiState
 
     object Loading : ArtistBookmarkListUiState
 

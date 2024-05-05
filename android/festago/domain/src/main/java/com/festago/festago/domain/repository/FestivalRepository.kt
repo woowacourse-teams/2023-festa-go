@@ -17,5 +17,5 @@ interface FestivalRepository {
         size: Int? = null,
     ): Result<FestivalsPage>
 
-    suspend fun loadFestivalDetail(id: Long): Result<FestivalDetail>
+    suspend fun loadFestivalDetail(id: Long, delayTimeMillis: Long = 0L): Result<FestivalDetail>
 }

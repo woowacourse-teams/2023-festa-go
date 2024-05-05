@@ -17,14 +17,12 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        onSingleClick="@{() -> item.onFestivalDetailClick.invoke(item.id)}"
+        onSingleClick="@{() -> item.onFestivalDetailClick.invoke(item)}"
         android:layout_width="match_parent"
-        android:layout_height="132dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_festival_list_festival"
-        tools:layout_height="132dp"
-        tools:layout_width="328dp">
+        android:background="@drawable/bg_festival_list_festival">
 
 
         <ImageView
@@ -48,7 +46,6 @@
             android:background="#FFFA1273"
             android:gravity="center"
             android:textColor="@color/background_gray_01"
-            android:visibility="@{LocalDate.now().compareTo(item.endDate) &lt;= 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="D-1" />
@@ -62,7 +59,6 @@
             android:gravity="center"
             android:text="@string/festival_list_tv_dday_end"
             android:textColor="@color/background_gray_01"
-            android:visibility="@{LocalDate.now().compareTo(item.endDate) > 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/ivFestivalImage"
             app:layout_constraintEnd_toEndOf="@id/ivFestivalImage"
             app:layout_constraintStart_toStartOf="@id/ivFestivalImage"
@@ -76,6 +72,7 @@
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="10dp"
             android:ellipsize="end"
+            android:includeFontPadding="false"
             android:maxLines="1"
             android:text="@{item.name}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,6 +85,7 @@
             style="@style/B3Medium14Lh14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:includeFontPadding="false"
             android:text="@{@string/festival_list_tv_date_range_format(item.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),item.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
             app:layout_constraintStart_toStartOf="@+id/tvFestivalName"
             app:layout_constraintTop_toBottomOf="@+id/tvFestivalName"
@@ -96,10 +94,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFestivalArtists"
             android:layout_width="0dp"
-            android:layout_height="66dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="@id/tvFestivalSchedule"

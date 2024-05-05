@@ -39,7 +39,6 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clSchoolInfo"
-            visibility="@{uiState.shouldShowSuccess}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background_gray_01"
@@ -54,6 +53,16 @@
                 android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@color/background_gray_02" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#40000000"
+                app:layout_constraintBottom_toBottomOf="@id/ivSchoolBackground"
+                app:layout_constraintEnd_toEndOf="@id/ivSchoolBackground"
+                app:layout_constraintStart_toStartOf="@id/ivSchoolBackground"
+                app:layout_constraintTop_toTopOf="@id/ivSchoolBackground" />
+
 
             <ImageView
                 android:id="@+id/ivBack"
@@ -80,7 +89,6 @@
 
                 <ImageView
                     android:id="@+id/ivSchoolLogoImage"
-                    imageUrl="@{successUiState.schoolInfo.logoUrl}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:importantForAccessibility="no"
@@ -116,7 +124,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@{successUiState.schoolInfo.schoolName}"
                 android:textColor="@color/contents_gray_07"
                 app:layout_constraintStart_toEndOf="@id/cvSchoolLogo"
                 app:layout_constraintTop_toBottomOf="@id/ivSchoolBackground"

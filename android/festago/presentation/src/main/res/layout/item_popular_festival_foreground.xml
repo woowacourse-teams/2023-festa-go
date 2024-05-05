@@ -19,14 +19,12 @@
 
         <ImageView
             android:id="@+id/ivPopularFestivalImage"
-            imageUrl="@{item.imageUrl}"
-            onSingleClick="@{()-> item.onFestivalDetail.invoke(item.id)}"
+            elevatedImageUrl="@{item.imageUrl}"
+            onSingleClick="@{()-> item.onFestivalDetail.invoke(item)}"
             android:layout_width="220dp"
             android:layout_height="220dp"
             android:layout_marginTop="12dp"
-            android:elevation="12dp"
             android:importantForAccessibility="no"
-            android:outlineProvider="bounds"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
