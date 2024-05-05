@@ -11,21 +11,44 @@ import java.net.URI;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Slf4j
-@RequiredArgsConstructor
+@Component
 public class R2StorageClient implements StorageClient {
 
     private final S3Client s3Client;
     private final String bucket;
     private final URI uri;
     private final Clock clock;
+
+    public R2StorageClient(
+        @Value("${festago.r2.access-key}") String accessKey,
+        @Value("${festago.r2.secret-key}") String secretKey,
+        @Value("${festago.r2.endpoint}") String endpoint,
+        @Value("${festago.r2.bucket}") String bucket,
+        @Value("${festago.r2.url}") String uri,
+        Clock clock
+    ) {
+        AwsBasicCredentials awsBasicCredentials = AwsBasicCredentials.create(accessKey, secretKey);
+        this.s3Client = S3Client.builder()
+            .credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
+            .endpointOverride(URI.create(endpoint))
+            .region(Region.of("auto"))
+            .build();
+        this.bucket = bucket;
+        this.uri = URI.create(uri);
+        this.clock = clock;
+    }
 
     @Override
     public UploadFile storage(MultipartFile file) {
