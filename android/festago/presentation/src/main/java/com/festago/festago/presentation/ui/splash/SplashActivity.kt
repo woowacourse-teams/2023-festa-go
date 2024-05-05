@@ -84,7 +84,7 @@ class SplashActivity : ComponentActivity() {
                     return@addOnCompleteListener
                 }
                 val latestVersion = firebaseRemoteConfig.getLong(KEY_LATEST_VERSION)
-                if (latestVersion == currentVersion) {
+                if (latestVersion <= currentVersion) {
                     vm.checkSignIn()
                     return@addOnCompleteListener
                 }
