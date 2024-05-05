@@ -135,7 +135,19 @@ class ArtistDetailFragment : Fragment() {
             )
         }
 
-        is ArtistDetailEvent.FailedToFetchBookmarkList -> {
+        is ArtistDetailEvent.BookmarkSuccess -> {
+            Toast.makeText(
+                requireContext(),
+                if (event.isBookmarked) {
+                    getString(R.string.artist_detail_bookmark_success)
+                } else {
+                    getString(R.string.artist_detail_bookmark_cancel)
+                },
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
+
+        is ArtistDetailEvent.BookmarkFailure -> {
             Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT)
                 .show()
         }

@@ -12,7 +12,10 @@ import com.festago.festago.domain.model.stage.Stage
 import com.festago.festago.domain.repository.BookmarkRepository
 import com.festago.festago.domain.repository.FestivalRepository
 import com.festago.festago.domain.repository.UserRepository
-import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailEvent.FailedToFetchBookmarkList
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailEvent.BookmarkFailure
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailEvent.BookmarkSuccess
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailEvent.ShowArtistDetail
+import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailEvent.ShowSchoolDetail
 import com.festago.festago.presentation.ui.festivaldetail.uiState.ArtistItemUiState
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalDetailUiState
 import com.festago.festago.presentation.ui.festivaldetail.uiState.FestivalUiState
@@ -94,18 +97,26 @@ class FestivalDetailViewModel @Inject constructor(
             val uiState = _uiState.value as? FestivalDetailUiState.Success ?: return@launch
 
             if (!userRepository.isSigned()) {
-                _event.emit(FailedToFetchBookmarkList("로그인이 필요합니다"))
+                _event.emit(BookmarkFailure("로그인이 필요합니다"))
                 return@launch
             }
 
             if (uiState.bookmarked) {
+                _uiState.value = uiState.copy(bookmarked = false)
                 bookmarkRepository.deleteFestivalBookmark(festivalId)
-                    .onSuccess { _uiState.value = uiState.copy(bookmarked = false) }
-                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
+                    .onSuccess { _event.emit(BookmarkSuccess(false)) }
+                    .onFailure {
+                        _uiState.value = uiState.copy(bookmarked = true)
+                        _event.emit(BookmarkFailure("북마크를 해제할 수 없습니다. 인터넷 연결을 확인해주세요"))
+                    }
             } else {
+                _uiState.value = uiState.copy(bookmarked = true)
                 bookmarkRepository.addFestivalBookmark(festivalId)
-                    .onSuccess { _uiState.value = uiState.copy(bookmarked = true) }
-                    .onFailure { _event.emit(FailedToFetchBookmarkList("최대 북마크 갯수를 초과했습니다")) }
+                    .onSuccess { _event.emit(BookmarkSuccess(true)) }
+                    .onFailure {
+                        _uiState.value = uiState.copy(bookmarked = false)
+                        _event.emit(BookmarkFailure("다른 북마크를 해제하거나 인터넷 연결을 확인해주세요"))
+                    }
             }
         }
     }
@@ -125,13 +136,13 @@ class FestivalDetailViewModel @Inject constructor(
 
     private fun showArtistDetail(artist: ArtistItemUiState) {
         viewModelScope.launch {
-            _event.emit(FestivalDetailEvent.ShowArtistDetail(artist))
+            _event.emit(ShowArtistDetail(artist))
         }
     }
 
     private fun showSchoolDetail(school: School) {
         viewModelScope.launch {
-            _event.emit(FestivalDetailEvent.ShowSchoolDetail(school))
+            _event.emit(ShowSchoolDetail(school))
         }
     }
 

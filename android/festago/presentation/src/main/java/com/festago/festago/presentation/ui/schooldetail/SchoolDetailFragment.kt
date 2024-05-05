@@ -135,7 +135,19 @@ class SchoolDetailFragment : Fragment() {
             )
         }
 
-        is SchoolDetailEvent.FailedToFetchBookmarkList -> {
+        is SchoolDetailEvent.BookmarkSuccess -> {
+            Toast.makeText(
+                requireContext(),
+                if (event.isBookmarked) {
+                    getString(R.string.school_detail_bookmark_success)
+                } else {
+                    getString(R.string.school_detail_bookmark_cancel)
+                },
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
+
+        is SchoolDetailEvent.BookmarkFailure -> {
             Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
         }
     }

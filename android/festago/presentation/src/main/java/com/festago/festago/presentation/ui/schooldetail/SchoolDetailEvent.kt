@@ -8,5 +8,7 @@ sealed interface SchoolDetailEvent {
 
     class ShowFestivalDetail(val festival: FestivalItemUiState) : SchoolDetailEvent
 
-    class FailedToFetchBookmarkList(val message: String) : SchoolDetailEvent
+    class BookmarkSuccess(val isBookmarked: Boolean) : SchoolDetailEvent
+
+    class BookmarkFailure(val message: String) : SchoolDetailEvent
 }

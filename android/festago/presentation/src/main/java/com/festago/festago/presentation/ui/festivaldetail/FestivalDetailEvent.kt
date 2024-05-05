@@ -6,5 +6,6 @@ import com.festago.festago.presentation.ui.festivaldetail.uiState.ArtistItemUiSt
 sealed interface FestivalDetailEvent {
     class ShowArtistDetail(val artist: ArtistItemUiState) : FestivalDetailEvent
     class ShowSchoolDetail(val school: School) : FestivalDetailEvent
-    class FailedToFetchBookmarkList(val message: String) : FestivalDetailEvent
+    class BookmarkSuccess(val isBookmarked: Boolean) : FestivalDetailEvent
+    class BookmarkFailure(val message: String) : FestivalDetailEvent
 }

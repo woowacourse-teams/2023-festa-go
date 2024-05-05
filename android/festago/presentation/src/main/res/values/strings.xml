@@ -28,6 +28,8 @@
     <!-- String related to artist detail -->
     <string name="artist_detail_tv_dday_format">D%1$s</string>
     <string name="artist_detail_tv_empty_festivals">아직 축제가 없어요</string>
+    <string name="artist_detail_bookmark_success">아티스트를 북마크 했습니다</string>
+    <string name="artist_detail_bookmark_cancel">북마크를 취소했습니다</string>
 
     <!-- String related to notification list-->
     <string name="notification_list_tv_notification_app_bar">알림</string>
@@ -36,7 +38,8 @@
 
     <!-- String related to festival detail -->
     <string name="festival_detail_tv_empty_stages">아직 라인업이 공개되지 않았어요</string>
-
+    <string name="festival_detail_bookmark_success">축제를 북마크 했습니다</string>
+    <string name="festival_detail_bookmark_cancel">북마크를 취소했습니다</string>
 
     <!-- String related to festival dday -->
     <string name="tv_dday_in_progress">진행 중</string>
@@ -46,8 +49,10 @@
     <!-- String related to region bottom sheet -->
     <string name="region_bottom_sheet_tv_region">지역별</string>
 
-    <!-- String related to artist detail -->
+    <!-- String related to school detail -->
     <string name="school_detail_tv_empty_festivals">아직 축제가 없어요</string>
+    <string name="school_detail_bookmark_success">학교를 북마크 했습니다</string>
+    <string name="school_detail_bookmark_cancel">북마크를 취소했습니다</string>
 
     <!-- String related to search -->
     <string name="search_et_search_hint">학교명, 아티스트명, 축제명으로 입력하세요.</string>

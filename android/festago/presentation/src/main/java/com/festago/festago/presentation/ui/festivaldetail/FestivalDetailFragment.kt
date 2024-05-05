@@ -180,7 +180,19 @@ class FestivalDetailFragment : Fragment() {
                 )
             }
 
-            is FestivalDetailEvent.FailedToFetchBookmarkList -> {
+            is FestivalDetailEvent.BookmarkSuccess -> {
+                Toast.makeText(
+                    requireContext(),
+                    if (event.isBookmarked) {
+                        getString(R.string.festival_detail_bookmark_success)
+                    } else {
+                        getString(R.string.festival_detail_bookmark_cancel)
+                    },
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+
+            is FestivalDetailEvent.BookmarkFailure -> {
                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
             }
         }
