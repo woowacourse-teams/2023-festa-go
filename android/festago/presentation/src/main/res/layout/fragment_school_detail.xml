@@ -99,7 +99,6 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvBookmark"
                 onSingleClick="@{() -> successUiState.onBookmarkClick.invoke(successUiState.schoolInfo.id)}"
-                visibility="@{uiState.shouldShowSuccess}"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 app:cardCornerRadius="1000dp"
@@ -125,7 +124,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@{successUiState.schoolInfo.schoolName}"
                 android:textColor="@color/contents_gray_07"
                 app:layout_constraintStart_toEndOf="@id/cvSchoolLogo"
                 app:layout_constraintTop_toBottomOf="@id/ivSchoolBackground"
