@@ -33,8 +33,11 @@ class ArtistCommandServiceTest {
     @Test
     void 아티스트를_저장한다() {
         // given
-        ArtistCreateCommand command = new ArtistCreateCommand("윤서연", "https://image.com/image.png",
-            "https://image.com/image.png");
+        var command = ArtistCreateCommand.builder()
+            .name("윤서연")
+            .profileImageUrl("https://image.com/image.png")
+            .backgroundImageUrl("https://image.com/image.png")
+            .build();
 
         // when
         Long artistId = artistCommandService.save(command);
@@ -47,8 +50,11 @@ class ArtistCommandServiceTest {
     void 아티스트_정보를_변경한다() {
         // given
         Long artistId = artistRepository.save(ArtistFixture.builder().name("고윤하").build()).getId();
-        ArtistUpdateCommand command = new ArtistUpdateCommand("윤하", "https://image.com/image2.png",
-            "https://image.com/image2.png");
+        var command = ArtistUpdateCommand.builder()
+            .name("윤하")
+            .profileImageUrl("https://image.com/image2.png")
+            .backgroundImageUrl("https://image.com/image2.png")
+            .build();
 
         // when
         artistCommandService.update(command, artistId);

@@ -122,12 +122,12 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
         @Test
         void 공연을_생성하면_FestivalQueryInfo가_갱신된다() {
             // given
-            var command = new StageCreateCommand(
-                테코대학교_축제_식별자,
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자)
-            );
+            var command = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제_식별자)
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자))
+                .build();
 
             // when
             FestivalQueryInfo previosFestivalQueryInfo = festivalInfoRepository.findByFestivalId(테코대학교_축제_식별자).get();
@@ -144,18 +144,18 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
         @Test
         void 공연이_여러_개_추가되면_FestivalQueryInfo에_추가된_공연의_ArtistInfo가_갱신된다() throws Exception {
             // given
-            var firstCommand = new StageCreateCommand(
-                테코대학교_축제_식별자,
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이_식별자)
-            );
-            var secondCommand = new StageCreateCommand(
-                테코대학교_축제_식별자,
-                festivalStartDate.plusDays(1).atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(소녀시대_식별자)
-            );
+            var firstCommand = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제_식별자)
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이_식별자))
+                .build();
+            var secondCommand = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제_식별자)
+                .startTime(festivalStartDate.plusDays(1).atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(소녀시대_식별자))
+                .build();
 
             // when
             stageCreateService.createStage(firstCommand);
@@ -174,18 +174,18 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
         @Test
         void 공연이_여러_개_추가될때_공연에_중복된_아티스트가_있어도_FestivalQueryInfo에는_중복이_없다() throws Exception {
             // given
-            var firstCommand = new StageCreateCommand(
-                테코대학교_축제_식별자,
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자)
-            );
-            var secondCommand = new StageCreateCommand(
-                테코대학교_축제_식별자,
-                festivalStartDate.plusDays(1).atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자)
-            );
+            var firstCommand = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제_식별자)
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자))
+                .build();
+            var secondCommand = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제_식별자)
+                .startTime(festivalStartDate.plusDays(1).atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자))
+                .build();
 
             // when
             stageCreateService.createStage(firstCommand);
@@ -209,22 +209,22 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
 
         @BeforeEach
         void setUp() {
-            테코대학교_축제_공연_식별자 = stageCreateService.createStage(new StageCreateCommand(
-                테코대학교_축제_식별자,
-                festivalStartDate.atTime(18, 0),
-                now.minusWeeks(1),
-                List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자)
-            ));
+            테코대학교_축제_공연_식별자 = stageCreateService.createStage(StageCreateCommand.builder()
+                .festivalId(테코대학교_축제_식별자)
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자))
+                .build());
         }
 
         @Test
         void 공연을_수정하면_StageQueryInfo가_갱신된다() throws Exception {
             // given
-            var command = new StageUpdateCommand(
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이_식별자, 소녀시대_식별자)
-            );
+            var command = StageUpdateCommand.builder()
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이_식별자, 소녀시대_식별자))
+                .build();
 
             // when
             stageUpdateService.updateStage(테코대학교_축제_공연_식별자, command);
@@ -242,11 +242,11 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
         @Test
         void 공연을_수정하면_FestivalQueryInfo가_갱신된다() throws Exception {
             // given
-            var command = new StageUpdateCommand(
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이_식별자, 소녀시대_식별자)
-            );
+            var command = StageUpdateCommand.builder()
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이_식별자, 소녀시대_식별자))
+                .build();
 
             // when
             stageUpdateService.updateStage(테코대학교_축제_공연_식별자, command);
@@ -268,12 +268,12 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
 
         @BeforeEach
         void setUp() {
-            테코대학교_축제_공연_식별자 = stageCreateService.createStage(new StageCreateCommand(
-                테코대학교_축제_식별자,
-                festivalStartDate.atTime(18, 0),
-                now.minusWeeks(1),
-                List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자)
-            ));
+            테코대학교_축제_공연_식별자 = stageCreateService.createStage(StageCreateCommand.builder()
+                .festivalId(테코대학교_축제_식별자)
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자))
+                .build());
         }
 
         @Test

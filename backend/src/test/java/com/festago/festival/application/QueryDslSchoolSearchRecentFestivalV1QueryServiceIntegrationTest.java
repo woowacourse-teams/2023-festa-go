@@ -3,13 +3,13 @@ package com.festago.festival.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import com.festago.festival.application.command.FestivalCreateService;
-import com.festago.festival.dto.command.FestivalCreateCommand;
-import com.festago.school.application.SchoolCommandService;
-import com.festago.school.domain.SchoolRegion;
-import com.festago.school.dto.SchoolCreateCommand;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.TimeInstantProvider;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.SchoolFixture;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,25 +23,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
-    private static final String LOGO_URL = "https://image.com/logo.png";
-    private static final String BACKGROUND_IMAGE_URL = "https://image.com/backgroundimage.png";
-    private static final String POSTER_IMAGE_URL = "https://image.com/posterimage.png";
-
     @Autowired
     QueryDslSchoolUpcomingFestivalStartDateV1QueryService schoolUpcomingFestivalStartDateV1QueryService;
 
     @Autowired
-    SchoolCommandService schoolCommandService;
+    SchoolRepository schoolRepository;
 
     @Autowired
-    FestivalCreateService festivalCreateService;
+    FestivalRepository festivalRepository;
 
     @Autowired
     Clock clock;
 
-    Long 테코대학교_식별자;
+    School 테코대학교;
 
-    Long 우테대학교_식별자;
+    School 우테대학교;
 
     LocalDate _6월_14일 = LocalDate.parse("2077-06-14");
     LocalDate _6월_15일 = LocalDate.parse("2077-06-15");
@@ -54,20 +50,28 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
      */
     @BeforeEach
     void setUp() {
-        테코대학교_식별자 = schoolCommandService.createSchool(
-            new SchoolCreateCommand("테코대학교", "teco.ac.kr", SchoolRegion.서울, LOGO_URL, BACKGROUND_IMAGE_URL)
+        테코대학교 = schoolRepository.save(SchoolFixture.builder().name("테코대학교").build());
+        우테대학교 = schoolRepository.save(SchoolFixture.builder().name("우테대학교").build());
+        festivalRepository.save(FestivalFixture.builder()
+            .name("테코대학교 6월 15일 당일 축제")
+            .startDate(_6월_15일)
+            .endDate(_6월_15일)
+            .school(테코대학교)
+            .build()
         );
-        우테대학교_식별자 = schoolCommandService.createSchool(
-            new SchoolCreateCommand("우테대학교", "wote.ac.kr", SchoolRegion.서울, LOGO_URL, BACKGROUND_IMAGE_URL)
+        festivalRepository.save(FestivalFixture.builder()
+            .name("테코대학교 6월 16일 당일 축제")
+            .startDate(_6월_16일)
+            .endDate(_6월_16일)
+            .school(테코대학교)
+            .build()
         );
-        festivalCreateService.createFestival(
-            new FestivalCreateCommand("테코대학교 6월 15일 당일 축제", _6월_15일, _6월_15일, POSTER_IMAGE_URL, 테코대학교_식별자)
-        );
-        festivalCreateService.createFestival(
-            new FestivalCreateCommand("테코대학교 6월 16일 당일 축제", _6월_16일, _6월_16일, POSTER_IMAGE_URL, 테코대학교_식별자)
-        );
-        festivalCreateService.createFestival(
-            new FestivalCreateCommand("우테대학교 6월 16~17일 축제", _6월_16일, _6월_17일, POSTER_IMAGE_URL, 우테대학교_식별자)
+        festivalRepository.save(FestivalFixture.builder()
+            .name("우테대학교 6월 16~17일 축제")
+            .startDate(_6월_16일)
+            .endDate(_6월_17일)
+            .school(우테대학교)
+            .build()
         );
     }
 
@@ -79,12 +83,12 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
 
         // when
         var actual = schoolUpcomingFestivalStartDateV1QueryService.getSchoolIdToUpcomingFestivalStartDate(
-            List.of(테코대학교_식별자, 우테대학교_식별자)
+            List.of(테코대학교.getId(), 우테대학교.getId())
         );
 
         // then
-        assertThat(actual.get(테코대학교_식별자)).isEqualTo(_6월_15일);
-        assertThat(actual.get(우테대학교_식별자)).isEqualTo(_6월_16일);
+        assertThat(actual.get(테코대학교.getId())).isEqualTo(_6월_15일);
+        assertThat(actual.get(우테대학교.getId())).isEqualTo(_6월_16일);
     }
 
     @Test
@@ -95,12 +99,12 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
 
         // when
         var actual = schoolUpcomingFestivalStartDateV1QueryService.getSchoolIdToUpcomingFestivalStartDate(
-            List.of(테코대학교_식별자, 우테대학교_식별자)
+            List.of(테코대학교.getId(), 우테대학교.getId())
         );
 
         // then
-        assertThat(actual.get(테코대학교_식별자)).isEqualTo(_6월_15일);
-        assertThat(actual.get(우테대학교_식별자)).isEqualTo(_6월_16일);
+        assertThat(actual.get(테코대학교.getId())).isEqualTo(_6월_15일);
+        assertThat(actual.get(우테대학교.getId())).isEqualTo(_6월_16일);
     }
 
     @Test
@@ -111,12 +115,12 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
 
         // when
         var actual = schoolUpcomingFestivalStartDateV1QueryService.getSchoolIdToUpcomingFestivalStartDate(
-            List.of(테코대학교_식별자, 우테대학교_식별자)
+            List.of(테코대학교.getId(), 우테대학교.getId())
         );
 
         // then
-        assertThat(actual.get(테코대학교_식별자)).isEqualTo(_6월_16일);
-        assertThat(actual.get(우테대학교_식별자)).isEqualTo(_6월_16일);
+        assertThat(actual.get(테코대학교.getId())).isEqualTo(_6월_16일);
+        assertThat(actual.get(우테대학교.getId())).isEqualTo(_6월_16일);
     }
 
     @Test
@@ -127,12 +131,12 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
 
         // when
         var actual = schoolUpcomingFestivalStartDateV1QueryService.getSchoolIdToUpcomingFestivalStartDate(
-            List.of(테코대학교_식별자, 우테대학교_식별자)
+            List.of(테코대학교.getId(), 우테대학교.getId())
         );
 
         // then
-        assertThat(actual.get(테코대학교_식별자)).isNull();
-        assertThat(actual.get(우테대학교_식별자)).isEqualTo(_6월_16일);
+        assertThat(actual.get(테코대학교.getId())).isNull();
+        assertThat(actual.get(우테대학교.getId())).isEqualTo(_6월_16일);
     }
 
     @Test
@@ -143,11 +147,11 @@ class QueryDslSchoolSearchRecentFestivalV1QueryServiceIntegrationTest extends Ap
 
         // when
         var actual = schoolUpcomingFestivalStartDateV1QueryService.getSchoolIdToUpcomingFestivalStartDate(
-            List.of(테코대학교_식별자, 우테대학교_식별자)
+            List.of(테코대학교.getId(), 우테대학교.getId())
         );
 
         // then
-        assertThat(actual.get(테코대학교_식별자)).isNull();
-        assertThat(actual.get(우테대학교_식별자)).isNull();
+        assertThat(actual.get(테코대학교.getId())).isNull();
+        assertThat(actual.get(우테대학교.getId())).isNull();
     }
 }

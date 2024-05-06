@@ -56,7 +56,10 @@ class AdminAuthCommandServiceTest {
         @Test
         void 계정이_없으면_예외() {
             // given
-            var command = new AdminLoginCommand("admin", "password");
+            var command = AdminLoginCommand.builder()
+                .username("admin")
+                .password("password")
+                .build();
 
             // when & then
             assertThatThrownBy(() -> adminAuthCommandService.login(command))
@@ -71,7 +74,10 @@ class AdminAuthCommandServiceTest {
                 .username("admin")
                 .password("{noop}password")
                 .build());
-            var command = new AdminLoginCommand("admin", "admin");
+            var command = AdminLoginCommand.builder()
+                .username("admin")
+                .password("admin")
+                .build();
 
             // when & then
             assertThatThrownBy(() -> adminAuthCommandService.login(command))
@@ -86,7 +92,10 @@ class AdminAuthCommandServiceTest {
                 .username("admin")
                 .password("{noop}password")
                 .build());
-            var command = new AdminLoginCommand("admin", "password");
+            var command = AdminLoginCommand.builder()
+                .username("admin")
+                .password("password")
+                .build();
             given(authTokenProvider.provide(any()))
                 .willReturn(new TokenResponse("token", LocalDateTime.now().plusWeeks(1)));
 
@@ -105,7 +114,10 @@ class AdminAuthCommandServiceTest {
         void 닉네임이_중복이면_예외() {
             // given
             Admin rootAdmin = adminRepository.save(Admin.createRootAdmin("{noop}password"));
-            var command = new AdminSignupCommand("admin", "password");
+            var command = AdminSignupCommand.builder()
+                .username("admin")
+                .password("password")
+                .build();
 
             // when & then
             Long rootAdminId = rootAdmin.getId();
@@ -121,7 +133,10 @@ class AdminAuthCommandServiceTest {
                 .username("glen")
                 .password("{noop}password")
                 .build());
-            var command = new AdminSignupCommand("newAdmin", "password");
+            var command = AdminSignupCommand.builder()
+                .username("newAdmin")
+                .password("password")
+                .build();
 
             // when & then
             Long adminId = admin.getId();
@@ -134,7 +149,10 @@ class AdminAuthCommandServiceTest {
         void 성공() {
             // given
             Admin rootAdmin = adminRepository.save(Admin.createRootAdmin("{noop}password"));
-            var command = new AdminSignupCommand("newAdmin", "password");
+            var command = AdminSignupCommand.builder()
+                .username("newAdmin")
+                .password("password")
+                .build();
 
             // when
             adminAuthCommandService.signup(rootAdmin.getId(), command);

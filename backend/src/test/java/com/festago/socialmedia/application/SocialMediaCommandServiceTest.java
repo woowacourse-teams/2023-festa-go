@@ -67,14 +67,14 @@ class SocialMediaCommandServiceTest {
                 .build());
 
             // when & then
-            var command = new SocialMediaCreateCommand(
-                socialMedia.getOwnerId(),
-                socialMedia.getOwnerType(),
-                socialMedia.getMediaType(),
-                socialMedia.getName(),
-                socialMedia.getLogoUrl(),
-                socialMedia.getUrl()
-            );
+            var command = SocialMediaCreateCommand.builder()
+                .ownerId(socialMedia.getId())
+                .ownerType(socialMedia.getOwnerType())
+                .socialMediaType(socialMedia.getMediaType())
+                .name(socialMedia.getName())
+                .logoUrl(socialMedia.getLogoUrl())
+                .url(socialMedia.getUrl())
+                .build();
             assertThatThrownBy(() -> socialMediaCommandService.createSocialMedia(command))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ErrorCode.DUPLICATE_SOCIAL_MEDIA.getMessage());
@@ -84,14 +84,14 @@ class SocialMediaCommandServiceTest {
         @Test
         void 추가하려는_소셜미디어의_owner가_존재하지_않으면_예외() {
             // when & then
-            var command = new SocialMediaCreateCommand(
-                4885L,
-                OwnerType.SCHOOL,
-                SocialMediaType.INSTAGRAM,
-                "테코대학교 인스타그램",
-                "https://image.com/logo.png",
-                "https://instagram.com/tecodaehak"
-            );
+            var command = SocialMediaCreateCommand.builder()
+                .ownerId(4885L)
+                .ownerType(OwnerType.SCHOOL)
+                .socialMediaType(SocialMediaType.INSTAGRAM)
+                .name("테코대학교 인스타그램")
+                .logoUrl("https://image.com/logo.png")
+                .url("https://instagram.com/tecodaehak")
+                .build();
             assertThatThrownBy(() -> socialMediaCommandService.createSocialMedia(command))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(ErrorCode.SCHOOL_NOT_FOUND.getMessage());
@@ -103,14 +103,14 @@ class SocialMediaCommandServiceTest {
             School 테코대학교 = schoolRepository.save(SchoolFixture.builder().name("테코대학교").build());
 
             // when
-            var command = new SocialMediaCreateCommand(
-                테코대학교.getId(),
-                OwnerType.SCHOOL,
-                SocialMediaType.INSTAGRAM,
-                "테코대학교 인스타그램",
-                "https://image.com/logo.png",
-                "https://instagram.com/tecodaehak"
-            );
+            var command = SocialMediaCreateCommand.builder()
+                .ownerId(테코대학교.getId())
+                .ownerType(OwnerType.SCHOOL)
+                .socialMediaType(SocialMediaType.INSTAGRAM)
+                .name("테코대학교 인스타그램")
+                .logoUrl("https://image.com/logo.png")
+                .url("https://instagram.com/tecodaehak")
+                .build();
             Long socialMediaId = socialMediaCommandService.createSocialMedia(command);
 
             // then
@@ -124,11 +124,11 @@ class SocialMediaCommandServiceTest {
         @Test
         void 소셜미디어의_식별자에_대한_소셜미디어가_존재하지_않으면_예외() {
             // when & then
-            var command = new SocialMediaUpdateCommand(
-                "테코대학교 인스타그램",
-                "https://instagram.com/tecodaehak",
-                "https://image.com/logo.png"
-            );
+            var command = SocialMediaUpdateCommand.builder()
+                .name("테코대학교 인스타그램")
+                .url("https://instagram.com/tecodaehak")
+                .logoUrl("https://image.com/logo.png")
+                .build();
             assertThatThrownBy(() -> socialMediaCommandService.updateSocialMedia(4885L, command))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(ErrorCode.SOCIAL_MEDIA_NOT_FOUND.getMessage());
@@ -146,11 +146,11 @@ class SocialMediaCommandServiceTest {
                 .build());
 
             // when
-            var command = new SocialMediaUpdateCommand(
-                "테코대학교 인스타그램",
-                "https://instagram.com/tecodaehak",
-                "https://image.com/logo.png"
-            );
+            var command = SocialMediaUpdateCommand.builder()
+                .name("테코대학교 인스타그램")
+                .url("https://instagram.com/tecodaehak")
+                .logoUrl("https://image.com/logo.png")
+                .build();
             socialMediaCommandService.updateSocialMedia(socialMedia.getId(), command);
 
             // then

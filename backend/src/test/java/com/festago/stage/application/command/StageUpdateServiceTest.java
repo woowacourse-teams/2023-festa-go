@@ -82,11 +82,11 @@ class StageUpdateServiceTest {
         @Test
         void ArtistIds에_중복이_있으면_예외() {
             // given
-            var command = new StageUpdateCommand(
-                stageStartTime.minusHours(1),
-                ticketOpenTime.minusDays(1),
-                List.of(에픽하이.getId(), 에픽하이.getId())
-            );
+            var command = StageUpdateCommand.builder()
+                .startTime(stageStartTime.minusHours(1))
+                .ticketOpenTime(ticketOpenTime.minusDays(1))
+                .artistIds(List.of(에픽하이.getId(), 에픽하이.getId()))
+                .build();
 
             // then
             // when & then
@@ -101,11 +101,11 @@ class StageUpdateServiceTest {
             List<Long> artistIds = LongStream.rangeClosed(1, 11)
                 .boxed()
                 .toList();
-            var command = new StageUpdateCommand(
-                stageStartTime.minusHours(1),
-                ticketOpenTime.minusDays(1),
-                artistIds
-            );
+            var command = StageUpdateCommand.builder()
+                .startTime(stageStartTime.minusHours(1))
+                .ticketOpenTime(ticketOpenTime.minusDays(1))
+                .artistIds(artistIds)
+                .build();
 
             // when & then
             assertThatThrownBy(() -> stageUpdateService.updateStage(테코대학교_축제_공연.getId(), command))
@@ -120,11 +120,11 @@ class StageUpdateServiceTest {
                 .mapToObj(it -> artistRepository.save(ArtistFixture.builder().build()))
                 .map(Artist::getId)
                 .toList();
-            var command = new StageUpdateCommand(
-                stageStartTime.minusHours(1),
-                ticketOpenTime.minusDays(1),
-                artistIds
-            );
+            var command = StageUpdateCommand.builder()
+                .startTime(stageStartTime.minusHours(1))
+                .ticketOpenTime(ticketOpenTime.minusDays(1))
+                .artistIds(artistIds)
+                .build();
 
             // when
             assertThatNoException()
@@ -135,11 +135,11 @@ class StageUpdateServiceTest {
         void Stage에_대한_식별자가_없으면_예외() {
             // given
             Long stageId = 4885L;
-            var command = new StageUpdateCommand(
-                stageStartTime.minusHours(1),
-                ticketOpenTime.minusDays(1),
-                List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId())
-            );
+            var command = StageUpdateCommand.builder()
+                .startTime(stageStartTime.minusHours(1))
+                .ticketOpenTime(ticketOpenTime.minusDays(1))
+                .artistIds(List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId()))
+                .build();
 
             // when & then
             assertThatThrownBy(() -> stageUpdateService.updateStage(stageId, command))
@@ -150,11 +150,11 @@ class StageUpdateServiceTest {
         @Test
         void 아티스트_식별자_목록에_존재하지_않은_아티스트가_있으면_예외() {
             // given
-            var command = new StageUpdateCommand(
-                stageStartTime.minusHours(1),
-                ticketOpenTime.minusDays(1),
-                List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId(), 4885L)
-            );
+            var command = StageUpdateCommand.builder()
+                .startTime(stageStartTime.minusHours(1))
+                .ticketOpenTime(ticketOpenTime.minusDays(1))
+                .artistIds(List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId(), 4885L))
+                .build();
 
             // when & then
             assertThatThrownBy(() -> stageUpdateService.updateStage(테코대학교_축제_공연.getId(), command))
@@ -165,11 +165,11 @@ class StageUpdateServiceTest {
         @Test
         void 성공하면_수정된_Stage에_반영된다() {
             // given
-            var command = new StageUpdateCommand(
-                stageStartTime.minusHours(1),
-                ticketOpenTime.minusDays(1),
-                List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId())
-            );
+            var command = StageUpdateCommand.builder()
+                .startTime(stageStartTime.minusHours(1))
+                .ticketOpenTime(ticketOpenTime.minusDays(1))
+                .artistIds(List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId()))
+                .build();
 
             // when
             stageUpdateService.updateStage(테코대학교_축제_공연.getId(), command);
@@ -183,11 +183,11 @@ class StageUpdateServiceTest {
         @Test
         void 성공하면_수정된_Stage에_대한_StageArtist가_갱신된다() {
             // given
-            var command = new StageUpdateCommand(
-                stageStartTime.minusHours(1),
-                ticketOpenTime.minusDays(1),
-                List.of(에픽하이.getId())
-            );
+            var command = StageUpdateCommand.builder()
+                .startTime(stageStartTime.minusHours(1))
+                .ticketOpenTime(ticketOpenTime.minusDays(1))
+                .artistIds(List.of(에픽하이.getId()))
+                .build();
 
             // when
             stageUpdateService.updateStage(테코대학교_축제_공연.getId(), command);
