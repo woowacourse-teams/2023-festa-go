@@ -105,9 +105,13 @@ class DefaultUserRepository @Inject constructor(
 
     private suspend fun refresh(refreshToken: Token): Result<Unit> {
         return runCatchingResponse {
-            authRetrofitService.refresh(RefreshRequest(refreshToken.token))
+            val refreshRequest = RefreshRequest(refreshToken.token)
+            tokenDataSource.accessToken = null
+            tokenDataSource.refreshToken = null
+            authRetrofitService.refresh(refreshRequest)
         }.onSuccessOrCatch { refreshTokenResponse ->
             tokenDataSource.accessToken = refreshTokenResponse.accessToken.toEntity()
+            tokenDataSource.refreshToken = refreshTokenResponse.refreshToken.toEntity()
         }
     }
 
