@@ -13,4 +13,5 @@ interface UserRepository {
     suspend fun deleteAccount(): Result<Unit>
     suspend fun rejectSignIn()
     suspend fun getUserInfo(): Result<UserInfo>
+    suspend fun clearToken()
 }

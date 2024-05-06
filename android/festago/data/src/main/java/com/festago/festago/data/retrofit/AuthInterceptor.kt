@@ -10,7 +10,10 @@ class AuthInterceptor(private val userRepository: UserRepository) : Interceptor 
 
     override fun intercept(chain: Interceptor.Chain): Response {
         return runBlocking {
-            chain.proceed(request = getNewRequest(chain))
+            chain.proceed(request = getNewRequest(chain)).also {
+                if (it.code == 401)
+                    userRepository.clearToken()
+            }
         }
     }
 
@@ -22,8 +25,8 @@ class AuthInterceptor(private val userRepository: UserRepository) : Interceptor 
                 AUTHORIZATION_TOKEN_FORMAT.format(
                     userRepository.getAccessToken().getOrNull()?.token ?: "TokenIsNull",
                 ),
-            )
-            .build()
+            ).build()
+
 
     companion object {
         private const val HEADER_AUTHORIZATION = "Authorization"

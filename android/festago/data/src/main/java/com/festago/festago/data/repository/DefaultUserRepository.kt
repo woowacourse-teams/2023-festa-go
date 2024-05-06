@@ -86,8 +86,7 @@ class DefaultUserRepository @Inject constructor(
             )
         }.onSuccessOrCatch {
             kakaoAuthorization.signOut()
-            tokenDataSource.accessToken = null
-            tokenDataSource.refreshToken = null
+            clearToken()
         }
     }
 
@@ -98,16 +97,14 @@ class DefaultUserRepository @Inject constructor(
             )
         }.onSuccessOrCatch {
             kakaoAuthorization.deleteAccount()
-            tokenDataSource.accessToken = null
-            tokenDataSource.refreshToken = null
+            clearToken()
         }
     }
 
     private suspend fun refresh(refreshToken: Token): Result<Unit> {
         return runCatchingResponse {
             val refreshRequest = RefreshRequest(refreshToken.token)
-            tokenDataSource.accessToken = null
-            tokenDataSource.refreshToken = null
+            clearToken()
             authRetrofitService.refresh(refreshRequest)
         }.onSuccessOrCatch { refreshTokenResponse ->
             tokenDataSource.accessToken = refreshTokenResponse.accessToken.toEntity()
@@ -118,6 +115,11 @@ class DefaultUserRepository @Inject constructor(
     override suspend fun getUserInfo(): Result<UserInfo> {
         return userInfoDataSource.userInfo?.toDomain()?.let { Result.success(it) }
             ?: Result.failure(NullPointerException("User info is null"))
+    }
+
+    override suspend fun clearToken() {
+        tokenDataSource.accessToken = null
+        tokenDataSource.refreshToken = null
     }
 
     companion object {
