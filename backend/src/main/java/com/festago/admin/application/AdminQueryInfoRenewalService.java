@@ -30,7 +30,7 @@ public class AdminQueryInfoRenewalService {
 
     public void renewalByFestivalStartDatePeriod(LocalDate to, LocalDate end) {
         List<Long> festivalIds = adminFestivalIdResolverQueryDslRepository.findFestivalIdsByStartDatePeriod(to, end);
-        log.info("{}개의 축제에 대해 QueryInfo를 새로 갱신합니다.", festivalIds);
+        log.info("{}개의 축제에 대해 QueryInfo를 새로 갱신합니다.", festivalIds.size());
         festivalIds.forEach(festivalQueryInfoArtistRenewService::renewArtistInfo);
         adminStageIdResolverQueryDslRepository.findStageIdsByFestivalIdIn(festivalIds)
             .forEach(stageQueryInfoService::renewalStageQueryInfo);
