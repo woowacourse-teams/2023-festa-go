@@ -18,10 +18,10 @@ public record StageV1UpdateRequest(
 ) {
 
     public StageUpdateCommand toCommand() {
-        return new StageUpdateCommand(
-            startTime,
-            ticketOpenTime,
-            artistIds
-        );
+        return StageUpdateCommand.builder()
+            .startTime(startTime)
+            .ticketOpenTime(ticketOpenTime)
+            .artistIds(artistIds)
+            .build();
     }
 }
