@@ -15,10 +15,10 @@ public record SocialMediaUpdateV1Request(
 ) {
 
     public SocialMediaUpdateCommand toCommand() {
-        return new SocialMediaUpdateCommand(
-            name,
-            logoUrl,
-            url
-        );
+        return SocialMediaUpdateCommand.builder()
+            .name(name)
+            .logoUrl(logoUrl)
+            .url(url)
+            .build();
     }
 }

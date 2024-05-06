@@ -24,13 +24,13 @@ public record SocialMediaCreateV1Request(
 ) {
 
     public SocialMediaCreateCommand toCommand() {
-        return new SocialMediaCreateCommand(
-            ownerId,
-            ownerType,
-            socialMediaType,
-            name,
-            logoUrl,
-            url
-        );
+        return SocialMediaCreateCommand.builder()
+            .ownerId(ownerId)
+            .ownerType(ownerType)
+            .socialMediaType(socialMediaType)
+            .name(name)
+            .logoUrl(logoUrl)
+            .url(url)
+            .build();
     }
 }

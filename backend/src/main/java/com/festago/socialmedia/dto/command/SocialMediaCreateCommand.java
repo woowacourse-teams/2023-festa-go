@@ -3,7 +3,9 @@ package com.festago.socialmedia.dto.command;
 import com.festago.socialmedia.domain.OwnerType;
 import com.festago.socialmedia.domain.SocialMedia;
 import com.festago.socialmedia.domain.SocialMediaType;
+import lombok.Builder;
 
+@Builder
 public record SocialMediaCreateCommand(
     Long ownerId,
     OwnerType ownerType,
