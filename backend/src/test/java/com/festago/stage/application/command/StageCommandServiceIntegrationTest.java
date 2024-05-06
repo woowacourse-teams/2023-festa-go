@@ -105,12 +105,12 @@ public class StageCommandServiceIntegrationTest extends ApplicationIntegrationTe
         @Test
         void 공연을_생성하면_StageQueryInfo가_저장된다() {
             // given
-            var command = new StageCreateCommand(
-                테코대학교_축제_식별자,
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자)
-            );
+            var command = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제_식별자)
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이_식별자, 소녀시대_식별자, 뉴진스_식별자))
+                .build();
 
             // when
             Long stageId = stageCreateService.createStage(command);
