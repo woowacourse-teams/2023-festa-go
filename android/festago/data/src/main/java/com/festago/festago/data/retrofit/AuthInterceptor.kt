@@ -27,7 +27,6 @@ class AuthInterceptor(private val userRepository: UserRepository) : Interceptor 
                 ),
             ).build()
 
-
     companion object {
         private const val HEADER_AUTHORIZATION = "Authorization"
         private const val AUTHORIZATION_TOKEN_FORMAT = "Bearer %s"
