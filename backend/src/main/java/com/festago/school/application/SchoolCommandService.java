@@ -3,8 +3,8 @@ package com.festago.school.application;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.school.domain.School;
-import com.festago.school.dto.SchoolCreateCommand;
-import com.festago.school.dto.SchoolUpdateCommand;
+import com.festago.school.dto.command.SchoolCreateCommand;
+import com.festago.school.dto.command.SchoolUpdateCommand;
 import com.festago.school.dto.evnet.SchoolCreatedEvent;
 import com.festago.school.dto.evnet.SchoolUpdatedEvent;
 import com.festago.school.repository.SchoolRepository;
@@ -24,7 +24,7 @@ public class SchoolCommandService {
 
     public Long createSchool(SchoolCreateCommand command) {
         validateCreate(command);
-        School school = schoolRepository.save(command.toDomain());
+        School school = schoolRepository.save(command.toEntity());
         eventPublisher.publishEvent(new SchoolCreatedEvent(school));
         return school.getId();
     }
