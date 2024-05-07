@@ -25,7 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageFileUploadService {
 
     private static final int MAX_FILE_SIZE = 2_000_000; // 2MB
-    private static final Set<FileExtension> ALLOW_IMAGE_EXTENSION = EnumSet.of(FileExtension.JPG, FileExtension.PNG);
+    private static final Set<FileExtension> ALLOW_IMAGE_EXTENSION = EnumSet.of(FileExtension.JPG, FileExtension.JPEG,
+        FileExtension.PNG, FileExtension.WEBP);
 
     private final StorageClient storageClient;
     private final UploadFileRepository uploadFileRepository;
