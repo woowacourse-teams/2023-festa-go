@@ -3,6 +3,7 @@ package com.festago.school.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.BDDMockito.*;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -31,7 +33,7 @@ class SchoolCommandServiceTest {
     @BeforeEach
     void setUp() {
         schoolRepository = new MemorySchoolRepository();
-        schoolCommandService = new SchoolCommandService(schoolRepository);
+        schoolCommandService = new SchoolCommandService(schoolRepository, mock());
     }
 
     @Nested

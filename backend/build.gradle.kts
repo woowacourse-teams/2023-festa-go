@@ -29,6 +29,7 @@ val jjwtVersion = "0.12.5"
 val logbackSlackAppenderVersion = "1.4.0"
 val cucumberVersion = "7.13.0"
 val firebaseVersion = "8.1.0"
+val awsS3Version = "2.25.40"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -82,6 +83,9 @@ dependencies {
 
     // Micrometer
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+
+    // AWS S3
+    implementation("software.amazon.awssdk:s3:${awsS3Version}")
 }
 
 tasks.test {

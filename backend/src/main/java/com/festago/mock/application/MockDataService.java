@@ -56,7 +56,7 @@ public class MockDataService {
         for (Festival festival : festivals) {
             List<Stage> stages = stageRepository.saveAll(mockStagesGenerator.generate(festival));
             stageArtistRepository.saveAll(mockStageArtistsGenerator.generate(stages, artists));
-            eventPublisher.publishEvent(new FestivalCreatedEvent(festival.getId()));
+            eventPublisher.publishEvent(new FestivalCreatedEvent(festival));
             for (Stage stage : stages) {
                 eventPublisher.publishEvent(new StageCreatedEvent(stage));
             }

@@ -27,3 +27,9 @@ festago:
       native-app-key: native-app-key
       redirect-uri: redirect-uri
       client-secret: client-secret
+  r2:
+    access-key: access-key
+    secret-key: secret-key
+    endpoint: https://endpoint.com
+    bucket: bucket
+    url: https://url.com
