@@ -2,6 +2,7 @@ package com.festago.artist.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.BDDMockito.*;
 
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.command.ArtistCreateCommand;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -25,7 +27,7 @@ class ArtistCommandServiceTest {
     @BeforeEach
     void setUp() {
         artistRepository = new MemoryArtistRepository();
-        artistCommandService = new ArtistCommandService(artistRepository);
+        artistCommandService = new ArtistCommandService(artistRepository, mock());
     }
 
     @Test
