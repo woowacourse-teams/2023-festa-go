@@ -1,14 +1,13 @@
 package com.festago.auth.infrastructure;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
-import static org.mockito.BDDMockito.spy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
+import com.festago.auth.infrastructure.openid.KakaoOpenIdClient;
 import com.festago.auth.infrastructure.openid.KakaoOpenIdPublicKeyLocator;
-import com.festago.auth.infrastructure.openid.KakaoOpenIdUserInfoProvider;
 import com.festago.auth.infrastructure.openid.NoopOpenIdNonceValidator;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
@@ -28,9 +27,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class KakaoOpenIdUserInfoProviderTest {
+class KakaoOpenIdClientTest {
 
-    KakaoOpenIdUserInfoProvider kakaoOpenIdUserInfoProvider;
+    KakaoOpenIdClient kakaoOpenIdClient;
 
     KakaoOpenIdPublicKeyLocator keyLocator;
 
@@ -42,7 +41,7 @@ class KakaoOpenIdUserInfoProviderTest {
     void setUp() {
         keyLocator = mock();
         clock = spy(Clock.systemDefaultZone());
-        kakaoOpenIdUserInfoProvider = new KakaoOpenIdUserInfoProvider(
+        kakaoOpenIdClient = new KakaoOpenIdClient(
             "restApiKey",
             "nativeAppKey",
             keyLocator,
@@ -65,7 +64,7 @@ class KakaoOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> kakaoOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> kakaoOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -84,7 +83,7 @@ class KakaoOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> kakaoOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> kakaoOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -104,7 +103,7 @@ class KakaoOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> kakaoOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> kakaoOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -124,7 +123,7 @@ class KakaoOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> kakaoOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> kakaoOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -143,7 +142,7 @@ class KakaoOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> kakaoOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> kakaoOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -164,7 +163,7 @@ class KakaoOpenIdUserInfoProviderTest {
             .compact();
 
         // when
-        var expect = kakaoOpenIdUserInfoProvider.provide(idToken);
+        var expect = kakaoOpenIdClient.getUserInfo(idToken);
 
         // then
         assertThat(expect.socialId()).isEqualTo(socialId);
@@ -187,7 +186,7 @@ class KakaoOpenIdUserInfoProviderTest {
             .compact();
 
         // when
-        var expect = kakaoOpenIdUserInfoProvider.provide(idToken);
+        var expect = kakaoOpenIdClient.getUserInfo(idToken);
 
         // then
         assertThat(expect.socialId()).isEqualTo(socialId);
