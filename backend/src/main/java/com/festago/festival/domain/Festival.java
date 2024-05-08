@@ -67,9 +67,6 @@ public class Festival extends BaseTimeEntity {
     }
 
     private void validatePosterImageUrl(String posterImageUrl) {
-        if (posterImageUrl == null) {
-            return;
-        }
         Validator.maxLength(posterImageUrl, MAX_POSTER_IMAGE_URL_LENGTH, "posterImageUrl");
     }
 
