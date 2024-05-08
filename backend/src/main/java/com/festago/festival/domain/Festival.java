@@ -1,6 +1,7 @@
 package com.festago.festival.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.util.ImageUrlHelper;
 import com.festago.common.util.Validator;
 import com.festago.school.domain.School;
 import jakarta.persistence.Embedded;
@@ -21,7 +22,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Festival extends BaseTimeEntity {
 
-    private static final String DEFAULT_POSTER_IMAGE_URL = "https://picsum.photos/536/354";
     private static final int MAX_NAME_LENGTH = 50;
     private static final int MAX_POSTER_IMAGE_URL_LENGTH = 255;
 
@@ -44,10 +44,6 @@ public class Festival extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private School school;
 
-    public Festival(String name, FestivalDuration festivalDuration, School school) {
-        this(null, name, festivalDuration, DEFAULT_POSTER_IMAGE_URL, school);
-    }
-
     public Festival(String name, FestivalDuration festivalDuration, String posterImageUrl, School school) {
         this(null, name, festivalDuration, posterImageUrl, school);
     }
@@ -60,7 +56,7 @@ public class Festival extends BaseTimeEntity {
         this.id = id;
         this.name = name;
         this.festivalDuration = festivalDuration;
-        this.posterImageUrl = posterImageUrl;
+        this.posterImageUrl = ImageUrlHelper.getBlankStringIfBlank(posterImageUrl);
         this.school = school;
     }
 
@@ -71,9 +67,10 @@ public class Festival extends BaseTimeEntity {
     }
 
     private void validatePosterImageUrl(String posterImageUrl) {
-        String fieldName = "posterImageUrl";
-        Validator.notBlank(posterImageUrl, fieldName);
-        Validator.maxLength(posterImageUrl, MAX_POSTER_IMAGE_URL_LENGTH, fieldName);
+        if (posterImageUrl == null) {
+            return;
+        }
+        Validator.maxLength(posterImageUrl, MAX_POSTER_IMAGE_URL_LENGTH, "posterImageUrl");
     }
 
     private void validateFestivalDuration(FestivalDuration festivalDuration) {
@@ -99,7 +96,7 @@ public class Festival extends BaseTimeEntity {
 
     public void changePosterImageUrl(String posterImageUrl) {
         validatePosterImageUrl(posterImageUrl);
-        this.posterImageUrl = posterImageUrl;
+        this.posterImageUrl = ImageUrlHelper.getBlankStringIfBlank(posterImageUrl);
     }
 
     public void changeFestivalDuration(FestivalDuration festivalDuration) {
