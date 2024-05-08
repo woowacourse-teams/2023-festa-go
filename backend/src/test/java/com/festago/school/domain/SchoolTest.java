@@ -27,7 +27,7 @@ class SchoolTest {
             String domain = "1".repeat(51);
 
             // when & then
-            assertThatThrownBy(() -> new School(domain, "테코대학교", SchoolRegion.서울))
+            assertThatThrownBy(() -> new School(domain, "테코대학교", "", "", SchoolRegion.서울))
                 .isInstanceOf(ValidException.class);
         }
 
@@ -36,7 +36,7 @@ class SchoolTest {
         @ValueSource(strings = {"", " ", "\t", "\n"})
         void 도메인이_null_또는_공백이면_예외(String domain) {
             // when & then
-            assertThatThrownBy(() -> new School(domain, "테코대학교", SchoolRegion.서울))
+            assertThatThrownBy(() -> new School(domain, "테코대학교", "", "", SchoolRegion.서울))
                 .isInstanceOf(ValidException.class);
         }
 
@@ -47,7 +47,7 @@ class SchoolTest {
             String domain = "1".repeat(length);
 
             // when
-            School school = new School(domain, "테코대학교", SchoolRegion.서울);
+            School school = new School(domain, "테코대학교", "", "", SchoolRegion.서울);
 
             // then
             assertThat(school.getDomain()).isEqualTo(domain);
@@ -59,7 +59,7 @@ class SchoolTest {
             String name = "1".repeat(256);
 
             // when & then
-            assertThatThrownBy(() -> new School("teco.ac.kr", name, SchoolRegion.서울))
+            assertThatThrownBy(() -> new School("teco.ac.kr", name, "", "", SchoolRegion.서울))
                 .isInstanceOf(ValidException.class);
         }
 
@@ -68,7 +68,7 @@ class SchoolTest {
         @ValueSource(strings = {"", " ", "\t", "\n"})
         void 이름이_null_또는_공백이면_예외(String name) {
             // when & then
-            assertThatThrownBy(() -> new School("teco.ac.kr", name, SchoolRegion.서울))
+            assertThatThrownBy(() -> new School("teco.ac.kr", name, "", "", SchoolRegion.서울))
                 .isInstanceOf(ValidException.class);
         }
 
@@ -79,7 +79,7 @@ class SchoolTest {
             String name = "1".repeat(length);
 
             // when
-            School school = new School("teco.ac.kr", name, SchoolRegion.서울);
+            School school = new School("teco.ac.kr", name, "", "", SchoolRegion.서울);
 
             // then
             assertThat(school.getName()).isEqualTo(name);
@@ -91,20 +91,20 @@ class SchoolTest {
             SchoolRegion region = null;
 
             // when & then
-            assertThatThrownBy(() -> new School("teco.ac.kr", "테코대학교", region))
+            assertThatThrownBy(() -> new School("teco.ac.kr", "테코대학교", "", "", region))
                 .isInstanceOf(ValidException.class);
         }
 
         @ParameterizedTest
         @NullSource
         @ValueSource(strings = {"", " ", "\t", "\n"})
-        void logoUrl이_null_또는_공백이어도_성공(String logoUrl) {
+        void logoUrl이_null_또는_공백이면_기본값이_할당된다(String logoUrl) {
             // when
             School school = new School(1L, "teco.ac.kr", "테코대학교", logoUrl, "https://image.com/backgroundImage.png",
                 SchoolRegion.서울);
 
             // then
-            assertThat(school.getLogoUrl()).isNotBlank();
+            assertThat(school.getLogoUrl()).isEmpty();
         }
 
         @ParameterizedTest
@@ -136,13 +136,13 @@ class SchoolTest {
         @ParameterizedTest
         @NullSource
         @ValueSource(strings = {"", " ", "\t", "\n"})
-        void backgroundImageUrl이_null_또는_공백이어도_성공(String backgroundImageUrl) {
+        void backgroundImageUrl이_null_또는_공백이면_기본값이_할당된다(String backgroundImageUrl) {
             // when
             School school = new School(1L, "teco.ac.kr", "테코대학교", "https://image.com/logo.png", backgroundImageUrl,
                 SchoolRegion.서울);
 
             // then
-            assertThat(school.getBackgroundUrl()).isNotBlank();
+            assertThat(school.getBackgroundUrl()).isEmpty();
         }
 
         @ParameterizedTest
@@ -295,12 +295,12 @@ class SchoolTest {
         @ParameterizedTest
         @NullSource
         @ValueSource(strings = {"", " ", "\t", "\n"})
-        void logoUrl이_null_또는_공백이어도_성공(String logoUrl) {
+        void logoUrl이_null_또는_공백이면_기본값이_할당된다(String logoUrl) {
             // when
             school.changeLogoUrl(logoUrl);
 
             // then
-            assertThat(school.getLogoUrl()).isNotBlank();
+            assertThat(school.getLogoUrl()).isEmpty();
         }
 
         @ParameterizedTest
@@ -328,12 +328,12 @@ class SchoolTest {
         @ParameterizedTest
         @NullSource
         @ValueSource(strings = {"", " ", "\t", "\n"})
-        void backgroundImageUrl이_null_또는_공백이어도_성공(String backgroundImageUrl) {
+        void backgroundImageUrl이_null_또는_공백이면_기본값이_할당된다(String backgroundImageUrl) {
             // when
             school.changeBackgroundImageUrl(backgroundImageUrl);
 
             // then
-            assertThat(school.getBackgroundUrl()).isNotBlank();
+            assertThat(school.getBackgroundUrl()).isEmpty();
         }
 
         @ParameterizedTest

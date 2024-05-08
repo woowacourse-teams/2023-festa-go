@@ -33,6 +33,8 @@ public class MockSchoolsGenerator {
         return new School(
             schoolEmail,
             schoolName,
+            "",
+            "",
             schoolRegion
         );
     }
