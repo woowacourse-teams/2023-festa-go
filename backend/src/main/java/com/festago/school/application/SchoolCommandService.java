@@ -30,11 +30,7 @@ public class SchoolCommandService {
     }
 
     private void validateCreate(SchoolCreateCommand command) {
-        String domain = command.domain();
         String name = command.name();
-        if (schoolRepository.existsByDomain(domain)) {
-            throw new BadRequestException(ErrorCode.DUPLICATE_SCHOOL_DOMAIN);
-        }
         if (schoolRepository.existsByName(name)) {
             throw new BadRequestException(ErrorCode.DUPLICATE_SCHOOL_NAME);
         }
@@ -55,11 +51,7 @@ public class SchoolCommandService {
     }
 
     private void validateUpdate(School school, SchoolUpdateCommand command) {
-        String domain = command.domain();
         String name = command.name();
-        if (!Objects.equals(school.getDomain(), domain) && schoolRepository.existsByDomain(domain)) {
-            throw new BadRequestException(ErrorCode.DUPLICATE_SCHOOL_DOMAIN);
-        }
         if (!Objects.equals(school.getName(), name) && schoolRepository.existsByName(name)) {
             throw new BadRequestException(ErrorCode.DUPLICATE_SCHOOL_NAME);
         }

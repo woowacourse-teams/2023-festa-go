@@ -30,7 +30,6 @@ public class School extends BaseTimeEntity {
 
     @NotNull
     @Size(max = MAX_DOMAIN_LENGTH)
-    @Column(unique = true)
     private String domain;
 
     @NotNull
