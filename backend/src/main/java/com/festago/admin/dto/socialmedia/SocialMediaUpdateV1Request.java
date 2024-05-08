@@ -1,6 +1,7 @@
 package com.festago.admin.dto.socialmedia;
 
 import com.festago.socialmedia.dto.command.SocialMediaUpdateCommand;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
@@ -8,7 +9,7 @@ import lombok.Builder;
 public record SocialMediaUpdateV1Request(
     @NotBlank
     String name,
-    @NotBlank
+    @Nullable
     String logoUrl,
     @NotBlank
     String url
