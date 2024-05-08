@@ -1,6 +1,8 @@
 package com.festago.artist.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.util.ImageUrlHelper;
+import com.festago.common.util.Validator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,8 +14,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Artist extends BaseTimeEntity {
-
-    private static final String DEFAULT_URL = "https://picsum.photos/536/354";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,14 +27,15 @@ public class Artist extends BaseTimeEntity {
     private String backgroundImageUrl;
 
     public Artist(Long id, String name, String profileImage, String backgroundImageUrl) {
+        validateName(name);
         this.id = id;
         this.name = name;
-        this.profileImage = profileImage;
-        this.backgroundImageUrl = backgroundImageUrl;
+        this.profileImage = ImageUrlHelper.getBlankStringIfBlank(profileImage);
+        this.backgroundImageUrl = ImageUrlHelper.getBlankStringIfBlank(backgroundImageUrl);
     }
 
-    public Artist(String name, String profileImage) {
-        this(null, name, profileImage, DEFAULT_URL);
+    private void validateName(String name) {
+        Validator.notBlank(name, "name");
     }
 
     public Artist(String name, String profileImage, String backgroundImageUrl) {
@@ -42,9 +43,10 @@ public class Artist extends BaseTimeEntity {
     }
 
     public void update(String name, String profileImage, String backgroundImageUrl) {
+        validateName(name);
         this.name = name;
-        this.profileImage = profileImage;
-        this.backgroundImageUrl = backgroundImageUrl;
+        this.profileImage = ImageUrlHelper.getBlankStringIfBlank(profileImage);
+        this.backgroundImageUrl = ImageUrlHelper.getBlankStringIfBlank(backgroundImageUrl);
     }
 
     public Long getId() {
