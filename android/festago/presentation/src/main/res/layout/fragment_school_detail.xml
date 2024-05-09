@@ -46,13 +46,12 @@
 
             <ImageView
                 android:id="@+id/ivSchoolBackground"
-                imageUrl="@{successUiState.schoolInfo.backgroundUrl}"
                 android:layout_width="match_parent"
                 android:layout_height="136dp"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@color/background_gray_02" />
+                android:src="@drawable/img_school_background"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:layout_width="0dp"
@@ -93,7 +92,7 @@
                     android:layout_height="match_parent"
                     android:importantForAccessibility="no"
                     android:scaleType="centerCrop"
-                    tools:src="@color/background_gray_03" />
+                    android:src="@drawable/img_default_school" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
