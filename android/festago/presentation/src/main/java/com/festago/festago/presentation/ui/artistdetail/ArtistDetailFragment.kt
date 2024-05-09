@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.festago.festago.domain.model.social.SocialMediaType
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentArtistDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
@@ -107,10 +108,20 @@ class ArtistDetailFragment : Fragment() {
 
         uiState.artist.artistMedia.map { media ->
             with(ItemMediaBinding.inflate(layoutInflater, binding.llcArtistMedia, false)) {
-                imageUrl = media.logoUrl
+                findMediaRes(media.type)
                 ivImage.setOnClickListener { startBrowser(media.url) }
                 binding.llcArtistMedia.addView(ivImage)
             }
+        }
+    }
+
+    private fun findMediaRes(type: SocialMediaType): Int {
+        return when (type) {
+            SocialMediaType.YOUTUBE -> R.drawable.ic_youtube
+            SocialMediaType.INSTAGRAM -> R.drawable.ic_instagram
+            SocialMediaType.X -> R.drawable.ic_x
+            SocialMediaType.FACEBOOK -> R.drawable.ic_facebook
+            SocialMediaType.NONE -> R.drawable.bg_festago_default
         }
     }
 

@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.festago.festago.domain.model.social.SocialMedia
+import com.festago.festago.domain.model.social.SocialMediaType
 import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
@@ -107,11 +109,23 @@ class SchoolDetailFragment : Fragment() {
 
         uiState.schoolInfo.socialMedia.forEach { media ->
             with(ItemMediaBinding.inflate(layoutInflater, binding.llcSchoolSocialMedia, false)) {
-                imageUrl = media.logoUrl
+                if (media.type == SocialMediaType.NONE) return@with
+                ivImage.setImageResource(findMediaRes(media))
                 ivImage.setOnClickListener { startBrowser(media.url) }
                 binding.llcSchoolSocialMedia.addView(ivImage)
             }
         }
+    }
+
+    private fun findMediaRes(media: SocialMedia): Int {
+        val res = when (media.type) {
+            SocialMediaType.INSTAGRAM -> R.drawable.ic_instagram
+            SocialMediaType.FACEBOOK -> R.drawable.ic_facebook
+            SocialMediaType.YOUTUBE -> R.drawable.ic_youtube
+            SocialMediaType.X -> R.drawable.ic_x
+            else -> R.drawable.bg_festago_default
+        }
+        return res
     }
 
     private fun handleError(uiState: SchoolDetailUiState.Error) {

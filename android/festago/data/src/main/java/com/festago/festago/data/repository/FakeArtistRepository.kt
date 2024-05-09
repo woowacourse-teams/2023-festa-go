@@ -6,6 +6,7 @@ import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.model.festival.FestivalsPage
 import com.festago.festago.domain.model.school.School
 import com.festago.festago.domain.model.social.SocialMedia
+import com.festago.festago.domain.model.social.SocialMediaType
 import com.festago.festago.domain.repository.ArtistRepository
 import java.time.LocalDate
 import javax.inject.Inject
@@ -22,13 +23,13 @@ class FakeArtistRepository @Inject constructor() : ArtistRepository {
                 "https://static.wikia.nocookie.net/witchers/images/d/d9/New_Jeans_Cover.png/revision/latest?cb=20220801091438",
                 listOf(
                     SocialMedia(
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1200px-Instagram_icon.png?20200512141346",
+                        SocialMediaType.INSTAGRAM,
                         "공식 인스타그램",
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/264px-Instagram_logo_2016.svg.png",
                         "https://www.instagram.com/newjeans_official/",
                     ),
                     SocialMedia(
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/600px-X_logo_2023.svg.png?20230819000805",
+                        SocialMediaType.INSTAGRAM,
                         "공식 엑스",
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/531px-X_logo_2023.svg.png",
                         "https://twitter.com/NewJeans_ADOR",
