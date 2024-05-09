@@ -43,4 +43,6 @@ class FakeUserRepository @Inject constructor() : UserRepository {
     override suspend fun getUserInfo(): Result<UserInfo> {
         return Result.success(UserInfo("", ""))
     }
+
+    override suspend fun clearToken() = Unit
 }
