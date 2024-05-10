@@ -76,11 +76,11 @@ public class R2StorageClient implements StorageClient {
             String mimeType = uploadFile.getMimeType().toString();
             RequestBody requestBody = RequestBody.fromContentProvider(() -> inputStream, fileSize, mimeType);
             UUID uploadFileId = uploadFile.getId();
-            log.info("파일 업로드 시작. id = {}, uploadUri={}, size={}", uploadFileId, uploadFile.getUploadUri(), fileSize);
+            log.info("파일 업로드 시작. id={}, uploadUri={}, size={}", uploadFileId, uploadFile.getUploadUri(), fileSize);
             s3Client.putObject(objectRequest, requestBody);
-            log.info("파일 업로드 완료. id = {}", uploadFileId);
+            log.info("파일 업로드 완료. id={}", uploadFileId);
         } catch (IOException e) {
-            log.warn("파일 업로드 중 문제가 발생했습니다. id = {}", uploadFile.getId());
+            log.warn("파일 업로드 중 문제가 발생했습니다. id={}", uploadFile.getId());
             throw new InternalServerException(ErrorCode.FILE_UPLOAD_ERROR, e);
         }
     }
