@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @CustomWebMvcTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AdminUploadV1ControllerTest {
+class AdminUploadImageV1ControllerTest {
 
     private static final Cookie TOKEN_COOKIE = new Cookie("token", "token");
 
