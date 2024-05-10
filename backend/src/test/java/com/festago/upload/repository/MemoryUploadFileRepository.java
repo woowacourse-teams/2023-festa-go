@@ -2,6 +2,8 @@ package com.festago.upload.repository;
 
 import com.festago.upload.domain.FileOwnerType;
 import com.festago.upload.domain.UploadFile;
+import com.festago.upload.domain.UploadStatus;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -37,5 +39,30 @@ public class MemoryUploadFileRepository implements UploadFileRepository {
         return memory.values().stream()
             .filter(uploadFile -> ids.contains(uploadFile.getId()))
             .toList();
+    }
+
+    @Override
+    public List<UploadFile> findByCreatedAtBetweenAndStatus(LocalDateTime startTime, LocalDateTime endTime,
+                                                            UploadStatus status) {
+        return memory.values().stream()
+            .filter(it -> it.getStatus() == status)
+            .filter(it -> it.getCreatedAt().isEqual(startTime) || it.getCreatedAt().isAfter(startTime))
+            .filter(it -> it.getCreatedAt().isEqual(endTime) || it.getCreatedAt().isBefore(endTime))
+            .toList();
+    }
+
+    @Override
+    public List<UploadFile> findByCreatedAtBeforeAndStatus(LocalDateTime createdAt, UploadStatus status) {
+        return memory.values().stream()
+            .filter(it -> it.getStatus() == status)
+            .filter(it -> it.getCreatedAt().isBefore(createdAt))
+            .toList();
+    }
+
+    @Override
+    public void deleteByIn(List<UploadFile> uploadFiles) {
+        for (UploadFile uploadFile : uploadFiles) {
+            memory.remove(uploadFile.getId());
+        }
     }
 }
