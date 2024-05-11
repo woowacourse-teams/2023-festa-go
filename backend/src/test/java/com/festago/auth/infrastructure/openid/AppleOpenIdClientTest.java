@@ -23,9 +23,9 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AppleOpenIdUserInfoProviderTest {
+class AppleOpenIdClientTest {
 
-    AppleOpenIdUserInfoProvider appleOpenIdUserInfoProvider;
+    AppleOpenIdClient appleOpenIdClient;
 
     AppleOpenIdPublicKeyLocator keyLocator;
 
@@ -37,7 +37,7 @@ class AppleOpenIdUserInfoProviderTest {
     void setUp() {
         keyLocator = mock();
         clock = spy(Clock.systemDefaultZone());
-        appleOpenIdUserInfoProvider = new AppleOpenIdUserInfoProvider(
+        appleOpenIdClient = new AppleOpenIdClient(
             "appleClientId",
             keyLocator,
             new NoopOpenIdNonceValidator(),
@@ -59,7 +59,7 @@ class AppleOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> appleOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> appleOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -78,7 +78,7 @@ class AppleOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> appleOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> appleOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -98,7 +98,7 @@ class AppleOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> appleOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> appleOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -118,7 +118,7 @@ class AppleOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> appleOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> appleOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -137,7 +137,7 @@ class AppleOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> appleOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> appleOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -158,7 +158,7 @@ class AppleOpenIdUserInfoProviderTest {
             .compact();
 
         // when
-        var expect = appleOpenIdUserInfoProvider.provide(idToken);
+        var expect = appleOpenIdClient.getUserInfo(idToken);
 
         // then
         assertThat(expect.socialId()).isEqualTo(socialId);
@@ -180,7 +180,7 @@ class AppleOpenIdUserInfoProviderTest {
             .compact();
 
         // when
-        var expect = appleOpenIdUserInfoProvider.provide(idToken);
+        var expect = appleOpenIdClient.getUserInfo(idToken);
 
         // then
         assertThat(expect.socialId()).isEqualTo(socialId);
