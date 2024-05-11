@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/search/artists")
-@Tag(name = "아티스트 검색 V1")
+@Tag(name = "아티스트 검색 요청 V1")
 @RequiredArgsConstructor
 public class ArtistSearchV1Controller {
 
     private final ArtistTotalSearchV1Service artistTotalSearchV1Service;
 
     @GetMapping
-    @Operation(description = "키워드로 아티스트 목록을 검색한다", summary = "아티스트 목록 검색 조회")
+    @Operation(description = "키워드로 아티스트 목록을 검색한다.", summary = "아티스트 검색")
     public ResponseEntity<List<ArtistTotalSearchV1Response>> searchByKeyword(@RequestParam String keyword) {
         Validator.notBlank(keyword, "keyword");
         List<ArtistTotalSearchV1Response> response = artistTotalSearchV1Service.findAllByKeyword(keyword);

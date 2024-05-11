@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/bookmarks/artists")
-@Tag(name = "아티스트 북마크 V1")
+@Tag(name = "아티스트 북마크 요청 V1")
 public class ArtistBookmarkV1Controller {
 
     private final ArtistBookmarkV1QueryService artistBookmarkV1QueryService;
 
     @MemberAuth
     @GetMapping
-    @Operation(description = "유저의 아티스트 북마크 목록을 조회한다.", summary = "아티스트 북마크 조회")
+    @Operation(description = "회원의 아티스트 북마크 목록을 조회한다.", summary = "아티스트 북마크 조회")
     public ResponseEntity<List<ArtistBookmarkV1Response>> findArtistBookmarksByMemberId(
         @Member Long memberId
     ) {

@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.artist.application.ArtistDetailV1QueryService;
 import com.festago.artist.dto.ArtistDetailV1Response;
-import com.festago.artist.dto.ArtistFestivalDetailV1Response;
+import com.festago.artist.dto.ArtistFestivalV1Response;
 import com.festago.artist.dto.ArtistMediaV1Response;
 import com.festago.socialmedia.domain.SocialMediaType;
 import com.festago.support.CustomWebMvcTest;
@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @CustomWebMvcTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ArtistDetailV1ControllerTest {
+class ArtistV1ControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -88,7 +88,7 @@ class ArtistDetailV1ControllerTest {
             void 요청을_보내면_200_응답과_body가_반환된다() throws Exception {
                 // given
                 var today = LocalDate.now();
-                var content = List.of(new ArtistFestivalDetailV1Response(
+                var content = List.of(new ArtistFestivalV1Response(
                     1L, "경북대학교", today, today.plusDays(1), "www.image.com/image.png",
                     "아티스트"
                 ));

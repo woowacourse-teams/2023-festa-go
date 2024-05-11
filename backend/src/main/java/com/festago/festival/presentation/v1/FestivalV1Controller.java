@@ -10,6 +10,7 @@ import com.festago.festival.dto.FestivalV1Response;
 import com.festago.festival.repository.FestivalFilter;
 import com.festago.school.domain.SchoolRegion;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +34,11 @@ public class FestivalV1Controller {
 
     @GetMapping
     @ValidPageable(maxSize = 20)
-    @Operation(description = "축제 목록를 조건별로 조회한다. PROGRESS: 진행 중, PLANNED: 진행 예정, END: 종료. 0 < size <= 20", summary = "축제 목록 조회")
+    @Operation(description = "축제 목록를 조건별로 조회한다.", summary = "축제 목록 조회")
     public ResponseEntity<Slice<FestivalV1Response>> findFestivals(
-        @RequestParam(defaultValue = "10") int size,
+        @Parameter(description = "0 < size <= 20") @RequestParam(defaultValue = "10") int size,
         @RequestParam(defaultValue = "ANY") SchoolRegion region,
-        @RequestParam(defaultValue = "PROGRESS") FestivalFilter filter,
+        @Parameter(description = "PROGRESS: 진행 중, PLANNED: 진행 예정, END: 종료") @RequestParam(defaultValue = "PROGRESS") FestivalFilter filter,
         @RequestParam(required = false) Long lastFestivalId,
         @RequestParam(required = false) LocalDate lastStartDate
     ) {
@@ -58,7 +59,7 @@ public class FestivalV1Controller {
     }
 
     @GetMapping("/{festivalId}")
-    @Operation(description = "특정 축제의 상세 정보를 조회한다.", summary = "특정 축제 상세 조회")
+    @Operation(description = "축제의 정보를 조회한다.", summary = "축제 정보 조회")
     public ResponseEntity<FestivalDetailV1Response> findFestivalDetail(
         @PathVariable Long festivalId
     ) {

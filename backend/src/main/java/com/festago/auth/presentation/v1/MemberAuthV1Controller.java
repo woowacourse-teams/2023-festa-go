@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
-@Tag(name = "회원 인증 V1")
+@Tag(name = "회원 인증 요청 V1")
 public class MemberAuthV1Controller {
 
     private final MemberAuthFacadeService memberAuthFacadeService;

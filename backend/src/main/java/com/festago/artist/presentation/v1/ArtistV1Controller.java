@@ -2,11 +2,12 @@ package com.festago.artist.presentation.v1;
 
 import com.festago.artist.application.ArtistDetailV1QueryService;
 import com.festago.artist.dto.ArtistDetailV1Response;
-import com.festago.artist.dto.ArtistFestivalDetailV1Response;
+import com.festago.artist.dto.ArtistFestivalV1Response;
 import com.festago.common.aop.ValidPageable;
 import com.festago.common.dto.SliceResponse;
 import com.festago.common.exception.ValidException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -23,28 +24,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/artists")
 @Tag(name = "아티스트 정보 요청 V1")
 @RequiredArgsConstructor
-public class ArtistDetailV1Controller {
+public class ArtistV1Controller {
 
     private final ArtistDetailV1QueryService artistDetailV1QueryService;
 
     @GetMapping("/{artistId}")
     @Operation(description = "아티스트의 정보를 조회한다.", summary = "아티스트 정보 조회")
-    public ResponseEntity<ArtistDetailV1Response> getArtistInfo(@PathVariable Long artistId) {
+    public ResponseEntity<ArtistDetailV1Response> findArtistDetail(@PathVariable Long artistId) {
         return ResponseEntity.ok(artistDetailV1QueryService.findArtistDetail(artistId));
     }
 
     @GetMapping("/{artistId}/festivals")
-    @Operation(description = "아티스트가 참석한 축제를 조회한다. isPast 값으로 종료 축제와 진행, 예정 축제를 구분 가능하다. 0 < size <= 20", summary = "아티스트 축제 조회")
+    @Operation(description = "아티스트가 참여한 축제 목록을 조회한다. isPast 값으로 종료 축제와 진행, 예정 축제를 구분 가능하다.", summary = "아티스트 참여 축제 목록 조회")
     @ValidPageable(maxSize = 20)
-    public ResponseEntity<SliceResponse<ArtistFestivalDetailV1Response>> getArtistInfo(
+    public ResponseEntity<SliceResponse<ArtistFestivalV1Response>> findArtistFestivals(
         @PathVariable Long artistId,
         @RequestParam(required = false) Long lastFestivalId,
         @RequestParam(required = false) LocalDate lastStartDate,
         @RequestParam(required = false, defaultValue = "false") boolean isPast,
-        @RequestParam(defaultValue = "10") int size
+        @Parameter(description = "0 < size <= 20") @RequestParam(defaultValue = "10") int size
     ) {
         validate(lastFestivalId, lastStartDate);
-        Slice<ArtistFestivalDetailV1Response> response = artistDetailV1QueryService.findArtistFestivals(artistId,
+        Slice<ArtistFestivalV1Response> response = artistDetailV1QueryService.findArtistFestivals(artistId,
             lastFestivalId, lastStartDate, isPast, PageRequest.ofSize(size));
         return ResponseEntity.ok(SliceResponse.from(response));
     }

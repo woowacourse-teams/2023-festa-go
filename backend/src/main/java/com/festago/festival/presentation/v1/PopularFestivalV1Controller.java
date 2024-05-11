@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/popular/festivals")
-@Tag(name = "인기 축제 정보 요청 V1")
+@Tag(name = "인기 축제 목록 요청 V1")
 @RequiredArgsConstructor
 public class PopularFestivalV1Controller {
 
     private final PopularFestivalV1QueryService popularFestivalV1QueryService;
 
     @GetMapping
-    @Operation(description = "인기 축제 목록을 7개 반환한다.", summary = "인기 축제 목록 조회")
-    public ResponseEntity<PopularFestivalsV1Response> popularFestivals() {
+    @Operation(description = "인기 축제 목록 7개를 반환한다.", summary = "인기 축제 목록 조회")
+    public ResponseEntity<PopularFestivalsV1Response> findPopularFestivals() {
         return ResponseEntity.ok(popularFestivalV1QueryService.findPopularFestivals());
     }
 }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/bookmarks")
-@Tag(name = "북마크 등록/삭제 V1")
+@Tag(name = "북마크 등록/삭제 요청 V1")
 public class BookmarkManagementV1Controller {
 
     private final BookmarkFacadeService bookmarkFacadeService;
