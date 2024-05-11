@@ -21,6 +21,8 @@ festago:
   auth-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
   cors-allow-origins: http://localhost:3000
   oauth2:
+    apple:
+      client-id: appleClientId
     kakao:
       grant-type: grant-type
       rest-api-key: rest-api-key
