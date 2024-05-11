@@ -46,7 +46,7 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
                         artist.backgroundImageUrl,
                         list(
                             new QArtistMediaV1Response(
-                                socialMedia.mediaType.stringValue(),
+                                socialMedia.mediaType,
                                 socialMedia.name,
                                 socialMedia.logoUrl,
                                 socialMedia.url

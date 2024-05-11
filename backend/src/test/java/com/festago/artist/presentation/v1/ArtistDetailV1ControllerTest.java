@@ -56,9 +56,9 @@ class ArtistDetailV1ControllerTest {
                     "https://image.com/logo.png",
                     "https://image.com/backgroundLogo.png",
                     List.of(
-                        new ArtistMediaV1Response(SocialMediaType.YOUTUBE.name(), "유튜브",
+                        new ArtistMediaV1Response(SocialMediaType.YOUTUBE, "유튜브",
                             "https://image.com/youtube.png", "www.knu-youtube.com"),
-                        new ArtistMediaV1Response(SocialMediaType.INSTAGRAM.name(), "인스타그램",
+                        new ArtistMediaV1Response(SocialMediaType.INSTAGRAM, "인스타그램",
                             "https://image.com/youtube.png", "www.knu-instagram.com")
                     )
                 );

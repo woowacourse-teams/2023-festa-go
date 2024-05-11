@@ -118,7 +118,7 @@ class ArtistDetailV1QueryServiceIntegrationTest extends ApplicationIntegrationTe
             // then
             assertThat(actual.socialMedias())
                 .map(ArtistMediaV1Response::type)
-                .containsExactly(SocialMediaType.INSTAGRAM.name());
+                .containsExactly(SocialMediaType.INSTAGRAM);
         }
 
         @Test
