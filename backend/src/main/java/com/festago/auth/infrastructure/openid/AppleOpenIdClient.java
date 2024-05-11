@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.openid;
 
 import com.festago.auth.domain.OpenIdClient;
 import com.festago.auth.domain.SocialType;
@@ -8,17 +8,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class KakaoOpenIdClient implements OpenIdClient {
+public class AppleOpenIdClient implements OpenIdClient {
 
-    private final KakaoOpenIdUserInfoProvider kakaoIdTokenUserInfoProvider;
+    private final AppleOpenIdUserInfoProvider appleOpenIdUserInfoProvider;
 
     @Override
     public UserInfo getUserInfo(String idToken) {
-        return kakaoIdTokenUserInfoProvider.provide(idToken);
+        return appleOpenIdUserInfoProvider.provide(idToken);
     }
 
     @Override
     public SocialType getSocialType() {
-        return SocialType.KAKAO;
+        return SocialType.APPLE;
     }
 }

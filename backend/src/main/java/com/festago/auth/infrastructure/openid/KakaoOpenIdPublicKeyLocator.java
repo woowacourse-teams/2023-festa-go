@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.openid;
 
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AppleOpenIdPublicKeyLocator implements Locator<Key> {
+public class KakaoOpenIdPublicKeyLocator implements Locator<Key> {
 
-    private final AppleOpenIdJwksClient appleOpenIdJwksClient;
-    private final CachedAppleOpenIdKeyProvider cachedOpenIdKeyProvider;
+    private final KakaoOpenIdJwksClient kakaoOpenIdJwksClient;
+    private final CachedOpenIdKeyProvider cachedOpenIdKeyProvider;
 
     @Override
     public Key locate(Header header) {
@@ -21,6 +21,6 @@ public class AppleOpenIdPublicKeyLocator implements Locator<Key> {
         if (kid == null) {
             throw new UnauthorizedException(ErrorCode.OPEN_ID_INVALID_TOKEN);
         }
-        return cachedOpenIdKeyProvider.provide(kid, appleOpenIdJwksClient::requestGetJwks);
+        return cachedOpenIdKeyProvider.provide(kid, kakaoOpenIdJwksClient::requestGetJwks);
     }
 }

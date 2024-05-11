@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.openid;
 
 import com.festago.common.exception.UnexpectedException;
 import io.jsonwebtoken.security.JwkSet;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class CachedOpenIdKeyProvider {
+public class CachedAppleOpenIdKeyProvider {
 
     private final Map<String, Key> cache = new HashMap<>();
     private final ReentrantLock lock = new ReentrantLock();

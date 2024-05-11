@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.oauth2;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;

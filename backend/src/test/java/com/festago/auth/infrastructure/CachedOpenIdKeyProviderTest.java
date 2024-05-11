@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
 
+import com.festago.auth.infrastructure.openid.CachedOpenIdKeyProvider;
 import io.jsonwebtoken.security.JwkSet;
 import io.jsonwebtoken.security.Jwks;
 import java.security.Key;

@@ -7,6 +7,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.spy;
 
+import com.festago.auth.infrastructure.openid.KakaoOpenIdPublicKeyLocator;
+import com.festago.auth.infrastructure.openid.KakaoOpenIdUserInfoProvider;
+import com.festago.auth.infrastructure.openid.NoopOpenIdNonceValidator;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Jwts;
