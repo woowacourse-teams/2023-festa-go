@@ -77,8 +77,9 @@ public class UploadFile implements Persistable<UUID> {
 
     /**
      * UPLOADED 상태의 파일을 ASSIGNED 상태로 변경한다. <br/> ASSIGNED 상태의 파일은 주인이 정해졌지만, 해당 주인이 파일을 소유하고 있지 않는 상태이다. <br/> 따라서
-     * ASSIGNED 상태의 파일은 같은 주인이라도 여러 개가 생길 수 있다. <br/> 이후 파일을 다른 상태로 변경하려면 renewalStatus() 또는 changeAbandoned()를 호출해야 한다.
-     * <br/> 파일의 주인은 정해졌지만, 해당 파일이 공유되어 사용될 수 있으므로 UPLOADED 상태의 파일만 ASSIGNED 상태로 변경할 수 있다. <br/>
+     * ASSIGNED 상태의 파일은 같은 주인이라도 여러 개가 생길 수 있다. <br/> 이후 파일을 다른 상태로 변경하려면 renewalStatus() 또는 changeAbandoned()를 호출해야
+     * 한다. <br/>
+     * 파일의 주인은 정해졌지만, 해당 파일이 공유되어 사용될 수 있으므로 UPLOADED 상태의 파일만 ASSIGNED 상태로 변경할 수 있다. <br/>
      *
      * @param ownerId   파일 주인의 식별자
      * @param ownerType 파일 주인의 타입
@@ -95,8 +96,8 @@ public class UploadFile implements Persistable<UUID> {
 
     /**
      * UPLOADED 상태의 파일을 ATTACHED 상태로 변경한다. <br/> ATTACHED 상태의 파일은 주인이 해당 파일을 소유하고 있는 상태이다. <br/> 따라서 ATTACHED 상태의 파일은
-     * 주인이 가진 파일 개수를 초과할 수 없다. <br/> 이후 파일을 다른 상태로 변경하려면 renewalStatus() 또는 changeAbandoned()를 호출해야 한다. <br/> 파일의 주인은
-     * 정해졌지만, 해당 파일이 공유되어 사용될 수 있으므로 UPLOADED 상태의 파일만 ATTACHED 상태로 변경할 수 있다. <br/>
+     * 주인이 가진 파일 개수를 초과할 수 없다. <br/> 이후 파일을 다른 상태로 변경하려면 renewalStatus() 또는 changeAbandoned()를 호출해야 한다. <br/>
+     * 파일의 주인은 정해졌지만, 해당 파일이 공유되어 사용될 수 있으므로 UPLOADED 상태의 파일만 ATTACHED 상태로 변경할 수 있다. <br/>
      *
      * @param ownerId   파일 주인의 식별자
      * @param ownerType 파일 주인의 타입
@@ -123,12 +124,12 @@ public class UploadFile implements Persistable<UUID> {
      * ASSIGNED 또는 ATTACHED 상태의 파일을 ATTACHED 또는 ABANDONED 상태로 변경한다. <br/> 하지만 사용자가 파일 등록을 여러번 시도하여 ASSIGNED 상태의 파일이 다수
      * 생성될 수 있다. <br/> 따라서 최종적으로 등록된 파일만 ATTACHED 상태로 변경하고 나머지는 ABANDONED 상태로 변경해야 한다. <br/> 그렇기에 최종적으로 등록되야할 파일의 식별자
      * 목록을 받은 뒤, 식별자 목록에 현재 파일의 식별자가 있고, ASSIGNED 또는 ATTACHED 상태의 파일을 PRE_ATTACHED로 변경한다. <br/> 그 뒤, PRE_ATTACHED 상태가 되지
-     * 못한 파일은 사용자가 최종적으로 등록한 파일이 아니므로 ABANDONED 상태로 변경한다. <br/> 그리고 PRE_ATTACHED 상태의 파일은 ATTACHED 상태로 변경한다. <br/> 해당 파일이
-     * 공유되어 사용될 수 있으므로 ownerId과 ownerType이 동일한 파일만 상태를 변경할 수 있다. <br/>
+     * 못한 파일은 사용자가 최종적으로 등록한 파일이 아니므로 ABANDONED 상태로 변경한다. <br/> 그리고 PRE_ATTACHED 상태의 파일은 ATTACHED 상태로 변경한다. <br/>
+     * 해당 파일이 공유되어 사용될 수 있으므로 ownerId과 ownerType이 동일한 파일만 상태를 변경할 수 있다. <br/>
      *
-     * @param ownerId   파일 주인의 식별자
+     * @param ownerId 파일 주인의 식별자
      * @param ownerType 파일 주인의 타입
-     * @param ids       최종적으로 ATTACHED 상태를 가져야 할 파일의 식별자 목록
+     * @param ids 최종적으로 ATTACHED 상태를 가져야 할 파일의 식별자 목록
      */
     public void renewalStatus(Long ownerId, FileOwnerType ownerType, Set<UUID> ids) {
         if (isNotOwner(ownerId, ownerType)) {
