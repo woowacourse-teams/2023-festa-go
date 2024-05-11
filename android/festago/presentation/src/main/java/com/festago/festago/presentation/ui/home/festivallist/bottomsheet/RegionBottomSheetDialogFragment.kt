@@ -11,32 +11,38 @@ import com.festago.festago.presentation.databinding.FragmentRegionBottomSheetBin
 import com.festago.festago.presentation.ui.home.festivallist.uistate.SchoolRegionUiState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class RegionBottomSheetDialogFragment(
-    private val items: List<SchoolRegionUiState>,
-    private val listener: OnRegionSelectListener,
-) : BottomSheetDialogFragment() {
+class RegionBottomSheetDialogFragment() : BottomSheetDialogFragment() {
 
     private var _binding: FragmentRegionBottomSheetBinding? = null
     private val binding: FragmentRegionBottomSheetBinding get() = _binding!!
+
+    var items: List<SchoolRegionUiState>? = null
+    var listener: OnRegionSelectListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentRegionBottomSheetBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
     }
 
     private fun initView() {
+        val schoolRegions = items ?: return
+        val onRegionSelectListener = listener ?: return
+
+
         binding.rvRegionList.adapter = RegionAdapter(
-            items = items,
-            onRegionSelect = listener::onRegionSelect
+            items = schoolRegions,
+            onRegionSelect = onRegionSelectListener::onRegionSelect,
         ) { dismiss() }
     }
 
@@ -48,23 +54,4 @@ class RegionBottomSheetDialogFragment(
     interface OnRegionSelectListener {
         fun onRegionSelect(region: SchoolRegion)
     }
-
-    companion object {
-        class RegionBottomSheetDialogFragmentFactory(
-            private val items: List<SchoolRegionUiState>,
-            private val listener: OnRegionSelectListener
-        ) : FragmentFactory() {
-            override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
-                return when (className) {
-                    RegionBottomSheetDialogFragment::class.java.name -> RegionBottomSheetDialogFragment(
-                        items = items,
-                        listener = listener
-                    )
-
-                    else -> super.instantiate(classLoader, className)
-                }
-            }
-        }
-    }
 }
-
