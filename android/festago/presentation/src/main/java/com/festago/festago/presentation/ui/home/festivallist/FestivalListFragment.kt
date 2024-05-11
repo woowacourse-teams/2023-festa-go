@@ -160,7 +160,6 @@ class FestivalListFragment : Fragment() {
         val schoolRegions = SchoolRegion.values().map {
             SchoolRegionUiState(it, it == this.schoolRegion)
         }
-        val dialog = createRegionDialog(schoolRegions)
 
         return mutableListOf<Any>().apply {
             if (popularFestivalUiState.festivals.isNotEmpty()) {
@@ -172,10 +171,7 @@ class FestivalListFragment : Fragment() {
                     selectedRegion = schoolRegion,
                     onFilterSelected = { vm.loadFestivals(it, schoolRegion) },
                 ) {
-                    dialog.show(
-                        parentFragmentManager,
-                        RegionBottomSheetDialogFragment::class.java.name,
-                    )
+                    createRegionDialog(schoolRegions).show(parentFragmentManager, tag)
                 },
             )
             addAll(festivals)
@@ -201,17 +197,16 @@ class FestivalListFragment : Fragment() {
 
     private fun FestivalListUiState.Success.createRegionDialog(
         schoolRegions: List<SchoolRegionUiState>,
-    ) = RegionBottomSheetDialogFragment.newInstance(
-        items = schoolRegions,
-        listener = object : RegionBottomSheetDialogFragment.OnRegionSelectListener {
-            override fun onRegionSelect(region: SchoolRegion) {
-                vm.loadFestivals(
-                    festivalFilterUiState = festivalFilter,
-                    schoolRegion = if (region == schoolRegion) null else region,
-                )
+    ): RegionBottomSheetDialogFragment {
+        return RegionBottomSheetDialogFragment().apply {
+            items = schoolRegions
+            listener = object : RegionBottomSheetDialogFragment.OnRegionSelectListener {
+                override fun onRegionSelect(region: SchoolRegion) {
+                    vm.loadFestivals(festivalFilter, region)
+                }
             }
-        },
-    )
+        }
+    }
 
     private fun showSearch() {
         findNavController().navigate(actionFestivalListFragmentToSearchFragment())
