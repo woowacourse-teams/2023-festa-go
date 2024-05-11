@@ -39,7 +39,6 @@ class RegionBottomSheetDialogFragment() : BottomSheetDialogFragment() {
         val schoolRegions = items ?: return
         val onRegionSelectListener = listener ?: return
 
-
         binding.rvRegionList.adapter = RegionAdapter(
             items = schoolRegions,
             onRegionSelect = onRegionSelectListener::onRegionSelect,
