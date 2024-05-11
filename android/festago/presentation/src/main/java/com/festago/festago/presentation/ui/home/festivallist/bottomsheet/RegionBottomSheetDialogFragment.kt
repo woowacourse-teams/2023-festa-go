@@ -4,20 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentFactory
 import com.festago.festago.domain.model.festival.SchoolRegion
 import com.festago.festago.presentation.databinding.FragmentRegionBottomSheetBinding
 import com.festago.festago.presentation.ui.home.festivallist.uistate.SchoolRegionUiState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class RegionBottomSheetDialogFragment() : BottomSheetDialogFragment() {
+class RegionBottomSheetDialogFragment(
+    private val items: List<SchoolRegionUiState>,
+    private val listener: OnRegionSelectListener,
+) : BottomSheetDialogFragment() {
 
     private var _binding: FragmentRegionBottomSheetBinding? = null
     private val binding: FragmentRegionBottomSheetBinding get() = _binding!!
-
-    private lateinit var listener: OnRegionSelectListener
-    private lateinit var items: List<SchoolRegionUiState>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,12 +50,21 @@ class RegionBottomSheetDialogFragment() : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(
-            items: List<SchoolRegionUiState>,
-            listener: OnRegionSelectListener,
-        ): RegionBottomSheetDialogFragment = RegionBottomSheetDialogFragment().apply {
-            this.listener = listener
-            this.items = items
+        class RegionBottomSheetDialogFragmentFactory(
+            private val items: List<SchoolRegionUiState>,
+            private val listener: OnRegionSelectListener
+        ) : FragmentFactory() {
+            override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+                return when (className) {
+                    RegionBottomSheetDialogFragment::class.java.name -> RegionBottomSheetDialogFragment(
+                        items = items,
+                        listener = listener
+                    )
+
+                    else -> super.instantiate(classLoader, className)
+                }
+            }
         }
     }
 }
+

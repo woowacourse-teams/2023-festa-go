@@ -201,17 +201,23 @@ class FestivalListFragment : Fragment() {
 
     private fun FestivalListUiState.Success.createRegionDialog(
         schoolRegions: List<SchoolRegionUiState>,
-    ) = RegionBottomSheetDialogFragment.newInstance(
-        items = schoolRegions,
-        listener = object : RegionBottomSheetDialogFragment.OnRegionSelectListener {
-            override fun onRegionSelect(region: SchoolRegion) {
-                vm.loadFestivals(
-                    festivalFilterUiState = festivalFilter,
-                    schoolRegion = if (region == schoolRegion) null else region,
-                )
-            }
-        },
-    )
+    ): RegionBottomSheetDialogFragment {
+        val factory =
+            RegionBottomSheetDialogFragment.Companion.RegionBottomSheetDialogFragmentFactory(
+                items = schoolRegions,
+                listener = object : RegionBottomSheetDialogFragment.OnRegionSelectListener {
+                    override fun onRegionSelect(region: SchoolRegion) {
+                        vm.loadFestivals(festivalFilter, region)
+                    }
+                }
+            )
+        val fragment = factory.instantiate(
+            classLoader = RegionBottomSheetDialogFragment::class.java.classLoader!!,
+            className = RegionBottomSheetDialogFragment::class.java.name,
+        ) as RegionBottomSheetDialogFragment
+
+        return fragment
+    }
 
     private fun showSearch() {
         findNavController().navigate(actionFestivalListFragmentToSearchFragment())
