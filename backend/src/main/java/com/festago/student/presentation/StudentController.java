@@ -5,6 +5,7 @@ import com.festago.student.application.StudentService;
 import com.festago.student.dto.StudentResponse;
 import com.festago.student.dto.StudentSendMailRequest;
 import com.festago.student.dto.StudentVerificateRequest;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Deprecated(forRemoval = true)
+@Hidden
 @RestController
 @RequestMapping("/students")
 @Tag(name = "학생 요청")

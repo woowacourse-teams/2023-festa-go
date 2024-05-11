@@ -4,6 +4,7 @@ package com.festago.entry.presentation;
 import com.festago.entry.application.EntryService;
 import com.festago.entry.dto.TicketValidationRequest;
 import com.festago.entry.dto.TicketValidationResponse;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Deprecated(forRemoval = true)
+@Hidden
 @RestController
 @RequestMapping("/staff/member-tickets")
 @Tag(name = "스태프 요청")
