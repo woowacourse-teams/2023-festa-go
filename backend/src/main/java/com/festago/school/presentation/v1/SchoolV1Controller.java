@@ -10,9 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,10 +42,11 @@ public class SchoolV1Controller {
         @RequestParam(required = false) Long lastFestivalId,
         @RequestParam(required = false) LocalDate lastStartDate,
         @RequestParam(defaultValue = "false") Boolean isPast,
-        @PageableDefault(size = 10) Pageable pageable
+        @RequestParam(defaultValue = "10") int size
     ) {
         LocalDate today = LocalDate.now();
-        var searchCondition = new SchoolFestivalV1SearchCondition(lastFestivalId, lastStartDate, isPast, pageable);
+        var searchCondition = new SchoolFestivalV1SearchCondition(lastFestivalId, lastStartDate, isPast,
+            PageRequest.ofSize(size));
         Slice<SchoolFestivalV1Response> response = schoolV1QueryService.findFestivalsBySchoolId(
             schoolId,
             today,

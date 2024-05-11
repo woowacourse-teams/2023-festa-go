@@ -13,9 +13,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,9 +33,9 @@ public class FestivalV1Controller {
 
     @GetMapping
     @ValidPageable(maxSize = 20)
-    @Operation(description = "축제 목록를 조건별로 조회한다. PROGRESS: 진행 중, PLANNED: 진행 예정, END: 종료, 기본값 -> 진행 중, limit의 크기는 0 < limit < 21 이며 기본 값 10이다.", summary = "축제 목록 조회")
+    @Operation(description = "축제 목록를 조건별로 조회한다. PROGRESS: 진행 중, PLANNED: 진행 예정, END: 종료. 0 < size <= 20", summary = "축제 목록 조회")
     public ResponseEntity<Slice<FestivalV1Response>> findFestivals(
-        @PageableDefault(size = 10) Pageable pageable,
+        @RequestParam(defaultValue = "10") int size,
         @RequestParam(defaultValue = "ANY") SchoolRegion region,
         @RequestParam(defaultValue = "PROGRESS") FestivalFilter filter,
         @RequestParam(required = false) Long lastFestivalId,
@@ -44,7 +43,7 @@ public class FestivalV1Controller {
     ) {
         validateCursor(lastFestivalId, lastStartDate);
         var request = new FestivalV1QueryRequest(region, filter, lastFestivalId, lastStartDate);
-        var response = festivalV1QueryService.findFestivals(pageable, request);
+        var response = festivalV1QueryService.findFestivals(PageRequest.ofSize(size), request);
         return ResponseEntity.ok(response);
     }
 
