@@ -14,7 +14,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:background="@color/contents_gray_06">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vpPopularFestivalBackground"
@@ -39,10 +40,11 @@
             android:id="@+id/tvPopularFestivalName"
             style="@style/H3Bold18Lh20"
             android:layout_width="220dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginTop="248dp"
             android:ellipsize="end"
             android:gravity="center"
+            android:includeFontPadding="false"
             android:lineSpacingExtra="0dp"
             android:lines="2"
             android:text="@{item.name}"
@@ -50,16 +52,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/vpPopularFestivalForeground"
-            tools:text="연세대 아카라카 연세대 아카라카 연세대 아카라카" />
+            tools:text="연세대 아카라카 연세대 아카라카 연세대 아카라카 (2024)" />
 
         <TextView
             android:id="@+id/tvFestivalSchedule"
             style="@style/B2Medium14Lh20"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
             android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:gravity="center"
+            android:includeFontPadding="false"
             android:maxLines="1"
             android:text="@{@string/festival_list_tv_date_range_format(item.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),item.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
             android:textColor="@color/background_gray_01"
@@ -72,7 +75,7 @@
             android:id="@+id/tvPopularFestivalArtistsName"
             style="@style/B2Medium14Lh20"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:ellipsize="end"
             android:gravity="center"
             android:lineSpacingExtra="0dp"
