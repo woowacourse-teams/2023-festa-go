@@ -119,14 +119,17 @@
             <TextView
                 android:id="@+id/tvSchoolName"
                 style="@style/H2Bold20Lh24"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:maxLines="2"
                 android:textColor="@color/contents_gray_07"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/cvSchoolLogo"
                 app:layout_constraintTop_toBottomOf="@id/ivSchoolBackground"
-                tools:text="서울대학교" />
+                tools:text="성균관대학교 인문사회과학캠퍼스" />
 
             <HorizontalScrollView
                 android:id="@+id/hsvSchoolSocialMedia"
