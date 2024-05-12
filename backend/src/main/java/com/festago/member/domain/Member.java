@@ -38,6 +38,7 @@ import org.springframework.util.StringUtils;
 public class Member extends BaseTimeEntity {
 
     private static final String DEFAULT_IMAGE_URL = "https://festa-go.site/images/default-profile.png";
+    private static final String DEFAULT_NICKNAME = "FestivalLover";
     private static final int MAX_SOCIAL_ID_LENGTH = 255;
     private static final int MAX_NICKNAME_LENGTH = 30;
     private static final int MAX_PROFILE_IMAGE_LENGTH = 255;
@@ -75,7 +76,7 @@ public class Member extends BaseTimeEntity {
         this.id = id;
         this.socialId = socialId;
         this.socialType = socialType;
-        this.nickname = nickname;
+        this.nickname = (StringUtils.hasText(nickname)) ? nickname : DEFAULT_NICKNAME;
         this.profileImage = (StringUtils.hasText(profileImage)) ? profileImage : DEFAULT_IMAGE_URL;
     }
 
@@ -98,7 +99,6 @@ public class Member extends BaseTimeEntity {
 
     private void validateNickname(String nickname) {
         String fieldName = "nickname";
-        Validator.notBlank(nickname, fieldName);
         Validator.maxLength(nickname, MAX_NICKNAME_LENGTH, fieldName);
     }
 

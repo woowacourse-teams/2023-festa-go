@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.openid;
 
 import com.festago.auth.domain.OpenIdNonceValidator;
 import com.festago.auth.domain.OpenIdUserInfoProvider;

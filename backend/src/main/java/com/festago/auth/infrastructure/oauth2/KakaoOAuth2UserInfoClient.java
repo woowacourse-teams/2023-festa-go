@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.oauth2;
 
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.KakaoUserInfo;
