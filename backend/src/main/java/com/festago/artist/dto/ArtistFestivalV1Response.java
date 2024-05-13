@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
-public record ArtistFestivalDetailV1Response(
+public record ArtistFestivalV1Response(
     Long id,
     String name,
     LocalDate startDate,
@@ -19,7 +19,7 @@ public record ArtistFestivalDetailV1Response(
 ) {
 
     @QueryProjection
-    public ArtistFestivalDetailV1Response {
+    public ArtistFestivalV1Response {
 
     }
 }

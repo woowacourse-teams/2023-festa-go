@@ -3,6 +3,7 @@ package com.festago.fcm.presentation;
 import com.festago.auth.annotation.Member;
 import com.festago.fcm.application.MemberFCMService;
 import com.festago.fcm.dto.MemberFcmCreateRequest;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Deprecated(forRemoval = true)
+@Hidden
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "유저 FCM 정보 요청")

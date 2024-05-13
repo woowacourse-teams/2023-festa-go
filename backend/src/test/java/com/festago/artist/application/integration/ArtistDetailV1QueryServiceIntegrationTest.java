@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.festago.artist.application.ArtistDetailV1QueryService;
 import com.festago.artist.domain.Artist;
-import com.festago.artist.dto.ArtistFestivalDetailV1Response;
+import com.festago.artist.dto.ArtistFestivalV1Response;
 import com.festago.artist.dto.ArtistMediaV1Response;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.common.exception.ErrorCode;
@@ -118,7 +118,7 @@ class ArtistDetailV1QueryServiceIntegrationTest extends ApplicationIntegrationTe
             // then
             assertThat(actual.socialMedias())
                 .map(ArtistMediaV1Response::type)
-                .containsExactly(SocialMediaType.INSTAGRAM.name());
+                .containsExactly(SocialMediaType.INSTAGRAM);
         }
 
         @Test
@@ -212,7 +212,7 @@ class ArtistDetailV1QueryServiceIntegrationTest extends ApplicationIntegrationTe
 
             // then
             assertThat(actual.getContent())
-                .map(ArtistFestivalDetailV1Response::id)
+                .map(ArtistFestivalV1Response::id)
                 .containsExactly(부산대학교_축제.getId(), 대구대학교_축제.getId());
         }
 
@@ -229,7 +229,7 @@ class ArtistDetailV1QueryServiceIntegrationTest extends ApplicationIntegrationTe
 
             // then
             assertThat(actual.getContent())
-                .map(ArtistFestivalDetailV1Response::id)
+                .map(ArtistFestivalV1Response::id)
                 .containsExactly(서울대학교_축제.getId());
         }
 
@@ -257,7 +257,7 @@ class ArtistDetailV1QueryServiceIntegrationTest extends ApplicationIntegrationTe
 
             // then
             assertThat(secondResponse.getContent())
-                .map(ArtistFestivalDetailV1Response::id)
+                .map(ArtistFestivalV1Response::id)
                 .containsExactly(대구대학교_축제.getId());
         }
     }

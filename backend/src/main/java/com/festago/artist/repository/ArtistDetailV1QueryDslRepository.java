@@ -11,9 +11,9 @@ import static com.querydsl.core.group.GroupBy.list;
 
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.ArtistDetailV1Response;
-import com.festago.artist.dto.ArtistFestivalDetailV1Response;
+import com.festago.artist.dto.ArtistFestivalV1Response;
 import com.festago.artist.dto.QArtistDetailV1Response;
-import com.festago.artist.dto.QArtistFestivalDetailV1Response;
+import com.festago.artist.dto.QArtistFestivalV1Response;
 import com.festago.artist.dto.QArtistMediaV1Response;
 import com.festago.common.querydsl.QueryDslRepositorySupport;
 import com.festago.socialmedia.domain.OwnerType;
@@ -46,7 +46,7 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
                         artist.backgroundImageUrl,
                         list(
                             new QArtistMediaV1Response(
-                                socialMedia.mediaType.stringValue(),
+                                socialMedia.mediaType,
                                 socialMedia.name,
                                 socialMedia.logoUrl,
                                 socialMedia.url
@@ -63,12 +63,12 @@ public class ArtistDetailV1QueryDslRepository extends QueryDslRepositorySupport 
         return Optional.of(response.get(0));
     }
 
-    public Slice<ArtistFestivalDetailV1Response> findArtistFestivals(ArtistFestivalSearchCondition condition) {
+    public Slice<ArtistFestivalV1Response> findArtistFestivals(ArtistFestivalSearchCondition condition) {
         Pageable pageable = condition.pageable();
         Long artistId = condition.artistId();
         return applySlice(
             pageable,
-            query -> query.select(new QArtistFestivalDetailV1Response(
+            query -> query.select(new QArtistFestivalV1Response(
                     festival.id,
                     festival.name,
                     festival.festivalDuration.startDate,
