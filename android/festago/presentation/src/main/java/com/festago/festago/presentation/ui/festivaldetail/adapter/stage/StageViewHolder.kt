@@ -15,6 +15,7 @@ class StageViewHolder(
 
     init {
         binding.rvStageArtists.adapter = artistAdapter
+        binding.rvStageArtists.itemAnimator = null
     }
 
     fun bind(item: StageItemUiState) {

@@ -119,6 +119,7 @@ class SearchFragment : Fragment() {
     private fun initRecyclerView() {
         recentSearchAdapter = RecentSearchAdapter()
         binding.rvRecentSearch.adapter = recentSearchAdapter
+        binding.rvRecentSearch.itemAnimator = null
     }
 
     private fun initBack() {

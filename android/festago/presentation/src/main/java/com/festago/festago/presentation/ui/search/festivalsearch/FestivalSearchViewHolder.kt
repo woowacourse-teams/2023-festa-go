@@ -24,6 +24,7 @@ class FestivalSearchViewHolder(
     init {
         binding.rvFestivalArtists.adapter = artistAdapter
         binding.rvFestivalArtists.addItemDecoration(ArtistItemDecoration())
+        binding.rvFestivalArtists.itemAnimator = null
     }
 
     fun bind(item: FestivalSearchItemUiState) {
