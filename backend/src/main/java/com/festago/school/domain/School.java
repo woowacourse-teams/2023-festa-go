@@ -1,6 +1,7 @@
 package com.festago.school.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.util.ImageUrlHelper;
 import com.festago.common.util.Validator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,13 +14,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class School extends BaseTimeEntity {
 
-    private static final String DEFAULT_URL = "https://picsum.photos/536/354";
     private static final int MAX_DOMAIN_LENGTH = 50;
     private static final int MAX_NAME_LENGTH = 255;
     private static final int MAX_IMAGE_URL_LENGTH = 255;
@@ -45,25 +44,18 @@ public class School extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private SchoolRegion region;
 
+    public School(String domain, String name, String logoUrl, String backgroundUrl, SchoolRegion region) {
+        this(null, domain, name, logoUrl, backgroundUrl, region);
+    }
+
     public School(Long id, String domain, String name, String logoUrl, String backgroundImageUrl, SchoolRegion region) {
         validate(domain, name, region, logoUrl, backgroundImageUrl);
         this.id = id;
         this.domain = domain;
         this.name = name;
-        this.logoUrl = getDefaultUrlIfBlank(logoUrl);
-        this.backgroundUrl = getDefaultUrlIfBlank(backgroundImageUrl);
+        this.logoUrl = ImageUrlHelper.getBlankStringIfBlank(logoUrl);
+        this.backgroundUrl = ImageUrlHelper.getBlankStringIfBlank(backgroundImageUrl);
         this.region = region;
-    }
-
-    private String getDefaultUrlIfBlank(String imageUrl) {
-        if (StringUtils.hasText(imageUrl)) {
-            return imageUrl;
-        }
-        return DEFAULT_URL;
-    }
-
-    public School(String domain, String name, SchoolRegion region) {
-        this(null, domain, name, DEFAULT_URL, DEFAULT_URL, region);
     }
 
     private void validate(String domain, String name, SchoolRegion region, String logoUrl, String backgroundImageUrl) {
@@ -111,12 +103,12 @@ public class School extends BaseTimeEntity {
 
     public void changeLogoUrl(String logoUrl) {
         validateImageUrl(logoUrl, "logoUrl");
-        this.logoUrl = getDefaultUrlIfBlank(logoUrl);
+        this.logoUrl = ImageUrlHelper.getBlankStringIfBlank(logoUrl);
     }
 
     public void changeBackgroundImageUrl(String backgroundImageUrl) {
         validateImageUrl(backgroundImageUrl, "backgroundImageUrl");
-        this.backgroundUrl = getDefaultUrlIfBlank(backgroundImageUrl);
+        this.backgroundUrl = ImageUrlHelper.getBlankStringIfBlank(backgroundImageUrl);
     }
 
     public Long getId() {

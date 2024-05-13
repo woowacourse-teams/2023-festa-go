@@ -1,14 +1,15 @@
 package com.festago.admin.dto.artist;
 
 import com.festago.artist.dto.command.ArtistCreateCommand;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 
 public record ArtistV1CreateRequest(
     @NotBlank
     String name,
-    @NotBlank
+    @Nullable
     String profileImageUrl,
-    @NotBlank
+    @Nullable
     String backgroundImageUrl
 ) {
 

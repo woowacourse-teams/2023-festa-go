@@ -91,7 +91,6 @@ class MemberTest {
         Member actual = new Member("12345", SocialType.FESTAGO, "nickname", profileImage);
 
         // when & then
-        assertThat(actual.getProfileImage()).isNotNull();
-        assertThat(actual.getProfileImage()).isNotBlank();
+        assertThat(actual.getProfileImage()).isEmpty();
     }
 }
