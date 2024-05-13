@@ -46,14 +46,15 @@ class SchoolCommandServiceTest {
             .build();
 
         @Test
-        void 같은_도메인의_학교가_저장되어_있으면_예외가_발생한다() {
+        void 같은_도메인의_학교가_저장되어_있어도_예외가_발생하지_않는다() {
             // given
             schoolRepository.save(SchoolFixture.builder().domain("teco.ac.kr").build());
 
-            // when & then
-            assertThatThrownBy(() -> schoolCommandService.createSchool(command))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessage(ErrorCode.DUPLICATE_SCHOOL_DOMAIN.getMessage());
+            // when
+            Long schoolId = schoolCommandService.createSchool(command);
+
+            // then
+            assertThat(schoolRepository.getOrThrow(schoolId).getDomain()).isEqualTo("teco.ac.kr");
         }
 
         @Test
@@ -113,15 +114,16 @@ class SchoolCommandServiceTest {
         }
 
         @Test
-        void 같은_도메인의_학교가_저장되어_있으면_예외가_발생한다() {
+        void 같은_도메인의_학교가_저장되어_있어도_예외가_발생하지_않는다() {
             // given
             Long schoolId = school.getId();
             schoolRepository.save(SchoolFixture.builder().domain("teco.ac.kr").build());
 
-            // when & then
-            assertThatThrownBy(() -> schoolCommandService.updateSchool(schoolId, command))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessage(ErrorCode.DUPLICATE_SCHOOL_DOMAIN.getMessage());
+            // when
+            schoolCommandService.updateSchool(schoolId, command);
+
+            //  then
+            assertThat(schoolRepository.getOrThrow(schoolId).getDomain()).isEqualTo("teco.ac.kr");
         }
 
         @Test
