@@ -64,7 +64,7 @@ public class FestivalDetailV1QueryDslRepository extends QueryDslRepositorySuppor
                             stage.id,
                             stage.startTime,
                             stageQueryInfo.artistInfo
-                        ).skipNulls(), Comparator.comparingLong(StageV1Response::id))
+                        ).skipNulls(), Comparator.comparing(StageV1Response::startDateTime))
                     )
                 )
             );

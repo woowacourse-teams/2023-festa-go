@@ -1,5 +1,6 @@
 package com.festago.festival.application.integration.query;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -10,6 +11,7 @@ import com.festago.common.exception.NotFoundException;
 import com.festago.festival.application.FestivalDetailV1QueryService;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.SocialMediaV1Response;
+import com.festago.festival.dto.StageV1Response;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.school.domain.School;
 import com.festago.school.repository.SchoolRepository;
@@ -28,6 +30,7 @@ import com.festago.support.fixture.SocialMediaFixture;
 import com.festago.support.fixture.StageArtistFixture;
 import com.festago.support.fixture.StageFixture;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -172,6 +175,18 @@ class FestivalDetailV1QueryServiceIntegrationTest extends ApplicationIntegration
                 .containsExactlyInAnyOrder("총학생회 인스타그램", "총학생회 페이스북");
             softly.assertThat(response.stages()).hasSize(3);
         });
+    }
+
+    @Test
+    void 공연_목록은_공연의_시작_시간_기준으로_정렬된다() {
+        // when
+        var response = festivalDetailV1QueryService.findFestivalDetail(테코대학교_축제.getId());
+
+        // then
+        assertThat(response.stages())
+            .map(StageV1Response::startDateTime)
+            .map(LocalDateTime::toLocalDate)
+            .containsExactly(now, now.plusDays(1), now.plusDays(2));
     }
 
     @Test
