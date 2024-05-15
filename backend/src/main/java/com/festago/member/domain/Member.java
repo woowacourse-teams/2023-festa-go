@@ -2,6 +2,7 @@ package com.festago.member.domain;
 
 import com.festago.auth.domain.SocialType;
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.util.ImageUrlHelper;
 import com.festago.common.util.Validator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,7 +38,7 @@ import org.springframework.util.StringUtils;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
-    private static final String DEFAULT_IMAGE_URL = "https://festa-go.site/images/default-profile.png";
+    private static final String DEFAULT_NICKNAME = "FestivalLover";
     private static final int MAX_SOCIAL_ID_LENGTH = 255;
     private static final int MAX_NICKNAME_LENGTH = 30;
     private static final int MAX_PROFILE_IMAGE_LENGTH = 255;
@@ -75,8 +76,8 @@ public class Member extends BaseTimeEntity {
         this.id = id;
         this.socialId = socialId;
         this.socialType = socialType;
-        this.nickname = nickname;
-        this.profileImage = (StringUtils.hasText(profileImage)) ? profileImage : DEFAULT_IMAGE_URL;
+        this.nickname = (StringUtils.hasText(nickname)) ? nickname : DEFAULT_NICKNAME;
+        this.profileImage = ImageUrlHelper.getBlankStringIfBlank(profileImage);
     }
 
     private void validate(String socialId, SocialType socialType, String nickname, String profileImage) {
@@ -98,7 +99,6 @@ public class Member extends BaseTimeEntity {
 
     private void validateNickname(String nickname) {
         String fieldName = "nickname";
-        Validator.notBlank(nickname, fieldName);
         Validator.maxLength(nickname, MAX_NICKNAME_LENGTH, fieldName);
     }
 

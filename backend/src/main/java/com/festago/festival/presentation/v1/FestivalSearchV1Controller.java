@@ -22,8 +22,8 @@ public class FestivalSearchV1Controller {
     private final FestivalSearchV1QueryService festivalSearchV1QueryService;
 
     @GetMapping
-    @Operation(description = "축제를 검색한다. ~대 혹은 ~대학교로 끝날 시 대학교 축제 검색이며 그 외의 경우는 아티스트 기반 축제 검색입니다.", summary = "축제 검색")
-    public ResponseEntity<List<FestivalSearchV1Response>> getArtistInfo(@RequestParam String keyword) {
+    @Operation(description = "키워드로 축제를 검색한다. ~대, ~대학교로 끝날 시 대학교 축제 검색, 그 외의 경우 아티스트가 참여한 축제 검색.", summary = "축제 검색")
+    public ResponseEntity<List<FestivalSearchV1Response>> searchFestivals(@RequestParam String keyword) {
         validate(keyword);
         return ResponseEntity.ok(festivalSearchV1QueryService.search(keyword));
     }

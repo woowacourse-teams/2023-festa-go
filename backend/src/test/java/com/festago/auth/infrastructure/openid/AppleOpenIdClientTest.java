@@ -1,15 +1,12 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.openid;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
-import static org.mockito.BDDMockito.spy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
-import com.festago.auth.infrastructure.openid.KakaoOpenIdPublicKeyLocator;
-import com.festago.auth.infrastructure.openid.KakaoOpenIdUserInfoProvider;
-import com.festago.auth.infrastructure.openid.NoopOpenIdNonceValidator;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Jwts;
@@ -21,18 +18,16 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class KakaoOpenIdUserInfoProviderTest {
+class AppleOpenIdClientTest {
 
-    KakaoOpenIdUserInfoProvider kakaoOpenIdUserInfoProvider;
+    AppleOpenIdClient appleOpenIdClient;
 
-    KakaoOpenIdPublicKeyLocator keyLocator;
+    AppleOpenIdPublicKeyLocator keyLocator;
 
     Clock clock;
 
@@ -42,9 +37,8 @@ class KakaoOpenIdUserInfoProviderTest {
     void setUp() {
         keyLocator = mock();
         clock = spy(Clock.systemDefaultZone());
-        kakaoOpenIdUserInfoProvider = new KakaoOpenIdUserInfoProvider(
-            "restApiKey",
-            "nativeAppKey",
+        appleOpenIdClient = new AppleOpenIdClient(
+            "appleClientId",
             keyLocator,
             new NoopOpenIdNonceValidator(),
             clock
@@ -59,13 +53,13 @@ class KakaoOpenIdUserInfoProviderTest {
         String idToken = Jwts.builder()
             .audience().add("wrong")
             .and()
-            .issuer("https://kauth.kakao.com")
+            .issuer("https://appleid.apple.com")
             .signWith(key)
             .expiration(Date.from(clock.instant().plus(1, ChronoUnit.DAYS)))
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> kakaoOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> appleOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -84,7 +78,7 @@ class KakaoOpenIdUserInfoProviderTest {
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> kakaoOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> appleOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -98,13 +92,13 @@ class KakaoOpenIdUserInfoProviderTest {
         String idToken = Jwts.builder()
             .audience().add("client-id")
             .and()
-            .issuer("https://kauth.kakao.com")
+            .issuer("https://appleid.apple.com")
             .signWith(key)
             .expiration(yesterday)
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> kakaoOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> appleOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -118,13 +112,13 @@ class KakaoOpenIdUserInfoProviderTest {
         String idToken = Jwts.builder()
             .audience().add("client-id")
             .and()
-            .issuer("https://kauth.kakao.com")
+            .issuer("https://appleid.apple.com")
             .signWith(key)
             .expiration(Date.from(clock.instant().plus(1, ChronoUnit.DAYS)))
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> kakaoOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> appleOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -137,13 +131,13 @@ class KakaoOpenIdUserInfoProviderTest {
         String idToken = Jwts.builder()
             .audience().add("client-id")
             .and()
-            .issuer("https://kauth.kakao.com")
+            .issuer("https://appleid.apple.com")
             .signWith(key)
             .expiration(Date.from(clock.instant().plus(1, ChronoUnit.DAYS)))
             .compact();
 
         // when & then
-        assertThatThrownBy(() -> kakaoOpenIdUserInfoProvider.provide(idToken))
+        assertThatThrownBy(() -> appleOpenIdClient.getUserInfo(idToken))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessage(ErrorCode.OPEN_ID_INVALID_TOKEN.getMessage());
     }
@@ -155,41 +149,42 @@ class KakaoOpenIdUserInfoProviderTest {
         given(keyLocator.locate(any()))
             .willReturn(key);
         String idToken = Jwts.builder()
-            .audience().add("restApiKey")
+            .audience().add("appleClientId")
             .and()
-            .issuer("https://kauth.kakao.com")
+            .issuer("https://appleid.apple.com")
             .signWith(key)
             .subject(socialId)
             .expiration(Date.from(clock.instant().plus(1, ChronoUnit.DAYS)))
             .compact();
 
         // when
-        var expect = kakaoOpenIdUserInfoProvider.provide(idToken);
+        var expect = appleOpenIdClient.getUserInfo(idToken);
 
         // then
         assertThat(expect.socialId()).isEqualTo(socialId);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"restApiKey", "nativeAppKey"})
-    void audience_값은_restApiKey_nativeAppKey_둘_중_하나라도_매칭되면_성공(String audience) {
+    @Test
+    void audience_값은_apple_client_id_와_같으면_성공() {
         // given
         String socialId = "12345";
         given(keyLocator.locate(any()))
             .willReturn(key);
         String idToken = Jwts.builder()
-            .audience().add(audience)
+            .audience().add("appleClientId")
             .and()
-            .issuer("https://kauth.kakao.com")
+            .issuer("https://appleid.apple.com")
             .signWith(key)
             .subject(socialId)
             .expiration(Date.from(clock.instant().plus(1, ChronoUnit.DAYS)))
             .compact();
 
         // when
-        var expect = kakaoOpenIdUserInfoProvider.provide(idToken);
+        var expect = appleOpenIdClient.getUserInfo(idToken);
 
         // then
         assertThat(expect.socialId()).isEqualTo(socialId);
     }
+
+
 }

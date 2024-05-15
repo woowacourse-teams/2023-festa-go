@@ -1,6 +1,8 @@
 package com.festago.socialmedia.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.util.ImageUrlHelper;
+import com.festago.common.util.Validator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
     name = "social_media",
     uniqueConstraints = {
         @UniqueConstraint(
-            columnNames= {"owner_id", "owner_type", "media_type"}
+            columnNames = {"owner_id", "owner_type", "media_type"}
         )
     }
 )
@@ -47,14 +49,18 @@ public class SocialMedia extends BaseTimeEntity {
     private String url;
 
     public SocialMedia(Long id, Long ownerId, OwnerType ownerType, SocialMediaType mediaType, String name,
-                       String logoUrl,
-                       String url) {
+                       String logoUrl, String url) {
+        Validator.notNull(ownerId, "ownerId");
+        Validator.notNull(ownerType, "ownerType");
+        Validator.notNull(mediaType, "mediaType");
+        Validator.notBlank(name, "name");
+        Validator.notBlank(url, "url");
         this.id = id;
         this.ownerId = ownerId;
         this.ownerType = ownerType;
         this.mediaType = mediaType;
         this.name = name;
-        this.logoUrl = logoUrl;
+        this.logoUrl = ImageUrlHelper.getBlankStringIfBlank(logoUrl);
         this.url = url;
     }
 
@@ -64,10 +70,12 @@ public class SocialMedia extends BaseTimeEntity {
     }
 
     public void changeName(String name) {
+        Validator.notBlank(name, "name");
         this.name = name;
     }
 
     public void changeUrl(String url) {
+        Validator.notBlank(url, "url");
         this.url = url;
     }
 

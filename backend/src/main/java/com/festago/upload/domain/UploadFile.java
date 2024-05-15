@@ -160,7 +160,7 @@ public class UploadFile implements Persistable<UUID> {
     }
 
     public URI getUploadUri() {
-        return location.resolve(getName());
+        return location.resolve("/" + getName());
     }
 
     public String getName() {

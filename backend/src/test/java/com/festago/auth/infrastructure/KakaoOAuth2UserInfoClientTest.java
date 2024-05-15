@@ -13,6 +13,7 @@ import com.festago.auth.domain.UserInfo;
 import com.festago.auth.dto.KakaoUserInfo;
 import com.festago.auth.dto.KakaoUserInfo.KakaoAccount;
 import com.festago.auth.dto.KakaoUserInfo.KakaoAccount.Profile;
+import com.festago.auth.infrastructure.oauth2.KakaoOAuth2UserInfoClient;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.InternalServerException;
 import org.junit.jupiter.api.DisplayNameGeneration;

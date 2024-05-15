@@ -26,6 +26,7 @@ public class MockFestivalsGenerator {
                 return new Festival(
                     school.getName() + " " + festivalDuration.getStartDate().format(DATE_TIME_FORMATTER) + " 축제",
                     festivalDuration,
+                    "",
                     school
                 );
             })

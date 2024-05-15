@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.festago.auth.infrastructure.openid.KakaoOpenIdJwksClient;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 import io.jsonwebtoken.Identifiable;

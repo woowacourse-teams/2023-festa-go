@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.openid;
 
 import com.festago.auth.domain.OpenIdClient;
 import com.festago.auth.domain.SocialType;

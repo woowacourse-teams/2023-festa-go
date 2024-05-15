@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.openid;
 
 import com.festago.common.exception.UnexpectedException;
 import io.jsonwebtoken.security.JwkSet;

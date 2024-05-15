@@ -7,7 +7,8 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.auth.dto.KakaoAccessTokenResponse;
-import com.festago.auth.infrastructure.KakaoOAuth2AccessTokenErrorHandler.KakaoOAuth2ErrorResponse;
+import com.festago.auth.infrastructure.oauth2.KakaoOAuth2AccessTokenClient;
+import com.festago.auth.infrastructure.oauth2.KakaoOAuth2AccessTokenErrorHandler.KakaoOAuth2ErrorResponse;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;

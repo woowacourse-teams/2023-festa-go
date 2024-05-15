@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/bookmarks/festivals")
-@Tag(name = "축제 북마크 V1")
+@Tag(name = "축제 북마크 요청 V1")
 public class FestivalBookmarkV1Controller {
 
     private final FestivalBookmarkV1QueryService festivalBookmarkV1QueryService;
 
     @MemberAuth
     @GetMapping("/ids")
-    @Operation(description = "북마크 된 축제의 식별자 목록을 조회한다.", summary = "북마크 된 축제 식별자 목록 조회")
+    @Operation(description = "회원의 북마크 된 축제 식별자 목록을 조회한다.", summary = "북마크 된 축제 식별자 목록 조회")
     public ResponseEntity<List<Long>> findBookmarkedFestivalIds(
         @Member Long memberId
     ) {
@@ -35,7 +35,7 @@ public class FestivalBookmarkV1Controller {
 
     @MemberAuth
     @GetMapping
-    @Operation(description = "축제의 식별자 목록으로 북마크 된 축제의 목록을 조회한다.", summary = "축제의 식별자 목록으로 북마크 된 축제의 목록 조회")
+    @Operation(description = "축제 식별자 목록으로 회원의 북마크 된 축제의 목록을 조회한다.", summary = "축제 식별자 목록으로 북마크 된 축제의 목록 조회")
     public ResponseEntity<List<FestivalBookmarkV1Response>> findBookmarkedFestivals(
         @Member Long memberId,
         @RequestParam List<Long> festivalIds,
