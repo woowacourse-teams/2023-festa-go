@@ -38,6 +38,7 @@ public class PopularFestivalV1QueryDslRepository extends QueryDslRepositorySuppo
             festivalQueryInfo.artistInfo)
         )
             .from(festival)
+            .where(festivalQueryInfo.artistInfo.ne("[]"))
             .innerJoin(school).on(school.id.eq(festival.school.id))
             .innerJoin(festivalQueryInfo).on(festivalQueryInfo.festivalId.eq(festival.id))
             .orderBy(festival.id.desc())
