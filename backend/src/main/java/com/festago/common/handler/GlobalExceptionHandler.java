@@ -15,6 +15,7 @@ import com.festago.common.exception.dto.ErrorResponse;
 import com.festago.common.exception.dto.ValidErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -62,6 +63,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
 
     private final AuthenticateContext authenticateContext;
+
+    @ExceptionHandler(ClientAbortException.class)
+    public ResponseEntity<ErrorResponse> handle(ClientAbortException e) {
+        return ResponseEntity.badRequest().build();
+    }
 
     @ExceptionHandler(InvalidMediaTypeException.class)
     public ResponseEntity<ErrorResponse> handle(InvalidMediaTypeException e) {
