@@ -38,7 +38,6 @@ import org.springframework.util.StringUtils;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
-    private static final String DEFAULT_NICKNAME = "FestivalLover";
     private static final int MAX_SOCIAL_ID_LENGTH = 255;
     private static final int MAX_NICKNAME_LENGTH = 30;
     private static final int MAX_PROFILE_IMAGE_LENGTH = 255;
@@ -76,7 +75,7 @@ public class Member extends BaseTimeEntity {
         this.id = id;
         this.socialId = socialId;
         this.socialType = socialType;
-        this.nickname = (StringUtils.hasText(nickname)) ? nickname : DEFAULT_NICKNAME;
+        this.nickname = nickname;
         this.profileImage = ImageUrlHelper.getBlankStringIfBlank(profileImage);
     }
 
@@ -100,6 +99,7 @@ public class Member extends BaseTimeEntity {
     private void validateNickname(String nickname) {
         String fieldName = "nickname";
         Validator.maxLength(nickname, MAX_NICKNAME_LENGTH, fieldName);
+        Validator.notBlank(nickname, fieldName);
     }
 
     private void validateProfileImage(String profileImage) {

@@ -55,12 +55,10 @@ class MemberTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = {"", " ", "\t", "\n"})
-    void nickname이_null_또는_공백이면_기본_닉네임_생성(String nickname) {
-        // given && when
-        Member member = new Member(1L, "12345", SocialType.FESTAGO, nickname, "profileImage.png");
-
-        // then
-        assertThat(member.getNickname()).isEqualTo("FestivalLover");
+    void nickname이_null_또는_공백이면_예외(String nickname) {
+        // when & then
+        assertThatThrownBy(() -> new Member(1L, "12345", SocialType.FESTAGO, nickname, "profileImage.png"))
+            .isInstanceOf(ValidException.class);
     }
 
     @Test

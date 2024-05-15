@@ -9,11 +9,13 @@ import static org.mockito.BDDMockito.spy;
 import com.festago.auth.domain.RefreshToken;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
+import com.festago.auth.domain.UserInfoMemberMapper;
 import com.festago.auth.repository.MemoryRefreshTokenRepository;
 import com.festago.auth.repository.RefreshTokenRepository;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.exception.UnauthorizedException;
+import com.festago.member.domain.DefaultNicknamePolicy;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.member.repository.MemoryMemberRepository;
@@ -46,10 +48,12 @@ class MemberAuthCommandServiceTest {
         clock = spy(Clock.systemDefaultZone());
         memberRepository = new MemoryMemberRepository();
         refreshTokenRepository = new MemoryRefreshTokenRepository();
+        DefaultNicknamePolicy defaultNicknamePolicy = () -> "nickname";
         memberAuthCommandService = new MemberAuthCommandService(
             memberRepository,
             refreshTokenRepository,
             mock(ApplicationEventPublisher.class),
+            new UserInfoMemberMapper(defaultNicknamePolicy),
             clock
         );
     }
