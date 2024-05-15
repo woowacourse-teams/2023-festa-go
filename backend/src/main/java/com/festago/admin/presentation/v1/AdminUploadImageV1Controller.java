@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/admin/api/v1/upload/images")
 @RequiredArgsConstructor
 @Hidden
-public class AdminUploadV1Controller {
+public class AdminUploadImageV1Controller {
 
     private final ImageFileUploadService imageFileUploadService;
 

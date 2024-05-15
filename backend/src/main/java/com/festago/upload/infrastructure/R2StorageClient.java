@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +21,11 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
+import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Error;
 
 @Slf4j
 @Component
@@ -71,12 +76,44 @@ public class R2StorageClient implements StorageClient {
             String mimeType = uploadFile.getMimeType().toString();
             RequestBody requestBody = RequestBody.fromContentProvider(() -> inputStream, fileSize, mimeType);
             UUID uploadFileId = uploadFile.getId();
-            log.info("파일 업로드 시작. id = {}, uploadUri={}, size={}", uploadFileId, uploadFile.getUploadUri(), fileSize);
+            log.info("파일 업로드 시작. id={}, uploadUri={}, size={}", uploadFileId, uploadFile.getUploadUri(), fileSize);
             s3Client.putObject(objectRequest, requestBody);
-            log.info("파일 업로드 완료. id = {}", uploadFileId);
+            log.info("파일 업로드 완료. id={}", uploadFileId);
         } catch (IOException e) {
-            log.warn("파일 업로드 중 문제가 발생했습니다. id = {}", uploadFile.getId());
+            log.warn("파일 업로드 중 문제가 발생했습니다. id={}", uploadFile.getId());
             throw new InternalServerException(ErrorCode.FILE_UPLOAD_ERROR, e);
         }
+    }
+
+    @Override
+    public void delete(List<UploadFile> uploadFiles) {
+        if (uploadFiles.isEmpty()) {
+            log.info("삭제하려는 파일이 없습니다.");
+            return;
+        }
+        int fileSize = uploadFiles.size();
+        UUID firstFileId = uploadFiles.get(0).getId();
+        DeleteObjectsRequest deleteObjectsRequest = getDeleteObjectsRequest(uploadFiles);
+
+        log.info("{}개 파일 삭제 시작. 첫 번째 파일 식별자={}", fileSize, firstFileId);
+        DeleteObjectsResponse response = s3Client.deleteObjects(deleteObjectsRequest);
+        log.info("{}개 파일 삭제 완료. 첫 번째 파일 식별자={}", fileSize, firstFileId);
+
+        if (response.hasErrors()) {
+            List<S3Error> errors = response.errors();
+            log.warn("{}개 파일 삭제 중 에러가 발생했습니다. 첫 번째 파일 식별자={}, 에러 개수={}", fileSize, firstFileId, errors.size());
+            errors.forEach(error -> log.info("파일 삭제 중 에러가 발생했습니다. key={}, message={}", error.key(), error.message()));
+        }
+    }
+
+    private DeleteObjectsRequest getDeleteObjectsRequest(List<UploadFile> uploadFiles) {
+        List<ObjectIdentifier> objectIdentifiers = uploadFiles.stream()
+            .map(UploadFile::getName)
+            .map(name -> ObjectIdentifier.builder().key(name).build())
+            .toList();
+        return DeleteObjectsRequest.builder()
+            .bucket(bucket)
+            .delete(builder -> builder.objects(objectIdentifiers).build())
+            .build();
     }
 }
