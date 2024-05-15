@@ -25,7 +25,7 @@
             android:paddingHorizontal="16dp"
             android:paddingVertical="4dp"
             android:text="@{item.schoolRegion.name()}"
-            android:textColor="@color/contents_gray_06"
+            android:textColor="@color/selector_btn_region_color"
             tools:text="서울" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
