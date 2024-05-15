@@ -4,7 +4,9 @@ import com.festago.festival.domain.Festival;
 import com.festago.festival.domain.FestivalDuration;
 import com.festago.school.domain.School;
 import java.time.LocalDate;
+import lombok.Builder;
 
+@Builder
 public record FestivalCreateCommand(
     String name,
     LocalDate startDate,

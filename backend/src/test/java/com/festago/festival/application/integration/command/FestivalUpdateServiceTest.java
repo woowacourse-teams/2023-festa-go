@@ -60,12 +60,12 @@ class FestivalUpdateServiceTest extends ApplicationIntegrationTest {
             LocalDate newStartDate = now.minusDays(1);
             LocalDate newEndDate = now.plusDays(1);
             String newPosterImageUrl = "https://image.com/new-image.png";
-            var command = new FestivalUpdateCommand(
-                newFestivalName,
-                newStartDate,
-                newEndDate,
-                newPosterImageUrl
-            );
+            var command = FestivalUpdateCommand.builder()
+                .name(newFestivalName)
+                .startDate(newStartDate)
+                .endDate(newEndDate)
+                .posterImageUrl(newPosterImageUrl)
+                .build();
 
             // when
             festivalUpdateService.updateFestival(festivalId, command);
@@ -87,12 +87,12 @@ class FestivalUpdateServiceTest extends ApplicationIntegrationTest {
             LocalDate newStartDate = now.plusDays(1);
             LocalDate newEndDate = now.plusDays(1);
             String newPosterImageUrl = "https://image.com/new-image.png";
-            var command = new FestivalUpdateCommand(
-                newFestivalName,
-                newStartDate,
-                newEndDate,
-                newPosterImageUrl
-            );
+            var command = FestivalUpdateCommand.builder()
+                .name(newFestivalName)
+                .startDate(newStartDate)
+                .endDate(newEndDate)
+                .posterImageUrl(newPosterImageUrl)
+                .build();
 
             // when
             festivalUpdateService.updateFestival(festivalId, command);
