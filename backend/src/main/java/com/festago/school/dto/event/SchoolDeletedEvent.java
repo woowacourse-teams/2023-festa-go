@@ -1,4 +1,4 @@
-package com.festago.school.dto.evnet;
+package com.festago.school.dto.event;
 
 public record SchoolDeletedEvent(
     Long schoolId

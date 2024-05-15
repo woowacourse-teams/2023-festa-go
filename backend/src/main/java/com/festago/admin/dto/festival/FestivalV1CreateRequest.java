@@ -27,12 +27,12 @@ public record FestivalV1CreateRequest(
 ) {
 
     public FestivalCreateCommand toCommand() {
-        return new FestivalCreateCommand(
-            name,
-            startDate,
-            endDate,
-            posterImageUrl,
-            schoolId
-        );
+        return FestivalCreateCommand.builder()
+            .name(name)
+            .startDate(startDate)
+            .endDate(endDate)
+            .posterImageUrl(posterImageUrl)
+            .schoolId(schoolId)
+            .build();
     }
 }

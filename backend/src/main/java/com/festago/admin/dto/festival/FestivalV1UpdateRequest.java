@@ -24,11 +24,11 @@ public record FestivalV1UpdateRequest(
 ) {
 
     public FestivalUpdateCommand toCommand() {
-        return new FestivalUpdateCommand(
-            name,
-            startDate,
-            endDate,
-            posterImageUrl
-        );
+        return FestivalUpdateCommand.builder()
+            .name(name)
+            .startDate(startDate)
+            .endDate(endDate)
+            .posterImageUrl(posterImageUrl)
+            .build();
     }
 }

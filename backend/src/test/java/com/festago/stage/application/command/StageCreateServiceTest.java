@@ -36,13 +36,20 @@ import org.junit.jupiter.api.Test;
 class StageCreateServiceTest {
 
     StageRepository stageRepository;
+
     FestivalRepository festivalRepository;
+
     ArtistRepository artistRepository;
+
     StageArtistRepository stageArtistRepository;
+
     StageCreateService stageCreateService;
+
     LocalDate festivalStartDate = LocalDate.parse("2077-06-30");
     LocalDate festivalEndDate = LocalDate.parse("2077-07-02");
+
     Festival 테코대학교_축제;
+
     Artist 에픽하이;
     Artist 소녀시대;
     Artist 뉴진스;
@@ -80,12 +87,12 @@ class StageCreateServiceTest {
         @Test
         void ArtistIds에_중복이_있으면_예외() {
             // given
-            var command = new StageCreateCommand(
-                테코대학교_축제.getId(),
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이.getId(), 에픽하이.getId())
-            );
+            var command = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제.getId())
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이.getId(), 에픽하이.getId()))
+                .build();
 
             // then
             // when & then
@@ -100,12 +107,12 @@ class StageCreateServiceTest {
             List<Long> artistIds = LongStream.rangeClosed(1, 11)
                 .boxed()
                 .toList();
-            var command = new StageCreateCommand(
-                테코대학교_축제.getId(),
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                artistIds
-            );
+            var command = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제.getId())
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(artistIds)
+                .build();
 
             // when & then
             assertThatThrownBy(() -> stageCreateService.createStage(command))
@@ -120,12 +127,12 @@ class StageCreateServiceTest {
                 .mapToObj(it -> artistRepository.save(ArtistFixture.builder().build()))
                 .map(Artist::getId)
                 .toList();
-            var command = new StageCreateCommand(
-                테코대학교_축제.getId(),
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                artistIds
-            );
+            var command = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제.getId())
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(artistIds)
+                .build();
 
             // when
             assertThatNoException().isThrownBy(() -> stageCreateService.createStage(command));
@@ -134,12 +141,12 @@ class StageCreateServiceTest {
         @Test
         void Festival_식별자에_대한_Festival이_없으면_예외() {
             // given
-            var command = new StageCreateCommand(
-                4885L,
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId())
-            );
+            var command = StageCreateCommand.builder()
+                .festivalId(4885L)
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId()))
+                .build();
 
             // when & then
             assertThatThrownBy(() -> stageCreateService.createStage(command))
@@ -150,12 +157,12 @@ class StageCreateServiceTest {
         @Test
         void 아티스트_식별자_목록에_존재하지_않은_아티스트가_있으면_예외() {
             // given
-            var command = new StageCreateCommand(
-                테코대학교_축제.getId(),
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId(), 4885L)
-            );
+            var command = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제.getId())
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId(), 4885L))
+                .build();
 
             // when & then
             assertThatThrownBy(() -> stageCreateService.createStage(command))
@@ -166,12 +173,12 @@ class StageCreateServiceTest {
         @Test
         void 성공하면_생성한_Stage에_대한_StageArtist가_저장된다() {
             // given
-            var command = new StageCreateCommand(
-                테코대학교_축제.getId(),
-                festivalStartDate.atTime(18, 0),
-                festivalStartDate.minusWeeks(1).atStartOfDay(),
-                List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId())
-            );
+            var command = StageCreateCommand.builder()
+                .festivalId(테코대학교_축제.getId())
+                .startTime(festivalStartDate.atTime(18, 0))
+                .ticketOpenTime(festivalStartDate.minusWeeks(1).atStartOfDay())
+                .artistIds(List.of(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId()))
+                .build();
 
             // when
             Long stageId = stageCreateService.createStage(command);

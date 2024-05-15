@@ -5,16 +5,20 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.given;
 
 import com.festago.festival.application.FestivalV1QueryService;
-import com.festago.festival.application.command.FestivalCreateService;
+import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.FestivalV1QueryRequest;
 import com.festago.festival.dto.FestivalV1Response;
-import com.festago.festival.dto.command.FestivalCreateCommand;
 import com.festago.festival.repository.FestivalFilter;
-import com.festago.school.application.SchoolCommandService;
+import com.festago.festival.repository.FestivalInfoRepository;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
 import com.festago.school.domain.SchoolRegion;
-import com.festago.school.dto.SchoolCreateCommand;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
 import com.festago.support.TimeInstantProvider;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.FestivalQueryInfoFixture;
+import com.festago.support.fixture.SchoolFixture;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,22 +33,22 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 
-// TODO Repository 사용하지 않고 Service로 데이터 세팅하도록 변경
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Transactional
 class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
 
     @Autowired
     FestivalV1QueryService festivalV1QueryService;
 
     @Autowired
-    FestivalCreateService festivalCreateService;
+    FestivalRepository festivalRepository;
 
     @Autowired
-    SchoolCommandService schoolCommandService;
+    SchoolRepository schoolRepository;
+
+    @Autowired
+    FestivalInfoRepository festivalInfoRepository;
 
     @Autowired
     Clock clock;
@@ -52,16 +56,16 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
     LocalDate now = LocalDate.parse("2077-07-10");
 
     // 진행중
-    Long 서울대학교_8일_12일_축제_식별자;
-    Long 서울대학교_6일_12일_축제_식별자;
-    Long 대구대학교_9일_12일_축제_식별자;
-    Long 부산대학교_6일_13일_축제_식별자;
-    Long 부산대학교_6일_12일_축제_식별자;
+    Festival 서울대학교_8일_12일_축제;
+    Festival 서울대학교_6일_12일_축제;
+    Festival 대구대학교_9일_12일_축제;
+    Festival 부산대학교_6일_13일_축제;
+    Festival 부산대학교_6일_12일_축제;
 
     // 진행 예정
-    Long 대구대학교_13일_14일_축제_식별자;
-    Long 대구대학교_12일_14일_축제_식별자;
-    Long 부산대학교_12일_14일_축제_식별자;
+    Festival 대구대학교_13일_14일_축제;
+    Festival 대구대학교_12일_14일_축제;
+    Festival 부산대학교_12일_14일_축제;
 
     /**
      * 현재 시간 <p> 2023년 7월 10일 <p>
@@ -74,40 +78,40 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
      */
     @BeforeEach
     void setting() {
-        Long 서울대학교_식별자 = createSchool("서울대학교", "seoul.ac.kr", SchoolRegion.서울);
-        Long 부산대학교_식별자 = createSchool("부산대학교", "busan.ac.kr", SchoolRegion.부산);
-        Long 대구대학교_식별자 = createSchool("대구대학교", "daegu.ac.kr", SchoolRegion.대구);
+        School 서울대학교 = createSchool("서울대학교", SchoolRegion.서울);
+        School 부산대학교 = createSchool("부산대학교", SchoolRegion.부산);
+        School 대구대학교 = createSchool("대구대학교", SchoolRegion.대구);
 
         // 진행 중
-        서울대학교_8일_12일_축제_식별자 = createFestival("서울대학교_8일_12일_축제", now.minusDays(2), now.plusDays(2), 서울대학교_식별자);
-        서울대학교_6일_12일_축제_식별자 = createFestival("서울대학교_6일_12일_축제", now.minusDays(4), now.plusDays(2), 서울대학교_식별자);
-        대구대학교_9일_12일_축제_식별자 = createFestival("대구대학교_9일_12일_축제", now.minusDays(1), now.plusDays(2), 대구대학교_식별자);
-        부산대학교_6일_13일_축제_식별자 = createFestival("부산대학교_6일_13일_축제", now.minusDays(4), now.plusDays(3), 부산대학교_식별자);
-        부산대학교_6일_12일_축제_식별자 = createFestival("부산대학교_6일_12일_축제", now.minusDays(4), now.plusDays(2), 부산대학교_식별자);
+        서울대학교_8일_12일_축제 = createFestival("서울대학교_8일_12일_축제", now.minusDays(2), now.plusDays(2), 서울대학교);
+        서울대학교_6일_12일_축제 = createFestival("서울대학교_6일_12일_축제", now.minusDays(4), now.plusDays(2), 서울대학교);
+        대구대학교_9일_12일_축제 = createFestival("대구대학교_9일_12일_축제", now.minusDays(1), now.plusDays(2), 대구대학교);
+        부산대학교_6일_13일_축제 = createFestival("부산대학교_6일_13일_축제", now.minusDays(4), now.plusDays(3), 부산대학교);
+        부산대학교_6일_12일_축제 = createFestival("부산대학교_6일_12일_축제", now.minusDays(4), now.plusDays(2), 부산대학교);
 
         // 진행 예정
-        대구대학교_13일_14일_축제_식별자 = createFestival("대구대학교_13일_14일_축제", now.plusDays(3), now.plusDays(4), 대구대학교_식별자);
-        부산대학교_12일_14일_축제_식별자 = createFestival("부산대학교_12일_14일_축제", now.plusDays(2), now.plusDays(4), 부산대학교_식별자);
-        대구대학교_12일_14일_축제_식별자 = createFestival("대구대학교_12일_14일_축제", now.plusDays(2), now.plusDays(4), 대구대학교_식별자);
+        대구대학교_13일_14일_축제 = createFestival("대구대학교_13일_14일_축제", now.plusDays(3), now.plusDays(4), 대구대학교);
+        부산대학교_12일_14일_축제 = createFestival("부산대학교_12일_14일_축제", now.plusDays(2), now.plusDays(4), 부산대학교);
+        대구대학교_12일_14일_축제 = createFestival("대구대학교_12일_14일_축제", now.plusDays(2), now.plusDays(4), 대구대학교);
 
         given(clock.instant())
             .willReturn(TimeInstantProvider.from(now));
     }
 
-    private Long createSchool(String schoolName, String domain, SchoolRegion region) {
-        return schoolCommandService.createSchool(new SchoolCreateCommand(
-            schoolName,
-            domain,
-            region,
-            "https://image.com/logo.png",
-            "https://image.com/background.png"
-        ));
+    private School createSchool(String schoolName, SchoolRegion region) {
+        return schoolRepository.save(SchoolFixture.builder().name(schoolName).region(region).build());
     }
 
-    private Long createFestival(String festivalName, LocalDate startDate, LocalDate endDate, Long schoolId) {
-        return festivalCreateService.createFestival(new FestivalCreateCommand(
-            festivalName, startDate, endDate, "https://image.com/posterImage.png", schoolId
-        ));
+    private Festival createFestival(String festivalName, LocalDate startDate, LocalDate endDate, School school) {
+        Festival festival = festivalRepository.save(FestivalFixture.builder()
+            .name(festivalName)
+            .startDate(startDate)
+            .endDate(endDate)
+            .school(school)
+            .build()
+        );
+        festivalInfoRepository.save(FestivalQueryInfoFixture.builder().festivalId(festival.getId()).build());
+        return festival;
     }
 
     @Nested
@@ -170,9 +174,9 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             assertThat(response.getContent())
                 .map(FestivalV1Response::id)
                 .containsExactly(
-                    부산대학교_12일_14일_축제_식별자,
-                    대구대학교_12일_14일_축제_식별자,
-                    대구대학교_13일_14일_축제_식별자
+                    부산대학교_12일_14일_축제.getId(),
+                    대구대학교_12일_14일_축제.getId(),
+                    대구대학교_13일_14일_축제.getId()
                 );
         }
 
@@ -188,11 +192,11 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
             assertThat(response.getContent())
                 .map(FestivalV1Response::id)
                 .containsExactly(
-                    대구대학교_9일_12일_축제_식별자,
-                    서울대학교_8일_12일_축제_식별자,
-                    서울대학교_6일_12일_축제_식별자,
-                    부산대학교_6일_13일_축제_식별자,
-                    부산대학교_6일_12일_축제_식별자
+                    대구대학교_9일_12일_축제.getId(),
+                    서울대학교_8일_12일_축제.getId(),
+                    서울대학교_6일_12일_축제.getId(),
+                    부산대학교_6일_13일_축제.getId(),
+                    부산대학교_6일_12일_축제.getId()
                 );
         }
 
@@ -216,9 +220,9 @@ class FestivalV1QueryServiceIntegrationTest extends ApplicationIntegrationTest {
                 softly.assertThat(secondResponse.getContent())
                     .map(FestivalV1Response::id)
                     .containsExactly(
-                        서울대학교_6일_12일_축제_식별자,
-                        부산대학교_6일_13일_축제_식별자,
-                        부산대학교_6일_12일_축제_식별자
+                        서울대학교_6일_12일_축제.getId(),
+                        부산대학교_6일_13일_축제.getId(),
+                        부산대학교_6일_12일_축제.getId()
                     );
             });
         }

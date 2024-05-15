@@ -11,6 +11,9 @@ public record AdminLoginV1Request(
 ) {
 
     public AdminLoginCommand toCommand() {
-        return new AdminLoginCommand(username, password);
+        return AdminLoginCommand.builder()
+            .username(username)
+            .password(password)
+            .build();
     }
 }

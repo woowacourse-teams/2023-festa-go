@@ -64,13 +64,13 @@ class FestivalCreateServiceTest extends ApplicationIntegrationTest {
             LocalDate startDate = now.minusDays(1);
             LocalDate endDate = now.plusDays(3);
             String posterImageUrl = "https://image.com/image.png";
-            var command = new FestivalCreateCommand(
-                festivalName,
-                startDate,
-                endDate,
-                posterImageUrl,
-                schoolId
-            );
+            var command = FestivalCreateCommand.builder()
+                .name(festivalName)
+                .startDate(startDate)
+                .endDate(endDate)
+                .posterImageUrl(posterImageUrl)
+                .schoolId(schoolId)
+                .build();
 
             // when & then
             assertThatThrownBy(() -> festivalCreateService.createFestival(command))
@@ -85,13 +85,13 @@ class FestivalCreateServiceTest extends ApplicationIntegrationTest {
             LocalDate startDate = now.plusDays(1);
             LocalDate endDate = now.plusDays(3);
             String posterImageUrl = "https://image.com/image.png";
-            var command = new FestivalCreateCommand(
-                festivalName,
-                startDate,
-                endDate,
-                posterImageUrl,
-                schoolId
-            );
+            var command = FestivalCreateCommand.builder()
+                .name(festivalName)
+                .startDate(startDate)
+                .endDate(endDate)
+                .posterImageUrl(posterImageUrl)
+                .schoolId(schoolId)
+                .build();
 
             // when
             Long festivalId = festivalCreateService.createFestival(command);

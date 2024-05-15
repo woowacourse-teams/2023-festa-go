@@ -3,9 +3,9 @@ package com.festago.upload.application.school;
 import static com.festago.upload.domain.FileOwnerType.SCHOOL;
 
 import com.festago.school.domain.School;
-import com.festago.school.dto.evnet.SchoolCreatedEvent;
-import com.festago.school.dto.evnet.SchoolDeletedEvent;
-import com.festago.school.dto.evnet.SchoolUpdatedEvent;
+import com.festago.school.dto.event.SchoolCreatedEvent;
+import com.festago.school.dto.event.SchoolDeletedEvent;
+import com.festago.school.dto.event.SchoolUpdatedEvent;
 import com.festago.upload.application.UploadFileStatusChangeService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

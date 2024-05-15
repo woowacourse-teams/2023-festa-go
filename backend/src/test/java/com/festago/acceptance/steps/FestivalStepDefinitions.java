@@ -36,7 +36,13 @@ public class FestivalStepDefinitions {
         LocalDate startDate = LocalDate.parse(시작일, DATE_TIME_FORMATTER);
         LocalDate endDate = LocalDate.parse(종료일, DATE_TIME_FORMATTER);
         Long schoolId = schoolRepository.findByName(학교이름).get().getId();
-        var command = new FestivalCreateCommand(축제이름, startDate, endDate, "https://image.com/image.png", schoolId);
+        var command = FestivalCreateCommand.builder()
+            .name(축제이름)
+            .startDate(startDate)
+            .endDate(endDate)
+            .posterImageUrl("https://image.com/image.png")
+            .schoolId(schoolId)
+            .build();
         festivalCreateService.createFestival(command);
     }
 

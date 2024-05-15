@@ -41,7 +41,7 @@ class ImageFileUploadServiceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"image.png", "image.jpg"})
+    @ValueSource(strings = {"image.png", "image.jpg", "image.jpeg"})
     void 이미지를_업로드할때_JPG_PNG_확장자이면_성공한다(String filename) {
         // given
         MultipartFile multipartFile = new MockMultipartFile("image", filename, "image/png",

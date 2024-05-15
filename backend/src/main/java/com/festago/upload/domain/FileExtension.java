@@ -8,6 +8,7 @@ import org.springframework.util.MimeTypeUtils;
 @RequiredArgsConstructor
 public enum FileExtension {
     JPG(".jpg", MimeTypeUtils.IMAGE_JPEG),
+    JPEG(".jpeg", MimeTypeUtils.IMAGE_JPEG),
     PNG(".png", MimeTypeUtils.IMAGE_PNG),
     NONE("", MimeTypeUtils.APPLICATION_OCTET_STREAM),
     ;

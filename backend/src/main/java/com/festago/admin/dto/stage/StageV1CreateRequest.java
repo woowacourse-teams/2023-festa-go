@@ -20,11 +20,11 @@ public record StageV1CreateRequest(
 ) {
 
     public StageCreateCommand toCommand() {
-        return new StageCreateCommand(
-            festivalId,
-            startTime,
-            ticketOpenTime,
-            artistIds
-        );
+        return StageCreateCommand.builder()
+            .festivalId(festivalId)
+            .startTime(startTime)
+            .ticketOpenTime(ticketOpenTime)
+            .artistIds(artistIds)
+            .build();
     }
 }

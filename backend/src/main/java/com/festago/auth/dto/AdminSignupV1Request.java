@@ -11,6 +11,9 @@ public record AdminSignupV1Request(
 ) {
 
     public AdminSignupCommand toCommand() {
-        return new AdminSignupCommand(username, password);
+        return AdminSignupCommand.builder()
+            .username(username)
+            .password(password)
+            .build();
     }
 }

@@ -14,10 +14,10 @@ public record ArtistV1UpdateRequest(
 ) {
 
     public ArtistUpdateCommand toCommand() {
-        return new ArtistUpdateCommand(
-            name,
-            profileImageUrl,
-            backgroundImageUrl
-        );
+        return ArtistUpdateCommand.builder()
+            .name(name)
+            .profileImageUrl(profileImageUrl)
+            .backgroundImageUrl(backgroundImageUrl)
+            .build();
     }
 }

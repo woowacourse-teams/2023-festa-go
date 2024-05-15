@@ -2,21 +2,17 @@ package com.festago.festival.application.integration.query;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.artist.repository.ArtistRepository;
 import com.festago.festival.application.PopularFestivalV1QueryService;
-import com.festago.festival.application.command.FestivalCreateService;
+import com.festago.festival.domain.Festival;
 import com.festago.festival.dto.FestivalV1Response;
-import com.festago.festival.dto.command.FestivalCreateCommand;
-import com.festago.school.application.SchoolCommandService;
-import com.festago.school.domain.SchoolRegion;
-import com.festago.school.dto.SchoolCreateCommand;
-import com.festago.stage.application.command.StageCreateService;
-import com.festago.stage.dto.command.StageCreateCommand;
+import com.festago.festival.repository.FestivalInfoRepository;
+import com.festago.festival.repository.FestivalRepository;
+import com.festago.school.domain.School;
+import com.festago.school.repository.SchoolRepository;
 import com.festago.support.ApplicationIntegrationTest;
-import com.festago.support.fixture.ArtistFixture;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import com.festago.support.fixture.FestivalFixture;
+import com.festago.support.fixture.FestivalQueryInfoFixture;
+import com.festago.support.fixture.SchoolFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -31,88 +27,83 @@ class PopularFestivalV1QueryServiceIntegrationTest extends ApplicationIntegratio
     PopularFestivalV1QueryService popularQueryService;
 
     @Autowired
-    FestivalCreateService festivalCreateService;
+    SchoolRepository schoolRepository;
 
     @Autowired
-    SchoolCommandService schoolCommandService;
+    FestivalRepository festivalRepository;
 
     @Autowired
-    StageCreateService stageCreateService;
+    FestivalInfoRepository festivalInfoRepository;
 
-    @Autowired
-    ArtistRepository artistRepository;
+    School 대학교;
 
-    LocalDate now = LocalDate.parse("2077-06-30");
-    LocalDateTime nowDate = now.atTime(12, 00);
-
-    Long 대학교_식별자;
-
-    Long 첫번째로_저장된_축제_식별자;
-    Long 두번째로_저장된_축제_식별자;
-    Long 세번째로_저장된_축제_식별자;
-    Long 네번째로_저장된_축제_식별자;
-    Long 다섯번째로_저장된_축제_식별자;
-    Long 여섯번째로_저장된_축제_식별자;
-    Long 일곱번째로_저장된_축제_식별자;
-    Long 여덟번째로_저장된_축제_식별자;
-    Long 아홉번쨔로_저장된_무대없는_축제_식별자;
-    Long 열번쨰로_저장된_무대없는_축제_식별자;
+    Festival 첫번째로_저장된_축제;
+    Festival 두번째로_저장된_축제;
+    Festival 세번째로_저장된_축제;
+    Festival 네번째로_저장된_축제;
+    Festival 다섯번째로_저장된_축제;
+    Festival 여섯번째로_저장된_축제;
+    Festival 일곱번째로_저장된_축제;
+    Festival 여덟번째로_저장된_축제;
+    Festival 아홉번째로_저장된_공연없는_축제;
+    Festival 열번째로_저장된_공연없는_축제;
 
     @BeforeEach
     void setUp() {
-        대학교_식별자 = schoolCommandService.createSchool(new SchoolCreateCommand(
-            "테코대학교",
-            "teco.ac.kr",
-            SchoolRegion.서울,
-            "https://image.com/logo.png",
-            "https://image.com/background.png"
-        ));
+        대학교 = schoolRepository.save(SchoolFixture.builder().build());
 
-        List<Long> 아티스트_리스트 = List.of(artistRepository.save(ArtistFixture.builder().build()).getId());
-
-        첫번째로_저장된_축제_식별자 = festivalCreateService.createFestival(getFestivalCreateCommand("첫번째로 저장된 축제"));
-        두번째로_저장된_축제_식별자 = festivalCreateService.createFestival(getFestivalCreateCommand("두번째로 저장된 축제"));
-        세번째로_저장된_축제_식별자 = festivalCreateService.createFestival(getFestivalCreateCommand("세번째로 저장된 축제"));
-        네번째로_저장된_축제_식별자 = festivalCreateService.createFestival(getFestivalCreateCommand("네번째로 저장된 축제"));
-        다섯번째로_저장된_축제_식별자 = festivalCreateService.createFestival(getFestivalCreateCommand("다섯번째로 저장된 축제"));
-        여섯번째로_저장된_축제_식별자 = festivalCreateService.createFestival(getFestivalCreateCommand("여섯번째로 저장된 축제"));
-        일곱번째로_저장된_축제_식별자 = festivalCreateService.createFestival(getFestivalCreateCommand("일곱번째로 저장된 축제"));
-        여덟번째로_저장된_축제_식별자 = festivalCreateService.createFestival(getFestivalCreateCommand("여덟번째로 저장된 축제"));
-        아홉번쨔로_저장된_무대없는_축제_식별자 = festivalCreateService.createFestival(getFestivalCreateCommand("아홉번쨔로 저장된 축제"));
-        열번쨰로_저장된_무대없는_축제_식별자 = festivalCreateService.createFestival(getFestivalCreateCommand("열번쨰로 저장된 축제"));
-
-        LocalDateTime 티켓_오픈_시간 = nowDate.minusDays(1L);
-
-        stageCreateService.createStage(new StageCreateCommand(첫번째로_저장된_축제_식별자, nowDate, 티켓_오픈_시간, 아티스트_리스트));
-        stageCreateService.createStage(new StageCreateCommand(두번째로_저장된_축제_식별자, nowDate, 티켓_오픈_시간, 아티스트_리스트));
-        stageCreateService.createStage(new StageCreateCommand(세번째로_저장된_축제_식별자, nowDate, 티켓_오픈_시간, 아티스트_리스트));
-        stageCreateService.createStage(new StageCreateCommand(네번째로_저장된_축제_식별자, nowDate, 티켓_오픈_시간, 아티스트_리스트));
-        stageCreateService.createStage(new StageCreateCommand(다섯번째로_저장된_축제_식별자, nowDate, 티켓_오픈_시간, 아티스트_리스트));
-        stageCreateService.createStage(new StageCreateCommand(여섯번째로_저장된_축제_식별자, nowDate, 티켓_오픈_시간, 아티스트_리스트));
-        stageCreateService.createStage(new StageCreateCommand(일곱번째로_저장된_축제_식별자, nowDate, 티켓_오픈_시간, 아티스트_리스트));
-        stageCreateService.createStage(new StageCreateCommand(여덟번째로_저장된_축제_식별자, nowDate, 티켓_오픈_시간, 아티스트_리스트));
+        첫번째로_저장된_축제 = createFestivalWithFilledFestivalInfo();
+        두번째로_저장된_축제 = createFestivalWithFilledFestivalInfo();
+        세번째로_저장된_축제 = createFestivalWithFilledFestivalInfo();
+        네번째로_저장된_축제 = createFestivalWithFilledFestivalInfo();
+        다섯번째로_저장된_축제 = createFestivalWithFilledFestivalInfo();
+        여섯번째로_저장된_축제 = createFestivalWithFilledFestivalInfo();
+        일곱번째로_저장된_축제 = createFestivalWithFilledFestivalInfo();
+        여덟번째로_저장된_축제 = createFestivalWithFilledFestivalInfo();
+        아홉번째로_저장된_공연없는_축제 = createFestivalWithEmptyFestivalInfo();
+        열번째로_저장된_공연없는_축제 = createFestivalWithEmptyFestivalInfo();
     }
 
-    private FestivalCreateCommand getFestivalCreateCommand(String schoolName) {
-        return new FestivalCreateCommand(schoolName, now, now, "https://image.com/posterImage.png", 대학교_식별자);
+    private Festival createFestivalWithFilledFestivalInfo() {
+        Festival festival = festivalRepository.save(FestivalFixture.builder().school(대학교).build());
+        festivalInfoRepository.save(makeBaseFixture(festival)
+            .artistInfo("""
+                {
+                    notEmpty
+                }
+                """)
+            .build());
+        return festival;
+    }
+
+    private FestivalQueryInfoFixture makeBaseFixture(Festival festival) {
+        return FestivalQueryInfoFixture.builder()
+            .festivalId(festival.getId());
+    }
+
+    private Festival createFestivalWithEmptyFestivalInfo() {
+        Festival festival = festivalRepository.save(FestivalFixture.builder().school(대학교).build());
+        festivalInfoRepository.save(makeBaseFixture(festival)
+            .build());
+        return festival;
     }
 
     @Test
-    void 인기_축제는_공연이_뜽록된_축제만_7개까지_반환되고_식별자의_내림차순으로_정렬되어_조회된다() {
-        // given && when
+    void 인기_축제는_공연이등록된_축제중_7개까지_반환되고_식별자의_내림차순으로_정렬되어_조회된다() {
+        // when
         var expect = popularQueryService.findPopularFestivals().content();
 
         // then
         assertThat(expect)
             .map(FestivalV1Response::id)
             .containsExactly(
-                여덟번째로_저장된_축제_식별자,
-                일곱번째로_저장된_축제_식별자,
-                여섯번째로_저장된_축제_식별자,
-                다섯번째로_저장된_축제_식별자,
-                네번째로_저장된_축제_식별자,
-                세번째로_저장된_축제_식별자,
-                두번째로_저장된_축제_식별자
+                여덟번째로_저장된_축제.getId(),
+                일곱번째로_저장된_축제.getId(),
+                여섯번째로_저장된_축제.getId(),
+                다섯번째로_저장된_축제.getId(),
+                네번째로_저장된_축제.getId(),
+                세번째로_저장된_축제.getId(),
+                두번째로_저장된_축제.getId()
             );
     }
 }

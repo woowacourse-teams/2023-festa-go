@@ -1,20 +1,22 @@
 package com.festago.artist.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.mock;
 
 import com.festago.artist.domain.Artist;
 import com.festago.artist.dto.command.ArtistCreateCommand;
 import com.festago.artist.dto.command.ArtistUpdateCommand;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.artist.repository.MemoryArtistRepository;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
 import com.festago.support.fixture.ArtistFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -33,8 +35,11 @@ class ArtistCommandServiceTest {
     @Test
     void 아티스트를_저장한다() {
         // given
-        ArtistCreateCommand command = new ArtistCreateCommand("윤서연", "https://image.com/image.png",
-            "https://image.com/image.png");
+        var command = ArtistCreateCommand.builder()
+            .name("윤서연")
+            .profileImageUrl("https://image.com/image.png")
+            .backgroundImageUrl("https://image.com/image.png")
+            .build();
 
         // when
         Long artistId = artistCommandService.save(command);
@@ -44,11 +49,27 @@ class ArtistCommandServiceTest {
     }
 
     @Test
+    void 중복된_이름의_아티스트가_저장되면_예외가_발생한다() {
+        // given
+        artistRepository.save(ArtistFixture.builder().name("윤서연").build());
+        ArtistCreateCommand command = new ArtistCreateCommand("윤서연", "https://image.com/image.png",
+            "https://image.com/image.png");
+
+        // when & then
+        assertThatThrownBy(() -> artistCommandService.save(command))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage(ErrorCode.DUPLICATE_ARTIST_NAME.getMessage());
+    }
+
+    @Test
     void 아티스트_정보를_변경한다() {
         // given
         Long artistId = artistRepository.save(ArtistFixture.builder().name("고윤하").build()).getId();
-        ArtistUpdateCommand command = new ArtistUpdateCommand("윤하", "https://image.com/image2.png",
-            "https://image.com/image2.png");
+        var command = ArtistUpdateCommand.builder()
+            .name("윤하")
+            .profileImageUrl("https://image.com/image2.png")
+            .backgroundImageUrl("https://image.com/image2.png")
+            .build();
 
         // when
         artistCommandService.update(command, artistId);

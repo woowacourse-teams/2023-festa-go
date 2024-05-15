@@ -1,7 +1,7 @@
 package com.festago.admin.dto.school;
 
 import com.festago.school.domain.SchoolRegion;
-import com.festago.school.dto.SchoolCreateCommand;
+import com.festago.school.dto.command.SchoolCreateCommand;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

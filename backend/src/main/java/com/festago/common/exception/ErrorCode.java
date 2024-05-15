@@ -46,6 +46,7 @@ public enum ErrorCode {
     OPEN_ID_NOT_SUPPORTED_SOCIAL_TYPE("해당 OpenId 제공자는 지원되지 않습니다."),
     OPEN_ID_INVALID_TOKEN("잘못된 OpenID 토큰입니다."),
     NOT_SUPPORT_FILE_EXTENSION("해당 파일의 확장자는 허용되지 않습니다."),
+    DUPLICATE_ARTIST_NAME("이미 존재하는 아티스트의 이름입니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),

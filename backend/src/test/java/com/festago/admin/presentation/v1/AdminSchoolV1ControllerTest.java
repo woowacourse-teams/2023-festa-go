@@ -21,7 +21,7 @@ import com.festago.common.querydsl.SearchCondition;
 import com.festago.school.application.SchoolCommandService;
 import com.festago.school.application.SchoolDeleteService;
 import com.festago.school.domain.SchoolRegion;
-import com.festago.school.dto.SchoolCreateCommand;
+import com.festago.school.dto.command.SchoolCreateCommand;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import jakarta.servlet.http.Cookie;

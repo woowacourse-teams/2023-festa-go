@@ -26,4 +26,6 @@ public interface ArtistRepository extends Repository<Artist, Long> {
     List<Artist> findByIdIn(Collection<Long> artistIds);
 
     boolean existsById(Long id);
+
+    boolean existsByName(String name);
 }
