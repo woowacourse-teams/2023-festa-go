@@ -10,7 +10,7 @@ public class FestivalFixture extends BaseFixture {
     private Long id;
     private String name;
     private LocalDate startDate = LocalDate.now();
-    private LocalDate endDate = LocalDate.now().plusDays(3L);
+    private LocalDate endDate;
     private String posterImageUrl = "https://picsum.photos/536/354";
     private School school = SchoolFixture.builder().build();
 
@@ -52,6 +52,9 @@ public class FestivalFixture extends BaseFixture {
     }
 
     public Festival build() {
+        if (endDate == null) {
+            endDate = startDate.plusDays(3L);
+        }
         return new Festival(id, uniqueValue("페스타고 대학교 축제", name), new FestivalDuration(startDate, endDate),
             posterImageUrl, school);
     }
