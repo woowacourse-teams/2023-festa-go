@@ -10,6 +10,7 @@ import com.festago.festival.repository.FestivalFilter;
 import com.festago.festival.repository.SchoolFestivalSearchV1QueryDslRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
@@ -43,7 +44,7 @@ public class FestivalSearchV1QueryService {
         List<FestivalSearchV1Response> result = new ArrayList<>();
         for (FestivalFilter festivalFilter : determineFestivalOrder()) {
             List<FestivalSearchV1Response> festivalsByFilter = festivalByStatus.getOrDefault(festivalFilter,
-                new ArrayList<>());
+                Collections.emptyList());
             sortByStatus(festivalFilter, festivalsByFilter);
             result.addAll(festivalsByFilter);
         }
@@ -51,7 +52,8 @@ public class FestivalSearchV1QueryService {
     }
 
     private Map<FestivalFilter, List<FestivalSearchV1Response>> divideByStatus(
-        List<FestivalSearchV1Response> festivals) {
+        List<FestivalSearchV1Response> festivals
+    ) {
         return festivals.stream()
             .collect(Collectors.groupingBy(
                 this::determineStatus,
