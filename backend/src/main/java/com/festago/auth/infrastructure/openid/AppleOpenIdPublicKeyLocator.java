@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class AppleOpenIdPublicKeyLocator implements Locator<Key> {
 
     private final AppleOpenIdJwksClient appleOpenIdJwksClient;
-    private final CachedAppleOpenIdKeyProvider cachedOpenIdKeyProvider;
+    private final CachedOpenIdKeyProvider cachedOpenIdKeyProvider;
 
     @Override
     public Key locate(Header header) {
