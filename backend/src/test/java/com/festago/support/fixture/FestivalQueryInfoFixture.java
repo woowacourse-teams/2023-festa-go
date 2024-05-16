@@ -6,7 +6,7 @@ import java.util.Collections;
 public class FestivalQueryInfoFixture extends BaseFixture {
 
     private Long festivalId;
-    private String artistInfo = "";
+    private String artistInfo = "[]";
 
     private FestivalQueryInfoFixture() {
     }
