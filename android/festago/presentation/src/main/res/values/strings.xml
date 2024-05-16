@@ -122,4 +122,6 @@
     <string name="my_page_delete_account_alert_message">정말 탈퇴 하시겠습니까? 다시 되돌릴 수 없습니다.</string>
     <string name="my_page_app_version_format">버전 : %s</string>
 
+    <string name="tv_empty_stage">아직 라인업이\n공개되지 않았어요</string>
+
 </resources>
