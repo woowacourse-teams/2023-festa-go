@@ -37,6 +37,11 @@
                 android:scaleType="centerCrop"
                 tools:src="@drawable/ic_launcher_background" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_artist_stroke" />
+
         </androidx.cardview.widget.CardView>
 
         <TextView
