@@ -27,5 +27,4 @@ class AppleOpenIdPublicKeyLocatorTest extends ApplicationIntegrationTest {
             .comparingOnlyFields("cachedOpenIdKeyProvider")
             .isNotEqualTo(kakaoOpenIdPublicKeyLocator);
     }
-
 }
