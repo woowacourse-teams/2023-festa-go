@@ -1,8 +1,7 @@
 package com.festago.auth;
 
 import com.festago.auth.domain.Role;
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.ForbiddenException;
+import com.festago.common.exception.UnexpectedException;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -10,6 +9,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+/**
+ * @deprecated 기존 Long으로 식별자를 받는 Controller가 많기에, 해당 클래스 삭제하지 않고 유지
+ */
+@Deprecated
 public class RoleArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final Role role;
@@ -30,9 +33,10 @@ public class RoleArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Long resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+                                NativeWebRequest webRequest, WebDataBinderFactory binderFactory
+    ) {
         if (authenticateContext.getRole() != this.role) {
-            throw new ForbiddenException(ErrorCode.NOT_ENOUGH_PERMISSION);
+            throw new UnexpectedException("인가된 권한이 인자의 권한과 맞지 않습니다.");
         }
         return authenticateContext.getId();
     }
