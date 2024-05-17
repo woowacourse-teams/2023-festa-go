@@ -97,14 +97,27 @@ class SplashActivity : ComponentActivity() {
     }
 
     private fun requestUpdate(latestVersion: Long) {
-        val isForceUpdateVersion = firebaseRemoteConfig.getBoolean(KEY_FORCE_UPDATE_REQUIRED)
         val latestVersionDescription =
             firebaseRemoteConfig.getString(KEY_LATEST_VERSION_DESCRIPTION)
+
+        if (checkForceUpdate(latestVersionDescription)) return
+        checkOptionalUpdate(latestVersion, latestVersionDescription)
+    }
+
+    private fun checkForceUpdate(latestVersionDescription: String): Boolean {
+        val isForceUpdateVersion = firebaseRemoteConfig.getBoolean(KEY_FORCE_UPDATE_REQUIRED)
         if (isForceUpdateVersion) {
             requestForceUpdate(message = latestVersionDescription)
-            return
+            return true
         }
-        requestOptionalUpdate(latestVersion = latestVersion, message = latestVersionDescription)
+        return false
+    }
+
+    private fun checkOptionalUpdate(latestVersion: Long, latestVersionDescription: String) {
+        val isOptionalUpdateVersion = firebaseRemoteConfig.getBoolean(KEY_OPTIONAL_UPDATE_REQUIRED)
+        if (isOptionalUpdateVersion) {
+            requestOptionalUpdate(latestVersion = latestVersion, message = latestVersionDescription)
+        }
     }
 
     private fun requestForceUpdate(message: String) {
@@ -188,6 +201,7 @@ class SplashActivity : ComponentActivity() {
         private const val DEBUG_REMOTE_CONFIG_FETCH_INTERVAL = 0L
         private const val RELEASE_REMOTE_CONFIG_FETCH_INTERVAL = 3600L
         private const val KEY_FORCE_UPDATE_REQUIRED = "FORCE_UPDATE_REQUIRED"
+        private const val KEY_OPTIONAL_UPDATE_REQUIRED = "OPTIONAL_UPDATE_REQUIRED"
         private const val KEY_LATEST_VERSION = "LATEST_VERSION"
         private const val KEY_LATEST_VERSION_DESCRIPTION = "LATEST_VERSION_DESCRIPTION"
     }
