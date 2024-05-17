@@ -2,8 +2,6 @@ package com.festago.festago.data.dto.schooldetail
 
 import com.festago.festago.data.dto.school.SocialMediaResponse
 import com.festago.festago.domain.model.school.SchoolInfo
-import com.festago.festago.domain.model.social.SocialMedia
-import com.festago.festago.domain.model.social.SocialMediaType
 import kotlinx.serialization.Serializable
 
 @Serializable

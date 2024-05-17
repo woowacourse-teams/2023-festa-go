@@ -1,6 +1,5 @@
 package com.festago.festago.data.repository
 
-import com.festago.festago.data.dto.school.SocialMediaResponse
 import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.model.festival.FestivalDetail
