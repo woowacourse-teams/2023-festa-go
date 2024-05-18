@@ -128,7 +128,7 @@
             app:singleLine="true" />
 
         <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/md_divider"
+            android:id="@+id/mdDivider"
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             app:dividerColor="@color/background_gray_03"
@@ -145,7 +145,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/md_divider"
+            app:layout_constraintTop_toBottomOf="@id/mdDivider"
             app:layout_constraintVertical_weight="1" />
 
         <TextView
