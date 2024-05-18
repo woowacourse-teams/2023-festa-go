@@ -2,6 +2,7 @@ package com.festago.auth.application.command;
 
 import com.festago.auth.domain.RefreshToken;
 import com.festago.auth.domain.UserInfo;
+import com.festago.auth.domain.UserInfoMemberMapper;
 import com.festago.auth.dto.event.MemberDeletedEvent;
 import com.festago.auth.dto.v1.LoginResult;
 import com.festago.auth.dto.v1.TokenRefreshResult;
@@ -28,6 +29,7 @@ public class MemberAuthCommandService {
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final UserInfoMemberMapper userInfoMemberMapper;
     private final Clock clock;
 
     public LoginResult oAuth2Login(UserInfo userInfo) {
@@ -44,7 +46,8 @@ public class MemberAuthCommandService {
     }
 
     private Member signUp(UserInfo userInfo) {
-        return memberRepository.save(userInfo.toMember());
+        Member member = userInfoMemberMapper.toMember(userInfo);
+        return memberRepository.save(member);
     }
 
     private RefreshToken saveRefreshToken(Long memberId) {
