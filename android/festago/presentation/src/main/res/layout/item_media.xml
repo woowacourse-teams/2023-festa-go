@@ -2,16 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="imageUrl"
-            type="String" />
-    </data>
-
     <ImageView
         android:id="@+id/ivImage"
-        imageUrl="@{imageUrl}"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginEnd="16dp"

@@ -17,6 +17,6 @@ data class SchoolInfoResponse(
         schoolName = name ?: "",
         logoUrl = logoUrl ?: "",
         backgroundUrl = backgroundImageUrl ?: "",
-        socialMedia = socialMedias.map { it.toDomain() },
+        socialMedia = socialMedias.map { it.toDomain() }
     )
 }

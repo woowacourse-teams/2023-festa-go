@@ -105,5 +105,19 @@
             app:layout_constraintStart_toStartOf="@id/tvFestivalSchedule"
             app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule"
             tools:listitem="@layout/item_festival_list_artist" />
+
+        <TextView
+            android:id="@+id/tvEmptyStage"
+            style="@style/H5Bold14Lh16"
+            visibility="@{item.artists.isEmpty()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/all_tv_empty_stage"
+            android:textColor="@color/contents_gray_06"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivFestivalImage"
+            app:layout_constraintTop_toBottomOf="@+id/tvFestivalSchedule" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

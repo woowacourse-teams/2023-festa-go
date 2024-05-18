@@ -5,6 +5,7 @@ import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.model.festival.FestivalDetail
 import com.festago.festago.domain.model.school.School
 import com.festago.festago.domain.model.social.SocialMedia
+import com.festago.festago.domain.model.social.SocialMediaType
 import com.festago.festago.domain.model.stage.Stage
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -20,13 +21,13 @@ object FakeFestivals {
         school = School(id = 2L, name = "부경대학교", imageUrl = ""),
         socialMedias = listOf(
             SocialMedia(
-                type = "INSTAGRAM",
+                type = SocialMediaType.INSTAGRAM,
                 name = "총학생회 인스타그램",
                 logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png",
                 url = "https://www.instagram.com/25th_solution/",
             ),
             SocialMedia(
-                type = "FACEBOOK",
+                type = SocialMediaType.FACEBOOK,
                 name = "총학생회 페이스북",
                 logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png",
                 url = "https://www.facebook.com/23rdemotion/",
