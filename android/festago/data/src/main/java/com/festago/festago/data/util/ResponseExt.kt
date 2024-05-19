@@ -49,6 +49,5 @@ private fun <T> handleBadRequestException(response: Response<T>) {
                 throw BookmarkLimitExceededException()
             }
         }
-        throw Throwable("400 Bad Request")
     }
 }
