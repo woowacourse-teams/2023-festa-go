@@ -1,7 +1,4 @@
 package com.festago.festago.domain.exception
 
-object NetworkException : Exception() {
-    private fun readResolve(): Any = NetworkException
-}
-
+class NetworkException : Exception()
 fun Throwable.isNetworkError() = this is NetworkException
