@@ -15,19 +15,9 @@ suspend fun <T> runCatchingResponse(
             return Result.success(response.body()!!)
         }
 
-        if (response.code() == 401) {
-            throw UnauthorizedException()
-        }
+        handleUnauthorizedException(response)
 
-        if (response.code() == 400) {
-            println(response.errorBody())
-            response.errorBody()?.string()?.let {
-                if (it.contains("BOOKMARK_LIMIT_EXCEEDED")) {
-                    return Result.failure(BookmarkLimitExceededException)
-                }
-            }
-            return Result.failure(Throwable("400 Bad Request"))
-        }
+        handleBadRequestException(response)
 
         return Result.failure(
             Throwable(
@@ -43,5 +33,22 @@ suspend fun <T> runCatchingResponse(
             return Result.failure(NetworkException)
         }
         return Result.failure(e)
+    }
+}
+
+private fun <T> handleUnauthorizedException(response: Response<T>) {
+    if (response.code() == 401) {
+        throw UnauthorizedException()
+    }
+}
+
+private fun <T> handleBadRequestException(response: Response<T>) {
+    if (response.code() == 400) {
+        response.errorBody()?.string()?.let {
+            if (it.contains("BOOKMARK_LIMIT_EXCEEDED")) {
+                throw BookmarkLimitExceededException
+            }
+        }
+        throw Throwable("400 Bad Request")
     }
 }
