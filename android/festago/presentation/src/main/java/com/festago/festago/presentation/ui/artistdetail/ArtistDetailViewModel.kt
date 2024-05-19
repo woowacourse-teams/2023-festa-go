@@ -67,8 +67,13 @@ class ArtistDetailViewModel @Inject constructor(
                     onBookmarkClick = ::toggleArtistBookmark,
                 )
 
-                if (festivalPage.festivals.isEmpty()) {
+                if(!festivalPage.isLastPage) {
+                    return@launch
+                }
+                val lastFestival = festivalPage.festivals.lastOrNull()
+                if (lastFestival == null || lastFestival.endDate >= LocalDate.now()) {
                     loadMoreArtistFestivals(id)
+                    return@launch
                 }
             }.onFailure {
                 handleFailure(key = KEY_LOAD_ARTIST_DETAIL, throwable = it)

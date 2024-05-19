@@ -65,8 +65,13 @@ class SchoolDetailViewModel @Inject constructor(
                     isLast = festivalPage.isLastPage,
                     onBookmarkClick = { schoolId -> toggleSchoolBookmark(schoolId) },
                 )
-                if (festivalPage.festivals.isEmpty()) {
+                if (!festivalPage.isLastPage) {
+                    return@launch
+                }
+                val lastFestival = festivalPage.festivals.lastOrNull()
+                if (lastFestival == null || lastFestival.endDate >= LocalDate.now()) {
                     loadMoreSchoolFestivals(schoolId)
+                    return@launch
                 }
             }.onFailure {
                 handleFailure(key = KEY_LOAD_SCHOOL_DETAIL, throwable = it)
