@@ -109,7 +109,7 @@ class FestivalDetailViewModel @Inject constructor(
                         }
                         if (it.isNetworkError()) {
                             _uiState.value = uiState.copy(bookmarked = true)
-                            _event.emit(BookmarkFailure("북마크를 해제할 수 없습니다. 인터넷 연결을 확인해주세요"))
+                            _event.emit(BookmarkFailure("인터넷 연결을 확인해주세요"))
                         }
                     }
             } else {
@@ -123,6 +123,10 @@ class FestivalDetailViewModel @Inject constructor(
                         if (it.isBookmarkLimitExceeded()) {
                             _uiState.value = uiState.copy(bookmarked = false)
                             _event.emit(BookmarkFailure("북마크는 12개까지 가능해요"))
+                        }
+                        if (it.isNetworkError()) {
+                            _uiState.value = uiState.copy(bookmarked = false)
+                            _event.emit(BookmarkFailure("인터넷 연결을 확인해주세요"))
                         }
                     }
             }

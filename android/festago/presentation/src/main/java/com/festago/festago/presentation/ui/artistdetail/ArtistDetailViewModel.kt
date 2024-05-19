@@ -121,7 +121,7 @@ class ArtistDetailViewModel @Inject constructor(
                         }
                         if (it.isNetworkError()) {
                             _uiState.value = uiState.copy(bookMarked = true)
-                            _event.emit(BookmarkFailure("북마크를 해제할 수 없습니다. 인터넷 연결을 확인해주세요"))
+                            _event.emit(BookmarkFailure("인터넷 연결을 확인해주세요"))
                         }
                     }
             } else {
@@ -135,6 +135,10 @@ class ArtistDetailViewModel @Inject constructor(
                         if (it.isBookmarkLimitExceeded()) {
                             _uiState.value = uiState.copy(bookMarked = false)
                             _event.emit(BookmarkFailure("북마크는 12개까지 가능해요"))
+                        }
+                        if (it.isNetworkError()) {
+                            _uiState.value = uiState.copy(bookMarked = false)
+                            _event.emit(BookmarkFailure("인터넷 연결을 확인해주세요"))
                         }
                     }
             }
