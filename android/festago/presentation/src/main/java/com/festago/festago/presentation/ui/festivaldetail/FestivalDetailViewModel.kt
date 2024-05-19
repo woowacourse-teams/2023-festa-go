@@ -97,7 +97,7 @@ class FestivalDetailViewModel @Inject constructor(
             val uiState = _uiState.value as? FestivalDetailUiState.Success ?: return@launch
 
             if (!userRepository.isSigned()) {
-                _event.emit(BookmarkFailure("로그인이 필요합니다"))
+                _event.emit(BookmarkFailure("로그인이 필요해요"))
                 return@launch
             }
 

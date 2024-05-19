@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
+import com.festago.festago.domain.exception.isUnauthorized
 import com.festago.festago.domain.model.bookmark.BookmarkType
 import com.festago.festago.domain.model.festival.Festival
 import com.festago.festago.domain.repository.BookmarkRepository
@@ -106,15 +107,14 @@ class SchoolDetailViewModel @Inject constructor(
         val uiState = uiState.value as? SchoolDetailUiState.Success ?: return
 
         viewModelScope.launch {
-            if (!userRepository.isSigned()) {
-                _event.emit(BookmarkFailure("로그인이 필요합니다"))
-                return@launch
-            }
             if (uiState.bookmarked) {
                 _uiState.value = uiState.copy(bookmarked = false)
                 bookmarkRepository.deleteSchoolBookmark(schoolId.toLong())
                     .onSuccess { _event.emit(BookmarkSuccess(false)) }
                     .onFailure {
+                        if (it.isUnauthorized()) {
+                            _event.emit(BookmarkFailure("로그인이 필요해요"))
+                        }
                         _uiState.value = uiState.copy(bookmarked = true)
                         _event.emit(BookmarkFailure("북마크를 해제할 수 없습니다. 인터넷 연결을 확인해주세요"))
                     }
@@ -123,6 +123,9 @@ class SchoolDetailViewModel @Inject constructor(
                 bookmarkRepository.addSchoolBookmark(uiState.schoolInfo.id.toLong())
                     .onSuccess { _event.emit(BookmarkSuccess(true)) }
                     .onFailure {
+                        if (it.isUnauthorized()) {
+                            _event.emit(BookmarkFailure("로그인이 필요해요"))
+                        }
                         _uiState.value = uiState.copy(bookmarked = false)
                         _event.emit(BookmarkFailure("다른 북마크를 해제하거나 인터넷 연결을 확인해주세요"))
                     }

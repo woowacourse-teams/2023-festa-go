@@ -109,7 +109,7 @@ class ArtistDetailViewModel @Inject constructor(
             val uiState = uiState.value as? ArtistDetailUiState.Success ?: return@launch
 
             if (!userRepository.isSigned()) {
-                _event.emit(BookmarkFailure("로그인이 필요합니다"))
+                _event.emit(BookmarkFailure("로그인이 필요해요"))
                 return@launch
             }
 
