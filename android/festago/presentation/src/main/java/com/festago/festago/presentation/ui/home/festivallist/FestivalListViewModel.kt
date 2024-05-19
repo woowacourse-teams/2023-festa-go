@@ -38,7 +38,9 @@ class FestivalListViewModel @Inject constructor(
 
     private var festivalFilter: FestivalFilter = FestivalFilter.PROGRESS
 
-    fun initFestivalList() {
+    fun initFestivalList(refresh: Boolean = false) {
+        if (!refresh && uiState.value is FestivalListUiState.Success) return
+
         viewModelScope.launch {
             val schoolRegion = (uiState.value as? FestivalListUiState.Success)?.schoolRegion
             val deferredPopularFestivals = async { festivalRepository.loadPopularFestivals() }
