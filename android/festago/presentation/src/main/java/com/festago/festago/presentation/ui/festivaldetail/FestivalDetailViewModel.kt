@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.festago.festago.common.analytics.AnalyticsHelper
 import com.festago.festago.common.analytics.logNetworkFailure
+import com.festago.festago.domain.exception.isBookmarkLimitExceeded
+import com.festago.festago.domain.exception.isNetworkError
+import com.festago.festago.domain.exception.isUnauthorized
 import com.festago.festago.domain.model.artist.Artist
 import com.festago.festago.domain.model.bookmark.BookmarkType
 import com.festago.festago.domain.model.festival.FestivalDetail
@@ -96,26 +99,31 @@ class FestivalDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val uiState = _uiState.value as? FestivalDetailUiState.Success ?: return@launch
 
-            if (!userRepository.isSigned()) {
-                _event.emit(BookmarkFailure("로그인이 필요해요"))
-                return@launch
-            }
-
             if (uiState.bookmarked) {
                 _uiState.value = uiState.copy(bookmarked = false)
                 bookmarkRepository.deleteFestivalBookmark(festivalId)
                     .onSuccess { _event.emit(BookmarkSuccess(false)) }
                     .onFailure {
-                        _uiState.value = uiState.copy(bookmarked = true)
-                        _event.emit(BookmarkFailure("북마크를 해제할 수 없습니다. 인터넷 연결을 확인해주세요"))
+                        if (it.isUnauthorized()) {
+                            _event.emit(BookmarkFailure("로그인이 필요해요"))
+                        }
+                        if (it.isNetworkError()) {
+                            _uiState.value = uiState.copy(bookmarked = true)
+                            _event.emit(BookmarkFailure("북마크를 해제할 수 없습니다. 인터넷 연결을 확인해주세요"))
+                        }
                     }
             } else {
                 _uiState.value = uiState.copy(bookmarked = true)
                 bookmarkRepository.addFestivalBookmark(festivalId)
                     .onSuccess { _event.emit(BookmarkSuccess(true)) }
                     .onFailure {
-                        _uiState.value = uiState.copy(bookmarked = false)
-                        _event.emit(BookmarkFailure("다른 북마크를 해제하거나 인터넷 연결을 확인해주세요"))
+                        if (it.isUnauthorized()) {
+                            _event.emit(BookmarkFailure("로그인이 필요해요"))
+                        }
+                        if (it.isBookmarkLimitExceeded()) {
+                            _uiState.value = uiState.copy(bookmarked = false)
+                            _event.emit(BookmarkFailure("북마크는 12개까지 가능해요"))
+                        }
                     }
             }
         }
