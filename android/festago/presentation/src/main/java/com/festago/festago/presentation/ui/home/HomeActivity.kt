@@ -14,6 +14,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.festago.festago.presentation.R
@@ -60,7 +61,21 @@ class HomeActivity : AppCompatActivity() {
             (supportFragmentManager.findFragmentById(R.id.fcvHomeContainer) as NavHostFragment).navController
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.nvHome)
         bottomNavigationView.setupWithNavController(navController)
+
+        setBottomNavPopUpBackstack(bottomNavigationView)
         setNavColor()
+    }
+
+    private fun setBottomNavPopUpBackstack(bottomNavigationView: BottomNavigationView) {
+        bottomNavigationView.setOnItemSelectedListener {
+            val options = NavOptions.Builder()
+                .setPopUpTo(R.id.main_graph_xml, false)
+                .setLaunchSingleTop(true)
+                .build()
+
+            navController.navigate(it.itemId, null, options)
+            true
+        }
     }
 
     private fun setNavColor() {

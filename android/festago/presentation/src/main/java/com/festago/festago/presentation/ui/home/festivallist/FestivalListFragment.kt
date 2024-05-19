@@ -82,7 +82,7 @@ class FestivalListFragment : Fragment() {
 
     private fun initRefresh() {
         binding.srlFestivalList.setOnRefreshListener {
-            vm.initFestivalList()
+            vm.initFestivalList(true)
             binding.srlFestivalList.isRefreshing = false
         }
         binding.srlFestivalList.setDistanceToTriggerSync(400)
