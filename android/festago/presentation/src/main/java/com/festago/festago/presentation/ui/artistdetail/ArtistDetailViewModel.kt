@@ -67,7 +67,7 @@ class ArtistDetailViewModel @Inject constructor(
                     onBookmarkClick = ::toggleArtistBookmark,
                 )
 
-                if(!festivalPage.isLastPage) {
+                if (!festivalPage.isLastPage) {
                     return@launch
                 }
                 val lastFestival = festivalPage.festivals.lastOrNull()
