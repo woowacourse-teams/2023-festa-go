@@ -52,7 +52,10 @@ class ArtistDetailViewModel @Inject constructor(
             runCatching {
                 val deferredArtistDetail =
                     async { artistRepository.loadArtistDetail(id, delayTimeMillis) }
-                val deferredFestivals = async { artistRepository.loadArtistFestivals(id, 10) }
+                val deferredFestivals = async {
+                    artistRepository.loadArtistFestivals(id = id, size = FESTIVAL_PAGE_SIZE)
+                }
+
                 val artist = deferredArtistDetail.await().getOrThrow()
                 val festivalPage = deferredFestivals.await().getOrThrow()
 
@@ -89,18 +92,19 @@ class ArtistDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentFestivals = successUiState.festivals
-            val lastItem = successUiState.festivals.lastOrNull()
-            val isPast = when {
-                lastItem == null -> true
-                lastItem.endDate < LocalDate.now() -> true
-                successUiState.isLast -> true
-                else -> false
-            }
+            val lastItem = currentFestivals.lastOrNull()
+            val isPast =
+                lastItem?.endDate?.isBefore(LocalDate.now()) ?: true || successUiState.isLast
+
+            val lastFestivalId = if (successUiState.isLast) null else lastItem?.id
+            val lastStartDate = if (successUiState.isLast) null else lastItem?.startDate
+
             artistRepository.loadArtistFestivals(
                 id = artistId,
-                lastFestivalId = currentFestivals.lastOrNull()?.id,
-                lastStartDate = currentFestivals.lastOrNull()?.startDate,
+                lastFestivalId = lastFestivalId,
+                lastStartDate = lastStartDate,
                 isPast = isPast,
+                size = FESTIVAL_PAGE_SIZE,
             ).onSuccess { festivalsPage ->
                 _uiState.value = successUiState.copy(
                     festivals = currentFestivals + festivalsPage.toUiState(),
@@ -189,6 +193,7 @@ class ArtistDetailViewModel @Inject constructor(
     }
 
     companion object {
+        private const val FESTIVAL_PAGE_SIZE = 20
         private const val KEY_LOAD_ARTIST_DETAIL = "KEY_LOAD_ARTIST_DETAIL"
         private const val KEY_LOAD_MORE_ARTIST_FESTIVAL = "KEY_LOAD_MORE_ARTIST_FESTIVAL"
     }
