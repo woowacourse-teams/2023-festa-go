@@ -202,7 +202,10 @@ class FestivalListFragment : Fragment() {
             items = schoolRegions
             listener = object : RegionBottomSheetDialogFragment.OnRegionSelectListener {
                 override fun onRegionSelect(region: SchoolRegion) {
-                    vm.loadFestivals(festivalFilter, region)
+                    vm.loadFestivals(
+                        festivalFilterUiState = festivalFilter,
+                        schoolRegion = if (region == schoolRegion) null else region,
+                    )
                 }
             }
         }

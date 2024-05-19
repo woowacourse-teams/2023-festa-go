@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/tvPopularFestivalTitle"
-            style="@style/H3Bold18Lh20"
+            style="@style/H1Bold20Lh20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"

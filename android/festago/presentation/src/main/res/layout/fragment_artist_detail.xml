@@ -130,6 +130,13 @@
             app:layout_constraintTop_toBottomOf="@id/tvArtistName"
             app:singleLine="true" />
 
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/mdDivider"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            app:dividerColor="@color/background_gray_03"
+            app:layout_constraintBottom_toTopOf="@id/rvToDoList"
+            app:layout_constraintTop_toBottomOf="@id/llcArtistMedia" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvToDoList"
@@ -137,12 +144,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="24dp"
-
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/llcArtistMedia"
+            app:layout_constraintTop_toBottomOf="@id/mdDivider"
             app:layout_constraintVertical_weight="1" />
 
         <TextView
