@@ -68,6 +68,7 @@
     <string name="search_school_tv_no_plan">예정 없음</string>
     <string name="search_artist_tv_today_stage_count">오늘 공연 %d개</string>
     <string name="search_artist_tv_upcoming_stage_count">공연 예정 %d개</string>
+    <string name="search_artist_tv_no_plan">예정 없음</string>
     <string name="search_tv_no_result">앗! 검색 결과가 없네요</string>
     <string name="search_tv_no_result_guide">찾으시는 정보가 없다면 저희에게 알려주세요</string>
     <string name="search_tv_request_add">추가 요청하러 가기</string>

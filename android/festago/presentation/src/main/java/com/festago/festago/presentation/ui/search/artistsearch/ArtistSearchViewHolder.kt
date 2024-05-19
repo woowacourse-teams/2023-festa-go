@@ -19,14 +19,22 @@ class ArtistSearchViewHolder(
 
     fun bind(item: ArtistSearchItemUiState) {
         binding.item = item
-        binding.tvTodayStageCount.setStageCount(
-            count = item.todayStage,
-            stringRes = R.string.search_artist_tv_today_stage_count,
-        )
-        binding.tvUpcomingStageCount.setStageCount(
-            item.upcomingStage,
-            stringRes = R.string.search_artist_tv_upcoming_stage_count,
-        )
+
+        if (item.todayStage == 0 && item.upcomingStage == 0) {
+            binding.tvTodayStageCount.visibility = TextView.GONE
+            binding.tvUpcomingStageCount.visibility = TextView.GONE
+        } else {
+            binding.tvTodayStageCount.setStageCount(
+                count = item.todayStage,
+                stringRes = R.string.search_artist_tv_today_stage_count,
+            )
+
+            binding.tvUpcomingStageCount.setStageCount(
+                item.upcomingStage,
+                stringRes = R.string.search_artist_tv_upcoming_stage_count,
+            )
+            binding.tvEmptyStage.visibility = TextView.GONE
+        }
     }
 
     private fun TextView.setStageCount(count: Int, @StringRes stringRes: Int) {
@@ -35,8 +43,14 @@ class ArtistSearchViewHolder(
             getPartialColorText(
                 start = COLOR_INDEX,
                 end = COLOR_INDEX + count.toString().length,
-                color = context.getColor(R.color.secondary_pink_01),
+                color = when (count) {
+                    0 -> context.getColor(R.color.contents_gray_05)
+                    else -> context.getColor(R.color.secondary_pink_01)
+                },
             )
+        }
+        if (count == 0) {
+            setTextColor(context.getColor(R.color.contents_gray_05))
         }
     }
 
