@@ -30,7 +30,7 @@ suspend fun <T> runCatchingResponse(
         )
     } catch (e: Exception) {
         if (e is UnknownHostException) {
-            return Result.failure(NetworkException)
+            return Result.failure(NetworkException())
         }
         return Result.failure(e)
     }
@@ -46,7 +46,7 @@ private fun <T> handleBadRequestException(response: Response<T>) {
     if (response.code() == 400) {
         response.errorBody()?.string()?.let {
             if (it.contains("BOOKMARK_LIMIT_EXCEEDED")) {
-                throw BookmarkLimitExceededException
+                throw BookmarkLimitExceededException()
             }
         }
         throw Throwable("400 Bad Request")
