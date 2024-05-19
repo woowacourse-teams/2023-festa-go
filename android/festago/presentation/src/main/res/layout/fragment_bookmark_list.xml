@@ -30,6 +30,7 @@
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/contents_gray_07"
             app:tabIndicatorFullWidth="false"
+            app:tabRippleColor="@color/contents_gray_04"
             app:tabIndicatorHeight="2dp"
             app:tabSelectedTextColor="@color/contents_gray_07"
             app:tabTextAppearance="@style/H4Bold16Lh20"
