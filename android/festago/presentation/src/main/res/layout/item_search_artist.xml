@@ -90,12 +90,15 @@
             style="@style/B2Medium14Lh20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/search_artist_tv_no_plan"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:includeFontPadding="false"
+            android:text="@string/search_artist_tv_no_plan"
             android:textColor="@color/contents_gray_05"
-            app:layout_constraintBottom_toBottomOf="@id/tvTodayStageCount"
-            app:layout_constraintStart_toEndOf="@id/tvTodayStageCount"
-            app:layout_constraintTop_toTopOf="@id/tvTodayStageCount" />
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintStart_toStartOf="@+id/tvArtistName"
+            app:layout_constraintTop_toBottomOf="@+id/tvArtistName" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
