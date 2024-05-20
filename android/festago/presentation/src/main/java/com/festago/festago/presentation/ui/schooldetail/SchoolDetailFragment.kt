@@ -17,7 +17,6 @@ import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs
-import com.festago.festago.presentation.ui.bindingadapter.setImage
 import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs
 import com.festago.festago.presentation.ui.schooldetail.uistate.MoreItemUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
