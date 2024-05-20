@@ -69,7 +69,7 @@ class ArtistDetailViewModel @Inject constructor(
                     artist = artist,
                     bookMarked = isBookmarked,
                     festivals = festivalPage.toUiState(),
-                    userRepository.isSigned(),
+                    festivalPage.isLastPage,
                     onBookmarkClick = ::toggleArtistBookmark,
                 )
 
