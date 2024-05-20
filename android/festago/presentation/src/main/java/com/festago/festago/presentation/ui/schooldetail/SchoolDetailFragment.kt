@@ -17,7 +17,6 @@ import com.festago.festago.presentation.R
 import com.festago.festago.presentation.databinding.FragmentSchoolDetailBinding
 import com.festago.festago.presentation.databinding.ItemMediaBinding
 import com.festago.festago.presentation.ui.artistdetail.ArtistDetailArgs
-import com.festago.festago.presentation.ui.bindingadapter.setImage
 import com.festago.festago.presentation.ui.festivaldetail.FestivalDetailArgs
 import com.festago.festago.presentation.ui.schooldetail.uistate.MoreItemUiState
 import com.festago.festago.presentation.ui.schooldetail.uistate.SchoolDetailUiState
@@ -74,7 +73,6 @@ class SchoolDetailFragment : Fragment() {
 
     private fun loadSchoolDetail() {
         binding.tvSchoolName.text = args.school.name
-        binding.ivSchoolLogoImage.setImage(args.school.profileImageUrl)
         val delayTimeMillis = resources.getInteger(R.integer.nav_Anim_time).toLong()
         vm.loadSchoolDetail(args.school.id, delayTimeMillis)
     }
@@ -97,7 +95,6 @@ class SchoolDetailFragment : Fragment() {
         binding.successUiState = uiState
         binding.ivBookmark.isSelected = uiState.bookmarked
         binding.tvSchoolName.text = uiState.schoolInfo.schoolName
-        binding.ivSchoolLogoImage.setImage(uiState.schoolInfo.logoUrl)
         val items: List<Any> = if (uiState.isLast) {
             uiState.festivals
         } else {

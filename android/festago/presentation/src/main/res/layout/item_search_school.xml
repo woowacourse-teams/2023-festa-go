@@ -32,12 +32,12 @@
 
             <ImageView
                 android:id="@+id/ivSchoolLogoImage"
-                imageUrl="@{item.logoUrl}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                tools:src="@drawable/ic_launcher_foreground" />
+                android:src="@drawable/img_default_school"
+                tools:src="@drawable/img_default_school" />
         </androidx.cardview.widget.CardView>
 
         <TextView

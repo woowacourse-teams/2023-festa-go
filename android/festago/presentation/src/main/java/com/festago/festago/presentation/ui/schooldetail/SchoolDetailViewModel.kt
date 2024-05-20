@@ -49,7 +49,9 @@ class SchoolDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val deferredSchoolInfo =
                 async { schoolRepository.loadSchoolInfo(schoolId, delayTimeMillis) }
-            val deferredFestivalPage = async { schoolRepository.loadSchoolFestivals(schoolId) }
+            val deferredFestivalPage = async {
+                schoolRepository.loadSchoolFestivals(schoolId = schoolId, size = FESTIVAL_PAGE_SIZE)
+            }
 
             runCatching {
                 val schoolInfo = deferredSchoolInfo.await().getOrThrow()
@@ -87,18 +89,17 @@ class SchoolDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentFestivals = successUiState.festivals
-            val lastItem = successUiState.festivals.lastOrNull()
-            val isPast = when {
-                lastItem == null -> true
-                lastItem.endDate > LocalDate.now() -> true
-                successUiState.isLast -> true
-                else -> false
-            }
+            val lastItem = currentFestivals.lastOrNull()
+            val isPast =
+                lastItem?.endDate?.isBefore(LocalDate.now()) ?: true || successUiState.isLast
+            val lastFestivalId = if (successUiState.isLast) null else lastItem?.id
+            val lastStartDate = if (successUiState.isLast) null else lastItem?.startDate
             schoolRepository.loadSchoolFestivals(
                 schoolId = schoolId,
-                lastFestivalId = currentFestivals.lastOrNull()?.id?.toInt(),
-                lastStartDate = currentFestivals.lastOrNull()?.startDate,
+                lastFestivalId = lastFestivalId?.toInt(),
+                lastStartDate = lastStartDate,
                 isPast = isPast,
+                size = FESTIVAL_PAGE_SIZE,
             ).onSuccess { festivalsPage ->
                 _uiState.value = successUiState.copy(
                     festivals = currentFestivals + festivalsPage.festivals.map { it.toUiState() },
@@ -185,6 +186,7 @@ class SchoolDetailViewModel @Inject constructor(
     )
 
     companion object {
+        private const val FESTIVAL_PAGE_SIZE = 20
         private const val KEY_LOAD_SCHOOL_DETAIL = "KEY_LOAD_SCHOOL_DETAIL"
         private const val KEY_LOAD_MORE_SCHOOL_FESTIVALS = "KEY_LOAD_MORE_SCHOOL_FESTIVALS"
     }

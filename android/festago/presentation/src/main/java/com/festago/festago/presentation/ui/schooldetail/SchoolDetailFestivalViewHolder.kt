@@ -28,6 +28,7 @@ class SchoolDetailFestivalViewHolder(
     fun bind(item: FestivalItemUiState) {
         binding.item = item
         artistAdapter.submitList(item.artists)
+        binding.tvEmptyStage.visibility = if (item.artists.isEmpty()) View.VISIBLE else View.GONE
         bindDDayView(item)
     }
 

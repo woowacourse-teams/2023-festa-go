@@ -30,6 +30,7 @@ class FestivalSearchViewHolder(
     fun bind(item: FestivalSearchItemUiState) {
         binding.item = item
         artistAdapter.submitList(item.artists)
+        binding.tvEmptyStage.visibility = if (item.artists.isEmpty()) View.VISIBLE else View.GONE
         binding.tvFestivalDDay.bindFestivalDday(item)
     }
 
