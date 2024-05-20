@@ -59,7 +59,7 @@ class MyPageFragment : Fragment() {
         binding.tvPersonalInfoPolicy.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data =
-                Uri.parse("https://wooteco-ash.notion.site/fe0ca28535044db999d998eb4ea37e83")
+                Uri.parse("https://sites.google.com/view/privacy-festago")
             startActivity(intent)
         }
     }
