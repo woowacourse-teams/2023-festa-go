@@ -2,6 +2,7 @@ package com.festago.upload.domain;
 
 import com.festago.common.util.Validator;
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -31,6 +32,7 @@ public class UploadFile implements Persistable<UUID> {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar")
     private UploadStatus status;
 
     private long size;
@@ -39,11 +41,13 @@ public class UploadFile implements Persistable<UUID> {
     private URI location;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar")
     private FileExtension extension;
 
     private Long ownerId;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar")
     private FileOwnerType ownerType;
 
     private LocalDateTime createdAt;

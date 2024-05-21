@@ -35,11 +35,11 @@ public class SocialMedia extends BaseTimeEntity {
     private Long ownerId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "owner_type")
+    @Column(name = "owner_type", columnDefinition = "varchar")
     private OwnerType ownerType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "media_type")
+    @Column(name = "media_type", columnDefinition = "varchar")
     private SocialMediaType mediaType;
 
     private String name;

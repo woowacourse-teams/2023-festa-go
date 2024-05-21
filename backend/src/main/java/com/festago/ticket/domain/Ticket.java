@@ -7,6 +7,7 @@ import com.festago.common.util.Validator;
 import com.festago.school.domain.School;
 import com.festago.stage.domain.Stage;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -46,6 +47,7 @@ public class Ticket extends BaseTimeEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar")
     private TicketType ticketType;
 
     @OneToOne(mappedBy = "ticket", optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
