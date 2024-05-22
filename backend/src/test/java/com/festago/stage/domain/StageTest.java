@@ -2,6 +2,7 @@ package com.festago.stage.domain;
 
 import static com.festago.common.exception.ErrorCode.INVALID_STAGE_START_TIME;
 import static com.festago.common.exception.ErrorCode.INVALID_TICKET_OPEN_TIME;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -10,8 +11,11 @@ import com.festago.festival.domain.Festival;
 import com.festago.support.fixture.FestivalFixture;
 import com.festago.support.fixture.StageFixture;
 import java.time.LocalDateTime;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -99,5 +103,40 @@ class StageTest {
             .ticketOpenTime(ticketOpenTime)
             .festival(festival)
             .build());
+    }
+
+    @Nested
+    class renewArtists {
+
+        Stage stage;
+
+        @BeforeEach
+        void setUp() {
+            stage = StageFixture.builder().id(1L).build();
+        }
+
+        @Test
+        void 아티스트를_추가할_수_있다() {
+            // when
+            stage.renewArtists(List.of(1L, 2L, 3L));
+
+            // then
+            assertThat(stage.getArtistIds())
+                .containsExactly(1L, 2L, 3L);
+        }
+
+        @Test
+        void 추가하려는_아티스트가_기존_아티스트에_없으면_기존_아티스트는_삭제된다() {
+            // given
+            stage.renewArtists(List.of(1L));
+
+            // when
+            stage.renewArtists(List.of(2L, 3L));
+
+            // then
+            assertThat(stage.getArtistIds())
+                .doesNotContain(1L)
+                .containsExactly(2L, 3L);
+        }
     }
 }

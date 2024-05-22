@@ -6,6 +6,7 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.util.Validator;
 import com.festago.festival.domain.Festival;
 import com.festago.ticket.domain.Ticket;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +18,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -41,7 +44,8 @@ public class Stage extends BaseTimeEntity {
     @OneToMany(mappedBy = "stage", fetch = FetchType.LAZY)
     private List<Ticket> tickets = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "stageId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "stageId", orphanRemoval = true,
+        cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<StageArtist> artists = new ArrayList<>();
 
     public Stage(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
@@ -85,6 +89,25 @@ public class Stage extends BaseTimeEntity {
         validateTime(startTime, ticketOpenTime, this.festival);
         this.startTime = startTime;
         this.ticketOpenTime = ticketOpenTime;
+    }
+
+    public void renewArtists(List<Long> artistIds) {
+        artists.removeIf(artist -> !artistIds.contains(artist.getArtistId()));
+        Set<Long> existsArtistIds = artists.stream()
+            .map(StageArtist::getArtistId)
+            .collect(Collectors.toSet());
+        for (Long artistId : artistIds) {
+            if (!existsArtistIds.contains(artistId)) {
+                artists.add(new StageArtist(this.id, artistId));
+            }
+        }
+    }
+
+    public List<Long> getArtistIds() {
+        return artists.stream()
+            .map(StageArtist::getArtistId)
+            .sorted()
+            .toList();
     }
 
     public Long getId() {

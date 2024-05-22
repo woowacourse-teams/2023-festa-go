@@ -7,10 +7,8 @@ import com.festago.common.util.Validator;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.stage.domain.Stage;
-import com.festago.stage.domain.StageArtist;
 import com.festago.stage.dto.command.StageCreateCommand;
 import com.festago.stage.dto.event.StageCreatedEvent;
-import com.festago.stage.repository.StageArtistRepository;
 import com.festago.stage.repository.StageRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +26,6 @@ public class StageCreateService {
     private final StageRepository stageRepository;
     private final FestivalRepository festivalRepository;
     private final ArtistRepository artistRepository;
-    private final StageArtistRepository stageArtistRepository;
     private final ApplicationEventPublisher eventPublisher;
 
     public Long createStage(StageCreateCommand command) {
@@ -40,7 +37,7 @@ public class StageCreateService {
             festival
         ));
         List<Long> artistIds = command.artistIds();
-        createStageArtist(artistIds, stage);
+        stage.renewArtists(artistIds);
         eventPublisher.publishEvent(new StageCreatedEvent(stage));
         return stage.getId();
     }
@@ -49,12 +46,7 @@ public class StageCreateService {
         List<Long> artistIds = command.artistIds();
         Validator.maxSize(artistIds, MAX_ARTIST_SIZE, "artistIds");
         Validator.notDuplicate(artistIds, "artistIds");
-    }
-
-    private void createStageArtist(List<Long> artistIds, Stage stage) {
-        if (artistRepository.countByIdIn(artistIds) == artistIds.size()) {
-            artistIds.forEach(artistId -> stageArtistRepository.save(new StageArtist(stage.getId(), artistId)));
-        } else {
+        if (artistRepository.countByIdIn(artistIds) != artistIds.size()) {
             throw new NotFoundException(ErrorCode.ARTIST_NOT_FOUND);
         }
     }

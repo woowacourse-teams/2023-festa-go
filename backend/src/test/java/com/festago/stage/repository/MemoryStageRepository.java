@@ -8,12 +8,6 @@ import java.util.Optional;
 
 public class MemoryStageRepository extends AbstractMemoryRepository<Stage> implements StageRepository {
 
-
-    @Override
-    public void flush() {
-        //NOOP
-    }
-
     @Override
     public boolean existsByFestivalId(Long festivalId) {
         return memory.values().stream()
@@ -25,11 +19,6 @@ public class MemoryStageRepository extends AbstractMemoryRepository<Stage> imple
         return memory.values().stream()
             .filter(stage -> Objects.equals(stage.getFestival().getId(), festivalId))
             .toList();
-    }
-
-    @Override
-    public List<Stage> findAllDetailByFestivalId(Long festivalId) {
-        return findAllByFestivalId(festivalId);
     }
 
     @Override
