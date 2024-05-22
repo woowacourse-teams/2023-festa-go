@@ -1,6 +1,5 @@
 package com.festago.auth;
 
-import com.festago.auth.annotation.Member;
 import com.festago.auth.domain.authentication.Authentication;
 import com.festago.auth.domain.authentication.MemberAuthentication;
 import com.festago.common.exception.UnexpectedException;
@@ -22,8 +21,7 @@ public class MemberAuthenticationArgumentResolver implements HandlerMethodArgume
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(MemberAuthentication.class) && parameter.hasParameterAnnotation(
-            Member.class);
+        return parameter.getParameterType().equals(MemberAuthentication.class);
     }
 
     @Override

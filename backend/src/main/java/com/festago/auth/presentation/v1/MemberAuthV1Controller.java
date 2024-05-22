@@ -1,6 +1,5 @@
 package com.festago.auth.presentation.v1;
 
-import com.festago.auth.annotation.Member;
 import com.festago.auth.annotation.MemberAuth;
 import com.festago.auth.application.command.MemberAuthFacadeService;
 import com.festago.auth.domain.SocialType;
@@ -67,7 +66,7 @@ public class MemberAuthV1Controller {
     @PostMapping("/logout")
     @Operation(description = "로그인 된 사용자를 로그아웃 처리한다.", summary = "로그아웃")
     public ResponseEntity<Void> logout(
-        @Member MemberAuthentication memberAuthentication,
+        MemberAuthentication memberAuthentication,
         @RequestBody @Valid LogoutV1Request request
     ) {
         memberAuthFacadeService.logout(memberAuthentication.getId(), UUID.fromString(request.refreshToken()));
@@ -86,7 +85,7 @@ public class MemberAuthV1Controller {
     @MemberAuth
     @DeleteMapping
     @Operation(description = "사용자를 탈퇴 처리한다.", summary = "회원 탈퇴")
-    public ResponseEntity<Void> deleteAccount(@Member MemberAuthentication memberAuthentication) {
+    public ResponseEntity<Void> deleteAccount(MemberAuthentication memberAuthentication) {
         memberAuthFacadeService.deleteAccount(memberAuthentication.getId());
         return ResponseEntity.ok().build();
     }

@@ -1,6 +1,5 @@
 package com.festago.auth.presentation.v1;
 
-import com.festago.auth.annotation.Admin;
 import com.festago.auth.application.command.AdminAuthCommandService;
 import com.festago.auth.domain.authentication.AdminAuthentication;
 import com.festago.auth.dto.AdminLoginV1Request;
@@ -67,7 +66,7 @@ public class AdminAuthV1Controller {
     @PostMapping("/signup")
     public ResponseEntity<Void> signupAdminAccount(
         @RequestBody @Valid AdminSignupV1Request request,
-        @Admin AdminAuthentication adminAuthentication
+        AdminAuthentication adminAuthentication
     ) {
         adminAuthCommandService.signup(adminAuthentication.getId(), request.toCommand());
         return ResponseEntity.ok().build();

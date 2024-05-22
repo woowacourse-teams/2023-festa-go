@@ -1,6 +1,5 @@
 package com.festago.auth;
 
-import com.festago.auth.annotation.Admin;
 import com.festago.auth.domain.authentication.AdminAuthentication;
 import com.festago.auth.domain.authentication.Authentication;
 import com.festago.common.exception.UnexpectedException;
@@ -22,8 +21,7 @@ public class AdminAuthenticationArgumentResolver implements HandlerMethodArgumen
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(AdminAuthentication.class) && parameter.hasParameterAnnotation(
-            Admin.class);
+        return parameter.getParameterType().equals(AdminAuthentication.class);
     }
 
     @Override
