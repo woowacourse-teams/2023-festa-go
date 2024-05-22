@@ -10,10 +10,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@Scope("prototype")
 public class CachedOpenIdKeyProvider {
 
     private final Map<String, Key> cache = new HashMap<>();

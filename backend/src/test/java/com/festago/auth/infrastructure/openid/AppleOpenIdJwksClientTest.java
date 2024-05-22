@@ -106,6 +106,4 @@ class AppleOpenIdJwksClientTest {
             .map(Identifiable::getId)
             .containsExactlyInAnyOrder("pyaRQpAbnY", "lVHdOx8ltR", "Bh6H7rHVmb");
     }
-
-
 }

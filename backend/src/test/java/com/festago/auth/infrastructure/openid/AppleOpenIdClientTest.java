@@ -185,6 +185,4 @@ class AppleOpenIdClientTest {
         // then
         assertThat(expect.socialId()).isEqualTo(socialId);
     }
-
-
 }
