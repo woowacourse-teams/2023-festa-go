@@ -18,6 +18,7 @@ public class MemberAuthenticationTokenProvider {
     public TokenResponse provide(MemberAuthentication memberAuthentication) {
         return tokenProviderTemplate.provide(EXPIRATION_MINUTES,
             jwtBuilder -> jwtBuilder
+                .subject(memberAuthentication.getId().toString())
                 .claim(MEMBER_ID_KEY, memberAuthentication.getId())
                 .audience().add(Role.MEMBER.name()).and()
         );

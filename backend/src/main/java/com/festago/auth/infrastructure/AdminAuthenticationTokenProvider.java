@@ -18,6 +18,7 @@ public class AdminAuthenticationTokenProvider {
     public TokenResponse provide(AdminAuthentication adminAuthentication) {
         return tokenProviderTemplate.provide(EXPIRATION_MINUTES,
             jwtBuilder -> jwtBuilder
+                .subject(adminAuthentication.getId().toString())
                 .claim(ADMIN_ID_KEY, adminAuthentication.getId())
                 .audience().add(Role.ADMIN.name()).and()
         );
