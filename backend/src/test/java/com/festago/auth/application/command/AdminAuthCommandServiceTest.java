@@ -12,10 +12,10 @@ import static org.mockito.Mockito.mock;
 import com.festago.admin.domain.Admin;
 import com.festago.admin.repository.AdminRepository;
 import com.festago.admin.repository.MemoryAdminRepository;
-import com.festago.auth.application.AuthTokenProvider;
 import com.festago.auth.dto.command.AdminLoginCommand;
 import com.festago.auth.dto.command.AdminSignupCommand;
 import com.festago.auth.dto.v1.TokenResponse;
+import com.festago.auth.infrastructure.AdminAuthenticationTokenProvider;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.ForbiddenException;
@@ -35,16 +35,16 @@ class AdminAuthCommandServiceTest {
 
     AdminRepository adminRepository;
 
-    AuthTokenProvider authTokenProvider;
+    AdminAuthenticationTokenProvider adminAuthenticationTokenProvider;
 
     AdminAuthCommandService adminAuthCommandService;
 
     @BeforeEach
     void setUp() {
         adminRepository = new MemoryAdminRepository();
-        authTokenProvider = mock(AuthTokenProvider.class);
+        adminAuthenticationTokenProvider = mock(AdminAuthenticationTokenProvider.class);
         adminAuthCommandService = new AdminAuthCommandService(
-            authTokenProvider,
+            adminAuthenticationTokenProvider,
             adminRepository,
             PasswordEncoderFactories.createDelegatingPasswordEncoder()
         );
@@ -96,7 +96,7 @@ class AdminAuthCommandServiceTest {
                 .username("admin")
                 .password("password")
                 .build();
-            given(authTokenProvider.provide(any()))
+            given(adminAuthenticationTokenProvider.provide(any()))
                 .willReturn(new TokenResponse("token", LocalDateTime.now().plusWeeks(1)));
 
             // when

@@ -32,7 +32,7 @@ public class MemberAuthCommandService {
     private final UserInfoMemberMapper userInfoMemberMapper;
     private final Clock clock;
 
-    public LoginResult oAuth2Login(UserInfo userInfo) {
+    public LoginResult login(UserInfo userInfo) {
         Member member = memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
             .orElseGet(() -> signUp(userInfo));
         RefreshToken refreshToken = saveRefreshToken(member.getId());

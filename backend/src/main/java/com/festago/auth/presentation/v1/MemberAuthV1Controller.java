@@ -1,9 +1,9 @@
 package com.festago.auth.presentation.v1;
 
-import com.festago.auth.annotation.Member;
 import com.festago.auth.annotation.MemberAuth;
 import com.festago.auth.application.command.MemberAuthFacadeService;
 import com.festago.auth.domain.SocialType;
+import com.festago.auth.domain.authentication.MemberAuthentication;
 import com.festago.auth.dto.v1.LoginV1Response;
 import com.festago.auth.dto.v1.LogoutV1Request;
 import com.festago.auth.dto.v1.OAuth2LoginV1Request;
@@ -66,10 +66,10 @@ public class MemberAuthV1Controller {
     @PostMapping("/logout")
     @Operation(description = "로그인 된 사용자를 로그아웃 처리한다.", summary = "로그아웃")
     public ResponseEntity<Void> logout(
-        @Member Long memberId,
+        MemberAuthentication memberAuthentication,
         @RequestBody @Valid LogoutV1Request request
     ) {
-        memberAuthFacadeService.logout(memberId, UUID.fromString(request.refreshToken()));
+        memberAuthFacadeService.logout(memberAuthentication.getId(), UUID.fromString(request.refreshToken()));
         return ResponseEntity.ok().build();
     }
 
@@ -85,8 +85,8 @@ public class MemberAuthV1Controller {
     @MemberAuth
     @DeleteMapping
     @Operation(description = "사용자를 탈퇴 처리한다.", summary = "회원 탈퇴")
-    public ResponseEntity<Void> deleteAccount(@Member Long memberId) {
-        memberAuthFacadeService.deleteAccount(memberId);
+    public ResponseEntity<Void> deleteAccount(MemberAuthentication memberAuthentication) {
+        memberAuthFacadeService.deleteAccount(memberAuthentication.getId());
         return ResponseEntity.ok().build();
     }
 }

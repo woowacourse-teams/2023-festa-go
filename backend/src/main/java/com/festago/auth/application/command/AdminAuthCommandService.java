@@ -2,13 +2,12 @@ package com.festago.auth.application.command;
 
 import com.festago.admin.domain.Admin;
 import com.festago.admin.repository.AdminRepository;
-import com.festago.auth.application.AuthTokenProvider;
-import com.festago.auth.domain.AuthPayload;
 import com.festago.auth.domain.AuthType;
-import com.festago.auth.domain.Role;
+import com.festago.auth.domain.authentication.AdminAuthentication;
 import com.festago.auth.dto.command.AdminLoginCommand;
 import com.festago.auth.dto.command.AdminLoginResult;
 import com.festago.auth.dto.command.AdminSignupCommand;
+import com.festago.auth.infrastructure.AdminAuthenticationTokenProvider;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.ForbiddenException;
@@ -23,15 +22,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminAuthCommandService {
 
-    private final AuthTokenProvider authTokenProvider;
+    private final AdminAuthenticationTokenProvider adminAuthenticationTokenProvider;
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public AdminLoginResult login(AdminLoginCommand command) {
         Admin admin = findAdminWithAuthenticate(command);
-        AuthPayload authPayload = new AuthPayload(admin.getId(), Role.ADMIN);
-        String accessToken = authTokenProvider.provide(authPayload).token();
+        AdminAuthentication adminAuthentication = new AdminAuthentication(admin.getId());
+        String accessToken = adminAuthenticationTokenProvider.provide(adminAuthentication).token();
         return new AdminLoginResult(
             admin.getUsername(),
             getAuthType(admin),
