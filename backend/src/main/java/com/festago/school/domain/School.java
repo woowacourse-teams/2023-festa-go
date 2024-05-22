@@ -42,6 +42,7 @@ public class School extends BaseTimeEntity {
     private String backgroundUrl;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar")
     private SchoolRegion region;
 
     public School(String domain, String name, String logoUrl, String backgroundUrl, SchoolRegion region) {

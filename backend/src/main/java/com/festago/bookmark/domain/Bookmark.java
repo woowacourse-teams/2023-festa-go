@@ -29,7 +29,7 @@ public class Bookmark extends BaseTimeEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "bookmark_type")
+    @Column(name = "bookmark_type", columnDefinition = "varchar")
     private BookmarkType bookmarkType;
 
     @Column(name = "resource_id")

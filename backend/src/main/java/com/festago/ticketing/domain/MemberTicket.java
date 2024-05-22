@@ -10,6 +10,7 @@ import com.festago.ticket.domain.ReservationSequence;
 import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketReserveInfo;
 import com.festago.ticket.domain.TicketType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -38,6 +39,7 @@ public class MemberTicket extends BaseTimeEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar")
     private EntryState entryState = EntryState.BEFORE_ENTRY;
 
     @NotNull
@@ -56,6 +58,7 @@ public class MemberTicket extends BaseTimeEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar")
     private TicketType ticketType;
 
     public MemberTicket(Member owner, Stage stage, int number, LocalDateTime entryTime, TicketType ticketType) {

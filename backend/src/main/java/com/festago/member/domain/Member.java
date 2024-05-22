@@ -52,7 +52,7 @@ public class Member extends BaseTimeEntity {
 
     @NotNull
     @Enumerated(value = EnumType.STRING)
-    @Column(name = "social_type")
+    @Column(name = "social_type", columnDefinition = "varchar")
     private SocialType socialType;
 
     @NotNull

@@ -41,6 +41,9 @@ public class Stage extends BaseTimeEntity {
     @OneToMany(mappedBy = "stage", fetch = FetchType.LAZY)
     private List<Ticket> tickets = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "stageId")
+    private List<StageArtist> artists = new ArrayList<>();
+
     public Stage(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
         this(null, startTime, ticketOpenTime, festival);
     }
