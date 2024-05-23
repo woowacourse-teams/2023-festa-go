@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/background_gray_01"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/H2Bold20Lh24"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical|start"
+            android:paddingStart="16dp"
+            android:text="@string/home_bottom_nav_bookmark"
+            android:textColor="@color/contents_gray_07" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tlBookmarkListTab"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:background="@android:color/transparent"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/contents_gray_07"
+            app:tabIndicatorFullWidth="false"
+            app:tabRippleColor="@color/contents_gray_04"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/contents_gray_07"
+            app:tabTextAppearance="@style/H4Bold16Lh20"
+            app:tabTextColor="@color/contents_gray_05">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tiBookmarkListFestival"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bookmark_list_tv_festival" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tiBookmarkListArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bookmark_list_tv_artist" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tiBookmarkListSchool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bookmark_list_tv_school" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/mdDividerSearch"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            app:dividerColor="@color/background_gray_03"
+            app:layout_constraintTop_toBottomOf="@id/tlBookmarkListTab" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpBookmarkList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+</layout>

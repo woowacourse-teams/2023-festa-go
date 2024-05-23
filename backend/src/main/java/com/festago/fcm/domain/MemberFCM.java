@@ -1,25 +1,43 @@
 package com.festago.fcm.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.util.Validator;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "member_fcm")
+@Table(
+    name = "member_fcm",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            columnNames = {
+                "member_id",
+                "fcm_token"
+            }
+        )
+    })
 public class MemberFCM extends BaseTimeEntity {
+
+    private static final int MAX_FCM_TOKEN_LENGTH = 255;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
+    @Column(name = "member_id")
     private Long memberId;
 
     @NotNull
+    @Size(max = MAX_FCM_TOKEN_LENGTH)
+    @Column(name = "fcm_token")
     private String fcmToken;
 
     protected MemberFCM() {
@@ -37,9 +55,18 @@ public class MemberFCM extends BaseTimeEntity {
     }
 
     private void validate(Long memberId, String fcmToken) {
-        if (memberId == null || fcmToken == null) {
-            throw new IllegalArgumentException("MemberFCM 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
-        }
+        validateMemberId(memberId);
+        validateFcmToken(fcmToken);
+    }
+
+    private void validateMemberId(Long memberId) {
+        Validator.notNull(memberId, "memberId");
+    }
+
+    private void validateFcmToken(String fcmToken) {
+        String fieldName = "fcmToken";
+        Validator.notBlank(fcmToken, fieldName);
+        Validator.maxLength(fcmToken, MAX_FCM_TOKEN_LENGTH, fieldName);
     }
 
     public Long getId() {

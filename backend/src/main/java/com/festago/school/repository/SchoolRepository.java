@@ -1,9 +1,29 @@
 package com.festago.school.repository;
 
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.NotFoundException;
 import com.festago.school.domain.School;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+import org.springframework.data.repository.Repository;
 
-public interface SchoolRepository extends JpaRepository<School, Long> {
+public interface SchoolRepository extends Repository<School, Long> {
 
-    boolean existsByDomainOrName(String domain, String name);
+    School save(School school);
+
+    Optional<School> findById(Long id);
+
+    void deleteById(Long id);
+
+    boolean existsById(Long id);
+
+    default School getOrThrow(Long schoolId) {
+        return findById(schoolId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.SCHOOL_NOT_FOUND));
+    }
+
+    boolean existsByDomain(String domain);
+
+    boolean existsByName(String name);
+
+    Optional<School> findByName(String name);
 }

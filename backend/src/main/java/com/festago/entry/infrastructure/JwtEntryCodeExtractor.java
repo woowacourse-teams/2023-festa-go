@@ -7,13 +7,17 @@ import com.festago.entry.domain.EntryCodePayload;
 import com.festago.ticketing.domain.EntryState;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;
 import javax.crypto.SecretKey;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JwtEntryCodeExtractor implements EntryCodeExtractor {
 
     private static final String MEMBER_TICKET_ID_KEY = "ticketId";
@@ -23,8 +27,8 @@ public class JwtEntryCodeExtractor implements EntryCodeExtractor {
 
     public JwtEntryCodeExtractor(String secretKey) {
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        this.jwtParser = Jwts.parserBuilder()
-            .setSigningKey(key)
+        this.jwtParser = Jwts.parser()
+            .verifyWith(key)
             .build();
     }
 
@@ -39,12 +43,15 @@ public class JwtEntryCodeExtractor implements EntryCodeExtractor {
 
     private Claims getClaims(String code) {
         try {
-            return jwtParser.parseClaimsJws(code)
-                .getBody();
+            return jwtParser.parseSignedClaims(code)
+                .getPayload();
         } catch (ExpiredJwtException e) {
             throw new BadRequestException(ErrorCode.EXPIRED_ENTRY_CODE);
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (SignatureException | IllegalArgumentException | MalformedJwtException | UnsupportedJwtException e) {
             throw new BadRequestException(ErrorCode.INVALID_ENTRY_CODE);
+        } catch (Exception e) {
+            log.error("JWT 토큰 파싱 중에 문제가 발생했습니다.");
+            throw e;
         }
     }
 }

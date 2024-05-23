@@ -1,88 +1,148 @@
 package com.festago.student.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.exception.TooManyRequestException;
+import com.festago.common.exception.UnexpectedException;
+import com.festago.common.exception.ValidException;
 import com.festago.member.domain.Member;
 import com.festago.school.domain.School;
-import com.festago.support.MemberFixture;
-import com.festago.support.SchoolFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.SchoolFixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class StudentCodeTest {
 
-    @Nested
-    class 재발급_가능한지_확인 {
+    @Test
+    void 성공() {
+        // given
+        Member member = MemberFixture.builder().build();
+        School school = SchoolFixture.builder().build();
+        LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
+        VerificationCode verificationCode = new VerificationCode("123456");
 
-        @Test
-        void 발급한지_30초_이내면_거짓() {
-            // given
-            LocalDateTime currentTime = LocalDateTime.now();
-            LocalDateTime issuedAt = currentTime.minusSeconds(30);
-            School school = SchoolFixture.school().build();
-            Member member = MemberFixture.member().build();
-            StudentCode studentCode = new StudentCode(1L, new VerificationCode("123456"),
-                school, member, "ash", issuedAt);
+        // when
+        StudentCode studentCode = new StudentCode(1L, verificationCode, school, member, "glen", issuedAt);
 
-            // when
-            boolean actual = studentCode.canReissue(currentTime);
-
-            // then
-            assertThat(actual).isEqualTo(false);
-        }
-
-        @Test
-        void 발급한지_30초_이후면_참() {
-            // given
-            LocalDateTime currentTime = LocalDateTime.now();
-            LocalDateTime issuedAt = currentTime.minusSeconds(31);
-            School school = SchoolFixture.school().build();
-            Member member = MemberFixture.member().build();
-            StudentCode studentCode = new StudentCode(1L, new VerificationCode("123456"),
-                school, member, "ash", issuedAt);
-
-            // when
-            boolean actual = studentCode.canReissue(currentTime);
-
-            // then
-            assertThat(actual).isEqualTo(true);
-        }
+        // then
+        assertThat(studentCode.getId()).isEqualTo(1L);
     }
 
     @Test
-    void 학생인증코드_재발급() {
+    void username의_길이가_255자를_초과하면_예외() {
         // given
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime issuedAt = currentTime.minusSeconds(31);
+        Member member = MemberFixture.builder().build();
+        School school = SchoolFixture.builder().build();
+        LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
+        VerificationCode verificationCode = new VerificationCode("123456");
+        String username = "1".repeat(256);
 
-        VerificationCode oldCode = new VerificationCode("111111");
-        VerificationCode newCode = new VerificationCode("222222");
+        // when & then
+        assertThatThrownBy(() -> new StudentCode(1L, verificationCode, school, member, username, issuedAt))
+            .isInstanceOf(ValidException.class)
+            .hasMessageContaining("username");
+    }
 
-        School oldSchool = SchoolFixture.school().build();
-        School newSchool = SchoolFixture.school().build();
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", " ", "\t", "\n"})
+    void username이_null_또는_공백이면_예외(String username) {
+        // given
+        Member member = MemberFixture.builder().build();
+        School school = SchoolFixture.builder().build();
+        LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
+        VerificationCode verificationCode = new VerificationCode("123456");
 
-        String oldUsername = "ash";
-        String newUsername = "pooh";
+        // when & then
+        assertThatThrownBy(() -> new StudentCode(1L, verificationCode, school, member, username, issuedAt))
+            .isInstanceOf(ValidException.class)
+            .hasMessageContaining("username");
+    }
 
-        Member member = MemberFixture.member().build();
-
-        StudentCode studentCode = new StudentCode(1L, oldCode, oldSchool, member, oldUsername, issuedAt);
+    @Test
+    void 이메일_반환_성공() {
+        // given
+        Member member = MemberFixture.builder().build();
+        School school = SchoolFixture.builder().domain("fiddich.com").build();
+        LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
+        VerificationCode verificationCode = new VerificationCode("123456");
 
         // when
-        studentCode.reissue(newCode, newSchool, newUsername);
+        StudentCode studentCode = new StudentCode(1L, verificationCode, school, member, "glen", issuedAt);
 
         // then
-        assertSoftly(softly -> {
-            softly.assertThat(studentCode.getCode()).isEqualTo(newCode);
-            softly.assertThat(studentCode.getSchool()).isEqualTo(newSchool);
-            softly.assertThat(studentCode.getUsername()).isEqualTo(newUsername);
-            softly.assertThat(studentCode.getMember()).isEqualTo(member);
-        });
+        assertThat(studentCode.getEmail()).isEqualTo("glen@fiddich.com");
+    }
+
+    @Nested
+    class 재발급 {
+
+        @Test
+        void 재발급할_코드에_식별자가_있으면_예외() {
+            // given
+            Member member = MemberFixture.builder().build();
+            School school = SchoolFixture.builder().build();
+            LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
+            VerificationCode verificationCode = new VerificationCode("123456");
+            StudentCode studentCode = new StudentCode(1L, verificationCode, school, member, "ash", issuedAt);
+
+            LocalDateTime future = LocalDateTime.MAX;
+            StudentCode newStudentCode = new StudentCode(2L, verificationCode, school, member, "glen", future);
+
+            // when & then
+            assertThatThrownBy(() -> studentCode.reissue(newStudentCode))
+                .isInstanceOf(UnexpectedException.class)
+                .hasMessage("새로 발급할 인증 코드는 식별자가 없어야 합니다.");
+        }
+
+        @ParameterizedTest
+        @ValueSource(longs = {0, 1, 30})
+        void 발급한지_30초_이내면_예외(long second) {
+            // given
+            Member member = MemberFixture.builder().build();
+            School school = SchoolFixture.builder().build();
+            LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
+            VerificationCode verificationCode = new VerificationCode("123456");
+            StudentCode studentCode = new StudentCode(1L, verificationCode, school, member, "ash", issuedAt);
+
+            LocalDateTime future = issuedAt.plusSeconds(second);
+            StudentCode newStudentCode = new StudentCode(null, verificationCode, school, member, "glen", future);
+
+            // when & then
+            assertThatThrownBy(() -> studentCode.reissue(newStudentCode))
+                .isInstanceOf(TooManyRequestException.class)
+                .hasMessage(ErrorCode.TOO_FREQUENT_REQUESTS.getMessage());
+        }
+
+        @ParameterizedTest
+        @ValueSource(longs = {31, 999, 9999})
+        void 발급한지_30초_이후면_성공(long second) {
+            // given
+            Member member = MemberFixture.builder().build();
+            School school = SchoolFixture.builder().build();
+            LocalDateTime issuedAt = LocalDateTime.parse("2023-11-19T02:00:00");
+            VerificationCode verificationCode = new VerificationCode("123456");
+            StudentCode studentCode = new StudentCode(1L, verificationCode, school, member, "ash", issuedAt);
+
+            LocalDateTime future = issuedAt.plusSeconds(second);
+            StudentCode newStudentCode = new StudentCode(null, verificationCode, school, member, "glen", future);
+
+            // when
+            studentCode.reissue(newStudentCode);
+
+            // then
+            assertThat(studentCode.getUsername()).isEqualTo("glen");
+        }
     }
 }

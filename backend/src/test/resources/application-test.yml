@@ -2,26 +2,36 @@ spring:
   datasource:
     url: jdbc:h2:mem:test;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
   jpa:
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: create
     open-in-view: false
   flyway:
     enabled: false
+management:
+  server:
+    port: 8090
 
 logging:
   file:
     path: ./
-  level:
-    org:
-      hibernate:
-        orm:
-          jdbc:
-            bind: trace
 
 festago:
   qr-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
   auth-secret-key: festagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestagofestago
+  cors-allow-origins: http://localhost:3000
+  oauth2:
+    apple:
+      client-id: appleClientId
+    kakao:
+      grant-type: grant-type
+      rest-api-key: rest-api-key
+      native-app-key: native-app-key
+      redirect-uri: redirect-uri
+      client-secret: client-secret
+  r2:
+    access-key: access-key
+    secret-key: secret-key
+    endpoint: https://endpoint.com
+    bucket: bucket
+    url: https://url.com

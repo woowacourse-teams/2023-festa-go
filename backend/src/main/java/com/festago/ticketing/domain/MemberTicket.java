@@ -1,9 +1,16 @@
 package com.festago.ticketing.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
+import com.festago.common.exception.BadRequestException;
+import com.festago.common.exception.ErrorCode;
+import com.festago.common.util.Validator;
 import com.festago.member.domain.Member;
 import com.festago.stage.domain.Stage;
+import com.festago.ticket.domain.ReservationSequence;
+import com.festago.ticket.domain.Ticket;
+import com.festago.ticket.domain.TicketReserveInfo;
 import com.festago.ticket.domain.TicketType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,6 +31,7 @@ import lombok.NoArgsConstructor;
 public class MemberTicket extends BaseTimeEntity {
 
     private static final long ENTRY_LIMIT_HOUR = 24;
+    private static final int MIN_NUMBER_VALUE = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +39,7 @@ public class MemberTicket extends BaseTimeEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar")
     private EntryState entryState = EntryState.BEFORE_ENTRY;
 
     @NotNull
@@ -41,7 +50,7 @@ public class MemberTicket extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Stage stage;
 
-    @Min(value = 0)
+    @Min(value = MIN_NUMBER_VALUE)
     private int number;
 
     @NotNull
@@ -49,6 +58,7 @@ public class MemberTicket extends BaseTimeEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar")
     private TicketType ticketType;
 
     public MemberTicket(Member owner, Stage stage, int number, LocalDateTime entryTime, TicketType ticketType) {
@@ -66,24 +76,52 @@ public class MemberTicket extends BaseTimeEntity {
         this.ticketType = ticketType;
     }
 
+    public static MemberTicket createMemberTicket(Ticket ticket, Member member, ReservationSequence sequence,
+                                                  LocalDateTime currentTime) {
+        if (ticket.alreadyStart(currentTime)) {
+            throw new BadRequestException(ErrorCode.TICKET_CANNOT_RESERVE_STAGE_START);
+        }
+
+        TicketReserveInfo ticketReserveInfo = extractTicketInfo(ticket, sequence);
+        return new MemberTicket(
+            member,
+            ticketReserveInfo.stage(),
+            ticketReserveInfo.sequence().getValue(),
+            ticketReserveInfo.entryTime(),
+            ticketReserveInfo.ticketType()
+        );
+    }
+
+    private static TicketReserveInfo extractTicketInfo(Ticket ticket, ReservationSequence sequence) {
+        return ticket.extractTicketInfo(sequence);
+    }
+
     private void validate(Member owner, Stage stage, int number, LocalDateTime entryTime, TicketType ticketType) {
-        checkNotNull(owner, stage, entryTime, ticketType);
-        checkScope(number);
+        validateOwner(owner);
+        validateStage(stage);
+        validateNumber(number);
+        validateEntryTime(entryTime);
+        validateTicketType(ticketType);
     }
 
-    private void checkNotNull(Member owner, Stage stage, LocalDateTime entryTime, TicketType ticketType) {
-        if (owner == null ||
-            stage == null ||
-            entryTime == null ||
-            ticketType == null) {
-            throw new IllegalArgumentException("MemberTicket 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
-        }
+    private void validateOwner(Member owner) {
+        Validator.notNull(owner, "owner");
     }
 
-    private void checkScope(int number) {
-        if (number < 0) {
-            throw new IllegalArgumentException("MemberTicket 의 필드로 허용된 범위를 넘은 column 을 넣을 수 없습니다.");
-        }
+    private void validateStage(Stage stage) {
+        Validator.notNull(stage, "stage");
+    }
+
+    private void validateNumber(int number) {
+        Validator.minValue(number, MIN_NUMBER_VALUE, "number");
+    }
+
+    private void validateEntryTime(LocalDateTime entryTime) {
+        Validator.notNull(entryTime, "entryTime");
+    }
+
+    private void validateTicketType(TicketType ticketType) {
+        Validator.notNull(ticketType, "ticketType");
     }
 
     public void changeState(EntryState originState) {

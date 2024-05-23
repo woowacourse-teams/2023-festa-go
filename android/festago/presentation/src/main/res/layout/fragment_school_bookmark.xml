@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="refreshListener"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="loginListener"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.home.bookmarklist.schoolbookmark.SchoolBookmarkListUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSchoolBookmarkList"
+            android:name="com.festago.festago.presentation.ItemFragment"
+            visibility="@{uiState.shouldShowSuccess}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="18dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:spanCount="3"
+            tools:context=".ItemFragment"
+            tools:listitem="@layout/item_school_bookmark" />
+
+        <include
+            android:id="@+id/includeRequireLogin"
+            layout="@layout/layout_require_login"
+            loginListener="@{loginListener}"
+            visibility="@{uiState.shouldShowNotLoggedIn}" />
+
+        <TextView
+            style="@style/H5Bold14Lh16"
+            visibility="@{uiState.shouldShowEmpty}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bookmark_list_tv_school_bookmark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/includeError"
+            layout="@layout/layout_network_error"
+            refreshListener="@{refreshListener}"
+            visibility="@{uiState.shouldShowError}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+

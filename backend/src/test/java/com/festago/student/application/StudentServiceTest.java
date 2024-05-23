@@ -5,9 +5,9 @@ import static com.festago.common.exception.ErrorCode.DUPLICATE_STUDENT_EMAIL;
 import static com.festago.common.exception.ErrorCode.INVALID_STUDENT_VERIFICATION_CODE;
 import static com.festago.common.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.festago.common.exception.ErrorCode.SCHOOL_NOT_FOUND;
-import static com.festago.common.exception.ErrorCode.TOO_FREQUENT_REQUESTS;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -15,23 +15,25 @@ import static org.mockito.BDDMockito.given;
 
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.NotFoundException;
-import com.festago.common.exception.TooManyRequestException;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
 import com.festago.school.domain.School;
+import com.festago.school.domain.SchoolRegion;
 import com.festago.school.repository.SchoolRepository;
+import com.festago.student.domain.Student;
 import com.festago.student.domain.StudentCode;
 import com.festago.student.domain.VerificationCode;
+import com.festago.student.dto.StudentResponse;
 import com.festago.student.dto.StudentSendMailRequest;
 import com.festago.student.dto.StudentVerificateRequest;
 import com.festago.student.infrastructure.MockMailClient;
 import com.festago.student.infrastructure.RandomVerificationCodeProvider;
 import com.festago.student.repository.StudentCodeRepository;
 import com.festago.student.repository.StudentRepository;
-import com.festago.support.MemberFixture;
-import com.festago.support.SchoolFixture;
 import com.festago.support.SetUpMockito;
-import com.festago.support.StudentCodeFixture;
+import com.festago.support.fixture.MemberFixture;
+import com.festago.support.fixture.SchoolFixture;
+import com.festago.support.fixture.StudentFixture;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -83,8 +85,8 @@ class StudentServiceTest {
         @BeforeEach
         void setUp() {
             request = new StudentSendMailRequest("ash", 1L);
-            Member member = MemberFixture.member().id(1L).build();
-            School school = SchoolFixture.school().id(1L).build();
+            Member member = MemberFixture.builder().id(1L).build();
+            School school = SchoolFixture.builder().id(1L).build();
 
             SetUpMockito
                 .given(memberRepository.findById(anyLong()))
@@ -125,22 +127,6 @@ class StudentServiceTest {
             assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(SCHOOL_NOT_FOUND.getMessage());
-        }
-
-        @Test
-        void 너무_잦은_요청이면_예외() {
-            // given
-            StudentSendMailRequest request = new StudentSendMailRequest("ash", 1L);
-            LocalDateTime currentTime = LocalDateTime.now(clock);
-            LocalDateTime issuedAt = currentTime.minusSeconds(30);
-            StudentCode studentCode = StudentCodeFixture.studentCode().issuedAt(issuedAt).build();
-            given(studentCodeRepository.findByMemberId(anyLong()))
-                .willReturn(Optional.of(studentCode));
-
-            // when
-            assertThatThrownBy(() -> studentService.sendVerificationMail(1L, request))
-                .isInstanceOf(TooManyRequestException.class)
-                .hasMessage(TOO_FREQUENT_REQUESTS.getMessage());
         }
 
         @Test
@@ -186,7 +172,7 @@ class StudentServiceTest {
                 .willReturn(true);
 
             // when & then
-            assertThatThrownBy(() -> studentService.verificate(memberId, request))
+            assertThatThrownBy(() -> studentService.verify(memberId, request))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ALREADY_STUDENT_VERIFIED.getMessage());
         }
@@ -197,12 +183,12 @@ class StudentServiceTest {
             Long memberId = 1L;
             StudentVerificateRequest request = new StudentVerificateRequest("123456");
             given(memberRepository.findById(anyLong()))
-                .willReturn(Optional.of(MemberFixture.member().build()));
+                .willReturn(Optional.of(MemberFixture.builder().build()));
             given(studentCodeRepository.findByCodeAndMember(any(), any()))
                 .willReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> studentService.verificate(memberId, request))
+            assertThatThrownBy(() -> studentService.verify(memberId, request))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(INVALID_STUDENT_VERIFICATION_CODE.getMessage());
         }
@@ -212,20 +198,61 @@ class StudentServiceTest {
             // given
             Long memberId = 1L;
             StudentVerificateRequest request = new StudentVerificateRequest("123456");
-            Member member = MemberFixture.member().build();
+            Member member = MemberFixture.builder().build();
             given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(member));
             given(studentCodeRepository.findByCodeAndMember(any(), any()))
                 .willReturn(Optional.of(new StudentCode(
                     new VerificationCode("123456"),
-                    new School("snu.ac.kr", "서울대학교"),
+                    SchoolFixture.builder().domain("snu.ac.kr").name("서울대학교").region(SchoolRegion.서울).build(),
                     member,
-                    "ohs"
+                    "ohs",
+                    LocalDateTime.now()
                 )));
 
             // when & then
             assertThatNoException()
-                .isThrownBy(() -> studentService.verificate(memberId, request));
+                .isThrownBy(() -> studentService.verify(memberId, request));
+        }
+    }
+
+    @Nested
+    class 멤버_아이디로_인증정보_조회 {
+
+        @Test
+        void 학생_인증된_멤버의_경우() {
+            // given
+            Long memberId = 1L;
+            School school = SchoolFixture.builder().id(2L).build();
+            Student student = StudentFixture.builder().id(3L).school(school).build();
+            given(studentRepository.findByMemberIdWithFetch(memberId))
+                .willReturn(Optional.of(student));
+
+            // when
+            StudentResponse actual = studentService.findVerification(memberId);
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isVerified()).isTrue();
+                softly.assertThat(actual.school().id()).isEqualTo(school.getId());
+            });
+        }
+
+        @Test
+        void 학생_인증되지_않은_사용자의_경우() {
+            // given
+            Long memberId = 1L;
+            given(studentRepository.findByMemberIdWithFetch(memberId))
+                .willReturn(Optional.empty());
+
+            // when
+            StudentResponse actual = studentService.findVerification(memberId);
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(actual.isVerified()).isFalse();
+                softly.assertThat(actual.school()).isNull();
+            });
         }
     }
 }

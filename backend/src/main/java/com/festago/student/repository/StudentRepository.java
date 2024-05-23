@@ -4,11 +4,13 @@ import com.festago.member.domain.Member;
 import com.festago.student.domain.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StudentRepository extends JpaRepository<Student, Long> {
+public interface StudentRepository extends JpaRepository<Student, Long>, StudentRepositoryCustom {
 
     boolean existsByMemberAndSchoolId(Member member, Long schoolId);
 
     boolean existsByUsernameAndSchoolId(String username, Long id);
 
     boolean existsByMemberId(Long id);
+
+    boolean existsBySchoolId(Long schoolId);
 }

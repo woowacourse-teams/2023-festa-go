@@ -2,16 +2,16 @@ package com.festago.fcm.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.festago.auth.domain.SocialType;
 import com.festago.fcm.domain.MemberFCM;
 import com.festago.member.domain.Member;
 import com.festago.member.repository.MemberRepository;
+import com.festago.support.RepositoryTest;
+import com.festago.support.fixture.MemberFixture;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@DataJpaTest
+@RepositoryTest
 class MemberFCMRepositoryTest {
 
     @Autowired
@@ -21,16 +21,17 @@ class MemberFCMRepositoryTest {
     MemberRepository memberRepository;
 
     @Test
-    void member_의_MemberFCM_을_찾을_수_있다() {
+    void member의_모든_fcmToken_조회() {
         // given
-        Member member = memberRepository.save(new Member("socialId", SocialType.FESTAGO, "nickname", "image.jpg"));
+        Member member = memberRepository.save(MemberFixture.builder().build());
         Long memberId = member.getId();
-        MemberFCM expect = memberFCMRepository.save(new MemberFCM(memberId, "fcmToken"));
+        MemberFCM expect1 = memberFCMRepository.save(new MemberFCM(memberId, "fcmToken"));
+        MemberFCM expect2 = memberFCMRepository.save(new MemberFCM(memberId, "fcmToken2"));
 
         // when
-        List<MemberFCM> actual = memberFCMRepository.findByMemberId(memberId);
+        List<MemberFCM> actual = memberFCMRepository.findAllByMemberId(memberId);
 
         // then
-        assertThat(actual).contains(expect);
+        assertThat(actual).containsExactly(expect1, expect2);
     }
 }

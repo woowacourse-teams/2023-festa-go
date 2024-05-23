@@ -1,8 +1,7 @@
 package com.festago.student.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
+import com.festago.common.util.Validator;
 import com.festago.member.domain.Member;
 import com.festago.school.domain.School;
 import jakarta.persistence.Entity;
@@ -21,6 +20,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Student extends BaseTimeEntity {
 
+    private static final int MAX_USERNAME_LENGTH = 255;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,7 +34,7 @@ public class Student extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private School school;
 
-    @Size(max = 255)
+    @Size(max = MAX_USERNAME_LENGTH)
     @NotNull
     private String username;
 
@@ -50,29 +51,23 @@ public class Student extends BaseTimeEntity {
     }
 
     private void validate(Member member, School school, String username) {
-        checkNotNull(member, school, username);
-        checkLength(username);
+        validateMember(member);
+        validateSchool(school);
+        validateUsername(username);
     }
 
-    private void checkNotNull(Member member, School school, String username) {
-        if (member == null ||
-            school == null ||
-            username == null) {
-            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+    private void validateMember(Member member) {
+        Validator.notNull(member, "member");
     }
 
-    private void checkLength(String username) {
-        if (overLength(username, 255)) {
-            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+    private void validateSchool(School school) {
+        Validator.notNull(school, "school");
     }
 
-    private boolean overLength(String target, int maxLength) {
-        if (target == null) {
-            return false;
-        }
-        return target.length() > maxLength;
+    private void validateUsername(String username) {
+        String fieldName = "username";
+        Validator.notBlank(username, fieldName);
+        Validator.maxLength(username, MAX_USERNAME_LENGTH, fieldName);
     }
 
     public Long getId() {

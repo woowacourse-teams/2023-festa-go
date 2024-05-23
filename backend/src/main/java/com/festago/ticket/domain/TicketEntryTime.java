@@ -1,8 +1,7 @@
 package com.festago.ticket.domain;
 
 import com.festago.common.domain.BaseTimeEntity;
-import com.festago.common.exception.BadRequestException;
-import com.festago.common.exception.ErrorCode;
+import com.festago.common.util.Validator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TicketEntryTime extends BaseTimeEntity implements Comparable<TicketEntryTime> {
 
-    private static final int MIN_TOTAL_AMOUNT = 1;
+    private static final int MIN_AMOUNT_VALUE = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +25,7 @@ public class TicketEntryTime extends BaseTimeEntity implements Comparable<Ticket
     @NotNull
     private LocalDateTime entryTime;
 
-    @Min(value = 0)
+    @Min(value = MIN_AMOUNT_VALUE)
     private int amount;
 
     public TicketEntryTime(LocalDateTime entryTime, int amount) {
@@ -41,27 +40,16 @@ public class TicketEntryTime extends BaseTimeEntity implements Comparable<Ticket
     }
 
     private void validate(LocalDateTime entryTime, int amount) {
-        checkNotNull(entryTime);
-        checkScope(amount);
-        validateAmont(amount);
+        validateEntryTime(entryTime);
+        validateAmount(amount);
     }
 
-    private void checkNotNull(LocalDateTime entryTime) {
-        if (entryTime == null) {
-            throw new IllegalArgumentException("TicketEntryTime 은 허용되지 않은 null 값으로 생성할 수 없습니다.");
-        }
+    private void validateEntryTime(LocalDateTime entryTime) {
+        Validator.notNull(entryTime, "entryTime");
     }
 
-    private void checkScope(int amount) {
-        if (amount < 0) {
-            throw new IllegalArgumentException("TicketEntryTime 의 필드로 허용된 범위를 넘은 column 을 넣을 수 없습니다.");
-        }
-    }
-
-    private void validateAmont(int amount) {
-        if (amount < MIN_TOTAL_AMOUNT) {
-            throw new BadRequestException(ErrorCode.INVALID_MIN_TICKET_AMOUNT);
-        }
+    private void validateAmount(int amount) {
+        Validator.minValue(amount, MIN_AMOUNT_VALUE, "amount");
     }
 
     public Long getId() {

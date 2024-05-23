@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ticketList"
+    app:startDestination="@id/ticketListFragment">
+
+    <fragment
+        android:id="@+id/ticketListFragment"
+        android:name="com.festago.festago.presentation.ui.home.ticketlist.TicketListFragment"
+        android:label="@string/home_bottom_nav_ticket" />
+</navigation>

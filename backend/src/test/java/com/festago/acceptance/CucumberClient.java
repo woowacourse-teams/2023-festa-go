@@ -4,9 +4,9 @@ import io.cucumber.spring.ScenarioScope;
 import io.restassured.response.Response;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.test.context.TestComponent;
 
-@Component
+@TestComponent
 @ScenarioScope
 public class CucumberClient {
 
@@ -21,7 +21,7 @@ public class CucumberClient {
         dataStorage.put(key, value);
     }
 
-    public void addAuthToken(String token) {
+    public void setToken(String token) {
         this.token = token;
     }
 

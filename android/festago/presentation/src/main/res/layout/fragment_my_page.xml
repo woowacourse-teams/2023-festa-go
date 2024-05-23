@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState" />
+
+
+        <variable
+            name="successUiState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState.Success" />
+
+
+        <variable
+            name="errorUiState"
+            type="com.festago.festago.presentation.ui.home.mypage.MyPageUiState.Error" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_gray_01">
+
+        <TextView
+            android:id="@+id/tvMyPageAppbar"
+            style="@style/H2Bold20Lh24"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical|start"
+            android:paddingHorizontal="16dp"
+            android:text="@string/home_bottom_nav_my_page"
+            android:textColor="@color/contents_gray_07"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/llMyPageLogin"
+            visibility="@{uiState.shouldShowNotLoggedIn}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMyPageAppbar">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_user_profile_default" />
+
+            <TextView
+                style="@style/H4Bold16Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/my_page_go_to_login"
+                android:textColor="@color/contents_gray_07" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="4dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_next"
+                app:tint="@color/contents_gray_07" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llUserInfo"
+            visibility="@{uiState.shouldShowSuccess}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMyPageAppbar">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvProfileImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="1000dp"
+                app:cardElevation="0dp"
+                app:layout_constraintDimensionRatio="1:1">
+
+                <ImageView
+                    android:id="@+id/ivProfileImage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_user_profile_default" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvUserNickname"
+                style="@style/H4Bold16Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{successUiState.userInfo.nickname}"
+                android:textColor="@color/contents_gray_07"
+                tools:text="김축제" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            visibility="@{uiState.shouldShowSuccess || uiState.shouldShowNotLoggedIn}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="80dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:context=".ui.home.mypage.MyPageFragment">
+
+            <TextView
+                android:id="@+id/tvFAQ"
+                style="@style/B2Medium14Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/my_page_faq"
+                android:textColor="@color/contents_gray_05" />
+
+            <TextView
+                android:id="@+id/tvAskQuestion"
+                style="@style/B2Medium14Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_page_contact_us"
+                android:textColor="@color/contents_gray_05" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/contents_gray_05" />
+
+            <TextView
+                android:id="@+id/tvPersonalInfoPolicy"
+                style="@style/B2Medium14Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_page_personal_info_policy"
+                android:textColor="@color/contents_gray_05" />
+
+            <TextView
+                android:id="@+id/tvAppVersion"
+                style="@style/B2Medium14Lh20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_page_app_version"
+                android:textColor="@color/contents_gray_05" />
+
+            <View
+                visibility="@{!uiState.shouldShowNotLoggedIn}"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/contents_gray_05" />
+
+            <TextView
+                android:id="@+id/tvLogout"
+                style="@style/B2Medium14Lh20"
+                visibility="@{!uiState.shouldShowNotLoggedIn}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_page_logout"
+                android:textColor="@color/contents_gray_05" />
+
+            <TextView
+                android:id="@+id/tvDeleteAccount"
+                style="@style/B2Medium14Lh20"
+                visibility="@{!uiState.shouldShowNotLoggedIn}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_page_unregister"
+                android:textColor="@color/contents_gray_05" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/includeError"
+            layout="@layout/layout_network_error"
+            refreshListener="@{errorUiState.refresh}"
+            visibility="@{uiState.shouldShowError}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

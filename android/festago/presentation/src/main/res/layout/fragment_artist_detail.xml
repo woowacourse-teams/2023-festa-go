@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="uiState"
+            type="com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState" />
+
+        <variable
+            name="successUiState"
+            type="com.festago.festago.presentation.ui.artistdetail.uistate.ArtistDetailUiState.Success" />
+
+        <variable
+            name="refreshListener"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_gray_01"
+        android:clickable="true"
+        android:orientation="vertical"
+        app:layout_collapseMode="parallax"
+        app:layout_collapseParallaxMultiplier="0.0">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivBackgroundImage"
+            imageUrl="@{successUiState.artist.backgroundUrl}"
+            android:layout_width="match_parent"
+            android:layout_height="136dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:layout_collapseMode="parallax"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="1" />
+
+        <View
+            android:id="@+id/tvFestivalDDayEnd"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#99000000"
+            app:layout_constraintBottom_toBottomOf="@+id/ivBackgroundImage"
+            app:layout_constraintEnd_toEndOf="@id/ivBackgroundImage"
+            app:layout_constraintStart_toStartOf="@id/ivBackgroundImage"
+            app:layout_constraintTop_toTopOf="@id/ivBackgroundImage" />
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_back"
+            android:tintMode="src_atop"
+            app:layout_constraintBottom_toBottomOf="@id/ivBackgroundImage"
+            app:layout_constraintStart_toStartOf="@id/ivBackgroundImage"
+            app:layout_constraintTop_toTopOf="@id/ivBackgroundImage"
+            app:tint="@color/background_gray_01" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvProfileImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            app:cardCornerRadius="1000dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivBackgroundImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivBackgroundImage">
+
+            <ImageView
+                android:id="@+id/ivProfileImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                tools:src="@color/background_gray_03" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvBookmark"
+            onSingleClick="@{() -> successUiState.onBookmarkClick.invoke(successUiState.artist.id)}"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            app:cardCornerRadius="1000dp"
+            app:layout_constraintBottom_toBottomOf="@id/cvProfileImage"
+            app:layout_constraintEnd_toEndOf="@id/cvProfileImage">
+
+            <ImageView
+                android:id="@+id/ivBookmark"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_bookmark"
+                app:tint="@color/tint_bookmark" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvArtistName"
+            style="@style/H2Bold20Lh24"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:maxLines="2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cvProfileImage"
+            app:layout_constraintTop_toBottomOf="@id/ivBackgroundImage"
+            tools:text="뉴진스 뉴진스 뉴진스 뉴진스 뉴진스 뉴진스 뉴진스" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llcArtistMedia"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvArtistName"
+            app:layout_constraintTop_toBottomOf="@id/tvArtistName"
+            app:singleLine="true" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/mdDivider"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            app:dividerColor="@color/background_gray_03"
+            app:layout_constraintBottom_toTopOf="@id/rvToDoList"
+            app:layout_constraintTop_toBottomOf="@id/llcArtistMedia" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvToDoList"
+            visibility="@{uiState.shouldShowSuccess}"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mdDivider"
+            app:layout_constraintVertical_weight="1" />
+
+        <TextView
+            android:id="@+id/tvFestivalsEmpty"
+            style="@style/H5Bold14Lh16"
+            visibility="@{uiState.shouldShowEmptyFestivals}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/artist_detail_tv_empty_festivals"
+            android:textColor="@color/contents_gray_06"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            visibility="@{uiState.shouldShowLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/layout_network_error"
+            refreshListener="@{refreshListener}"
+            visibility="@{uiState.shouldShowError}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

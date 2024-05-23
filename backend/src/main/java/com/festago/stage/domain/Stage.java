@@ -14,13 +14,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.util.Assert;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,9 +31,6 @@ public class Stage extends BaseTimeEntity {
     @NotNull
     private LocalDateTime startTime;
 
-    @Size(max = 255)
-    private String lineUp;
-
     @NotNull
     private LocalDateTime ticketOpenTime;
 
@@ -46,43 +41,36 @@ public class Stage extends BaseTimeEntity {
     @OneToMany(mappedBy = "stage", fetch = FetchType.LAZY)
     private List<Ticket> tickets = new ArrayList<>();
 
-    public Stage(LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime, Festival festival) {
-        this(null, startTime, lineUp, ticketOpenTime, festival);
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "stageId")
+    private List<StageArtist> artists = new ArrayList<>();
 
     public Stage(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
-        this(null, startTime, null, ticketOpenTime, festival);
+        this(null, startTime, ticketOpenTime, festival);
     }
 
-    public Stage(Long id, LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime,
+    public Stage(Long id, LocalDateTime startTime, LocalDateTime ticketOpenTime,
                  Festival festival) {
-        validate(startTime, lineUp, ticketOpenTime, festival);
+        validate(startTime, ticketOpenTime, festival);
         this.id = id;
         this.startTime = startTime;
-        this.lineUp = lineUp;
         this.ticketOpenTime = ticketOpenTime;
         this.festival = festival;
     }
 
-    private void validate(LocalDateTime startTime, String lineUp, LocalDateTime ticketOpenTime, Festival festival) {
-        validateLineUp(lineUp);
+    private void validate(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
         validateFestival(festival);
         validateTime(startTime, ticketOpenTime, festival);
     }
 
-    private void validateLineUp(String lineUp) {
-        Validator.maxLength(lineUp, 255, "lineUp은 50글자를 넘을 수 없습니다.");
-    }
-
     private void validateFestival(Festival festival) {
-        Assert.notNull(festival, "festival은 null 값이 될 수 없습니다.");
+        Validator.notNull(festival, "festival");
     }
 
     private void validateTime(LocalDateTime startTime, LocalDateTime ticketOpenTime, Festival festival) {
-        Assert.notNull(startTime, "startTime은 null 값이 될 수 없습니다.");
-        Assert.notNull(ticketOpenTime, "ticketOpenTime은 null 값이 될 수 없습니다.");
+        Validator.notNull(startTime, "startTime");
+        Validator.notNull(ticketOpenTime, "ticketOpenTime");
         if (ticketOpenTime.isAfter(startTime) || ticketOpenTime.isEqual(startTime)) {
-            throw new IllegalArgumentException("티켓 오픈 시간은 공연 시작 이전 이어야 합니다.");
+            throw new BadRequestException(ErrorCode.INVALID_TICKET_OPEN_TIME);
         }
         if (festival.isNotInDuration(startTime)) {
             throw new BadRequestException(ErrorCode.INVALID_STAGE_START_TIME);
@@ -99,21 +87,12 @@ public class Stage extends BaseTimeEntity {
         this.ticketOpenTime = ticketOpenTime;
     }
 
-    public void changeLineUp(String lineUp) {
-        validateLineUp(lineUp);
-        this.lineUp = lineUp;
-    }
-
     public Long getId() {
         return id;
     }
 
     public LocalDateTime getStartTime() {
         return startTime;
-    }
-
-    public String getLineUp() {
-        return lineUp;
     }
 
     public LocalDateTime getTicketOpenTime() {

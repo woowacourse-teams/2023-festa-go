@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="java.time.LocalDate" />
+
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="item"
+            type="com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{()-> item.onFestivalDetail.invoke(item)}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_festival_list_festival">
+
+
+        <ImageView
+            android:id="@+id/ivFestivalImage"
+            imageUrl="@{item.imageUrl}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/festival_list_iv_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@color/background_gray_03" />
+
+        <TextView
+            android:id="@+id/tvFestivalDDay"
+            style="@style/H5Bold14Lh16"
+            android:layout_width="56dp"
+            android:layout_height="24dp"
+            android:background="#FFFA1273"
+            android:gravity="center"
+            android:textColor="@color/background_gray_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="D-1" />
+
+        <TextView
+            android:id="@+id/tvFestivalDDayEnd"
+            style="@style/H5Bold14Lh16"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#40000000"
+            android:gravity="center"
+            android:text="@string/festival_list_tv_dday_end"
+            android:textColor="@color/background_gray_01"
+            app:layout_constraintBottom_toBottomOf="@+id/ivFestivalImage"
+            app:layout_constraintEnd_toEndOf="@id/ivFestivalImage"
+            app:layout_constraintStart_toStartOf="@id/ivFestivalImage"
+            app:layout_constraintTop_toTopOf="@id/ivFestivalImage" />
+
+        <TextView
+            android:id="@+id/tvFestivalName"
+            style="@style/H4Bold16Lh20"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{item.name}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivFestivalImage"
+            app:layout_constraintTop_toTopOf="@+id/ivFestivalImage"
+            tools:text="중앙대학교 청진난만 중앙대학교 천진난만" />
+
+        <TextView
+            android:id="@+id/tvFestivalSchedule"
+            style="@style/B3Medium14Lh14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/festival_list_tv_date_range_format(item.startDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)),item.endDate.format(DateTimeFormatter.ofPattern(@string/festival_list_tv_date_format)))}"
+            app:layout_constraintStart_toStartOf="@+id/tvFestivalName"
+            app:layout_constraintTop_toBottomOf="@+id/tvFestivalName"
+            tools:text="21.10.10 ~ 21.10.12" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFestivalArtists"
+            android:layout_width="0dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="@id/tvFestivalSchedule"
+            app:layout_constraintTop_toBottomOf="@id/tvFestivalSchedule"
+            tools:listitem="@layout/item_festival_list_artist" />
+
+        <TextView
+            android:id="@+id/tvEmptyStage"
+            style="@style/H5Bold14Lh16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/all_tv_empty_stage"
+            android:textColor="@color/contents_gray_06"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivFestivalImage"
+            app:layout_constraintTop_toBottomOf="@+id/tvFestivalSchedule" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
