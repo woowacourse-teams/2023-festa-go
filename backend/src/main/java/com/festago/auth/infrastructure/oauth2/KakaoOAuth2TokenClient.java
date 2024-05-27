@@ -1,6 +1,6 @@
 package com.festago.auth.infrastructure.oauth2;
 
-import com.festago.auth.dto.KakaoAccessTokenResponse;
+import com.festago.auth.dto.KakaoOAuth2TokenResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpHeaders;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class KakaoOAuth2AccessTokenClient {
+public class KakaoOAuth2TokenClient {
 
     private static final String URL = "https://kauth.kakao.com/oauth/token";
 
@@ -19,7 +19,7 @@ public class KakaoOAuth2AccessTokenClient {
     private final String redirectUri;
     private final String clientSecret;
 
-    public KakaoOAuth2AccessTokenClient(
+    public KakaoOAuth2TokenClient(
         @Value("${festago.oauth2.kakao.grant-type}") String grantType,
         @Value("${festago.oauth2.kakao.rest-api-key}") String clientId,
         @Value("${festago.oauth2.kakao.redirect-uri}") String redirectUri,
@@ -35,12 +35,13 @@ public class KakaoOAuth2AccessTokenClient {
             .build();
     }
 
-    public String getAccessToken(String code) {
-        HttpHeaders headers = getAccessTokenHeaders(code);
-        return requestAccessToken(headers);
+    public String getIdToken(String code) {
+        KakaoOAuth2TokenResponse response = restTemplate.postForEntity(URL, getHeaders(code),
+            KakaoOAuth2TokenResponse.class).getBody();
+        return response.idToken();
     }
 
-    private HttpHeaders getAccessTokenHeaders(String code) {
+    private HttpHeaders getHeaders(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.set("grant_type", grantType);
@@ -49,11 +50,5 @@ public class KakaoOAuth2AccessTokenClient {
         headers.set("client_secret", clientSecret);
         headers.set("code", code);
         return headers;
-    }
-
-    private String requestAccessToken(HttpHeaders headers) {
-        KakaoAccessTokenResponse response = restTemplate.postForEntity(URL, headers,
-            KakaoAccessTokenResponse.class).getBody();
-        return response.accessToken();
     }
 }
