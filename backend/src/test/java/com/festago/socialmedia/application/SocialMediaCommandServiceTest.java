@@ -80,7 +80,6 @@ class SocialMediaCommandServiceTest {
                 .hasMessage(ErrorCode.DUPLICATE_SOCIAL_MEDIA.getMessage());
         }
 
-        // TODO 다른 Owner에 대한 테스트를 어떻게 작성할지? ex) MethodSource
         @Test
         void 추가하려는_소셜미디어의_owner가_존재하지_않으면_예외() {
             // when & then

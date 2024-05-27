@@ -171,8 +171,6 @@ class SchoolTest {
             }).isInstanceOf(ValidException.class);
         }
 
-        // TODO 해당 테스트는 생성자 파라미터 순서가 올바른지 검사하는데 의의가 있음
-        // 다만 빌더 패턴을 적용하면 해당 테스트의 필요성이 있을까?
         @Test
         void 성공() {
             // given

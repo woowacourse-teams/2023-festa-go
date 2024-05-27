@@ -26,12 +26,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * TODO
- * 서비스 통합 테스트 시 필요한 의존이 너무 많은 것 같다. 차라리 Cucumber를 사용한 통합 테스트로 해당 테스트가 하는 역할을 옮기고, 서비스 통합 테스트는 Stub을 사용한 단위 테스트로 변경하여
- * 서비스가 행하고자 하는 비즈니스 로직을 나타내는 테스트로 하는게 어떨까 deleteSchool() 메서드의 행위는 Validator.validate()를 호출하여, 던져진 예외가 있으면 삭제에 실패한다. 라고
- * 볼 수 있다.
- */
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class SchoolDeleteServiceIntegrationTest extends ApplicationIntegrationTest {

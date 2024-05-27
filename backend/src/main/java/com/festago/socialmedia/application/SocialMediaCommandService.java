@@ -37,7 +37,6 @@ public class SocialMediaCommandService {
         if (socialMediaRepository.existsByOwnerIdAndOwnerTypeAndMediaType(ownerId, ownerType, socialMediaType)) {
             throw new BadRequestException(ErrorCode.DUPLICATE_SOCIAL_MEDIA);
         }
-        // TODO 추상적인 에러 코드가 필요할지? ex) ErrorCode.SOCIAL_MEDIA_OWNER_NOT_FOUND
         if (ownerType == OwnerType.ARTIST && !artistRepository.existsById(ownerId)) {
             throw new NotFoundException(ErrorCode.ARTIST_NOT_FOUND);
         }
