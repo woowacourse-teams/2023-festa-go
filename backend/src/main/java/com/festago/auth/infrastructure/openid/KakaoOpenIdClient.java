@@ -48,8 +48,6 @@ public class KakaoOpenIdClient implements OpenIdClient {
         return UserInfo.builder()
             .socialType(SocialType.KAKAO)
             .socialId(payload.getSubject())
-            .nickname(payload.get("nickname", String.class))
-            .profileImage(payload.get("picture", String.class))
             .build();
     }
 

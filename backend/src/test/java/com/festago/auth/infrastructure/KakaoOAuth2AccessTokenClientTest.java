@@ -97,8 +97,7 @@ class KakaoOAuth2AccessTokenClientTest {
     @Test
     void 성공() throws JsonProcessingException {
         // given
-        KakaoAccessTokenResponse expected = new KakaoAccessTokenResponse("tokenType", "accessToken",
-            100, "refreshToken", 50);
+        KakaoAccessTokenResponse expected = new KakaoAccessTokenResponse("accessToken", "idToken");
         mockServer.expect(requestTo(URL))
             .andRespond(MockRestResponseCreators.withSuccess()
                 .contentType(MediaType.APPLICATION_JSON)

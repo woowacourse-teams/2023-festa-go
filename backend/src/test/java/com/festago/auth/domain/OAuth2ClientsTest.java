@@ -9,9 +9,7 @@ import com.festago.auth.application.OAuth2Client;
 import com.festago.auth.application.OAuth2Clients;
 import com.festago.auth.application.OAuth2Clients.OAuth2ClientsBuilder;
 import com.festago.auth.infrastructure.oauth2.FestagoOAuth2Client;
-import com.festago.auth.infrastructure.oauth2.KakaoOAuth2AccessTokenClient;
 import com.festago.auth.infrastructure.oauth2.KakaoOAuth2Client;
-import com.festago.auth.infrastructure.oauth2.KakaoOAuth2UserInfoClient;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.UnexpectedException;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -53,10 +51,7 @@ class OAuth2ClientsTest {
     void 여러_타입의_클라이언트가_주어졌을때_타입으로_찾기_성공() {
         // given
         FestagoOAuth2Client festagoOAuth2Client = new FestagoOAuth2Client();
-        KakaoOAuth2Client kakaoOAuth2Client = new KakaoOAuth2Client(
-            mock(KakaoOAuth2AccessTokenClient.class),
-            mock(KakaoOAuth2UserInfoClient.class)
-        );
+        KakaoOAuth2Client kakaoOAuth2Client = new KakaoOAuth2Client(mock(), mock());
 
         OAuth2Clients oAuth2Clients = OAuth2Clients.builder()
             .add(festagoOAuth2Client)
