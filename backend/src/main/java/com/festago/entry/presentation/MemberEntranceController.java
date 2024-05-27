@@ -19,7 +19,6 @@ public class MemberEntranceController {
 
     private final EntryService entryService;
 
-    // TODO: URI 다시 생각해보기
     @PostMapping("/member-tickets/{memberTicketId}/qr")
     @Operation(description = "티켓 제시용 QR 코드를 생성한다.", summary = "티켓 제시용 QR 생성")
     public ResponseEntity<EntryCodeResponse> createQR(@Member Long memberId,

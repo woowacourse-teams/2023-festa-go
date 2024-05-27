@@ -31,7 +31,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-// TODO 해당 테스트 코드 개선 또는 컨트롤러 새롭게 설계 필요
+@Deprecated(forRemoval = true)
 @CustomWebMvcTest
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
