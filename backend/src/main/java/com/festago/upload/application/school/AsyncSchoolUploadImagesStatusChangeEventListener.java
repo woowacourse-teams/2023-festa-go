@@ -27,7 +27,7 @@ public class AsyncSchoolUploadImagesStatusChangeEventListener {
     public void changeAttachedStatusSchoolImagesEventHandler(SchoolCreatedEvent event) {
         School school = event.school();
         Long schoolId = school.getId();
-        List<String> imageUris = List.of(school.getBackgroundUrl(), school.getLogoUrl());
+        List<String> imageUris = school.getImageUrls();
         uploadFileStatusChangeService.changeAttached(schoolId, SCHOOL, imageUris);
     }
 
@@ -35,7 +35,7 @@ public class AsyncSchoolUploadImagesStatusChangeEventListener {
     public void changeRenewalStatusSchoolImagesEventHandler(SchoolUpdatedEvent event) {
         School school = event.school();
         Long schoolId = school.getId();
-        List<String> imageUris = List.of(school.getBackgroundUrl(), school.getLogoUrl());
+        List<String> imageUris = school.getImageUrls();
         uploadFileStatusChangeService.changeRenewal(schoolId, SCHOOL, imageUris);
     }
 
