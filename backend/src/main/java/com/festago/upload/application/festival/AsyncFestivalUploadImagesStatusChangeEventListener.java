@@ -27,7 +27,7 @@ public class AsyncFestivalUploadImagesStatusChangeEventListener {
     public void changeAttachedStatusFestivalImagesEventHandler(FestivalCreatedEvent event) {
         Festival festival = event.festival();
         Long festivalId = festival.getId();
-        List<String> imageUris = List.of(festival.getPosterImageUrl());
+        List<String> imageUris = festival.getImageUrls();
         uploadFileStatusChangeService.changeAttached(festivalId, FESTIVAL, imageUris);
     }
 
@@ -35,7 +35,7 @@ public class AsyncFestivalUploadImagesStatusChangeEventListener {
     public void changeRenewalStatusFestivalImagesEventHandler(FestivalUpdatedEvent event) {
         Festival festival = event.festival();
         Long festivalId = festival.getId();
-        List<String> imageUris = List.of(festival.getPosterImageUrl());
+        List<String> imageUris = festival.getImageUrls();
         uploadFileStatusChangeService.changeRenewal(festivalId, FESTIVAL, imageUris);
     }
 

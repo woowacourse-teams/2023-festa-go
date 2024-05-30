@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.festago.common.exception.ValidException;
+import com.festago.support.fixture.SchoolFixture;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -355,6 +357,23 @@ class SchoolTest {
             // when & then
             assertThatThrownBy(() -> school.changeBackgroundImageUrl(backgroundImageUrl))
                 .isInstanceOf(ValidException.class);
+        }
+    }
+
+    @Nested
+    class getImageUrls {
+
+        @Test
+        void 가지고_있는_모든_이미지_URL을_반환한다() {
+            // given
+            School school = SchoolFixture.builder().build();
+
+            // when
+            List<String> imageUrls = school.getImageUrls();
+
+            // then
+            assertThat(imageUrls)
+                .containsExactlyInAnyOrder(school.getLogoUrl(), school.getBackgroundUrl());
         }
     }
 }

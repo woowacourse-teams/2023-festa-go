@@ -27,7 +27,7 @@ public class AsyncArtistUploadImagesStatusChangeEventListener {
     public void changeAttachedStatusArtistImagesEventHandler(ArtistCreatedEvent event) {
         Artist artist = event.artist();
         Long artistId = artist.getId();
-        List<String> imageUris = List.of(artist.getProfileImage(), artist.getBackgroundImageUrl());
+        List<String> imageUris = artist.getImageUrls();
         uploadFileStatusChangeService.changeAttached(artistId, ARTIST, imageUris);
     }
 
@@ -35,7 +35,7 @@ public class AsyncArtistUploadImagesStatusChangeEventListener {
     public void changeRenewalStatusArtistImagesEventHandler(ArtistUpdatedEvent event) {
         Artist artist = event.artist();
         Long artistId = artist.getId();
-        List<String> imageUris = List.of(artist.getProfileImage(), artist.getBackgroundImageUrl());
+        List<String> imageUris = artist.getImageUrls();
         uploadFileStatusChangeService.changeRenewal(artistId, ARTIST, imageUris);
     }
 
