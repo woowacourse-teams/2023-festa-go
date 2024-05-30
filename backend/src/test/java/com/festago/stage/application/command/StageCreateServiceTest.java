@@ -14,22 +14,21 @@ import com.festago.common.exception.ValidException;
 import com.festago.festival.domain.Festival;
 import com.festago.festival.repository.FestivalRepository;
 import com.festago.festival.repository.MemoryFestivalRepository;
+import com.festago.stage.domain.Stage;
 import com.festago.stage.dto.command.StageCreateCommand;
-import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageRepository;
-import com.festago.stage.repository.StageArtistRepository;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.fixture.ArtistFixture;
 import com.festago.support.fixture.FestivalFixture;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.LongStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -40,8 +39,6 @@ class StageCreateServiceTest {
     FestivalRepository festivalRepository;
 
     ArtistRepository artistRepository;
-
-    StageArtistRepository stageArtistRepository;
 
     StageCreateService stageCreateService;
 
@@ -59,13 +56,11 @@ class StageCreateServiceTest {
         stageRepository = new MemoryStageRepository();
         festivalRepository = new MemoryFestivalRepository();
         artistRepository = new MemoryArtistRepository();
-        stageArtistRepository = new MemoryStageArtistRepository();
         stageCreateService = new StageCreateService(
             stageRepository,
             festivalRepository,
             artistRepository,
-            stageArtistRepository,
-            mock()
+            mock(ApplicationEventPublisher.class)
         );
 
         테코대학교_축제 = festivalRepository.save(
@@ -184,8 +179,8 @@ class StageCreateServiceTest {
             Long stageId = stageCreateService.createStage(command);
 
             // then
-            Set<Long> stageArtists = stageArtistRepository.findAllArtistIdByStageId(stageId);
-            assertThat(stageArtists)
+            Stage stage = stageRepository.getOrThrow(stageId);
+            assertThat(stage.getArtistIds())
                 .containsExactlyInAnyOrder(에픽하이.getId(), 소녀시대.getId(), 뉴진스.getId());
         }
     }

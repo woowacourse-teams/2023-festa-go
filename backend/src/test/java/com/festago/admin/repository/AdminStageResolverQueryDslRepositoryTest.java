@@ -23,10 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AdminStageIdResolverQueryDslRepositoryTest extends ApplicationIntegrationTest {
+class AdminStageResolverQueryDslRepositoryTest extends ApplicationIntegrationTest {
 
     @Autowired
-    AdminStageIdResolverQueryDslRepository adminStageIdResolverQueryDslRepository;
+    AdminStageResolverQueryDslRepository adminStageResolverQueryDslRepository;
 
     @Autowired
     FestivalRepository festivalRepository;
@@ -48,7 +48,7 @@ class AdminStageIdResolverQueryDslRepositoryTest extends ApplicationIntegrationT
     class findStageIdsByFestivalId {
 
         @Test
-        void 축제_식별자로_공연의_식별자를_모두_조회한다() {
+        void 축제_식별자로_공연을_모두_조회한다() {
             // given
             Festival festival = festivalRepository.save(FestivalFixture.builder().school(테코대학교).build());
             List<Long> expect = IntStream.rangeClosed(1, 3)
@@ -57,10 +57,12 @@ class AdminStageIdResolverQueryDslRepositoryTest extends ApplicationIntegrationT
                 .toList();
 
             // when
-            List<Long> actual = adminStageIdResolverQueryDslRepository.findStageIdsByFestivalId(festival.getId());
+            List<Stage> actual = adminStageResolverQueryDslRepository.findStageByFestivalId(festival.getId());
 
             // then
-            assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+            assertThat(actual)
+                .map(Stage::getId)
+                .containsExactlyInAnyOrderElementsOf(expect);
         }
     }
 
@@ -68,7 +70,7 @@ class AdminStageIdResolverQueryDslRepositoryTest extends ApplicationIntegrationT
     class findStageIdsByFestivalIdIn {
 
         @Test
-        void 축제_식별자_목록으로_공연의_식별자를_모두_조회한다() {
+        void 축제_식별자_목록으로_공연을_모두_조회한다() {
             // given
             List<Festival> festivals = IntStream.rangeClosed(1, 2)
                 .mapToObj(i -> festivalRepository.save(FestivalFixture.builder().school(테코대학교).build()))
@@ -85,10 +87,12 @@ class AdminStageIdResolverQueryDslRepositoryTest extends ApplicationIntegrationT
             List<Long> festivalIds = festivals.stream()
                 .map(Festival::getId)
                 .toList();
-            List<Long> actual = adminStageIdResolverQueryDslRepository.findStageIdsByFestivalIdIn(festivalIds);
+            List<Stage> actual = adminStageResolverQueryDslRepository.findStageByFestivalIdIn(festivalIds);
 
             // then
-            assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+            assertThat(actual)
+                .map(Stage::getId)
+                .containsExactlyInAnyOrderElementsOf(expect);
         }
     }
 }

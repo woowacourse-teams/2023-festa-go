@@ -9,16 +9,17 @@ import com.festago.artist.infrastructure.DelimiterArtistsSerializer;
 import com.festago.artist.repository.ArtistRepository;
 import com.festago.artist.repository.MemoryArtistRepository;
 import com.festago.common.exception.ErrorCode;
-import com.festago.common.exception.InternalServerException;
 import com.festago.common.exception.NotFoundException;
+import com.festago.stage.domain.Stage;
 import com.festago.stage.domain.StageQueryInfo;
-import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageQueryInfoRepository;
-import com.festago.stage.repository.StageArtistRepository;
+import com.festago.stage.repository.MemoryStageRepository;
 import com.festago.stage.repository.StageQueryInfoRepository;
+import com.festago.stage.repository.StageRepository;
 import com.festago.support.fixture.ArtistFixture;
-import com.festago.support.fixture.StageArtistFixture;
+import com.festago.support.fixture.StageFixture;
 import com.festago.support.fixture.StageQueryInfoFixture;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -29,58 +30,45 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class StageQueryInfoServiceTest {
 
-    private final Long stageId = 1L;
-
     StageQueryInfoService stageQueryInfoService;
 
     StageQueryInfoRepository stageQueryInfoRepository;
 
-    StageArtistRepository stageArtistRepository;
+    StageRepository stageRepository;
 
     ArtistRepository artistRepository;
 
     ArtistsSerializer artistsSerializer = new DelimiterArtistsSerializer(",");
+
+    Stage 공연;
 
     Artist 뉴진스;
 
     @BeforeEach
     void setUp() {
         stageQueryInfoRepository = new MemoryStageQueryInfoRepository();
-        stageArtistRepository = new MemoryStageArtistRepository();
+        stageRepository = new MemoryStageRepository();
         artistRepository = new MemoryArtistRepository();
         stageQueryInfoService = new StageQueryInfoService(
             stageQueryInfoRepository,
-            stageArtistRepository,
             artistRepository,
             artistsSerializer
         );
         뉴진스 = artistRepository.save(ArtistFixture.builder().name("뉴진스").build());
+        공연 = stageRepository.save(StageFixture.builder().build());
+        공연.renewArtists(List.of(뉴진스.getId()));
     }
 
     @Nested
     class initialStageQueryInfo {
 
         @Test
-        void Artist가_존재하지_않으면_예외() {
-            // given
-            stageArtistRepository.save(StageArtistFixture.builder(stageId, 4885L).build());
-
-            // when
-            assertThatThrownBy(() -> stageQueryInfoService.initialStageQueryInfo(stageId))
-                .isInstanceOf(InternalServerException.class)
-                .hasMessage(ErrorCode.ARTIST_NOT_FOUND.getMessage());
-        }
-
-        @Test
         void StageQueryInfo가_생성된다() {
-            // given
-            stageArtistRepository.save(StageArtistFixture.builder(stageId, 뉴진스.getId()).build());
-
             // when
-            stageQueryInfoService.initialStageQueryInfo(stageId);
+            stageQueryInfoService.initialStageQueryInfo(공연);
 
             // then
-            assertThat(stageQueryInfoRepository.findByStageId(stageId)).isPresent();
+            assertThat(stageQueryInfoRepository.findByStageId(공연.getId())).isPresent();
         }
     }
 
@@ -90,7 +78,7 @@ class StageQueryInfoServiceTest {
         @Test
         void Stage_식별자에_대한_StageQueryInfo가_없으면_예외() {
             // when & then
-            assertThatThrownBy(() -> stageQueryInfoService.renewalStageQueryInfo(stageId))
+            assertThatThrownBy(() -> stageQueryInfoService.renewalStageQueryInfo(공연))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(ErrorCode.STAGE_NOT_FOUND.getMessage());
         }
@@ -99,14 +87,13 @@ class StageQueryInfoServiceTest {
         void StageQueryInfo가_새롭게_갱신된다() {
             // given
             stageQueryInfoRepository.save(
-                StageQueryInfoFixture.builder().stageId(stageId).artistInfo("oldInfo").build());
-            stageArtistRepository.save(StageArtistFixture.builder(stageId, 뉴진스.getId()).build());
+                StageQueryInfoFixture.builder().stageId(공연.getId()).artistInfo("oldInfo").build());
 
             // when
-            stageQueryInfoService.renewalStageQueryInfo(stageId);
+            stageQueryInfoService.renewalStageQueryInfo(공연);
 
             // then
-            StageQueryInfo stageQueryInfo = stageQueryInfoRepository.findByStageId(stageId).get();
+            StageQueryInfo stageQueryInfo = stageQueryInfoRepository.findByStageId(공연.getId()).get();
             assertThat(stageQueryInfo.getArtistInfo()).isNotEqualTo("oldInfo");
         }
     }
@@ -117,13 +104,13 @@ class StageQueryInfoServiceTest {
         @Test
         void StageQueryInfo가_삭제된다() {
             // given
-            stageQueryInfoRepository.save(StageQueryInfoFixture.builder().stageId(stageId).build());
+            stageQueryInfoRepository.save(StageQueryInfoFixture.builder().stageId(공연.getId()).build());
 
             // when
-            stageQueryInfoService.deleteStageQueryInfo(stageId);
+            stageQueryInfoService.deleteStageQueryInfo(공연.getId());
 
             // then
-            assertThat(stageQueryInfoRepository.findByStageId(stageId)).isEmpty();
+            assertThat(stageQueryInfoRepository.findByStageId(공연.getId())).isEmpty();
         }
     }
 }

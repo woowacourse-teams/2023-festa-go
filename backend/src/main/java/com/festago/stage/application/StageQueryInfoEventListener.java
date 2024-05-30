@@ -22,14 +22,14 @@ public class StageQueryInfoEventListener {
     @Transactional(propagation = Propagation.MANDATORY)
     public void stageCreatedEventHandler(StageCreatedEvent event) {
         Stage stage = event.stage();
-        stageQueryInfoService.initialStageQueryInfo(stage.getId());
+        stageQueryInfoService.initialStageQueryInfo(stage);
     }
 
     @EventListener
     @Transactional(propagation = Propagation.MANDATORY)
     public void stageUpdatedEventHandler(StageUpdatedEvent event) {
         Stage stage = event.stage();
-        stageQueryInfoService.renewalStageQueryInfo(stage.getId());
+        stageQueryInfoService.renewalStageQueryInfo(stage);
     }
 
     @EventListener

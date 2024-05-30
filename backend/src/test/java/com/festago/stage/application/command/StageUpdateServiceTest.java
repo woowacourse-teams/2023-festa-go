@@ -14,23 +14,20 @@ import com.festago.common.exception.ValidException;
 import com.festago.festival.domain.Festival;
 import com.festago.stage.domain.Stage;
 import com.festago.stage.dto.command.StageUpdateCommand;
-import com.festago.stage.repository.MemoryStageArtistRepository;
 import com.festago.stage.repository.MemoryStageRepository;
-import com.festago.stage.repository.StageArtistRepository;
 import com.festago.stage.repository.StageRepository;
 import com.festago.support.fixture.ArtistFixture;
 import com.festago.support.fixture.FestivalFixture;
-import com.festago.support.fixture.StageArtistFixture;
 import com.festago.support.fixture.StageFixture;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.LongStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -38,7 +35,6 @@ class StageUpdateServiceTest {
 
     StageRepository stageRepository;
     ArtistRepository artistRepository;
-    StageArtistRepository stageArtistRepository;
     StageUpdateService stageUpdateService;
 
     LocalDateTime stageStartTime = LocalDateTime.parse("2077-06-30T18:00:00");
@@ -53,8 +49,11 @@ class StageUpdateServiceTest {
     void setUp() {
         stageRepository = new MemoryStageRepository();
         artistRepository = new MemoryArtistRepository();
-        stageArtistRepository = new MemoryStageArtistRepository();
-        stageUpdateService = new StageUpdateService(stageRepository, artistRepository, stageArtistRepository, mock());
+        stageUpdateService = new StageUpdateService(
+            stageRepository,
+            artistRepository,
+            mock(ApplicationEventPublisher.class)
+        );
 
         테코대학교_축제 = FestivalFixture.builder()
             .name("테코대학교 축제")
@@ -71,9 +70,8 @@ class StageUpdateServiceTest {
         소녀시대 = artistRepository.save(ArtistFixture.builder().name("소녀시대").build());
         뉴진스 = artistRepository.save(ArtistFixture.builder().name("뉴진스").build());
 
-        stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 에픽하이.getId()).build());
-        stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 소녀시대.getId()).build());
-        stageArtistRepository.save(StageArtistFixture.builder(테코대학교_축제_공연.getId(), 뉴진스.getId()).build());
+        테코대학교_축제_공연.renewArtists(List.of(에픽하이.getId()));
+        테코대학교_축제_공연.renewArtists(List.of(소녀시대.getId(), 뉴진스.getId()));
     }
 
     @Nested
@@ -193,8 +191,8 @@ class StageUpdateServiceTest {
             stageUpdateService.updateStage(테코대학교_축제_공연.getId(), command);
 
             // then
-            Set<Long> artistIds = stageArtistRepository.findAllArtistIdByStageId(테코대학교_축제_공연.getId());
-            assertThat(artistIds)
+            Stage stage = stageRepository.getOrThrow(테코대학교_축제_공연.getId());
+            assertThat(stage.getArtistIds())
                 .containsExactly(에픽하이.getId());
         }
     }
