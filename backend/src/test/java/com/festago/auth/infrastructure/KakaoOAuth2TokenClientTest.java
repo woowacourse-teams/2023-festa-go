@@ -6,8 +6,8 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.auth.dto.KakaoAccessTokenResponse;
-import com.festago.auth.infrastructure.oauth2.KakaoOAuth2AccessTokenClient;
+import com.festago.auth.dto.KakaoOAuth2TokenResponse;
+import com.festago.auth.infrastructure.oauth2.KakaoOAuth2TokenClient;
 import com.festago.auth.infrastructure.oauth2.KakaoOAuth2AccessTokenErrorHandler.KakaoOAuth2ErrorResponse;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
@@ -24,13 +24,13 @@ import org.springframework.test.web.client.response.MockRestResponseCreators;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@RestClientTest(KakaoOAuth2AccessTokenClient.class)
-class KakaoOAuth2AccessTokenClientTest {
+@RestClientTest(KakaoOAuth2TokenClient.class)
+class KakaoOAuth2TokenClientTest {
 
     private static final String URL = "https://kauth.kakao.com/oauth/token";
 
     @Autowired
-    KakaoOAuth2AccessTokenClient kakaoOAuth2AccessTokenClient;
+    KakaoOAuth2TokenClient kakaoOAuth2TokenClient;
 
     @Autowired
     MockRestServiceServer mockServer;
@@ -48,7 +48,7 @@ class KakaoOAuth2AccessTokenClientTest {
                 .body(objectMapper.writeValueAsString(expected)));
 
         // when & then
-        assertThatThrownBy(() -> kakaoOAuth2AccessTokenClient.getAccessToken("code"))
+        assertThatThrownBy(() -> kakaoOAuth2TokenClient.getIdToken("code"))
             .isInstanceOf(BadRequestException.class)
             .hasMessage(ErrorCode.OAUTH2_INVALID_CODE.getMessage());
     }
@@ -63,7 +63,7 @@ class KakaoOAuth2AccessTokenClientTest {
                 .body(objectMapper.writeValueAsString(expected)));
 
         // when & then
-        assertThatThrownBy(() -> kakaoOAuth2AccessTokenClient.getAccessToken("code"))
+        assertThatThrownBy(() -> kakaoOAuth2TokenClient.getIdToken("code"))
             .isInstanceOf(InternalServerException.class)
             .hasMessage(ErrorCode.OAUTH2_INVALID_REQUEST.getMessage());
     }
@@ -76,7 +76,7 @@ class KakaoOAuth2AccessTokenClientTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         // when & then
-        assertThatThrownBy(() -> kakaoOAuth2AccessTokenClient.getAccessToken("code"))
+        assertThatThrownBy(() -> kakaoOAuth2TokenClient.getIdToken("code"))
             .isInstanceOf(InternalServerException.class)
             .hasMessage(ErrorCode.OAUTH2_INVALID_REQUEST.getMessage());
     }
@@ -89,7 +89,7 @@ class KakaoOAuth2AccessTokenClientTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         // when & then
-        assertThatThrownBy(() -> kakaoOAuth2AccessTokenClient.getAccessToken("code"))
+        assertThatThrownBy(() -> kakaoOAuth2TokenClient.getIdToken("code"))
             .isInstanceOf(InternalServerException.class)
             .hasMessage(ErrorCode.OAUTH2_PROVIDER_NOT_RESPONSE.getMessage());
     }
@@ -97,16 +97,15 @@ class KakaoOAuth2AccessTokenClientTest {
     @Test
     void 성공() throws JsonProcessingException {
         // given
-        KakaoAccessTokenResponse expected = new KakaoAccessTokenResponse("tokenType", "accessToken",
-            100, "refreshToken", 50);
+        KakaoOAuth2TokenResponse expected = new KakaoOAuth2TokenResponse("accessToken", "idToken");
         mockServer.expect(requestTo(URL))
             .andRespond(MockRestResponseCreators.withSuccess()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(objectMapper.writeValueAsString(expected)));
         // when
-        String actual = kakaoOAuth2AccessTokenClient.getAccessToken("code");
+        String actual = kakaoOAuth2TokenClient.getIdToken("code");
 
         // then
-        assertThat(actual).isEqualTo(expected.accessToken());
+        assertThat(actual).isEqualTo(expected.idToken());
     }
 }

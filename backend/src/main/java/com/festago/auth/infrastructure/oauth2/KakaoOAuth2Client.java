@@ -3,6 +3,7 @@ package com.festago.auth.infrastructure.oauth2;
 import com.festago.auth.application.OAuth2Client;
 import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
+import com.festago.auth.infrastructure.openid.KakaoOpenIdClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -10,17 +11,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class KakaoOAuth2Client implements OAuth2Client {
 
-    private final KakaoOAuth2AccessTokenClient accessTokenClient;
-    private final KakaoOAuth2UserInfoClient userInfoClient;
+    private final KakaoOAuth2TokenClient kakaoOAuth2TokenClient;
+    private final KakaoOpenIdClient kakaoOpenIdClient;
 
     @Override
-    public String getAccessToken(String code) {
-        return accessTokenClient.getAccessToken(code);
-    }
-
-    @Override
-    public UserInfo getUserInfo(String accessToken) {
-        return userInfoClient.getUserInfo(accessToken);
+    public UserInfo getUserInfo(String code) {
+        String idToken = kakaoOAuth2TokenClient.getIdToken(code);
+        return kakaoOpenIdClient.getUserInfo(idToken);
     }
 
     @Override

@@ -5,9 +5,7 @@ import com.festago.auth.domain.UserInfo;
 
 public interface OAuth2Client {
 
-    String getAccessToken(String code);
-
-    UserInfo getUserInfo(String accessToken);
+    UserInfo getUserInfo(String code);
 
     SocialType getSocialType();
 }

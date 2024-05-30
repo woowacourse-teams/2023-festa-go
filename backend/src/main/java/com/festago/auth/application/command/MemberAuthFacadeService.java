@@ -28,8 +28,7 @@ public class MemberAuthFacadeService {
 
     public LoginV1Response oAuth2Login(SocialType socialType, String code) {
         OAuth2Client oAuth2Client = oAuth2Clients.getClient(socialType);
-        String oAuth2AccessToken = oAuth2Client.getAccessToken(code);
-        UserInfo userInfo = oAuth2Client.getUserInfo(oAuth2AccessToken);
+        UserInfo userInfo = oAuth2Client.getUserInfo(code);
         return login(userInfo);
     }
 
