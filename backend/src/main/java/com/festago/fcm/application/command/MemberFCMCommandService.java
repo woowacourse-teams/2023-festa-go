@@ -24,7 +24,7 @@ public class MemberFCMCommandService {
         List<MemberFCM> memberFCMs = memberFCMRepository.findAllByMemberId(memberId);
         LocalDateTime expiredAt = memberFCMExpiredAtPolicy.provide();
         memberFCMs.stream()
-            .filter(it -> it.isSameToken(fcmToken))
+            .filter(memberFCM -> memberFCM.isSameToken(fcmToken))
             .findAny()
             .ifPresentOrElse(memberFCM -> {
                 memberFCM.changeExpiredAt(expiredAt);
