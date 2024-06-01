@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.festago.common.exception.ValidException;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ class MemberFCMTest {
     @Test
     void MemberFCM_생성_성공() {
         // given
-        MemberFCM memberFCM = new MemberFCM(1L, "token");
+        MemberFCM memberFCM = new MemberFCM(1L, "token", LocalDateTime.now());
 
         // when & then
         assertThat(memberFCM.getMemberId()).isEqualTo(1L);
@@ -29,7 +30,7 @@ class MemberFCMTest {
     @NullSource
     void memberId가_null이면_예외(Long memberId) {
         // when & then
-        assertThatThrownBy(() -> new MemberFCM(memberId, "token"))
+        assertThatThrownBy(() -> new MemberFCM(memberId, "token", LocalDateTime.now()))
             .isInstanceOf(ValidException.class);
     }
 
@@ -38,7 +39,7 @@ class MemberFCMTest {
     @ValueSource(strings = {"", " ", "\t", "\n"})
     void token이_null_또는_공백이면_예외(String token) {
         // when & then
-        assertThatThrownBy(() -> new MemberFCM(1L, token))
+        assertThatThrownBy(() -> new MemberFCM(1L, token, LocalDateTime.now()))
             .isInstanceOf(ValidException.class);
     }
 
@@ -48,7 +49,15 @@ class MemberFCMTest {
         String token = "1".repeat(256);
 
         // when & then
-        assertThatThrownBy(() -> new MemberFCM(1L, token))
+        assertThatThrownBy(() -> new MemberFCM(1L, token, LocalDateTime.now()))
+            .isInstanceOf(ValidException.class);
+    }
+
+    @ParameterizedTest
+    @NullSource
+    void expiredAt이_null이면_예외(LocalDateTime expiredAt) {
+        // when & then
+        assertThatThrownBy(() -> new MemberFCM(1L, "token", expiredAt))
             .isInstanceOf(ValidException.class);
     }
 }

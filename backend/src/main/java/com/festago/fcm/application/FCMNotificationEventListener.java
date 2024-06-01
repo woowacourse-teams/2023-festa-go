@@ -1,7 +1,10 @@
 package com.festago.fcm.application;
 
 import com.festago.entry.dto.event.EntryProcessEvent;
+import com.festago.fcm.application.command.MemberFCMCommandService;
 import com.festago.fcm.domain.FCMChannel;
+import com.festago.fcm.domain.MemberFCM;
+import com.festago.fcm.repository.MemberFCMRepository;
 import com.google.firebase.messaging.AndroidConfig;
 import com.google.firebase.messaging.AndroidNotification;
 import com.google.firebase.messaging.BatchResponse;
@@ -10,6 +13,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.SendResponse;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
@@ -17,18 +21,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+// TODO 비즈니스 로직 새로운 Service 클래스 생성 뒤 이관할 것
 @Component
 @Profile("prod | dev")
 @Slf4j
+@RequiredArgsConstructor
 public class FCMNotificationEventListener {
 
     private final FirebaseMessaging firebaseMessaging;
-    private final MemberFCMService memberFCMService;
-
-    public FCMNotificationEventListener(FirebaseMessaging firebaseMessaging, MemberFCMService memberFCMService) {
-        this.firebaseMessaging = firebaseMessaging;
-        this.memberFCMService = memberFCMService;
-    }
+    private final MemberFCMRepository memberFCMRepository;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
@@ -44,7 +45,9 @@ public class FCMNotificationEventListener {
     }
 
     private List<String> getMemberFCMTokens(Long memberId) {
-        return memberFCMService.findAllMemberFCMTokens(memberId);
+        return memberFCMRepository.findAllByMemberId(memberId).stream()
+            .map(MemberFCM::getFcmToken)
+            .toList();
     }
 
     private List<Message> createMessages(List<String> tokens, String channelId) {
