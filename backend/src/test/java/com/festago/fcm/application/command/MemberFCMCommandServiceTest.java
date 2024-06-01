@@ -56,8 +56,9 @@ class MemberFCMCommandServiceTest {
             memberFCMCommandService.registerFCM(memberId, fcmToken);
 
             // then
-            assertThat(memberFCMRepository.existsByMemberIdAndFcmToken(memberId, fcmToken))
-                .isTrue();
+            assertThat(memberFCMRepository.findAllByMemberId(memberId))
+                .map(MemberFCM::getFcmToken)
+                .containsOnly(fcmToken);
         }
     }
 
@@ -90,11 +91,10 @@ class MemberFCMCommandServiceTest {
 
                 // then
                 List<MemberFCM> memberFCMs = memberFCMRepository.findAllByMemberId(memberId);
-                MemberFCM memberFCM = memberFCMRepository.findByMemberIdAndFcmToken(memberId, oldToken).get();
                 assertThat(memberFCMs)
                     .map(MemberFCM::getFcmToken)
                     .containsOnly(oldToken);
-                assertThat(memberFCM.getExpiredAt())
+                assertThat(memberFCMs.get(0).getExpiredAt())
                     .isEqualTo("2077-06-30T18:00:00");
             }
         }
