@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.mock;
 
 import com.festago.fcm.domain.MemberFCM;
 import com.festago.fcm.domain.MemberFCMExpiredAtPolicy;
-import com.festago.fcm.domain.MemberFCMRemoveOldTokensPolicy;
+import com.festago.fcm.domain.MemberFCMDeleteOldTokensPolicy;
 import com.festago.fcm.repository.MemberFCMRepository;
 import com.festago.fcm.repository.MemoryMemberFCMRepository;
 import com.festago.support.fixture.MemberFCMFixture;
@@ -39,7 +39,7 @@ class MemberFCMCommandServiceTest {
         memberFCMCommandService = new MemberFCMCommandService(
             memberFCMRepository,
             memberFCMExpiredAtPolicy,
-            new MemberFCMRemoveOldTokensPolicy(memberFCMRepository)
+            new MemberFCMDeleteOldTokensPolicy(memberFCMRepository)
         );
     }
 

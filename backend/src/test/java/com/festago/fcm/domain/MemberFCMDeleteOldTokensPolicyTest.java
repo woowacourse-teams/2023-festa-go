@@ -17,9 +17,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class MemberFCMRemoveOldTokensPolicyTest {
+class MemberFCMDeleteOldTokensPolicyTest {
 
-    MemberFCMRemoveOldTokensPolicy memberFCMRemoveOldTokensPolicy;
+    MemberFCMDeleteOldTokensPolicy memberFCMDeleteOldTokensPolicy;
 
     MemberFCMRepository memberFCMRepository;
 
@@ -28,7 +28,7 @@ class MemberFCMRemoveOldTokensPolicyTest {
     @BeforeEach
     void setUp() {
         memberFCMRepository = new MemoryMemberFCMRepository();
-        memberFCMRemoveOldTokensPolicy = new MemberFCMRemoveOldTokensPolicy(memberFCMRepository);
+        memberFCMDeleteOldTokensPolicy = new MemberFCMDeleteOldTokensPolicy(memberFCMRepository);
     }
 
     @Nested
@@ -48,7 +48,7 @@ class MemberFCMRemoveOldTokensPolicyTest {
             memberFCMs.forEach(memberFCMRepository::save);
 
             // when
-            memberFCMRemoveOldTokensPolicy.delete(memberFCMs);
+            memberFCMDeleteOldTokensPolicy.delete(memberFCMs);
 
             // then
             List<MemberFCM> actual = memberFCMRepository.findAllByMemberId(memberId);
