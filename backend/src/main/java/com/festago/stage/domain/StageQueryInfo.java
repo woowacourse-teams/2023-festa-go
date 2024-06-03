@@ -1,5 +1,7 @@
 package com.festago.stage.domain;
 
+import static java.util.Comparator.comparingLong;
+
 import com.festago.artist.domain.Artist;
 import com.festago.artist.domain.ArtistsSerializer;
 import jakarta.persistence.Column;
@@ -40,7 +42,10 @@ public class StageQueryInfo {
     }
 
     public void updateArtist(List<Artist> artists, ArtistsSerializer serializer) {
-        this.artistInfo = serializer.serialize(artists);
+        List<Artist> sortedArtists = artists.stream()
+            .sorted(comparingLong(Artist::getId))
+            .toList();
+        this.artistInfo = serializer.serialize(sortedArtists);
     }
 
     public Long getId() {

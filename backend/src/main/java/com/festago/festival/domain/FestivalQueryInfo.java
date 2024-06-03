@@ -1,5 +1,7 @@
 package com.festago.festival.domain;
 
+import static java.util.Comparator.comparingLong;
+
 import com.festago.artist.domain.Artist;
 import com.festago.artist.domain.ArtistsSerializer;
 import com.festago.common.domain.BaseTimeEntity;
@@ -39,7 +41,11 @@ public class FestivalQueryInfo extends BaseTimeEntity {
     }
 
     public void updateArtistInfo(List<Artist> artists, ArtistsSerializer serializer) {
-        this.artistInfo = serializer.serialize(artists);
+        List<Artist> distinctSortedArtists = artists.stream()
+            .distinct()
+            .sorted(comparingLong(Artist::getId))
+            .toList();
+        this.artistInfo = serializer.serialize(distinctSortedArtists);
     }
 
     public Long getId() {

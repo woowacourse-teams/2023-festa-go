@@ -79,18 +79,4 @@ class FestivalIdStageArtistsQueryDslResolverTest extends ApplicationIntegrationT
             .map(Artist::getName)
             .containsOnly(뉴진스.getName(), 에픽하이.getName(), 아이유.getName());
     }
-
-    @Test
-    void 중복된_아티스트가_있으면_중복된_아티스트는_포함되지_않는다() {
-        // given
-        stageArtistRepository.save(StageArtistFixture.builder(테코대학교_두번째_공연.getId(), 아이유.getId()).build());
-
-        // when
-        List<Artist> expect = festivalIdStageArtistsResolver.resolve(festivalId);
-
-        // then
-        assertThat(expect)
-            .map(Artist::getName)
-            .containsOnly(뉴진스.getName(), 에픽하이.getName(), 아이유.getName());
-    }
 }
