@@ -1,6 +1,5 @@
 package com.festago.festival.application;
 
-import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -9,6 +8,7 @@ import static org.mockito.BDDMockito.reset;
 
 import com.festago.artist.domain.Artist;
 import com.festago.artist.domain.ArtistsSerializer;
+import com.festago.artist.infrastructure.DelimiterArtistsSerializer;
 import com.festago.festival.domain.FestivalIdStageArtistsResolver;
 import com.festago.festival.domain.FestivalQueryInfo;
 import com.festago.festival.repository.FestivalInfoRepository;
@@ -28,9 +28,7 @@ class FestivalQueryInfoArtistRenewServiceTest {
 
     FestivalInfoRepository festivalInfoRepository;
     FestivalIdStageArtistsResolver festivalIdStageArtistsResolver = mock();
-    ArtistsSerializer artistsSerializer = artists -> artists.stream()
-        .map(Artist::getName)
-        .collect(joining(",")); // "뉴진스,에픽하이"
+    ArtistsSerializer artistsSerializer = new DelimiterArtistsSerializer(",");
     FestivalQueryInfoArtistRenewService festivalQueryInfoArtistRenewService;
 
     @BeforeEach

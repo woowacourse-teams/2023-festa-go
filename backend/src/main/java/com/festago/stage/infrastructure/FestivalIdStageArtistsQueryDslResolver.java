@@ -22,12 +22,10 @@ public class FestivalIdStageArtistsQueryDslResolver implements FestivalIdStageAr
     public List<Artist> resolve(Long festivalId) {
         return queryDslHelper.select(artist)
             .from(festival)
-            .join(stage).on(stage.festival.id.eq(festival.id))
-            .join(stageArtist).on(stageArtist.stageId.eq(stage.id))
-            .join(artist).on(artist.id.eq(stageArtist.artistId))
+            .innerJoin(stage).on(stage.festival.id.eq(festival.id))
+            .innerJoin(stageArtist).on(stageArtist.stageId.eq(stage.id))
+            .innerJoin(artist).on(artist.id.eq(stageArtist.artistId))
             .where(festival.id.eq(festivalId))
-            .orderBy(artist.id.asc())
-            .distinct()
             .fetch();
     }
 }
