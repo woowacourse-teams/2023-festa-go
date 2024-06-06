@@ -49,7 +49,7 @@ import kotlin.math.absoluteValue
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PopularFestivalScreen(uiState: PopularFestivalUiState) {
-    val firstPage = (100 / 2) - (100 / 2) % uiState.festivals.size
+    val firstPage = 100 / 2
     val rememberCoroutineScope = rememberCoroutineScope()
     val foregroundPagerState = rememberPagerState { 100 }
     val backgroundPagerState = rememberPagerState { uiState.festivals.size }
@@ -60,7 +60,7 @@ fun PopularFestivalScreen(uiState: PopularFestivalUiState) {
         stringResource(R.string.festival_list_tv_date_format)
     )
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(Unit) {
         foregroundPagerState.apply {
             scroll {
                 updateCurrentPage(firstPage)
@@ -78,18 +78,20 @@ fun PopularFestivalScreen(uiState: PopularFestivalUiState) {
     }
 
     PopularFestivalScreen(
-        uiState,
-        backgroundPagerState,
-        pageSize,
-        dateFormatter,
-        foregroundPagerState,
-        horizontalPadding
+        modifier = Modifier.fillMaxSize(),
+        uiState = uiState,
+        backgroundPagerState = backgroundPagerState,
+        pageSize = pageSize,
+        dateFormatter = dateFormatter,
+        foregroundPagerState = foregroundPagerState,
+        horizontalPadding = horizontalPadding
     )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PopularFestivalScreen(
+    modifier: Modifier = Modifier,
     uiState: PopularFestivalUiState,
     backgroundPagerState: PagerState,
     pageSize: Dp,
@@ -97,15 +99,16 @@ private fun PopularFestivalScreen(
     foregroundPagerState: PagerState,
     horizontalPadding: Dp
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier) {
         BackgroundPopularFestivals(
-            uiState = uiState,
             modifier = Modifier.fillMaxWidth(),
+            uiState = uiState,
             backgroundPagerState = backgroundPagerState,
             pageSize = pageSize,
             dateFormatter = dateFormatter
         )
         ForegroundPopularFestivalsPager(
+            modifier = Modifier.fillMaxSize(),
             uiState = uiState,
             foregroundPagerState = foregroundPagerState,
             horizontalPadding = horizontalPadding
@@ -129,15 +132,17 @@ private fun PopularFestivalScreen(
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun ForegroundPopularFestivalsPager(
+    modifier: Modifier = Modifier,
     foregroundPagerState: PagerState,
     horizontalPadding: Dp,
     uiState: PopularFestivalUiState
 ) {
     HorizontalPager(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         state = foregroundPagerState,
         pageSpacing = 24.dp,
         contentPadding = PaddingValues(horizontal = horizontalPadding, vertical = 70.dp),
+        beyondBoundsPageCount = 5,
     ) { page ->
         val calculatedPage = page % uiState.festivals.size
         val pageOffset =
