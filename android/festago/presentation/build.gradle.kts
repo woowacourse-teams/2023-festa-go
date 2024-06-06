@@ -4,7 +4,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
-    id("kotlin-kapt")
+    id("org.jetbrains.kotlin.kapt")
     id("org.jlleitschuh.gradle.ktlint")
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs")
@@ -48,6 +48,17 @@ android {
     dataBinding {
         enable = true
     }
+
+    kapt {
+        correctErrorTypes = true
+    }
+
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
@@ -64,6 +75,9 @@ dependencies {
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("com.google.firebase:firebase-config-ktx:21.6.3")
+    implementation("androidx.compose.runtime:runtime-android:1.6.7")
+    implementation("androidx.compose.foundation:foundation-android:1.6.7")
+    implementation("androidx.compose.ui:ui-tooling-preview-android:1.6.7")
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
@@ -74,10 +88,10 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
     // hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
-    implementation("com.google.dagger:hilt-android-testing:2.44")
+    implementation("com.google.dagger:hilt-android-testing:2.50")
 
     // recyclerview
     implementation("androidx.recyclerview:recyclerview:1.3.1-rc01")
@@ -87,6 +101,7 @@ dependencies {
 
     // glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 
     // glide blur
     implementation("jp.wasabeef:glide-transformations:4.3.0")
@@ -142,8 +157,21 @@ dependencies {
 
     // splash
     implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
+
+    val composeBom = platform("androidx.compose:compose-bom:2023.08.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    implementation("androidx.compose.runtime:runtime")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.foundation:foundation-layout")
+    implementation("androidx.compose.material:material")
+    implementation("androidx.compose.runtime:runtime-livedata")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
 fun getSecretKey(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }

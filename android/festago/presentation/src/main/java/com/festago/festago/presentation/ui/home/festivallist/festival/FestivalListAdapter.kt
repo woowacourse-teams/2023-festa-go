@@ -1,8 +1,11 @@
 package com.festago.festago.presentation.ui.home.festivallist.festival
 
+import android.os.Build
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.festago.festago.presentation.ui.home.festivallist.uistate.ArtistUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalEmptyItemUiState
 import com.festago.festago.presentation.ui.home.festivallist.uistate.FestivalItemUiState
@@ -12,11 +15,11 @@ import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFest
 
 class FestivalListAdapter(
     private val onArtistClick: (ArtistUiState) -> Unit,
-) : ListAdapter<Any, FestivalListViewHolder>(diffUtil) {
+) : ListAdapter<Any, RecyclerView.ViewHolder>(diffUtil) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FestivalListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            1 -> FestivalListPopularViewHolder.of(parent)
+            1 -> FestivalListPopularViewHolder2.of(parent)
             2 -> FestivalListFestivalViewHolder.of(parent, onArtistClick)
             3 -> FestivalListTabViewHolder.of(parent)
             4 -> FestivalListMoreItemViewHolder.of(parent)
@@ -25,14 +28,16 @@ class FestivalListAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: FestivalListViewHolder, position: Int) {
+    @RequiresApi(Build.VERSION_CODES.S)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         return when (holder) {
-            is FestivalListPopularViewHolder -> holder.bind(item as PopularFestivalUiState)
+            is FestivalListPopularViewHolder2 -> holder.bind(item as PopularFestivalUiState)
             is FestivalListFestivalViewHolder -> holder.bind(item as FestivalItemUiState)
             is FestivalListTabViewHolder -> holder.bind(item as FestivalTabUiState)
             is FestivalListMoreItemViewHolder -> holder.bind(item as FestivalMoreItemUiState)
             is FestivalListEmptyItemViewHolder -> holder.bind(item as FestivalEmptyItemUiState)
+            else -> throw IllegalArgumentException("Invalid holder")
         }
     }
 

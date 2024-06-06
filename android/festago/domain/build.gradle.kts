@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     id("org.jlleitschuh.gradle.ktlint")
+    id("kotlin-kapt")
 }
 
 dependencies {

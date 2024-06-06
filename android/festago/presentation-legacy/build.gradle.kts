@@ -66,10 +66,10 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
     // hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
-    implementation("com.google.dagger:hilt-android-testing:2.44")
+    implementation("com.google.dagger:hilt-android-testing:2.50")
 
     // recyclerview
     implementation("androidx.recyclerview:recyclerview:1.3.1-rc01")
@@ -134,5 +134,5 @@ dependencies {
 }
 
 fun getSecretKey(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
