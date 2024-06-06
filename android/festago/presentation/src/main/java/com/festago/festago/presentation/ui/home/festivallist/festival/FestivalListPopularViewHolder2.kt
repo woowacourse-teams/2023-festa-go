@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.recyclerview.widget.RecyclerView
-import com.festago.festago.presentation.ui.home.festivallist.popularfestival.PopularFestivalPager
+import com.festago.festago.presentation.ui.home.festivallist.popularfestival.PopularFestivalScreen
 import com.festago.festago.presentation.ui.home.festivallist.uistate.PopularFestivalUiState
 
 class FestivalListPopularViewHolder2(
@@ -15,7 +15,7 @@ class FestivalListPopularViewHolder2(
     @RequiresApi(Build.VERSION_CODES.S)
     fun bind(item: PopularFestivalUiState) {
         composeView.setContent {
-            PopularFestivalPager(item)
+            PopularFestivalScreen(item)
         }
     }
 
