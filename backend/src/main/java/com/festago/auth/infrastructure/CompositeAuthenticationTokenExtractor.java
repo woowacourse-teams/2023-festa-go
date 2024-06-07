@@ -4,6 +4,8 @@ import com.festago.auth.domain.AuthenticationTokenExtractor;
 import com.festago.auth.domain.Role;
 import com.festago.auth.domain.authentication.AnonymousAuthentication;
 import com.festago.auth.domain.authentication.Authentication;
+import com.festago.auth.infrastructure.jwt.AuthenticationClaimsExtractor;
+import com.festago.auth.infrastructure.jwt.JwtTokenParser;
 import io.jsonwebtoken.Claims;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

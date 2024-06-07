@@ -2,9 +2,9 @@ package com.festago.auth.domain;
 
 import com.festago.member.domain.SocialType;
 
-public interface OpenIdClient {
+public interface OAuth2Client {
 
-    UserInfo getUserInfo(String idToken);
+    UserInfo getUserInfo(String code);
 
     SocialType getSocialType();
 }

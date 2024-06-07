@@ -1,6 +1,5 @@
 package com.festago.member.domain;
 
-import com.festago.auth.domain.SocialType;
 import com.festago.common.domain.BaseTimeEntity;
 import com.festago.common.util.ImageUrlHelper;
 import com.festago.common.util.Validator;
@@ -20,7 +19,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.util.StringUtils;
 
 @Entity
 @SQLDelete(sql = "UPDATE member SET deleted_at = now(), nickname = '탈퇴한 회원', profile_image_url = '', social_id = null WHERE id=?")

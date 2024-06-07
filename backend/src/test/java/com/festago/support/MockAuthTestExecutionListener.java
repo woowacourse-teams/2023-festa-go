@@ -1,10 +1,10 @@
 package com.festago.support;
 
-import com.festago.auth.AuthenticateContext;
+import com.festago.auth.domain.AuthenticateContext;
 import com.festago.auth.domain.authentication.AdminAuthentication;
 import com.festago.auth.domain.authentication.AnonymousAuthentication;
-import com.festago.auth.domain.authentication.MemberAuthentication;
 import com.festago.auth.domain.authentication.Authentication;
+import com.festago.auth.domain.authentication.MemberAuthentication;
 import java.lang.reflect.Method;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestContext;

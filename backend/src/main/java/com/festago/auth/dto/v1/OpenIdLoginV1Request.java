@@ -1,6 +1,6 @@
 package com.festago.auth.dto.v1;
 
-import com.festago.auth.domain.SocialType;
+import com.festago.member.domain.SocialType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

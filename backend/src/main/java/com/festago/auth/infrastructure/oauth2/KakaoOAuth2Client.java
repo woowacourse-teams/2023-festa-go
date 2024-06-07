@@ -1,9 +1,9 @@
 package com.festago.auth.infrastructure.oauth2;
 
-import com.festago.auth.application.OAuth2Client;
-import com.festago.auth.domain.SocialType;
+import com.festago.auth.domain.OAuth2Client;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.infrastructure.openid.KakaoOpenIdClient;
+import com.festago.member.domain.SocialType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
