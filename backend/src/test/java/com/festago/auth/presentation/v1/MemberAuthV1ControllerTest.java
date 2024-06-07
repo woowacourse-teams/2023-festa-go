@@ -6,10 +6,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.festago.auth.domain.SocialType;
 import com.festago.auth.dto.v1.OAuth2LoginV1Request;
 import com.festago.auth.dto.v1.OpenIdLoginV1Request;
 import com.festago.auth.dto.v1.RefreshTokenV1Request;
+import com.festago.member.domain.SocialType;
 import com.festago.support.CustomWebMvcTest;
 import com.festago.support.WithMockAuth;
 import java.util.UUID;

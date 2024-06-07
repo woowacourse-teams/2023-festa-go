@@ -1,6 +1,5 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.web;
 
-import com.festago.auth.application.HttpRequestTokenExtractor;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;

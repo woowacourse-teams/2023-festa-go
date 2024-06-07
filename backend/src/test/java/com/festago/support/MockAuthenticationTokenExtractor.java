@@ -1,6 +1,6 @@
 package com.festago.support;
 
-import com.festago.auth.AuthenticateContext;
+import com.festago.auth.domain.AuthenticateContext;
 import com.festago.auth.domain.AuthenticationTokenExtractor;
 import com.festago.auth.domain.authentication.Authentication;
 

@@ -1,6 +1,6 @@
-package com.festago.auth.infrastructure;
+package com.festago.member.infrastructure;
 
-import com.festago.auth.domain.SocialType;
+import com.festago.member.domain.SocialType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

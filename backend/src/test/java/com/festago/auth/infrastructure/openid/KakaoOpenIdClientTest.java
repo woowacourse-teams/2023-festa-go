@@ -1,14 +1,12 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.openid;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
-import com.festago.auth.infrastructure.openid.KakaoOpenIdClient;
-import com.festago.auth.infrastructure.openid.KakaoOpenIdPublicKeyLocator;
-import com.festago.auth.infrastructure.openid.NoopOpenIdNonceValidator;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnauthorizedException;
 import io.jsonwebtoken.Jwts;

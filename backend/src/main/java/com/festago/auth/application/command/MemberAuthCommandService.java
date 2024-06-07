@@ -4,7 +4,7 @@ import com.festago.auth.domain.RefreshToken;
 import com.festago.auth.domain.UserInfo;
 import com.festago.auth.domain.UserInfoMemberMapper;
 import com.festago.auth.dto.event.MemberDeletedEvent;
-import com.festago.auth.dto.v1.LoginResult;
+import com.festago.auth.dto.v1.MemberLoginResult;
 import com.festago.auth.dto.v1.TokenRefreshResult;
 import com.festago.auth.repository.RefreshTokenRepository;
 import com.festago.common.exception.ErrorCode;
@@ -32,11 +32,11 @@ public class MemberAuthCommandService {
     private final UserInfoMemberMapper userInfoMemberMapper;
     private final Clock clock;
 
-    public LoginResult login(UserInfo userInfo) {
+    public MemberLoginResult login(UserInfo userInfo) {
         Member member = memberRepository.findBySocialIdAndSocialType(userInfo.socialId(), userInfo.socialType())
             .orElseGet(() -> signUp(userInfo));
         RefreshToken refreshToken = saveRefreshToken(member.getId());
-        return new LoginResult(
+        return new MemberLoginResult(
             member.getId(),
             member.getNickname(),
             member.getProfileImage(),

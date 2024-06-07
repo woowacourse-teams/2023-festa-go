@@ -1,6 +1,5 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.web;
 
-import com.festago.auth.application.HttpRequestTokenExtractor;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;

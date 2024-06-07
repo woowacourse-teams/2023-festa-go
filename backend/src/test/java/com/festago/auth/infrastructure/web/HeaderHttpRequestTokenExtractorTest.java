@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.web;
 
 import static com.festago.common.exception.ErrorCode.NOT_BEARER_TOKEN_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;

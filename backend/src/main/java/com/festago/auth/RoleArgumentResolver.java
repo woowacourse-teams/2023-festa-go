@@ -1,5 +1,6 @@
 package com.festago.auth;
 
+import com.festago.auth.domain.AuthenticateContext;
 import com.festago.auth.domain.Role;
 import com.festago.common.exception.UnexpectedException;
 import org.springframework.core.MethodParameter;

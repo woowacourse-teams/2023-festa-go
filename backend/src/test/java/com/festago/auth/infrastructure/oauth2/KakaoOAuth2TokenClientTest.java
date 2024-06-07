@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.oauth2;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -7,7 +7,6 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.festago.auth.dto.KakaoOAuth2TokenResponse;
-import com.festago.auth.infrastructure.oauth2.KakaoOAuth2TokenClient;
 import com.festago.auth.infrastructure.oauth2.KakaoOAuth2AccessTokenErrorHandler.KakaoOAuth2ErrorResponse;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
