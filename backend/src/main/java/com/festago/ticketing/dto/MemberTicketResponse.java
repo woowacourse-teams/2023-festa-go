@@ -5,6 +5,7 @@ import com.festago.ticketing.domain.EntryState;
 import com.festago.ticketing.domain.MemberTicket;
 import java.time.LocalDateTime;
 
+@Deprecated(forRemoval = true)
 public record MemberTicketResponse(
     Long id,
     Integer number,

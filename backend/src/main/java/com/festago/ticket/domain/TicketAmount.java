@@ -13,6 +13,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Min;
 import lombok.NoArgsConstructor;
 
+@Deprecated(forRemoval = true)
 @Entity
 @NoArgsConstructor
 public class TicketAmount extends BaseTimeEntity {

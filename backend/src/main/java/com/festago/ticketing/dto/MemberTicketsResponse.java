@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.toList;
 import com.festago.ticketing.domain.MemberTicket;
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 public record MemberTicketsResponse(
     List<MemberTicketResponse> memberTickets) {
 

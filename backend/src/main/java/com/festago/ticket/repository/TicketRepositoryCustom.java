@@ -4,6 +4,7 @@ import com.festago.ticket.domain.Ticket;
 import java.util.List;
 import java.util.Optional;
 
+@Deprecated(forRemoval = true)
 public interface TicketRepositoryCustom {
 
     List<Ticket> findAllByStageIdWithFetch(Long stageId);

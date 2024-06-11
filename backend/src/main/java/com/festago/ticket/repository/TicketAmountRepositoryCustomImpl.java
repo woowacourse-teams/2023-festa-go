@@ -8,6 +8,7 @@ import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
+@Deprecated(forRemoval = true)
 @RequiredArgsConstructor
 public class TicketAmountRepositoryCustomImpl implements TicketAmountRepositoryCustom{
 

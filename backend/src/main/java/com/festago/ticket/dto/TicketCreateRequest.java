@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+@Deprecated(forRemoval = true)
 public record TicketCreateRequest(
     @NotNull(message = "stageId는 null 일 수 없습니다.")
     Long stageId,
