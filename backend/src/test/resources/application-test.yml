@@ -8,6 +8,12 @@ spring:
     open-in-view: false
   flyway:
     enabled: false
+  data:
+    redis:
+      port: 6389
+      host: localhost
+      repositories:
+        enabled: false
 management:
   server:
     port: 8090
