@@ -3,6 +3,7 @@ package com.festago.ticketing.application.command;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
+import com.festago.common.exception.TooManyRequestException;
 import com.festago.ticketing.domain.Booker;
 import com.festago.ticketing.domain.TicketQuantity;
 import com.festago.ticketing.domain.TicketingRateLimiter;
@@ -45,7 +46,7 @@ public class QuantityTicketingService {
 
     private void validateFrequentTicketing(Booker booker) {
         if (ticketingRateLimiter.isFrequentTicketing(booker, 5, TimeUnit.SECONDS)) {
-            throw new BadRequestException(ErrorCode.TOO_FREQUENT_REQUESTS);
+            throw new TooManyRequestException();
         }
     }
 }
