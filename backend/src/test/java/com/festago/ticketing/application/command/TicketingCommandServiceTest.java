@@ -23,7 +23,6 @@ import com.festago.ticket.repository.NewTicketDao;
 import com.festago.ticket.repository.StageTicketRepository;
 import com.festago.ticketing.domain.Booker;
 import com.festago.ticketing.dto.command.TicketingCommand;
-import com.festago.ticketing.infrastructure.MemoryTicketingSequenceGenerator;
 import com.festago.ticketing.repository.MemoryReserveTicketRepository;
 import com.festago.ticketing.repository.ReserveTicketRepository;
 import java.time.Clock;
@@ -55,18 +54,18 @@ class TicketingCommandServiceTest {
         ticketingCommandService = new TicketingCommandService(
             new NewTicketDao(stageTicketRepository),
             reserveTicketRepository,
-            new MemoryTicketingSequenceGenerator(),
             Collections.emptyList(),
             clock
         );
     }
 
     @Nested
-    class reserveTicket {
+    class ticketing {
 
         StageTicket stageTicket;
         LocalDateTime 무대_시작_시간 = LocalDateTime.parse("2077-06-30T18:00:00");
         LocalDateTime 티켓_오픈_시간 = LocalDateTime.parse("2077-06-23T18:00:00");
+        int sequence = 1;
 
         @BeforeEach
         void setUp() {
@@ -101,7 +100,7 @@ class TicketingCommandServiceTest {
                 .build();
 
             // when & then
-            assertThatThrownBy(() -> ticketingCommandService.reserveTicket(command))
+            assertThatThrownBy(() -> ticketingCommandService.ticketing(command, sequence))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(ErrorCode.TICKET_NOT_FOUND.getMessage());
         }
@@ -114,10 +113,10 @@ class TicketingCommandServiceTest {
                 .booker(new Booker(1L, 1L))
                 .ticketType(NewTicketType.STAGE)
                 .build();
-            ticketingCommandService.reserveTicket(command);
+            ticketingCommandService.ticketing(command, sequence);
 
             // when & then
-            assertThatThrownBy(() -> ticketingCommandService.reserveTicket(command))
+            assertThatThrownBy(() -> ticketingCommandService.ticketing(command, sequence))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ErrorCode.RESERVE_TICKET_OVER_AMOUNT.getMessage());
         }
@@ -132,7 +131,7 @@ class TicketingCommandServiceTest {
                 .build();
 
             // when
-            ticketingCommandService.reserveTicket(command);
+            ticketingCommandService.ticketing(command, sequence);
 
             // then
             assertThat(reserveTicketRepository.countByMemberIdAndTicketId(1L, stageTicket.getId()))

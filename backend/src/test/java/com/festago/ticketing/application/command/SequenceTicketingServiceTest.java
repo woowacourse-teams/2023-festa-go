@@ -1,16 +1,17 @@
 package com.festago.ticketing.application.command;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.any;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 
 import com.festago.common.infrastructure.FakeTicketingRateLimiter;
 import com.festago.ticket.domain.FakeTicket;
-import com.festago.ticketing.domain.TicketQuantity;
+import com.festago.ticketing.domain.TicketSequence;
 import com.festago.ticketing.dto.command.TicketingCommand;
-import com.festago.ticketing.repository.MemoryTicketQuantityRepository;
-import com.festago.ticketing.repository.TicketQuantityRepository;
+import com.festago.ticketing.repository.MemoryTicketSequenceRepository;
+import com.festago.ticketing.repository.TicketSequenceRepository;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -25,23 +26,22 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class QuantityTicketingServiceTest {
+class SequenceTicketingServiceTest {
 
-    QuantityTicketingService quantityTicketingService;
-
-    TicketQuantityRepository ticketQuantityRepository;
+    TicketSequenceRepository ticketSequenceRepository;
 
     @BeforeEach
     void setUp() {
-        ticketQuantityRepository = new MemoryTicketQuantityRepository();
+        ticketSequenceRepository = new MemoryTicketSequenceRepository();
     }
 
     @Nested
-    class reserveTicket {
+    class ticketing {
 
         Long ticketId = 1L;
+        TicketSequence ticketSequence;
         AtomicLong reserveCount;
-        TicketQuantity ticketQuantity;
+        SequenceTicketingService sequenceTicketingService;
         TicketingCommandService ticketingCommandService;
         ExecutorService executorService = Executors.newFixedThreadPool(8);
         TicketingCommand command = TicketingCommand.builder()
@@ -50,11 +50,11 @@ class QuantityTicketingServiceTest {
 
         @BeforeEach
         void setUp() {
-            reserveCount = new AtomicLong();
             ticketingCommandService = mock();
-            quantityTicketingService = new QuantityTicketingService(
-                ticketQuantityRepository,
+            reserveCount = new AtomicLong();
+            sequenceTicketingService = new SequenceTicketingService(
                 ticketingCommandService,
+                ticketSequenceRepository,
                 new FakeTicketingRateLimiter(false)
             );
         }
@@ -64,8 +64,8 @@ class QuantityTicketingServiceTest {
             // given
             int ticketAmount = 50;
             long tryCount = 100;
-            ticketQuantity = ticketQuantityRepository.put(new FakeTicket(ticketId, ticketAmount));
-            given(ticketingCommandService.reserveTicket(any())).willAnswer(invoke -> {
+            ticketSequence = ticketSequenceRepository.put(new FakeTicket(ticketId, ticketAmount));
+            given(ticketingCommandService.ticketing(any(), anyInt())).willAnswer(invoke -> {
                 reserveCount.incrementAndGet();
                 return null;
             });
@@ -73,13 +73,13 @@ class QuantityTicketingServiceTest {
             // when
             List<CompletableFuture<Void>> futures = LongStream.rangeClosed(1, tryCount)
                 .mapToObj(i -> CompletableFuture.runAsync(() -> {
-                    quantityTicketingService.ticketing(command);
+                    sequenceTicketingService.ticketing(command);
                 }, executorService).exceptionally(throwable -> null))
                 .toList();
             futures.forEach(CompletableFuture::join);
 
             // then
-            assertThat(ticketQuantity.getQuantity()).isZero();
+            assertThat(ticketSequence.getQuantity()).isZero();
             assertThat(reserveCount).hasValue(ticketAmount);
         }
 
@@ -89,10 +89,10 @@ class QuantityTicketingServiceTest {
             int ticketAmount = 50;
             long tryCount = 100;
             AtomicLong counter = new AtomicLong();
-            ticketQuantity = ticketQuantityRepository.put(new FakeTicket(ticketId, ticketAmount));
-            given(ticketingCommandService.reserveTicket(any())).willAnswer(invoke -> {
+            ticketSequence = ticketSequenceRepository.put(new FakeTicket(ticketId, ticketAmount));
+            given(ticketingCommandService.ticketing(any(), anyInt())).willAnswer(invoke -> {
                 long count = counter.incrementAndGet();
-                if (count <= 25 && count % 5 == 0) { // 5번 예외 발생
+                if (count <= ticketAmount / 2 && count % 5 == 0) {
                     throw new IllegalArgumentException();
                 }
                 reserveCount.incrementAndGet();
@@ -102,13 +102,13 @@ class QuantityTicketingServiceTest {
             // when
             List<CompletableFuture<Void>> futures = LongStream.rangeClosed(1, tryCount)
                 .mapToObj(i -> CompletableFuture.runAsync(() -> {
-                    quantityTicketingService.ticketing(command);
+                    sequenceTicketingService.ticketing(command);
                 }, executorService).exceptionally(throwable -> null))
                 .toList();
             futures.forEach(CompletableFuture::join);
 
             // then
-            assertThat(ticketQuantity.getQuantity()).isZero();
+            assertThat(ticketSequence.getQuantity()).isZero();
             assertThat(reserveCount).hasValue(ticketAmount);
         }
     }

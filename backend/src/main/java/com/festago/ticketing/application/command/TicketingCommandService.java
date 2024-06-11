@@ -7,7 +7,6 @@ import com.festago.ticket.domain.NewTicketType;
 import com.festago.ticket.repository.NewTicketDao;
 import com.festago.ticketing.domain.Booker;
 import com.festago.ticketing.domain.ReserveTicket;
-import com.festago.ticketing.domain.TicketingSequenceGenerator;
 import com.festago.ticketing.domain.validator.TicketingValidator;
 import com.festago.ticketing.dto.TicketingResult;
 import com.festago.ticketing.dto.command.TicketingCommand;
@@ -26,11 +25,10 @@ public class TicketingCommandService {
 
     private final NewTicketDao ticketDao;
     private final ReserveTicketRepository reserveTicketRepository;
-    private final TicketingSequenceGenerator sequenceGenerator;
     private final List<TicketingValidator> validators;
     private final Clock clock;
 
-    public TicketingResult reserveTicket(TicketingCommand command) {
+    public TicketingResult ticketing(TicketingCommand command, int sequence) {
         Long ticketId = command.ticketId();
         NewTicketType ticketType = command.ticketType();
         NewTicket ticket = ticketDao.findByIdWithTicketTypeAndFetch(ticketId, ticketType);
@@ -38,9 +36,8 @@ public class TicketingCommandService {
         ticket.validateReserve(booker, LocalDateTime.now(clock));
         validators.forEach(validator -> validator.validate(ticket, booker));
         validate(ticket, booker);
-        int sequence = sequenceGenerator.generate(ticketId);
         ReserveTicket reserveTicket = ticket.reserve(booker, sequence);
-        reserveTicketRepository.save(ticket.reserve(booker, sequence));
+        reserveTicketRepository.save(reserveTicket);
         return new TicketingResult(reserveTicket.getTicketId());
     }
 
