@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class TicketingCommandServiceTest {
 
-    TicketingCommandServiceImpl ticketingCommandService;
+    TicketingCommandService ticketingCommandService;
 
     ReserveTicketRepository reserveTicketRepository;
 
@@ -52,7 +52,7 @@ class TicketingCommandServiceTest {
         reserveTicketRepository = new MemoryReserveTicketRepository();
         stageTicketRepository = new MemoryStageTicketRepository();
         clock = spy(Clock.systemDefaultZone());
-        ticketingCommandService = new TicketingCommandServiceImpl(
+        ticketingCommandService = new TicketingCommandService(
             new NewTicketDao(stageTicketRepository),
             reserveTicketRepository,
             new MemoryTicketingSequenceGenerator(),
