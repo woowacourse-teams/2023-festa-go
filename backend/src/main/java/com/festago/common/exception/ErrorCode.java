@@ -25,7 +25,6 @@ public enum ErrorCode {
     TICKET_CANNOT_RESERVE_STAGE_START("공연의 시작 시간 이후로 예매할 수 없습니다."),
     INVALID_STUDENT_VERIFICATION_CODE("올바르지 않은 학생 인증 코드입니다."),
     DELETE_CONSTRAINT_FESTIVAL("공연이 등록된 축제는 삭제할 수 없습니다."),
-    DELETE_CONSTRAINT_STAGE("티켓이 등록된 공연은 삭제할 수 없습니다."),
     DELETE_CONSTRAINT_SCHOOL("학생 또는 축제에 등록된 학교는 삭제할 수 없습니다."), // @deprecate
     DUPLICATE_SCHOOL("이미 존재하는 학교 정보입니다."), // @deprecate
     VALIDATION_FAIL("검증이 실패하였습니다."),
@@ -47,6 +46,12 @@ public enum ErrorCode {
     OPEN_ID_INVALID_TOKEN("잘못된 OpenID 토큰입니다."),
     NOT_SUPPORT_FILE_EXTENSION("해당 파일의 확장자는 허용되지 않습니다."),
     DUPLICATE_ARTIST_NAME("이미 존재하는 아티스트의 이름입니다."),
+    RESERVE_TICKET_BEFORE_TICKET_OPEN_TIME("티켓 예매 시간 이전에는 예매 할 수 없습니다."),
+    RESERVE_TICKET_NOT_SCHOOL_STUDENT("해당 티켓의 예매는 소속된 학교를 다니는 재학생만 가능합니다."),
+    STAGE_UPDATE_CONSTRAINT_EXISTS_TICKET("티켓이 등록된 공연은 수정할 수 없습니다."),
+    STAGE_DELETE_CONSTRAINT_EXISTS_TICKET("티켓이 등록된 공연은 삭제할 수 없습니다."),
+    STAGE_TICKET_DELETE_CONSTRAINT_TICKET_OPEN_TIME("티켓 오픈 시간 이후에는 티켓을 삭제할 수 없습니다."),
+    ONLY_STAGE_TICKETING_SINGLE_TYPE("공연 당 하나의 유형의 티켓에 대해서만 예매가 가능합니다."),
 
     // 401
     EXPIRED_AUTH_TOKEN("만료된 로그인 토큰입니다."),
@@ -84,6 +89,7 @@ public enum ErrorCode {
     OAUTH2_INVALID_REQUEST("알 수 없는 OAuth2 에러가 발생했습니다."),
     OPEN_ID_PROVIDER_NOT_RESPONSE("OpenID 제공자 서버에 문제가 발생했습니다."),
     FILE_UPLOAD_ERROR("파일 업로드 중 에러가 발생했습니다."),
+    REDIS_ERROR("Redis에 문제가 발생했습니다."),
     ;
 
     private final String message;

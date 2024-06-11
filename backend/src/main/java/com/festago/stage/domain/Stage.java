@@ -5,7 +5,6 @@ import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.util.Validator;
 import com.festago.festival.domain.Festival;
-import com.festago.ticket.domain.Ticket;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,6 +17,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -40,9 +40,6 @@ public class Stage extends BaseTimeEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Festival festival;
-
-    @OneToMany(mappedBy = "stage", fetch = FetchType.LAZY)
-    private List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "stageId", orphanRemoval = true,
         cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -85,6 +82,10 @@ public class Stage extends BaseTimeEntity {
         return currentTime.isAfter(startTime);
     }
 
+    public boolean isBeforeTicketOpenTime(LocalDateTime currentTime) {
+        return currentTime.isBefore(ticketOpenTime);
+    }
+
     public void changeTime(LocalDateTime startTime, LocalDateTime ticketOpenTime) {
         validateTime(startTime, ticketOpenTime, this.festival);
         this.startTime = startTime;
@@ -110,6 +111,11 @@ public class Stage extends BaseTimeEntity {
             .toList();
     }
 
+    // 디미터 법칙에 어긋나지만, n+1을 회피하고, fetch join을 생략하며 주인을 검사하기 위해 getter 체이닝 사용
+    public boolean isSchoolStage(Long schoolId) {
+        return Objects.equals(getFestival().getSchool().getId(), schoolId);
+    }
+
     public Long getId() {
         return id;
     }
@@ -124,9 +130,5 @@ public class Stage extends BaseTimeEntity {
 
     public Festival getFestival() {
         return festival;
-    }
-
-    public List<Ticket> getTickets() {
-        return tickets;
     }
 }

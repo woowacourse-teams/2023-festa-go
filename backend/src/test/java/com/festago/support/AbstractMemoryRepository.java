@@ -1,6 +1,7 @@
 package com.festago.support;
 
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Optional;
@@ -14,8 +15,12 @@ public abstract class AbstractMemoryRepository<T> {
 
     @SneakyThrows
     final public T save(T entity) {
-        Field[] fields = entity.getClass()
-            .getDeclaredFields();
+        Class<?> clazz = entity.getClass();
+        Class<?> superclass = clazz.getSuperclass();
+        if (superclass.isAnnotationPresent(Inheritance.class)) {
+            clazz = superclass;
+        }
+        Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Id.class)) {
                 field.setAccessible(true);
