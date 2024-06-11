@@ -5,6 +5,7 @@ import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.NotFoundException;
 import com.festago.common.util.Validator;
 import com.festago.stage.domain.Stage;
+import com.festago.stage.domain.validator.StageUpdateValidator;
 import com.festago.stage.dto.command.StageUpdateCommand;
 import com.festago.stage.dto.event.StageUpdatedEvent;
 import com.festago.stage.repository.StageRepository;
@@ -24,6 +25,7 @@ public class StageUpdateService {
 
     private final StageRepository stageRepository;
     private final ArtistRepository artistRepository;
+    private final List<StageUpdateValidator> validators;
     private final ApplicationEventPublisher eventPublisher;
 
     public void updateStage(Long stageId, StageUpdateCommand command) {
@@ -35,6 +37,7 @@ public class StageUpdateService {
             .orElseThrow(() -> new NotFoundException(ErrorCode.STAGE_NOT_FOUND));
         stage.changeTime(startTime, ticketOpenTime);
         stage.renewArtists(artistIds);
+        validators.forEach(validator -> validator.validate(stage));
         eventPublisher.publishEvent(new StageUpdatedEvent(stage));
     }
 
