@@ -25,4 +25,9 @@ public class MemoryStageRepository extends AbstractMemoryRepository<Stage> imple
     public Optional<Stage> findByIdWithFetch(Long id) {
         return findById(id);
     }
+
+    @Override
+    public Optional<Stage> findByIdWithFetchFestival(Long id) {
+        return findById(id);
+    }
 }

@@ -20,6 +20,7 @@ import com.festago.support.fixture.ArtistFixture;
 import com.festago.support.fixture.FestivalFixture;
 import com.festago.support.fixture.StageFixture;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.LongStream;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,6 +53,7 @@ class StageUpdateServiceTest {
         stageUpdateService = new StageUpdateService(
             stageRepository,
             artistRepository,
+            Collections.emptyList(),
             mock(ApplicationEventPublisher.class)
         );
 

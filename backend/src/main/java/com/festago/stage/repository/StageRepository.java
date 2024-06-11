@@ -33,4 +33,12 @@ public interface StageRepository extends Repository<Stage, Long> {
         where s.id = :id
         """)
     Optional<Stage> findByIdWithFetch(@Param("id") Long id);
+
+    @Query("""
+        select s
+        from Stage s
+        join fetch s.festival
+        where s.id = :id
+        """)
+    Optional<Stage> findByIdWithFetchFestival(@Param("id") Long id);
 }
