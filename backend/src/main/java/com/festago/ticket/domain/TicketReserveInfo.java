@@ -4,6 +4,7 @@ import com.festago.common.util.Validator;
 import com.festago.stage.domain.Stage;
 import java.time.LocalDateTime;
 
+@Deprecated(forRemoval = true)
 public record TicketReserveInfo(
     Stage stage,
     ReservationSequence sequence,

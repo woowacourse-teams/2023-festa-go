@@ -3,6 +3,7 @@ package com.festago.ticket.domain;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.InternalServerException;
 
+@Deprecated(forRemoval = true)
 public class ReservationSequence {
 
     private static final int MOST_FAST_SEQUENCE = 1;

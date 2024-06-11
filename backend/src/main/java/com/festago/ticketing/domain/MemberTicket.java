@@ -26,6 +26,7 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+@Deprecated(forRemoval = true)
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberTicket extends BaseTimeEntity {

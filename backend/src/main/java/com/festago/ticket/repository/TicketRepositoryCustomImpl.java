@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
+@Deprecated(forRemoval = true)
 @RequiredArgsConstructor
 public class TicketRepositoryCustomImpl implements TicketRepositoryCustom {
 

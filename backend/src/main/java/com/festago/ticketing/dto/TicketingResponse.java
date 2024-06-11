@@ -3,6 +3,7 @@ package com.festago.ticketing.dto;
 import com.festago.ticketing.domain.MemberTicket;
 import java.time.LocalDateTime;
 
+@Deprecated(forRemoval = true)
 public record TicketingResponse(
     Long id,
     Integer number,

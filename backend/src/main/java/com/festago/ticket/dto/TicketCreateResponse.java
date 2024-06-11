@@ -2,6 +2,7 @@ package com.festago.ticket.dto;
 
 import com.festago.ticket.domain.Ticket;
 
+@Deprecated(forRemoval = true)
 public record TicketCreateResponse(
     Long id) {
 

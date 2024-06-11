@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+@Deprecated(forRemoval = true)
 public interface MemberTicketRepository extends JpaRepository<MemberTicket, Long> {
 
     List<MemberTicket> findAllByOwnerId(Long memberId, Pageable pageable);

@@ -4,6 +4,7 @@ import com.festago.ticket.domain.Ticket;
 import com.festago.ticket.domain.TicketAmount;
 import com.festago.ticket.domain.TicketType;
 
+@Deprecated(forRemoval = true)
 public record StageTicketResponse(
     Long id,
     TicketType ticketType,

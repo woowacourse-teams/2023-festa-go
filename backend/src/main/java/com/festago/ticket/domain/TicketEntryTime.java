@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+@Deprecated(forRemoval = true)
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TicketEntryTime extends BaseTimeEntity implements Comparable<TicketEntryTime> {
