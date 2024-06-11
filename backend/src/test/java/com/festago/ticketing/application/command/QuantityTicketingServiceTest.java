@@ -20,6 +20,7 @@ import java.util.stream.LongStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -30,83 +31,85 @@ class QuantityTicketingServiceTest {
 
     TicketQuantityRepository ticketQuantityRepository;
 
-    TicketingCommandService ticketingCommandService;
-
-    TicketingCommand command;
-
-    AtomicLong reserveCount;
-
-    TicketQuantity ticketQuantity;
-
-    ExecutorService executorService = Executors.newFixedThreadPool(8);
-
-    Long ticketId = 1L;
-
     @BeforeEach
     void setUp() {
         ticketQuantityRepository = new MemoryTicketQuantityRepository();
-        ticketingCommandService = mock();
-        reserveCount = new AtomicLong();
-        command = TicketingCommand.builder()
+    }
+
+    @Nested
+    class reserveTicket {
+
+        Long ticketId = 1L;
+        AtomicLong reserveCount;
+        TicketQuantity ticketQuantity;
+        TicketingCommandService ticketingCommandService;
+        ExecutorService executorService = Executors.newFixedThreadPool(8);
+        TicketingCommand command = TicketingCommand.builder()
             .ticketId(ticketId)
             .build();
-        quantityTicketingService = new QuantityTicketingService(
-            ticketQuantityRepository,
-            ticketingCommandService,
-            new FakeTicketingRateLimiter(false)
-        );
-    }
 
-    @Test
-    void 티켓팅은_동시성_문제가_발생하지_않아야_한다() {
-        // given
-        int ticketAmount = 50;
-        long tryCount = 100;
-        ticketQuantity = ticketQuantityRepository.put(new FakeTicket(ticketId, ticketAmount));
-        given(ticketingCommandService.reserveTicket(any())).willAnswer(invoke -> {
-            reserveCount.incrementAndGet();
-            return null;
-        });
+        @BeforeEach
+        void setUp() {
+            reserveCount = new AtomicLong();
+            ticketingCommandService = mock();
+            quantityTicketingService = new QuantityTicketingService(
+                ticketQuantityRepository,
+                ticketingCommandService,
+                new FakeTicketingRateLimiter(false)
+            );
+        }
 
-        // when
-        List<CompletableFuture<Void>> futures = LongStream.rangeClosed(1, tryCount)
-            .mapToObj(i -> CompletableFuture.runAsync(() -> {
-                quantityTicketingService.ticketing(command);
-            }, executorService).exceptionally(throwable -> null))
-            .toList();
-        futures.forEach(CompletableFuture::join);
+        @Test
+        void 티켓팅은_동시성_문제가_발생하지_않아야_한다() {
+            // given
+            int ticketAmount = 50;
+            long tryCount = 100;
+            ticketQuantity = ticketQuantityRepository.put(new FakeTicket(ticketId, ticketAmount));
+            given(ticketingCommandService.reserveTicket(any())).willAnswer(invoke -> {
+                reserveCount.incrementAndGet();
+                return null;
+            });
 
-        // then
-        assertThat(ticketQuantity.getQuantity()).isZero();
-        assertThat(reserveCount).hasValue(ticketAmount);
-    }
+            // when
+            List<CompletableFuture<Void>> futures = LongStream.rangeClosed(1, tryCount)
+                .mapToObj(i -> CompletableFuture.runAsync(() -> {
+                    quantityTicketingService.ticketing(command);
+                }, executorService).exceptionally(throwable -> null))
+                .toList();
+            futures.forEach(CompletableFuture::join);
 
-    @Test
-    void 티켓팅_도중_예외가_발생하면_재고가_복구되고_동시성_문제가_발생하지_않아야_한다() {
-        // given
-        int ticketAmount = 50;
-        long tryCount = 100;
-        AtomicLong counter = new AtomicLong();
-        ticketQuantity = ticketQuantityRepository.put(new FakeTicket(ticketId, ticketAmount));
-        given(ticketingCommandService.reserveTicket(any())).willAnswer(invoke -> {
-            long count = counter.incrementAndGet();
-            if (count <= 25 && count % 5 == 0) { // 5번 예외 발생
-                throw new IllegalArgumentException();
-            }
-            reserveCount.incrementAndGet();
-            return null;
-        });
+            // then
+            assertThat(ticketQuantity.getQuantity()).isZero();
+            assertThat(reserveCount).hasValue(ticketAmount);
+        }
 
-        // when
-        List<CompletableFuture<Void>> futures = LongStream.rangeClosed(1, tryCount)
-            .mapToObj(i -> CompletableFuture.runAsync(() -> {
-                quantityTicketingService.ticketing(command);
-            }, executorService).exceptionally(throwable -> null))
-            .toList();
-        futures.forEach(CompletableFuture::join);
+        @Test
+        void 티켓팅_도중_예외가_발생하면_재고가_복구되고_동시성_문제가_발생하지_않아야_한다() {
+            // given
+            int ticketAmount = 50;
+            long tryCount = 100;
+            AtomicLong counter = new AtomicLong();
+            ticketQuantity = ticketQuantityRepository.put(new FakeTicket(ticketId, ticketAmount));
+            given(ticketingCommandService.reserveTicket(any())).willAnswer(invoke -> {
+                long count = counter.incrementAndGet();
+                if (count <= 25 && count % 5 == 0) { // 5번 예외 발생
+                    throw new IllegalArgumentException();
+                }
+                reserveCount.incrementAndGet();
+                return null;
+            });
 
-        // then
-        assertThat(ticketQuantity.getQuantity()).isZero();
-        assertThat(reserveCount).hasValue(ticketAmount);
+            // when
+            List<CompletableFuture<Void>> futures = LongStream.rangeClosed(1, tryCount)
+                .mapToObj(i -> CompletableFuture.runAsync(() -> {
+                    quantityTicketingService.ticketing(command);
+                }, executorService).exceptionally(throwable -> null))
+                .toList();
+            futures.forEach(CompletableFuture::join);
+
+            // then
+            assertThat(ticketQuantity.getQuantity()).isZero();
+            assertThat(reserveCount).hasValue(ticketAmount);
+        }
     }
 }
