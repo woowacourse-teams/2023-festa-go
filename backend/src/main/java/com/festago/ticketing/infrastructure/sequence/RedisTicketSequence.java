@@ -33,7 +33,7 @@ public class RedisTicketSequence implements TicketSequence {
 
     @Override
     public void cancel(int sequence) {
-        redisTemplate.opsForList().leftPush(key, String.valueOf(sequence));
+        redisTemplate.opsForList().rightPush(key, String.valueOf(sequence));
     }
 
     @Override
