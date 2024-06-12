@@ -5,6 +5,7 @@ import com.festago.common.util.Validator;
 import com.festago.ticketing.domain.Booker;
 import com.festago.ticketing.domain.ReserveTicket;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 // TODO NewTicket -> Ticket 이름 변경할 것
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class NewTicket extends BaseTimeEntity {
 
