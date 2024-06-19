@@ -40,14 +40,19 @@
 - OkHttp3, Retrofit2, Glide, JUnit, MockK, Turbine, Zxing 
 - Firebase Analytics | Crashlytics, FCM, Kakao sdk 
 
+<br/>
+<br/>
+
 ## Backend
-### 백엔드 인프라 아키텍처
+
 <div align="center">
+  <h3> 백엔드 인프라 아키텍처 </h3>
   <img width="800" src="https://github.com/woowacourse-teams/2023-festa-go/assets/103228463/aad084a6-c1ca-41fa-89c0-f2d2371e59cc">
 </div>
 
-### 기술 스택
+
 <div align="center">
+  <h3> 기술 스택 </h3>
   <img src="https://img.shields.io/badge/Java17-000000?style=flat-square&logo=java&color=F40D12">
   <img src="https://img.shields.io/badge/Spring_Boot_3-0?style=flat-square&logo=spring-boot&logoColor=white&color=%236DB33F">
   <img src="https://img.shields.io/badge/MySQL_8-0?style=flat-square&logo=mysql&logoColor=white&color=4479A1">
@@ -65,13 +70,20 @@
   <img src="https://img.shields.io/badge/Jenkins-0?style=flat-square&logo=Jenkins&logoColor=white&color=%23D24939">
 </div>
 <br/>
+<br/>
 
 ## 🎉 축제 스태프를 소개합니다
 
-|BackEnd|BackEnd|BackEnd|BackEnd|Android|Android|Android|
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|![](https://avatars.githubusercontent.com/u/103228463?v=4&size=100)|![](https://avatars.githubusercontent.com/u/116627736?v=4&size=100)|![](https://avatars.githubusercontent.com/u/71129059?v=4&size=100)|![](https://avatars.githubusercontent.com/u/100915276?v=4&size=100)|![](https://avatars.githubusercontent.com/u/108349655?v=4&size=100)|![](https://avatars.githubusercontent.com/u/67777523?v=4&size=100)|![](https://avatars.githubusercontent.com/u/37167652?v=4&size=100)|
-|[푸우](https://github.com/BGuga)|[글렌](https://github.com/seokjin8678)|[애쉬](https://github.com/xxeol2)|[오리](https://github.com/carsago)|[베르](https://github.com/SeongHoonC)|[해시](https://github.com/EmilyCh0)|[아크](https://github.com/re4rk)|
+|BackEnd|BackEnd|BackEnd|BackEnd|iOS|
+|:-:|:-:|:-:|:-:|:-:|
+|![](https://avatars.githubusercontent.com/u/103228463?v=4&size=110)|![](https://avatars.githubusercontent.com/u/116627736?v=4&size=110)|![](https://avatars.githubusercontent.com/u/71129059?v=4&size=110)|![](https://avatars.githubusercontent.com/u/100915276?v=4&size=110)|![](https://avatars.githubusercontent.com/u/81206228?v=4&size=110)|
+|[푸우](https://github.com/BGuga)|[글렌](https://github.com/seokjin8678)|[애쉬](https://github.com/xxeol2)|[오리](https://github.com/carsago)|[닉](https://github.com/tea-hkim)|
+
+|Android|Android|Android|Design|Design|
+|:-:|:-:|:-:|:-:|:-:|
+|![](https://avatars.githubusercontent.com/u/108349655?v=4&size=110)|![](https://avatars.githubusercontent.com/u/67777523?v=4&size=110)|![](https://avatars.githubusercontent.com/u/37167652?v=4&size=110)|![](https://avatars.githubusercontent.com/u/103024956?v=4&size=110)|<img src="https://avatars.githubusercontent.com/u/153623913?v=4" width="110" height="110" />|
+|[베르](https://github.com/SeongHoonC)|[해시](https://github.com/EmilyCh0)|[아크](https://github.com/re4rk)|[라우](https://github.com/lau0505)|[혜성](https://github.com/comet-stella)
+
 
 <br>
 
