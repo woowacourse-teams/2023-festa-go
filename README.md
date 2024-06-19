@@ -1,10 +1,9 @@
 # 페스타고, 대학 축제 티케팅 & 라인업 검색 서비스
 
 **▷  개발, 출시, 유지보수 기간 총 1년 (2023.07 ~ 현재) </br>**
-**▷  사용자 100 명 유치**
+**▷  사용자 200 명 이상 유치** (Android, iOS 모두 100 명 이상)
 
-
-![6 5형 (12 XS Max, 12 XR) (6)](https://github.com/woowacourse-teams/2023-festa-go/assets/108349655/af36a3b6-0e72-4021-a6e4-f3b1a34d1f63)
+![6 5형 (12 XS Max, 12 XR)](https://github.com/woowacourse-teams/2023-festa-go/assets/108349655/51fa15dc-b9e2-426c-b46b-abe4c562bc05)
 
 **▷ 📲 Android 다운로드 |** [플레이스토어 바로가기](https://play.google.com/store/apps/details?id=com.festago.festago) </br>
 **▷ 📲 iOS 다운로드 |** [앱스토어 바로가기](https://apps.apple.com/kr/app/%ED%8E%98%EC%8A%A4%ED%83%80%EA%B3%A0-%EB%8C%80%ED%95%99-%EC%B6%95%EC%A0%9C-%EB%9D%BC%EC%9D%B8%EC%97%85-%EA%B0%80%EC%88%98-%EA%B3%B5%EC%97%B0-%EC%95%84%EC%9D%B4%EB%8F%8C/id6502875848)
