@@ -77,11 +77,13 @@
 |BackEnd|BackEnd|BackEnd|BackEnd|iOS|
 |:-:|:-:|:-:|:-:|:-:|
 |![](https://avatars.githubusercontent.com/u/103228463?v=4&size=110)|![](https://avatars.githubusercontent.com/u/116627736?v=4&size=110)|![](https://avatars.githubusercontent.com/u/71129059?v=4&size=110)|![](https://avatars.githubusercontent.com/u/100915276?v=4&size=110)|![](https://avatars.githubusercontent.com/u/81206228?v=4&size=110)|
+|<a href="https://github.com/woowacourse-teams/2023-festa-go/commits/dev?author=BGuga" title="Code">작업 내용 💻</a>|<a href="https://github.com/woowacourse-teams/2023-festa-go/commits/dev?author=seokjin8678" title="Code">작업 내용 💻</a>|<a href="https://github.com/woowacourse-teams/2023-festa-go/commits/dev?author=xxeol2" title="Code">작업 내용 💻</a>|<a href="https://github.com/woowacourse-teams/2023-festa-go/commits/dev?author=carsago" title="Code">작업 내용 💻</a>
 |[푸우](https://github.com/BGuga)|[글렌](https://github.com/seokjin8678)|[애쉬](https://github.com/xxeol2)|[오리](https://github.com/carsago)|[닉](https://github.com/tea-hkim)|
 
 |Android|Android|Android|Design|Design|
 |:-:|:-:|:-:|:-:|:-:|
 |![](https://avatars.githubusercontent.com/u/108349655?v=4&size=110)|![](https://avatars.githubusercontent.com/u/67777523?v=4&size=110)|![](https://avatars.githubusercontent.com/u/37167652?v=4&size=110)|![](https://avatars.githubusercontent.com/u/103024956?v=4&size=110)|<img src="https://avatars.githubusercontent.com/u/153623913?v=4" width="110" height="110" />|
+|<a href="https://github.com/woowacourse-teams/2023-festa-go/commits/dev?author=SeongHoonC" title="Code">작업 내용 💻</a>|<a href="https://github.com/woowacourse-teams/2023-festa-go/commits/dev?author=EmilyCh0" title="Code">작업 내용 💻</a>|<a href="https://github.com/woowacourse-teams/2023-festa-go/commits/dev?author=re4rk" title="Code">작업 내용 💻</a>|
 |[베르](https://github.com/SeongHoonC)|[해시](https://github.com/EmilyCh0)|[아크](https://github.com/re4rk)|[라우](https://github.com/lau0505)|[혜성](https://github.com/comet-stella)
 
 
