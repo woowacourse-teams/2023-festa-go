@@ -8,6 +8,10 @@ android {
     namespace = "com.festago.festago.common"
     compileSdk = 34
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         minSdk = 26
         consumerProguardFiles("consumer-rules.pro")

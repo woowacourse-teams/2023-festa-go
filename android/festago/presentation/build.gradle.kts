@@ -14,6 +14,10 @@ android {
     namespace = "com.festago.festago.presentation"
     compileSdk = 34
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         minSdk = 28
 
@@ -145,5 +149,5 @@ dependencies {
 }
 
 fun getSecretKey(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
