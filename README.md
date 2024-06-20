@@ -15,7 +15,7 @@
 
 ## 페스타고가 제공합니다
 
-### 1. 축제 줄서기 
+### 1. 축제 줄서기 (Deprecated)
 > 현재 v1.X.X 에서만 제공합니다.
 
 <img width="1192" alt="image" src="https://github.com/woowacourse-teams/2023-festa-go/assets/71129059/8e761c81-6066-4f93-89af-b9d2d22eb577">
