@@ -126,9 +126,6 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.7.2")
     implementation("androidx.fragment:fragment-ktx:1.6.0")
 
-    // zxing
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
-
     // firebase
     implementation("com.google.firebase:firebase-messaging-ktx:23.4.0")
 
@@ -140,9 +137,6 @@ dependencies {
 
     // turbine
     testImplementation("app.cash.turbine:turbine:1.0.0")
-
-    // inApp Update
-    implementation("com.google.android.play:app-update-ktx:2.1.0")
 
     // splash
     implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
