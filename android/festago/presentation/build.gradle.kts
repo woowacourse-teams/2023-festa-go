@@ -146,6 +146,9 @@ dependencies {
 
     // splash
     implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
+
+    // Update Play Feature Delivery dependency
+    implementation("com.google.android.play:feature-delivery-ktx:2.1.0")
 }
 
 fun getSecretKey(propertyKey: String): String {
