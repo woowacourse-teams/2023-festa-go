@@ -11,6 +11,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(
@@ -23,6 +27,7 @@ import jakarta.validation.constraints.Size;
             }
         )
     })
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberFCM extends BaseTimeEntity {
 
     private static final int MAX_FCM_TOKEN_LENGTH = 255;
@@ -40,23 +45,24 @@ public class MemberFCM extends BaseTimeEntity {
     @Column(name = "fcm_token")
     private String fcmToken;
 
-    protected MemberFCM() {
+    private LocalDateTime expiredAt;
+
+    public MemberFCM(Long memberId, String fcmToken, LocalDateTime expiredAt) {
+        this(null, memberId, fcmToken, expiredAt);
     }
 
-    public MemberFCM(Long memberId, String fcmToken) {
-        this(null, memberId, fcmToken);
-    }
-
-    public MemberFCM(Long id, Long memberId, String fcmToken) {
-        validate(memberId, fcmToken);
+    public MemberFCM(Long id, Long memberId, String fcmToken, LocalDateTime expiredAt) {
+        validate(memberId, fcmToken, expiredAt);
         this.id = id;
         this.memberId = memberId;
         this.fcmToken = fcmToken;
+        this.expiredAt = expiredAt;
     }
 
-    private void validate(Long memberId, String fcmToken) {
+    private void validate(Long memberId, String fcmToken, LocalDateTime expiredAt) {
         validateMemberId(memberId);
         validateFcmToken(fcmToken);
+        validateExpiredAt(expiredAt);
     }
 
     private void validateMemberId(Long memberId) {
@@ -69,6 +75,19 @@ public class MemberFCM extends BaseTimeEntity {
         Validator.maxLength(fcmToken, MAX_FCM_TOKEN_LENGTH, fieldName);
     }
 
+    private void validateExpiredAt(LocalDateTime expiredAt) {
+        Validator.notNull(expiredAt, "expiredAt");
+    }
+
+    public void changeExpiredAt(LocalDateTime expiredAt) {
+        validateExpiredAt(expiredAt);
+        this.expiredAt = expiredAt;
+    }
+
+    public boolean isSameToken(String fcmToken) {
+        return Objects.equals(this.fcmToken, fcmToken);
+    }
+
     public Long getId() {
         return id;
     }
@@ -79,5 +98,9 @@ public class MemberFCM extends BaseTimeEntity {
 
     public String getFcmToken() {
         return fcmToken;
+    }
+
+    public LocalDateTime getExpiredAt() {
+        return expiredAt;
     }
 }
