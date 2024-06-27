@@ -130,9 +130,6 @@ dependencies {
     // turbine
     testImplementation("app.cash.turbine:turbine:1.0.0")
 
-    // inApp Update
-    implementation("com.google.android.play:app-update-ktx:2.1.0")
-
     // splash
     implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
 }
