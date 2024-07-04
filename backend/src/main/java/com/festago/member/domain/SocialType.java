@@ -1,4 +1,4 @@
-package com.festago.auth.domain;
+package com.festago.member.domain;
 
 public enum SocialType {
     KAKAO,

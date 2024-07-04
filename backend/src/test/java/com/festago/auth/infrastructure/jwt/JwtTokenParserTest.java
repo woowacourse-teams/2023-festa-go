@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.jwt;
 
 import static com.festago.common.exception.ErrorCode.EXPIRED_AUTH_TOKEN;
 import static com.festago.common.exception.ErrorCode.INVALID_AUTH_TOKEN;

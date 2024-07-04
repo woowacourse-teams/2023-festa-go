@@ -7,6 +7,7 @@ import com.festago.auth.domain.Role;
 import com.festago.auth.domain.authentication.AdminAuthentication;
 import com.festago.auth.domain.authentication.AnonymousAuthentication;
 import com.festago.auth.domain.authentication.Authentication;
+import com.festago.auth.infrastructure.jwt.JwtTokenParser;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;

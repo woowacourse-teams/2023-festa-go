@@ -1,5 +1,6 @@
 package com.festago.auth.domain;
 
+import com.festago.member.domain.SocialType;
 import lombok.Builder;
 
 @Builder

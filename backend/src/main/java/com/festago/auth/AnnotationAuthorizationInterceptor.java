@@ -1,9 +1,10 @@
 package com.festago.auth;
 
 import com.festago.auth.annotation.Authorization;
-import com.festago.auth.application.HttpRequestTokenExtractor;
+import com.festago.auth.domain.AuthenticateContext;
 import com.festago.auth.domain.AuthenticationTokenExtractor;
 import com.festago.auth.domain.authentication.Authentication;
+import com.festago.auth.infrastructure.web.HttpRequestTokenExtractor;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.ForbiddenException;
 import com.festago.common.exception.UnauthorizedException;
@@ -23,8 +24,7 @@ public class AnnotationAuthorizationInterceptor implements HandlerInterceptor {
     public AnnotationAuthorizationInterceptor(
         HttpRequestTokenExtractor httpRequestTokenExtractor,
         AuthenticationTokenExtractor authenticationTokenExtractor,
-        AuthenticateContext authenticateContext)
-    {
+        AuthenticateContext authenticateContext) {
         Assert.notNull(httpRequestTokenExtractor, "The httpRequestTokenExtractor must not be null");
         Assert.notNull(authenticationTokenExtractor, "The authenticationTokenExtractor must not be null");
         Assert.notNull(authenticateContext, "The authenticateContext must not be null");

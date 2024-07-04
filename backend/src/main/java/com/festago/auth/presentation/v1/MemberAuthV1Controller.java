@@ -2,7 +2,6 @@ package com.festago.auth.presentation.v1;
 
 import com.festago.auth.annotation.MemberAuth;
 import com.festago.auth.application.command.MemberAuthFacadeService;
-import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.authentication.MemberAuthentication;
 import com.festago.auth.dto.v1.LoginV1Response;
 import com.festago.auth.dto.v1.LogoutV1Request;
@@ -10,6 +9,7 @@ import com.festago.auth.dto.v1.OAuth2LoginV1Request;
 import com.festago.auth.dto.v1.OpenIdLoginV1Request;
 import com.festago.auth.dto.v1.RefreshTokenV1Request;
 import com.festago.auth.dto.v1.TokenRefreshV1Response;
+import com.festago.member.domain.SocialType;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,10 +1,10 @@
 package com.festago.auth.infrastructure.openid;
 
 import com.festago.auth.domain.OpenIdClient;
-import com.festago.auth.domain.SocialType;
 import com.festago.auth.domain.UserInfo;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
+import com.festago.member.domain.SocialType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;

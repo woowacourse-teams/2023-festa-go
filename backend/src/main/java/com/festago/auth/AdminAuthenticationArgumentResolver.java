@@ -1,5 +1,6 @@
 package com.festago.auth;
 
+import com.festago.auth.domain.AuthenticateContext;
 import com.festago.auth.domain.authentication.AdminAuthentication;
 import com.festago.auth.domain.authentication.Authentication;
 import com.festago.common.exception.UnexpectedException;

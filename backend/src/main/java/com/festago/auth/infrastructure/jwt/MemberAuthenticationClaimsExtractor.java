@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.jwt;
 
 import com.festago.auth.domain.Role;
 import com.festago.auth.domain.authentication.AnonymousAuthentication;
@@ -10,14 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemberAuthenticationClaimsExtractor implements AuthenticationClaimsExtractor {
 
-    private static final String MEMBER_ID_KEY = "memberId";
-
     @Override
     public Authentication extract(Claims claims) {
         if (!claims.getAudience().contains(Role.MEMBER.name())) {
             return AnonymousAuthentication.getInstance();
         }
-        Long memberId = claims.get(MEMBER_ID_KEY, Long.class);
+        Long memberId = Long.parseLong(claims.getSubject());
         return new MemberAuthentication(memberId);
     }
 }

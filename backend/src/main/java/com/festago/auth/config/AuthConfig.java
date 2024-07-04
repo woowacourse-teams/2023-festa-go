@@ -1,7 +1,7 @@
 package com.festago.auth.config;
 
-import com.festago.auth.application.OAuth2Client;
-import com.festago.auth.application.OAuth2Clients;
+import com.festago.auth.domain.OAuth2Client;
+import com.festago.auth.domain.OAuth2Clients;
 import com.festago.auth.domain.OpenIdClient;
 import com.festago.auth.domain.OpenIdClients;
 import java.util.List;

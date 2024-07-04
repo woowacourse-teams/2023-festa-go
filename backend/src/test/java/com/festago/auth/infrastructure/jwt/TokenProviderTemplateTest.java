@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.jwt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

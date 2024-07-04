@@ -1,4 +1,4 @@
-package com.festago.auth.application;
+package com.festago.auth.infrastructure.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;

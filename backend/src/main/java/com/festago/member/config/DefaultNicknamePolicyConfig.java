@@ -12,7 +12,7 @@ public class DefaultNicknamePolicyConfig {
     @Bean
     public DefaultNicknamePolicy defaultNicknamePolicy() {
         List<String> adjectives = List.of(
-            "츄러스를 먹는", "노래 부르는", "때창하는", "응원하는",
+            "츄러스를 먹는", "노래 부르는", "떼창하는", "응원하는",
             "응원봉을 든", "타코야끼를 먹는", "공연에 심취한", "신나는",
             "춤추는", "행복한", "즐거운", "신나는", "흥겨운"
         );

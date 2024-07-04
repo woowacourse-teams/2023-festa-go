@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.jwt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,20 +14,20 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AdminAuthenticationClaimsExtractorTest {
+class MemberAuthenticationClaimsExtractorTest {
 
-    AdminAuthenticationClaimsExtractor adminAuthenticationClaimsExtractor = new AdminAuthenticationClaimsExtractor();
+    MemberAuthenticationClaimsExtractor memberAuthenticationClaimsExtractor = new MemberAuthenticationClaimsExtractor();
 
     @ParameterizedTest
-    @EnumSource(names = "ADMIN", mode = EnumSource.Mode.EXCLUDE)
-    void Claims의_audience가_ADMIN이_아니면_반환되는_Authentication의_권한은_ANONYMOUS이다(Role role) {
+    @EnumSource(names = "MEMBER", mode = EnumSource.Mode.EXCLUDE)
+    void Claims의_audience가_MEMBER가_아니면_반환되는_Authentication의_권한은_ANONYMOUS이다(Role role) {
         // given
         Claims claims = Jwts.claims()
             .audience().add(role.name()).and()
             .build();
 
         // when
-        Authentication authentication = adminAuthenticationClaimsExtractor.extract(claims);
+        Authentication authentication = memberAuthenticationClaimsExtractor.extract(claims);
 
         // then
         assertThat(authentication.getRole())
@@ -35,18 +35,18 @@ class AdminAuthenticationClaimsExtractorTest {
     }
 
     @Test
-    void Claims의_audience가_ADMIN이면_Authentication의_권한은_ADMIN이다() {
+    void Claims의_audience가_MEMBER이면_Authentication의_권한은_MEMBER이다() {
         // given
         Claims claims = Jwts.claims()
-            .audience().add(Role.ADMIN.name()).and()
-            .add("adminId", 1)
+            .audience().add(Role.MEMBER.name()).and()
+            .subject("1")
             .build();
 
         // when
-        Authentication authentication = adminAuthenticationClaimsExtractor.extract(claims);
+        Authentication authentication = memberAuthenticationClaimsExtractor.extract(claims);
 
         // then
         assertThat(authentication.getRole())
-            .isEqualTo(Role.ADMIN);
+            .isEqualTo(Role.MEMBER);
     }
 }

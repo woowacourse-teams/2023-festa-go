@@ -1,4 +1,4 @@
-package com.festago.auth.infrastructure;
+package com.festago.auth.infrastructure.jwt;
 
 import com.festago.auth.domain.authentication.Authentication;
 import io.jsonwebtoken.Claims;

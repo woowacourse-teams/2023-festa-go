@@ -1,6 +1,5 @@
-package com.festago.auth;
+package com.festago.auth.domain;
 
-import com.festago.auth.domain.Role;
 import com.festago.auth.domain.authentication.AnonymousAuthentication;
 import com.festago.auth.domain.authentication.Authentication;
 import org.springframework.stereotype.Component;

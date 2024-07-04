@@ -1,6 +1,6 @@
 package com.festago.common.handler;
 
-import com.festago.auth.AuthenticateContext;
+import com.festago.auth.domain.AuthenticateContext;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.FestaGoException;

@@ -1,6 +1,6 @@
 package com.festago.support;
 
-import com.festago.auth.AuthenticateContext;
+import com.festago.auth.domain.AuthenticateContext;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

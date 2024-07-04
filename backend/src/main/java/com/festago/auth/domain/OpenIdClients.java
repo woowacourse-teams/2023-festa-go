@@ -3,6 +3,7 @@ package com.festago.auth.domain;
 import com.festago.common.exception.BadRequestException;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.UnexpectedException;
+import com.festago.member.domain.SocialType;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;

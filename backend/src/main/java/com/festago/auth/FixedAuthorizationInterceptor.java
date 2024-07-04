@@ -1,9 +1,10 @@
 package com.festago.auth;
 
-import com.festago.auth.application.HttpRequestTokenExtractor;
+import com.festago.auth.domain.AuthenticateContext;
 import com.festago.auth.domain.AuthenticationTokenExtractor;
 import com.festago.auth.domain.Role;
 import com.festago.auth.domain.authentication.Authentication;
+import com.festago.auth.infrastructure.web.HttpRequestTokenExtractor;
 import com.festago.common.exception.ErrorCode;
 import com.festago.common.exception.ForbiddenException;
 import com.festago.common.exception.UnauthorizedException;
