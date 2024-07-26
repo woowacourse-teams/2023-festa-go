@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -47,6 +48,10 @@ public class Artist extends BaseTimeEntity {
         this.name = name;
         this.profileImage = ImageUrlHelper.getBlankStringIfBlank(profileImage);
         this.backgroundImageUrl = ImageUrlHelper.getBlankStringIfBlank(backgroundImageUrl);
+    }
+
+    public List<String> getImageUrls() {
+        return List.of(profileImage, backgroundImageUrl);
     }
 
     public Long getId() {

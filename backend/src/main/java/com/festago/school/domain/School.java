@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -110,6 +111,10 @@ public class School extends BaseTimeEntity {
     public void changeBackgroundImageUrl(String backgroundImageUrl) {
         validateImageUrl(backgroundImageUrl, "backgroundImageUrl");
         this.backgroundUrl = ImageUrlHelper.getBlankStringIfBlank(backgroundImageUrl);
+    }
+
+    public List<String> getImageUrls() {
+        return List.of(backgroundUrl, logoUrl);
     }
 
     public Long getId() {

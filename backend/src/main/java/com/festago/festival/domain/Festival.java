@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -99,6 +100,10 @@ public class Festival extends BaseTimeEntity {
     public void changeFestivalDuration(FestivalDuration festivalDuration) {
         validateFestivalDuration(festivalDuration);
         this.festivalDuration = festivalDuration;
+    }
+
+    public List<String> getImageUrls() {
+        return List.of(posterImageUrl);
     }
 
     public Long getId() {
